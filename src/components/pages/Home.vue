@@ -1,21 +1,9 @@
 <template>
   <main-layout>
-    <p class="caption">On dark background</p>
-      <div class="dark-example">
-        <q-field
-          dark
-          icon="school"
-          label="Javascript"
-          helper="Pick a start time"
-        >
-          <q-datetime-range
-            dark
-            color="secondary"
-            v-model="range8"
-            type="time"
-          />
-        </q-field>
-</div>
+    <center>
+      <img src="statics/logo.png" width="128px"/>
+      <p class="title">Ukuvota</p>
+    </center>
     <q-card>
       <q-card-main>
         <q-input v-model="text" float-label="Topic Question" />
@@ -58,4 +46,9 @@ export default {
 }
 </script>
 <style lang="stylus">
+body
+  font-family 'coolFont'
+
+.title
+  font-size 32px
 </style>
