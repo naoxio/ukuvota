@@ -30,8 +30,8 @@
         <center>
         <img src="statics/logo.png" width="128px"/>
         <p class="title">Ukuvota</p>
-        </center>
         <slot></slot>
+        </center>
       </div>
     </div>
 

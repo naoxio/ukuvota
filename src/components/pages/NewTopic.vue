@@ -1,6 +1,6 @@
 <template>
   <main-layout>
-    <q-card>
+    <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <q-alert
           color="dark"
