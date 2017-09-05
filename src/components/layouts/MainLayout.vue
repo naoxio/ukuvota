@@ -82,5 +82,8 @@ export default {
 </script>
 
 <style lang="stylus">
-
+body
+  font-family 'coolFont'
+.title
+  font-size 32px
 </style>

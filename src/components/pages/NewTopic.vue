@@ -17,6 +17,12 @@
           v-model="proposalSelect"
          :options="proposalTimes"
         />
+        <q-select
+          float-label="Voting Time"
+          radio
+          v-model="votingSelect"
+         :options="votingTimes"
+        />
         <q-input
           type="textarea"
           float-label="* Description"
@@ -34,10 +40,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
-
-const today = new Date()
-const { addToDate, subtractFromDate } = date
+import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
 export default {
   components: {
@@ -60,7 +63,7 @@ export default {
   },
   data () {
     return {
-      proposalSelect: '1',
+      proposalSelect: '2',
       proposalTimes: [
         {
           label: '1 Day',
@@ -83,6 +86,29 @@ export default {
           value: '5'
         }
       ],
+      votingSelect: '1',
+      votingTimes: [
+        {
+          label: '1 Day',
+          value: '1'
+        },
+        {
+          label: '2 Days',
+          value: '2'
+        },
+        {
+          label: '3 Days',
+          value: '3'
+        },
+        {
+          label: '4 Days',
+          value: '4'
+        },
+        {
+          label: '5 Days',
+          value: '5'
+        }
+      ]
     }
   }
 }

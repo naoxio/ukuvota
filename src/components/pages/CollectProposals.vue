@@ -4,22 +4,32 @@
       <q-card-main>
         <h5>Add Proposal</h5>
         <q-input v-model="text" float-label="Proposal" />
-
         <div style="text-align: right">
           <q-btn icon="arrow forward">Add</q-btn>
         </div>
       </q-card-main>
     </q-card>
+    <q-list highlight>
+    <q-list-header>Current Proposals</q-list-header>
+    <q-item>
+      <q-item-main>
+        <q-item-tile label>Change Nothing</q-item-tile>
+      </q-item-main>
+    </q-item>
+    <q-item-separator />
+    <q-item>
+      <q-item-main label="Repeat Process " />
+    </q-item>
+  </q-list>
   </main-layout>
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemMain, QItemSide, QList, QModal, QModalLayout, QToolbar, QToolbarTitle, QTree } from 'quasar'
+import { QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeperator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 
 export default {
   components: {
     MainLayout,
-    QAlert,
     QBtn,
     QCard,
     QCardMain,
@@ -29,14 +39,12 @@ export default {
     QField,
     QInput,
     QItem,
+    QItemSeperator,
     QItemMain,
     QItemSide,
+    QItemTile,
     QList,
-    QModal,
-    QModalLayout,
-    QToolbar,
-    QToolbarTitle,
-    QTree
+    QListHeader
   },
   data () {
     return {
