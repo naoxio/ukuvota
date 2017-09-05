@@ -39,6 +39,7 @@
   </main-layout>
 </template>
 <script>
+import Firebase from 'firebase'
 import MainLayout from '@/layouts/MainLayout'
 import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
@@ -63,6 +64,7 @@ export default {
   },
   data () {
     return {
+      test: Firebase,
       proposalSelect: '2',
       proposalTimes: [
         {

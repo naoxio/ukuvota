@@ -11,8 +11,6 @@
             <q-btn icon="arrow forward">Add</q-btn>
           </div>
         </div>
-
-
       </q-card-main>
       <q-list highlight>
         <q-list-header>Current Proposals</q-list-header>
@@ -31,7 +29,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeperator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+import { QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 
 export default {
   components: {
@@ -45,7 +43,6 @@ export default {
     QField,
     QInput,
     QItem,
-    QItemSeperator,
     QItemMain,
     QItemSide,
     QItemTile,
