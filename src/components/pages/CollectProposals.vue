@@ -1,30 +1,8 @@
 <template>
   <main-layout>
-    <q-card>
-      <q-card-main>
-        <q-alert
-          color="dark"
-          icon="toys"
-          appear
-          dismissible
-        >
-          optional fields are marked with an asterix (*)
-        </q-alert>
-        <q-input v-model="text" float-label="Topic Question" />
-        <q-input
-          v-model="area"
-          type="textarea"
-          float-label="* Description"
-          :max-height="50"
-          :min-rows="7"
-        />
-        <div style="text-align: right">
-          <router-link :to="{ name: 'collectProposals' }">
-            <q-btn icon="arrow forward">Next</q-btn>
-          </router-link>
-        </div>
-      </q-card-main>
-    </q-card>
+    <center>
+
+    </center>
   </main-layout>
 </template>
 <script>
