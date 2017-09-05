@@ -1,8 +1,15 @@
 <template>
   <main-layout>
-    <center>
+    <q-card>
+      <q-card-main>
+        <h5>Add Proposal</h5>
+        <q-input v-model="text" float-label="Proposal" />
 
-    </center>
+        <div style="text-align: right">
+          <q-btn icon="arrow forward">Add</q-btn>
+        </div>
+      </q-card-main>
+    </q-card>
   </main-layout>
 </template>
 <script>
@@ -38,9 +45,5 @@ export default {
 }
 </script>
 <style lang="stylus">
-body
-  font-family 'coolFont'
 
-.title
-  font-size 32px
 </style>

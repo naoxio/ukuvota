@@ -3,12 +3,7 @@
     ref="layout"
     view="lHh Lpr fff"
   >
-
-
-
     <!--div slot="left">
-
-
       <q-list no-border link inset-delimiter>
         <q-list-header>Essential Links</q-list-header>
         <q-item @click="launch('http://quasar-framework.org')">

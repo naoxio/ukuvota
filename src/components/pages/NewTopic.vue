@@ -10,9 +10,14 @@
         >
           optional fields are marked with an asterix (*)
         </q-alert>
-        <q-input v-model="text" float-label="Topic Question" />
+        <q-input float-label="Topic Question" />
+        <q-select
+          float-label="Proposal Collection Time"
+          radio
+          v-model="proposalSelect"
+         :options="proposalTimes"
+        />
         <q-input
-          v-model="area"
           type="textarea"
           float-label="* Description"
           :max-height="50"
@@ -29,7 +34,10 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemMain, QItemSide, QList, QModal, QModalLayout, QToolbar, QToolbarTitle, QTree } from 'quasar'
+import { date, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+
+const today = new Date()
+const { addToDate, subtractFromDate } = date
 
 export default {
   components: {
@@ -42,27 +50,43 @@ export default {
     QCardTitle,
     QDatetimeRange,
     QField,
+    QInlineDatetime,
     QInput,
     QItem,
     QItemMain,
     QItemSide,
     QList,
-    QModal,
-    QModalLayout,
-    QToolbar,
-    QToolbarTitle,
-    QTree
+    QSelect
   },
   data () {
     return {
+      proposalSelect: '1',
+      proposalTimes: [
+        {
+          label: '1 Day',
+          value: '1'
+        },
+        {
+          label: '2 Days',
+          value: '2'
+        },
+        {
+          label: '3 Days',
+          value: '3'
+        },
+        {
+          label: '4 Days',
+          value: '4'
+        },
+        {
+          label: '5 Days',
+          value: '5'
+        }
+      ],
     }
   }
 }
 </script>
 <style lang="stylus">
-body
-  font-family 'coolFont'
 
-.title
-  font-size 32px
 </style>
