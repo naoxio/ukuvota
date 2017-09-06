@@ -2,15 +2,7 @@
   <main-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <q-alert
-          color="dark"
-          icon="toys"
-          appear
-          dismissible
-        >
-          optional fields are marked with an asterix (*)
-        </q-alert>
-        <template v-if="topicMissing && topicMissing !== nil">
+        <template v-if="topicMissing && topicMissing !== null">
           <q-alert
             color="dark"
             icon="warning"
@@ -34,7 +26,7 @@
         />
         <q-input
           type="textarea"
-          float-label="* Description"
+          float-label="Description (optional)"
           v-model="description"
           :max-height="50"
           :min-rows="7"
@@ -50,7 +42,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { LocalStorage, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
 export default {
   components: {
@@ -79,9 +71,19 @@ export default {
       else {
         this.topicMissing = false
       }
-      console.log(this.proposalSelect)
-      console.log(this.votingSelect)
-      console.log(this.description)
+      let topics = JSON.parse(LocalStorage.get.item('topics'))
+
+      if (topics === null) {
+        topics = []
+      }
+      let newTopic = {
+        'topicQuestion': this.topicQuestion,
+        'proposalTime': this.proposalSelect,
+        'votingTime': this.proposalSelect,
+        'description': this.description
+      }
+      topics.push(newTopic)
+      LocalStorage.set('topics', JSON.stringify(topics))
     }
   },
   data () {
