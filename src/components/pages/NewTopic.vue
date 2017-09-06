@@ -65,25 +65,30 @@ export default {
   },
   methods: {
     next () {
+      let error = false
       if (this.topicQuestion === '') {
         this.topicMissing = true
+        error = true
       }
       else {
         this.topicMissing = false
       }
-      let topics = JSON.parse(LocalStorage.get.item('topics'))
+      if (!error) {
+        let topics = JSON.parse(LocalStorage.get.item('topics'))
 
-      if (topics === null) {
-        topics = []
+        if (topics === null) {
+          topics = []
+        }
+        let newTopic = {
+          'topicQuestion': this.topicQuestion,
+          'proposalTime': this.proposalSelect,
+          'votingTime': this.proposalSelect,
+          'description': this.description
+        }
+        topics.push(newTopic)
+        LocalStorage.set('topics', JSON.stringify(topics))
+        this.$router.push('/collectProposals')
       }
-      let newTopic = {
-        'topicQuestion': this.topicQuestion,
-        'proposalTime': this.proposalSelect,
-        'votingTime': this.proposalSelect,
-        'description': this.description
-      }
-      topics.push(newTopic)
-      LocalStorage.set('topics', JSON.stringify(topics))
     }
   },
   data () {
