@@ -14,23 +14,6 @@ import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
 
-import VueFire from 'vuefire'
-import Firebase from 'firebase'
-
-// explicit installation is required in a module environment
-Vue.use(VueFire)
-
-// Initialize Firebase
-var config = {
-  apiKey: 'AIzaSyB7KCC4PEbn1gk4NrdFlrARGmcYK7C1SnY',
-  authDomain: 'ukuvota.firebaseapp.com',
-  databaseURL: 'https://ukuvota.firebaseio.com',
-  projectId: 'ukuvota',
-  storageBucket: '',
-  messagingSenderId: '105902830879'
-}
-Firebase.initializeApp(config)
-
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
 

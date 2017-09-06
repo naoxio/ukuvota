@@ -10,7 +10,16 @@
         >
           optional fields are marked with an asterix (*)
         </q-alert>
-        <q-input float-label="Topic Question" />
+        <template v-if="topicMissing && topicMissing !== nil">
+          <q-alert
+            color="dark"
+            icon="warning"
+          >
+            topic question is missing
+          </q-alert>
+        </template>
+
+        <q-input float-label="Topic Question" v-model="topicQuestion"/>
         <q-select
           float-label="Proposal Collection Time"
           radio
@@ -26,20 +35,20 @@
         <q-input
           type="textarea"
           float-label="* Description"
+          v-model="description"
           :max-height="50"
           :min-rows="7"
         />
         <div style="text-align: right">
-          <router-link :to="{ name: 'collectProposals' }">
-            <q-btn icon="arrow forward">Next</q-btn>
-          </router-link>
+          <!--router-link :to="{ name: 'collectProposals' }"-->
+            <q-btn @click="next()" icon="arrow forward">Next</q-btn>
+          <!--/router-link-->
         </div>
       </q-card-main>
     </q-card>
   </main-layout>
 </template>
 <script>
-import Firebase from 'firebase'
 import MainLayout from '@/layouts/MainLayout'
 import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
@@ -62,9 +71,25 @@ export default {
     QList,
     QSelect
   },
+  methods: {
+    next () {
+      if (this.topicQuestion === '') {
+        this.topicMissing = true
+      }
+      else {
+        this.topicMissing = false
+      }
+      console.log(this.proposalSelect)
+      console.log(this.votingSelect)
+      console.log(this.description)
+    }
+  },
   data () {
     return {
-      test: Firebase,
+      description: '',
+      topicQuestion: '',
+      topicMissing: false,
+      visible: false,
       proposalSelect: '2',
       proposalTimes: [
         {
