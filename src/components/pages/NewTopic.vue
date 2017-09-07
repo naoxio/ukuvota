@@ -83,14 +83,14 @@ export default {
         let newTopic = {
           'topicQuestion': this.topicQuestion,
           'proposalTime': this.proposalSelect,
-          'votingTime': this.proposalSelect,
+          'votingTime': this.votingSelect,
           'description': this.description,
           'id': id,
           'proposals': ['Change Nothing', 'Repeat Process']
         }
         topics.push(newTopic)
         LocalStorage.set('topics', JSON.stringify(topics))
-        this.$router.push('/collectProposals')
+        this.$router.push(id + '/collectProposals')
       }
     }
   },
