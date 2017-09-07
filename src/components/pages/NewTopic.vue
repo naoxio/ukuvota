@@ -42,7 +42,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { LocalStorage, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
 export default {
   components: {
@@ -75,6 +75,7 @@ export default {
       }
       if (!error) {
         let topics = JSON.parse(LocalStorage.get.item('topics'))
+        let id = uid()
 
         if (topics === null) {
           topics = []
@@ -83,7 +84,9 @@ export default {
           'topicQuestion': this.topicQuestion,
           'proposalTime': this.proposalSelect,
           'votingTime': this.proposalSelect,
-          'description': this.description
+          'description': this.description,
+          'id': id,
+          'proposals': ['Change Nothing', 'Repeat Process']
         }
         topics.push(newTopic)
         LocalStorage.set('topics', JSON.stringify(topics))
