@@ -2,6 +2,13 @@
 
 > A Quasar project
 
+## Installing Quasar
+
+``` bash
+# install quasar-cli globally (sudo required to install globally)
+$ sudo npm install -g quasar-cli
+```
+
 ## Build Setup
 
 ``` bash
