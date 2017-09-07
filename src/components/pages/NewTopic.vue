@@ -83,7 +83,7 @@ export default {
         let newTopic = {
           'topicQuestion': this.topicQuestion,
           'proposalTime': this.proposalSelect,
-          'votingTime': this.proposalSelect,
+          'votingTime': this.votingSelect,
           'description': this.description,
           'id': id,
           'proposals': ['Change Nothing', 'Repeat Process']

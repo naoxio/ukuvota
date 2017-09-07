@@ -1,6 +1,5 @@
 <template>
   <main-layout>
-
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field :label="topicQuestion"></q-field></h5>
@@ -33,7 +32,7 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list highlight>
-        <q-item v-for="proposal in proposals">
+        <q-item v-for="proposal in proposals" :key="proposal.id">
           <q-item-main>
             <q-item-tile label>{{ proposal }}</q-item-tile>
           </q-item-main>
@@ -47,12 +46,6 @@
 import MainLayout from '@/layouts/MainLayout'
 import { LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 
-let currentTopic = {}
-let loadData = () => {
-  let topics = JSON.parse(LocalStorage.get.item('topics'))
-  currentTopic = topics[0]
-}
-
 let getTimeEnding = (time) => {
   if (time === 1) {
     time = '1 Day'
@@ -62,8 +55,6 @@ let getTimeEnding = (time) => {
   }
   return time
 }
-
-window.addEventListener('load', loadData())
 
 export default {
   components: {
@@ -84,26 +75,49 @@ export default {
     QList,
     QListHeader
   },
+  mounted () {
+    this.loadData()
+  },
   methods: {
     addProposal () {
       this.proposals.push(this.newProposal)
+    },
+    loadData () {
+      let topics = JSON.parse(LocalStorage.get.item('topics'))
+      let index = -1
+      for (let x = 0; x < topics.length; x++) {
+        if (topics[x].id === this.$route.params.id) {
+          index = x
+        }
+      }
+      if (index === -1) {
+        this.$router.push('/newTopic')
+      }
+      let tmp = topics[index]
+      this.topicQuestion = tmp.topicQuestion
+      this.description = tmp.description
+      this.proposalTime = tmp.proposalTime
+      this.votingTime = tmp.votingTime
+      this.proposals = tmp.proposals
+      console.log(this.votingTime)
+      // this.$route.params.id
     }
   },
   computed: {
     getProposalTime () {
-      return getTimeEnding(currentTopic.proposalTime)
+      return getTimeEnding(this.proposalTime)
     },
     getVotingTime () {
-      return getTimeEnding(currentTopic.votingTime)
+      return getTimeEnding(this.votingTime)
     }
   },
   data () {
     return {
-      topicQuestion: currentTopic.topicQuestion,
-      description: currentTopic.description,
-      proposalTime: currentTopic.proposalTime,
-      votingTime: currentTopic.votingTime,
-      proposals: currentTopic.proposals,
+      topicQuestion: '',
+      description: '',
+      proposalTime: '',
+      votingTime: '',
+      proposals: '',
       newProposal: ''
     }
   }

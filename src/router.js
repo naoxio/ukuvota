@@ -25,7 +25,7 @@ export default new VueRouter({
     { name: 'index', path: '/', redirect: { name: 'newTopic' } },
     { name: 'newTopic', path: '/newTopic', component: load('NewTopic') },
     { name: 'collectProposals', path: '/:id/collectProposals', component: load('CollectProposals') },
-    { path: '/:id/', component: load('CollectProposals') },
+    { path: '/:id/', redirect: { name: 'collectProposals' } },
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found
   ]
