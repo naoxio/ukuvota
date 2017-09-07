@@ -1,5 +1,6 @@
 <template>
   <main-layout>
+
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field :label="topicQuestion"></q-field></h5>
@@ -8,7 +9,7 @@
           <q-item-main label="Proposal Collection Time" :sublabel="getProposalTime">          </q-item-main>
         </q-item>
         <q-item tag="label">
-          <q-item-main label="Voting Time" :sublabel="getProposalTime">          </q-item-main>
+          <q-item-main label="Voting Time" :sublabel="getVotingTime">          </q-item-main>
         </q-item>
       </q-card-main>
     </q-card>
@@ -16,11 +17,13 @@
       <q-card-main>
         <h5><q-field label="Add Proposal"></q-field></h5>
         <div class="row justify-between items-center" >
-          <div class="col-8">
-            <q-input v-model="addProposal" float-label="Proposal" />
+          <div class="col-9">
+            <q-input v-model="newProposal" float-label="Proposal" />
           </div>
-          <div class="col-3">
-            <q-btn icon="arrow forward">Add</q-btn>
+          <div class="col-2">
+            <q-btn @click="addProposal">Add</q-btn>
+          </div>
+          <div class="col-auto">
           </div>
         </div>
       </q-card-main>
@@ -28,18 +31,14 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field label="Current Proposals"></q-field></h5>
-
       </q-card-main>
       <q-list highlight>
-        <q-item>
+        <q-item v-for="proposal in proposals">
           <q-item-main>
-            <q-item-tile label>Change Nothing</q-item-tile>
+            <q-item-tile label>{{ proposal }}</q-item-tile>
           </q-item-main>
         </q-item>
         <q-item-separator />
-        <q-item>
-          <q-item-main label="Repeat Process " />
-        </q-item>
       </q-list>
     </q-card>
   </main-layout>
@@ -52,7 +51,6 @@ let currentTopic = {}
 let loadData = () => {
   let topics = JSON.parse(LocalStorage.get.item('topics'))
   currentTopic = topics[0]
-  console.log(currentTopic)
 }
 
 let getTimeEnding = (time) => {
@@ -86,6 +84,11 @@ export default {
     QList,
     QListHeader
   },
+  methods: {
+    addProposal () {
+      this.proposals.push(this.newProposal)
+    }
+  },
   computed: {
     getProposalTime () {
       return getTimeEnding(currentTopic.proposalTime)
@@ -100,7 +103,8 @@ export default {
       description: currentTopic.description,
       proposalTime: currentTopic.proposalTime,
       votingTime: currentTopic.votingTime,
-      addProposal: ''
+      proposals: currentTopic.proposals,
+      newProposal: ''
     }
   }
 }
