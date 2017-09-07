@@ -90,7 +90,7 @@ export default {
         }
         topics.push(newTopic)
         LocalStorage.set('topics', JSON.stringify(topics))
-        this.$router.push('/collectProposals')
+        this.$router.push(id + '/collectProposals')
       }
     }
   },
