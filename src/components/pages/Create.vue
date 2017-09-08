@@ -12,14 +12,29 @@
         </template>
 
         <q-input float-label="Topic Question" v-model="topicQuestion"/>
+        <q-field label="Proposal Collection Time"></q-field>
+        <div class="row">
+          <q-select
+            radio
+            class="col-4"
+            v-model="proposalDaySelect"
+           :options="proposalDays"
+          />
+          <q-select
+            radio
+            class="col-4"
+            v-model="proposalHourSelect"
+           :options="proposalHours"
+          />
+          <q-select
+            radio
+            class="col-4"
+            v-model="proposalMinuteSelect"
+           :options="proposalMinutes"
+          />
+        </div>
+        <q-field label="Voting Time"></q-field>
         <q-select
-          float-label="Proposal Collection Time"
-          radio
-          v-model="proposalSelect"
-         :options="proposalTimes"
-        />
-        <q-select
-          float-label="Voting Time"
           radio
           v-model="votingSelect"
          :options="votingTimes"
@@ -42,7 +57,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
 const
   { addToDate } = date,
@@ -57,7 +72,6 @@ export default {
     QCardMain,
     QCardMedia,
     QCardTitle,
-    QDatetimeRange,
     QField,
     QInlineDatetime,
     QInput,
@@ -87,7 +101,7 @@ export default {
         if (topics === null) {
           topics = []
         }
-        let endProposal = addToDate(today, {days: this.proposalSelect})
+        let endProposal = addToDate(today, {days: this.proposalDaySelect, hours: this.proposalHourSelect, minutes: this.proposalMinuteSelect})
 
         // create a new Topic object
         let newTopic = {
@@ -117,10 +131,75 @@ export default {
       topicQuestion: '',
       topicMissing: false,
       visible: false,
-      proposalSelect: 2,
-      proposalTimes: [
+      proposalMinutes: [
         {
-          label: '0 (for testing)',
+          label: '',
+          value: 0
+        },
+        {
+          label: '1 Minute',
+          value: 1
+        },
+        {
+          label: '5 Minutes',
+          value: 5
+        },
+        {
+          label: '13 Minutes',
+          value: 13
+        },
+        {
+          label: '21 Minutes',
+          value: 21
+        },
+        {
+          label: '34 Minutes',
+          value: 34
+        },
+        {
+          label: '55 Minutes',
+          value: 55
+        }
+      ],
+      proposalMinuteSelect: 0,
+      proposalHours: [
+        {
+          label: '',
+          value: 0
+        },
+        {
+          label: '1 Hour',
+          value: 1
+        },
+        {
+          label: '2 Hours',
+          value: 2
+        },
+        {
+          label: '3 Hours',
+          value: 3
+        },
+        {
+          label: '5 Hours',
+          value: 5
+        },
+        {
+          label: '8 Hours',
+          value: 8
+        },
+        {
+          label: '13 Hours',
+          value: 13
+        },
+        {
+          label: '21 Hours',
+          value: 21
+        }
+      ],
+      proposalHourSelect: 0,
+      proposalDays: [
+        {
+          label: '',
           value: 0
         },
         {
@@ -136,14 +215,27 @@ export default {
           value: 3
         },
         {
-          label: '4 Days',
-          value: 4
-        },
-        {
           label: '5 Days',
           value: 5
+        },
+        {
+          label: '8 Days',
+          value: 8
+        },
+        {
+          label: '13 Days',
+          value: 13
+        },
+        {
+          label: '21 Days',
+          value: 21
+        },
+        {
+          label: '34 Days',
+          value: 21
         }
       ],
+      proposalDaySelect: 2,
       votingSelect: 1,
       votingTimes: [
         {
@@ -159,12 +251,24 @@ export default {
           value: 3
         },
         {
-          label: '4 Days',
-          value: 4
-        },
-        {
           label: '5 Days',
           value: 5
+        },
+        {
+          label: '8 Days',
+          value: 8
+        },
+        {
+          label: '13 Days',
+          value: 13
+        },
+        {
+          label: '21 Days',
+          value: 21
+        },
+        {
+          label: '34 Days',
+          value: 34
         }
       ]
     }

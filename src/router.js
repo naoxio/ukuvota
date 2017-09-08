@@ -22,10 +22,11 @@ export default new VueRouter({
    */
 
   routes: [
-    { name: 'index', path: '/', redirect: { name: 'newTopic' } },
-    { name: 'newTopic', path: '/newTopic', component: load('NewTopic') },
+    { name: 'index', path: '/', redirect: { name: 'create' } },
+    { name: 'create', path: '/create', component: load('Create') },
     { name: 'collect', path: '/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
+    { name: 'results', path: '/:id/results', component: load('Results') },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found

@@ -55,10 +55,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
-
-const
-  today = new Date()
+import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 
 export default {
   components: {
@@ -68,7 +65,6 @@ export default {
     QCardMain,
     QCardMedia,
     QCardTitle,
-    QDatetimeRange,
     QField,
     QInput,
     QItem,
@@ -131,6 +127,7 @@ export default {
       }, 1000)
     },
     setProposalTimer () {
+      let today = new Date()
       let timeStamp = this.proposalTime
       let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
       let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
