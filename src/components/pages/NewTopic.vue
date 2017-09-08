@@ -87,7 +87,6 @@ export default {
         if (topics === null) {
           topics = []
         }
-        console.log(addToDate(today, 2))
         let endProposal = addToDate(today, {days: this.proposalSelect})
 
         // create a new Topic object

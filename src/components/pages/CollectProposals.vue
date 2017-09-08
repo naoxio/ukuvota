@@ -5,7 +5,7 @@
         <h5><q-field :label="topicQuestion"></q-field></h5>
         <q-field :label="topicDescription"></q-field>
         <q-item tag="label">
-          <q-item-main label="Proposal Time Ends In" :sublabel="getProposalTime">          </q-item-main>
+          <q-item-main label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
         </q-item>
       </q-card-main>
@@ -48,7 +48,6 @@
               </q-item-side>
             </q-item>
           </div>
-
         </div>
       </q-list>
     </q-card>
@@ -117,20 +116,30 @@ export default {
       this.votingTime = tmp.votingTime
       this.proposals = tmp.proposals
       this.id = tmp.id
+      this.setProposalTimer()
+      this.startIntervalUpdate()
       // this.$route.params.id
-    }
-  },
-  computed: {
-    getProposalTime () {
+    },
+    startIntervalUpdate () {
+      let component = this
+      setInterval(function () {
+      /*  if (timeToStopConditionMet) {
+          clearInterval(timerId);
+          return;
+        } */
+        component.setProposalTimer()
+      }, 1000)
+    },
+    setProposalTimer () {
       let timeStamp = this.proposalTime
       let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
       let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
       let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
       let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
       let output = ''
-
+      hours = hours + days * 24
       if (days > 1) {
-        output = days + ' days and ' + hours + ' hours'
+        output = hours + ' hours'
       }
       else if (hours > 1) {
         output = hours + ' hours and ' + minutes + ' minutes'
@@ -144,11 +153,11 @@ export default {
       else {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
         // this.$router.push('/vote')
-        console.log(days)
       }
-
-      return output
-    },
+      this.proposalTimer = output
+    }
+  },
+  computed: {
     getVotingTime () {
       let output = this.votingTime
       if (output === 1) {
@@ -165,7 +174,9 @@ export default {
       votingTime: '',
       proposals: '',
       newProposal: '',
-      proposalMissing: false
+      proposalTimer: '',
+      proposalMissing: false,
+      proposalDescription: ''
     }
   }
 }
