@@ -3,7 +3,7 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field :label="topicQuestion"></q-field></h5>
-        <q-field :label="description"></q-field>
+        <q-field :label="topicDescription"></q-field>
         <q-item tag="label">
           <q-item-main label="Proposal Time Ends In" :sublabel="getProposalTime">          </q-item-main>
           <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
@@ -13,15 +13,18 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field label="Add Proposal"></q-field></h5>
-        <div class="row justify-between items-center" >
-          <div class="col-9">
-            <q-input v-model="newProposal" float-label="Proposal" />
-          </div>
-          <div class="col-2">
-            <q-btn @click="addProposal">Add</q-btn>
-          </div>
-          <div class="col-auto">
-          </div>
+        <template v-if="proposalMissing && proposalMissing !== null">
+          <q-alert
+            color="dark"
+            icon="warning"
+          >
+            proposal is empty
+          </q-alert>
+        </template>
+        <q-input v-model="newProposal" float-label="Proposal" />
+        <q-input v-model="proposalDescription" float-label="Description (optional)" />
+        <div class="row justify-end">
+          <q-btn @click="addProposal">Add</q-btn>
         </div>
       </q-card-main>
     </q-card>
@@ -30,12 +33,23 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list highlight>
-        <q-item v-for="proposal in proposals" :key="proposal.id">
-          <q-item-main>
-            <q-item-tile label>{{ proposal }}</q-item-tile>
-          </q-item-main>
-        </q-item>
-        <q-item-separator />
+        <div class="row">
+          <div class="col-6">
+            <q-item v-for="title in proposals.title" :key="proposals.key">
+              <q-item-tile>
+                {{ title }}
+              </q-item-tile>
+            </q-item>
+          </div>
+          <div class="col-6">
+            <q-item v-for="description in proposals.description" :key="proposals.key">
+              <q-item-side>
+                {{ description }}
+              </q-item-side>
+            </q-item>
+          </div>
+
+        </div>
       </q-list>
     </q-card>
   </main-layout>
@@ -69,14 +83,21 @@ export default {
   mounted () {
     this.loadData()
   },
-  updated () {
-    this.$nextTick(function () {
-      console.log('hihi')
-    })
-  },
   methods: {
     addProposal () {
-      this.proposals.push(this.newProposal)
+      let error = false
+      // error check
+      if (this.newPropsal === '') {
+        this.proposalMissing = true
+        error = true
+      }
+      else {
+        this.proposalMissing = false
+      }
+      if (!error) {
+        this.proposals.title.push(this.newProposal)
+        this.proposals.description.push(this.proposalDescription)
+      }
     },
     loadData () {
       let topics = JSON.parse(LocalStorage.get.item('topics'))
@@ -91,7 +112,7 @@ export default {
       }
       let tmp = topics[index]
       this.topicQuestion = tmp.topicQuestion
-      this.description = tmp.description
+      this.topicDescription = tmp.description
       this.proposalTime = tmp.proposalTime
       this.votingTime = tmp.votingTime
       this.proposals = tmp.proposals
@@ -122,7 +143,8 @@ export default {
       }
       else {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
-        // this.$router.push(this.id + '/vote')
+        // this.$router.push('/vote')
+        console.log(days)
       }
 
       return output
@@ -138,11 +160,12 @@ export default {
   data () {
     return {
       topicQuestion: '',
-      description: '',
+      topicDescription: '',
       proposalTime: '',
       votingTime: '',
       proposals: '',
-      newProposal: ''
+      newProposal: '',
+      proposalMissing: false
     }
   }
 }
