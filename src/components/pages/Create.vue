@@ -59,9 +59,7 @@
 import MainLayout from '@/layouts/MainLayout'
 import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
 
-const
-  { addToDate } = date,
-  today = new Date()
+const { addToDate } = date
 
 export default {
   components: {
@@ -101,11 +99,13 @@ export default {
         if (topics === null) {
           topics = []
         }
+
+        let today = new Date()
         let endProposal = addToDate(today, {days: this.proposalDaySelect, hours: this.proposalHourSelect, minutes: this.proposalMinuteSelect})
 
         // create a new Topic object
         let newTopic = {
-          'topicQuestion': this.topicQuestion,
+          'question': this.topicQuestion,
           'proposalTime': endProposal,
           'votingTime': this.votingSelect,
           'description': this.description,

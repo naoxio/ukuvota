@@ -2,8 +2,8 @@
   <main-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field :label="topicQuestion"></q-field></h5>
-        <q-field :label="topicDescription"></q-field>
+        <h5><q-field :label="topic.question"></q-field></h5>
+        <q-field :label="topic.description"></q-field>
         <q-item tag="label">
           <q-item-main label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
@@ -35,14 +35,14 @@
       <q-list highlight>
         <div class="row">
           <div class="col-6">
-            <q-item v-for="title in proposals.title" :key="proposals.key">
+            <q-item v-for="title in topic.proposals.title" :key="topic.proposals.key">
               <q-item-tile>
                 {{ title }}
               </q-item-tile>
             </q-item>
           </div>
           <div class="col-6">
-            <q-item v-for="description in proposals.description" :key="proposals.key">
+            <q-item v-for="description in topic.proposals.description" :key="topic.proposals.key">
               <q-item-side>
                 {{ description }}
               </q-item-side>
@@ -56,8 +56,8 @@
 <script>
 import MainLayout from '@/layouts/MainLayout'
 import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
-const
-  { subtractToDate } = date
+
+const { addToDate } = date
 
 export default {
   components: {
@@ -92,48 +92,54 @@ export default {
         this.proposalMissing = false
       }
       if (!error) {
-        this.proposals.title.push(this.newProposal)
-        this.proposals.description.push(this.proposalDescription)
+        this.topic.proposals.title.push(this.newProposal)
+        this.topic.proposals.description.push(this.proposalDescription)
       }
     },
     loadData () {
-      let topics = JSON.parse(LocalStorage.get.item('topics'))
-      let index = -1
-      for (let x = 0; x < topics.length; x++) {
-        if (topics[x].id === this.$route.params.id) {
-          index = x
+      this.topics = JSON.parse(LocalStorage.get.item('topics'))
+      this.index = -1
+      for (let x = 0; x < this.topics.length; x++) {
+        if (this.topics[x].id === this.$route.params.id) {
+          this.index = x
         }
       }
-      if (index === -1) {
+      if (this.index === -1) {
         this.$router.push('/newTopic')
       }
-      let tmp = topics[index]
-      this.topicQuestion = tmp.topicQuestion
-      this.topicDescription = tmp.description
-      this.proposalTime = tmp.proposalTime
-      this.votingTime = tmp.votingTime
-      this.proposals = tmp.proposals
-      this.id = tmp.id
+      this.topic = this.topics[this.index]
       this.setProposalTimer()
       this.startIntervalUpdate()
       // this.$route.params.id
     },
     next () {
+      let today = new Date()
+      let endVoting = addToDate(today, {days: this.topic.votingTime})
 
+      // update topic object by replacing it
+      let updatedTopic = {
+        'topicQuestion': this.topic.question,
+        'proposalTime': '0',
+        'votingTime': endVoting,
+        'description': this.topic.description,
+        'id': this.topic.id,
+        'proposals': this.topic.proposals
+      }
+      this.topics[this.index] = updatedTopic
+
+      // update localstorage topics content
+      LocalStorage.set('topics', JSON.stringify(this.topics))
+      this.$router.push({name: 'vote', params: { id: this.id }})
     },
     startIntervalUpdate () {
       let component = this
       setInterval(function () {
-      /*  if (timeToStopConditionMet) {
-          clearInterval(timerId);
-          return;
-        } */
         component.setProposalTimer()
       }, 1000)
     },
     setProposalTimer () {
       let today = new Date()
-      let timeStamp = this.proposalTime
+      let timeStamp = this.topic.proposalTime
       let diff = date.formatDate(timeStamp, 'x') - date.formatDate(today, 'x')
       let days = date.formatDate(diff, 'D')
       let hours = date.formatDate(diff, 'h')
@@ -164,7 +170,7 @@ export default {
   },
   computed: {
     getVotingTime () {
-      let output = this.votingTime
+      let output = this.topic.votingTime
       if (output === 1) {
         return '1 day'
       }
@@ -173,11 +179,7 @@ export default {
   },
   data () {
     return {
-      topicQuestion: '',
-      topicDescription: '',
-      proposalTime: '',
-      votingTime: '',
-      proposals: '',
+      topic: '',
       newProposal: '',
       proposalTimer: '',
       proposalMissing: false,
