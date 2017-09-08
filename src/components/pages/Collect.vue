@@ -13,12 +13,21 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field label="Add Proposal"></q-field></h5>
-        <template v-if="proposalMissing && proposalMissing !== null">
+        <template v-if="proposalEmpty">
           <q-alert
             color="dark"
             icon="warning"
           >
             proposal is empty
+          </q-alert>
+        </template>
+        <template v-if="proposalExists">
+          <q-alert
+            color="dark"
+            icon="warning"
+            v-model="proposalExists"
+          >
+            proposal exists
           </q-alert>
         </template>
         <q-input v-model="newProposal" float-label="Proposal" />
@@ -42,18 +51,20 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+import { date, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QIcon, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 import { loadData, saveData } from '@/data'
 
 export default {
   components: {
     MainLayout,
+    QAlert,
     QBtn,
     QCard,
     QCardMain,
     QCardMedia,
     QCardTitle,
     QField,
+    QIcon,
     QInput,
     QItem,
     QItemSeparator,
@@ -73,20 +84,28 @@ export default {
       this.startIntervalUpdate()
     }
   },
+
   methods: {
     addProposal () {
       let error = false
       // error check
-      if (this.newPropsal === '') {
-        this.proposalMissing = true
+      if (this.newProposal === '') {
+        this.proposalEmpty = true
+        this.proposalExists = false
         error = true
       }
       else {
-        this.proposalMissing = false
+        this.proposalEmpty = false
+        if (typeof this.topic.proposals[this.newProposal] !== 'undefined') {
+          this.proposalExists = true
+          error = true
+        }
+        else {
+          this.proposalExists = false
+        }
       }
       if (!error) {
-        this.topic.proposals.title.push(this.newProposal)
-        this.topic.proposals.description.push(this.proposalDescription)
+        this.topic.proposals[this.newProposal] = this.proposalDescription
         this.newProposal = ''
         this.proposalDescription = ''
       }
@@ -131,6 +150,7 @@ export default {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
         this.next()
       }
+
       this.proposalTimer = output
     }
   },
@@ -148,7 +168,8 @@ export default {
       topic: '',
       newProposal: '',
       proposalTimer: '',
-      proposalMissing: false,
+      proposalEmpty: false,
+      proposalExists: false,
       proposalDescription: ''
     }
   }
