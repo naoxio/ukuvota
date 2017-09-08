@@ -55,9 +55,8 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
-
-const { addToDate } = date
+import { date, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+import { loadData, saveData } from '@/data'
 
 export default {
   components: {
@@ -78,7 +77,14 @@ export default {
     QListHeader
   },
   mounted () {
-    this.loadData()
+    this.topic = loadData(this.$route.params.id)
+    if (this.topic === -1) {
+      this.$router.push('/create')
+    }
+    else {
+      this.setProposalTimer()
+      this.startIntervalUpdate()
+    }
   },
   methods: {
     addProposal () {
@@ -96,40 +102,11 @@ export default {
         this.topic.proposals.description.push(this.proposalDescription)
       }
     },
-    loadData () {
-      this.topics = JSON.parse(LocalStorage.get.item('topics'))
-      this.index = -1
-      for (let x = 0; x < this.topics.length; x++) {
-        if (this.topics[x].id === this.$route.params.id) {
-          this.index = x
-        }
-      }
-      if (this.index === -1) {
-        this.$router.push('/newTopic')
-      }
-      this.topic = this.topics[this.index]
-      this.setProposalTimer()
-      this.startIntervalUpdate()
-      // this.$route.params.id
-    },
     next () {
-      let today = new Date()
-      let endVoting = addToDate(today, {days: this.topic.votingTime})
-
-      // update topic object by replacing it
-      let updatedTopic = {
-        'topicQuestion': this.topic.question,
-        'proposalTime': '0',
-        'votingTime': endVoting,
-        'description': this.topic.description,
-        'id': this.topic.id,
-        'proposals': this.topic.proposals
+      let done = saveData(this.topics, this.index)
+      if (done) {
+        this.$router.push({name: 'vote', params: { id: this.id }})
       }
-      this.topics[this.index] = updatedTopic
-
-      // update localstorage topics content
-      LocalStorage.set('topics', JSON.stringify(this.topics))
-      this.$router.push({name: 'vote', params: { id: this.id }})
     },
     startIntervalUpdate () {
       let component = this

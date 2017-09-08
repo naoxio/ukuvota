@@ -112,7 +112,7 @@ export default {
           'id': id,
           'proposals': {
             'title': ['Change Nothing', 'Repeat Process'],
-            'description': ['Leave things as they are now', 'Recollect proposals and do another voting session']
+            'description': ['keep things the way they are', 'look for other options, recollect proposals and do another voting session']
           }
         }
         topics.push(newTopic)
