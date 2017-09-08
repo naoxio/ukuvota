@@ -31,7 +31,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QRadio } from 'quasar'
+import { LocalStorage, QAlert, QBtn, QCard, QCardMain, QField, QRadio } from 'quasar'
 
 export default {
   components: {
@@ -44,7 +44,31 @@ export default {
     QRadio
   },
   methods: {
-
+    loadData () {
+      let topics = JSON.parse(LocalStorage.get.item('topics'))
+      let index = -1
+      for (let x = 0; x < topics.length; x++) {
+        if (topics[x].id === this.$route.params.id) {
+          index = x
+        }
+      }
+      if (index === -1) {
+        this.$router.push('/newTopic')
+      }
+      let tmp = topics[index]
+      this.topicQuestion = tmp.topicQuestion
+      this.topicDescription = tmp.description
+      this.proposalTime = tmp.proposalTime
+      this.votingTime = tmp.votingTime
+      this.proposals = tmp.proposals
+      this.id = tmp.id
+      this.setProposalTimer()
+      this.startIntervalUpdate()
+      // this.$route.params.id
+    }
+  },
+  mounted () {
+    this.loadData()
   },
   data () {
     return {

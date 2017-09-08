@@ -56,6 +56,8 @@
 <script>
 import MainLayout from '@/layouts/MainLayout'
 import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+const
+  { subtractToDate } = date
 
 export default {
   components: {
@@ -116,6 +118,9 @@ export default {
       this.startIntervalUpdate()
       // this.$route.params.id
     },
+    next () {
+
+    },
     startIntervalUpdate () {
       let component = this
       setInterval(function () {
@@ -129,14 +134,14 @@ export default {
     setProposalTimer () {
       let today = new Date()
       let timeStamp = this.proposalTime
-      let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
-      let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
-      let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
-      let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
+      let diff = date.formatDate(timeStamp, 'x') - date.formatDate(today, 'x')
+      let days = date.formatDate(diff, 'D')
+      let hours = date.formatDate(diff, 'h')
+      let minutes = date.formatDate(diff, 'm')
+      let seconds = date.formatDate(diff, 's')
       let output = ''
-      hours = hours + days * 24
       if (days > 1) {
-        output = hours + ' hours'
+        output = days + ' days and ' + hours + ' hours'
       }
       else if (hours > 1) {
         output = hours + ' hours and ' + minutes + ' minutes'
@@ -144,12 +149,15 @@ export default {
       else if (minutes > 1) {
         output = minutes + ' minutes and ' + seconds + ' seconds'
       }
-      else if (seconds > 0) {
+      else if (seconds > 1) {
         output = seconds + ' seconds'
+      }
+      else if (seconds > 0) {
+        output = '1 second'
       }
       else {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
-        this.$router.push({name: 'vote', params: { id: this.id }})
+        this.next()
       }
       this.proposalTimer = output
     }
