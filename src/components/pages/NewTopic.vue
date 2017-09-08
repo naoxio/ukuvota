@@ -107,7 +107,7 @@ export default {
         LocalStorage.set('topics', JSON.stringify(topics))
 
         // go to collectProposals vue
-        this.$router.push(id + '/collectProposals')
+        this.$router.push(id + '/collect')
       }
     }
   },
@@ -119,6 +119,10 @@ export default {
       visible: false,
       proposalSelect: 2,
       proposalTimes: [
+        {
+          label: '0 (for testing)',
+          value: 0
+        },
         {
           label: '1 Day',
           value: 1

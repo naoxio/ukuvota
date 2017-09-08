@@ -152,7 +152,7 @@ export default {
       }
       else {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
-        // this.$router.push('/vote')
+        this.$router.push({name: 'vote', params: { id: this.id }})
       }
       this.proposalTimer = output
     }

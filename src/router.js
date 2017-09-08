@@ -24,8 +24,7 @@ export default new VueRouter({
   routes: [
     { name: 'index', path: '/', redirect: { name: 'newTopic' } },
     { name: 'newTopic', path: '/newTopic', component: load('NewTopic') },
-    { name: 'collectProposals', path: '/:id/collectProposals', component: load('CollectProposals') },
-    { path: '/:id/', redirect: { name: 'collectProposals' } },
+    { name: 'collect', path: '/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
 
     // Always leave this last one
