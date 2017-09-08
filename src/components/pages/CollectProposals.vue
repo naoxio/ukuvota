@@ -90,8 +90,6 @@ export default {
         this.$router.push('/newTopic')
       }
       let tmp = topics[index]
-      console.log(index)
-      console.log(topics[index])
       this.topicQuestion = tmp.topicQuestion
       this.description = tmp.description
       this.proposalTime = tmp.proposalTime
@@ -99,34 +97,6 @@ export default {
       this.proposals = tmp.proposals
       this.id = tmp.id
       // this.$route.params.id
-    },
-    getProposalTimeEnding (timeStamp, id) {
-      let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
-      let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
-      let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
-      let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
-      let output = ''
-      console.log('today ' +date.formatDate(today, 'DD'))
-      console.log('today ' +date.formatDate(timeStamp, 'DD'))
-
-      console.log(days)
-      if (days > 1) {
-        output = days + ' days left and ' + hours + ' hours left'
-      }
-      else if (hours > 1) {
-        output = hours + ' hours left and ' + minutes + ' minutes left'
-      }
-      else if (minutes > 1) {
-        output = minutes + ' minutes left and ' + seconds + ' seconds left'
-      }
-      else if (seconds > 0) {
-        output = seconds + ' seconds left'
-      }
-      else {
-        // this.$router.push(this.id + '/vote')
-      }
-
-      return output
     }
   },
   computed: {
@@ -137,21 +107,18 @@ export default {
       let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
       let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
       let output = ''
-      console.log('today ' + date.formatDate(today, 'DD'))
-      console.log('today ' + date.formatDate(timeStamp, 'DD'))
 
-      console.log(days)
       if (days > 1) {
-        output = days + ' days left and ' + hours + ' hours left'
+        output = days + ' days and ' + hours + ' hours'
       }
       else if (hours > 1) {
-        output = hours + ' hours left and ' + minutes + ' minutes left'
+        output = hours + ' hours and ' + minutes + ' minutes'
       }
       else if (minutes > 1) {
-        output = minutes + ' minutes left and ' + seconds + ' seconds left'
+        output = minutes + ' minutes and ' + seconds + ' seconds'
       }
       else if (seconds > 0) {
-        output = seconds + ' seconds left'
+        output = seconds + ' seconds'
       }
       else {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
