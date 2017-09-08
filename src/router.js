@@ -26,6 +26,8 @@ export default new VueRouter({
     { name: 'newTopic', path: '/newTopic', component: load('NewTopic') },
     { name: 'collectProposals', path: '/:id/collectProposals', component: load('CollectProposals') },
     { path: '/:id/', redirect: { name: 'collectProposals' } },
+    { name: 'vote', path: '/:id/vote', component: load('Vote') },
+
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found
   ]

@@ -5,10 +5,8 @@
         <h5><q-field :label="topicQuestion"></q-field></h5>
         <q-field :label="description"></q-field>
         <q-item tag="label">
-          <q-item-main label="Proposal Collection Time" :sublabel="getProposalTime">          </q-item-main>
-        </q-item>
-        <q-item tag="label">
-          <q-item-main label="Voting Time" :sublabel="getVotingTime">          </q-item-main>
+          <q-item-main label="Proposal Time Ends In" :sublabel="getProposalTime">          </q-item-main>
+          <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
         </q-item>
       </q-card-main>
     </q-card>
@@ -44,17 +42,10 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+import { date, LocalStorage, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
 
-let getTimeEnding = (time) => {
-  if (time === 1) {
-    time = '1 Day'
-  }
-  else {
-    time = time + ' Days'
-  }
-  return time
-}
+const
+  today = new Date()
 
 export default {
   components: {
@@ -78,6 +69,11 @@ export default {
   mounted () {
     this.loadData()
   },
+  updated () {
+    this.$nextTick(function () {
+      console.log('hihi')
+    })
+  },
   methods: {
     addProposal () {
       this.proposals.push(this.newProposal)
@@ -94,21 +90,82 @@ export default {
         this.$router.push('/newTopic')
       }
       let tmp = topics[index]
+      console.log(index)
+      console.log(topics[index])
       this.topicQuestion = tmp.topicQuestion
       this.description = tmp.description
       this.proposalTime = tmp.proposalTime
       this.votingTime = tmp.votingTime
       this.proposals = tmp.proposals
-      console.log(this.votingTime)
+      this.id = tmp.id
       // this.$route.params.id
+    },
+    getProposalTimeEnding (timeStamp, id) {
+      let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
+      let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
+      let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
+      let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
+      let output = ''
+      console.log('today ' +date.formatDate(today, 'DD'))
+      console.log('today ' +date.formatDate(timeStamp, 'DD'))
+
+      console.log(days)
+      if (days > 1) {
+        output = days + ' days left and ' + hours + ' hours left'
+      }
+      else if (hours > 1) {
+        output = hours + ' hours left and ' + minutes + ' minutes left'
+      }
+      else if (minutes > 1) {
+        output = minutes + ' minutes left and ' + seconds + ' seconds left'
+      }
+      else if (seconds > 0) {
+        output = seconds + ' seconds left'
+      }
+      else {
+        // this.$router.push(this.id + '/vote')
+      }
+
+      return output
     }
   },
   computed: {
     getProposalTime () {
-      return getTimeEnding(this.proposalTime)
+      let timeStamp = this.proposalTime
+      let days = date.formatDate(timeStamp, 'DD') - date.formatDate(today, 'DD')
+      let hours = date.formatDate(timeStamp, 'HH') - date.formatDate(today, 'HH')
+      let minutes = date.formatDate(timeStamp, 'mm') - date.formatDate(today, 'mm')
+      let seconds = date.formatDate(timeStamp, 'ss') - date.formatDate(today, 'ss')
+      let output = ''
+      console.log('today ' + date.formatDate(today, 'DD'))
+      console.log('today ' + date.formatDate(timeStamp, 'DD'))
+
+      console.log(days)
+      if (days > 1) {
+        output = days + ' days left and ' + hours + ' hours left'
+      }
+      else if (hours > 1) {
+        output = hours + ' hours left and ' + minutes + ' minutes left'
+      }
+      else if (minutes > 1) {
+        output = minutes + ' minutes left and ' + seconds + ' seconds left'
+      }
+      else if (seconds > 0) {
+        output = seconds + ' seconds left'
+      }
+      else {
+        // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
+        // this.$router.push(this.id + '/vote')
+      }
+
+      return output
     },
     getVotingTime () {
-      return getTimeEnding(this.votingTime)
+      let output = this.votingTime
+      if (output === 1) {
+        return '1 day'
+      }
+      return output + ' days'
     }
   },
   data () {

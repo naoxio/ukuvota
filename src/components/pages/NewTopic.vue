@@ -42,7 +42,11 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QDatetimeRange, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+
+const
+  { addToDate } = date,
+  today = new Date()
 
 export default {
   components: {
@@ -66,6 +70,7 @@ export default {
   methods: {
     next () {
       let error = false
+      // error check
       if (this.topicQuestion === '') {
         this.topicMissing = true
         error = true
@@ -73,23 +78,33 @@ export default {
       else {
         this.topicMissing = false
       }
-      if (!error) {
+
+      if (!error) { // if no errors proceed
         let topics = JSON.parse(LocalStorage.get.item('topics'))
         let id = uid()
 
+        // if localstorage item 'topics' doesnt exist create empty array
         if (topics === null) {
           topics = []
         }
+        console.log(addToDate(today, 2))
+        let endProposal = addToDate(today, {days: this.proposalSelect})
+
+        // create a new Topic object
         let newTopic = {
           'topicQuestion': this.topicQuestion,
-          'proposalTime': this.proposalSelect,
+          'proposalTime': endProposal,
           'votingTime': this.votingSelect,
           'description': this.description,
           'id': id,
           'proposals': ['Change Nothing', 'Repeat Process']
         }
         topics.push(newTopic)
+
+        // update localstorage topics content
         LocalStorage.set('topics', JSON.stringify(topics))
+
+        // go to collectProposals vue
         this.$router.push(id + '/collectProposals')
       }
     }
@@ -100,50 +115,50 @@ export default {
       topicQuestion: '',
       topicMissing: false,
       visible: false,
-      proposalSelect: '2',
+      proposalSelect: 2,
       proposalTimes: [
         {
           label: '1 Day',
-          value: '1'
+          value: 1
         },
         {
           label: '2 Days',
-          value: '2'
+          value: 2
         },
         {
           label: '3 Days',
-          value: '3'
+          value: 3
         },
         {
           label: '4 Days',
-          value: '4'
+          value: 4
         },
         {
           label: '5 Days',
-          value: '5'
+          value: 5
         }
       ],
-      votingSelect: '1',
+      votingSelect: 1,
       votingTimes: [
         {
           label: '1 Day',
-          value: '1'
+          value: 1
         },
         {
           label: '2 Days',
-          value: '2'
+          value: 2
         },
         {
           label: '3 Days',
-          value: '3'
+          value: 3
         },
         {
           label: '4 Days',
-          value: '4'
+          value: 4
         },
         {
           label: '5 Days',
-          value: '5'
+          value: 5
         }
       ]
     }
