@@ -33,22 +33,9 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list highlight>
-        <div class="row">
-          <div class="col-6">
-            <q-item v-for="title in topic.proposals.title" :key="topic.proposals.key">
-              <q-item-tile>
-                {{ title }}
-              </q-item-tile>
-            </q-item>
-          </div>
-          <div class="col-6">
-            <q-item v-for="description in topic.proposals.description" :key="topic.proposals.key">
-              <q-item-side>
-                {{ description }}
-              </q-item-side>
-            </q-item>
-          </div>
-        </div>
+        <q-item v-for="(description, title) in topic.proposals" :key="topic.proposals.key">
+          <q-item-main :label="title" :sublabel="description"></q-item-main>
+        </q-item>
       </q-list>
     </q-card>
   </main-layout>
@@ -100,6 +87,8 @@ export default {
       if (!error) {
         this.topic.proposals.title.push(this.newProposal)
         this.topic.proposals.description.push(this.proposalDescription)
+        this.newProposal = ''
+        this.proposalDescription = ''
       }
     },
     next () {

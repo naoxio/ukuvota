@@ -111,8 +111,8 @@ export default {
           'description': this.description,
           'id': id,
           'proposals': {
-            'title': ['Change Nothing', 'Repeat Process'],
-            'description': ['keep things the way they are', 'look for other options, recollect proposals and do another voting session']
+            'Change Nothing': 'keep things the way they are',
+            'Repeat Process': 'look for other options and repeat the process'
           }
         }
         topics.push(newTopic)
