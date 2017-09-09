@@ -11,30 +11,34 @@
     </q-card>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <q-item v-for="(description, title) in topic.proposals" :key="topic.proposals.key">
-          <q-item-main :label="title" :sublabel="description"></q-item-main>
-        </q-item>
-        <h5><q-field :label="topicQuestion"></q-field></h5>
-        <q-field :label="topicDescription"></q-field>
-        <div class="row justify-around">
-          <img src="statics/1f621.svg" height="32px" />
-          <img src="statics/1f620.svg" height="32px" />
-          <img src="statics/1f641.svg" height="32px" />
-          <img src="statics/1f636.svg" height="32px" />
-          <img src="statics/1f642.svg" height="32px" />
-          <img src="statics/1f60a.svg" height="32px" />
-          <img src="statics/2764.svg" height="32px" />
+        <div v-for="(description, title, key) in topic.proposals" :key="topic.proposals.key">
+          <h5><q-field :label="title"></q-field></h5>
+          <q-field :label="description"></q-field>
+          <div class="row justify-around">
+            <div :id="'emo-' + key + '_-3'" class="selected" @click="select(key, -3)">
+              <img class="emo" src="statics/1f621.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_-2'" @click="select(key, -2)">
+              <img class="emo"  src="statics/1f620.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_-1'" @click="select(key, -1)">
+              <img class="emo"  src="statics/1f641.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_0'" @click="select(key, 0)">
+              <img class="emo"  src="statics/1f636.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_1'" @click="select(key, 1)">
+              <img class="emo"  src="statics/1f642.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_2'" @click="select(key, 2)">
+              <img class="emo"  src="statics/1f60a.svg" height="32px" />
+            </div>
+            <div :id="'emo-' + key + '_3'" @click="select(key, 3)">
+              <img class="emo"  src="statics/2764.svg" height="32px" />
+            </div>
+          </div>
         </div>
-        </br>
-        <div class="row justify-around">
-          <q-radio v-model="radio1" val="-3" color="red"/>
-          <q-radio v-model="radio1" val="-2" color="red" style="margin-left: 10px" />
-          <q-radio v-model="radio1" val="-1" color="secondary" style="margin-left: 10px" />
-          <q-radio v-model="radio1" val="0" color="secondary" style="margin-left: 10px" />
-          <q-radio v-model="radio1" val="1" color="secondary" style="margin-left: 10px" />
-          <q-radio v-model="radio1" val="2" color="green" style="margin-left: 10px" />
-          <q-radio v-model="radio1" val="3" color="green" style="margin-left: 10px" />
-        </div>
+
       </q-card-main>
     </q-card>
   </main-layout>
@@ -56,9 +60,6 @@ export default {
     QItemMain,
     QRadio
   },
-  methods: {
-
-  },
   mounted () {
     this.topic = loadTopic(this.$route.params.id)
     if (this.topic === '-1') {
@@ -66,20 +67,38 @@ export default {
     }
     console.log(this.topic.proposals)
   },
+  methods: {
+    select (key, val) {
+      let values = [-3, -2, -1, 0, 1, 2, 3]
+      document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
+      console.log(val)
+      let index = values.indexOf(val)
+      values.splice(index, 1)
+      console.log(values)
+      for (let x = 0; x < values.length; x++) {
+        document.getElementById('emo-' + key + '_' + values[x]).removeAttribute('class', 'selected')
+      }
+    }
+  },
   data () {
     return {
       topic: '',
-      topicQuestion: 'hi',
-      topicDescription: 'hi',
-      radio1: 'two',
-      radio2: 'one',
-      radio3: 'three',
+      radio: '1',
       group: 'upload',
       list: ''
     }
   }
 }
 </script>
-<style lang="stylus">
+<style lang="styl">
+@import '~variables'
+img:hover
+  cursor pointer
 
+.selected
+  .emo
+  	filter grayscale(0)
+
+.emo
+	filter grayscale(1)
 </style>

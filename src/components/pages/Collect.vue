@@ -114,7 +114,7 @@ export default {
     },
     next () {
       clearInterval(this.timer)
-      let done = saveTopic(this.id)
+      let done = saveTopic(this.id, this.topic)
       console.log('done' + done)
       if (done) {
         // this.$router.push(this.$route.params.id + '/vote')
