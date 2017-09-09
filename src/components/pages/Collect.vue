@@ -77,7 +77,6 @@ export default {
   mounted () {
     this.id = this.$route.params.id
     this.topic = loadTopic(this.id)
-    console.log(this.topic, this.id)
     if (this.topic === -1) {
       this.$router.push('/create')
     }
@@ -117,8 +116,8 @@ export default {
       let done = saveTopic(this.id)
       console.log('done' + done)
       if (done) {
-        this.$router.push(this.$route.params.id + '/vote')
-        // this.$router.push({name: 'vote', params: { id: this.$route.params.id }})
+        // this.$router.push(this.$route.params.id + '/vote')
+        this.$router.push({name: 'vote', params: { id: this.$route.params.id }})
       }
     },
     startIntervalUpdate () {
@@ -158,8 +157,6 @@ export default {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
         this.next()
       }
-
-      console.log(diff)
 
       this.proposalTimer = output
     }
