@@ -13,6 +13,7 @@ require(`./themes/app.${__THEME}.styl`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
+import * as firebase from 'firebase'
 
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
@@ -32,4 +33,23 @@ Quasar.start(() => {
     router,
     render: h => h(require('./App'))
   })
+
+  initDb()
 })
+
+function initDb () {
+  // Initialize Firebase
+  var config = {
+    apiKey: 'AIzaSyB7KCC4PEbn1gk4NrdFlrARGmcYK7C1SnY',
+    authDomain: 'ukuvota.firebaseapp.com',
+    databaseURL: 'https://ukuvota.firebaseio.com',
+    projectId: 'ukuvota',
+    storageBucket: 'ukuvota.appspot.com'
+    // messagingSenderId: '105902830879"
+  }
+  firebase.initializeApp(config)
+  firebase.database().ref('users/' + '123').set({
+    username: 'Alexander',
+    email: '2ab@gmx.de'
+  })
+}
