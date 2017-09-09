@@ -24,10 +24,11 @@ export default new VueRouter({
   routes: [
     { name: 'index', path: '/', redirect: { name: 'create' } },
     { name: 'create', path: '/create', component: load('Create') },
-    { name: 'create', path: '/:id/create', redirect: { name: 'create' } },
     { name: 'collect', path: '/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
     { name: 'results', path: '/:id/results', component: load('Results') },
+
+    { path: '/:id/create', redirect: { name: 'create' } },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found

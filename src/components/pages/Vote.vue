@@ -32,7 +32,7 @@
 <script>
 import MainLayout from '@/layouts/MainLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QRadio } from 'quasar'
-import { loadData } from '@/data'
+import { loadTopic } from '@/data'
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
 
   },
   mounted () {
-    let topic = loadData(this.$route.params.id)
+    let topic = loadTopic(this.$route.params.id)
     if (topic === '1') {
       this.$router.push('/newTopic')
     }

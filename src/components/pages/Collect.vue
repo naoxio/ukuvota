@@ -52,7 +52,7 @@
 <script>
 import MainLayout from '@/layouts/MainLayout'
 import { date, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QIcon, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
-import { loadData, saveData } from '@/data'
+import { loadTopic, saveTopic } from '@/data'
 
 export default {
   components: {
@@ -75,7 +75,9 @@ export default {
     QListHeader
   },
   mounted () {
-    this.topic = loadData(this.$route.params.id)
+    this.id = this.$route.params.id
+    this.topic = loadTopic(this.id)
+    console.log(this.topic, this.id)
     if (this.topic === -1) {
       this.$router.push('/create')
     }
@@ -111,14 +113,17 @@ export default {
       }
     },
     next () {
-      let done = saveData(this.topics, this.index)
+      clearInterval(this.timer)
+      let done = saveTopic(this.id)
+      console.log('done' + done)
       if (done) {
-        this.$router.push({name: 'vote', params: { id: this.id }})
+        this.$router.push(this.$route.params.id + '/vote')
+        // this.$router.push({name: 'vote', params: { id: this.$route.params.id }})
       }
     },
     startIntervalUpdate () {
       let component = this
-      setInterval(function () {
+      this.timer = setInterval(function () {
         component.setProposalTimer()
       }, 1000)
     },
@@ -126,6 +131,9 @@ export default {
       let today = new Date()
       let timeStamp = this.topic.proposalTime
       let diff = date.formatDate(timeStamp, 'x') - date.formatDate(today, 'x')
+      if (diff < 0) {
+        this.next()
+      }
       let days = date.formatDate(diff, 'D')
       let hours = date.formatDate(diff, 'h')
       let minutes = date.formatDate(diff, 'm')
@@ -150,6 +158,8 @@ export default {
         // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
         this.next()
       }
+
+      console.log(diff)
 
       this.proposalTimer = output
     }

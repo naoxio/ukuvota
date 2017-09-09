@@ -2,14 +2,24 @@ import { LocalStorage, date } from 'quasar'
 
 const { addToDate } = date
 
-export const loadData = (route) => {
-  let topics = JSON.parse(LocalStorage.get.item('topics'))
+const getTopics = () => {
+  return JSON.parse(LocalStorage.get.item('topics'))
+}
+
+const getTopicIndex = (id) => {
+  let topics = getTopics()
   let index = -1
   for (let x = 0; x < topics.length; x++) {
-    if (topics[x].id === route) {
+    if (topics[x].id === id) {
       index = x
     }
   }
+  return index
+}
+export const loadTopic = (id) => {
+  let topics = getTopics()
+  let index = getTopicIndex(id)
+  console.log(index)
   if (index === -1) {
     return -1
   }
@@ -20,7 +30,9 @@ export const loadData = (route) => {
   return topic
 }
 
-export const saveData = (topics, index) => {
+export const saveTopic = (id) => {
+  let index = getTopicIndex(id)
+  let topics = getTopics()
   let today = new Date()
   let topic = topics[index]
   let endVoting = addToDate(today, {days: topic.votingTime})
