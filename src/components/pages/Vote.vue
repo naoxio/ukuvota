@@ -1,9 +1,19 @@
 <template>
   <main-layout>
-
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-
+        <h5><q-field :label="topic.question"></q-field></h5>
+        <q-field :label="topic.description"></q-field>
+        <q-item tag="label">
+          <q-item-main label="Voting Time Ends In" sublabel="votingTimer">          </q-item-main>
+        </q-item>
+      </q-card-main>
+    </q-card>
+    <q-card style="max-width: 700px; text-align: left;">
+      <q-card-main>
+        <q-item v-for="(description, title) in topic.proposals" :key="topic.proposals.key">
+          <q-item-main :label="title" :sublabel="description"></q-item-main>
+        </q-item>
         <h5><q-field :label="topicQuestion"></q-field></h5>
         <q-field :label="topicDescription"></q-field>
         <div class="row justify-around">
@@ -31,7 +41,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QRadio } from 'quasar'
+import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QRadio } from 'quasar'
 import { loadTopic } from '@/data'
 
 export default {
@@ -42,20 +52,23 @@ export default {
     QCard,
     QCardMain,
     QField,
+    QItem,
+    QItemMain,
     QRadio
   },
   methods: {
 
   },
   mounted () {
-    let topic = loadTopic(this.$route.params.id)
-    if (topic === '1') {
+    this.topic = loadTopic(this.$route.params.id)
+    if (this.topic === '-1') {
       this.$router.push('/newTopic')
     }
-    console.log(topic)
+    console.log(this.topic.proposals)
   },
   data () {
     return {
+      topic: '',
       topicQuestion: 'hi',
       topicDescription: 'hi',
       radio1: 'two',

@@ -1,6 +1,4 @@
-import { LocalStorage, date } from 'quasar'
-
-const { addToDate } = date
+import { LocalStorage } from 'quasar'
 
 const getTopics = () => {
   return JSON.parse(LocalStorage.get.item('topics'))
@@ -30,18 +28,16 @@ export const loadTopic = (id) => {
   return topic
 }
 
-export const saveTopic = (id) => {
+export const saveTopic = (id, topic) => {
   let index = getTopicIndex(id)
   let topics = getTopics()
-  let today = new Date()
-  let topic = topics[index]
-  let endVoting = addToDate(today, {days: topic.votingTime})
 
   // update topic object by replacing it
   let updatedTopic = {
     'topicQuestion': topic.question,
     'proposalTime': '0',
-    'votingTime': endVoting,
+    'votingTime': topic.votingTime,
+    'votingInterval': topic.votingInterval,
     'description': topic.description,
     'id': topic.id,
     'proposals': topic.proposals

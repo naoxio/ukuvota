@@ -107,6 +107,7 @@ export default {
       }
       if (!error) {
         this.topic.proposals[this.newProposal] = this.proposalDescription
+        saveTopic(this.id, this.topic)
         this.newProposal = ''
         this.proposalDescription = ''
       }
@@ -129,14 +130,27 @@ export default {
     setProposalTimer () {
       let today = new Date()
       let timeStamp = this.topic.proposalTime
-      let diff = date.formatDate(timeStamp, 'x') - date.formatDate(today, 'x')
+      let diff = date.formatDate(timeStamp, 'X') - date.formatDate(today, 'X')
       if (diff < 0) {
         this.next()
       }
-      let days = date.formatDate(diff, 'D')
-      let hours = date.formatDate(diff, 'h')
-      let minutes = date.formatDate(diff, 'm')
-      let seconds = date.formatDate(diff, 's')
+      let days = 0
+      let hours = 0
+      let minutes = 0
+      while (diff - 86400 > 0) {
+        days = days + 1
+        diff = diff - 86400
+      }
+      while (diff - 3600 > 0) {
+        hours = hours + 1
+        diff = diff - 3600
+      }
+      while (diff - 60 > 0) {
+        minutes = minutes + 1
+        diff = diff - 60
+      }
+      let seconds = diff
+      // let days = date.formatDate(diff, 'D')
       let output = ''
       if (days > 1) {
         output = days + ' days and ' + hours + ' hours'
@@ -163,7 +177,7 @@ export default {
   },
   computed: {
     getVotingTime () {
-      let output = this.topic.votingTime
+      let output = this.topic.votingInterval
       if (output === 1) {
         return '1 day'
       }

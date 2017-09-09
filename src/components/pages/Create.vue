@@ -102,12 +102,17 @@ export default {
 
         let today = new Date()
         let endProposal = addToDate(today, {days: this.proposalDaySelect, hours: this.proposalHourSelect, minutes: this.proposalMinuteSelect})
-
+        let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
+        let endVoting = addToDate(today, {days: this.votingSelect, milliseconds: diff})
+        console.log(endVoting)
+        console.log(endProposal)
+        console.log(today)
         // create a new Topic object
         let newTopic = {
           'question': this.topicQuestion,
           'proposalTime': endProposal,
-          'votingTime': this.votingSelect,
+          'votingTime': endVoting,
+          'votingInterval': this.votingSelect,
           'description': this.description,
           'id': id,
           'proposals': {
