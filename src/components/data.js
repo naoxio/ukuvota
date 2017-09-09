@@ -1,4 +1,5 @@
 import { LocalStorage, date } from 'quasar'
+import * as firebase from 'firebase'
 
 const { addToDate } = date
 
@@ -50,5 +51,16 @@ export const saveTopic = (id) => {
 
   // update localstorage topics content
   LocalStorage.set('topics', JSON.stringify(topics))
+
   return true
+}
+
+export const saveTopicToFirebase = (newTopic) => {
+  // firebase update
+  // get a key for a new topic.
+  var newTopicKey = firebase.database().ref().child('topics').push().key
+  // write the new topics's data in the topics list
+  var updates = {}
+  updates['/topics/' + newTopicKey] = newTopic
+  firebase.database().ref().update(updates)
 }

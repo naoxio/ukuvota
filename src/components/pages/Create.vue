@@ -58,6 +58,7 @@
 <script>
 import MainLayout from '@/layouts/MainLayout'
 import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { saveTopicToFirebase } from '@/data'
 
 const { addToDate } = date
 
@@ -117,8 +118,8 @@ export default {
         }
         topics.push(newTopic)
 
-        // update localstorage topics content
         LocalStorage.set('topics', JSON.stringify(topics))
+        saveTopicToFirebase(newTopic)
 
         // go to collectProposals vue
         this.$router.push(id + '/collect')

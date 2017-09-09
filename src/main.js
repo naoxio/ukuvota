@@ -34,11 +34,7 @@ Quasar.start(() => {
     render: h => h(require('./App'))
   })
 
-  initDb()
-})
-
-function initDb () {
-  // Initialize Firebase
+  // initialize firebase
   var config = {
     apiKey: 'AIzaSyB7KCC4PEbn1gk4NrdFlrARGmcYK7C1SnY',
     authDomain: 'ukuvota.firebaseapp.com',
@@ -48,14 +44,4 @@ function initDb () {
     // messagingSenderId: '105902830879"
   }
   firebase.initializeApp(config)
-  // write
-  firebase.database().ref('settings/' + 'default').set({
-    message: 'Ukuvota now on Firebase',
-    email: 'info@ukuvota.de'
-  })
-  // read
-  var userRef = firebase.database().ref('settings/default')
-  userRef.on('value', function (someValue) {
-    console.log(someValue.val().message)
-  })
-}
+})
