@@ -48,8 +48,14 @@ function initDb () {
     // messagingSenderId: '105902830879"
   }
   firebase.initializeApp(config)
-  firebase.database().ref('users/' + '123').set({
-    username: 'Alexander',
-    email: '2ab@gmx.de'
+  // write
+  firebase.database().ref('settings/' + 'default').set({
+    message: 'Ukuvota now on Firebase',
+    email: 'info@ukuvota.de'
+  })
+  // read
+  var userRef = firebase.database().ref('settings/default')
+  userRef.on('value', function (someValue) {
+    console.log(someValue.val().message)
   })
 }
