@@ -7,7 +7,7 @@
             color="dark"
             icon="warning"
           >
-            topic question is missing
+            Topic Question Is Missing
           </q-alert>
         </template>
 
@@ -121,7 +121,8 @@ export default {
         LocalStorage.set('topics', JSON.stringify(topics))
 
         // go to collectProposals vue
-        this.$router.push(id + '/collect')
+        this.$router.push({name: 'collect', params: { id: id }})
+    //    this.$router.push(id + '/collect')
       }
     }
   },

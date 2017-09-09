@@ -18,7 +18,7 @@
             color="dark"
             icon="warning"
           >
-            proposal is empty
+            Proposal Is Empty
           </q-alert>
         </template>
         <template v-if="proposalExists">
@@ -27,7 +27,7 @@
             icon="warning"
             v-model="proposalExists"
           >
-            proposal exists
+            Proposal Exists
           </q-alert>
         </template>
         <q-input v-model="newProposal" float-label="Proposal" />
