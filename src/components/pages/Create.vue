@@ -17,18 +17,21 @@
           <q-select
             radio
             class="col-4"
+            float-label="Days"
             v-model="proposalDaySelect"
            :options="proposalDays"
           />
           <q-select
             radio
             class="col-4"
+            float-label="Hours"
             v-model="proposalHourSelect"
            :options="proposalHours"
           />
           <q-select
             radio
             class="col-4"
+            float-label="Minutes"
             v-model="proposalMinuteSelect"
            :options="proposalMinutes"
           />

@@ -15,7 +15,7 @@
           <h5><q-field :label="title"></q-field></h5>
           <q-field :label="description"></q-field>
           <div class="row justify-around">
-            <div :id="'emo-' + key + '_-3'" class="selected" @click="select(key, -3)">
+            <div :id="'emo-' + key + '_-3'" @click="select(key, -3)">
               <img class="emo" src="statics/1f621.svg" height="32px" />
             </div>
             <div :id="'emo-' + key + '_-2'" @click="select(key, -2)">
@@ -24,7 +24,7 @@
             <div :id="'emo-' + key + '_-1'" @click="select(key, -1)">
               <img class="emo"  src="statics/1f641.svg" height="32px" />
             </div>
-            <div :id="'emo-' + key + '_0'" @click="select(key, 0)">
+            <div :id="'emo-' + key + '_0'" class="selected" @click="select(key, 0)">
               <img class="emo"  src="statics/1f636.svg" height="32px" />
             </div>
             <div :id="'emo-' + key + '_1'" @click="select(key, 1)">
@@ -91,14 +91,14 @@ export default {
 }
 </script>
 <style lang="styl">
-@import '~variables'
-img:hover
+.emo
+  filter grayscale(1)
+
+.emo:hover
   cursor pointer
+  filter grayscale(0.5)
 
 .selected
   .emo
   	filter grayscale(0)
-
-.emo
-	filter grayscale(1)
 </style>
