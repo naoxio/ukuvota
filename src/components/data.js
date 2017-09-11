@@ -34,7 +34,7 @@ export const saveTopic = (id, topic) => {
 
   // update topic object by replacing it
   let updatedTopic = {
-    'topicQuestion': topic.question,
+    'question': topic.question,
     'proposalTime': '0',
     'votingTime': topic.votingTime,
     'votingInterval': topic.votingInterval,

@@ -38,14 +38,23 @@
             </div>
           </div>
         </div>
-
+        <br></br>
+        <h6><q-field label="Your Name / Persistant Alias"></q-field></h6>
+        <q-input
+          type="text"
+          v-model="yourname"
+        />
+       </br>
+        <div style="text-align: right">
+          <q-btn @click="next()" icon="arrow forward">Submit</q-btn>
+        </div>
       </q-card-main>
     </q-card>
   </main-layout>
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QRadio } from 'quasar'
+import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QInput, QRadio } from 'quasar'
 import { loadTopic } from '@/data'
 
 export default {
@@ -58,6 +67,7 @@ export default {
     QField,
     QItem,
     QItemMain,
+    QInput,
     QRadio
   },
   mounted () {
@@ -78,6 +88,9 @@ export default {
       for (let x = 0; x < values.length; x++) {
         document.getElementById('emo-' + key + '_' + values[x]).removeAttribute('class', 'selected')
       }
+    },
+    next () {
+
     }
   },
   data () {
@@ -85,7 +98,8 @@ export default {
       topic: '',
       radio: '1',
       group: 'upload',
-      list: ''
+      list: '',
+      yourname: ''
     }
   }
 }

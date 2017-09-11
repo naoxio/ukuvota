@@ -8,6 +8,9 @@
           <q-item-main label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
         </q-item>
+        </br>
+        <q-input stack-label="Sharable URL" v-model="urlpath"></q-input>
+
       </q-card-main>
     </q-card>
     <q-card style="max-width: 700px; text-align: left;">
@@ -187,6 +190,7 @@ export default {
   data () {
     return {
       topic: '',
+      urlpath: window.location.href,
       newProposal: '',
       proposalTimer: '',
       proposalEmpty: false,
