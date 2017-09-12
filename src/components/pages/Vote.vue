@@ -7,6 +7,7 @@
         <q-item tag="label">
           <q-item-main label="Voting Time Ends In" sublabel="votingTimer">          </q-item-main>
         </q-item>
+        <input style="width: 100%" onClick="this.select();" :value="urlpath"></input>
       </q-card-main>
     </q-card>
     <q-card style="max-width: 700px; text-align: left;">
@@ -99,7 +100,8 @@ export default {
       radio: '1',
       group: 'upload',
       list: '',
-      yourname: ''
+      yourname: '',
+      urlpath: window.location.href
     }
   }
 }

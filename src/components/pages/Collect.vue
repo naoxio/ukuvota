@@ -8,9 +8,9 @@
           <q-item-main label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main label="Voting Time Will Last For" :sublabel="getVotingTime">          </q-item-main>
         </q-item>
-        </br>
-        <q-input stack-label="Sharable URL" v-model="urlpath"></q-input>
-
+        <br>
+        <q-field label="Shareable URL"></q-field>
+        <input style="width: 100%" onClick="this.select();" :value="urlpath"></input>
       </q-card-main>
     </q-card>
     <q-card style="max-width: 700px; text-align: left;">
