@@ -26,7 +26,7 @@ export default new VueRouter({
     { name: 'create', path: '/create', component: load('Create') },
     { name: 'collect', path: '/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
-    { name: 'results', path: '/:id/results', component: load('Results') },
+    { name: 'result', path: '/:id/result', component: load('Result') },
 
     { path: '/:id/create', redirect: { name: 'create' } },
 

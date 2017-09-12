@@ -7,6 +7,7 @@
         <q-item tag="label">
           <q-item-main label="Voting Time Ends In" sublabel="votingTimer">          </q-item-main>
         </q-item>
+        <q-field label="Shareable URL"></q-field>
         <input style="width: 100%" onClick="this.select();" :value="urlpath"></input>
       </q-card-main>
     </q-card>
@@ -40,7 +41,7 @@
           </div>
         </div>
         <br></br>
-        <h6><q-field label="Your Name / Persistant Alias"></q-field></h6>
+        <h6><q-field label="Your Name or Persistant Alias"></q-field></h6>
         <q-input
           type="text"
           v-model="yourname"
