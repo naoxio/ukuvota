@@ -14,24 +14,24 @@ const getTopicIndex = (id) => {
   }
   return index
 }
-export const loadTopic = (id) => {
+export const getTopic = (id) => {
   let topics = getTopics()
   let index = getTopicIndex(id)
-  console.log(index)
   if (index === -1) {
     return -1
   }
-  let topic = topics[index]
-  // this.setVotingTimer()
-  // this.startIntervalUpdate()
-  // this.$route.params.id
-  return topic
+  return topics[index]
 }
 
-export const saveTopic = (id, topic) => {
+export const getProposals = (id) => {
+  let topic = getTopic(id)
+  return topic.proposals
+}
+
+export const setProposals = (id, proposals) => {
   let index = getTopicIndex(id)
   let topics = getTopics()
-
+  let topic = topics[index]
   // update topic object by replacing it
   let updatedTopic = {
     'question': topic.question,
@@ -40,7 +40,7 @@ export const saveTopic = (id, topic) => {
     'votingInterval': topic.votingInterval,
     'description': topic.description,
     'id': topic.id,
-    'proposals': topic.proposals
+    'proposals': proposals
   }
   topics[index] = updatedTopic
 
