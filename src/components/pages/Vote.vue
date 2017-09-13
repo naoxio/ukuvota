@@ -6,26 +6,10 @@
           <h5><q-field :label="title"></q-field></h5>
           <q-field :label="description"></q-field>
           <div class="row justify-around">
-            <div :id="'emo-' + key + '_-3'" @click="select(key, -3)">
-              <img class="emo" src="statics/emo/-3.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_-2'" @click="select(key, -2)">
-              <img class="emo"  src="statics/emo/-2.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_-1'" @click="select(key, -1)">
-              <img class="emo"  src="statics/emo/-1.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_0'" class="selected" @click="select(key, 0)">
-              <img class="emo"  src="statics/emo/0.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_1'" @click="select(key, 1)">
-              <img class="emo"  src="statics/emo/1.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_2'" @click="select(key, 2)">
-              <img class="emo"  src="statics/emo/2.svg" height="32px" />
-            </div>
-            <div :id="'emo-' + key + '_3'" @click="select(key, 3)">
-              <img class="emo"  src="statics/emo/3.svg" height="32px" />
+            <div v-for="file in emo" :key="emo.key">
+              <div :id="'emo-' + key + '_' + file" @click="select(key, file)">
+                <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
+              </div>
             </div>
           </div>
         </div>
@@ -88,16 +72,7 @@ export default {
       group: 'upload',
       list: '',
       yourname: '',
-      emo: [
-        {
-          key: 0,
-          value: 0
-        },
-        {
-          key: 1,
-          value: 3
-        }
-      ]
+      emo: [-3, -2, -1, 0, 1, 2, 3]
     }
   }
 }
