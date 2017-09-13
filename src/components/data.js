@@ -21,10 +21,6 @@ export const getTopic = (id) => {
   return topics[index]
 }
 
-export const setTopic = () => {
-
-}
-
 export const addProposal = (id, title, description) => {
   let topics = getTopics()
   let index = getTopicIndex(id, topics)
@@ -48,14 +44,14 @@ export const getProposals = (id) => {
   return topic.proposals
 }
 
-export const setEmojis = (id) => {
-  // let topics = getTopics()
-  // let index = getTopicIndex(id, topics)
+export const setEmojis = (id, title, value) => {
+  let topics = getTopics()
+  let index = getTopicIndex(id, topics)
 
   // update topic proposals
-  // topics[index].votes = votes
+  topics[index].emojis[title] = value
 
   // update localstorage topics content
-  // LocalStorage.set('topics', JSON.stringify(topics))
+  LocalStorage.set('topics', JSON.stringify(topics))
   return true
 }

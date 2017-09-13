@@ -8,12 +8,12 @@
           <div class="row justify-around">
             <div v-for="file in emo" :key="emo.key">
               <div v-if="file === emojis[title]">
-                <div class="selected" :id="'emo-' + key + '_' + file" @click="select(key, file)">
+                <div class="selected" :id="'emo-' + key + '_' + file" @click="select(title, key, file)">
                   <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
                 </div>
               </div>
               <div v-else>
-               <div :id="'emo-' + key + '_' + file" @click="select(key, file)">
+               <div :id="'emo-' + key + '_' + file" @click="select(title, key, file)">
                 <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
                </div>
               </div>
@@ -24,7 +24,7 @@
         <h6><q-field label="Your Name or Persistant Alias"></q-field></h6>
         <q-input
           type="text"
-          v-model="yourname"
+          v-model="name"
         />
        </br>
         <div style="text-align: right">
@@ -37,7 +37,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QInput, QRadio } from 'quasar'
-import { getProposals, getEmojis } from '@/data'
+import { getProposals, getEmojis, setEmojis } from '@/data'
 
 export default {
   components: {
@@ -60,7 +60,7 @@ export default {
     console.log(this.emojis)
   },
   methods: {
-    select (key, val) {
+    select (title, key, val) {
       let values = [-3, -2, -1, 0, 1, 2, 3]
       document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
       let index = values.indexOf(val)
@@ -70,7 +70,8 @@ export default {
       }
     },
     next () {
-
+      setEmojis(this.id, title, val, this.name)
+      console.log(this.id, title, val)
     }
   },
   data () {
@@ -79,7 +80,7 @@ export default {
       radio: '1',
       group: 'upload',
       list: '',
-      yourname: '',
+      name: '',
       emo: [-3, -2, -1, 0, 1, 2, 3]
     }
   }
