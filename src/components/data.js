@@ -16,10 +16,9 @@ const getTopicIndex = (id) => {
 }
 export const getTopic = (id) => {
   let topics = getTopics()
+  if (topics === null) return -1
   let index = getTopicIndex(id)
-  if (index === -1) {
-    return -1
-  }
+  if (index === -1) return -1
   return topics[index]
 }
 

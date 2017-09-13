@@ -59,14 +59,14 @@ export default {
   mounted () {
     this.id = this.$route.params.id
     this.topic = getTopic(this.id)
-    if (this.topic === '-1') {
-      this.$router.push('/newTopic')
+    console.log(this.topic)
+    if (this.topic === -1) {
+      this.$router.push({name: '/create'})
     }
     else {
       this.timer()
       this.startIntervalUpdate()
     }
-    console.log(this.topic.proposals)
   },
   data () {
     return {
