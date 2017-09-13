@@ -31,11 +31,14 @@
         <div class="row justify-center items-center">
           <div class="col-6">
             <p class="title">Ukuvota</p>
-            <a target="_blank" href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/">
-            reference</a>
+            <a href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/" target="_blank">
+            reference</a><br>
+            <a href="https://gitlab.com/yunity/ukuvota/" target="_blank">source</a>
           </div>
           <div class="col-6">
-            <img class="logo" src="statics/logo.png" width="128px" />
+            <a href="https://yunity.org" target="_blank">
+              <img class="logo" src="statics/logo.png" width="128px" />
+            </a>  
           </div>
         </div>
         <br></br>
@@ -100,10 +103,6 @@ body
 
 .logo:hover
   cursor pointer
-  filter saturate(2)
-
-.logo:active
-  transition-timing-function ease-in-out
   animation spin 4s linear infinite
-
+  filter hue-rotate(300deg)
 </style>
