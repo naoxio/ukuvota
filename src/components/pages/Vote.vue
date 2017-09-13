@@ -68,10 +68,9 @@ export default {
       for (let x = 0; x < values.length; x++) {
         document.getElementById('emo-' + key + '_' + values[x]).removeAttribute('class', 'selected')
       }
+      setEmojis(this.id, title, val, this.name)
     },
     next () {
-      setEmojis(this.id, title, val, this.name)
-      console.log(this.id, title, val)
     }
   },
   data () {

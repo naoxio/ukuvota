@@ -50,7 +50,6 @@ export const setEmojis = (id, title, value) => {
 
   // update topic proposals
   topics[index].emojis[title] = value
-
   // update localstorage topics content
   LocalStorage.set('topics', JSON.stringify(topics))
   return true
