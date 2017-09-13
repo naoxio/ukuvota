@@ -42,7 +42,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QIcon, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
-import { getProposals, setProposals } from '@/data'
+import { addProposal, getProposals } from '@/data'
 
 export default {
   components: {
@@ -66,9 +66,12 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    this.proposals = getProposals(this.id)
+    this.update()
   },
   methods: {
+    update () {
+      this.proposals = getProposals(this.id)
+    },
     addProposal () {
       let error = false
       // error check
@@ -88,10 +91,10 @@ export default {
         }
       }
       if (!error) {
-        this.proposals[this.newProposal] = this.proposalDescription
-        setProposals(this.id, this.proposals)
+        addProposal(this.id, this.newProposal, this.proposalDescription)
         this.newProposal = ''
         this.proposalDescription = ''
+        this.update()
       }
     }
   },

@@ -107,9 +107,6 @@ export default {
         let endProposal = addToDate(today, {days: this.proposalDaySelect, hours: this.proposalHourSelect, minutes: this.proposalMinuteSelect})
         let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
         let endVoting = addToDate(today, {days: this.votingSelect, milliseconds: diff})
-        console.log(endVoting)
-        console.log(endProposal)
-        console.log(today)
         // create a new Topic object
         let newTopic = {
           'question': this.topicQuestion,
@@ -121,6 +118,10 @@ export default {
           'proposals': {
             'Change Nothing': 'keep things the way they are',
             'Repeat Process': 'look for other options and repeat the process'
+          },
+          'emojis': {
+            'Change Nothing': 0,
+            'Repeat Process': 0
           }
         }
         topics.push(newTopic)

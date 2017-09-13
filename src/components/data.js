@@ -4,8 +4,7 @@ const getTopics = () => {
   return JSON.parse(LocalStorage.get.item('topics'))
 }
 
-const getTopicIndex = (id) => {
-  let topics = getTopics()
+const getTopicIndex = (id, topics) => {
   let index = -1
   for (let x = 0; x < topics.length; x++) {
     if (topics[x].id === id) {
@@ -17,9 +16,31 @@ const getTopicIndex = (id) => {
 export const getTopic = (id) => {
   let topics = getTopics()
   if (topics === null) return -1
-  let index = getTopicIndex(id)
+  let index = getTopicIndex(id, topics)
   if (index === -1) return -1
   return topics[index]
+}
+
+export const setTopic = () => {
+
+}
+
+export const addProposal = (id, title, description) => {
+  let topics = getTopics()
+  let index = getTopicIndex(id, topics)
+
+  // update topic proposals
+  topics[index].proposals[title] = description
+  topics[index].emojis[title] = 0
+
+  // update localstorage topics content
+  LocalStorage.set('topics', JSON.stringify(topics))
+  return true
+}
+
+export const getEmojis = (id) => {
+  let topic = getTopic(id)
+  return topic.emojis
 }
 
 export const getProposals = (id) => {
@@ -27,23 +48,14 @@ export const getProposals = (id) => {
   return topic.proposals
 }
 
-export const setProposals = (id, proposals) => {
-  let index = getTopicIndex(id)
-  let topics = getTopics()
-  let topic = topics[index]
-  // update topic object by replacing it
-  let updatedTopic = {
-    'question': topic.question,
-    'proposalTime': '0',
-    'votingTime': topic.votingTime,
-    'votingInterval': topic.votingInterval,
-    'description': topic.description,
-    'id': topic.id,
-    'proposals': proposals
-  }
-  topics[index] = updatedTopic
+export const setEmojis = (id) => {
+  // let topics = getTopics()
+  // let index = getTopicIndex(id, topics)
+
+  // update topic proposals
+  // topics[index].votes = votes
 
   // update localstorage topics content
-  LocalStorage.set('topics', JSON.stringify(topics))
+  // LocalStorage.set('topics', JSON.stringify(topics))
   return true
 }
