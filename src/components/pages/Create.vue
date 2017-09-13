@@ -12,36 +12,31 @@
         </template>
 
         <q-input float-label="Topic Question" v-model="topicQuestion"/>
-        <q-field label="Proposal Collection Time"></q-field>
-        <div class="row">
-          <q-select
-            radio
-            class="col-4"
-            float-label="Days"
-            v-model="proposalDaySelect"
-           :options="proposalDays"
-          />
-          <q-select
-            radio
-            class="col-4"
-            float-label="Hours"
-            v-model="proposalHourSelect"
-           :options="proposalHours"
-          />
-          <q-select
-            radio
-            class="col-4"
-            float-label="Minutes"
-            v-model="proposalMinuteSelect"
-           :options="proposalMinutes"
-          />
-        </div>
-        <q-field label="Voting Time"></q-field>
-        <q-select
-          radio
-          v-model="votingSelect"
-         :options="votingTimes"
-        />
+        <p class="caption">
+          Proposal Collection Time
+          <span>
+            <br>
+            <q-chip>
+              Days: {{proposalDays}}
+              Hours: {{proposalHours}}
+              Minutes: {{proposalMinutes}}
+            </q-chip>
+          </span>
+        </p>
+        <q-slider :step="1" v-model="proposalDays" :min="0" :max="356" snap></q-slider>
+        <q-slider :step="1" v-model="proposalHours" :min="0" :max="24" snap></q-slider>
+        <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" snap></q-slider>
+
+        <p class="caption">
+          Voting Time
+          <span>
+            <br>
+            <q-chip>
+              Days: {{votingDays}}
+            </q-chip>
+          </span>
+        </p>
+        <q-slider :step="1" v-model="votingDays" :label-value="`${votingDays} days`" :min="1" :max="356" label snap></q-slider>
         <q-input
           type="textarea"
           float-label="Description (optional)"
@@ -60,7 +55,7 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect } from 'quasar'
+import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect, QSlider } from 'quasar'
 
 const { addToDate } = date
 
@@ -73,6 +68,7 @@ export default {
     QCardMain,
     QCardMedia,
     QCardTitle,
+    QChip,
     QField,
     QInlineDatetime,
     QInput,
@@ -80,7 +76,8 @@ export default {
     QItemMain,
     QItemSide,
     QList,
-    QSelect
+    QSelect,
+    QSlider
   },
   methods: {
     next () {
@@ -104,15 +101,15 @@ export default {
         }
 
         let today = new Date()
-        let endProposal = addToDate(today, {days: this.proposalDaySelect, hours: this.proposalHourSelect, minutes: this.proposalMinuteSelect})
+        let endProposal = addToDate(today, {days: this.proposalDays, hours: this.proposalHours, minutes: this.proposalMinutes})
         let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
-        let endVoting = addToDate(today, {days: this.votingSelect, milliseconds: diff})
+        let endVoting = addToDate(today, {days: this.votingDays, milliseconds: diff})
         // create a new Topic object
         let newTopic = {
           'question': this.topicQuestion,
           'proposalTime': endProposal,
           'votingTime': endVoting,
-          'votingInterval': this.votingSelect,
+          'votingInterval': this.votingDays,
           'description': this.description,
           'id': id,
           'proposals': {
@@ -141,146 +138,10 @@ export default {
       topicQuestion: '',
       topicMissing: false,
       visible: false,
-      proposalMinutes: [
-        {
-          label: '',
-          value: 0
-        },
-        {
-          label: '1 Minute',
-          value: 1
-        },
-        {
-          label: '5 Minutes',
-          value: 5
-        },
-        {
-          label: '13 Minutes',
-          value: 13
-        },
-        {
-          label: '21 Minutes',
-          value: 21
-        },
-        {
-          label: '34 Minutes',
-          value: 34
-        },
-        {
-          label: '55 Minutes',
-          value: 55
-        }
-      ],
-      proposalMinuteSelect: 0,
-      proposalHours: [
-        {
-          label: '',
-          value: 0
-        },
-        {
-          label: '1 Hour',
-          value: 1
-        },
-        {
-          label: '2 Hours',
-          value: 2
-        },
-        {
-          label: '3 Hours',
-          value: 3
-        },
-        {
-          label: '5 Hours',
-          value: 5
-        },
-        {
-          label: '8 Hours',
-          value: 8
-        },
-        {
-          label: '13 Hours',
-          value: 13
-        },
-        {
-          label: '21 Hours',
-          value: 21
-        }
-      ],
-      proposalHourSelect: 0,
-      proposalDays: [
-        {
-          label: '',
-          value: 0
-        },
-        {
-          label: '1 Day',
-          value: 1
-        },
-        {
-          label: '2 Days',
-          value: 2
-        },
-        {
-          label: '3 Days',
-          value: 3
-        },
-        {
-          label: '5 Days',
-          value: 5
-        },
-        {
-          label: '8 Days',
-          value: 8
-        },
-        {
-          label: '13 Days',
-          value: 13
-        },
-        {
-          label: '21 Days',
-          value: 21
-        },
-        {
-          label: '34 Days',
-          value: 21
-        }
-      ],
-      proposalDaySelect: 2,
-      votingSelect: 1,
-      votingTimes: [
-        {
-          label: '1 Day',
-          value: 1
-        },
-        {
-          label: '2 Days',
-          value: 2
-        },
-        {
-          label: '3 Days',
-          value: 3
-        },
-        {
-          label: '5 Days',
-          value: 5
-        },
-        {
-          label: '8 Days',
-          value: 8
-        },
-        {
-          label: '13 Days',
-          value: 13
-        },
-        {
-          label: '21 Days',
-          value: 21
-        },
-        {
-          label: '34 Days',
-          value: 34
-        }
-      ]
+      proposalMinutes: 1,
+      proposalHours: 0,
+      proposalDays: 2,
+      votingDays: 1
     }
   }
 }
