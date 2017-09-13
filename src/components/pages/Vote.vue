@@ -1,19 +1,8 @@
 <template>
-  <main-layout>
+  <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field :label="topic.question"></q-field></h5>
-        <q-field :label="topic.description"></q-field>
-        <q-item tag="label">
-          <q-item-main label="Voting Time Ends In" sublabel="votingTimer">          </q-item-main>
-        </q-item>
-        <q-field label="Shareable URL"></q-field>
-        <input style="width: 100%" onClick="this.select();" :value="urlpath"></input>
-      </q-card-main>
-    </q-card>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <div v-for="(description, title, key) in topic.proposals" :key="topic.proposals.key">
+        <div v-for="(description, title, key) in proposals" :key="proposals.key">
           <h5><q-field :label="title"></q-field></h5>
           <q-field :label="description"></q-field>
           <div class="row justify-around">
@@ -52,16 +41,16 @@
         </div>
       </q-card-main>
     </q-card>
-  </main-layout>
+  </process-layout>
 </template>
 <script>
-import MainLayout from '@/layouts/MainLayout'
+import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QInput, QRadio } from 'quasar'
-import { loadTopic } from '@/data'
+import { getProposals } from '@/data'
 
 export default {
   components: {
-    MainLayout,
+    ProcessLayout,
     QAlert,
     QBtn,
     QCard,
@@ -73,11 +62,8 @@ export default {
     QRadio
   },
   mounted () {
-    this.topic = loadTopic(this.$route.params.id)
-    if (this.topic === '-1') {
-      this.$router.push('/newTopic')
-    }
-    console.log(this.topic.proposals)
+    this.id = this.$route.params.id
+    this.proposals = getProposals(this.id)
   },
   methods: {
     select (key, val) {
@@ -97,12 +83,11 @@ export default {
   },
   data () {
     return {
-      topic: '',
+      proposals: '',
       radio: '1',
       group: 'upload',
       list: '',
-      yourname: '',
-      urlpath: window.location.href
+      yourname: ''
     }
   }
 }
