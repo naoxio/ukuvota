@@ -103,17 +103,20 @@ export default {
       if (this.weightedScores && score < 0) score = score * 3 
       return score
     },
+    getLength (object) {
+      return Object.keys(object).length
+    },
     getEmoji (proposal) {
-      console.log(this.results)
+      let length = this.getLength(this.results)
+      console.log(length)
       let p = this.getScore(proposal)
       let emo = 0
-      console.log("max" + this.max, "p" + p)
       if (p === this.max) emo = 3
-      else if (p > this.max - 14) emo = 2
-      else if (p > this.max - 29) emo = 1
-      else if (p > this.max - 43) emo = 0
-      else if (p > this.max - 57) emo = -1
-      else if (p > this.max - 71) emo = -2
+      else if (p > this.max - length) emo = 2
+      else if (p > this.max - length * 2) emo = 1
+      else if (p > this.max - length * 3) emo = 0
+      else if (p > this.max - length * 4) emo = -1
+      else if (p > this.max - length * 5) emo = -2
       else emo = -3
       return emo
     }
