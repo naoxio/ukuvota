@@ -99,7 +99,7 @@ export default {
     },
     getIndiScore (object, proposal) {
       let score = object[proposal]
-      if (this.weightedScores && score < 0) score = score * 3 
+      if (this.weightedScores && score < 0) score = score * 3
       return score
     },
     getLength (object) {
@@ -111,8 +111,6 @@ export default {
       if (this.weightedScores) negativeWeight = 2
       let p = this.getScore(proposal)
       let emo = 0
-      console.log("length" + length, "max" + this.max, "p " + p)
-
       if (p === this.max) emo = 3
       else if (p >= this.max - length) emo = 2
       else if (p >= this.max - length * 2) emo = 1
