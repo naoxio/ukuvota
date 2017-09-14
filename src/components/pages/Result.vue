@@ -88,7 +88,6 @@ export default {
       this.max = -999999999
       for (let key in object) {
         if (this.max < object[key]) this.max = object[key]
-        console.log(object[key])
       }
     },
     getScore (proposal) {
@@ -107,16 +106,19 @@ export default {
       return Object.keys(object).length
     },
     getEmoji (proposal) {
-      let length = this.getLength(this.results)
-      console.log(length)
+      let length = this.getLength(this.votes)
+      let negativeWeight = 1
+      if (this.weightedScores) negativeWeight = 2
       let p = this.getScore(proposal)
       let emo = 0
+      console.log("length" + length, "max" + this.max, "p " + p)
+
       if (p === this.max) emo = 3
-      else if (p > this.max - length) emo = 2
-      else if (p > this.max - length * 2) emo = 1
-      else if (p > this.max - length * 3) emo = 0
-      else if (p > this.max - length * 4) emo = -1
-      else if (p > this.max - length * 5) emo = -2
+      else if (p >= this.max - length) emo = 2
+      else if (p >= this.max - length * 2) emo = 1
+      else if (p >= this.max - length * 3) emo = 0
+      else if (p >= this.max - length * 4 * negativeWeight) emo = -1
+      else if (p >= this.max - length * 5 * negativeWeight) emo = -2
       else emo = -3
       return emo
     }
