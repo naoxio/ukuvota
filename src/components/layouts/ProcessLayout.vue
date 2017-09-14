@@ -29,15 +29,7 @@ export default {
   },
   methods: {
     timer () {
-      this.proposalTimer = this.getTimeOutput(this.topic.proposalTime)
-      if (this.proposalTimer !== -1) {
-        this.votingTimeLabel = 'Voting Time Will Last For'
-        this.votingTimer = getVotingTime(this.topic.votingInterval)
-      }
-      else {
-        this.voringTimeLabel = 'Voting Time Ends In'
-        this.votingTimer = this.getTimeOutput(this.topic.votingTime)
-      }
+      this.autoRedirect()
     },
     startIntervalUpdate (time) {
       let component = this
@@ -45,15 +37,27 @@ export default {
         component.timer()
       }, 1000)
     },
-    getTimeOutput (time) {
-      let output = formatTime(time)
-      if (this.proposalTimer === -1) {
+    autoRedirect () {
+      this.proposalTimer = formatTime(this.topic.proposalTime)
+      if (this.proposalTimer !== -1) {
+        if (this.$route.path.indexOf(this.id + '/collect') === -1) this.goToCollect()
+        this.votingTimeLabel = 'Voting Time Will Last For'
+        this.votingTimer = getVotingTime(this.topic.votingInterval)
+      }
+      else if (this.proposalTimer === -1) {
         if (this.$route.path.indexOf(this.id + '/collect') !== -1) this.goToVote()
+        this.votingTimer = formatTime(this.topic.votingTime)
+        if (this.votingTimer !== -1) {
+          if (this.$route.path.indexOf(this.id + '/vote') === -1) this.goToVote()
+          this.voringTimeLabel = 'Voting Time Ends In'
+        }
+        else if (this.votingTimer === -1) {
+          if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
+        }
       }
-      else if (this.votingTimer === -1) {
-        if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
-      }
-      return output
+    },
+    goToCollect () {
+      this.$router.push({name: 'collect', params: { id: this.id }})
     },
     goToVote () {
       this.$router.push({name: 'vote', params: { id: this.id }})
