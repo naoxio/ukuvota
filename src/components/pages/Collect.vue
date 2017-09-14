@@ -59,10 +59,8 @@ export default {
   },
   methods: {
     getProposalError () {
-      if (this.proposalExists) 
-        return "The Proposal Already Exists"
-      else if (this.proposalEmpty)
-        return "Proposal is Empty"
+      if (this.proposalExists) return 'The Proposal Already Exists'
+      else if (this.proposalEmpty) return 'Proposal is Empty'
     },
     update () {
       this.proposals = getProposals(this.id)

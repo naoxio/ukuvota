@@ -47,13 +47,19 @@ export default {
     },
     getTimeOutput (time) {
       let output = formatTime(time)
-      if (output === -1) {
-        this.next()
+      if (this.proposalTimer === -1) {
+        if (this.$route.path.indexOf(this.id + '/collect') !== -1) this.goToVote()
+      }
+      else if (this.votingTimer === -1) {
+        if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
       }
       return output
     },
-    next () {
+    goToVote () {
       this.$router.push({name: 'vote', params: { id: this.id }})
+    },
+    goToResult () {
+      this.$router.push({name: 'result', params: { id: this.id }})
     }
   },
   mounted () {

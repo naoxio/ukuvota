@@ -21,11 +21,18 @@
           </div>
         </div>
         <br></br>
-        <h6><q-field label="Your Name or Persistant Alias"></q-field></h6>
-        <q-input
-          type="text"
-          v-model="name"
-        />
+        <h6>
+          <q-field 
+          label="Your Name or Persistant Alias"
+          :error-label="getNameError()"
+            >
+          <q-input
+            type="text"
+            v-model="name"
+            :error="nameExists || nameEmpty"
+          />
+          </q-field>
+        </h6>
        </br>
         <div style="text-align: right">
           <q-btn @click="next()" icon="arrow forward">Submit</q-btn>
@@ -37,7 +44,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QInput, QRadio } from 'quasar'
-import { getProposals, getEmojis, setEmojis } from '@/data'
+import { getProposals, getEmojis, setEmojis, setVotes } from '@/data'
 
 export default {
   components: {
@@ -56,10 +63,12 @@ export default {
     this.id = this.$route.params.id
     this.proposals = getProposals(this.id)
     this.emojis = getEmojis(this.id)
-
-    console.log(this.emojis)
   },
   methods: {
+    getNameError () {
+      if (this.nameExists) return 'This Name Already Exists'
+      else if (this.nameEmpty) return 'Name is Empty'
+    },
     select (title, key, val) {
       let values = [-3, -2, -1, 0, 1, 2, 3]
       document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
@@ -71,6 +80,21 @@ export default {
       setEmojis(this.id, title, val, this.name)
     },
     next () {
+      let error = false
+      // error check
+      if (this.name === '') {
+        this.nameEmpty = true
+        error = true
+      }
+      else {
+        this.nameEmpty = false
+      }
+
+      if (!error) { // if no errors proceed
+        let error = setVotes(this.id, this.name)
+        if (error === -2) this.nameExists = true
+        else this.$router.push({name: 'result', params: { id: this.id }})
+      }
     }
   },
   data () {
@@ -80,6 +104,8 @@ export default {
       group: 'upload',
       list: '',
       name: '',
+      nameEmpty: false,
+      nameExists: false,
       emo: [-3, -2, -1, 0, 1, 2, 3]
     }
   }

@@ -111,7 +111,8 @@ export default {
           'emojis': {
             'Change Nothing': 0,
             'Repeat Process': 0
-          }
+          },
+          'votes': {}
         }
         topics.push(newTopic)
 
