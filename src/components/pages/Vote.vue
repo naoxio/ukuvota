@@ -2,11 +2,11 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <div v-for="(description, title, key) in proposals" :key="proposals.key">
+        <div v-for="(description, title, key) in proposals" :key="title">
           <h5><q-field :label="title"></q-field></h5>
           <q-field :label="description"></q-field>
           <div class="row justify-around">
-            <div v-for="file in emo" :key="emo.key">
+            <div v-for="file in emo" :key="file">
               <div v-if="file === emojis[title]">
                 <div class="selected" :id="'emo-' + key + '_' + file" @click="select(title, key, file)">
                   <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
@@ -44,7 +44,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getProposals, getEmojis, setEmojis, setVotes } from '@/data'
+import { getProposals, getEmojis, setTmpEmojis, setVotes } from '@/data'
 
 export default {
   components: {
@@ -66,14 +66,14 @@ export default {
       else if (this.nameEmpty) return 'Name is Empty'
     },
     select (title, key, val) {
-      let values = [-3, -2, -1, 0, 1, 2, 3]
+      let values = [1, 2, 3, 4, 5, 6, 7]
       document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
       let index = values.indexOf(val)
       values.splice(index, 1)
       for (let x = 0; x < values.length; x++) {
         document.getElementById('emo-' + key + '_' + values[x]).removeAttribute('class', 'selected')
       }
-      setEmojis(this.id, title, val, this.name)
+      setTmpEmojis(this.id, title, val, this.name)
     },
     next () {
       let error = false
@@ -96,13 +96,10 @@ export default {
   data () {
     return {
       proposals: '',
-      radio: '1',
-      group: 'upload',
-      list: '',
       name: '',
       nameEmpty: false,
       nameExists: false,
-      emo: [-3, -2, -1, 0, 1, 2, 3]
+      emo: [1, 2, 3, 4, 5, 6, 7]
     }
   }
 }

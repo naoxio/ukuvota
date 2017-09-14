@@ -21,7 +21,7 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list highlight>
-        <q-item v-for="(description, title) in proposals" :key="proposals.id">
+        <q-item v-for="(description, title) in proposals" :key="title">
           <q-item-main :label="title" :sublabel="description"></q-item-main>
         </q-item>
       </q-list>

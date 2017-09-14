@@ -109,10 +109,15 @@ export default {
             'Repeat Process': 'look for other options and repeat the process'
           },
           'emojis': {
-            'Change Nothing': 0,
-            'Repeat Process': 0
+            'Change Nothing': 4,
+            'Repeat Process': 4
           },
-          'votes': {}
+          'tmpemojis': {
+            'Change Nothing': 4,
+            'Repeat Process': 4
+          },
+          'votes': {},
+          'result': {}
         }
         topics.push(newTopic)
 
