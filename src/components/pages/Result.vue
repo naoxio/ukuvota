@@ -2,12 +2,35 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
+        <table class="q-table horizontal-seperator flipped" :class="computedClasses">
+          <thead>
+            <tr>
+              <th class="text-left">Name</th>
+              <div v-for="(description, proposal) in proposals" :key="proposal">
+                <th>{{ proposal }}</th>
+              </div> 
+            </tr>
+          </thead>
+          <tbody>
+            <div v-for="(object, name, index) in votes" :key="name">
+              <tr>
+                <td data-th="Name">{{ name }}</td>
+                <div v-for="(description, proposal) in proposals" :key="proposal">
+                  <td :data-th="proposal" class="text-right"> {{ object[proposal] }}</td>
+                </div> 
+              </tr>
+            </div>
+          </tbody>
+        </table>
+      </q-card-main>
+    </q-card>
+    <q-card style="max-width: 700px; text-align: left;">
+      <q-card-main>
         <div v-for="(description, proposal) in proposals" :key="proposal">
           <q-list highlight>
             <q-item>
               <q-item-main :label="proposal" :sublabel="description"></q-item-main>
               <q-item-side>
-                {{ getPercentage(proposal) }} %
                 <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
               </q-item-side>
             </q-item>
@@ -84,6 +107,10 @@ export default {
       else if (p > 14) emo = -2
       else emo = -3
       return emo
+    },
+    getName (index) {
+      console.log(index)
+      return Object.keys(this.votes)[index]
     }
   },
   data () {
@@ -97,5 +124,7 @@ export default {
 }
 </script>
 <style lang="stylus">
-
+.q-list
+  .q-item
+    cursor pointer
 </style>

@@ -41,7 +41,7 @@ export default {
     },
     startIntervalUpdate (time) {
       let component = this
-      setInterval(function () {
+      this.interval = setInterval(function () {
         component.timer()
       }, 1000)
     },
@@ -65,7 +65,6 @@ export default {
   mounted () {
     this.id = this.$route.params.id
     this.topic = getTopic(this.id)
-    console.log(this.topic)
     if (this.topic === -1) {
       this.$router.push({name: '/create'})
     }
@@ -73,6 +72,9 @@ export default {
       this.timer()
       this.startIntervalUpdate()
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   },
   data () {
     return {

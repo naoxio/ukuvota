@@ -28,8 +28,6 @@ export default new VueRouter({
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
     { name: 'result', path: '/:id/result', component: load('Result') },
 
-    { path: '/:id/create', redirect: { name: 'create' } },
-
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found
   ]
