@@ -12,31 +12,25 @@
         </template>
 
         <q-input float-label="Topic Question" v-model="topicQuestion"/>
-        <p class="caption">
+        <p class="caption row justify-between">
           Proposal Collection Time
-          <span>
-            <br>
-            <q-chip>
-              Days: {{proposalDays}}
-              Hours: {{proposalHours}}
-              Minutes: {{proposalMinutes}}
-            </q-chip>
-          </span>
+          <q-chip>
+            Days: {{proposalDays}}
+            Hours: {{proposalHours}}
+            Minutes: {{proposalMinutes}}
+          </q-chip>
         </p>
-        <q-slider :step="1" v-model="proposalDays" :min="0" :max="356" snap></q-slider>
+        <q-slider :step="1" v-model="proposalDays" :min="0" :max="62" snap></q-slider>
         <q-slider :step="1" v-model="proposalHours" :min="0" :max="24" snap></q-slider>
         <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" snap></q-slider>
 
-        <p class="caption">
+        <p class="caption row justify-between">
           Voting Time
-          <span>
-            <br>
-            <q-chip>
-              Days: {{votingDays}}
-            </q-chip>
-          </span>
+          <q-chip>
+            Days: {{votingDays}}
+          </q-chip>
         </p>
-        <q-slider :step="1" v-model="votingDays" :label-value="`${votingDays} days`" :min="1" :max="356" label snap></q-slider>
+        <q-slider :step="1" v-model="votingDays" :label-value="`${votingDays} days`" :min="1" :max="62" label snap></q-slider>
         <q-input
           type="textarea"
           float-label="Description (optional)"
