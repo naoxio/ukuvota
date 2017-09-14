@@ -109,12 +109,12 @@ export default {
             'Repeat Process': 'look for other options and repeat the process'
           },
           'emojis': {
-            'Change Nothing': 4,
-            'Repeat Process': 4
+            'Change Nothing': 0,
+            'Repeat Process': 0
           },
           'tmpemojis': {
-            'Change Nothing': 4,
-            'Repeat Process': 4
+            'Change Nothing': 0,
+            'Repeat Process': 0
           },
           'votes': {},
           'result': {}

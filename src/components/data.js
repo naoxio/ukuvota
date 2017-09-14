@@ -35,8 +35,8 @@ const addProperty = (id, prop, key, value) => {
 
 export const addProposal = (id, title, description) => {
   addProperty(id, 'proposals', title, description)
-  addProperty(id, 'emojis', title, 4)
-  addProperty(id, 'tmpemojis', title, 4)
+  addProperty(id, 'emojis', title, 0)
+  addProperty(id, 'tmpemojis', title, 0)
   return true
 }
 

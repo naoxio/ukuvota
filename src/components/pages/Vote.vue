@@ -66,7 +66,7 @@ export default {
       else if (this.nameEmpty) return 'Name is Empty'
     },
     select (title, key, val) {
-      let values = [1, 2, 3, 4, 5, 6, 7]
+      let values = [-3, -2, -1, 0, 1, 2, 3]
       document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
       let index = values.indexOf(val)
       values.splice(index, 1)
@@ -99,7 +99,7 @@ export default {
       name: '',
       nameEmpty: false,
       nameExists: false,
-      emo: [1, 2, 3, 4, 5, 6, 7]
+      emo: [-3, -2, -1, 0, 1, 2, 3]
     }
   }
 }
