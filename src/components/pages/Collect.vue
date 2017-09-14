@@ -3,24 +3,13 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <h5><q-field label="Add Proposal"></q-field></h5>
-        <template v-if="proposalEmpty">
-          <q-alert
-            color="dark"
-            icon="warning"
-          >
-            Proposal Is Empty
-          </q-alert>
-        </template>
-        <template v-if="proposalExists">
-          <q-alert
-            color="dark"
-            icon="warning"
-            v-model="proposalExists"
-          >
-            Proposal Exists
-          </q-alert>
-        </template>
-        <q-input v-model="newProposal" float-label="Proposal" />
+        <q-field :error-label="getProposalError()" >
+          <q-input
+            v-model="newProposal"
+            float-label="Proposal"
+            :error="proposalExists || proposalEmpty"
+          />
+        </q-field>
         <q-input v-model="proposalDescription" float-label="Description (optional)" />
         <div class="row justify-end">
           <q-btn @click="addProposal">Add</q-btn>
@@ -69,6 +58,12 @@ export default {
     this.update()
   },
   methods: {
+    getProposalError () {
+      if (this.proposalExists) 
+        return "The Proposal Already Exists"
+      else if (this.proposalEmpty)
+        return "Proposal is Empty"
+    },
     update () {
       this.proposals = getProposals(this.id)
     },

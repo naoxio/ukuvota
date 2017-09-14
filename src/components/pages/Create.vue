@@ -2,16 +2,14 @@
   <main-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <template v-if="topicMissing && topicMissing !== null">
-          <q-alert
-            color="dark"
-            icon="warning"
-          >
-            Topic Question Is Missing
-          </q-alert>
-        </template>
-
-        <q-input float-label="Topic Question" v-model="topicQuestion"/>
+        <q-field 
+          error-label="Please add a Topic Question"
+        >
+          <q-input v-model="topicQuestion"
+            float-label="Topic Question"
+            :error="topicMissing"
+            />
+        </q-field>
         <p class="caption row justify-between">
           Proposal Collection Time
           <q-chip>
