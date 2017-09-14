@@ -2,30 +2,7 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <table class="q-table horizontal-seperator flipped" :class="computedClasses">
-          <thead>
-            <tr>
-              <th class="text-left">Name</th>
-              <div v-for="(description, proposal) in proposals" :key="proposal">
-                <th>{{ proposal }}</th>
-              </div> 
-            </tr>
-          </thead>
-          <tbody>
-            <div v-for="(object, name, index) in votes" :key="name">
-              <tr>
-                <td data-th="Name">{{ name }}</td>
-                <div v-for="(description, proposal) in proposals" :key="proposal">
-                  <td :data-th="proposal" class="text-right"> {{ object[proposal] }}</td>
-                </div> 
-              </tr>
-            </div>
-          </tbody>
-        </table>
-      </q-card-main>
-    </q-card>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
+        <p class="caption">Results!</p>
         <div v-for="(description, proposal) in proposals" :key="proposal">
           <q-list highlight>
             <q-item>
@@ -38,6 +15,31 @@
         </div>
       </q-card-main>
     </q-card>
+    <q-card style="max-width: 700px; text-align: left;">
+     <q-card-main>
+       <p class="caption">Raw Data Table</p>
+       <table class="q-table horizontal-seperator flipped" :class="computedClasses">
+         <thead>
+           <tr>
+             <th class="text-left">Name</th>
+             <div v-for="(description, proposal) in proposals" :key="proposal">
+               <th style="max-width: 150px; word-break: break-all;">{{ proposal }}</th>
+             </div> 
+           </tr>
+         </thead>
+         <tbody>
+           <div v-for="(object, name, index) in votes" :key="name">
+             <tr>
+               <td data-th="Name">{{ name }}</td>
+               <div v-for="(description, proposal) in proposals" :key="proposal">
+                 <td :data-th="proposal" class="text-center"> {{ object[proposal] }}</td>
+               </div> 
+             </tr>
+            </div>
+         </tbody>
+       </table>
+     </q-card-main>
+   </q-card>
   </process-layout>
 </template>
 <script>
@@ -86,6 +88,7 @@ export default {
       this.max = -999999999
       for (let key in object) {
         if (this.max < object[key]) this.max = object[key]
+        console.log(object[key])
       }
     },
     getScore (proposal) {
@@ -93,24 +96,21 @@ export default {
     },
     getPercentage (proposal) {
       let score = this.getScore(proposal)
-      console.log(score, this.max)
-      return Math.round((score / this.max) * 100)
+      return score / this.max
     },
     getEmoji (proposal) {
-      let p = this.getPercentage(proposal)
+      console.log(this.results)
+      let p = this.getScore(proposal)
       let emo = 0
-      if (p > 86) emo = 3
-      else if (p > 71) emo = 2
-      else if (p > 57) emo = 1
-      else if (p > 43) emo = 0
-      else if (p > 29) emo = -1
-      else if (p > 14) emo = -2
+      console.log("max" + this.max, "p" + p)
+      if (p === this.max) emo = 3
+      else if (p > this.max - 14) emo = 2
+      else if (p > this.max - 29) emo = 1
+      else if (p > this.max - 43) emo = 0
+      else if (p > this.max - 57) emo = -1
+      else if (p > this.max - 71) emo = -2
       else emo = -3
       return emo
-    },
-    getName (index) {
-      console.log(index)
-      return Object.keys(this.votes)[index]
     }
   },
   data () {
