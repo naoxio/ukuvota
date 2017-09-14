@@ -68,7 +68,6 @@ export default {
       this.genResults(name)
     }
     this.genMax(this.results)
-    console.log(this.total)
   },
   methods: {
     genResults (name) {
@@ -136,4 +135,9 @@ export default {
 .q-list
   .q-item
     cursor pointer
+table
+  td
+    height 64px
+  th
+    height 64px
 </style>
