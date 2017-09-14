@@ -21,7 +21,7 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list highlight>
-        <q-item v-for="(description, title) in proposals" :key="proposals.key">
+        <q-item v-for="(description, title) in proposals" :key="proposals.id">
           <q-item-main :label="title" :sublabel="description"></q-item-main>
         </q-item>
       </q-list>
@@ -30,28 +30,20 @@
 </template>
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
-import { QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QField, QIcon, QInput, QItem, QItemSeparator, QItemMain, QItemTile, QItemSide, QList, QListHeader } from 'quasar'
+import { QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
 import { addProposal, getProposals } from '@/data'
 
 export default {
   components: {
     ProcessLayout,
-    QAlert,
     QBtn,
     QCard,
     QCardMain,
-    QCardMedia,
-    QCardTitle,
     QField,
-    QIcon,
     QInput,
     QItem,
-    QItemSeparator,
     QItemMain,
-    QItemSide,
-    QItemTile,
-    QList,
-    QListHeader
+    QList
   },
   mounted () {
     this.id = this.$route.params.id

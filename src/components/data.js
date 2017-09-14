@@ -30,7 +30,6 @@ const addProperty = (id, prop, key, value) => {
   let topics = getTopics()
   let index = getTopicIndex(id, topics)
   topics[index][prop][key] = value
-  console.log(prop, key, value)
   setTopics(topics)
 }
 

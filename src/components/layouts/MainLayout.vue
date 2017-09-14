@@ -30,9 +30,7 @@
         <center>
         <div class="row justify-center items-center">
           <div class="col-6">
-            <a href="https://yunity.org" target="_blank">
-              <img class="logo" src="statics/logo.png" width="128px" />
-            </a>  
+            <img @dblclick="launch('https://yunity.org/ukuota')" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
           </div>
           <div class="col-6">
             <p class="title">Ukuvota</p>
@@ -83,6 +81,13 @@ export default {
     QItemMain
   },
   methods: {
+    rotateLogo () {
+      document.getElementById('logo').setAttribute('class', 'animation hide')
+      setTimeout(function () {
+        document.getElementById('logo').setAttribute('class', 'show')
+      }, 10000)
+     // document.getElementById('logo').setAttribute('class', 'show')
+    },
     launch (url) {
       openURL(url)
     }
@@ -100,9 +105,19 @@ body
   font-size 32px
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+.show {
+  opacity: 1;
+  transition: opacity 2s linear;
+}
 
-.logo:hover
+.hide {
+  opacity: 0;
+  transition: opacity 10s linear;
+}
+#logo {
   cursor pointer
-  animation spin 4s linear infinite
+}
+.animation
   filter hue-rotate(300deg)
+  animation spin 4s linear infinite
 </style>

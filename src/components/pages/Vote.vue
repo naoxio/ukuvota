@@ -43,21 +43,17 @@
 </template>
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain, QInput, QRadio } from 'quasar'
+import { QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
 import { getProposals, getEmojis, setEmojis, setVotes } from '@/data'
 
 export default {
   components: {
     ProcessLayout,
-    QAlert,
     QBtn,
     QCard,
     QCardMain,
     QField,
-    QItem,
-    QItemMain,
-    QInput,
-    QRadio
+    QInput
   },
   mounted () {
     this.id = this.$route.params.id
