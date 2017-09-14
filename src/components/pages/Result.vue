@@ -32,7 +32,7 @@
              <tr>
                <td data-th="Name">{{ name }}</td>
                <div v-for="(description, proposal) in proposals" :key="proposal">
-                 <td :data-th="proposal" class="text-center"> {{ object[proposal] }}</td>
+                 <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
                </div> 
              </tr>
             </div>
@@ -74,7 +74,7 @@ export default {
     genResults (name) {
       for (let proposal in this.proposals) {
         let vote = this.votes[name][proposal]
-        if (vote < 0) vote = vote * 3
+        if (vote < 0 && this.weightedScores) vote = vote * 3
         if (this.results[proposal] === undefined) {
           this.results[proposal] = vote
         }
@@ -98,6 +98,11 @@ export default {
       let score = this.getScore(proposal)
       return score / this.max
     },
+    getIndiScore (object, proposal) {
+      let score = object[proposal]
+      if (this.weightedScores && score < 0) score = score * 3 
+      return score
+    },
     getEmoji (proposal) {
       console.log(this.results)
       let p = this.getScore(proposal)
@@ -118,7 +123,8 @@ export default {
       results: {},
       percentages: {},
       proposals: {},
-      total: 0
+      total: 0,
+      weightedScores: true
     }
   }
 }
