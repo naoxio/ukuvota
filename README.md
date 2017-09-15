@@ -9,21 +9,18 @@ Ukuvota uses a cooperative and scalable process to help individuals reach collec
 ## Technology used
 The front-end is made using the Quasar Framework
 
-## Installing Quasar and Yarn
+## Installing Quasar
 
 ``` bash
-# (sudo is onyl required if npm is install globally)
-# install quasar-cli globally (
+# install quasar-cli globally (sudo required to install globally)
 $ sudo npm install -g quasar-cli
-# install dependency manager
-$ sudo npm install -g yarn
 ```
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-$ yarn
+$ npm install
 
 # serve with hot reload at localhost:8080
 $ quasar dev
