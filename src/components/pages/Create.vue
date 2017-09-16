@@ -121,8 +121,8 @@ export default {
         }
         topics.push(newTopic)
 
-        // update localstorage topics content
         LocalStorage.set('topics', JSON.stringify(topics))
+        saveTopicToFirebase(newTopic)
 
         // go to collectProposals vue
         this.$router.push({name: 'collect', params: { id: id }})
