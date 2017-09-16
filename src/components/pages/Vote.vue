@@ -15,6 +15,15 @@
         </div>
         <br></br>
         <h6>
+          <template v-if="submited">
+            <q-alert
+              color="light"
+              icon="done"
+              dismissible
+            >
+              Vote from {{ submitName }} submited!
+            </q-alert>
+          </template>
           <q-field 
           label="Your Name or Persistant Alias"
           :error-label="getNameError()"
@@ -36,12 +45,13 @@
 </template>
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
-import { QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
+import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
 import { getProposals, getEmojis, setVotes } from '@/data'
 
 export default {
   components: {
     ProcessLayout,
+    QAlert,
     QBtn,
     QCard,
     QCardMain,
@@ -85,8 +95,10 @@ export default {
         if (error === -2) this.nameExists = true
         else {
           this.nameExists = false
+          this.submitName = this.name
           this.name = ''
           this.init()
+          this.submited = true
         }
       }
     }
@@ -94,6 +106,8 @@ export default {
   data () {
     return {
       id: '',
+      submited: false,
+      submitName: '',
       proposals: '',
       emojis: '',
       name: '',
