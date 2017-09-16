@@ -33,15 +33,4 @@ Quasar.start(() => {
     router,
     render: h => h(require('./App'))
   })
-
-  // initialize firebase
-  var config = {
-    apiKey: 'AIzaSyB7KCC4PEbn1gk4NrdFlrARGmcYK7C1SnY',
-    authDomain: 'ukuvota.firebaseapp.com',
-    databaseURL: 'https://ukuvota.firebaseio.com',
-    projectId: 'ukuvota',
-    storageBucket: 'ukuvota.appspot.com'
-    // messagingSenderId: '105902830879"
-  }
-  firebase.initializeApp(config)
 })
