@@ -49,6 +49,8 @@ export default {
     QInput
   },
   mounted () {
+    this.id = this.$route.params.id
+    this.proposals = getProposals(this.id)
     this.init()
   },
   methods: {
@@ -61,8 +63,6 @@ export default {
       else if (this.nameEmpty) return 'Name is Empty'
     },
     init () {
-      this.id = this.$route.params.id
-      this.proposals = getProposals(this.id)
       this.tmpemojis = getEmojis(this.id)
     },
     select (title, val) {
