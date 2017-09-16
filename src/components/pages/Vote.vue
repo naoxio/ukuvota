@@ -7,15 +7,8 @@
           <q-field :label="description"></q-field>
           <div class="row justify-around">
             <div v-for="file in emo" :key="file">
-              <div v-if="file === emojis[title]">
-                <div class="selected" :id="'emo-' + key + '_' + file" @click="select(title, key, file)">
-                  <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
-                </div>
-              </div>
-              <div v-else>
-               <div :id="'emo-' + key + '_' + file" @click="select(title, key, file)">
+              <div :class="{ selected: isSelected(file, title) }" @click="select(title, file)">
                 <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
-               </div>
               </div>
             </div>
           </div>
@@ -35,7 +28,7 @@
         </h6>
        </br>
         <div style="text-align: right">
-          <q-btn @click="next()" icon="arrow forward">Submit</q-btn>
+          <q-btn @click="submit()" icon="arrow forward">Submit</q-btn>
         </div>
       </q-card-main>
     </q-card>
@@ -44,7 +37,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getProposals, getEmojis, setTmpEmojis, setVotes } from '@/data'
+import { getProposals, getEmojis, setVotes } from '@/data'
 
 export default {
   components: {
@@ -56,26 +49,27 @@ export default {
     QInput
   },
   mounted () {
-    this.id = this.$route.params.id
-    this.proposals = getProposals(this.id)
-    this.emojis = getEmojis(this.id)
+    this.init()
   },
   methods: {
+    isSelected (file, title) {
+      if (file === this.tmpemojis[title]) return true
+      else return false
+    },
     getNameError () {
       if (this.nameExists) return 'This Name Already Exists'
       else if (this.nameEmpty) return 'Name is Empty'
     },
-    select (title, key, val) {
-      let values = [-3, -2, -1, 0, 1, 2, 3]
-      document.getElementById('emo-' + key + '_' + val).setAttribute('class', 'selected')
-      let index = values.indexOf(val)
-      values.splice(index, 1)
-      for (let x = 0; x < values.length; x++) {
-        document.getElementById('emo-' + key + '_' + values[x]).removeAttribute('class', 'selected')
-      }
-      setTmpEmojis(this.id, title, val, this.name)
+    init () {
+      this.id = this.$route.params.id
+      this.proposals = getProposals(this.id)
+      this.tmpemojis = getEmojis(this.id)
     },
-    next () {
+    select (title, val) {
+      this.$set(this.tmpemojis, title, val)
+      this.$forceUpdate()
+    },
+    submit () {
       let error = false
       // error check
       if (this.name === '') {
@@ -87,15 +81,21 @@ export default {
       }
 
       if (!error) { // if no errors proceed
-        let error = setVotes(this.id, this.name)
+        let error = setVotes(this.id, this.name, this.tmpemojis)
         if (error === -2) this.nameExists = true
-        else this.$router.push({name: 'result', params: { id: this.id }})
+        else {
+          this.nameExists = false
+          this.name = ''
+          this.init()
+        }
       }
     }
   },
   data () {
     return {
+      id: '',
       proposals: '',
+      emojis: '',
       name: '',
       nameEmpty: false,
       nameExists: false,
