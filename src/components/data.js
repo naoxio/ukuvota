@@ -1,21 +1,43 @@
 import { LocalStorage } from 'quasar'
 import * as firebase from 'firebase'
 
-const database = 'localstorage'
+const database = 'firebase'
 
-export const saveTopicToFirebase = (newTopic) => {
-  // firebase update
-  // get a key for a new topic.
-  var newTopicKey = firebase.database().ref().child('topics').push().key
-  // write the new topics's data in the topics list
+// firebase topic
+const addFirebaseTopic = (id, newTopic) => {
   var updates = {}
-  updates['/topics/' + newTopicKey] = newTopic
+  updates['/topics/' + id] = newTopic
   firebase.database().ref().update(updates)
 }
+/*
+const updateFirebaseTopic = (id, changedTopic) => {
+  firebase.database().ref('topics/').transaction(function (topic) {
+    if (topic) {
+      topic[id] = changedTopic
+    }
+    return topic
+  })
+} */
 
+const getFirebaseTopic = (id) => {
+  return firebase.database().ref('topics/' + id).once('value').then(function (snapshot) {
+    return snapshot.val()
+  })
+}
+
+const setFirebaseTopic = (topic) => {
+  console.log(topic)
+  addFirebaseTopic(topic.id, topic)
+  let t = getFirebaseTopic(topic.id)
+  console.log(t)
+//  updateFirebaseTopic(topic.id, topic)
+}
+
+// general data methods
 export const setTopic = (topic) => {
   switch (database) {
     case 'firebase':
+      setFirebaseTopic(topic)
       break
     default:
       LocalStorage.set(topic.id, JSON.stringify(topic))
@@ -26,9 +48,7 @@ export const getTopic = (id) => {
   let topic = -1
   switch (database) {
     case 'firebase':
-      firebase.database().ref('topics').on('value', function (snapshot) {
-        topic = snapshot.val()
-      })
+      getFirebaseTopic(id)
       break
     default:
       topic = JSON.parse(LocalStorage.get.item(id))
