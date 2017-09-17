@@ -20,13 +20,14 @@ const updateFirebaseTopic = (id, changedTopic) => {
 } */
 
 const getFirebaseTopic = (id) => {
-  return firebase.database().ref('topics/' + id).once('value').then(function (snapshot) {
-    return snapshot.val()
+  let topic = -1
+  firebase.database().ref('topics/' + id).on('value', function (snapshot) {
+    topic = snapshot.val()
   })
+  return topic
 }
 
 const setFirebaseTopic = (topic) => {
-  console.log(topic)
   addFirebaseTopic(topic.id, topic)
   let t = getFirebaseTopic(topic.id)
   console.log(t)
@@ -48,7 +49,7 @@ export const getTopic = (id) => {
   let topic = -1
   switch (database) {
     case 'firebase':
-      getFirebaseTopic(id)
+      topic = getFirebaseTopic(id)
       break
     default:
       topic = JSON.parse(LocalStorage.get.item(id))

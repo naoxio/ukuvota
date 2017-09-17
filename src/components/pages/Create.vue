@@ -112,10 +112,6 @@ export default {
             'Change Nothing': 0,
             'Repeat Process': 0
           },
-          'tmpemojis': {
-            'Change Nothing': 0,
-            'Repeat Process': 0
-          },
           'votes': {},
           'result': {}
         }
