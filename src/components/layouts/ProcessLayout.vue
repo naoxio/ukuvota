@@ -4,9 +4,9 @@
       <q-card-main>
         <h5><q-field :label="topic.question"></q-field></h5>
         <q-field :label="topic.description"></q-field>
-        <q-item tag="label">
+        <q-item v-if="votingTimer !== -1 && proposalTimer !== -1" tag="label">
           <q-item-main v-if="proposalTimer !== -1" label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
-          <q-item-main label="Voting Time Will Last For" :sublabel="votingTimer">          </q-item-main>
+          <q-item-main v-if="votingTimer !== -1" l label="Voting Time Will Last For" :sublabel="votingTimer">          </q-item-main>
         </q-item>
         <br>
         <q-field label="Shareable URL"></q-field>

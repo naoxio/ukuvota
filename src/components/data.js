@@ -1,36 +1,45 @@
 import { LocalStorage } from 'quasar'
+import * as firebase from 'firebase'
 
-const getTopics = () => {
-  return JSON.parse(LocalStorage.get.item('topics'))
+const database = 'localstorage'
+
+export const saveTopicToFirebase = (newTopic) => {
+  // firebase update
+  // get a key for a new topic.
+  var newTopicKey = firebase.database().ref().child('topics').push().key
+  // write the new topics's data in the topics list
+  var updates = {}
+  updates['/topics/' + newTopicKey] = newTopic
+  firebase.database().ref().update(updates)
 }
 
-const setTopics = (topics) => {
-  LocalStorage.set('topics', JSON.stringify(topics))
-}
-
-const getTopicIndex = (id, topics) => {
-  let index = -1
-  for (let x = 0; x < topics.length; x++) {
-    if (topics[x].id === id) {
-      index = x
-    }
+export const setTopic = (topic) => {
+  switch (database) {
+    case 'firebase':
+      break
+    default:
+      LocalStorage.set(topic.id, JSON.stringify(topic))
   }
-  return index
 }
 
 export const getTopic = (id) => {
-  let topics = getTopics()
-  if (topics === null) return -1
-  let index = getTopicIndex(id, topics)
-  if (index === -1) return -1
-  return topics[index]
+  let topic = -1
+  switch (database) {
+    case 'firebase':
+      firebase.database().ref('topics').on('value', function (snapshot) {
+        topic = snapshot.val()
+      })
+      break
+    default:
+      topic = JSON.parse(LocalStorage.get.item(id))
+  }
+  return topic
 }
 
 const addProperty = (id, prop, key, value) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  topics[index][prop][key] = value
-  setTopics(topics)
+  let topic = getTopic(id)
+  topic[prop][key] = value
+  setTopic(topic)
 }
 
 export const addProposal = (id, title, description) => {
@@ -50,24 +59,21 @@ export const getProposals = (id) => {
 }
 
 export const setVotes = (id, name, emojis) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
+  let topic = getTopic(id)
 
-  if (topics[index].votes[name] === undefined) topics[index].votes[name] = emojis
+  if (topic.votes[name] === undefined) topic.votes[name] = emojis
   else return -2
 
-  setTopics(topics)
+  setTopic(topic)
 }
 
 export const getVotes = (id) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  return topics[index].votes
+  let topic = getTopic(id)
+  return topic.votes
 }
 
 export const setResults = (id, results) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  if (topics[index].results === undefined) topics[index].results = results
+  let topic = getTopic(id)
+  if (topic.results === undefined) topic.results = results
   else return -2
 }
