@@ -83,7 +83,8 @@ export default {
             tmp.proposalDescription = ''
             getTopic(tmp.id).then(tmp.updateProposals).then(tmp.$forceUpdate()
           )
-          })
+          }
+        )
       }
     }
   },

@@ -57,7 +57,9 @@ const setProperty = (id, prop, key, value) => {
 
 export const addProposal = (id, title, description) => {
   return setProperty(id, 'proposals', title, description).then(
-  setProperty(id, 'emojis', title, 0)
+    function () {
+      setProperty(id, 'emojis', title, 0)
+    }
   )
 }
 

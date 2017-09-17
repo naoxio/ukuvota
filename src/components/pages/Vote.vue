@@ -60,12 +60,16 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    getTopic(this.id).then(topic => {
-      this.proposals = topic.proposals
-    })
-    this.init()
+    getTopic(this.id).then(this.updateProposals)
+    getTopic(this.id).then(this.updateEmojis)
   },
   methods: {
+    updateProposals (topic) {
+      this.proposals = topic.proposals
+    },
+    updateEmojis (topic) {
+      this.tmpemojis = topic.emojis
+    },
     isSelected (file, title) {
       if (file === this.tmpemojis[title]) return true
       else return false
@@ -73,11 +77,6 @@ export default {
     getNameError () {
       if (this.nameExists) return 'This Name Already Exists'
       else if (this.nameEmpty) return 'Name is Empty'
-    },
-    init () {
-      getTopic(this.id).then(topic => {
-        this.tmpemojis = topic.emojis
-      })
     },
     select (title, val) {
       this.$set(this.tmpemojis, title, val)
@@ -95,15 +94,20 @@ export default {
       }
 
       if (!error) { // if no errors proceed
-        let error = setVotes(this.id, this.name, this.tmpemojis)
-        if (error === -2) this.nameExists = true
-        else {
-          this.nameExists = false
-          this.submitName = this.name
-          this.name = ''
-          this.init()
-          this.submited = true
-        }
+        let tmp = this
+        addVotes(this.id, this.name, this.tmpemojis).then(
+          function () {
+            tmp.nameExists = false
+            tmp.submitName = tmp.name
+            tmp.name = ''
+            this.submited = true
+            getTopic(tmp.id).then(tmp.updateEmojis).then(tmp.$forceUpdate())
+          },
+          function (error) {
+            if (error === -2) this.nameExists = true
+            else console.log('error: adding votes failed: ' + error)
+          }
+        )
       }
     }
   },
@@ -114,6 +118,7 @@ export default {
       submitName: '',
       proposals: '',
       emojis: '',
+      tmpemojis: '',
       name: '',
       nameEmpty: false,
       nameExists: false,
