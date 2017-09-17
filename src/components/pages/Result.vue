@@ -4,7 +4,7 @@
       <q-card-main>
         <p class="caption">Results!</p>
         <div v-for="(description, proposal) in proposals" :key="proposal">
-          <q-list highlight>
+          <q-list>
             <q-item>
               <q-item-main :label="proposal" :sublabel="description"></q-item-main>
               <q-item-side>
@@ -136,9 +136,6 @@ export default {
 }
 </script>
 <style lang="stylus">
-.q-list
-  .q-item
-    cursor pointer
 table
   td
     height 64px
