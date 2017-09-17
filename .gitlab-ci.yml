@@ -1,13 +1,22 @@
 image: node:latest
 
-deploy:
-  stage: deploy
+test:
   script:
   - yarn
+  - yarn lint
+  - yarn test
   - yarn build
-  - echo would deploy here
   artifacts:
     paths:
     - dist
+
+deploy:
+  stage: deploy
+  script:
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$DEPLOY_SSH_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:ukuvota/
   only:
   - master
