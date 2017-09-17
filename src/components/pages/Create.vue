@@ -26,9 +26,14 @@
           Voting Time
           <q-chip>
             Days: {{votingDays}}
+            Hours: {{votingHours}}
+            Minutes: {{votingMinutes}}
           </q-chip>
         </p>
-        <q-slider :step="1" v-model="votingDays" :label-value="`${votingDays} days`" :min="1" :max="62" label snap></q-slider>
+        <q-slider :step="1" v-model="votingDays" :min="0" :max="62" label snap></q-slider>
+        <q-slider :step="1" v-model="votingHours" :min="0" :max="24" snap></q-slider>
+        <q-slider :step="1" v-model="votingMinutes" :min="1" :max="60" snap></q-slider>
+
         <q-input
           type="textarea"
           float-label="Description (optional)"
@@ -90,7 +95,7 @@ export default {
         let today = new Date()
         let endProposal = addToDate(today, {days: this.proposalDays, hours: this.proposalHours, minutes: this.proposalMinutes})
         let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
-        let endVoting = addToDate(today, {days: this.votingDays, milliseconds: diff})
+        let endVoting = addToDate(today, {days: this.votingDays, hours: this.votingHours, minutes: this.votingMinutes, milliseconds: diff})
         // create a new Topic object
         let newTopic = {
           'question': this.topicQuestion,
@@ -130,6 +135,8 @@ export default {
       proposalMinutes: 1,
       proposalHours: 0,
       proposalDays: 2,
+      votingMinutes: 1,
+      votingHours: 0,
       votingDays: 1
     }
   }
