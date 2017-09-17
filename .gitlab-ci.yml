@@ -1,0 +1,13 @@
+image: node:latest
+
+deploy:
+  stage: deploy
+  script:
+  - yarn
+  - yarn build
+  - echo would deploy here
+  artifacts:
+    paths:
+    - dist
+  only:
+  - master
