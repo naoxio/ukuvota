@@ -18,25 +18,31 @@
     <q-card style="max-width: 700px; text-align: left;">
      <q-card-main>
        <p class="caption">Raw Data Table</p>
-       <table class="q-table horizontal-seperator flipped">
+       <table class="q-table horizontal-seperator flipped vertical-separator">
          <thead>
            <tr>
-             <th class="text-left">Name</th>
+             <th class="text-left green">Name</th>
              <div v-for="(description, proposal) in proposals" :key="proposal">
-               <th style="max-width: 150px; word-break: break-all;">{{ proposal }}</th>
+               <th class="green" style="max-width: 150px; overflow-wrap: break-word;">{{ proposal }}</th>
              </div> 
            </tr>
          </thead>
          <tbody>
            <div v-for="(object, name, index) in votes" :key="name">
              <tr>
-               <td data-th="Name">{{ name }}</td>
+               <td class="green" style="font-weight: bold" data-th="Name">{{ name }}</td>
                <div v-for="(description, proposal) in proposals" :key="proposal">
                  <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
                </div> 
              </tr>
             </div>
          </tbody>
+         <tfood style="background-color: #ffffcc" >
+           <tr class="text-right">
+             <th>Total</th>
+             <td> test</td>
+           </tr>
+         </tfood>
        </table>
      </q-card-main>
    </q-card>
@@ -136,6 +142,8 @@ export default {
 }
 </script>
 <style lang="stylus">
+.green
+  background-color #F0F4C3
 table
   td
     height 64px

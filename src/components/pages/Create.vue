@@ -114,7 +114,7 @@ export default {
             'Repeat Process': 0
           },
           'votes': {},
-          'result': {}
+          'results': {}
         }
         let tmp = this
         setTopic(newTopic).then(function () {

@@ -53,7 +53,7 @@ export default {
           this.voringTimeLabel = 'Voting Time Ends In'
         }
         else if (this.votingTimer === -1) {
-          if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
+          if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResults()
         }
       }
     },
@@ -63,8 +63,8 @@ export default {
     goToVote () {
       this.$router.push({name: 'vote', params: { id: this.id }})
     },
-    goToResult () {
-      this.$router.push({name: 'result', params: { id: this.id }})
+    goToResults () {
+      this.$router.push({name: 'results', params: { id: this.id }})
     },
     setData (topic) {
       this.topic = topic

@@ -26,7 +26,7 @@ export default new VueRouter({
     { name: 'create', path: '/create', component: load('Create') },
     { name: 'collect', path: '/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/:id/vote', component: load('Vote') },
-    { name: 'result', path: '/:id/result', component: load('Result') },
+    { name: 'results', path: '/:id/results', component: load('Results') },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found
