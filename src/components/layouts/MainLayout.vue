@@ -11,7 +11,7 @@
           <a href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/" target="_blank">
             <q-icon name="fa-book"></q-icon>
           </a>
-          <a href="https://gitlab.com/yunity/ukuvota/" target="_blank"><q-icon name="fa-gitlab"></q-icon></a>
+          <a href="https://gitlab.com/ukuvota/ukuvota/" target="_blank"><q-icon name="fa-gitlab"></q-icon></a>
           <br></br>
           <slot></slot>
         </center>
