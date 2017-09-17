@@ -13,6 +13,7 @@ test:
 deploy:
   stage: deploy
   script:
+  - apt-get update && apt-get install -y rsync
   - eval $(ssh-agent -s)
   - ssh-add <(echo "$DEPLOY_SSH_KEY")
   - mkdir -p ~/.ssh
