@@ -67,11 +67,11 @@ export default {
     },
     success (topic) {
       this.topic = topic
-      // this.timer()
-      // this.startIntervalUpdate()
+      this.timer()
+      this.startIntervalUpdate()
     },
     error (error) {
-      console.log(error)
+      console.log('error with getting topic: ' + error)
       this.$router.push({name: '/create'})
     }
   },

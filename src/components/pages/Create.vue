@@ -18,9 +18,9 @@
             Minutes: {{proposalMinutes}}
           </q-chip>
         </p>
-        <q-slider :step="1" v-model="proposalDays" :min="0" :max="62" snap></q-slider>
-        <q-slider :step="1" v-model="proposalHours" :min="0" :max="24" snap></q-slider>
-        <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" snap></q-slider>
+        <q-slider :step="1" v-model="proposalDays" :min="0" :max="62" label snap></q-slider>
+        <q-slider :step="1" v-model="proposalHours" :min="0" :max="24" label snap></q-slider>
+        <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" label snap></q-slider>
 
         <p class="caption row justify-between">
           Voting Time
@@ -31,8 +31,8 @@
           </q-chip>
         </p>
         <q-slider :step="1" v-model="votingDays" :min="0" :max="62" label snap></q-slider>
-        <q-slider :step="1" v-model="votingHours" :min="0" :max="24" snap></q-slider>
-        <q-slider :step="1" v-model="votingMinutes" :min="1" :max="60" snap></q-slider>
+        <q-slider :step="1" v-model="votingHours" :min="0" :max="24" label snap></q-slider>
+        <q-slider :step="1" v-model="votingMinutes" :min="1" :max="60" label snap></q-slider>
 
         <q-input
           type="textarea"

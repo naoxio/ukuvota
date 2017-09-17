@@ -46,7 +46,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getProposals, getEmojis, setVotes } from '@/data'
+import { getTopic, setVotes } from '@/data'
 
 export default {
   components: {
@@ -60,7 +60,9 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    this.proposals = getProposals(this.id)
+    getTopic(this.id).then(topic => {
+      this.proposals = topic.proposals
+    })
     this.init()
   },
   methods: {
@@ -73,7 +75,9 @@ export default {
       else if (this.nameEmpty) return 'Name is Empty'
     },
     init () {
-      this.tmpemojis = getEmojis(this.id)
+      getTopic(this.id).then(topic => {
+        this.tmpemojis = topic.emojis
+      })
     },
     select (title, val) {
       this.$set(this.tmpemojis, title, val)

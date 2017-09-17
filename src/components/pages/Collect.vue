@@ -31,7 +31,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
-import { addProposal, getProposals } from '@/data'
+import { addProposal, getTopic } from '@/data'
 
 export default {
   components: {
@@ -47,14 +47,15 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
+    getTopic(this.id).then(this.updateProposals)
   },
   methods: {
     getProposalError () {
       if (this.proposalExists) return 'The Proposal Already Exists'
       else if (this.proposalEmpty) return 'Proposal is Empty'
     },
-    update () {
-      getProposals(this.id).then(proposals => this.proposals = proposals)
+    updateProposals (topic) {
+      this.proposals = topic.proposals
     },
     addProposal () {
       let error = false
@@ -75,10 +76,14 @@ export default {
         }
       }
       if (!error) {
-        addProposal(this.id, this.newProposal, this.proposalDescription)
-        this.newProposal = ''
-        this.proposalDescription = ''
-        this.update()
+        let tmp = this
+        addProposal(this.id, this.newProposal, this.proposalDescription).then(
+          function () {
+            tmp.newProposal = ''
+            tmp.proposalDescription = ''
+            getTopic(tmp.id).then(tmp.updateProposals).then(tmp.$forceUpdate()
+          )
+          })
       }
     }
   },
