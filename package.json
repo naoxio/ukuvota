@@ -7,7 +7,8 @@
     "clean": "node build/script.clean.js",
     "dev": "node build/script.dev.js",
     "build": "node build/script.build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo 'repeat after me: 'I PROMISE TO WRITE TESTS''"
   },
   "dependencies": {
     "babel-runtime": "^6.0.0",
