@@ -115,10 +115,11 @@ export default {
           'votes': {},
           'result': {}
         }
-        setTopic(newTopic)
-
-        // go to collect vue
-        this.$router.push({name: 'collect', params: { id: id }})
+        let tmp = this
+        setTopic(newTopic).then(function () {
+          // go to collect vue after saving topic data
+          tmp.$router.push({name: 'collect', params: { id: id }})
+        })
       }
     }
   },

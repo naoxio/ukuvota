@@ -46,7 +46,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getTopic, setVotes } from '@/data'
+import { getTopic, addVotes } from '@/data'
 
 export default {
   components: {
@@ -60,14 +60,11 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    getTopic(this.id).then(this.updateProposals)
-    getTopic(this.id).then(this.updateEmojis)
+    getTopic(this.id).then(this.getData)
   },
   methods: {
-    updateProposals (topic) {
+    getData (topic) {
       this.proposals = topic.proposals
-    },
-    updateEmojis (topic) {
       this.tmpemojis = topic.emojis
     },
     isSelected (file, title) {
@@ -101,7 +98,7 @@ export default {
             tmp.submitName = tmp.name
             tmp.name = ''
             this.submited = true
-            getTopic(tmp.id).then(tmp.updateEmojis).then(tmp.$forceUpdate())
+            getTopic(tmp.id).then(tmp.getData).then(tmp.$forceUpdate())
           },
           function (error) {
             if (error === -2) this.nameExists = true

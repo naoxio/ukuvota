@@ -45,7 +45,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
-import { getVotes, getProposals, setResults } from '@/data.js'
+import { getTopic, setResults } from '@/data.js'
 
 export default {
   components: {
@@ -61,15 +61,19 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    this.votes = getVotes(this.id)
-    this.proposals = getProposals(this.id)
-    this.results = {}
-    for (let name in this.votes) {
-      this.genResults(name)
-    }
-    this.genMax(this.results)
+    getTopic(this.id).then(this.getData).then(function () {
+      this.results = {}
+      for (let name in this.votes) {
+        this.genResults(name)
+      }
+      this.genMax(this.results)
+    })
   },
   methods: {
+    getData (topic) {
+      this.votes = topic.votes
+      this.proposals = topic.proposals
+    },
     genResults (name) {
       for (let proposal in this.proposals) {
         let vote = this.votes[name][proposal]

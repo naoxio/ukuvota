@@ -4,7 +4,7 @@
       <q-card-main>
         <h5><q-field :label="topic.question"></q-field></h5>
         <q-field :label="topic.description"></q-field>
-        <q-item v-if="votingTimer !== -1 && proposalTimer !== -1" tag="label">
+        <q-item v-if="votingTimer !== -1" tag="label">
           <q-item-main v-if="proposalTimer !== -1" label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main v-if="votingTimer !== -1" l label="Voting Time Will Last For" :sublabel="votingTimer">          </q-item-main>
         </q-item>
@@ -65,7 +65,7 @@ export default {
     goToResult () {
       this.$router.push({name: 'result', params: { id: this.id }})
     },
-    success (topic) {
+    setData (topic) {
       this.topic = topic
       this.timer()
       this.startIntervalUpdate()
@@ -77,7 +77,7 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    getTopic(this.id).then(this.success).catch(this.error)
+    getTopic(this.id).then(this.setData).catch(this.error)
   },
   beforeDestroy () {
     clearInterval(this.interval)

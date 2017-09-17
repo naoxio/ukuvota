@@ -7,7 +7,7 @@ const database = 'firebase'
 const addFirebaseTopic = (newTopic) => {
   var updates = {}
   updates['/topics/' + newTopic.id] = newTopic
-  firebase.database().ref().update(updates)
+  return firebase.database().ref().update(updates)
 }
 /*
 const updateFirebaseTopic = (changedTopic) => {
@@ -25,18 +25,13 @@ const getFirebaseTopic = (id) => {
   })
 }
 
-const setFirebaseTopic = (topic) => {
-  addFirebaseTopic(topic)
-}
-
 // general data methods
 export const setTopic = (topic) => {
   switch (database) {
     case 'firebase':
-      setFirebaseTopic(topic)
-      break
+      return addFirebaseTopic(topic)
     default:
-      LocalStorage.set(topic.id, JSON.stringify(topic))
+      Promise.resolve(LocalStorage.set(topic.id, JSON.stringify(topic)))
   }
 }
 
@@ -48,6 +43,7 @@ export const getTopic = (id) => {
       return Promise.resolve(JSON.parse(LocalStorage.get.item(id)))
   }
 }
+
 const setProperty = (id, prop, key, value) => {
   return getTopic(id).then(topic => {
     topic[prop][key] = value
@@ -63,17 +59,11 @@ export const addProposal = (id, title, description) => {
   )
 }
 
-export const setVotes = (id, name, emojis) => {
+export const addVotes = (id, name, emojis) => {
   return getTopic(id).then(topic => {
     if (topic.votes[name] === undefined) topic.votes[name] = emojis
     else return -2
     setTopic(topic)
-  })
-}
-
-export const getVotes = (id) => {
-  return getTopic(id).then(topic => {
-    return topic.votes
   })
 }
 
