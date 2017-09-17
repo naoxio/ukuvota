@@ -47,7 +47,6 @@ const addProperty = (id, prop, key, value) => {
 export const addProposal = (id, title, description) => {
   addProperty(id, 'proposals', title, description)
   addProperty(id, 'emojis', title, 0)
-  addProperty(id, 'tmpemojis', title, 0)
   return true
 }
 
@@ -61,16 +60,11 @@ export const getProposals = (id) => {
   return topic.proposals
 }
 
-export const setTmpEmojis = (id, title, value) => {
-  addProperty(id, 'tmpemojis', title, value)
-  return true
-}
-
-export const setVotes = (id, name) => {
+export const setVotes = (id, name, emojis) => {
   let topics = getTopics()
   let index = getTopicIndex(id, topics)
 
-  if (topics[index].votes[name] === undefined) topics[index].votes[name] = topics[index].tmpemojis
+  if (topics[index].votes[name] === undefined) topics[index].votes[name] = emojis
   else return -2
 
   setTopics(topics)
