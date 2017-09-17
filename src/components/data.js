@@ -25,48 +25,32 @@ const getTopics = () => {
   }
 }
 
-const setTopics = (topics) => {
+export const setTopic = (topic) => {
   switch (database) {
     case 'firebase':
       break
     default:
-      LocalStorage.set('topics', JSON.stringify(topics))
-  }
-}
-
-const setTopicLocalStorage = (topic) => {
-  let topics = getTopics()
-
-  // if localstorage item 'topics' doesnt exist create empty array
-  if (topics === null) {
-    topics = []
-    topics.push(topic)
-  }
-  topics[topic] = topic
-  console.log(topics)
-  setTopics(topics)
-}
-
-export const setTopic = (newTopic) => {
-  switch (database) {
-    case 'firebase':
-      break
-    default:
-      setTopicLocalStorage(newTopic)
+      LocalStorage.set(topic.id, JSON.stringify(topic))
   }
 }
 
 export const getTopic = (id) => {
-  let topics = getTopics()
-  if (topics === null) return -1
-  let index = getTopicIndex(id, topics)
-  if (index === -1) return -1
-  return topics[index]
+  let topic = -1
+  switch (database) {
+    case 'firebase':
+      firebase.database().ref('topics').on('value', function (snapshot) {
+        topic = snapshot.val()
+      })
+      break
+    default:
+      topic = JSON.parse(LocalStorage.get.item(id))
+  }
+  return topic
 }
 
 const getTopicIndex = (id, topics) => {
   let index = -1
-  for (let x = 0; x < topics.length; x++) {
+  for (let x = 0; x < Object.kets(topics).length; x++) {
     if (topics[x].id === id) {
       index = x
     }
@@ -103,7 +87,7 @@ export const setVotes = (id, name, emojis) => {
   if (topics[index].votes[name] === undefined) topics[index].votes[name] = emojis
   else return -2
 
-  setTopics(topics)
+  setTopic(topics[index])
 }
 
 export const getVotes = (id) => {
