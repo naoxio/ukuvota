@@ -25,7 +25,7 @@
             </q-alert>
           </template>
           <q-field 
-          label="Your Name or Persistant Alias"
+          label="Your Name or Persistent Alias"
           :error-label="getNameError()"
             >
           <q-input
