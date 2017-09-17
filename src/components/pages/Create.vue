@@ -54,6 +54,7 @@
 import MainLayout from '@/layouts/MainLayout'
 import { date, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect, QSlider } from 'quasar'
 import { setTopic } from '@/data'
+import { buildOutput } from '@/timer'
 
 const { addToDate } = date
 
@@ -101,7 +102,7 @@ export default {
           'question': this.topicQuestion,
           'proposalTime': endProposal,
           'votingTime': endVoting,
-          'votingInterval': this.votingDays,
+          'votingInterval': buildOutput(this.votingDays, this.votingHours, this.votingMinutes, 0),
           'description': this.description,
           'id': id,
           'proposals': {

@@ -97,11 +97,11 @@ export default {
             tmp.nameExists = false
             tmp.submitName = tmp.name
             tmp.name = ''
-            this.submited = true
+            tmp.submited = true
             getTopic(tmp.id).then(tmp.getData).then(tmp.$forceUpdate())
           },
           function (error) {
-            if (error === -2) this.nameExists = true
+            if (error === -2) tmp.nameExists = true
             else console.log('error: adding votes failed: ' + error)
           }
         )

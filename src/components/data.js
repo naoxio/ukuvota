@@ -61,6 +61,7 @@ export const addProposal = (id, title, description) => {
 
 export const addVotes = (id, name, emojis) => {
   return getTopic(id).then(topic => {
+    if (topic.votes === undefined) topic.votes = {}
     if (topic.votes[name] === undefined) topic.votes[name] = emojis
     else return -2
     setTopic(topic)

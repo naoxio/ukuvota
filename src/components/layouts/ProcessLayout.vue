@@ -21,7 +21,7 @@
 import MainLayout from '@/layouts/MainLayout'
 import { QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
 import { getTopic } from '@/data'
-import { getVotingTime, formatTime } from '@/timer'
+import { formatTime } from '@/timer'
 
 export default {
   components: {
@@ -42,7 +42,7 @@ export default {
       if (this.proposalTimer !== -1) {
         if (this.$route.path.indexOf(this.id + '/collect') === -1) this.goToCollect()
         this.votingTimeLabel = 'Voting Time Will Last For'
-        this.votingTimer = getVotingTime(this.topic.votingInterval)
+        this.votingTimer = this.topic.votingInterval
       }
       else if (this.proposalTimer === -1) {
         if (this.$route.path.indexOf(this.id + '/collect') !== -1) this.goToVote()
@@ -72,7 +72,7 @@ export default {
     },
     error (error) {
       console.log('error with getting topic: ' + error)
-      this.$router.push({name: '/create'})
+      this.$router.push({name: 'create'})
     }
   },
   mounted () {
