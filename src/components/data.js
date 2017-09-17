@@ -13,18 +13,6 @@ export const saveTopicToFirebase = (newTopic) => {
   firebase.database().ref().update(updates)
 }
 
-const getTopics = () => {
-  switch (database) {
-    case 'firebase':
-      firebase.database().ref('topics').on('value', function (snapshot) {
-        return snapshot.val()
-      })
-      break
-    default:
-      return JSON.parse(LocalStorage.get.item('topics'))
-  }
-}
-
 export const setTopic = (topic) => {
   switch (database) {
     case 'firebase':
@@ -46,16 +34,6 @@ export const getTopic = (id) => {
       topic = JSON.parse(LocalStorage.get.item(id))
   }
   return topic
-}
-
-const getTopicIndex = (id, topics) => {
-  let index = -1
-  for (let x = 0; x < Object.kets(topics).length; x++) {
-    if (topics[x].id === id) {
-      index = x
-    }
-  }
-  return index
 }
 
 const addProperty = (id, prop, key, value) => {
@@ -81,24 +59,21 @@ export const getProposals = (id) => {
 }
 
 export const setVotes = (id, name, emojis) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
+  let topic = getTopic(id)
 
-  if (topics[index].votes[name] === undefined) topics[index].votes[name] = emojis
+  if (topic.votes[name] === undefined) topic.votes[name] = emojis
   else return -2
 
-  setTopic(topics[index])
+  setTopic(topic)
 }
 
 export const getVotes = (id) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  return topics[index].votes
+  let topic = getTopic(id)
+  return topic.votes
 }
 
 export const setResults = (id, results) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  if (topics[index].results === undefined) topics[index].results = results
+  let topic = getTopic(id)
+  if (topic.results === undefined) topic.results = results
   else return -2
 }
