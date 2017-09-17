@@ -37,12 +37,14 @@
              </tr>
             </div>
          </tbody>
-         <tfood style="background-color: #ffffcc" >
+         <!--tfood style="background-color: #ffffcc" >
            <tr class="text-right">
              <th>Total</th>
-             <td> test</td>
+              <div v-for="(description, proposal) in proposals" :key="proposal">
+               <td :data-th="proposal" class="text-center"> {{ getTotalScore(proposal) }}</td>
+              </div>
            </tr>
-         </tfood>
+         </tfood-->
        </table>
      </q-card-main>
    </q-card>
@@ -110,6 +112,9 @@ export default {
       let score = object[proposal]
       if (this.weightedScores && score < 0) score = score * 3
       return score
+    },
+    getTotalScore (proposal) {
+      return -1
     },
     getLength (object) {
       return Object.keys(object).length
