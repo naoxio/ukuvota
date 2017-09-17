@@ -25,23 +25,35 @@ export const formatTime = (timeStamp) => {
   // let days = date.formatDate(diff, 'D')
   let output = ''
   if (days > 1) {
-    output = days + ' days and ' + hours + ' hours'
+    output += days + ' days '
   }
-  else if (hours > 1) {
-    output = hours + ' hours and ' + minutes + ' minutes'
+  else if (days === 1) {
+    output += '1 day '
   }
-  else if (minutes > 1) {
-    output = minutes + ' minutes and ' + seconds + ' seconds'
+  if (hours > 1) {
+    output += hours + ' hours '
   }
-  else if (seconds > 1) {
-    output = seconds + ' seconds'
+  else if (hours === 1) {
+    output += '1 hour '
   }
-  else if (seconds > 0) {
-    output = '1 second'
-  }
-  else {
-    // let endVoting = addToDate(today, {days: (this.votingSelect + this.proposalSelect)})
-    return -1
+  if (days < 1) {
+    if (minutes > 1) {
+      output += minutes + ' minutes '
+    }
+    else if (minutes === 1) {
+      output += '1 minute '
+    }
+    if (hours < 1) {
+      if (seconds > 1) {
+        output += seconds + ' seconds'
+      }
+      else if (seconds === 1) {
+        output += '1 second'
+      }
+      else {
+        return -1
+      }
+    }
   }
   return output
 }
