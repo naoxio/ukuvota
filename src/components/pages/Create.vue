@@ -47,7 +47,8 @@
 </template>
 <script>
 import MainLayout from '@/layouts/MainLayout'
-import { date, LocalStorage, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect, QSlider } from 'quasar'
+import { date, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QSelect, QSlider } from 'quasar'
+import { setTopic } from '@/data'
 
 const { addToDate } = date
 
@@ -84,13 +85,7 @@ export default {
       }
 
       if (!error) { // if no errors proceed
-        let topics = JSON.parse(LocalStorage.get.item('topics'))
         let id = uid()
-
-        // if localstorage item 'topics' doesnt exist create empty array
-        if (topics === null) {
-          topics = []
-        }
 
         let today = new Date()
         let endProposal = addToDate(today, {days: this.proposalDays, hours: this.proposalHours, minutes: this.proposalMinutes})
@@ -119,14 +114,10 @@ export default {
           'votes': {},
           'result': {}
         }
-        topics.push(newTopic)
+        setTopic(newTopic)
 
-        LocalStorage.set('topics', JSON.stringify(topics))
-        saveTopicToFirebase(newTopic)
-
-        // go to collectProposals vue
+        // go to collect vue
         this.$router.push({name: 'collect', params: { id: id }})
-    //    this.$router.push(id + '/collect')
       }
     }
   },

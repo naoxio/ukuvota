@@ -1,6 +1,8 @@
 import { LocalStorage } from 'quasar'
 import * as firebase from 'firebase'
 
+const database = 'localstorage'
+
 export const saveTopicToFirebase = (newTopic) => {
   // firebase update
   // get a key for a new topic.
@@ -12,11 +14,54 @@ export const saveTopicToFirebase = (newTopic) => {
 }
 
 const getTopics = () => {
-  return JSON.parse(LocalStorage.get.item('topics'))
+  switch (database) {
+    case 'firebase':
+      firebase.database().ref('topics').on('value', function (snapshot) {
+        return snapshot.val()
+      })
+      break
+    default:
+      return JSON.parse(LocalStorage.get.item('topics'))
+  }
 }
 
 const setTopics = (topics) => {
-  LocalStorage.set('topics', JSON.stringify(topics))
+  switch (database) {
+    case 'firebase':
+      break
+    default:
+      LocalStorage.set('topics', JSON.stringify(topics))
+  }
+}
+
+const setTopicLocalStorage = (topic) => {
+  let topics = getTopics()
+
+  // if localstorage item 'topics' doesnt exist create empty array
+  if (topics === null) {
+    topics = []
+    topics.push(topic)
+  }
+  topics[topic] = topic
+  console.log(topics)
+  setTopics(topics)
+}
+
+export const setTopic = (newTopic) => {
+  switch (database) {
+    case 'firebase':
+      break
+    default:
+      setTopicLocalStorage(newTopic)
+  }
+}
+
+export const getTopic = (id) => {
+  let topics = getTopics()
+  if (topics === null) return -1
+  let index = getTopicIndex(id, topics)
+  if (index === -1) return -1
+  return topics[index]
 }
 
 const getTopicIndex = (id, topics) => {
@@ -29,19 +74,10 @@ const getTopicIndex = (id, topics) => {
   return index
 }
 
-export const getTopic = (id) => {
-  let topics = getTopics()
-  if (topics === null) return -1
-  let index = getTopicIndex(id, topics)
-  if (index === -1) return -1
-  return topics[index]
-}
-
 const addProperty = (id, prop, key, value) => {
-  let topics = getTopics()
-  let index = getTopicIndex(id, topics)
-  topics[index][prop][key] = value
-  setTopics(topics)
+  let topic = getTopic(id)
+  topic[prop][key] = value
+  setTopic(topic)
 }
 
 export const addProposal = (id, title, description) => {
