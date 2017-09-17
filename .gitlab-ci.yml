@@ -18,6 +18,6 @@ deploy:
   - ssh-add <(echo "$DEPLOY_SSH_KEY")
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:ukuvota/
+  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/
   only:
   - master
