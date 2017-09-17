@@ -28,12 +28,10 @@ export const buildOutput = (days, hours, minutes, seconds) => {
       else if (seconds === 1) {
         output += '1 second'
       }
-      else {
-        return -1
-      }
     }
   }
-  return output
+  if (output === '') return -1
+  else return output
 }
 export const formatTime = (timeStamp) => {
   let today = new Date()

@@ -4,7 +4,7 @@
       <q-card-main>
         <h5><q-field :label="topic.question"></q-field></h5>
         <q-field :label="topic.description"></q-field>
-        <q-item v-if="votingTimer !== -1" tag="label">
+        <q-item v-if="votingTimer !== -1 || proposalTimer !== -1" tag="label">
           <q-item-main v-if="proposalTimer !== -1" label="Proposal Time Ends In" :sublabel="proposalTimer">          </q-item-main>
           <q-item-main v-if="votingTimer !== -1" l label="Voting Time Will Last For" :sublabel="votingTimer">          </q-item-main>
         </q-item>
@@ -39,6 +39,7 @@ export default {
     },
     autoRedirect () {
       this.proposalTimer = formatTime(this.topic.proposalTime)
+
       if (this.proposalTimer !== -1) {
         if (this.$route.path.indexOf(this.id + '/collect') === -1) this.goToCollect()
         this.votingTimeLabel = 'Voting Time Will Last For'
@@ -55,6 +56,8 @@ export default {
           if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
         }
       }
+      console.log(this.votingTimer)
+      console.log(this.topic.votingInterval)
     },
     goToCollect () {
       this.$router.push({name: 'collect', params: { id: this.id }})
