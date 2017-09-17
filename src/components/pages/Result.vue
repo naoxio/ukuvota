@@ -18,7 +18,7 @@
     <q-card style="max-width: 700px; text-align: left;">
      <q-card-main>
        <p class="caption">Raw Data Table</p>
-       <table class="q-table horizontal-seperator flipped" :class="computedClasses">
+       <table class="q-table horizontal-seperator flipped">
          <thead>
            <tr>
              <th class="text-left">Name</th>
@@ -45,7 +45,7 @@
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
-import { getTopic, setResults } from '@/data.js'
+import { getTopic } from '@/data.js'
 
 export default {
   components: {
@@ -61,12 +61,13 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
+    let tmp = this
     getTopic(this.id).then(this.getData).then(function () {
-      this.results = {}
-      for (let name in this.votes) {
-        this.genResults(name)
+      tmp.results = {}
+      for (let name in tmp.votes) {
+        tmp.genResults(name)
       }
-      this.genMax(this.results)
+      tmp.genMax(tmp.results)
     })
   },
   methods: {
@@ -84,7 +85,6 @@ export default {
         else {
           this.results[proposal] = this.results[proposal] + vote
         }
-        setResults(this.id, this.results)
       }
     },
     genMax (object) {

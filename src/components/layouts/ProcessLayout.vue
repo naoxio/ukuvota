@@ -56,8 +56,6 @@ export default {
           if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResult()
         }
       }
-      console.log(this.votingTimer)
-      console.log(this.topic.votingInterval)
     },
     goToCollect () {
       this.$router.push({name: 'collect', params: { id: this.id }})
