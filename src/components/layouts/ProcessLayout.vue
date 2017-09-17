@@ -64,18 +64,20 @@ export default {
     },
     goToResult () {
       this.$router.push({name: 'result', params: { id: this.id }})
+    },
+    success (topic) {
+      this.topic = topic
+      // this.timer()
+      // this.startIntervalUpdate()
+    },
+    error (error) {
+      console.log(error)
+      this.$router.push({name: '/create'})
     }
   },
   mounted () {
     this.id = this.$route.params.id
-    this.topic = getTopic(this.id)
-    if (this.topic === -1) {
-      this.$router.push({name: '/create'})
-    }
-    else {
-      this.timer()
-      this.startIntervalUpdate()
-    }
+    getTopic(this.id).then(this.success).catch(this.error)
   },
   beforeDestroy () {
     clearInterval(this.interval)

@@ -47,7 +47,6 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    this.update()
   },
   methods: {
     getProposalError () {
@@ -55,7 +54,7 @@ export default {
       else if (this.proposalEmpty) return 'Proposal is Empty'
     },
     update () {
-      this.proposals = getProposals(this.id)
+      getProposals(this.id).then(proposals => this.proposals = proposals)
     },
     addProposal () {
       let error = false
