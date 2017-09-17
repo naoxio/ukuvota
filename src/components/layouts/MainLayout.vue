@@ -6,7 +6,7 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <img @dblclick="launch('https://yunity.org/ukuota')" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
+          <img @dblclick="launch('https://yunity.org/ukuvota')" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
           <p class="title">Ukuvota</p>
           <a href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/" target="_blank">
           <q-icon name="fa-book"></q-icon></a>
