@@ -131,7 +131,7 @@ export default {
           'id': id,
           'proposals': {
             'Change Nothing': 'keep things the way they are',
-            'Repeat Process': 'look for other options and repeat the process'
+            'Repeat Process': 'reapeat the process and look for other options'
           },
           'negativeScoreWeight': this.negativeScoreWeight,
           'emojis': {
