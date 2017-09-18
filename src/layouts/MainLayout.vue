@@ -6,12 +6,11 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <div class="row justify-center items-center">
-            <div class="col-auto">
-              <img @dblclick="rotateLogoFast" @click="rotateLogoSlow" id="logo" src="statics/logo.png" width="128px" />
+          <div class="row justify-center items-center content-stretch">
+            <div class="item">
+              <img @dblclick="rotateLogoFast" @click="rotateLogoSlow" id="logo" src="statics/logo.png" width="92px" />
             </div>
-            <div class="col-1"></div>
-            <div class="col-auto">
+            <div class="item">
               <p class="title">Ukuvota</p>
               <router-link :to="{ name: 'home' }">
                 <q-icon name="fa-home"></q-icon>
@@ -21,7 +20,12 @@
               </a>
               <a href="https://gitlab.com/ukuvota/ukuvota/" target="_blank"><q-icon name="fa-gitlab"></q-icon></a>
             </div>
+            <div class="item">
+              <lang-switcher style="width: 2em; height: 2em"></lang-switcher>
+            </div>
+
           </div>
+
           <br></br>
           <slot></slot>
         </center>
@@ -35,6 +39,7 @@
 </template>
 
 <script>
+import LangSwitcher from '@/LangSwitcher'
 import {
   openURL,
   QLayout,
@@ -52,6 +57,7 @@ import {
 export default {
   name: 'index',
   components: {
+    LangSwitcher,
     QLayout,
     QToolbar,
     QToolbarTitle,
@@ -95,30 +101,51 @@ export default {
 </script>
 
 <style lang="stylus">
+@media screen and (min-width: 600px)
+  .item 
+    width 200px
+@media screen and (max-width: 600px)
+  .item 
+    width 130px
+@media screen and (max-width: 440px)
+  .item 
+    width 120px
+@media screen and (max-width: 400px)
+  .item 
+    width 88px
+@media screen and (max-width: 280px)
+  .item 
+    width 80px
+    font-size 0.8em
+    img
+      width 60px
+
 body
   font-family 'coolFont'
+
 .title
-  font-size 32px
+  font-size 1.8em
 
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-.show {
-  opacity: 1;
-  transition: opacity 2s linear;
-}
 
-.hide {
-  opacity: 0;
-  transition: opacity 10s linear;
-}
-.quickhide {
-  opacity: 0;
-  transition: opacity 1s linear;
-}
-#logo {
+.show
+  opacity 1
+  transition opacity 2s linear
+
+.hide
+  opacity 0
+  transition opacity 10s linear
+
+.quickhide
+  opacity 0
+  transition opacity 1s linear
+
+#logo
   cursor pointer
-}
+
 .animation
   animation spin 4s linear infinite
+
 .fastanimation
   animation spin 1s linear infinite
 </style>
