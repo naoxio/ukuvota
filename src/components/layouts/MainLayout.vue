@@ -6,12 +6,22 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <img @dblclick="launch('https://yunity.org/ukuvota')" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
-          <p class="title">Ukuvota</p>
-          <a href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/" target="_blank">
-            <q-icon name="fa-book"></q-icon>
-          </a>
-          <a href="https://gitlab.com/ukuvota/ukuvota/" target="_blank"><q-icon name="fa-gitlab"></q-icon></a>
+          <div class="row justify-center items-center">
+            <div class="col-auto">
+              <img @dblclick="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
+            </div>
+            <div class="col-1"></div>
+            <div class="col-auto">
+              <p class="title">Ukuvota</p>
+              <router-link :to="{ name: 'home' }">
+                <q-icon name="fa-home"></q-icon>
+              </router-link>
+              <a href="https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/" target="_blank">
+                <q-icon name="fa-book"></q-icon>
+              </a>
+              <a href="https://gitlab.com/ukuvota/ukuvota/" target="_blank"><q-icon name="fa-gitlab"></q-icon></a>
+            </div>
+          </div>
           <br></br>
           <slot></slot>
         </center>

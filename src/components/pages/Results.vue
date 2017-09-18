@@ -14,11 +14,11 @@
         <div v-if="noResults">
           <q-item>
             <q-item-main style="text-align: center">
-              <router-link :to="{ name: 'home' }">
+              <router-link :to="{ name: 'create' }">
                 <img id="noresults" src="statics/noresults.svg"></img>
               </router-link>
               <p style="font-size: 50px">no one voted</p>
-                <router-link :to="{ name: 'home' }">
+                <router-link :to="{ name: 'create' }">
                   <p style="font-size: 30px">try again, this time tell your friends!</p>
                 </router-link>
             </q-item-main>
