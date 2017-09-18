@@ -16,7 +16,7 @@
     <q-card style="max-width: 700px; text-align: left;">
      <q-card-main>
        <p class="caption">Raw Data Table</p>
-       <table class="q-table horizontal-seperator flipped vertical-separator">
+       <table class="q-table horizontal-seperator loose flipped vertical-separator">
          <thead>
            <tr>
              <th class="text-left red">Name</th>
