@@ -11,9 +11,13 @@
         <div v-if="noResults">
           <q-item>
             <q-item-main style="text-align: center">
-              <img id="noresults" src="statics/noresults.svg"></img>
+              <router-link :to="{ name: 'home' }">
+                <img id="noresults" src="statics/noresults.svg"></img>
+              </router-link>
               <p style="font-size: 50px">no one voted</p>
-              <p style="font-size: 30px"><a href="/create">try again, this time tell your friends!</a> </p>
+                <router-link :to="{ name: 'home' }">
+                  <p style="font-size: 30px">try again, this time tell your friends!</p>
+                </router-link>
             </q-item-main>
           </q-item>
         </div>
@@ -51,9 +55,9 @@
          </tbody>
          <tfood>
            <tr class="text-right">
-             <th class="red">Total</th>
+              <th class="red">Total</th>
               <div v-for="(description, proposal) in proposals" :key="proposal">
-               <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
+                <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
               </div>
            </tr>
          </tfood>
