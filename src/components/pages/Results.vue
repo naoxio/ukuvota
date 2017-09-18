@@ -3,15 +3,13 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <p class="caption">Results!</p>
-        <div v-for="(description, proposal) in proposals" :key="proposal">
-          <q-list>
-            <q-item>
-              <q-item-main :label="proposal" :sublabel="description"></q-item-main>
-              <q-item-side>
-                <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
-              </q-item-side>
-            </q-item>
-          </q-list>
+        <div v-for="(value, proposal) in sortedResults" :key="value">
+          <q-item :class="{ yellow: getEmoji(proposal) === 3 }">
+            <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
+            <q-item-side>
+              <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
+            </q-item-side>
+          </q-item>
         </div>
       </q-card-main>
     </q-card>
@@ -21,30 +19,30 @@
        <table class="q-table horizontal-seperator flipped vertical-separator">
          <thead>
            <tr>
-             <th class="text-left green">Name</th>
+             <th class="text-left red">Name</th>
              <div v-for="(description, proposal) in proposals" :key="proposal">
-               <th class="green" style="max-width: 150px; overflow-wrap: break-word;">{{ proposal }}</th>
+               <th class="red" style="max-width: 150px; overflow-wrap: break-word;">{{ proposal }}</th>
              </div> 
            </tr>
          </thead>
          <tbody>
            <div v-for="(object, name, index) in votes" :key="name">
              <tr>
-               <td class="green" style="font-weight: bold" data-th="Name">{{ name }}</td>
+               <td class="red" style="font-weight: bold" data-th="Name">{{ name }}</td>
                <div v-for="(description, proposal) in proposals" :key="proposal">
                  <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
                </div> 
              </tr>
             </div>
          </tbody>
-         <!--tfood style="background-color: #ffffcc" >
+         <tfood>
            <tr class="text-right">
-             <th>Total</th>
+             <th class="red">Total</th>
               <div v-for="(description, proposal) in proposals" :key="proposal">
-               <td :data-th="proposal" class="text-center"> {{ getTotalScore(proposal) }}</td>
+               <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
               </div>
            </tr>
-         </tfood-->
+         </tfood>
        </table>
      </q-card-main>
    </q-card>
@@ -75,7 +73,15 @@ export default {
       for (let name in tmp.votes) {
         tmp.genResults(name)
       }
+      // calculate the highest score
       tmp.genMax(tmp.results)
+
+      // create an ordered lists with the highest score on top
+      let myObj = tmp.results
+      tmp.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
+        ..._sortedObj,
+        [key]: myObj[key]
+      }), {})
     })
   },
   methods: {
@@ -113,11 +119,11 @@ export default {
       if (this.weightedScores && score < 0) score = score * 3
       return score
     },
-    getTotalScore (proposal) {
-      return -1
-    },
     getLength (object) {
       return Object.keys(object).length
+    },
+    getDescription (proposal) {
+      return this.proposals[proposal]
     },
     getEmoji (proposal) {
       let length = this.getLength(this.votes)
@@ -138,6 +144,7 @@ export default {
   data () {
     return {
       results: {},
+      sortedResults: {},
       percentages: {},
       proposals: {},
       total: 0,
@@ -147,8 +154,10 @@ export default {
 }
 </script>
 <style lang="stylus">
-.green
-  background-color #F0F4C3
+.red
+  background-color #FFEBEE
+.yellow
+  background-color #ffffcc
 table
   td
     height 64px
