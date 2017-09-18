@@ -144,6 +144,7 @@ export default {
   data () {
     return {
       results: {},
+      votes: {},
       sortedResults: {},
       percentages: {},
       proposals: {},
