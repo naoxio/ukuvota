@@ -47,3 +47,4 @@ production:
     url: https://ukuvota.world
   only:
   - master
+
