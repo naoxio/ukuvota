@@ -1,6 +1,12 @@
+stages:
+- build
+- staging
+- production 
+
 image: node:latest
 
-test:
+build:
+  stage: build
   script:
   - yarn
   - yarn lint
@@ -10,17 +16,35 @@ test:
     paths:
     - dist
 
-deploy:
-  stage: deploy
+.deploy: &deploy
   script:
   - apt-get update && apt-get install -y rsync
   - eval $(ssh-agent -s)
   - ssh-add <(echo "$DEPLOY_SSH_KEY")
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/
+  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/$DEPLOY_DIR/
+
+staging:
+  <<: *deploy
+  stage: staging
+  variables:
+    DEPLOY_DIR: staging
+  environment:
+    name: staging
+    url: https://staging.ukuvota.world
+  only:
+  - master
+
+production:
+  <<: *deploy
+  stage: production
+  when: manual
+  variables:
+    DEPLOY_DIR: production
   environment:
     name: production
     url: https://ukuvota.world
   only:
   - master
+
