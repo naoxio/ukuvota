@@ -7,6 +7,8 @@ module.exports = {
     src: path.resolve(__dirname, '../src'),
     assets: path.resolve(__dirname, '../src/assets'),
     '@': path.resolve(__dirname, '../src/components'),
+    pages: path.resolve(__dirname, '../src/pages'),
+    layouts: path.resolve(__dirname, '../src/layouts'),
     variables: path.resolve(__dirname, '../src/themes/quasar.variables.styl')
   },
 

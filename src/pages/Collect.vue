@@ -29,9 +29,9 @@
   </process-layout>
 </template>
 <script>
-import ProcessLayout from '@/layouts/ProcessLayout'
+import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
-import { addProposal, getTopic } from '@/data'
+import { addProposal, getTopic } from 'src/data'
 
 export default {
   components: {

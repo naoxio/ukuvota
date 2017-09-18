@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import MainLayout from '@/layouts/MainLayout'
+import MainLayout from './MainLayout'
 import { QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
-import { getTopic } from '@/data'
-import { formatTime } from '@/timer'
+import { getTopic } from 'src/data'
+import { formatTime } from 'src/timer'
 
 export default {
   components: {

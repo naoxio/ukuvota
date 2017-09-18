@@ -70,9 +70,9 @@
   </process-layout>
 </template>
 <script>
-import ProcessLayout from '@/layouts/ProcessLayout'
+import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
-import { getTopic } from '@/data.js'
+import { getTopic } from 'src/data.js'
 
 export default {
   components: {

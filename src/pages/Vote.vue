@@ -44,9 +44,9 @@
   </process-layout>
 </template>
 <script>
-import ProcessLayout from '@/layouts/ProcessLayout'
+import ProcessLayout from 'layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getTopic, addVotes } from '@/data'
+import { getTopic, addVotes } from 'data'
 
 export default {
   components: {

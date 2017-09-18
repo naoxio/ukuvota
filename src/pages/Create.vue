@@ -71,10 +71,10 @@
   </main-layout>
 </template>
 <script>
-import MainLayout from '@/layouts/MainLayout'
+import MainLayout from 'layouts/MainLayout'
 import { date, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QIcon, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QModal, QSelect, QSlider } from 'quasar'
-import { setTopic } from '@/data'
-import { buildOutput } from '@/timer'
+import { setTopic } from 'src/data'
+import { buildOutput } from 'src/timer'
 
 const { addToDate } = date
 
