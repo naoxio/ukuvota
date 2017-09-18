@@ -10,6 +10,15 @@ test:
     paths:
     - dist
 
+.deploy: &deploy
+  script:
+  - apt-get update && apt-get install -y rsync
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$DEPLOY_SSH_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/$DEPLOY_DIR/
+
 deploy-staging:
   <<: *deploy
   stage: deploy
@@ -32,12 +41,3 @@ deploy-production:
     url: https://ukuvota.world
   only:
   - master
-
-.deploy: &deploy
-  script:
-  - apt-get update && apt-get install -y rsync
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "$DEPLOY_SSH_KEY")
-  - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/$DEPLOY_DIR/
