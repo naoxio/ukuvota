@@ -91,6 +91,5 @@ body
   cursor pointer
 }
 .animation
-  filter hue-rotate(300deg)
   animation spin 4s linear infinite
 </style>
