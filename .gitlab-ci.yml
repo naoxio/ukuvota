@@ -19,5 +19,8 @@ deploy:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/
+  environment:
+    name: production
+    url: https://ukuvota.world
   only:
   - master
