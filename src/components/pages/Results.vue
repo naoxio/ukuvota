@@ -2,7 +2,21 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <p class="caption">Results!</p>
+        <div v-if="noResults">
+          <p class="caption">No Results :(</p>
+        </div>
+        <div v-else>
+          <p class="caption">Results!</p>
+        </div>
+        <div v-if="noResults">
+          <q-item>
+            <q-item-main style="text-align: center">
+              <img id="noresults" src="statics/noresults.svg"></img>
+              <p style="font-size: 50px">no one voted</p>
+              <p style="font-size: 30px"><a href="/create">try again, this time tell your friends!</a> </p>
+            </q-item-main>
+          </q-item>
+        </div>
         <div v-for="(value, proposal) in sortedResults" :key="value">
           <q-item :class="{ yellow: getEmoji(proposal) === 3 }">
             <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
@@ -13,7 +27,7 @@
         </div>
       </q-card-main>
     </q-card>
-    <q-card style="max-width: 700px; text-align: left;">
+    <q-card v-if="noResults === false" style="max-width: 700px; text-align: left;">
      <q-card-main>
        <p class="caption">Raw Data Table</p>
        <table class="q-table horizontal-seperator loose flipped vertical-separator">
@@ -73,15 +87,20 @@ export default {
       for (let name in tmp.votes) {
         tmp.genResults(name)
       }
-      // calculate the highest score
-      tmp.genMax(tmp.results)
-
-      // create an ordered lists with the highest score on top
-      let myObj = tmp.results
-      tmp.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
-        ..._sortedObj,
-        [key]: myObj[key]
-      }), {})
+      if (Object.keys(tmp.results).length !== 0) {
+        // calculate the highest score
+        tmp.genMax(tmp.results)
+        // create an ordered lists with the highest score on top
+        let myObj = tmp.results
+        tmp.sortedResults = {}
+        tmp.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
+          ..._sortedObj,
+          [key]: myObj[key]
+        }), {})
+      }
+      else {
+        tmp.noResults = true
+      }
     })
   },
   methods: {
@@ -149,7 +168,8 @@ export default {
       percentages: {},
       proposals: {},
       total: 0,
-      negativeScore: 3
+      negativeScore: 3,
+      noResults: false
     }
   }
 }
@@ -164,4 +184,15 @@ table
     height 64px
   th
     height 64px
+
+@keyframes blink {
+  50% {
+    opacity 0.6
+    transform:rotate(20deg)
+  }
+}
+
+#noresults
+  animation spin 10s linear infinite
+  animation blink 1s step-start 0s infinite
 </style>
