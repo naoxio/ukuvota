@@ -8,7 +8,7 @@
         <center>
           <div class="row justify-center items-center">
             <div class="col-auto">
-              <img @dblclick="rotateLogoFast" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
+              <img @dblclick="rotateLogoFast" @click="rotateLogoSlow" id="logo" src="statics/logo.png" width="128px" />
             </div>
             <div class="col-1"></div>
             <div class="col-auto">
@@ -64,17 +64,22 @@ export default {
     QItemMain
   },
   methods: {
-    rotateLogo () {
-      document.getElementById('logo').setAttribute('class', 'animation hide')
-      setTimeout(function () {
-        document.getElementById('logo').setAttribute('class', 'show')
-      }, 10000)
+    rotateLogo (animation) {
+      document.getElementById('logo').setAttribute('class', animation + ' hide')
+      if (!this.rotating) {
+        this.rotating = true
+        let t = this
+        setTimeout(function () {
+          document.getElementById('logo').setAttribute('class', 'show')
+          t.rotating = false
+        }, 10000)
+      }
     },
     rotateLogoFast () {
-      document.getElementById('logo').setAttribute('class', 'fastanimation hide')
-      setTimeout(function () {
-        document.getElementById('logo').setAttribute('class', 'show')
-      }, 10000)
+      this.rotateLogo('fastanimation')
+    },
+    rotateLogoSlow () {
+      this.rotateLogo('animation')
     },
     launch (url) {
       openURL(url)
@@ -82,6 +87,11 @@ export default {
   },
   mounted () {
     this.$refs.layout.hideLeft()
+  },
+  data () {
+    return {
+      rotating: false
+    }
   }
 }
 </script>
