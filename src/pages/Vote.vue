@@ -21,11 +21,11 @@
               icon="done"
               dismissible
             >
-              Vote from {{ submitName }} submited!
+              Vote from {{ submitName }} submitted!
             </q-alert>
           </template>
           <q-field 
-          label="Your Name or Persistant Alias"
+          label="Your Name or Persistent Alias"
           :error-label="getNameError()"
             >
           <q-input
