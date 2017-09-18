@@ -13,6 +13,7 @@ The front-end is made using the Quasar Framework
 
 ``` bash
 (sudo is only required if npm is installed globally)
+
 # install quasar-cli globally 
 $ sudo npm install -g quasar-cli
 
