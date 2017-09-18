@@ -31,3 +31,9 @@ $ quasar build
 # lint code
 $ quasar lint
 ```
+
+## Deployment
+
+Deployment is managed using gitlab ci. The master branch will be tested and built and deployed to [staging.ukuvota.world](https://staging.ukuvota.world).
+
+Once you have verified that you haven't broken everything, then you can trigger the deployment to [ukuvota.world](https://ukuvota.world) in the [gitlab environments](https://gitlab.com/ukuvota/ukuvota/environments) view.
