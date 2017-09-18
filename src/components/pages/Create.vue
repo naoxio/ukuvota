@@ -2,7 +2,7 @@
   <main-layout>
     <q-modal
       ref="weightingInfo"
-      :content-css="{padding: '50px', minWidth: '50vw'}"
+      :content-css="{padding: '50px', maxWidth: '700px'}"
     >
       <h4>Negative Score Multiplier</h4>
       <p>

@@ -39,21 +39,20 @@ export default {
     },
     autoRedirect () {
       this.proposalTimer = formatTime(this.topic.proposalTime)
-
       if (this.proposalTimer !== -1) {
-        if (this.$route.path.indexOf(this.id + '/collect') === -1) this.goToCollect()
+        if (this.$route.name.indexOf('collect') === -1) this.goToCollect()
         this.votingTimeLabel = 'Voting Time Will Last For'
         this.votingTimer = this.topic.votingInterval
       }
       else if (this.proposalTimer === -1) {
-        if (this.$route.path.indexOf(this.id + '/collect') !== -1) this.goToVote()
+        if (this.$route.name.indexOf('collect') !== -1) this.goToVote()
         this.votingTimer = formatTime(this.topic.votingTime)
         if (this.votingTimer !== -1) {
-          if (this.$route.path.indexOf(this.id + '/vote') === -1) this.goToVote()
+          if (this.$route.name.indexOf('vote') === -1) this.goToVote()
           this.voringTimeLabel = 'Voting Time Ends In'
         }
         else if (this.votingTimer === -1) {
-          if (this.$route.path.indexOf(this.id + '/results') === -1) this.goToResults()
+          if (this.$route.name.indexOf('results') === -1) this.goToResults()
         }
       }
     },
