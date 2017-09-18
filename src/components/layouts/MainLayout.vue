@@ -86,9 +86,6 @@ export default {
       openURL(url)
     }
   },
-  mounted () {
-    this.$refs.layout.hideLeft()
-  },
   data () {
     return {
       rotating: false

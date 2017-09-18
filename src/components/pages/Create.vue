@@ -64,9 +64,7 @@
           :min-rows="7"
         />
         <div style="text-align: right">
-          <!--router-link :to="{ name: 'collectProposals' }"-->
-            <q-btn @click="next()" icon="arrow forward">Next</q-btn>
-          <!--/router-link-->
+          <q-btn @click="next()" icon="arrow forward">Next</q-btn>
         </div>
       </q-card-main>
     </q-card>
