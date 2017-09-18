@@ -21,7 +21,7 @@
               icon="done"
               dismissible
             >
-              Vote from {{ submitName }} submited!
+              Vote from {{ submitName }} submitted!
             </q-alert>
           </template>
           <q-field 
