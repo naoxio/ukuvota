@@ -22,11 +22,18 @@ export default new VueRouter({
    */
 
   routes: [
-    { name: 'index', path: '/', redirect: { name: 'create' } },
-    { name: 'create', path: '/create', component: load('Create') },
-    { name: 'collect', path: '/:id/collect', component: load('Collect') },
-    { name: 'vote', path: '/:id/vote', component: load('Vote') },
-    { name: 'results', path: '/:id/results', component: load('Results') },
+
+    // redirect routes
+    { name: 'index', path: '/', redirect: { name: 'home' } },
+    { name: 'app', path: '/app', redirect: { name: 'create' } },
+    { path: '/create', redirect: { name: 'create' } },
+
+    // routes that load components
+    { name: 'home', path: '/', component: load('Home') },
+    { name: 'create', path: '/app/create', component: load('Create') },
+    { name: 'collect', path: '/app/:id/collect', component: load('Collect') },
+    { name: 'vote', path: '/app/:id/vote', component: load('Vote') },
+    { name: 'results', path: '/app/:id/results', component: load('Results') },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found
