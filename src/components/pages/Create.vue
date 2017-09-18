@@ -130,13 +130,13 @@ export default {
           'description': this.description,
           'id': id,
           'proposals': {
-            'Change Nothing': 'keep things the way they are',
-            'Repeat Process': 'reapeat the process and look for other options'
+            'Change nothing': 'keep things the way they are',
+            'Repeat process': 'reapeat the process and look for other options'
           },
           'negativeScoreWeight': this.negativeScoreWeight,
           'emojis': {
-            'Change Nothing': 0,
-            'Repeat Process': 0
+            'Change nothing': 0,
+            'Repeat process': 0
           },
           'votes': {},
           'results': {}
