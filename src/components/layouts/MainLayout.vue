@@ -8,7 +8,7 @@
         <center>
           <div class="row justify-center items-center">
             <div class="col-auto">
-              <img @dblclick="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
+              <img @dblclick="rotateLogoFast" @click="rotateLogo" id="logo" src="statics/logo.png" width="128px" />
             </div>
             <div class="col-1"></div>
             <div class="col-auto">
@@ -69,7 +69,12 @@ export default {
       setTimeout(function () {
         document.getElementById('logo').setAttribute('class', 'show')
       }, 10000)
-     // document.getElementById('logo').setAttribute('class', 'show')
+    },
+    rotateLogoFast () {
+      document.getElementById('logo').setAttribute('class', 'fastanimation hide')
+      setTimeout(function () {
+        document.getElementById('logo').setAttribute('class', 'show')
+      }, 10000)
     },
     launch (url) {
       openURL(url)
@@ -102,4 +107,6 @@ body
 }
 .animation
   animation spin 4s linear infinite
+.fastanimation
+  animation spin 1s linear infinite
 </style>
