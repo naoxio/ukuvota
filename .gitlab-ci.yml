@@ -6,11 +6,13 @@ stages:
 image: node:latest
 
 build:
+  # shhh, borrow this nice image from fs that has all the browser test stuff
+  image: 'registry.gitlab.com/foodsharing-dev/images:light'
   stage: build
   script:
   - yarn
   - yarn lint
-  - yarn test
+  - xvfb-run yarn test
   - yarn build
   artifacts:
     paths:
