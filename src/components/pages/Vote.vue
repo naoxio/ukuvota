@@ -124,7 +124,7 @@ export default {
   }
 }
 </script>
-<style lang="styl">
+<style lang="stylus">
 .emo
   filter grayscale(1)
 

@@ -6,7 +6,10 @@
           <p class="caption">No Results :(</p>
         </div>
         <div v-else>
-          <p class="caption">Results!</p>
+          <div class="row justify-between">
+            <p class="caption">Results!</p>
+            <q-checkbox v-model="highlightTopScores" label="Highlight Top Scores" />
+          </div>
         </div>
         <div v-if="noResults">
           <q-item>
@@ -22,7 +25,7 @@
           </q-item>
         </div>
         <div v-for="(value, proposal) in sortedResults" :key="value">
-          <q-item :class="{ yellow: getEmoji(proposal) === 3 }">
+          <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
             <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
             <q-item-side>
               <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
@@ -68,7 +71,7 @@
 </template>
 <script>
 import ProcessLayout from '@/layouts/ProcessLayout'
-import { QBtn, QCard, QCardMain, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
+import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
 import { getTopic } from '@/data.js'
 
 export default {
@@ -77,6 +80,7 @@ export default {
     QBtn,
     QCard,
     QCardMain,
+    QCheckbox,
     QField,
     QItem,
     QItemMain,
@@ -173,16 +177,27 @@ export default {
       proposals: {},
       total: 0,
       negativeScore: 3,
-      noResults: false
+      noResults: false,
+      highlightTopScores: false
     }
   }
 }
 </script>
 <style lang="stylus">
+.topProposal
+  font-weight bold
+
+.highlightTopScores
+  font-size 20px
+  border-radius 30px
+  background-color #ffffcc 
+
 .red
   background-color #FFEBEE
+
 .yellow
   background-color #ffffcc
+
 table
   td
     height 64px
