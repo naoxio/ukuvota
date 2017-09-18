@@ -66,6 +66,7 @@ export default {
   methods: {
     rotateLogo (animation) {
       document.getElementById('logo').setAttribute('class', animation + ' hide')
+
       if (!this.rotating) {
         this.rotating = true
         let t = this
@@ -111,6 +112,10 @@ body
 .hide {
   opacity: 0;
   transition: opacity 10s linear;
+}
+.quickhide {
+  opacity: 0;
+  transition: opacity 1s linear;
 }
 #logo {
   cursor pointer

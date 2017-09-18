@@ -3,6 +3,7 @@
 node_modules/
 dist/
 public/
+coverage/
 npm-debug.log*
 cordova/platforms
 cordova/plugins

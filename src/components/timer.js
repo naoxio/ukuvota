@@ -31,7 +31,7 @@ export const buildOutput = (days, hours, minutes, seconds) => {
     }
   }
   if (output === '') return -1
-  else return output
+  else return output.trim()
 }
 export const formatTime = (timeStamp) => {
   let today = new Date()
