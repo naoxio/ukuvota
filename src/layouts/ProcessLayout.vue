@@ -6,7 +6,10 @@
         <q-field :label="topic.description"></q-field>
         <q-item v-if="votingTimer !== -1 || proposalTimer !== -1" tag="label">
           <q-item-main v-if="proposalTimer !== -1" label="Proposal time ends in" :sublabel="proposalTimer">          </q-item-main>
-          <q-item-main v-if="votingTimer !== -1" l label="Voting time will last for" :sublabel="votingTimer">          </q-item-main>
+          <q-item-main v-if="votingTimer !== -1" label="Voting time will last for" :sublabel="votingTimer">          </q-item-main>
+        </q-item>
+        <q-item>
+          <q-item-main label="Negative Score Multiplier" :sublabel="negativeScoreWeightLabel"></q-item-main>
         </q-item>
         <br>
         <q-field label="Shareable URL"></q-field>
@@ -69,6 +72,7 @@ export default {
       this.topic = topic
       this.timer()
       this.startIntervalUpdate()
+      this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
     },
     error (error) {
       console.log('error with getting topic: ' + error)
@@ -88,7 +92,8 @@ export default {
       urlpath: window.location.href,
       proposalTimer: '',
       votingTimeLabel: 'Voting time will last for',
-      votingTimer: ''
+      votingTimer: '',
+      negativeScoreWeightLabel: ''
     }
   }
 }
