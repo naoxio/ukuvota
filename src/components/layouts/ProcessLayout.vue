@@ -53,7 +53,7 @@ export default {
           this.voringTimeLabel = 'Voting Time Ends In'
         }
         else if (this.votingTimer === -1) {
-          if (this.$route.path.indexOf(this.id + '/vote') !== -1) this.goToResults()
+          if (this.$route.path.indexOf(this.id + '/results') === -1) this.goToResults()
         }
       }
     },

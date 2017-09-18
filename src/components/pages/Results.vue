@@ -89,7 +89,6 @@ export default {
       this.votes = topic.votes
       this.proposals = topic.proposals
       this.negativeScore = topic.negativeScoreWeight
-      console.log(topic.negativeScoreWeight)
     },
     genResults (name) {
       for (let proposal in this.proposals) {
