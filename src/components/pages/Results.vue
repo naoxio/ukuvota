@@ -88,11 +88,13 @@ export default {
     getData (topic) {
       this.votes = topic.votes
       this.proposals = topic.proposals
+      this.negativeScore = topic.negativeScoreWeight
+      console.log(topic.negativeScoreWeight)
     },
     genResults (name) {
       for (let proposal in this.proposals) {
         let vote = this.votes[name][proposal]
-        if (vote < 0 && this.weightedScores) vote = vote * 3
+        if (vote < 0) vote = vote * this.negativeScore
         if (this.results[proposal] === undefined) {
           this.results[proposal] = vote
         }
@@ -116,7 +118,7 @@ export default {
     },
     getIndiScore (object, proposal) {
       let score = object[proposal]
-      if (this.weightedScores && score < 0) score = score * 3
+      if (score < 0) score = score * this.negativeScore
       return score
     },
     getLength (object) {
@@ -127,16 +129,15 @@ export default {
     },
     getEmoji (proposal) {
       let length = this.getLength(this.votes)
-      let negativeWeight = 1
-      if (this.weightedScores) negativeWeight = 2
+      let multiplier = this.negativeScore - 1
       let p = this.getScore(proposal)
       let emo = 0
       if (p === this.max) emo = 3
       else if (p >= this.max - length) emo = 2
       else if (p >= this.max - length * 2) emo = 1
       else if (p >= this.max - length * 3) emo = 0
-      else if (p >= this.max - length * 4 * negativeWeight) emo = -1
-      else if (p >= this.max - length * 5 * negativeWeight) emo = -2
+      else if (p >= this.max - length * 4 * multiplier) emo = -1
+      else if (p >= this.max - length * 5 * multiplier) emo = -2
       else emo = -3
       return emo
     }
@@ -148,7 +149,7 @@ export default {
       percentages: {},
       proposals: {},
       total: 0,
-      weightedScores: true
+      negativeScore: 3
     }
   }
 }
