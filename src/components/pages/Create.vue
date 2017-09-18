@@ -82,7 +82,7 @@ export default {
     next () {
       let error = false
       // error check
-      if (this.topicQuestion === '') {
+      if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
         this.topicMissing = true
         error = true
       }

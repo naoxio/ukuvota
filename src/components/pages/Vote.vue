@@ -82,7 +82,7 @@ export default {
     submit () {
       let error = false
       // error check
-      if (this.name === '') {
+      if (this.name.replace(/\s/g, '').length <= 0) {
         this.nameEmpty = true
         error = true
       }

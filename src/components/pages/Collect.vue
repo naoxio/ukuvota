@@ -60,7 +60,7 @@ export default {
     addProposal () {
       let error = false
       // error check
-      if (this.newProposal === '') {
+      if (this.newProposal.replace(/\s/g, '').length <= 0) {
         this.proposalEmpty = true
         this.proposalExists = false
         error = true
