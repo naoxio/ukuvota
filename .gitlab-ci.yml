@@ -1,6 +1,12 @@
+stages:
+- build
+- staging
+- production 
+
 image: node:latest
 
-test:
+build:
+  stage: build
   script:
   - yarn
   - yarn lint
@@ -19,9 +25,9 @@ test:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/$DEPLOY_DIR/
 
-deploy-staging:
+staging:
   <<: *deploy
-  stage: deploy
+  stage: staging
   variables:
     DEPLOY_DIR: staging
   environment:
@@ -30,9 +36,9 @@ deploy-staging:
   only:
   - master
 
-deploy-production:
+production:
   <<: *deploy
-  stage: deploy
+  stage: production
   when: manual
   variables:
     DEPLOY_DIR: production
