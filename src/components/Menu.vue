@@ -23,7 +23,7 @@
 
 <script>
   import LangSwitcher from '@/LangSwitcher'
-  import Menu from '@/Menu'
+
   import {
     QIcon
   } from 'quasar'
@@ -32,11 +32,14 @@
     name: 'index',
     components: {
       LangSwitcher,
-      Menu,
       QIcon
     },
     methods: {
+      goHome () {
+        this.$router.push({name: 'home'})
+      },
       rotateLogo (animation) {
+        if (this.$route.name.indexOf('home') === -1) this.goHome()
         document.getElementById('logo').setAttribute('class', animation + ' hide')
   
         if (!this.rotating) {
