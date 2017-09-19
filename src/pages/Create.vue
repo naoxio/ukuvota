@@ -2,15 +2,15 @@
   <main-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <q-field error-label="Please add a Topic Question">
-          <q-input v-model="topicQuestion" float-label="Topic Question" :error="topicMissing" />
+        <q-field :error-label="$t('Topic.errorLabel')">
+          <q-input v-model="topicQuestion" :float-label="$t('Topic.questionLabel')" :error="topicMissing" />
         </q-field>
         <div class="row">
-          <q-select class="col-11" v-model="negativeScoreWeight" float-label="Negative Score Multiplier" :options="negativeMultipliers" />
+          <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreMultiplier')" :options="negativeMultipliers" />
           <NegativeScoreInfo style="margin: auto; text-align: center"/>
         </div>
         <p class="caption row justify-between">
-          Proposal Collection Time
+          {{ $t('Proposal.time.selectLabel') }}
           <q-chip>
             Days: {{proposalDays}} Hours: {{proposalHours}} Minutes: {{proposalMinutes}}
           </q-chip>
@@ -20,7 +20,7 @@
         <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" label snap></q-slider>
   
         <p class="caption row justify-between">
-          Voting Time
+          {{ $t('Voting.time.selectLabel') }}
           <q-chip>
             Days: {{votingDays}} Hours: {{votingHours}} Minutes: {{votingMinutes}}
           </q-chip>
@@ -29,9 +29,9 @@
         <q-slider :step="1" v-model="votingHours" :min="0" :max="24" label snap></q-slider>
         <q-slider :step="1" v-model="votingMinutes" :min="1" :max="60" label snap></q-slider>
   
-        <q-input type="textarea" float-label="Description (optional)" v-model="description" :max-height="50" :min-rows="7" />
+        <q-input type="textarea" :float-label="$t('Topic.descriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
-          <q-btn @click="next()" icon="arrow forward">Next</q-btn>
+          <q-btn @click="next()" icon="arrow forward">{{ $t('Next') }}</q-btn>
         </div>
       </q-card-main>
     </q-card>

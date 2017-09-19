@@ -24,7 +24,7 @@
             </p>
           </q-item-main>
         </q-item>
-        <q-field label="Shareable URL" />
+        <q-field :label="$t('ShareableURL')" />
         <input style="width: 100%" onClick="this.select();" :value="urlpath" />
       </q-card-main>
     </q-card>

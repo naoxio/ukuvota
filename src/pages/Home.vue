@@ -4,7 +4,7 @@
       <MarkdownContent name="summary" />
       <center>
         <router-link :to="{ name: 'app' }">
-          <q-btn>Start Web App</q-btn>
+          <q-btn>{{ $t('StartWebApp') }}</q-btn>
         </router-link>
       </center>
     </div>

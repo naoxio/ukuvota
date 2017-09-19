@@ -1,9 +1,19 @@
 Proposal:
   time:
     label: Vorschlagszeit endet in
+    selectLabel: Zeit für die Vorschlagssammlung 
 
 Voting:
   time:
-    duration: Abstimmungszeit dauert für
+    duration: Dauer der Abstimmungszeit
+    selectLabel: Abstimmungszeit
+
+Topic:
+  questionLabel: Frage zum Thema
+  descriptionLabel: Beschreibung (Optional)
+  errorLabel: Bitte fügen Sie eine Frage zum Thema hinzu
 
 NegativeScoreMultiplier: Negativer Score-Multiplikator
+ShareableURL: Freigegebene URL
+StartWebApp: Web App starten
+Next: Weiter

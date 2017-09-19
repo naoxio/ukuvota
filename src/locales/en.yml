@@ -1,9 +1,19 @@
 Proposal:
   time:
     label: Proposal time ends in
+    selectLabel: Proposal Collection Time 
 
 Voting:
   time:
     duration: Voting time will last for
+    selectLabel:  Voting Time
+
+Topic:
+  questionLabel: Topic Question
+  descriptionLabel: Description (optional)
+  errorLabel: Please add a Topic Question
 
 NegativeScoreMultiplier: Negative score multiplier
+ShareableURL: Shareable URL
+StartWebApp: Start Web App
+Next: Next
