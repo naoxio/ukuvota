@@ -5,6 +5,7 @@ module.exports = {
   aliases: {
     '@': path.resolve(__dirname, '../src/components'),    
     assets: path.resolve(__dirname, '../src/assets'),   
+    content: path.resolve(__dirname, '../src/content'),
     layouts: path.resolve(__dirname, '../src/layouts'),
     locales: path.resolve(__dirname, '../src/locales'), 
     pages: path.resolve(__dirname, '../src/pages'),

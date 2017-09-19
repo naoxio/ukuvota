@@ -1,3 +1,17 @@
+Home:
+  summary:
+    title: 
+      content: |
+        Ukuvota uses a cooperative and scalable process to help individuals reach collective decisions.
+        The core process is
+        {scoreVotingLink}
+        with additional features to make it more cooperative
+      scoreVotingLinkText: score voting
+    p1: <strong>To "keep things the way they are" is always an option, never the default.</strong> Framing this option as a default position introduces a significant conservative bias—listing it as an option removes this bias and keeps a collective evolutionary.
+    p2:
+    p3:
+    p4:
+
 Login:
   heading: Log in
   submit: Login

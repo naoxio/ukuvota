@@ -3,7 +3,7 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <Menu></Menu>
+          <MainMenu></MainMenu>
           <br></br>
           <slot></slot>
         </center>
@@ -17,7 +17,7 @@
 
 <script>
   import LangSwitcher from '@/LangSwitcher'
-  import Menu from '@/Menu'
+  import MainMenu from '@/Menu'
   import {
     QLayout
   } from 'quasar'
@@ -26,7 +26,7 @@
     name: 'index',
     components: {
       LangSwitcher,
-      Menu,
+      MainMenu,
       QLayout
     },
     data () {
