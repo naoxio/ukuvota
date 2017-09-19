@@ -3,9 +3,9 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <MainMenu/>
-          <br></br>
-          <slot />>
+          <MainMenu />
+          <br/>
+          <slot />
         </center>
       </div>
     </div>

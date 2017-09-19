@@ -2,7 +2,6 @@
   <main-layout>
     <div style="max-width: 700px; text-align: left;">
       <MarkdownContent name="summary" />
-      <!--div v-html="$c('summary')"></div -->
       <center>
         <router-link :to="{ name: 'app' }">
           <q-btn>Start Web App</q-btn>
