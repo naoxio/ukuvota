@@ -17,3 +17,8 @@ NegativeScoreMultiplier: Negative score multiplier
 ShareableURL: Shareable URL
 StartWebApp: Start Web App
 Next: Next
+
+Time:
+  Days: Days
+  Hours: Hours
+  Minutes: Minutes

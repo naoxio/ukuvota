@@ -3,12 +3,12 @@
     <p class="caption row justify-between">
       {{ label }}
       <q-chip>
-        Days: {{days}} Hours: {{hours}} Minutes: {{minutes}}
+        {{ $t('Time.Days') }}: {{days}} {{ $t('Time.Hours') }}: {{hours}} {{ $t('Time.Minutes') }}: {{minutes}}
       </q-chip>
     </p>
-    <q-slider :step="1" v-model="days" :min="0" :max="62" label snap/>
-    <q-slider :step="1" v-model="hours" :min="0" :max="24" label snap/>
-    <q-slider :step="1" v-model="minutes" :min="1" :max="60" label snap/>
+    <q-slider :step="1" v-model="days" :min="0" :max="62" snap/>
+    <q-slider :step="1" v-model="hours" :min="0" :max="23" snap/>
+    <q-slider :step="1" v-model="minutes" :min="1" :max="59" snap/>
   
     <!--div class="row">
       <q-select
