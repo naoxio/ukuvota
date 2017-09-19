@@ -3,14 +3,11 @@
     <div class="layout-view">
       <div class="layout-padding">
         <center>
-          <MainMenu></MainMenu>
+          <MainMenu/>
           <br></br>
-          <slot></slot>
+          <slot />>
         </center>
       </div>
-    </div>
-    <div slot="footer">
-      <slot name="app-footer"></slot>
     </div>
   </q-layout>
 </template>
