@@ -5,16 +5,25 @@
         <h5><q-field :label="topic.question" /></h5>
         <q-field :label="topic.description" />
         <q-item v-if="votingTimer !== -1 || proposalTimer !== -1" tag="label">
-          <q-item-main v-if="proposalTimer !== -1" label="Proposal time ends in" :sublabel="proposalTimer" />
-          <q-item-main v-if="votingTimer !== -1" label="Voting time will last for" :sublabel="votingTimer" />
+          <div class="row">
+            <q-item-main v-if="proposalTimer !== -1">
+              {{ $t('Proposal.time.label') }}
+              <p class="text-dark">{{ proposalTimer }}</p>
+            </q-item-main>
+            <q-item-main v-if="votingTimer !== -1">
+              {{ $t('Voting.time.duration') }}
+              <p class="text-dark">{{ votingTimer }}</p>
+            </q-item-main>    
+          </div>
         </q-item>
-        <div class="row">
-          <q-item>
-            <q-item-main label="Negative Score Multiplier" :sublabel="negativeScoreWeightLabel" />
-          </q-item>
-          <NegativeScoreInfo/>
-        </div>
-        <br>
+        <q-item>
+          <q-item-main>
+            {{ $t('NegativeScoreMultiplier') }}
+            <p class="text-dark">{{ negativeScoreWeightLabel }}
+              <NegativeScoreInfo/>
+            </p>
+          </q-item-main>
+        </q-item>
         <q-field label="Shareable URL" />
         <input style="width: 100%" onClick="this.select();" :value="urlpath" />
       </q-card-main>

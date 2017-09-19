@@ -1,14 +1,9 @@
-Login:
-  heading: Log in
-  submit: Login
-  form:
-    email: Email Address
-    password: Password
-  failed: Login failed
-  cookiesDisabled: Please activiate cookies!
-  not_registered: |
-    Not yet registered?
-    You can
-    <a href="https://foodsharing.de/" target="_blank">register</a>
-    on the Desktop Version at
-    <a href="https://foodsharing.de/" target="_blank">foodsharing.de</a>
+Proposal:
+  time:
+    label: Proposal time ends in
+
+Voting:
+  time:
+    duration: Voting time will last for
+
+NegativeScoreMultiplier: Negative score multiplier
