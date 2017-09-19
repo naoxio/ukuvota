@@ -8,6 +8,10 @@ const content = {
   summary: {
     en: require('content/summary.en.md'),
     de: require('content/summary.de.md')
+  },
+  negativeScoreWeighting: {
+    en: require('content/negativeScoreWeighting.en.md'),
+    de: require('content/negativeScoreWeighting.de.md')
   }
 }
 

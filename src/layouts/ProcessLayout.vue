@@ -2,21 +2,21 @@
   <main-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field :label="topic.question"></q-field></h5>
-        <q-field :label="topic.description"></q-field>
+        <h5><q-field :label="topic.question" /></h5>
+        <q-field :label="topic.description" />
         <q-item v-if="votingTimer !== -1 || proposalTimer !== -1" tag="label">
-          <q-item-main v-if="proposalTimer !== -1" label="Proposal time ends in" :sublabel="proposalTimer">          </q-item-main>
-          <q-item-main v-if="votingTimer !== -1" label="Voting time will last for" :sublabel="votingTimer">          </q-item-main>
+          <q-item-main v-if="proposalTimer !== -1" label="Proposal time ends in" :sublabel="proposalTimer"/>
+          <q-item-main v-if="votingTimer !== -1" label="Voting time will last for" :sublabel="votingTimer"/>
         </q-item>
         <q-item>
-          <q-item-main label="Negative Score Multiplier" :sublabel="negativeScoreWeightLabel"></q-item-main>
+          <q-item-main label="Negative Score Multiplier" :sublabel="negativeScoreWeightLabel"/>
         </q-item>
         <br>
-        <q-field label="Shareable URL"></q-field>
-        <input style="width: 100%" onClick="this.select();" :value="urlpath"></input>
+        <q-field label="Shareable URL"/>
+        <input style="width: 100%" onClick="this.select();" :value="urlpath"/>
       </q-card-main>
     </q-card>
-    <slot></slot>
+    <slot/>
   </main-layout>
 </template>
 

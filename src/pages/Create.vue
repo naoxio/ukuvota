@@ -4,9 +4,8 @@
       ref="weightingInfo"
       :content-css="{padding: '50px', maxWidth: '700px'}"
     >
-      <NegativeScoreInfoModal>
+        <MarkdownContent name="negativeScoreWeighting" />
         <q-btn color="primary" @click="$refs.weightingInfo.close()">Close</q-btn>
-      </NegativeScoreInfoModal>
     </q-modal>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
@@ -68,17 +67,16 @@
 </template>
 <script>
 import MainLayout from 'layouts/MainLayout'
-import NegativeScoreInfoModal from '@/NegativeScoreInfoModal'
 import { date, uid, QAlert, QBtn, QCard, QCardMain, QCardMedia, QCardTitle, QChip, QField, QIcon, QInput, QInlineDatetime, QItem, QItemMain, QItemSide, QList, QModal, QSelect, QSlider } from 'quasar'
 import { setTopic } from 'src/data'
 import { buildOutput } from 'src/timer'
-
+import MarkdownContent from '@/Content'
 const { addToDate } = date
 
 export default {
   components: {
     MainLayout,
-    NegativeScoreInfoModal,
+    MarkdownContent,
     QAlert,
     QBtn,
     QCard,
