@@ -40,15 +40,16 @@
       },
       rotateLogo (animation) {
         if (this.$route.name.indexOf('home') === -1) this.goHome()
-        document.getElementById('logo').setAttribute('class', animation + ' hide')
-  
-        if (!this.rotating) {
-          this.rotating = true
-          let t = this
-          setTimeout(function () {
-            document.getElementById('logo').setAttribute('class', 'show')
-            t.rotating = false
-          }, 10000)
+        else {
+          document.getElementById('logo').setAttribute('class', animation + ' hide')
+          if (!this.rotating) {
+            this.rotating = true
+            let t = this
+            setTimeout(function () {
+              document.getElementById('logo').setAttribute('class', 'show')
+              t.rotating = false
+            }, 10000)
+          }
         }
       },
       rotateLogoFast () {
