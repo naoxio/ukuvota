@@ -7,7 +7,7 @@
         </q-field>
         <div class="row">
           <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreMultiplier')" :options="negativeMultipliers" />
-          <NegativeScoreInfo style="margin: auto; text-align: center"/>
+          <NegativeScoreInfo style="margin: auto; text-align: center" />
         </div>
         <p class="caption row justify-between">
           {{ $t('Proposal.time.selectLabel') }}
