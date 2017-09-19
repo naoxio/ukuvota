@@ -9,26 +9,14 @@
           <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreMultiplier')" :options="negativeMultipliers" />
           <NegativeScoreInfo style="margin: auto; text-align: center" />
         </div>
-        <p class="caption row justify-between">
-          {{ $t('Proposal.time.selectLabel') }}
-          <q-chip>
-            Days: {{proposalDays}} Hours: {{proposalHours}} Minutes: {{proposalMinutes}}
-          </q-chip>
-        </p>
-        <q-slider :step="1" v-model="proposalDays" :min="0" :max="62" label snap></q-slider>
-        <q-slider :step="1" v-model="proposalHours" :min="0" :max="24" label snap></q-slider>
-        <q-slider :step="1" v-model="proposalMinutes" :min="1" :max="60" label snap></q-slider>
-  
-        <p class="caption row justify-between">
-          {{ $t('Voting.time.selectLabel') }}
-          <q-chip>
-            Days: {{votingDays}} Hours: {{votingHours}} Minutes: {{votingMinutes}}
-          </q-chip>
-        </p>
-        <q-slider :step="1" v-model="votingDays" :min="0" :max="62" label snap></q-slider>
-        <q-slider :step="1" v-model="votingHours" :min="0" :max="24" label snap></q-slider>
-        <q-slider :step="1" v-model="votingMinutes" :min="1" :max="60" label snap></q-slider>
-  
+        <TimeSelector 
+          :label="$t('Proposal.time.selectLabel')"
+          v-model="proposal"
+         />
+        <TimeSelector 
+          :label="$t('Voting.time.selectLabel')"
+          v-model="voting"
+         />
         <q-input type="textarea" :float-label="$t('Topic.descriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
           <q-btn @click="next()" icon="arrow forward">{{ $t('Next') }}</q-btn>
@@ -40,6 +28,10 @@
 
 <script>
   import MainLayout from 'layouts/MainLayout'
+  import TimeSelector from '@/TimeSelector'
+  import NegativeScoreInfo from '@/NegativeScoreInfo'
+  import { setTopic } from 'src/data'
+  import { buildOutput } from 'src/timer'
   import {
     date,
     uid,
@@ -52,21 +44,14 @@
     QSelect,
     QSlider
   } from 'quasar'
-  import {
-    setTopic
-  } from 'src/data'
-  import {
-    buildOutput
-  } from 'src/timer'
-  import NegativeScoreInfo from '@/NegativeScoreInfo'
-  const {
-    addToDate
-  } = date
+
+  const { addToDate } = date
   
   export default {
     components: {
       MainLayout,
       NegativeScoreInfo,
+      TimeSelector,
       QBtn,
       QCard,
       QCardMain,
@@ -93,15 +78,15 @@
   
           let today = new Date()
           let endProposal = addToDate(today, {
-            days: this.proposalDays,
-            hours: this.proposalHours,
-            minutes: this.proposalMinutes
+            days: this.proposal.days,
+            hours: this.proposal.hours,
+            minutes: this.proposal.minutes
           })
           let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
           let endVoting = addToDate(today, {
-            days: this.votingDays,
-            hours: this.votingHours,
-            minutes: this.votingMinutes,
+            days: this.voting.days,
+            hours: this.voting.hours,
+            minutes: this.voting.minutes,
             milliseconds: diff
           })
           // create a new Topic object
@@ -143,12 +128,16 @@
         topicQuestion: '',
         topicMissing: false,
         visible: false,
-        proposalMinutes: 1,
-        proposalHours: 0,
-        proposalDays: 2,
-        votingMinutes: 1,
-        votingHours: 0,
-        votingDays: 1,
+        proposal: {
+          days: 2,
+          hours: 0,
+          minutes: 1
+        },
+        voting: {
+          days: 1,
+          hours: 0,
+          minutes: 1
+        },
         negativeScoreWeight: 3,
         negativeMultipliers: [{
           label: 'x1',

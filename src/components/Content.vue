@@ -1,5 +1,5 @@
 <template>
-  <span v-html="content"></span>
+  <span v-html="content"/>
 </template>
 <script>
 import i18n from 'src/i18n'
