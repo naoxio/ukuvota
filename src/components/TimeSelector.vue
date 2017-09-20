@@ -26,7 +26,7 @@
         class="col-4"
         :float-label="$t('Time.Hours')"
         v-model="hours"
-        :options="selectHours"
+        :options="selectHours" 
       />
       <q-select
         radio
