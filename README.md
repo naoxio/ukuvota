@@ -51,3 +51,6 @@ Wolfi's contact:
  - mastodon: [wolfi@aleph.land](https://aleph.land/@wolfi)
 
 A good place to start are the issues labelled "todo".
+
+## License
+[CC0 - No Rights Reserved](LICENSE.md)
