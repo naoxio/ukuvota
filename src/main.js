@@ -14,7 +14,7 @@ import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
 import * as firebase from 'firebase'
-import i18n from 'i18n'
+import i18n from './i18n'
 
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework

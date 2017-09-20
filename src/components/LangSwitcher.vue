@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { QSelect } from 'quasar'
+  import { LocalStorage, QSelect } from 'quasar'
   import i18n from '../i18n'
   export default {
     components: { QSelect },
@@ -19,6 +19,7 @@
     watch: {
       locale (val) {
         i18n.locale = val
+        LocalStorage.set('locale', val)
       }
     }
   }

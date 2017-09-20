@@ -1,10 +1,17 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import { LocalStorage } from 'quasar'
 
 Vue.use(VueI18n)
 
+const getLocale = () => {
+  let local = LocalStorage.get.item('locale')
+  if (local === null) local = 'en'
+  return local
+}
+
 const i18n = new VueI18n({
-  locale: 'en',
+  locale: getLocale(),
   messages: {
     en: require('locales/en.yml'),
     de: require('locales/de.yml')
