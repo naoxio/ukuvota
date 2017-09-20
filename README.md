@@ -53,4 +53,4 @@ Wolfi's contact:
 A good place to start are the issues labelled "todo".
 
 ## License
-[CC0 - No Rights Reserved](LICENSE.md)
+[CC0 - No Rights Reserved](LICENSE)
