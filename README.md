@@ -10,10 +10,9 @@ Ukuvota uses a cooperative and scalable process to help individuals reach collec
 The front-end is made using the Quasar Framework
 
 ## Installing
-
-``` bash
 (sudo is only required if npm is installed globally)
 
+``` bash
 # install quasar-cli globally 
 $ sudo npm install -g quasar-cli
 
