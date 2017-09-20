@@ -42,3 +42,12 @@ $ quasar lint
 Deployment is managed using gitlab ci. The master branch will be tested and built and deployed to [staging.ukuvota.world](https://staging.ukuvota.world).
 
 Once you have verified that you haven't broken everything, then you can trigger the deployment to [ukuvota.world](https://ukuvota.world) in the [gitlab environments](https://gitlab.com/ukuvota/ukuvota/environments) view.
+
+## Contributing
+We would be happy to accept PRs! If you want to work on something, it'd be good to talk beforehand to make sure nobody else is working on it. You can reach us on IRC #ukuvota on Freenode or contacting the current main developer wolif.
+
+Wolfi's contact:
+ - email: [wolfi@disroot.org](mailto: wolfi@disroot.org)
+ - mastodon: [wolfi@aleph.land](https://aleph.land/@wolfi)
+
+A good place to start are the issues labelled "todo".
