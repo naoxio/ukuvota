@@ -5,7 +5,8 @@ Ukuvota uses a cooperative and scalable process to help individuals reach collec
 - **To "look for other options" is always an option.** If none of the other current options are good enough, people are able to choose to look for better ones—this ensures that there is always an acceptable option for everyone.
 - **Every participant can express how much they support or oppose each option.** Limiting people to choose their favorite or list their preference prevents them from fully expressing their opinions—scoring clarifies opinions and makes it much more likely to identify the best decision.
 - **Acceptance (non-opposition) is the main determinant for the best decision.** A decision with little opposition reduces the likelihood of conflict, monitoring or sanctioning—it is also important that some people actively support the decision to ensure it actually happens.
-more can be read on the homepage [https://ukuvota.world](https://ukuvota.world)
+
+More about Ukuvota can be read on the homepage [https://ukuvota.world](https://ukuvota.world)
 
 ## Technology used
 The front-end is made using the Quasar Framework
