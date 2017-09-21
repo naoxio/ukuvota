@@ -102,9 +102,9 @@
             negativeScoreWeight: this.negativeScoreWeight
           }
           setTopic(newTopic)
-          setProposal(id, 'Change nothing', { description: 'keep things the way they are' })
+          setProposal(id, 'Change nothing', 'keep things the way they are')
           let t = this
-          setProposal(id, 'Repeat process', { description: 'reapeat the process and look for other options' }).on(() => {
+          setProposal(id, 'Repeat process', 'reapeat the process and look for other options').on(() => {
             // after making the last databse change redirect to new page
             t.$router.push({ name: 'collect', params: { id } })
           })

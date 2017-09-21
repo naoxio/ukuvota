@@ -111,23 +111,16 @@
             id: this.id
           }
         })
-      },
-      setData (topic) {
-        this.topic = topic
-        this.timer()
-        this.startIntervalUpdate()
-        this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
-      },
-      error (error) {
-        console.log('error with getting topic: ' + error)
-        this.$router.push({
-          name: 'create'
-        })
       }
     },
     mounted () {
       this.id = this.$route.params.id
-      getTopic(this.id).then(this.setData).catch(this.error)
+      getTopic(this.id).on((topic) => {
+        this.topic = topic
+        this.timer()
+        this.startIntervalUpdate()
+        this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
+      })
     },
     beforeDestroy () {
       clearInterval(this.interval)

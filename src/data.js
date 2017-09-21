@@ -11,8 +11,16 @@ export const getTopic = (id) => {
   return gun.get(id)
 }
 
-export const setProposal = (id, key, proposal) => {
-  return gun.get(id).get(key).set(proposal)
+export const setProposal = (id, title, description) => {
+  return gun.get(id).get('proposals').get(title).put(description)
+}
+
+export const getProposals = (id) => {
+  return gun.get(id).get('proposals')
+}
+
+export const getProposal = (id, title) => {
+  return gun.get(id).get('proposals').get(title)
 }
 
 export const addVotes = (id, name, emojis) => {

@@ -21,9 +21,11 @@
         <h5><q-field label="Current Proposals"></q-field></h5>
       </q-card-main>
       <q-list>
-        <q-item v-for="(description, title) in proposals" :key="title">
-          <q-item-main :label="title" :sublabel="description"></q-item-main>
-        </q-item>
+        <div v-for="(description, title) in proposals" :key="title">
+          <q-item v-if="title !== '_'">
+            <q-item-main  :label="title" :sublabel="description"></q-item-main>
+          </q-item>
+        </div>
       </q-list>
     </q-card>
   </process-layout>
@@ -31,7 +33,7 @@
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
-import { addProposal, getTopic } from 'src/data'
+import { getProposals, setProposal } from 'src/data'
 
 export default {
   components: {
@@ -47,16 +49,17 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    getTopic(this.id).then(this.updateProposals)
-    console.log(getTopic(this.id))
+    this.updateProposals()
   },
   methods: {
+    updateProposals () {
+      getProposals(this.id).on((proposals) => {
+        this.proposals = proposals
+      })
+    },
     getProposalError () {
       if (this.proposalExists) return 'The Proposal Already Exists'
       else if (this.proposalEmpty) return 'Proposal is Empty'
-    },
-    updateProposals (topic) {
-      this.proposals = topic.proposals
     },
     addProposal () {
       let error = false
@@ -77,15 +80,12 @@ export default {
         }
       }
       if (!error) {
-        let tmp = this
-        addProposal(this.id, this.newProposal, this.proposalDescription).then(
-          function () {
-            tmp.newProposal = ''
-            tmp.proposalDescription = ''
-            getTopic(tmp.id).then(tmp.updateProposals).then(tmp.$forceUpdate()
-          )
-          }
-        )
+        let t = this
+        setProposal(this.id, this.newProposal, this.proposalDescription).on(() => {
+          t.newProposal = ''
+          t.proposalDescription = ''
+          t.updateProposals()
+        })
       }
     }
   },
