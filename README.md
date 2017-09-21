@@ -27,14 +27,14 @@ $ sudo npm install -g yarn
 # install dependencies
 $ yarn
 
-# serve with hot reload at localhost:8080
-$ quasar dev
+# serve with hot reload at localhost:3000
+$ yarn dev
 
 # build for production with minification
-$ quasar build
+$ yarn build
 
 # lint code
-$ quasar lint
+$ yarn lint
 ```
 
 ## Deployment
