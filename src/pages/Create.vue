@@ -30,10 +30,10 @@
   import MainLayout from 'layouts/MainLayout'
   import TimeSelector from '@/TimeSelector'
   import NegativeScoreInfo from '@/NegativeScoreInfo'
-  import { setTopic } from 'src/data'
-  import { buildOutput } from 'src/timer'
+  import { createNewTopic, getTopic } from 'src/data'
+  // import { buildOutput } from 'src/timer'
   import {
-    date,
+  //  date,
     uid,
     QBtn,
     QCard,
@@ -45,7 +45,7 @@
     QSlider
   } from 'quasar'
 
-  const { addToDate } = date
+  // const { addToDate } = date
   
   export default {
     components: {
@@ -75,7 +75,11 @@
   
         if (!error) { // if no errors proceed
           let id = uid()
-  
+          createNewTopic(id)
+          getTopic(id).on((data, key) => {
+            console.log(data.id)
+          })
+          /*
           let today = new Date()
           let endProposal = addToDate(today, {
             days: this.proposal.days,
@@ -88,27 +92,8 @@
             hours: this.voting.hours,
             minutes: this.voting.minutes,
             milliseconds: diff
-          })
-          // create a new Topic object
-          let newTopic = {
-            'question': this.topicQuestion,
-            'proposalTime': endProposal,
-            'votingTime': endVoting,
-            'votingInterval': buildOutput(this.votingDays, this.votingHours, this.votingMinutes, 0),
-            'description': this.description,
-            'id': id,
-            'proposals': {
-              'Change nothing': 'keep things the way they are',
-              'Repeat process': 'reapeat the process and look for other options'
-            },
-            'negativeScoreWeight': this.negativeScoreWeight,
-            'emojis': {
-              'Change nothing': 0,
-              'Repeat process': 0
-            },
-            'votes': {},
-            'results': {}
-          }
+          }) */
+          /*
           let tmp = this
           setTopic(newTopic).then(function () {
             // go to collect vue after saving topic data
@@ -118,14 +103,14 @@
                 id: id
               }
             })
-          })
+          }) */
         }
       }
     },
     data () {
       return {
         description: '',
-        topicQuestion: '',
+        topicQuestion: 'q',
         topicMissing: false,
         visible: false,
         proposal: {

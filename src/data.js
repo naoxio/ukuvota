@@ -1,12 +1,18 @@
 import { LocalStorage } from 'quasar'
+import Gun from 'gun'
 
+let gun = Gun()
+
+export const createNewTopic = (id) => {
+  gun.get(id).put({id})
+}
 // general data methods
 export const setTopic = (topic) => {
   Promise.resolve(LocalStorage.set(topic.id, JSON.stringify(topic)))
 }
 
 export const getTopic = (id) => {
-  return Promise.resolve(JSON.parse(LocalStorage.get.item(id)))
+  return gun.get(id)
 }
 
 const setProperty = (id, prop, key, value) => {

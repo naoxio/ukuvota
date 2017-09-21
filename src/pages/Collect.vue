@@ -48,6 +48,7 @@ export default {
   mounted () {
     this.id = this.$route.params.id
     getTopic(this.id).then(this.updateProposals)
+    console.log(getTopic(this.id))
   },
   methods: {
     getProposalError () {
