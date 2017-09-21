@@ -12,14 +12,12 @@ More about Ukuvota can be read on the homepage: [https://ukuvota.world](https://
 The front-end is made using the Quasar Framework
 
 ## Installing
-(sudo is only required if npm is installed globally)
-
 ``` bash
 # install quasar-cli globally 
-$ sudo npm install -g quasar-cli
+$ [sudo] npm install -g quasar-cli
 
 # install yarn for dependencie management
-$ sudo npm install -g yarn
+$ [sudo] npm install -g yarn
 ```
 
 ## Build Setup
@@ -29,13 +27,13 @@ $ sudo npm install -g yarn
 $ yarn
 
 # serve with hot reload at localhost:3000
-$ yarn dev
+$ quasar dev
 
 # build for production with minification
-$ yarn build
+$ quasar build
 
 # lint code
-$ yarn lint
+$ quasar lint
 ```
 
 ## Deployment
