@@ -1,36 +1,18 @@
-import { LocalStorage } from 'quasar'
 import Gun from 'gun'
 
 let gun = Gun()
 
-export const createNewTopic = (id) => {
-  gun.get(id).put({
-    id
-
-  })
-}
-// general data methods
+// set topic in gun
 export const setTopic = (topic) => {
-  Promise.resolve(LocalStorage.set(topic.id, JSON.stringify(topic)))
+  return gun.get(topic.id).put(topic)
 }
 
 export const getTopic = (id) => {
   return gun.get(id)
 }
 
-const setProperty = (id, prop, key, value) => {
-  return getTopic(id).then(topic => {
-    topic[prop][key] = value
-    setTopic(topic)
-  })
-}
-
-export const addProposal = (id, title, description) => {
-  return setProperty(id, 'proposals', title, description).then(
-    function () {
-      setProperty(id, 'emojis', title, 0)
-    }
-  )
+export const setProposal = (id, key, proposal) => {
+  return gun.get(id).get(key).set(proposal)
 }
 
 export const addVotes = (id, name, emojis) => {

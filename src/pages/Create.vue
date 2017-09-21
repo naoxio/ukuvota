@@ -30,10 +30,11 @@
   import MainLayout from 'layouts/MainLayout'
   import TimeSelector from '@/TimeSelector'
   import NegativeScoreInfo from '@/NegativeScoreInfo'
-  import { createNewTopic, getTopic } from 'src/data'
-  // import { buildOutput } from 'src/timer'
+  import { setProposal, setTopic } from 'src/data'
+  import { buildOutput } from 'src/timer'
+
   import {
-  //  date,
+    date,
     uid,
     QBtn,
     QCard,
@@ -45,7 +46,7 @@
     QSlider
   } from 'quasar'
 
-  // const { addToDate } = date
+  const { addToDate } = date
   
   export default {
     components: {
@@ -75,34 +76,37 @@
   
         if (!error) { // if no errors proceed
           let id = uid()
-          createNewTopic(id)
-          getTopic(id).on((data, key) => {
-            console.log(data.id)
-          })
-  
+
           let today = new Date()
+          // calculate when the proposal collection time ends
           let endProposal = addToDate(today, {
             days: this.proposal.days,
             hours: this.proposal.hours,
             minutes: this.proposal.minutes
-          })
+          }).toString()
           let diff = date.formatDate(endProposal, 'x') - date.formatDate(today, 'x')
           let endVoting = addToDate(today, {
             days: this.voting.days,
             hours: this.voting.hours,
             minutes: this.voting.minutes,
             milliseconds: diff
-          })
-  
-          let tmp = this
-          setTopic(newTopic).then(function () {
-            // go to collect vue after saving topic data
-            tmp.$router.push({
-              name: 'collect',
-              params: {
-                id: id
-              }
-            })
+          }).toString()
+
+          let newTopic = {
+            id,
+            title: this.topicQuestion,
+            description: this.description,
+            proposalTime: endProposal,
+            votingTime: endVoting,
+            votingInterval: buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
+            negativeScoreWeight: this.negativeScoreWeight
+          }
+          setTopic(newTopic)
+          setProposal(id, 'Change nothing', { description: 'keep things the way they are' })
+          let t = this
+          setProposal(id, 'Repeat process', { description: 'reapeat the process and look for other options' }).on(() => {
+            // after making the last databse change redirect to new page
+            t.$router.push({ name: 'collect', params: { id } })
           })
         }
       }
