@@ -69,44 +69,34 @@
           component.timer()
         }, 1000)
       },
+      checkCorrectRoute (targetRoute) {
+        let currentRoute = this.$route.name
+        let routeNames = ['collect', 'vote', 'results']
+        if (currentRoute !== targetRoute && routeNames.indexOf(currentRoute) >= 0) {
+          this.goTo(targetRoute)
+        }
+      },
       autoRedirect () {
         this.proposalTimer = formatTime(this.topic.proposalTime)
         if (this.proposalTimer !== -1) {
-          if (this.$route.name.indexOf('collect') === -1) this.goToCollect()
+          this.checkCorrectRoute('collect')
           this.votingTimeLabel = 'Voting Time Will Last For'
           this.votingTimer = this.topic.votingInterval
         }
         else if (this.proposalTimer === -1) {
-          if (this.$route.name.indexOf('collect') !== -1) this.goToVote()
           this.votingTimer = formatTime(this.topic.votingTime)
           if (this.votingTimer !== -1) {
-            if (this.$route.name.indexOf('vote') === -1) this.goToVote()
-            this.voringTimeLabel = 'Voting Time Ends In'
+            this.checkCorrectRoute('vote')
+            this.votingTimeLabel = 'Voting Time Ends In'
           }
           else if (this.votingTimer === -1) {
-            if (this.$route.name.indexOf('results') === -1) this.goToResults()
+            this.checkCorrectRoute('results')
           }
         }
       },
-      goToCollect () {
+      goTo (route) {
         this.$router.push({
-          name: 'collect',
-          params: {
-            id: this.id
-          }
-        })
-      },
-      goToVote () {
-        this.$router.push({
-          name: 'vote',
-          params: {
-            id: this.id
-          }
-        })
-      },
-      goToResults () {
-        this.$router.push({
-          name: 'results',
+          name: route,
           params: {
             id: this.id
           }

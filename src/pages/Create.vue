@@ -114,7 +114,7 @@
     data () {
       return {
         description: '',
-        topicQuestion: 'q',
+        topicQuestion: '',
         topicMissing: false,
         visible: false,
         proposal: {

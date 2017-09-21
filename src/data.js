@@ -2,6 +2,8 @@ import Gun from 'gun'
 
 let gun = Gun()
 
+window.gun = gun
+
 // set topic in gun
 export const setTopic = (topic) => {
   return gun.get(topic.id).put(topic)
