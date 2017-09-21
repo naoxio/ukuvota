@@ -79,7 +79,7 @@
           getTopic(id).on((data, key) => {
             console.log(data.id)
           })
-          /*
+  
           let today = new Date()
           let endProposal = addToDate(today, {
             days: this.proposal.days,
@@ -92,8 +92,8 @@
             hours: this.voting.hours,
             minutes: this.voting.minutes,
             milliseconds: diff
-          }) */
-          /*
+          })
+  
           let tmp = this
           setTopic(newTopic).then(function () {
             // go to collect vue after saving topic data
@@ -103,7 +103,7 @@
                 id: id
               }
             })
-          }) */
+          })
         }
       }
     },

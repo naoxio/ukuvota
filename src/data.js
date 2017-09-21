@@ -4,7 +4,10 @@ import Gun from 'gun'
 let gun = Gun()
 
 export const createNewTopic = (id) => {
-  gun.get(id).put({id})
+  gun.get(id).put({
+    id
+
+  })
 }
 // general data methods
 export const setTopic = (topic) => {
