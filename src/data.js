@@ -1,47 +1,12 @@
 import { LocalStorage } from 'quasar'
-import * as firebase from 'firebase'
-
-const database = 'firebase'
-
-// firebase topic
-const addFirebaseTopic = (newTopic) => {
-  var updates = {}
-  updates['/topics/' + newTopic.id] = newTopic
-  return firebase.database().ref().update(updates)
-}
-/*
-const updateFirebaseTopic = (changedTopic) => {
-  firebase.database().ref('topics/').transaction(function (topic) {
-    if (topic) {
-      topic[changedTopic.id] = changedTopic
-    }
-    return topic
-  })
-}
-*/
-const getFirebaseTopic = (id) => {
-  return firebase.database().ref('topics/' + id).once('value').then(function (snapshot) {
-    return snapshot.val()
-  })
-}
 
 // general data methods
 export const setTopic = (topic) => {
-  switch (database) {
-    case 'firebase':
-      return addFirebaseTopic(topic)
-    default:
-      Promise.resolve(LocalStorage.set(topic.id, JSON.stringify(topic)))
-  }
+  Promise.resolve(LocalStorage.set(topic.id, JSON.stringify(topic)))
 }
 
 export const getTopic = (id) => {
-  switch (database) {
-    case 'firebase':
-      return getFirebaseTopic(id)
-    default:
-      return Promise.resolve(JSON.parse(LocalStorage.get.item(id)))
-  }
+  return Promise.resolve(JSON.parse(LocalStorage.get.item(id)))
 }
 
 const setProperty = (id, prop, key, value) => {
