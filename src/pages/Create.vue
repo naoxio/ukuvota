@@ -21,6 +21,9 @@
         <div style="text-align: right">
           <q-btn @click="next()" icon="arrow forward">{{ $t('Next') }}</q-btn>
         </div>
+        <div style="color: red; text-align: right" v-if="serverError">
+          something went wrong. server down?
+        </div>
       </q-card-main>
     </q-card>
   </main-layout>
@@ -30,7 +33,7 @@
   import MainLayout from 'layouts/MainLayout'
   import TimeSelector from '@/TimeSelector'
   import NegativeScoreInfo from '@/NegativeScoreInfo'
-  import { setProposal, setTopic } from 'src/data'
+  import { setTopic } from 'src/data'
   import { buildOutput } from 'src/timer'
 
   import {
@@ -93,20 +96,32 @@
           }).toString()
 
           let newTopic = {
-            id,
-            title: this.topicQuestion,
-            description: this.description,
-            proposalTime: endProposal,
-            votingTime: endVoting,
-            votingInterval: buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
-            negativeScoreWeight: this.negativeScoreWeight
+            '_id': id,
+            'question': this.topicQuestion,
+            'description': this.description,
+            'proposalTime': endProposal,
+            'votingTime': endVoting,
+            'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
+            'negativeScoreWeight': this.negativeScoreWeight,
+            'proposals': {
+              'Change nothing': 'keep things the way they are',
+              'Repeat process': 'reapeat the process and look for other options'
+            },
+            'emojis': {
+              'Change nothing': 0,
+              'Repeat process': 0
+            },
+            'votes': {
+  
+            }
           }
-          setTopic(newTopic)
-          setProposal(id, 'Change nothing', 'keep things the way they are')
           let t = this
-          setProposal(id, 'Repeat process', 'reapeat the process and look for other options').on(() => {
-            // after making the last databse change redirect to new page
-            t.$router.push({ name: 'collect', params: { id } })
+          setTopic(newTopic).then(log => {
+            if (log === -1) this.serverError = true
+            else {
+              this.serverError = false
+              t.$router.push({ name: 'collect', params: { id } })
+            }
           })
         }
       }
@@ -117,6 +132,7 @@
         topicQuestion: '',
         topicMissing: false,
         visible: false,
+        serverError: false,
         proposal: {
           days: 2,
           hours: 0,

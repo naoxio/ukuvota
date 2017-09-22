@@ -49,14 +49,14 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    console.log(this.id)
-    // this.updateProposals()
-    getProposals(this.id).on((proposals) => {
-      console.log('updated proposals', proposals)
-      this.proposals = proposals
-    })
+    this.updateProposals()
   },
   methods: {
+    updateProposals () {
+      getProposals(this.id).then((proposals) => {
+        this.proposals = proposals
+      })
+    },
     getProposalError () {
       if (this.proposalExists) return 'The Proposal Already Exists'
       else if (this.proposalEmpty) return 'Proposal is Empty'
@@ -81,9 +81,10 @@ export default {
       }
       if (!error) {
         let t = this
-        setProposal(this.id, this.newProposal, this.proposalDescription).on(() => {
+        setProposal(this.id, this.newProposal, this.proposalDescription).then(() => {
           t.newProposal = ''
           t.proposalDescription = ''
+          this.updateProposals()
         })
       }
     }

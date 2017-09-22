@@ -46,7 +46,7 @@
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
-import { getTopic, addVotes } from 'data'
+import { getTopic, setVotes } from 'data'
 
 export default {
   components: {
@@ -92,19 +92,14 @@ export default {
 
       if (!error) { // if no errors proceed
         let tmp = this
-        addVotes(this.id, this.name, this.tmpemojis).then(
-          function () {
-            tmp.nameExists = false
-            tmp.submitName = tmp.name
-            tmp.name = ''
-            tmp.submited = true
-            getTopic(tmp.id).then(tmp.getData).then(tmp.$forceUpdate())
-          },
-          function (error) {
-            if (error === -2) tmp.nameExists = true
-            else console.log('error: adding votes failed: ' + error)
-          }
-        )
+        setVotes(this.id, this.name, this.tmpemojis).then(log => {
+          if (log === -2) tmp.nameExists = true
+          tmp.nameExists = false
+          tmp.submitName = tmp.name
+          tmp.name = ''
+          tmp.submited = true
+          getTopic(tmp.id).then(tmp.getData).then(tmp.$forceUpdate())
+        })
       }
     }
   },

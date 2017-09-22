@@ -105,11 +105,12 @@
     },
     mounted () {
       this.id = this.$route.params.id
-      getTopic(this.id).on((topic) => {
+      getTopic(this.id).then((topic) => {
         this.topic = topic
+        this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
+      }).then(() => {
         this.timer()
         this.startIntervalUpdate()
-        this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
       })
     },
     beforeDestroy () {

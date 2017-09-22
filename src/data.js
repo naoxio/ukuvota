@@ -1,22 +1,48 @@
-// set topic in gun
+import PouchDB from 'pouchdb'
+
+const BACKEND_URL = 'http://localhost:8080/db'
+let db = new PouchDB(BACKEND_URL + '/topics')
+window.PouchDB = PouchDB
+
+// set topic in db
 export const setTopic = (topic) => {
-  return -1
-  //  return gun.get(topic.id).put(topic)
+  return db.put(topic).then().catch(() => {
+    return db.get(topic._id).then(doc => {
+      topic._rev = doc._rev
+      return db.put(topic)
+    }).then().catch(err => {
+      console.log(err)
+      return -1
+    })
+  })
 }
 
 export const getTopic = (id) => {
-  return -1
-  //  return gun.get(id)
+  return db.get(id).then(doc => {
+    return doc
+  }).then().catch(err => {
+    console.log(err)
+    return -1
+  })
 }
 
 export const setProposal = (id, title, description) => {
-  return -1
-  // return gun.get(id).get('proposals').get(title).put(description)
+  return getTopic(id).then(topic => {
+    // add proposal
+    topic.emojis[title] = 0
+    topic.proposals[title] = description
+    // put them back
+    return db.put(topic)
+  })
 }
 
 export const getProposals = (id) => {
-  return -1
-  // return gun.get(id).get('proposals')
+  return getTopic(id).then(topic => {
+    return topic.proposals
+  }).then().catch(err => {
+    console.log(err)
+    return -1
+  })
 }
 
 export const getProposal = (id, title) => {
@@ -24,18 +50,16 @@ export const getProposal = (id, title) => {
   // return gun.get(id).get('proposals').get(title)
 }
 
-export const addVotes = (id, name, emojis) => {
+export const setVotes = (id, name, emojis) => {
   return getTopic(id).then(topic => {
+    // add proposal
     if (topic.votes === undefined) topic.votes = {}
-    if (topic.votes[name] === undefined) topic.votes[name] = emojis
+    else if (topic.votes[name] === undefined) topic.votes[name] = emojis
     else return -2
-    setTopic(topic)
-  })
-}
-
-export const setResults = (id, results) => {
-  return getTopic(id).then(topic => {
-    if (topic.results === undefined) topic.results = results
-    else return -2
+    // put them back
+    return db.put(topic)
+  }).then().catch(err => {
+    console.log(err)
+    return -1
   })
 }

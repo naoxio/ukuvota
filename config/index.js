@@ -48,7 +48,14 @@ module.exports = {
     // Proxy your API if using any.
     // Also see /build/script.dev.js and search for "proxy api requests"
     // https://github.com/chimurai/http-proxy-middleware
-    proxyTable: {}
+    proxyTable: {
+      // proxy all requests starting with /api
+      '/db': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        ws: true
+      }
+    }
   }
 }
 
