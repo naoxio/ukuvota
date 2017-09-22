@@ -1,7 +1,9 @@
-var PouchDB = require('pouchdb')
-var express = require('express')
-var app = express()
+let PouchDB = require('pouchdb')
+let express = require('express')
+let app = express()
 
-app.use('/db', require('express-pouchdb')(PouchDB))
+app.use(express.static('../dist'))
+
+app.use('/db', require('express-pouchdb')(PouchDB.defaults({prefix: './mydb/'})))
 
 app.listen(3000)

@@ -1,6 +1,6 @@
 import PouchDB from 'pouchdb'
 
-const BACKEND_URL = 'http://localhost:8080/db'
+const BACKEND_URL = location.protocol + '//' + location.host + '/db'
 let db = new PouchDB(BACKEND_URL + '/topics')
 window.PouchDB = PouchDB
 
