@@ -1,28 +1,27 @@
-import Gun from 'gun'
-
-let gun = Gun()
-
-window.gun = gun
-
 // set topic in gun
 export const setTopic = (topic) => {
-  return gun.get(topic.id).put(topic)
+  return -1
+  //  return gun.get(topic.id).put(topic)
 }
 
 export const getTopic = (id) => {
-  return gun.get(id)
+  return -1
+  //  return gun.get(id)
 }
 
 export const setProposal = (id, title, description) => {
-  return gun.get(id).get('proposals').get(title).put(description)
+  return -1
+  // return gun.get(id).get('proposals').get(title).put(description)
 }
 
 export const getProposals = (id) => {
-  return gun.get(id).get('proposals')
+  return -1
+  // return gun.get(id).get('proposals')
 }
 
 export const getProposal = (id, title) => {
-  return gun.get(id).get('proposals').get(title)
+  return -1
+  // return gun.get(id).get('proposals').get(title)
 }
 
 export const addVotes = (id, name, emojis) => {
