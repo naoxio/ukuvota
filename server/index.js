@@ -1,12 +1,7 @@
-import level from 'level-rocksdb'
+var PouchDB = require('pouchdb');
+var express = require('express');
+var app = express();
 
-let db = level('./mydb')
+app.use('/db', require('express-pouchdb')(PouchDB));
 
-db.put('name', 'wolfi', err => {
-  if (err) return console.log('Oops!', err)
-
-  db.get('name', (err, value) => {
-    if (err) return console.log('Oops!', err)
-    console.log('name=' + value)
-  })
-})
+app.listen(3000);
