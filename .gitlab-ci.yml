@@ -17,6 +17,7 @@ build:
   artifacts:
     paths:
     - dist
+    - server
 
 .deploy: &deploy
   script:

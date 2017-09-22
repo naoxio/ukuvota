@@ -10,6 +10,7 @@ More about Ukuvota can be read on the homepage: [https://ukuvota.world](https://
 
 ## Technology used
 The front-end is made using the Quasar Framework
+The back-end is made using PouchDB
 
 ## Installing
 ``` bash
@@ -34,6 +35,25 @@ $ quasar build
 
 # lint code
 $ quasar lint
+```
+
+## Self-hosting
+
+``` bash
+
+# clone the project
+$ git clone git@gitlab.com:ukuvota/ukuvota.git
+
+# build the project
+$ quasar build
+
+# run the server with default database location
+$ node .
+# run server with a custom database location
+$ node . your/custom/path/to/database
+
+# visit the project at
+http://your.domain:3000
 ```
 
 ## Deployment
