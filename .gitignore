@@ -9,3 +9,5 @@ npm-debug.log*
 cordova/platforms
 cordova/plugins
 yarn-error.log
+server/log.txt
+server/mydb
