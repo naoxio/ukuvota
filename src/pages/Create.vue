@@ -19,7 +19,7 @@
          />
         <q-input type="textarea" :float-label="$t('Topic.descriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
-          <q-btn @click="next()" icon="arrow forward">{{ $t('Next') }}</q-btn>
+          <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
         </div>
         <div style="color: red; text-align: right" v-if="serverError">
           something went wrong. server down?
@@ -66,7 +66,7 @@
       QSlider
     },
     methods: {
-      next () {
+      submit () {
         let error = false
         // error check
         if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
