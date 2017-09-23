@@ -3,6 +3,9 @@
     <div style="max-width: 700px; text-align: left;">
       <MarkdownContent name="summary" />
       <center>
+        <br/>
+        <q-alert color="light">Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!</q-alert>
+        <br/>
         <router-link :to="{ name: 'app' }">
           <q-btn>{{ $t('StartWebApp') }}</q-btn>
         </router-link>
@@ -12,11 +15,11 @@
 </template>
 <script>
 import MainLayout from 'layouts/MainLayout'
-import { QBtn, QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
+import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
 import MarkdownContent from '@/Content'
 export default {
   components: {
-    MarkdownContent, MainLayout, QBtn, QCard, QCardMain, QField, QItem, QItemMain
+    MarkdownContent, MainLayout, QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain
   }
 }
 
