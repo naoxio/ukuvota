@@ -17,7 +17,6 @@ build:
   artifacts:
     paths:
     - dist
-    - server
 
 .deploy: &deploy
   script:
@@ -26,7 +25,7 @@ build:
   - ssh-add <(echo "$DEPLOY_SSH_KEY")
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/www/$DEPLOY_DIR/
+  - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/$DEPLOY_DIR/frontend/
 
 staging:
   <<: *deploy
