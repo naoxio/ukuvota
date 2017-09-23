@@ -19,10 +19,10 @@ build:
     - dist
 
 .deploy: &deploy
-  image: nishidayuya/alpine-rsync
+  image: instrumentisto/rsync-ssh
   script:
   - eval $(ssh-agent -s)
-  - ssh-add $DEPLOY_SSH_KEY
+  - ssh-add <(echo "$DEPLOY_SSH_KEY")
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - rsync -av --delete dist/ ukuvota-deploy@yuca.yunity.org:/var/www/ukuvota/$DEPLOY_DIR/frontend/
