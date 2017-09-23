@@ -63,7 +63,7 @@ Deployment is managed using gitlab ci. The master branch will be tested and buil
 Once you have verified that you haven't broken everything, then you can trigger the deployment to [ukuvota.world](https://ukuvota.world) in the [gitlab environments](https://gitlab.com/ukuvota/ukuvota/environments) view.
 
 ## Contributing
-We would be happy to accept PRs! If you want to work on something, it'd be good to talk beforehand to make sure nobody else is working on it. You can reach us on IRC #ukuvota on Freenode or contacting the current main developer wolif.
+We would be happy to accept PRs! If you want to work on something, it'd be good to talk beforehand to make sure nobody else is working on it. You can reach us on [gitter](https://gitter.im/ukuvota/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link) or contacting the current main developer wolif.
 
 Wolfi's contact:
  - email: [wolfi@disroot.org](mailto: wolfi@disroot.org)
