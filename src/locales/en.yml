@@ -16,9 +16,23 @@ Topic:
 NegativeScoreMultiplier: Negative score multiplier
 ShareableURL: Shareable URL
 StartWebApp: Start Web App
+
+Results:
+  viewRaw: View data table
+  disclaimer: |
+    Please Make sure all the data is valid!
 Next: Next
+Close: Close
 
 Time:
   Days: Days
   Hours: Hours
   Minutes: Minutes
+  days: days
+  day: day
+  hours: hours
+  hour: hour
+  minutes: minutes
+  minute: minute
+  seconds: seconds
+  second: second

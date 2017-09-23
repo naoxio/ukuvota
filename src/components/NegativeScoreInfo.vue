@@ -3,7 +3,7 @@
     <q-icon color="primary" name="fa-info" />
     <q-modal ref="weightingInfo" :content-css="{padding: '50px', maxWidth: '700px'}">
       <MarkdownContent name="negativeScoreWeighting" />
-      <q-btn color="primary" @click="$refs.weightingInfo.close()">Close</q-btn>
+      <q-btn color="primary" @click="$refs.weightingInfo.close()">{{ $t('Close') }}</q-btn>
       <br/><br/>
     </q-modal>
   </div>

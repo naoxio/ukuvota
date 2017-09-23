@@ -16,10 +16,22 @@ Topic:
 NegativeScoreMultiplier: Negativer Score-Multiplikator
 ShareableURL: Freigegebene URL
 StartWebApp: Web App starten
-Next: Weiter
 
+Results:
+  viewRaw: Datentabelle anzeigen
+
+Next: Weiter
+Close: Schließen
 
 Time:
   Days: Tage
   Hours: Stunden
   Minutes: Minuten
+  days: Tage
+  day: Tag
+  hours: Stunden
+  hour: Stunde
+  minutes: Minuten
+  minute: Minute
+  seconds: Sekunden
+  second: Sekunde

@@ -36,35 +36,12 @@
     </q-card>
     <q-card v-if="noResults === false" style="max-width: 700px; text-align: left;">
      <q-card-main>
-       <p class="caption">Raw Data Table</p>
-       <table class="q-table horizontal-seperator loose flipped vertical-separator">
-         <thead>
-           <tr>
-             <th class="text-left red">Name</th>
-             <div v-for="(description, proposal) in proposals" :key="proposal">
-               <th class="red" style="max-width: 150px; overflow-wrap: break-word;">{{ proposal }}</th>
-             </div> 
-           </tr>
-         </thead>
-         <tbody>
-           <div v-for="(object, name, index) in votes" :key="name">
-             <tr>
-               <td class="red" style="font-weight: bold" data-th="Name">{{ name }}</td>
-               <div v-for="(description, proposal) in proposals" :key="proposal">
-                 <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
-               </div> 
-             </tr>
-            </div>
-         </tbody>
-         <tfood>
-           <tr class="text-right">
-              <th class="red">Total</th>
-              <div v-for="(description, proposal) in proposals" :key="proposal">
-                <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
-              </div>
-           </tr>
-         </tfood>
-       </table>
+        <div class="row justify-between">
+          <p> {{ $t('Results.disclaimer')}} </p>
+          <div
+            <DataTable :proposals="proposals" :votes="votes" :results="results" :negativeScore="negativeScore" />
+          </div>
+        </div>
      </q-card-main>
    </q-card>
   </process-layout>
@@ -72,11 +49,13 @@
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
-import { getTopic } from 'src/data.js'
+import { getTopic } from 'src/data'
+import DataTable from '@/DataTable'
 
 export default {
   components: {
     ProcessLayout,
+    DataTable,
     QBtn,
     QCard,
     QCardMain,
@@ -89,33 +68,37 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    let tmp = this
-    getTopic(this.id).then(this.getData).then(function () {
-      tmp.results = {}
-      for (let name in tmp.votes) {
-        tmp.genResults(name)
+    getTopic(this.id).then(this.getData)
+  },
+  methods: {
+    goToResultsRaw () {
+      this.$router.push({ name: 'results-raw', params: { id: this.id } })
+    },
+    getData (topic) {
+      this.votes = topic.votes
+      this.proposals = topic.proposals
+      this.negativeScore = topic.negativeScoreWeight
+      this.orderList()
+    },
+    orderList () {
+      this.results = {}
+      for (let name in this.votes) {
+        this.genResults(name)
       }
-      if (Object.keys(tmp.results).length !== 0) {
+      if (Object.keys(this.results).length !== 0) {
         // calculate the highest score
-        tmp.genMax(tmp.results)
+        this.genMax(this.results)
         // create an ordered lists with the highest score on top
-        let myObj = tmp.results
-        tmp.sortedResults = {}
-        tmp.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
+        let myObj = this.results
+        this.sortedResults = {}
+        this.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
           ..._sortedObj,
           [key]: myObj[key]
         }), {})
       }
       else {
-        tmp.noResults = true
+        this.noResults = true
       }
-    })
-  },
-  methods: {
-    getData (topic) {
-      this.votes = topic.votes
-      this.proposals = topic.proposals
-      this.negativeScore = topic.negativeScoreWeight
     },
     genResults (name) {
       for (let proposal in this.proposals) {
@@ -141,11 +124,6 @@ export default {
     getPercentage (proposal) {
       let score = this.getScore(proposal)
       return score / this.max
-    },
-    getIndiScore (object, proposal) {
-      let score = object[proposal]
-      if (score < 0) score = score * this.negativeScore
-      return score
     },
     getLength (object) {
       return Object.keys(object).length

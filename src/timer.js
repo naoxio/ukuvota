@@ -3,30 +3,30 @@ import { date } from 'quasar'
 export const buildOutput = (days, hours, minutes, seconds) => {
   let output = ''
   if (days > 1) {
-    output += days + ' days '
+    output += days + ' ' + this.$t('Time.days') + ' '
   }
   else if (days === 1) {
-    output += '1 day '
+    output += '1 ' + this.$t('Time.day') + ' '
   }
   if (hours > 1) {
-    output += hours + ' hours '
+    output += hours + ' ' + this.$t('Time.hours') + ' '
   }
   else if (hours === 1) {
-    output += '1 hour '
+    output += '1 ' + this.$t('Time.hour') + ' '
   }
   if (days < 1) {
     if (minutes > 1) {
-      output += minutes + ' minutes '
+      output += minutes + ' ' + this.$t('Time.minutes') + ' '
     }
     else if (minutes === 1) {
-      output += '1 minute '
+      output += '1 ' + this.$t('Time.minute') + ' '
     }
     if (hours < 1) {
       if (seconds > 1) {
-        output += seconds + ' seconds'
+        output += seconds + ' ' + this.$t('Time.seconds')
       }
       else if (seconds === 1) {
-        output += '1 second'
+        output += '1 ' + this.$t('Time.second')
       }
     }
   }

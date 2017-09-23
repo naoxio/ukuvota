@@ -95,12 +95,7 @@
         }
       },
       goTo (route) {
-        this.$router.push({
-          name: route,
-          params: {
-            id: this.id
-          }
-        })
+        this.$router.push({ name: route, params: { id: this.id } })
       }
     },
     mounted () {
