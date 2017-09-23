@@ -68,17 +68,16 @@ export default {
   },
   mounted () {
     this.id = this.$route.params.id
-    getTopic(this.id).then(this.getData)
-  },
-  methods: {
-    goToResultsRaw () {
-      this.$router.push({ name: 'results-raw', params: { id: this.id } })
-    },
-    getData (topic) {
+    getTopic(this.id).then((topic) => {
       this.votes = topic.votes
       this.proposals = topic.proposals
       this.negativeScore = topic.negativeScoreWeight
       this.orderList()
+    })
+  },
+  methods: {
+    goToResultsRaw () {
+      this.$router.push({ name: 'results-raw', params: { id: this.id } })
     },
     orderList () {
       this.results = {}
@@ -95,6 +94,7 @@ export default {
           ..._sortedObj,
           [key]: myObj[key]
         }), {})
+        console.log(this.sortedResults)
       }
       else {
         this.noResults = true

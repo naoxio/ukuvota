@@ -45,11 +45,6 @@ export const getProposals = (id) => {
   })
 }
 
-export const getProposal = (id, title) => {
-  return -1
-  // return gun.get(id).get('proposals').get(title)
-}
-
 export const setVotes = (id, name, emojis) => {
   return getTopic(id).then(topic => {
     // add proposal
@@ -58,6 +53,15 @@ export const setVotes = (id, name, emojis) => {
     else return -2
     // put them back
     return db.put(topic)
+  }).then().catch(err => {
+    console.log(err)
+    return -1
+  })
+}
+
+export const getVotes = (id) => {
+  return getTopic(id).then(topic => {
+    return topic.votes
   }).then().catch(err => {
     console.log(err)
     return -1
