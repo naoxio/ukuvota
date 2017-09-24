@@ -4,7 +4,7 @@
       <MarkdownContent name="summary" />
       <center>
         <br/>
-        <q-alert color="light">$t('Disclaimer'</q-alert>
+        <q-alert color="light">{{ $t('Disclaimer') }}</q-alert>
         <br/>
         <router-link :to="{ name: 'app' }">
           <q-btn>{{ $t('StartWebApp') }}</q-btn>
