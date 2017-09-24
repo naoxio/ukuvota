@@ -1,16 +1,24 @@
+Disclaimer: 'Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!'
+
 Proposal:
   time:
     label: Proposal time ends in
-    selectLabel: Proposal Collection Time 
+    selectLabel: Proposal collection Time
+  exists: The proposal already exists'
+  empty: Proposal is empty
+  add: Add Proposal
+
+Proposals:
+  current: Current Proposals
 
 Voting:
   time:
     duration: Voting time will last for
+    ends: Voting time ends in
     selectLabel:  Voting Time
 
 Topic:
   questionLabel: Topic Question
-  descriptionLabel: Description (optional)
   errorLabel: Please add a Topic Question
 
 NegativeScoreMultiplier: Negative score multiplier
@@ -18,12 +26,31 @@ ShareableURL: Shareable URL
 StartWebApp: Start Web App
 
 Results:
+  title: Results
+  noResults: noResults
   viewRaw: View data table
-  disclaimer: |
-    Please Make sure all the data is valid!
+  disclaimer: Please Make sure all the data is valid!
+  noOneVoted: no one voted\
+  tryAgain: try again, this time tell your friends!
+
+HighlightTopScores: Highlight Top Scores
+
+## Buttons
 Next: Next
 Close: Close
+Submit: Submit
+Add: Add
 
+## Labels
+DescriptionLabel: Description (optional)
+
+## Name specific
+Name:
+  label: Your Name or Persistent Alias
+  exists: This Name Already Exists
+  empty: Name is empty
+
+## Time specific
 Time:
   Days: Days
   Hours: Hours

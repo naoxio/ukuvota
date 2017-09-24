@@ -1,16 +1,24 @@
+Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'
+
 Proposal:
   time:
     label: Vorschlagszeit endet in
-    selectLabel: Zeit für die Vorschlagssammlung 
+    selectLabel: Zeit für die Vorschlagssammlung
+  exists: Der Vorschlag existiert bereits
+  empty: Der Vorschlag ist leer
+  add: Vorschlag hinzufügen
+
+Proposals:
+  current: Aktuelle Vorschläge
 
 Voting:
   time:
     duration: Dauer der Abstimmungszeit
+    ends: Abstimmungszeit endet in
     selectLabel: Abstimmungszeit
 
 Topic:
   questionLabel: Frage zum Thema
-  descriptionLabel: Beschreibung (Optional)
   errorLabel: Bitte fügen Sie eine Frage zum Thema hinzu
 
 NegativeScoreMultiplier: Negativer Score-Multiplikator
@@ -18,11 +26,32 @@ ShareableURL: Freigegebene URL
 StartWebApp: Web App starten
 
 Results:
+  title: Ergebnisse
+  noResults: Keine Ergebnisse
   viewRaw: Datentabelle anzeigen
+  disclaimer: Bitte stellen Sie sicher, dass alle Daten gültig sind!
+  noOneVoted: niemand hat gewählt
+  tryAgain: versuche es noch einmal, diesmal sag es deinen Freunden!
 
+HighlightTopScores: Markiere höchste Punktzahlen
+
+## Buttons
 Next: Weiter
 Close: Schließen
+Submit: Abschicken
+Add: Hinzufügen
 
+## Labels
+DescriptionLabel: Beschreibung (Optional)
+
+## Name Specific
+Name:
+  label: Ihr Name oder persistenter Alias
+  exists: Dieser Name existiert bereits
+  empty: Name ist leer
+
+
+## Time Specific
 Time:
   Days: Tage
   Hours: Stunden

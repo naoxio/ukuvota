@@ -80,14 +80,14 @@
         this.proposalTimer = formatTime(this.topic.proposalTime)
         if (this.proposalTimer !== -1) {
           this.checkCorrectRoute('collect')
-          this.votingTimeLabel = 'Voting Time Will Last For'
+          this.votingTimeLabel = this.$t('Voting.time.duration')
           this.votingTimer = this.topic.votingInterval
         }
         else if (this.proposalTimer === -1) {
           this.votingTimer = formatTime(this.topic.votingTime)
           if (this.votingTimer !== -1) {
             this.checkCorrectRoute('vote')
-            this.votingTimeLabel = 'Voting Time Ends In'
+            this.votingTimeLabel = this.$t('Voting.time.ends')
           }
           else if (this.votingTimer === -1) {
             this.checkCorrectRoute('results')
@@ -116,7 +116,7 @@
         topic: '',
         urlpath: window.location.href,
         proposalTimer: '',
-        votingTimeLabel: 'Voting time will last for',
+        votingTimeLabel: this.$t('Voting.time.duration'),
         votingTimer: '',
         negativeScoreWeightLabel: ''
       }

@@ -2,7 +2,7 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field label="Add Proposal"></q-field></h5>
+        <h5><q-field :label="$t('Proposal.add')"></q-field></h5>
         <q-field :error-label="getProposalError()" >
           <q-input
             v-model="newProposal"
@@ -10,15 +10,15 @@
             :error="proposalExists || proposalEmpty"
           />
         </q-field>
-        <q-input v-model="proposalDescription" float-label="Description (optional)" />
+        <q-input v-model="proposalDescription" :float-label="$t('DescriptionLabel')" />
         <div class="row justify-end">
-          <q-btn @click="addProposal">Add</q-btn>
+          <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
         </div>
       </q-card-main>
     </q-card>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field label="Current Proposals"></q-field></h5>
+        <h5><q-field :label="$t('Proposals.current')"></q-field></h5>
       </q-card-main>
       <q-list>
         <div v-for="(description, title) in proposals" :key="title">
@@ -58,8 +58,8 @@ export default {
       })
     },
     getProposalError () {
-      if (this.proposalExists) return 'The Proposal Already Exists'
-      else if (this.proposalEmpty) return 'Proposal is Empty'
+      if (this.proposalExists) return this.$t('Proposal.exists')
+      else if (this.proposalEmpty) return this.$t('Proposal.empty')
     },
     addProposal () {
       let error = false

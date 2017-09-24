@@ -3,12 +3,12 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <div v-if="noResults">
-          <p class="caption">No Results :(</p>
+          <p class="caption">{{ $t('Results.noResults') }} :(</p>
         </div>
         <div v-else>
           <div class="row justify-between">
-            <p class="caption">Results!</p>
-            <q-checkbox v-model="highlightTopScores" label="Highlight Top Scores" />
+            <p class="caption">{{ $t('Results.title') }}!</p>
+            <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
           </div>
         </div>
         <div v-if="noResults">
@@ -17,9 +17,9 @@
               <router-link :to="{ name: 'create' }">
                 <img id="noresults" src="statics/noresults.svg"></img>
               </router-link>
-              <p style="font-size: 50px">no one voted</p>
+              <p style="font-size: 50px">{{ $t('Results.noOneVoted') }}</p>
                 <router-link :to="{ name: 'create' }">
-                  <p style="font-size: 30px">try again, this time tell your friends!</p>
+                  <p style="font-size: 30px">{{ $t('Results.tryAgain') }}</p>
                 </router-link>
             </q-item-main>
           </q-item>

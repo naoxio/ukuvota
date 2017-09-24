@@ -25,7 +25,7 @@
             </q-alert>
           </template>
           <q-field 
-          label="Your Name or Persistent Alias"
+          :label="$t('Name.label')"
           :error-label="getNameError()"
             >
           <q-input
@@ -37,7 +37,7 @@
         </h6>
        </br>
         <div style="text-align: right">
-          <q-btn @click="submit()" icon="arrow forward">Submit</q-btn>
+          <q-btn @click="submit()" icon="arrow forward">{{ $t('Submit') }}</q-btn>
         </div>
       </q-card-main>
     </q-card>
@@ -72,8 +72,8 @@ export default {
       else return false
     },
     getNameError () {
-      if (this.nameExists) return 'This Name Already Exists'
-      else if (this.nameEmpty) return 'Name is Empty'
+      if (this.nameExists) return this.$t('Name.exists')
+      else if (this.nameEmpty) return this.$t('Name.empty')
     },
     select (title, val) {
       this.$set(this.tmpemojis, title, val)

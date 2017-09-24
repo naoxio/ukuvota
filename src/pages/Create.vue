@@ -17,7 +17,7 @@
           :label="$t('Voting.time.selectLabel')"
           v-model="voting"
          />
-        <q-input type="textarea" :float-label="$t('Topic.descriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
+        <q-input type="textarea" :float-label="$t('DescriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
           <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
         </div>

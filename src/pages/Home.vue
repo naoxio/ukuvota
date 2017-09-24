@@ -4,7 +4,7 @@
       <MarkdownContent name="summary" />
       <center>
         <br/>
-        <q-alert color="light">Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!</q-alert>
+        <q-alert color="light">$t('Disclaimer'</q-alert>
         <br/>
         <router-link :to="{ name: 'app' }">
           <q-btn>{{ $t('StartWebApp') }}</q-btn>
