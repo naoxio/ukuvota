@@ -15,9 +15,7 @@
 <script>
   import LangSwitcher from '@/LangSwitcher'
   import MainMenu from '@/Menu'
-  import {
-    QLayout
-  } from 'quasar'
+  import { LocalStorage, uid, QLayout } from 'quasar'
   
   export default {
     name: 'index',
@@ -28,6 +26,13 @@
     },
     data () {
       return {}
+    },
+    mounted () {
+      let sessionID = LocalStorage.get.item('SessionID')
+      if (sessionID === null) {
+        sessionID = uid()
+        LocalStorage.set('SessionID', sessionID)
+      }
     }
   }
 </script>
