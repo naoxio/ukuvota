@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-center items-center content-stretch">
     <div class="item">
-      <img @dblclick="rotateLogoFast" @click="rotateLogoSlow" id="logo" src="statics/logo.png" width="92px" />
+      <img @dblclick="rotateLogoFast" id="logo" src="statics/logo.png" width="92px" />
     </div>
     <div class="item">
       <p class="title">Ukuvota</p>
