@@ -94,7 +94,7 @@ export default {
         let tmp = this
         setVotes(this.id, this.name, this.tmpemojis).then(log => {
           if (log === -2) tmp.nameExists = true
-          tmp.nameExists = false
+          else tmp.nameExists = false
           tmp.submitName = tmp.name
           tmp.name = ''
           tmp.submited = true

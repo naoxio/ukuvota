@@ -49,7 +49,7 @@ export const setVotes = (id, name, emojis) => {
   return getTopic(id).then(topic => {
     // add proposal
     if (topic.votes === undefined) topic.votes = {}
-    else if (topic.votes[name] === undefined) topic.votes[name] = emojis
+    if (topic.votes[name] === undefined) topic.votes[name] = emojis
     else return -2
     // put them back
     return db.put(topic)
