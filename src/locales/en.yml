@@ -3,7 +3,7 @@ Disclaimer: 'Disclaimer: This is just a prototype, there is no guarantee while u
 Proposal:
   time:
     label: Proposal time ends in
-    selectLabel: Proposal collection Time
+    selectLabel: Proposal Time
   exists: The proposal already exists'
   empty: Proposal is empty
   add: Add Proposal
@@ -27,10 +27,10 @@ StartWebApp: Start Web App
 
 Results:
   title: Results
-  noResults: noResults
+  noResults: No Results
   viewRaw: View data table
   disclaimer: Please Make sure all the data is valid!
-  noOneVoted: no one voted\
+  noOneVoted: no one voted
   tryAgain: try again, this time tell your friends!
 
 HighlightTopScores: Highlight Top Scores

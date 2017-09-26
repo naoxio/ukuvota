@@ -3,7 +3,7 @@ Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie währe
 Proposal:
   time:
     label: Vorschlagszeit endet in
-    selectLabel: Zeit für die Vorschlagssammlung
+    selectLabel: Vorschlagszeit
   exists: Der Vorschlag existiert bereits
   empty: Der Vorschlag ist leer
   add: Vorschlag hinzufügen
