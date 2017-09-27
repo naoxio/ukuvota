@@ -11,3 +11,4 @@ cordova/plugins
 yarn-error.log
 mydb
 **/log.txt
+config.json
