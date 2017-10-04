@@ -104,7 +104,7 @@
             'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
             'negativeScoreWeight': this.negativeScoreWeight,
             'proposals': {
-              'Change nothing': 'keep things the way they are',
+              'Status quo': 'keep things the way they are',
               'Repeat process': 'reapeat the process and look for other options'
             },
             'emojis': {
