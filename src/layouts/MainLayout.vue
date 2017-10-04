@@ -1,10 +1,10 @@
 <template>
-  <q-layout ref="layout" view="lHh Lpr fff">
+  <q-layout ref="layout" view="hHh Lpr fff">
+    <MainMenu slot="header" />
     <div class="layout-view">
       <div class="layout-padding">
+        </br>
         <center>
-          <MainMenu />
-          <br/>
           <slot />
         </center>
       </div>
@@ -14,7 +14,7 @@
 
 <script>
   import LangSwitcher from '@/LangSwitcher'
-  import MainMenu from '@/Menu'
+  import MainMenu from '@/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
   
   export default {

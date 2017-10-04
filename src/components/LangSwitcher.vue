@@ -1,5 +1,5 @@
 <template>
-  <q-select inverted type="list" v-model="locale" :options="langOptions"></q-select>
+  <q-select type="list" v-model="locale" :options="langOptions"/>
 </template>
 
 <script>
@@ -24,10 +24,10 @@
     }
   }
 </script>
+<style lang="stylus" scoped>
 
-<style lang="stylus">
-  .q-select
-    font-size 1em
-    min-height 1em
-    min-width 2em
+.q-if::before
+  display none
+.q-if::after
+  display none
 </style>
