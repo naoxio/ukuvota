@@ -49,6 +49,15 @@
 </script>
 
 <style lang="stylus" scoped>
+  @media screen and (max-width: 300px)
+    .q-icon
+      font-size 1.5em
+    .imgbtn
+      width 48px  
+  
+  .q-icon
+    font-size 1.5em
+  
   .imgbtn
     padding 0 0.5em 0 0.5em
 
