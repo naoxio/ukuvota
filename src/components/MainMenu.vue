@@ -1,16 +1,16 @@
 <template>
   <div class="nav row">
-      <q-btn class="imgbtn" @click="goHome" color="primary" flat>
-        <img src="statics/logo.png" width="48px" />
+      <q-btn @click="goTo('home')" color="primary" flat>
+        <img src="statics/icons/home.png" />
       </q-btn>
-      <q-btn @click="launch('https://douginamug.gitbooks.io/cooperative-decision-making-that-scales/content/')" color="primary" flat>
-        <q-icon name="book" />
+      <q-btn @click="goTo('manual')" color="primary" flat>
+        <img src="statics/icons/book.png" />
       </q-btn>
       <q-btn @click="launch('https://gitlab.com/ukuvota/ukuvota/')" color="primary" flat>
-        <q-icon name="fa-gitlab"/>
+        <img src="statics/icons/gitlab.png" />
       </q-btn>
-      <q-btn class="imgbtn" @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
-        <img src="statics/icons/gitter.png" width="48px" />
+      <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
+        <img src="statics/icons/gitter.png" />
       </q-btn>
       <div class="col">
       </div>
@@ -36,8 +36,8 @@
       launch (url) {
         openURL(url)
       },
-      goHome () {
-        this.$router.push({name: 'home'})
+      goTo (name) {
+        this.$router.push({name: name})
       }
     },
     data () {
@@ -48,22 +48,14 @@
   }
 </script>
 
-<style lang="stylus" scoped>
-  @media screen and (max-width: 300px)
-    .q-icon
-      font-size 1.5em
-    .imgbtn
-      width 48px  
-  
-  .q-icon
-    font-size 1.5em
-  
-  .imgbtn
-    padding 0 0.5em 0 0.5em
-
+<style lang="stylus" scoped>  
   .nav
     width 100%
     background-color white
+    .q-btn
+      width 48px
+      height auto
+      padding 0.7em
 
   .lang
     margin-left 1em

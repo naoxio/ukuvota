@@ -12,6 +12,10 @@ const content = {
   negativeScoreWeighting: {
     en: require('content/negativeScoreWeighting.en.md'),
     de: require('content/negativeScoreWeighting.de.md')
+  },
+  manual: {
+    en: require('content/manual/manual.en.md'),
+    de: require('content/manual/manual.de.md')
   }
 }
 

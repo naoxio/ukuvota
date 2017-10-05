@@ -4,9 +4,7 @@
     <div class="layout-view">
       <div class="layout-padding">
         </br>
-        <center>
-          <slot />
-        </center>
+        <slot />
       </div>
     </div>
   </q-layout>

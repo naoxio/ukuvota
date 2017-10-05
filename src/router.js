@@ -30,6 +30,7 @@ export default new VueRouter({
 
     // routes that load components
     { name: 'home', path: '/', component: load('Home') },
+    { name: 'manual', path: '/manual', component: load('Manual') },
     { name: 'create', path: '/app/create', component: load('Create') },
     { name: 'collect', path: '/app/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/app/:id/vote', component: load('Vote') },

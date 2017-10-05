@@ -1,0 +1,177 @@
+# Intro
+* pyramids and smartphones → hierarchies and markets → domination and competition
+* cooperation → groups and networks → no pyramids nor smartphones 
+* how to get both? improve groups → fundamental coordination process → decision-making
+
+---
+
+# Decision-making
+* entire framework-of-change (creative p-f and eliminative d-m) → just d-m
+* options presented → opinions expressed → option selected
+
+Decisions are reflections of interests, indications of action and the product of decision-making. Decision-making is the eliminative process in which available options are reduced  is reflected in the origin of 'decision' from the latin verb _decidere_ meaning 'to cut off'. Having options to decide from necessarily precedes decision-making, with the creative process for producing options being referred to as proposal-forming. Whilst proposal-forming and decision-making are both required for a complete process-of-change, the later is the point of coordination where possible options are turned into a plan.
+
+In a group decision-making has a general form of individuals expressing their opinions on the options then processing the opinions (through combination and comparison) to arrive at a decision.
+
+This piece will first define what meant by decision-making that is cooperative and scalable. Then the major decision-making approaches of majority-preference and unanimous-consent are evaluated. Next, several elements are presented as being intrinsically scalable and cooperative and a specific example is given. Finally, limitations and other considerations are discussed befre concluding.
+
+
+
+---
+
+# Cooperative
+
+Self-determination is taken to be the
+
+
+Cooperation is taken to be the quality of interaction between self-determined individuals who in treating each other equally act towards their collective-interest. The collective-interest is considered to be the combination of individual self-interests in which the avoidance of resistance is more important than support. Cooperative decision-making treats individuals equally and finds the decision closest to the collective-interest.
+
+The first condition for cooperation is that individuals are self-determined, that they act in accordance with their own self-interests and are free to associate and dissociate by choice. In contrast, coercive interactions mask self-interest by threat, force or authority. The self-interest of an individual is thought of as an aggregate of an their interests and may include the welfare of others: an internally self-determined individual can be externally selfish or selfless.
+
+The second condition for people to cooperate is that they treat each other as equals. Clearly people are different in countless ways and equality does not, can not, mean total symmetry. Instead, equality is the equal valuation of things that can be valued equally such as self-interest. Cooperative individuals treating the individual self-interests equally act towards their mutual collective-interest. In the case where self-interests are perfectly aligned, acting towards the collective-interest is unsurprising. However cooperation implies the pursuit of collective-interest even when an individual could profit at the collective expense, an illustrative scenario of this being the Prisonners Dilemma. 
+
+
+	
+In using 'resistance' to indicate prospective suffering, 'support' to indicate prospective happiness and 'acceptance' to indicate neither prospective suffering nor happiness, the most cooperative outcome is the one with resistanc << acceptance < support.
+
+ Global coordination in collectives past the small-scale is not a new challenge and this section describes a basis of growth and approaches for growth. >>>
+ 
+ For a collective of any scale to grow, the rate of individuals joining (association) must exceed that of individuals leaving (dissociation), both of which relate to self-interest. An individual is only really motivated to join a collective if they believe it supports the realisation of an interest more effectively than they could by themselves. <<< On the basis that any collective has potential Thus the rate of joining depends on the performance >>>
+
+and joining will help realise it. Other factors affecting the i The primary reason for an individual to join a collective is that they can more effectively realise a self-interest. that a In order for an individual to be sufficiently motivated to join a collective, they must believe that it more effectively realises a supported interest than if they were to remain alone. Assuming that for a given collective there are countless individuals with shared interests, the major factor for those individuals actually joining is the perceived functionality of the collective. Other factors include exposure and ease of joining.
+
+Once associated an individual is likely to find and fulfill secondary interests, often those of a social nature. Thus the main reason for an individual to leave a collective is if it begins to generally resist their interests or The absence of support, if persistent, can also become a reason for dissociation since the indiviual may realise their interests better elsewhere.
+
+# Scalability
+* scalability about quantity, specifically growth
+* growth: association - dissociation
+* association: support
+* dissociation: not resistance and non-zero support
+* scalability ~~ cooperativity (R<<A<S)
+* finding cooperative outcome depends on scale
+* small-scale → mental models → informal
+* medium-sclae → space and time limits → semi-formal
+* large-scale → time, space and brain limits → formal
+
+
+In a cooperative scenario the scope for resistance is limited by dissociation, the point at which an individuals self-interest is better served elsewhere. For a decision to lead to action, the level support i individuals must chose to actwhilst still associated there is clearly non-zero value in people voluntarily increasing their. <<< support is necessary in a voluntary world, decision get done and decisions are functional. IMPORTANT! >>>
+
+Hence growth, when joining exceeds leaving, has the same basis as cooperation: Resistance << Acceptance < Support.
+
+This restriction is due not only to issues of time and space but also cognitive capacity. At a medium-scale (~50) where some mutual understanding is still present, semi-formal meetings may prove sufficient for collective coordination.
+
+
+
+Past a certain scale, the majority of individuals will never meet with social connections and mental models being primarily localised: global coordination cannot take the form of a meeting and the process for decision-making must be formal: clear, unambiguous and predetermined.
+
+Thus for a decision-making to be cooperative and scalable, it must be formal and distributeable.
+
+
+## Current approaches
+* majority-rule
+* unanimous consent → no veto 
+* veto privileges the status quo as an option and individuals who support it
+* equality between individuals
+
+The two major decision-making approaches used by groups are 'majority-rule' and 'consensus'. Both present proposals against the implicit backdrop of the status quo. Majority-rule decides in favor of the proposal if it gains the support an absolute majority, over half of the votes. Consensus decides in favor of the proposal if it gains the support of a unanimity, all of the votes. Decisions made by a majority risk 
+
+* if status quo and available proposals not acceptable, should not be forced to choose
+* whilst resources are finite, possibilites are not → best solution perhaps still to be found
+* "postpone decision, find other options"
+* NOTA → I want change, but not any of the given options
+* NOTA represents 'all other options' and thus there is an acceptable option for all
+	
+	
+* s.q. as implicit default leads to conceptual elevation (and with supermajority/unanimity, procedural elevation) 
+* presenting s.q. as positive not passive → equality between options
+* equality between individuals
+
+
+Plurality voting even conceals the majority preference: voters whos favorite option is not generally popular often voted for a less-favored option in order not to 'waste their vote' (favorite betrayal) and the presence of similar options will make them all less likely to be selected since they 'split the vote' (the spoiler effect).
+
+In order to identify the most cooperative option individuals must be able to freely and honestly express their opinion, whether they resist, accept or support. Voting, the formal expression of opinion, Latin _votum_ "a vow" , has three established methods: nominal, ordinal and cardinal. naming favorite, ranking or scoring.
+
+### voting
+#### Score voting
+* coop outcome is option with R << A < S
+* must be able to express R, A & S on each option
+* expressing opinion on options independently = score voting
+	* THE CRITIQUE MIGHT BE BETTER ELSEWHERE
+	* choose-one 
+	* ranking forces compared expression → resistance and support merge into linear preference
+#### expression range
+* approval voting, simplest score vote → 2 pts on scale: y/n, for/against, approval/disapproval = ambiguous
+* must have at least 3 pt scale → more allows magnitude of expression → cognitive limit
+* clear indication of scores → numerical/lexical/pictorial
+
+What you can express = type of voting.
+
+Voting, the formal expression of opinion, has three established methods: nominal, ordinal and cardinal. naming favorite, ranking or scoring.
+
+In order to identify the most cooperative outcome it must be able to express active resistance and active support.
+
+Naming favorite only indicates relative preference to rest and obscures all opinion of rest.
+
+Ranking only indicates relative preference, still can't tell when people stop liking and start disliking
+
+Scoring allows independent expression of options: people express indepe
+
+Voting can be thought of as a type of game for coordination: participants express their opinions on options, the opinions are combined and an option is selected using a rule. Whilst many voting methods are competitive, gathering criticism from some cooperative groups, competitiveness is not an intrinsic property of all voting implementations. In fact, at scale voting provides the opportunity for equal participation that meeting or conversation based methods can't.  Voting facilitates divergent and free-flowing thought through the creation of separate proposals, instead of iteratively amending a proposal which suffers from anchoring and compromise.
+
+In score voting systems (a.k.a 'range' or 'rated' voting) voters express their opinion on options independently using set of values (e.g. 'rate each from 0 to 5'). participants are thus capable of indicating their preference order and preference magnitude. In contrast, rank voting systems (e.g. 'rank from first to last') only allows participants to indicate their preference order and single vote systems (e.g. 'select one') only allows participants to indicate their favourite option (intrinsically competitive). As such score voting systems provide the greatest degree of expressiveness, permitting more honest expression and thus greater trust in the outcome. Further related to expressiveness, score voting systems do not actively encourage manipulation.[^b]
+
+Rank voting and single vote systems force voters into zero-sum comparison of options, for example you cannot rank two options 1st. This leads to the effect of favourite betrayal/compromise, where a voter does not vote for their favourite option (first) as it is not popular and might allow a resisted option being selected. Another negative effect of rank and single vote systems is splitting, where similar options less likely to win by dividing voters.
+
+**Score voting allows participants to express themselves honestly by not incentivising manipulation.**
+
+There are three main types of system differentiated by how participants can express themselves: single, rank and rating. 
+
+Single vote systems: _'please select one'_. These are the simplest systems with participants only indicating their favorite option. The most well-known version being 'first-past-the-post' or 'plurality', which for many people is synonymous with voting itself. One major flaw is splitting, where similar options divide the voters, thus reducing the chance of either option being selected! Another flaw is compromise - also known as favorite betrayal - where supporters of less popular options vote for an option that is more likely to win in order not to 'waste' their vote. These flaws lead to an incorrect picture of true participant opinion.
+
+Rank voting systems: _'please rank options from first to last'_.  These are the most complex systems, participants indicate their preference order of options, thus also indicating their favorite. Score voting systems allow participants to indicate their preference magnitude, thus also indicating their preference order and their favorite. The differences can be further illustrated with an example
+
+In score voting systems (a.k.a 'range' or 'rated' voting) voters express their opinion on options independently using set of values (e.g. 'rate each from 0 to 5'). participants are thus capable of indicating their preference order and preference magnitude. In contrast, rank voting systems (e.g. 'rank from first to last') only allows participants to indicate their preference order and single vote systems (e.g. 'select one') only allows participants to indicate their favourite option (intrinsically competitive). As such score voting systems provide the greatest degree of expressiveness, permitting more honest expression and thus greater trust in the outcome. Further related to expressiveness, score voting systems do not actively encourage manipulation.[^b]
+
+
+
+* neither voting for favorite nor ranking allow honest expression, often encourage dishonesty
+* independent assessment of options → capacity for honest expression
+* 
+
+---
+
+#### Complete range
+* full and honest expression
+
+
+Scalability is the ability of a process to accommodate quantity and grow sustainably. In the context of cooperative-decision making this means delivering cooperative decisions whilst simultaneously allowing the collective to grow.
+
+For a collective of any scale to grow, the rate of individuals joining (association) must exceed that of individuals leaving (dissociation). The reason for an individual to associate must be the belief that the collective can more effectively help them fulfill their self-interests. This is the case if an individual has general support for the collective activity. Once associated an individual is likely to develop and fulfill secondary interests, often those of a social nature, providing extra reason to remain associated. The reason for an individal to dissociate from a collective is similar to that for association: the belief that doing so can more effectively help them fulfill their primary self-interests. This is the case if they have acute resistance or persistent absence of support for the collective activity. Taken together, growth - when association exceeds dissociation - is seen to have the same basis has as cooperation: Resistance << Acceptance < Support.  
+
+The bottom-up nature of collectives means they typically start at a very small scale of roughly 10 individuals. At this scale individuals can easily socialize and it is possible for all to attend meetings and meaningfully participate. This ability to develop strong social connections and a common mental model of the world leads to comprehensive mutual understanding: individuals can coordinate autonomously by knowing the interests of the others and if resistance does arise, it can often be quickly resolved close to the source. 
+
+As a collective gets bigger, the ability for individuals to socialize or meaningfully participate in meetings rapidly diminishes. Social connections and shared mental models will always exist at a local level but cannot span to a global level due to restrictions in time, space and cognitive capacity. To emphasize this point, in a sufficiently large collective the majority of individuals could never even meet face-to-face. For a large-scale collective to coordinate and make decisions globally, it must use formal and physically decentralized processes.
+
+Majority-rule interprets the principle of quality, that each individuals should be treated equally, to mean that the option most people prefer should be selected. The idea that a minority should have their preference seems superficially counterintuitive and is often thought to be the definition of tyrrany. This approach is classically seen in binary 'yes/no' situations such as referendums where a single proposal is presented and 'yes' stands for its adoption, 'no' for its rejection.
+
+Since an individual can only indicate their comparative preference, the polarity and magnitude of their self-interest is unknown and as such the expressed collective-interest is misleading. For example a person voting 'yes' might support 'no' only fractionally less and a person voting 'no' might vehemently resist 'yes'. A worst-case scenario can be imagined when an option is selected due to the mild preference of 51 % against the strong preference of the 49 %. In cooperative situations where the minority are not coerced into action, the likelihood of a decision like this being implemented is slim and the number of dissociating individuals high. Additionally, there could be another proposal or compromise that almost the entire voting base would support but they are unable to express this.
+
+Unanimous-consent interprets the principle of equality to mean that no individual should have to endure a decision they strongly oppose. This stems perhaps from a belief in social justice. This approach is commonly seen in deliberative assemblies where proposals are collectively developed through discussion and amendment until no outstanding concerns remain. If concerns do remain, then the proposal is essentially put to a binary decision in which people can express various degrees of support and resistance to the point of veto: if there is no veto the proposal passes.
+
+As for majority-rule, participants can't express that they don't want the status quo nor the proposal. The ability to collectively develop is also a strict limitation to scale. Veto elevates position of those favoring the status quo and introduces vulnerability for saboteurs. Implies belief consensus option exists when in fact none might.
+
+, to _be cooperative_ and _to cooperate_
+
+What would this project have to be in order for it to be one to which I could give my 100% commitment to it?
+
+What are my dreams that could make this project worthwhile for me to be deeply committed to?
+
+T3his was the best possible, conceivable way I could have spent my time
+
+bodhi: hates waste
+frank: appreciates needs
+
+				coercion
+autonomy		competition or cooperation
+equality		competition or cooperation
+acceptability	cooperation

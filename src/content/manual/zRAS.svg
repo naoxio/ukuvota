@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 299.0943 79.840004"
+   enable-background="new 0 0 64 64"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="zRAS.svg"
+   inkscape:version="0.92.1 r"
+   width="299.0943"
+   height="79.840004">
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="731"
+     id="namedview14"
+     showgrid="false"
+     inkscape:zoom="0.921875"
+     inkscape:cx="88.334422"
+     inkscape:cy="-26.073203"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg12"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:25px;font-family:palatino;-inkscape-font-specification:palatino;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="75.122391"
+     y="38.352001"
+     id="text4686"><tspan
+       sodipodi:role="line"
+       id="tspan4684"
+       x="75.122391"
+       y="38.352001"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;font-family:palatino;-inkscape-font-specification:palatino">&lt;&lt;</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:25px;font-family:palatino;-inkscape-font-specification:palatino;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="201.10617"
+     y="38.352001"
+     id="text4694"><tspan
+       sodipodi:role="line"
+       id="tspan4692"
+       x="201.10617"
+       y="38.352001"
+       style="font-size:32px">&lt;</tspan></text>
+  <g
+     id="g4574"
+     transform="translate(4.5017445,-1.9999987)">
+    <circle
+       id="circle4551"
+       r="30"
+       cy="32"
+       cx="32"
+       style="fill:#ffdd67" />
+    <g
+       id="g4559"
+       style="fill:#664e27">
+      <circle
+         id="circle4553"
+         r="5"
+         cy="24.6"
+         cx="20.5" />
+      <circle
+         id="circle4555"
+         r="5"
+         cy="24.6"
+         cx="43.5" />
+      <path
+         id="path4557"
+         d="m 19.4,45.8 c 8.1,-5.7 17.1,-5.6 25.2,0 1,0.7 1.8,-0.5 1.2,-1.6 -2.5,-4 -7.4,-7.7 -13.8,-7.7 -6.4,0 -11.3,3.6 -13.8,7.7 -0.6,1.1 0.2,2.3 1.2,1.6"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:25px;font-family:palatino;-inkscape-font-specification:palatino;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="-0.352"
+     y="75.072006"
+     id="text4705"><tspan
+       sodipodi:role="line"
+       id="tspan4703"
+       x="-0.352"
+       y="75.072006">Resistance</tspan></text>
+  <g
+     id="g4701"
+     transform="translate(129.47599,101.05085)">
+    <circle
+       style="fill:#ffdd67"
+       id="circle2"
+       r="30"
+       cy="-71.05085"
+       cx="23.322035" />
+    <g
+       style="fill:#664e27"
+       transform="translate(-8.6779661,-103.05085)"
+       id="g10">
+      <circle
+         id="circle4"
+         r="5"
+         cy="27.6"
+         cx="20.5" />
+      <circle
+         id="circle6"
+         r="5"
+         cy="27.6"
+         cx="43.5" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8"
+         d="M 38.9,48 H 25.1 c -1.5,0 -1.5,-4 0,-4 h 13.7 c 1.6,0 1.6,4 0.1,4" />
+    </g>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:25px;font-family:palatino;-inkscape-font-specification:palatino;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="112.32841"
+     y="75.200005"
+     id="text4709"><tspan
+       sodipodi:role="line"
+       id="tspan4707"
+       x="112.32841"
+       y="75.200005">Acceptance</tspan></text>
+  <g
+     id="g4682"
+     transform="translate(237.09431,-2)">
+    <circle
+       id="circle4659"
+       r="30"
+       cy="32"
+       cx="32"
+       style="fill:#ffdd67" />
+    <g
+       id="g4667"
+       style="fill:#664e27">
+      <circle
+         id="circle4661"
+         r="5"
+         cy="26.6"
+         cx="20.5" />
+      <circle
+         id="circle4663"
+         r="5"
+         cy="26.6"
+         cx="43.5" />
+      <path
+         id="path4665"
+         d="m 44.6,40.3 c -8.1,5.7 -17.1,5.6 -25.2,0 -1,-0.7 -1.8,0.5 -1.2,1.6 2.5,4 7.4,7.7 13.8,7.7 6.4,0 11.3,-3.6 13.8,-7.7 0.6,-1.1 -0.2,-2.3 -1.2,-1.6"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:25px;font-family:palatino;-inkscape-font-specification:palatino;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="240.16281"
+     y="75.344002"
+     id="text4713"><tspan
+       sodipodi:role="line"
+       id="tspan4711"
+       x="240.16281"
+       y="75.344002">Support</tspan></text>
+</svg>
