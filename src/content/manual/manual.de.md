@@ -140,29 +140,3 @@ To outline a specific format for this general form, imagine a large group (>50) 
 
 ## Discussion
 Cooperative decision-making can only really survive in a cooperative environment and how that is constructed remains to be seen. One compelling version is a federation of nested collectives. How do important decisions get escalated, especially to the global level? Too many global decisions could lead to fatigue and too few to frustration. How are proposals short-listed for ultimate decision? Too many leads to fatigue and too few to one of the control options. The answer to many of these question undoubtably rests in the creation and use of appropriate web-based or wireless software (free, encrypted and open-source, naturally).
-
-<style>
-	body {
-		max-width: 540px;
-		margin: auto;
-	}
-	h1 {
-		font-size: 2em;
-		text-align: center;
-	}
-	h2 {
-		font-size: 1.5em;
-	}
-	h3 {
-		font-size: 1.2em;
-	}
-	h4 {
-		font-size: 1em;
-		font-style: bold;
-	}
-	@media screen and (max-width: 320px ) {
-		#zRAS {
-			width: 100%;
-		}
-	}
-</style>

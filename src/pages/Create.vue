@@ -12,11 +12,11 @@
         <TimeSelector 
           :label="$t('Proposal.time.selectLabel')"
           v-model="proposal"
-         />
+        />
         <TimeSelector 
           :label="$t('Voting.time.selectLabel')"
           v-model="voting"
-         />
+        />
         <q-input type="textarea" :float-label="$t('DescriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
           <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
