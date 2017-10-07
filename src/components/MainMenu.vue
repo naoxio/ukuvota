@@ -49,13 +49,18 @@
 </script>
 
 <style lang="stylus" scoped>  
+  @media screen and (max-width: 400px)
+    .nav
+      img
+       height 16px
+  @media screen and (min-width: 400px)
+   .nav
+     img
+      height 28px
+  
   .nav
     width 100%
     background-color white
-    .q-btn
-      width 48px
-      height auto
-      padding 0.7em
 
   .lang
     margin-left 1em
