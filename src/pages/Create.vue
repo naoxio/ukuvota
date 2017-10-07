@@ -1,9 +1,10 @@
 <template>
   <main-layout>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
+    <div style="max-width: 700px; text-align: left;">
+        <p>{{ $t('Topic.questionLabel') }}</p>
+        <p id="top"/>
         <q-field :error-label="$t('Topic.errorLabel')">
-          <q-input v-model="topicQuestion" :float-label="$t('Topic.questionLabel')" :error="topicMissing" />
+          <q-input v-model="topicQuestion" :error="topicMissing" />
         </q-field>
         <div class="row">
           <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreMultiplier')" :options="negativeMultipliers" />
@@ -12,6 +13,7 @@
         <TimeSelector 
           :label="$t('Proposal.time.selectLabel')"
           v-model="proposal"
+          style="padding: 1em 0.2em 1em 0.2em"
         />
         <TimeSelector 
           :label="$t('Voting.time.selectLabel')"
@@ -24,8 +26,7 @@
         <div style="color: red; text-align: right" v-if="serverError">
           something went wrong. server down?
         </div>
-      </q-card-main>
-    </q-card>
+    </div>
   </main-layout>
 </template>
 
@@ -39,6 +40,7 @@
   import {
     date,
     uid,
+    scroll,
     QBtn,
     QCard,
     QCardMain,
@@ -48,6 +50,8 @@
     QSelect,
     QSlider
   } from 'quasar'
+
+  const { setScrollPosition } = scroll
 
   const { addToDate } = date
   
@@ -64,6 +68,9 @@
       QInput,
       QSelect,
       QSlider
+    },
+    mounted () {
+      setScrollPosition(top, 0)
     },
     methods: {
       submit () {
@@ -175,6 +182,10 @@
         {
           label: 'x8',
           value: 8
+        },
+        {
+          label: '∞ (' + this.$t('SystemicConsensus') + ')',
+          value: 'infinity'
         }
         ]
       }

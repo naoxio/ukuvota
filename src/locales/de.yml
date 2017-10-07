@@ -1,4 +1,5 @@
-Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'
+CreateNewTopic: Erstelle neues Thema
+SystemicConsensus: Systemisches Konsensieren
 
 Proposal:
   time:
@@ -64,3 +65,5 @@ Time:
   minute: Minute
   seconds: Sekunden
   second: Sekunde
+
+Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'

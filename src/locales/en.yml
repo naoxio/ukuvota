@@ -1,4 +1,5 @@
-Disclaimer: 'Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!'
+CreateNewTopic: Create new topic
+SystemicConsensus: Systemic Consensus
 
 Proposal:
   time:
@@ -63,3 +64,5 @@ Time:
   minute: minute
   seconds: seconds
   second: second
+
+Disclaimer: 'Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!'
