@@ -1,6 +1,6 @@
 <template>
   <main-layout>
-    <div style="max-width: 700px; text-align: left;">
+    <div style="max-width: 700px; text-align: left; padding: 1em;">
         <p>{{ $t('Topic.questionLabel') }}</p>
         <p id="top"/>
         <q-field :error-label="$t('Topic.errorLabel')">
@@ -13,7 +13,7 @@
         <TimeSelector 
           :label="$t('Proposal.time.selectLabel')"
           v-model="proposal"
-          style="padding: 1em 0.2em 1em 0.2em"
+          style="padding: 1em 0em 1em 0em"
         />
         <TimeSelector 
           :label="$t('Voting.time.selectLabel')"
