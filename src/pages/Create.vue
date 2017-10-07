@@ -3,9 +3,7 @@
     <div style="max-width: 700px; text-align: left; padding: 1em;">
         <p>{{ $t('Topic.questionLabel') }}</p>
         <p id="top"/>
-        <q-field :error-label="$t('Topic.errorLabel')">
-          <q-input v-model="topicQuestion" :error="topicMissing" />
-        </q-field>
+        <HyperInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
         <div class="row">
           <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreWeighting')" :options="negativeMultipliers" />
           <NegativeScoreInfo style="margin: auto; text-align: center" />
@@ -36,6 +34,7 @@
   import NegativeScoreInfo from '@/NegativeScoreInfo'
   import { setTopic } from 'src/data'
   import { buildOutput } from 'src/timer'
+  import HyperInput from '@/HyperInput'
 
   import {
     date,
@@ -57,6 +56,7 @@
   
   export default {
     components: {
+      HyperInput,
       MainLayout,
       NegativeScoreInfo,
       TimeSelector,
@@ -74,6 +74,7 @@
     },
     methods: {
       submit () {
+        console.log(this.topicQuestion, this.topicMissing)
         let error = false
         // error check
         if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
