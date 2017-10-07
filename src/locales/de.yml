@@ -22,7 +22,7 @@ Topic:
   questionLabel: Frage zum Thema
   errorLabel: Bitte fügen Sie eine Frage zum Thema hinzu
 
-NegativeScoreMultiplier: Negativer Score-Multiplikator
+NegativeScoreWeighting: Negativer Score-Gewichtung
 ShareableURL: Freigegebene URL
 StartWebApp: Web App starten
 

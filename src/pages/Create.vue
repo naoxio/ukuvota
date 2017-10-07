@@ -7,7 +7,7 @@
           <q-input v-model="topicQuestion" :error="topicMissing" />
         </q-field>
         <div class="row">
-          <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreMultiplier')" :options="negativeMultipliers" />
+          <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreWeighting')" :options="negativeMultipliers" />
           <NegativeScoreInfo style="margin: auto; text-align: center" />
         </div>
         <TimeSelector 
