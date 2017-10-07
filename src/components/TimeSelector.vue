@@ -1,13 +1,15 @@
 <template>
   <div>
-    <p class="caption row justify-between">
-      {{ label }}
+    <div class="caption row justify-center" style="text-align: center">
+      <div class="col" style="text-align: left">
+        {{ label }}
+      </div>
       <q-chip>
         {{ $t('Time.Days') }}: {{days}} {{ $t('Time.Hours') }}: {{hours}} {{ $t('Time.Minutes') }}: {{minutes}}
       </q-chip>
-    </p>
+    </div>
 
-    <q-slider :step="1" v-model="days" :min="0" :max="62" snap/>
+    <q-slider :step="1" v-model="days" :min="0" :max="31" snap/>
     <q-slider :step="1" v-model="hours" :min="0" :max="23" snap/>
     <q-slider :step="1" v-model="minutes" :min="1" :max="59" snap/>
   </div>
@@ -56,4 +58,6 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="stylus">
+
+</style>
