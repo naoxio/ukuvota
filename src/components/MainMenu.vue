@@ -49,14 +49,25 @@
 </script>
 
 <style lang="stylus" scoped>  
-  @media screen and (max-width: 400px)
+  @media screen and (max-width: 300px)
+    .nav
+      img
+        height 10px
+
+  @media screen and (max-width: 300px)
     .nav
       img
        height 16px
+  
+  @media screen and (max-width: 400px) and (min-width: 300px)
+    .nav
+      img
+       height 22px
+  
   @media screen and (min-width: 400px)
-   .nav
-     img
-      height 28px
+    .nav
+      img
+        height 28px
   
   .nav
     width 100%
