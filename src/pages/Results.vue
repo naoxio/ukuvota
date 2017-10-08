@@ -167,7 +167,6 @@ export default {
   font-weight bold
 
 .highlightTopScores
-  font-size 20px
   border-radius 30px
   background-color #ffffcc 
 
