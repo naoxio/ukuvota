@@ -82,8 +82,6 @@
           }
         }
         if (!error) {
-          console.log(this.$refs.pT.val)
-
           let t = this
           setProposal(this.id, this.newProposal, this.proposalDescription).then(() => {
             t.newProposal = ''

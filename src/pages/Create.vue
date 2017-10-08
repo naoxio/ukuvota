@@ -115,7 +115,7 @@
               'Repeat process': 'reapeat the process and look for other options'
             },
             'emojis': {
-              'Change nothing': 0,
+              'Status quo': 0,
               'Repeat process': 0
             },
             'votes': {

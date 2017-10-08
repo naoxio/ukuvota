@@ -66,6 +66,9 @@ export default {
     getData (topic) {
       this.proposals = topic.proposals
       this.tmpemojis = topic.emojis
+      if (topic.negativeScoreWeight === 'infinity') {
+        this.emo = [-3, -2, -1, 0]
+      }
     },
     isSelected (file, title) {
       if (file === this.tmpemojis[title]) return true

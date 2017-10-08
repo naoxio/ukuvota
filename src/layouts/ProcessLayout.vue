@@ -98,7 +98,8 @@
       this.id = this.$route.params.id
       getTopic(this.id).then((topic) => {
         this.topic = topic
-        this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
+        if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeightLabel = '∞'
+        else this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
       }).then(() => {
         this.timer()
         this.startIntervalUpdate()

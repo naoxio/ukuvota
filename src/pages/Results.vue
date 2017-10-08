@@ -71,7 +71,8 @@ export default {
     getTopic(this.id).then((topic) => {
       this.votes = topic.votes
       this.proposals = topic.proposals
-      this.negativeScore = topic.negativeScoreWeight
+      if (topic.negativeScoreWeight === 'infinity') this.negativeScore = 1
+      else this.negativeScore = topic.negativeScoreWeight
       this.orderList()
     })
   },
