@@ -48,9 +48,12 @@ DescriptionLabel: Description (optional)
 
 ## Name specific
 Name:
+  title: Name
   label: Your Name or Persistent Alias
   exists: This Name Already Exists
   empty: Name is empty
+
+Total: Total
 
 ## Time specific
 Time:

@@ -48,10 +48,12 @@ DescriptionLabel: Beschreibung (Optional)
 
 ## Name Specific
 Name:
+  title: Name
   label: Ihr Name oder persistenter Alias
   exists: Dieser Name existiert bereits
   empty: Name ist leer
 
+Total: Gesamtzahl
 
 ## Time Specific
 Time:

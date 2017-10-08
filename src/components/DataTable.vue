@@ -5,9 +5,11 @@
         <table class="q-table horizontal-seperator loose flipped vertical-separator">
           <thead>
           <tr>
-            <th class="text-left red">Name</th>
+            <th class="text-left red">{{ $t('Name.title') }}</th>
             <div v-for="(description, proposal) in proposals" :key="proposal">
-              <th class="red" style="max-width: 150px; overflow-wrap: break-word;">{{ proposal }}</th>
+              <th class="red" style="max-width: 150px; overflow-wrap: break-word;">
+                <q-field :label="proposal" />
+              </th>
             </div> 
           </tr>
         </thead>
@@ -23,7 +25,7 @@
         </tbody>
         <tfood>
           <tr class="text-right">
-            <th class="red">Total</th>
+            <th class="red">{{ $t('Total') }}</th>
             <div v-for="(description, proposal) in proposals" :key="proposal">
               <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
             </div>
@@ -43,6 +45,7 @@
   import {
     QBtn,
     QIcon,
+    QField,
     QModal
   } from 'quasar'
   
@@ -60,6 +63,7 @@
     },
     components: {
       QBtn,
+      QField,
       QModal,
       QIcon
     }
