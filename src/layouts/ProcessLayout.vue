@@ -14,7 +14,7 @@
             <p class="text-dark">{{ votingTimer }}</p>
           </div>  
           <div>
-            {{ $t('NegativeScoreMultiplier') }}
+            {{ $t('NegativeScoreWeighting') }}
             <p class="text-dark">{{ negativeScoreWeightLabel }}
               <NegativeScoreInfo/>
             </p>

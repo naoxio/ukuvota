@@ -17,7 +17,7 @@
           :label="$t('Voting.time.selectLabel')"
           v-model="voting"
         />
-        <q-input type="textarea" :float-label="$t('DescriptionLabel')" v-model="description" :max-height="50" :min-rows="7" />
+        <HyperInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
           <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
         </div>
@@ -74,7 +74,7 @@
     },
     methods: {
       submit () {
-        console.log(this.topicQuestion, this.topicMissing)
+        console.log(this.topicDescription)
         let error = false
         // error check
         if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
@@ -87,7 +87,6 @@
   
         if (!error) { // if no errors proceed
           let id = uid()
-
           let today = new Date()
           // calculate when the proposal collection time ends
           let endProposal = addToDate(today, {
@@ -106,7 +105,7 @@
           let newTopic = {
             '_id': id,
             'question': this.topicQuestion,
-            'description': this.description,
+            'description': this.topicDescription,
             'proposalTime': endProposal,
             'votingTime': endVoting,
             'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
@@ -136,7 +135,7 @@
     },
     data () {
       return {
-        description: '',
+        topicDescription: '',
         topicQuestion: '',
         topicMissing: false,
         visible: false,

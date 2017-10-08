@@ -2,10 +2,11 @@ StartNewTopic: Start new topic
 SystemicConsensus: Systemic Consensus
 
 Proposal:
+  title: Proposal
   time:
     label: Proposal time ends in
     selectLabel: Proposal Time
-  exists: The proposal already exists'
+  exists: The proposal already exists
   empty: Proposal is empty
   add: Add Proposal
 

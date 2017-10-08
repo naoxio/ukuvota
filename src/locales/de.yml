@@ -2,6 +2,7 @@ StartNewTopic: Neues Thema starten
 SystemicConsensus: Systemisches Konsensieren
 
 Proposal:
+  title: Vorschlag
   time:
     label: Vorschlagszeit endet in
     selectLabel: Vorschlagszeit
