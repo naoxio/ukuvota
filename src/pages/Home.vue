@@ -12,7 +12,7 @@
         <q-alert color="light">{{ $t('Disclaimer') }}</q-alert>
         <br/>
         <router-link :to="{ name: 'create' }">
-          <q-btn>{{ $t('StartNewTopic') }}</q-btn>
+          <q-btn>{{ $t('StartWebApp') }}</q-btn>
         </router-link>
       </center>
     </div>
