@@ -38,9 +38,7 @@
      <q-card-main>
         <div class="row justify-between">
           <p> {{ $t('Results.disclaimer')}} </p>
-          <div
-            <DataTable :proposals="proposals" :votes="votes" :results="results" :negativeScore="negativeScore" />
-          </div>
+          <DataTable :proposals="proposals" :votes="votes" :results="results" :negativeScore="negativeScore" />
         </div>
      </q-card-main>
    </q-card>
