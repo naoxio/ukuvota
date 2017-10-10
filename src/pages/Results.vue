@@ -38,7 +38,7 @@
      <q-card-main>
         <div class="row justify-between">
           <p> {{ $t('Results.disclaimer')}} </p>
-          <DataTable :proposals="proposals" :votes="votes" :results="results" :negativeScore="negativeScore" />
+          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
         </div>
      </q-card-main>
    </q-card>
@@ -75,9 +75,6 @@ export default {
     })
   },
   methods: {
-    goToResultsRaw () {
-      this.$router.push({ name: 'results-raw', params: { id: this.id } })
-    },
     orderList () {
       this.results = {}
       for (let name in this.votes) {

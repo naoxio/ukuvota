@@ -13,7 +13,9 @@
         </tr>
         <div v-for="(object, name, index) in votes" :key="name">
           <tr class="t-center">
-            <td class="red" style="font-weight: bold" data-th="Name">{{ name }}</td>
+            <td class="red" style="font-weight: bold" data-th="Name">
+              <q-checkbox v-model="selection" :val="name" :label="name"/>
+            </td>
             <div v-for="(description, proposal) in proposals" :key="proposal">
               <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
             </div> 
@@ -38,16 +40,29 @@
 <script>
   import {
     QBtn,
+    QCheckbox,
     QIcon,
     QField,
     QModal
   } from 'quasar'
   
   export default {
-    props: ['proposals', 'votes', 'results', 'negativeScore'],
+    props: ['proposals', 'votes', 'negativeScore'],
     methods: {
+      genResults (name) {
+        for (let proposal in this.proposals) {
+          let vote = this.votes[name][proposal]
+          if (vote < 0) vote = vote * this.negativeScore
+          if (this.res[proposal] === undefined) {
+            this.res[proposal] = vote
+          }
+          else {
+            this.res[proposal] = this.res[proposal] + vote
+          }
+        }
+      },
       getScore (proposal) {
-        return this.results[proposal]
+        return this.res[proposal]
       },
       getIndiScore (object, proposal) {
         let score = object[proposal]
@@ -57,9 +72,30 @@
     },
     components: {
       QBtn,
+      QCheckbox,
       QField,
       QModal,
       QIcon
+    },
+    mounted () {
+      this.res = {}
+      for (let x = 0; x < this.selection.length; x++) {
+        this.genResults(this.selection[x])
+      }
+    },
+    watch: {
+      selection (newVal) {
+        this.res = {}
+        for (let x = 0; x < newVal.length; x++) {
+          this.genResults(newVal[x])
+        }
+      }
+    },
+    data () {
+      return {
+        selection: Object.keys(this.votes),
+        res: {}
+      }
     }
   }
 </script>
