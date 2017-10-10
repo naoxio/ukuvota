@@ -7,7 +7,7 @@
           <th class="text-left red">{{ $t('Name.title') }}</th>
           <div v-for="(description, proposal) in proposals" :key="proposal">
             <th class="red" style="max-width: 150px; overflow-wrap: break-word;">
-             <q-field :label="proposal" />
+             <q-field :label="proposal" style="margin: 0"/>
             </th>
           </div> 
         </tr>
@@ -79,6 +79,7 @@
     },
     mounted () {
       this.res = {}
+      console.log(Object.keys(this.votes))
       for (let x = 0; x < this.selection.length; x++) {
         this.genResults(this.selection[x])
       }
