@@ -7,7 +7,7 @@
           <th class="text-left red">{{ $t('Name.title') }}</th>
           <div v-for="(description, proposal) in proposals" :key="proposal">
             <th class="red">
-             <q-field class="field" :label="proposal"/>
+             <p style="text-align: left" class="field" v-html="proposal"/>
             </th>
           </div> 
         </tr>
@@ -114,7 +114,5 @@
 .t-right
   margin-right auto
 
-.field
-  margin 0
-  text-align left
+
 </style>
