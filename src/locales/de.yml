@@ -52,6 +52,9 @@ Name:
   exists: Dieser Name existiert bereits
   empty: Name ist leer
 
+Names:
+  voted: Namen, die gewählt haben
+
 Total: Gesamtzahl
 
 ## Time Specific

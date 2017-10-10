@@ -32,6 +32,8 @@
             </q-item-side>
           </q-item>
         </div>
+        <p class="caption">{{ $t('Names.voted') }}:</p>
+        <NameList :votes="votes" select="false" />
       </q-card-main>
     </q-card>
     <q-card v-if="noResults === false" style="max-width: 700px; text-align: left;">
@@ -49,11 +51,13 @@ import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
 import { getTopic } from 'src/data'
 import DataTable from '@/DataTable'
+import NameList from '@/NameList'
 
 export default {
   components: {
     ProcessLayout,
     DataTable,
+    NameList,
     QBtn,
     QCard,
     QCardMain,
