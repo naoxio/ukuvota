@@ -6,8 +6,8 @@
         <tr class="t-left">
           <th class="text-left red">{{ $t('Name.title') }}</th>
           <div v-for="(description, proposal) in proposals" :key="proposal">
-            <th class="red" style="max-width: 150px; overflow-wrap: break-word;">
-             <q-field :label="proposal" style="margin: 0"/>
+            <th class="red">
+             <q-field class="field" :label="proposal"/>
             </th>
           </div> 
         </tr>
@@ -114,4 +114,7 @@
 .t-right
   margin-right auto
 
+.field
+  margin 0
+  text-align left
 </style>
