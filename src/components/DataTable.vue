@@ -14,7 +14,7 @@
         <div v-for="(object, name, index) in votes" :key="name">
           <tr class="t-center">
             <td class="red" style="font-weight: bold" data-th="Name">
-              <q-checkbox v-model="selection" :val="name" :label="name"/>
+              <NameSelect :options="selection" :name="name"/>
             </td>
             <div v-for="(description, proposal) in proposals" :key="proposal">
               <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
@@ -38,13 +38,8 @@
 </template>
 
 <script>
-  import {
-    QBtn,
-    QCheckbox,
-    QIcon,
-    QField,
-    QModal
-  } from 'quasar'
+  import { QBtn, QCheckbox, QIcon, QField, QModal } from 'quasar'
+  import NameSelect from '@/NameSelect'
   
   export default {
     props: ['proposals', 'votes', 'negativeScore'],
@@ -71,6 +66,7 @@
       }
     },
     components: {
+      NameSelect,
       QBtn,
       QCheckbox,
       QField,
@@ -79,7 +75,6 @@
     },
     mounted () {
       this.res = {}
-      console.log(Object.keys(this.votes))
       for (let x = 0; x < this.selection.length; x++) {
         this.genResults(this.selection[x])
       }

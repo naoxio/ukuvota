@@ -90,7 +90,6 @@ export default {
           ..._sortedObj,
           [key]: myObj[key]
         }), {})
-        console.log(this.sortedResults)
       }
       else {
         this.noResults = true
