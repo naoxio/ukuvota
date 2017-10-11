@@ -110,7 +110,7 @@
     },
     data () {
       return {
-        redirect: false,
+        redirect: true,
         topic: '',
         urlpath: window.location.href,
         proposalTimer: '',
