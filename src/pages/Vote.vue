@@ -1,6 +1,6 @@
 <template>
   <process-layout>
-    <ProcessCard>
+    <ProcessCard v-if="votesExist()" >
       <h5><q-field :label="$t('Voted.list')" /></h5>
       <NameList :votes="votes"/>
     </ProcessCard>
@@ -61,6 +61,10 @@ export default {
     getTopic(this.id).then(this.getData)
   },
   methods: {
+    votesExist () {
+      if (Object.keys(this.votes).length > 0) return true
+      else return false
+    },
     getData (topic) {
       this.proposals = topic.proposals
       this.tmpemojis = topic.emojis
@@ -110,7 +114,8 @@ export default {
       tmpemojis: '',
       name: '',
       nameEmpty: false,
-      nameExists: false
+      nameExists: false,
+      votes: ''
     }
   }
 }
