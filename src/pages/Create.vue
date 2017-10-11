@@ -4,10 +4,7 @@
         <p>{{ $t('Topic.questionLabel') }}</p>
         <p id="top"/>
         <HyperInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
-        <div class="row">
-          <q-select class="col-11" v-model="negativeScoreWeight" :float-label="$t('NegativeScoreWeighting')" :options="negativeMultipliers" />
-          <NegativeScoreInfo style="margin: auto; text-align: center" />
-        </div>
+        <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
         <TimeSelector 
           :label="$t('Proposal.time.selectLabel')"
           v-model="proposal"
@@ -31,11 +28,11 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import TimeSelector from '@/TimeSelector'
-  import NegativeScoreInfo from '@/NegativeScoreInfo'
   import { setTopic } from 'src/data'
   import { buildOutput } from 'src/timer'
   import HyperInput from '@/HyperInput'
-
+  import NegativeScoreWeightSelector from '@/NegativeScoreWeightSelector'
+  
   import {
     date,
     uid,
@@ -46,19 +43,17 @@
     QChip,
     QField,
     QInput,
-    QSelect,
     QSlider
   } from 'quasar'
 
   const { setScrollPosition } = scroll
-
   const { addToDate } = date
   
   export default {
     components: {
       HyperInput,
       MainLayout,
-      NegativeScoreInfo,
+      NegativeScoreWeightSelector,
       TimeSelector,
       QBtn,
       QCard,
@@ -66,7 +61,6 @@
       QChip,
       QField,
       QInput,
-      QSelect,
       QSlider
     },
     mounted () {
@@ -150,44 +144,7 @@
           hours: 0,
           minutes: 1
         },
-        negativeScoreWeight: 3,
-        negativeMultipliers: [{
-          label: 'x1',
-          value: 1
-        },
-        {
-          label: 'x2',
-          value: 2
-        },
-        {
-          label: 'x3',
-          value: 3
-        },
-        {
-          label: 'x4',
-          value: 4
-        },
-        {
-          label: 'x5',
-          value: 5
-        },
-        {
-          label: 'x6',
-          value: 6
-        },
-        {
-          label: 'x7',
-          value: 7
-        },
-        {
-          label: 'x8',
-          value: 8
-        },
-        {
-          label: '∞ (' + this.$t('SystemicConsensus') + ')',
-          value: 'infinity'
-        }
-        ]
+        negativeScoreWeight: 3
       }
     }
   }
