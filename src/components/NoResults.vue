@@ -1,13 +1,16 @@
 <template>
-  <center>    
-    <router-link :to="{ name: 'create' }">
-      <img id="noresults" src="statics/noresults.svg"></img>
-    </router-link>
-    <p style="font-size: 50px">{{ $t('Results.noOneVoted') }}</p>
-    <router-link :to="{ name: 'create' }">
-      <p style="font-size: 30px">{{ $t('Results.tryAgain') }}</p>
-    </router-link>
-  </center>
+  <div>
+    <p class="caption">{{ $t('Results.noResults') }} :(</p>
+    <center>    
+      <router-link :to="{ name: 'create' }">
+        <img id="noresults" src="statics/noresults.svg"></img>
+      </router-link>
+      <p style="font-size: 50px">{{ $t('Results.noOneVoted') }}</p>
+      <router-link :to="{ name: 'create' }">
+        <p style="font-size: 30px">{{ $t('Results.tryAgain') }}</p>
+      </router-link>
+    </center>
+  </div>
 </template>
 
 <script>

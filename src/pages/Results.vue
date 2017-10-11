@@ -3,15 +3,6 @@
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
         <div v-if="noResults">
-          <p class="caption">{{ $t('Results.noResults') }} :(</p>
-        </div>
-        <div v-else>
-          <div class="row justify-between">
-            <p class="caption">{{ $t('Results.title') }}!</p>
-            <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
-          </div>
-        </div>
-        <div v-if="noResults">
           <NoResults />
         </div>
         <div v-else>
@@ -30,7 +21,7 @@
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
+import { QCard, QCardMain } from 'quasar'
 import { getTopic } from 'src/data'
 import DataTable from '@/DataTable'
 import NoResults from '@/NoResults'
@@ -44,15 +35,8 @@ export default {
     NameList,
     NoResults,
     EmojiList,
-    QBtn,
     QCard,
-    QCardMain,
-    QCheckbox,
-    QField,
-    QItem,
-    QItemMain,
-    QItemSide,
-    QList
+    QCardMain
   },
   mounted () {
     this.id = this.$route.params.id
@@ -113,29 +97,11 @@ export default {
       proposals: {},
       total: 0,
       negativeScore: 3,
-      noResults: false,
-      highlightTopScores: false
+      noResults: false
     }
   }
 }
 </script>
 <style lang="stylus" scoped>
-.topProposal
-  font-weight bold
-
-.highlightTopScores
-  background-color #ffffcc 
-
-.red
-  background-color #FFEBEE
-
-.yellow
-  background-color #ffffcc
-
-table
-  td
-    height 64px
-  th
-    height 64px
 
 </style>

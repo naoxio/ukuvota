@@ -96,7 +96,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .info
   cursor pointer
   font-size 14px
@@ -109,5 +109,16 @@
 .t-right
   margin-right auto
 
+.red
+  background-color #FFEBEE
+
+.yellow
+  background-color #ffffcc
+
+table
+  td
+    height 64px
+  th
+    height 64px
 
 </style>

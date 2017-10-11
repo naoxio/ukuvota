@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="row justify-between">
+      <p class="caption">{{ $t('Results.title') }}!</p>
+      <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
+    </div>
     <div v-for="(value, proposal) in results" :key="value">
       <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
         <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
@@ -13,7 +17,7 @@
 </template>
 
 <script>
-import { QItem, QItemMain, QItemSide } from 'quasar'
+import { QCheckbox, QItem, QItemMain, QItemSide } from 'quasar'
 
 export default {
   props: {
@@ -23,6 +27,7 @@ export default {
     max: { required: true }
   },
   components: {
+    QCheckbox,
     QItem,
     QItemMain,
     QItemSide
@@ -58,12 +63,17 @@ export default {
   },
   data () {
     return {
-      selection: this.options
+      selection: this.options,
+      highlightTopScores: false
     }
   }
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+.topProposal
+  font-weight bold
 
+.highlightTopScores
+  background-color #ffffcc 
 </style>
