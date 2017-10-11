@@ -20,9 +20,8 @@
             </p>
           </div>
         </div>
-        <q-field :label="$t('ShareableURL')" />
-        <input style="width: 100%" onClick="this.select();" :value="urlpath" />
-      </q-card-main>
+        <Share />
+       </q-card-main>
     </q-card>
     <slot/>
   </main-layout>
@@ -30,25 +29,17 @@
 
 <script>
   import MainLayout from './MainLayout'
-  import {
-    QCard,
-    QCardMain,
-    QField,
-    QItem,
-    QItemMain
-  } from 'quasar'
-  import {
-    getTopic
-  } from 'src/data'
-  import {
-    formatTime
-  } from 'src/timer'
+  import Share from '@/Share'
+  import { QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
+  import { getTopic } from 'src/data'
+  import { formatTime } from 'src/timer'
   import NegativeScoreInfo from '@/NegativeScoreInfo'
   
   export default {
     components: {
       MainLayout,
       NegativeScoreInfo,
+      Share,
       QCard,
       QCardMain,
       QField,
@@ -112,7 +103,6 @@
       return {
         redirect: true,
         topic: '',
-        urlpath: window.location.href,
         proposalTimer: '',
         votingTimeLabel: this.$t('Voting.time.duration'),
         votingTimer: '',
