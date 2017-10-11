@@ -13,6 +13,12 @@ Proposal:
 Proposals:
   current: Current Proposals
 
+Vote:
+  added: Vote from {submitName} submitted!
+
+Voted:
+  list: People who already voted
+
 Voting:
   time:
     duration: Voting time will last for

@@ -1,62 +1,60 @@
 <template>
   <process-layout>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <div v-for="(description, title, key) in proposals" :key="title">
-          <h5><q-field :label="title"></q-field></h5>
-          <q-field :label="description"></q-field>
-          <div class="row justify-around">
-            <div v-for="file in emo" :key="file">
-              <div :class="{ selected: isSelected(file, title) }" @click="select(title, file)">
-                <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <br></br>
-        <h6>
-          <template v-if="submitted">
-            <q-alert
-              color="light"
-              icon="done"
-              dismissible
-            >
-              Vote from {{ submitName }} submitted!
-            </q-alert>
-          </template>
-          <q-field 
+    <ProcessCard>
+      <h5><q-field :label="$t('Voted.list')" /></h5>
+      <NameList :votes="votes"/>
+    </ProcessCard>
+    <ProcessCard>
+      <EmojiVoteList :proposals="proposals" :tmpemojis="tmpemojis" />
+      <br></br>
+      <template v-if="submitted">
+        <q-alert
+          color="light"
+          icon="done"
+          dismissible
+          >
+          <q-item-main :label="$t('Vote.added', { submitName })" />
+        </q-alert>
+      </template>
+      <h6>
+        <q-field 
           :label="$t('Name.label')"
           :error-label="getNameError()"
-            >
+          >
           <q-input
             type="text"
             v-model="name"
             :error="nameExists || nameEmpty"
-          />
-          </q-field>
-        </h6>
-       </br>
-        <div style="text-align: right">
-          <q-btn @click="submit()" icon="arrow forward">{{ $t('Submit') }}</q-btn>
-        </div>
-      </q-card-main>
-    </q-card>
+            />
+        </q-field>
+      </h6>
+      </br>
+      <div style="text-align: right">
+        <q-btn @click="submit()" icon="arrow forward">{{ $t('Submit') }}</q-btn>
+      </div>
+    </ProcessCard>
   </process-layout>
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QInput } from 'quasar'
+import ProcessCard from 'layouts/ProcessCard'
+
+import { QAlert, QBtn, QField, QInput, QItemMain } from 'quasar'
 import { getTopic, setVotes } from 'data'
+import NameList from '@/NameList'
+import EmojiVoteList from '@/EmojiVoteList'
 
 export default {
   components: {
+    EmojiVoteList,
     ProcessLayout,
+    ProcessCard,
+    NameList,
     QAlert,
     QBtn,
-    QCard,
-    QCardMain,
     QField,
-    QInput
+    QInput,
+    QItemMain
   },
   mounted () {
     this.id = this.$route.params.id
@@ -66,22 +64,16 @@ export default {
     getData (topic) {
       this.proposals = topic.proposals
       this.tmpemojis = topic.emojis
+      this.votes = topic.votes
       if (topic.negativeScoreWeight === 'infinity') {
         this.emo = [-3, -2, -1, 0]
       }
-    },
-    isSelected (file, title) {
-      if (file === this.tmpemojis[title]) return true
-      else return false
     },
     getNameError () {
       if (this.nameExists) return this.$t('Name.exists')
       else if (this.nameEmpty) return this.$t('Name.empty')
     },
-    select (title, val) {
-      this.$set(this.tmpemojis, title, val)
-      this.$forceUpdate()
-    },
+
     submit () {
       let error = false
       // error check
@@ -95,6 +87,8 @@ export default {
 
       if (!error) { // if no errors proceed
         let tmp = this
+        console.log(this.tmpemojis)
+
         setVotes(this.id, this.name, this.tmpemojis).then(log => {
           if (log === -2) tmp.nameExists = true
           else tmp.nameExists = false
@@ -116,21 +110,8 @@ export default {
       tmpemojis: '',
       name: '',
       nameEmpty: false,
-      nameExists: false,
-      emo: [-3, -2, -1, 0, 1, 2, 3]
+      nameExists: false
     }
   }
 }
 </script>
-<style lang="stylus">
-.emo
-  filter grayscale(1)
-
-.emo:hover
-  cursor pointer
-  filter grayscale(0.5)
-
-.selected
-  .emo
-  	filter grayscale(0)
-</style>

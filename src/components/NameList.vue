@@ -1,6 +1,6 @@
 
 <template> 
-  <div class="row justify-between">
+  <div class="row justify-around">
     <div v-for="(object, name, index) in votes" :key="name">
       <div v-if='select'>
         <NameSelect :options="selection" :name="name"/>
