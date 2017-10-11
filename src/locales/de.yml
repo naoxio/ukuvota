@@ -8,6 +8,7 @@ Proposal:
   exists: Der Vorschlag existiert bereits
   empty: Der Vorschlag ist leer
   add: Vorschlag hinzufügen
+  added: Vorschalg "{submittedProposal}" hinzugefügt!
 
 Proposals:
   current: Aktuelle Vorschläge

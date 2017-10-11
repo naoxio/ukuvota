@@ -8,6 +8,7 @@ Proposal:
   exists: The proposal already exists
   empty: Proposal is empty
   add: Add Proposal
+  added: Proposal "{submittedProposal}" added!
 
 Proposals:
   current: Current Proposals

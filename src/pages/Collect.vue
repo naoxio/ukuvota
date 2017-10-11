@@ -2,7 +2,16 @@
   <process-layout>
     <q-card style="max-width: 700px; text-align: left;">
       <q-card-main>
-        <h5><q-field :label="$t('Proposal.add')"></q-field></h5>
+        <h5><q-field :label="$t('Proposal.add')"/></h5> 
+        <template v-if="submitted">
+          <q-alert
+            color="light"
+            icon="done"
+            dismissible
+            >
+            <q-item-main class="linklight" :label="$t('Proposal.added', { submittedProposal })" />
+          </q-alert>
+        </template>
         <HyperInput
           ref="pT"
           :value.sync="newProposal"
@@ -11,15 +20,7 @@
           :error-label="getProposalError()" 
         />
         <HyperInput ref="pD" :value.sync="proposalDescription" :float-label="$t('DescriptionLabel')" />
-        <template v-if="submitted">
-            <q-alert
-              color="light"
-              icon="done"
-              dismissible
-            >
-              Proposal "{{ submittedProposal }}" added!
-            </q-alert>
-          </template>
+   
         <div class="row justify-end">
           <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
         </div>
@@ -41,7 +42,7 @@
 </template>
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
-  import { QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
+  import { QAlert, QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
   import { getProposals, setProposal } from 'src/data'
   import HyperInput from '@/HyperInput'
 
@@ -49,6 +50,7 @@
     components: {
       HyperInput,
       ProcessLayout,
+      QAlert,
       QBtn,
       QCard,
       QCardMain,
@@ -93,11 +95,12 @@
         if (!error) {
           let t = this
           setProposal(this.id, this.newProposal, this.proposalDescription).then(() => {
+            t.submitted = true
+            t.submittedProposal = t.newProposal
             t.newProposal = ''
             t.proposalDescription = ''
             t.$refs.pT.val = ''
             t.$refs.pD.val = ''
-  
             this.updateProposals()
           })
         }
@@ -119,5 +122,8 @@
 
 </script>
 <style lang="stylus">
-
+.linklight
+  a
+    text-decoration none
+    color yellow
 </style>
