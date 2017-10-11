@@ -1,19 +1,19 @@
 <template>
   <main-layout>
     <div style="max-width: 700px; text-align: left; padding: 1em;">
-        <p>{{ $t('Topic.questionLabel') }}</p>
-        <p id="top"/>
-        <HyperInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
-        <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
-        <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
-        <TimeSelector :label="$t('Voting.time.selectLabel')" v-model="voting" />
-        <HyperInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
-        <div style="text-align: right">
-          <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
-        </div>
-        <div style="color: red; text-align: right" v-if="serverError">
-          something went wrong. server down?
-        </div>
+      <p>{{ $t('Topic.questionLabel') }}</p>
+      <p id="top"/>
+      <HyperInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
+      <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
+      <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
+      <TimeSelector :label="$t('Voting.time.selectLabel')" v-model="voting" />
+      <HyperInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
+      <div style="text-align: right">
+        <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
+      </div>
+      <div style="color: red; text-align: right" v-if="serverError">
+        something went wrong. server down?
+      </div>
     </div>
   </main-layout>
 </template>

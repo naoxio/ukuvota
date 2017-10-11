@@ -15,10 +15,10 @@ The back-end is made using PouchDB
 ## Installing
 ``` bash
 # install quasar-cli globally 
-$ [sudo] npm install -g quasar-cli
+$ npm install -g quasar-cli
 
 # install yarn for dependencie management
-$ [sudo] npm install -g yarn
+$ npm install -g yarn
 ```
 
 ## Build Setup
@@ -49,6 +49,7 @@ $ quasar build
 
 # run the server with default database location
 $ node .
+
 # run server with a custom database location
 $ node . your/custom/path/to/database
 
@@ -68,8 +69,9 @@ We would be happy to accept PRs! If you want to work on something, it'd be good 
 Wolfi's contact:
  - email: [wolfi@disroot.org](mailto: wolfi@disroot.org)
  - mastodon: [wolfi@aleph.land](https://aleph.land/@wolfi)
+ - ssb: [@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519](@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519)
 
-A good place to start are the issues labelled "todo".
+A good place to start are the issues labelled "feature" or "help wanted".
 
 ## License
 [CC0 - No Rights Reserved](LICENSE)
