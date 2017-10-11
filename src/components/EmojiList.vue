@@ -17,17 +17,43 @@ import { QItem, QItemMain, QItemSide } from 'quasar'
 
 export default {
   props: {
-    results: { required: true }
+    results: { required: true },
+    votes: { required: true },
+    proposals: { required: true },
+    max: { required: true }
   },
   components: {
     QItem,
     QItemMain,
     QItemSide
   },
-  watch: {
-    selection (newVal) {
-      this.res = {}
-      this.$emit('update:options', newVal)
+  methods: {
+    getPercentage (proposal) {
+      let score = this.getScore(proposal)
+      return score / this.max
+    },
+    getScore (proposal) {
+      return this.results[proposal]
+    },
+    getLength (object) {
+      return Object.keys(object).length
+    },
+    getDescription (proposal) {
+      return this.proposals[proposal]
+    },
+    getEmoji (proposal) {
+      let length = this.getLength(this.votes)
+      let multiplier = this.negativeScore - 1
+      let p = this.getScore(proposal)
+      let emo = 0
+      if (p === this.max) emo = 3
+      else if (p >= this.max - length) emo = 2
+      else if (p >= this.max - length * 2) emo = 1
+      else if (p >= this.max - length * 3) emo = 0
+      else if (p >= this.max - length * 4 * multiplier) emo = -1
+      else if (p >= this.max - length * 5 * multiplier) emo = -2
+      else emo = -3
+      return emo
     }
   },
   data () {

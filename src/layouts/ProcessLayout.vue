@@ -57,7 +57,7 @@
     },
     methods: {
       timer () {
-        this.autoRedirect()
+        if (this.redirect) this.autoRedirect()
       },
       startIntervalUpdate (time) {
         let component = this
@@ -110,6 +110,7 @@
     },
     data () {
       return {
+        redirect: false,
         topic: '',
         urlpath: window.location.href,
         proposalTimer: '',

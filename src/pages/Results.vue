@@ -15,24 +15,14 @@
           <NoResults />
         </div>
         <div v-else>
-          <div v-for="(value, proposal) in sortedResults" :key="value">
-            <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
-              <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
-              <q-item-side>
-                <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
-              </q-item-side>
-            </q-item>
-          </div>
+          <EmojiList :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
           <p class="caption">{{ $t('Names.voted') }}:</p>
           <NameList :votes="votes" :select="false" />
-        </div>
-      </q-card-main>
-    </q-card>
-    <q-card v-if="noResults === false" style="max-width: 700px; text-align: left;">
-     <q-card-main>
-        <div class="row justify-between">
-          <p> {{ $t('Results.disclaimer')}} </p>
-          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
+          </br>
+          <div class="row justify-between">
+            <p style="color: red"> {{ $t('Results.disclaimer')}} </p>
+            <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
+          </div>
         </div>
      </q-card-main>
    </q-card>
@@ -43,8 +33,9 @@ import ProcessLayout from 'layouts/ProcessLayout'
 import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide, QList } from 'quasar'
 import { getTopic } from 'src/data'
 import DataTable from '@/DataTable'
-import NameList from '@/NameList'
 import NoResults from '@/NoResults'
+import NameList from '@/NameList'
+import EmojiList from '@/EmojiList'
 
 export default {
   components: {
@@ -52,6 +43,7 @@ export default {
     DataTable,
     NameList,
     NoResults,
+    EmojiList,
     QBtn,
     QCard,
     QCardMain,
@@ -110,33 +102,6 @@ export default {
       for (let key in object) {
         if (this.max < object[key]) this.max = object[key]
       }
-    },
-    getScore (proposal) {
-      return this.results[proposal]
-    },
-    getPercentage (proposal) {
-      let score = this.getScore(proposal)
-      return score / this.max
-    },
-    getLength (object) {
-      return Object.keys(object).length
-    },
-    getDescription (proposal) {
-      return this.proposals[proposal]
-    },
-    getEmoji (proposal) {
-      let length = this.getLength(this.votes)
-      let multiplier = this.negativeScore - 1
-      let p = this.getScore(proposal)
-      let emo = 0
-      if (p === this.max) emo = 3
-      else if (p >= this.max - length) emo = 2
-      else if (p >= this.max - length * 2) emo = 1
-      else if (p >= this.max - length * 3) emo = 0
-      else if (p >= this.max - length * 4 * multiplier) emo = -1
-      else if (p >= this.max - length * 5 * multiplier) emo = -2
-      else emo = -3
-      return emo
     }
   },
   data () {
@@ -154,7 +119,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
 .topProposal
   font-weight bold
 
@@ -173,14 +138,4 @@ table
   th
     height 64px
 
-@keyframes blink {
-  50% {
-    opacity 0.6
-    transform:rotate(20deg)
-  }
-}
-
-#noresults
-  animation spin 10s linear infinite
-  animation blink 1s step-start 0s infinite
 </style>
