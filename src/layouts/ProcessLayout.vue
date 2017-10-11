@@ -1,50 +1,26 @@
 <template>
   <main-layout>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <h5><q-field :label="topic.question" /></h5>
-        <q-field :label="topic.description" />
-        <div class="row justify-between">
-          <div v-if="proposalTimer !== -1">
-            {{ $t('Proposal.time.label') }}
-            <p class="text-dark">{{ proposalTimer }}</p>
-          </div>
-          <div v-if="votingTimer !== -1">
-            {{ $t('Voting.time.duration') }}
-            <p class="text-dark">{{ votingTimer }}</p>
-          </div>  
-          <div>
-            {{ $t('NegativeScoreWeighting') }}
-            <p class="text-dark">{{ negativeScoreWeightLabel }}
-              <NegativeScoreInfo/>
-            </p>
-          </div>
-        </div>
-        <Share />
-       </q-card-main>
-    </q-card>
-    <slot/>
+    <InfoCard 
+      :topic="topic"
+      :proposalTimer="proposalTimer"
+      :votingTimeLabel="this.$t('Voting.time.duration')"
+      :votingTimer="votingTimer"
+      :negativeScoreWeightLabel="negativeScoreWeightLabel"
+      />
+    <slot />
   </main-layout>
 </template>
 
 <script>
-  import MainLayout from './MainLayout'
-  import Share from '@/Share'
-  import { QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
+  import MainLayout from 'layouts/MainLayout'
   import { getTopic } from 'src/data'
   import { formatTime } from 'src/timer'
-  import NegativeScoreInfo from '@/NegativeScoreInfo'
-  
+  import InfoCard from '@/InfoCard'
+
   export default {
     components: {
       MainLayout,
-      NegativeScoreInfo,
-      Share,
-      QCard,
-      QCardMain,
-      QField,
-      QItem,
-      QItemMain
+      InfoCard
     },
     methods: {
       timer () {
