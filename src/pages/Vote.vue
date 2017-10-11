@@ -15,7 +15,7 @@
         </div>
         <br></br>
         <h6>
-          <template v-if="submited">
+          <template v-if="submitted">
             <q-alert
               color="light"
               icon="done"
@@ -100,7 +100,7 @@ export default {
           else tmp.nameExists = false
           tmp.submitName = tmp.name
           tmp.name = ''
-          tmp.submited = true
+          tmp.submitted = true
           getTopic(tmp.id).then(tmp.getData).then(tmp.$forceUpdate())
         })
       }
@@ -109,7 +109,7 @@ export default {
   data () {
     return {
       id: '',
-      submited: false,
+      submitted: false,
       submitName: '',
       proposals: '',
       emojis: '',

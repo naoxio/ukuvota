@@ -12,28 +12,20 @@
           </div>
         </div>
         <div v-if="noResults">
-          <q-item>
-            <q-item-main style="text-align: center">
-              <router-link :to="{ name: 'create' }">
-                <img id="noresults" src="statics/noresults.svg"></img>
-              </router-link>
-              <p style="font-size: 50px">{{ $t('Results.noOneVoted') }}</p>
-                <router-link :to="{ name: 'create' }">
-                  <p style="font-size: 30px">{{ $t('Results.tryAgain') }}</p>
-                </router-link>
-            </q-item-main>
-          </q-item>
+          <NoResults />
         </div>
-        <div v-for="(value, proposal) in sortedResults" :key="value">
-          <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
-            <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
-            <q-item-side>
-              <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
-            </q-item-side>
-          </q-item>
+        <div v-else>
+          <div v-for="(value, proposal) in sortedResults" :key="value">
+            <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
+              <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
+              <q-item-side>
+                <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
+              </q-item-side>
+            </q-item>
+          </div>
+          <p class="caption">{{ $t('Names.voted') }}:</p>
+          <NameList :votes="votes" :select="false" />
         </div>
-        <p class="caption">{{ $t('Names.voted') }}:</p>
-        <NameList :votes="votes" select="false" />
       </q-card-main>
     </q-card>
     <q-card v-if="noResults === false" style="max-width: 700px; text-align: left;">
@@ -52,12 +44,14 @@ import { QBtn, QCard, QCardMain, QCheckbox, QField, QItem, QItemMain, QItemSide,
 import { getTopic } from 'src/data'
 import DataTable from '@/DataTable'
 import NameList from '@/NameList'
+import NoResults from '@/NoResults'
 
 export default {
   components: {
     ProcessLayout,
     DataTable,
     NameList,
+    NoResults,
     QBtn,
     QCard,
     QCardMain,

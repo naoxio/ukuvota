@@ -11,6 +11,15 @@
           :error-label="getProposalError()" 
         />
         <HyperInput ref="pD" :value.sync="proposalDescription" :float-label="$t('DescriptionLabel')" />
+        <template v-if="submitted">
+            <q-alert
+              color="light"
+              icon="done"
+              dismissible
+            >
+              Proposal "{{ submittedProposal }}" added!
+            </q-alert>
+          </template>
         <div class="row justify-end">
           <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
         </div>
@@ -97,6 +106,8 @@
     data () {
       return {
         proposals: '',
+        submittedProposal: '',
+        submitted: false,
         urlpath: window.location.href,
         newProposal: '',
         proposalEmpty: false,
