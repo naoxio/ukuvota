@@ -13,7 +13,7 @@
       </div>  
       <div>
         {{ $t('NegativeScoreWeighting') }}
-        <p class="text-dark">{{ negativeScoreWeightLabel }}
+        <p class="text-dark">{{ negativeScoreWeight }}
           <NegativeScoreInfo/>
         </p>
       </div>
@@ -31,9 +31,8 @@
     props: {
       topic: { required: true },
       proposalTimer: { required: true },
-      votingTimeLabel: { required: true },
       votingTimer: { required: true },
-      negativeScoreWeightLabel: { required: true }
+      negativeScoreWeight: { required: true }
     },
     components: {
       NegativeScoreInfo,
@@ -42,6 +41,11 @@
       QField,
       QItem,
       QItemMain
+    },
+    data () {
+      return {
+        votingTimeLabel: this.$t('Voting.time.duration')
+      }
     }
   }
 </script>

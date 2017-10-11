@@ -3,9 +3,8 @@
     <InfoCard 
       :topic="topic"
       :proposalTimer="proposalTimer"
-      :votingTimeLabel="this.$t('Voting.time.duration')"
       :votingTimer="votingTimer"
-      :negativeScoreWeightLabel="negativeScoreWeightLabel"
+      :negativeScoreWeight="negativeScoreWeight"
       />
     <slot />
   </main-layout>
@@ -65,8 +64,8 @@
       this.id = this.$route.params.id
       getTopic(this.id).then((topic) => {
         this.topic = topic
-        if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeightLabel = '∞'
-        else this.negativeScoreWeightLabel = 'x' + topic.negativeScoreWeight
+        if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
+        else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight
       }).then(() => {
         this.timer()
         this.startIntervalUpdate()
@@ -80,9 +79,8 @@
         redirect: true,
         topic: '',
         proposalTimer: '',
-        votingTimeLabel: this.$t('Voting.time.duration'),
         votingTimer: '',
-        negativeScoreWeightLabel: ''
+        negativeScoreWeight: ''
       }
     }
   }
