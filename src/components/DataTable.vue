@@ -85,6 +85,9 @@
         for (let x = 0; x < newVal.length; x++) {
           this.genResults(newVal[x])
         }
+      },
+      votes (v) {
+        this.selection = Object.keys(v)
       }
     },
     data () {
