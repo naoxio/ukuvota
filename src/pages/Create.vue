@@ -5,15 +5,8 @@
         <p id="top"/>
         <HyperInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
         <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
-        <TimeSelector 
-          :label="$t('Proposal.time.selectLabel')"
-          v-model="proposal"
-          style="padding: 1em 0em 1em 0em"
-        />
-        <TimeSelector 
-          :label="$t('Voting.time.selectLabel')"
-          v-model="voting"
-        />
+        <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
+        <TimeSelector :label="$t('Voting.time.selectLabel')" v-model="voting" />
         <HyperInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
         <div style="text-align: right">
           <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
@@ -37,13 +30,7 @@
     date,
     uid,
     scroll,
-    QBtn,
-    QCard,
-    QCardMain,
-    QChip,
-    QField,
-    QInput,
-    QSlider
+    QBtn
   } from 'quasar'
 
   const { setScrollPosition } = scroll
@@ -55,13 +42,7 @@
       MainLayout,
       NegativeScoreWeightSelector,
       TimeSelector,
-      QBtn,
-      QCard,
-      QCardMain,
-      QChip,
-      QField,
-      QInput,
-      QSlider
+      QBtn
     },
     mounted () {
       setScrollPosition(top, 0)
