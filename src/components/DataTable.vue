@@ -5,9 +5,9 @@
       <table class="q-table horizontal-seperator loose flipped vertical-separator">
         <tr class="t-left">
           <th class="text-left red">{{ $t('Name.title') }}</th>
-          <div v-for="(description, proposal) in proposals" :key="proposal">
+          <div v-for="(obj, id) in proposals" :key="id">
             <th class="red">
-             <p style="text-align: left" class="field" v-html="proposal"/>
+             <ULabel style="text-align: left" class="field" :hyperlink=true :value="obj.title" />
             </th>
           </div> 
         </tr>
@@ -16,15 +16,15 @@
             <td class="red" style="font-weight: bold" data-th="Name">
               <NameSelect :options="selection" :name="name"/>
             </td>
-            <div v-for="(description, proposal) in proposals" :key="proposal">
-              <td :data-th="proposal" class="text-center"> {{ getIndiScore(object, proposal) }}</td>
+            <div v-for="(obj, id) in proposals" :key="id">
+              <td :data-th="id" class="text-center"> {{ getIndiScore(object, id) }}</td>
             </div> 
           </tr>
         </div>
         <tr class="text-right t-right">
           <th class="red">{{ $t('Total') }}</th>
-          <div v-for="(description, proposal) in proposals" :key="proposal">
-            <td :data-th="proposal" class="text-center yellow"> {{ getScore(proposal) }}</td>
+          <div v-for="(obj, id) in proposals" :key="id">
+            <td :data-th="id" class="text-center yellow"> {{ getScore(id) }}</td>
           </div>
         </tr>
       </table>
@@ -40,8 +40,9 @@
 <script>
   import { QBtn, QCheckbox, QIcon, QField, QModal } from 'quasar'
   import NameSelect from '@/NameSelect'
-  
-  export default {
+  import ULabel from '@/ULabel'
+
+export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
       genResults (name) {
@@ -67,6 +68,7 @@
     },
     components: {
       NameSelect,
+      ULabel,
       QBtn,
       QCheckbox,
       QField,

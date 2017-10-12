@@ -1,60 +1,57 @@
 <template>
   <process-layout>
     <ProcessCard>
-      <h5><ULabel :value="$t('Proposal.add')"/></h5> 
-      <UAlert :submitted="submitted" :value="$t('Proposal.added', { submittedProposal })" />
-      <UInput
-        ref="pT"
-        :value.sync="newProposal"
-        :float-label="$t('Proposal.title')"
-        :error="proposalExists || proposalEmpty"
-        :error-label="getProposalError()" 
-      />
-      <UInput ref="pD" :value.sync="proposalDescription" :float-label="$t('DescriptionLabel')" />
-      <div class="row justify-end">
-        <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
+      <h5><ULabel :value="$t('Proposals.current')"/></h5>
+      <div v-for="(obj, id) in proposals" :key="id">
+        <UItem
+          :uid="id"
+          editifblank="true"
+          class="item"
+          :editable="true"
+          :label="obj.title"
+          @update:newData="val => updateProposal(val)"
+          :sublabel="obj.description"
+          />
       </div>
     </ProcessCard>
-    <ProcessCard>
-      <h5><ULabel :value="$t('Proposals.current')"/></h5>
-      <q-list>
-        <div v-for="(description, title) in proposals" :key="title">
-          <q-item v-if="title !== '_'">
-            <q-item-main  :label="title" :sublabel="description"></q-item-main>
-          </q-item>
-        </div>
-      </q-list>
-    </ProcessCard>
+    <q-fixed-position corner="bottom-right" :offset="[18, 18]">
+      <q-btn round color="primary" icon="add" @click="addProposal"/>
+    </q-fixed-position>
   </process-layout>
 </template>
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
   import ProcessCard from 'layouts/ProcessCard'
-  import { QBtn, QField, QInput, QItem, QItemMain, QList } from 'quasar'
-  import { getProposals, setProposal } from 'src/data'
-  import UInput from '@/UInput'
-  import ULabel from '@/ULabel'
-  import UAlert from '@/UAlert'
 
+  import { uid, scroll, QBtn, QFixedPosition, QIcon } from 'quasar'
+  import { getProposals, setProposal } from 'src/data'
+  import UAlert from '@/UAlert'
+  import UInput from '@/UInput'
+  import UItem from '@/UItem'
+  import ULabel from '@/ULabel'
+
+  const { setScrollPosition } = scroll
   export default {
     components: {
       ProcessLayout,
       ProcessCard,
       UAlert,
       UInput,
+      UItem,
       ULabel,
       QBtn,
-      QField,
-      QInput,
-      QItem,
-      QItemMain,
-      QList
+      QFixedPosition,
+      QIcon
     },
     mounted () {
       this.id = this.$route.params.id
       this.updateProposals()
     },
     methods: {
+      updateProposal (p) {
+        let newProposal = { id: p.uid, title: p.label, description: p.sublabel }
+        setProposal(this.id, newProposal).then(log => { })
+      },
       updateProposals () {
         getProposals(this.id).then((proposals) => {
           this.proposals = proposals
@@ -65,35 +62,10 @@
         else if (this.proposalEmpty) return this.$t('Proposal.empty')
       },
       addProposal () {
-        let error = false
-        // error check
-        if (this.newProposal.replace(/\s/g, '').length <= 0) {
-          this.proposalEmpty = true
-          this.proposalExists = false
-          error = true
-        }
-        else {
-          this.proposalEmpty = false
-          if (typeof this.proposals[this.newProposal] !== 'undefined') {
-            this.proposalExists = true
-            error = true
-          }
-          else {
-            this.proposalExists = false
-          }
-        }
-        if (!error) {
-          let t = this
-          setProposal(this.id, this.newProposal, this.proposalDescription).then(() => {
-            t.submitted = true
-            t.submittedProposal = t.newProposal
-            t.newProposal = ''
-            t.proposalDescription = ''
-            t.$refs.pT.val = ''
-            t.$refs.pD.val = ''
-            this.updateProposals()
-          })
-        }
+        setScrollPosition(window, document.body.scrollHeight)
+        setProposal(this.id, { id: uid(), title: '', description: '' }).then(() => {
+          this.updateProposals()
+        })
       }
     },
     data () {
@@ -111,3 +83,7 @@
   }
 
 </script>
+<style lang="stylus" scoped>
+
+
+</style>

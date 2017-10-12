@@ -1,8 +1,7 @@
 <template>
   <ProcessCard>
     <h5><ULabel :value="topic.question" /></h5>
-    <ULabel :value="topic.description" />
-    </br>
+    <ULabel class="desc":value="topic.description" />
     <div class="row justify-between">
       <div v-if="proposalTimer !== -1">
         {{ $t('Proposal.time.label') }}
@@ -52,3 +51,7 @@
     }
   }
 </script>
+<style lang="stylus" scoped>
+.desc
+  color grey
+</style>

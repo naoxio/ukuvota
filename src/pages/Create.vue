@@ -2,7 +2,6 @@
   <main-layout>
     <div style="max-width: 700px; text-align: left; padding: 1em;">
       <ULabel :value="$t('Topic.questionLabel')" />
-      <p id="top"/>
       <UInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
       <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
       <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
@@ -21,7 +20,7 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import TimeSelector from '@/TimeSelector'
-  import { setTopic } from 'src/data'
+  import { setTopic, setProposal } from 'src/data'
   import { buildOutput } from 'src/timer'
   import UInput from '@/UInput'
   import ULabel from '@/ULabel'
@@ -46,7 +45,6 @@
     },
     methods: {
       submit () {
-        console.log(this.topicDescription)
         let error = false
         // error check
         if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
@@ -58,7 +56,7 @@
         }
   
         if (!error) { // if no errors proceed
-          let id = uid()
+          this.id = uid()
           let today = new Date()
           // calculate when the proposal collection time ends
           let endProposal = addToDate(today, {
@@ -73,33 +71,29 @@
             minutes: this.voting.minutes,
             milliseconds: diff
           }).toString()
-
           let newTopic = {
-            '_id': id,
+            '_id': this.id,
             'question': this.topicQuestion,
             'description': this.topicDescription,
             'proposalTime': endProposal,
             'votingTime': endVoting,
             'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
             'negativeScoreWeight': this.negativeScoreWeight,
-            'proposals': {
-              'Status quo': 'keep things the way they are',
-              'Repeat process': 'reapeat the process and look for other options'
-            },
-            'emojis': {
-              'Status quo': 0,
-              'Repeat process': 0
-            },
-            'votes': {
-  
-            }
+            'proposals': { },
+            'votes': { },
+            'emojis': { }
           }
           let t = this
           setTopic(newTopic).then(log => {
-            if (log === -1) this.serverError = true
+            if (log === -1) t.serverError = true
             else {
-              this.serverError = false
-              t.$router.push({ name: 'collect', params: { id } })
+              t.serverError = false
+              setProposal(t.id, t.defaultP1).then(() => {
+                setProposal(t.id, t.defaultP2).then(() => {
+                  let id = t.id
+                  t.$router.push({ name: 'collect', params: { id } })
+                })
+              })
             }
           })
         }
@@ -107,6 +101,7 @@
     },
     data () {
       return {
+        id: '',
         topicDescription: '',
         topicQuestion: '',
         topicMissing: false,
@@ -122,7 +117,16 @@
           hours: 0,
           minutes: 1
         },
-        negativeScoreWeight: 3
+        negativeScoreWeight: 3,
+        defaultP1: {
+          id: uid(),
+          title: 'Status quo',
+          description: 'keep things the way they are'
+        },
+        defaultP2: {
+          id: uid(),
+          title: 'Repeat process',
+          description: 'reapeat the process and look for other options' }
       }
     }
   }

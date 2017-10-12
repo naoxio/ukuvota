@@ -4,20 +4,23 @@
       <p class="caption">{{ $t('Results.title') }}!</p>
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
-    <div v-for="(value, proposal) in results" :key="value">
-      <q-item :class="{ topProposal: getEmoji(proposal) === 3, highlightTopScores: highlightTopScores && getEmoji(proposal) === 3}">
-        <q-item-main :label="proposal" :sublabel="getDescription(proposal)"></q-item-main>
-          <q-item-side>
-            <img :src="'statics/emo/' + getEmoji(proposal) + '.svg'" height="32px" />
-          </q-item-side>
-        </q-item-main>
-     </q-item>
+    <div v-for="(value, id) in results" :key="value">
+      <div :class="{ topProposal: getEmoji(id) === 3, highlightTopScores: highlightTopScores && getEmoji(id) === 3}">
+        <div class="list row justify-between items-center">
+          <div>
+            <ULabel :hyperlink="true" :value="getTitle(id)" />
+            <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
+          </div>
+          <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { QCheckbox, QItem, QItemMain, QItemSide } from 'quasar'
+import ULabel from '@/ULabel'
 
 export default {
   props: {
@@ -30,7 +33,8 @@ export default {
     QCheckbox,
     QItem,
     QItemMain,
-    QItemSide
+    QItemSide,
+    ULabel
   },
   methods: {
     getPercentage (proposal) {
@@ -43,8 +47,11 @@ export default {
     getLength (object) {
       return Object.keys(object).length
     },
-    getDescription (proposal) {
-      return this.proposals[proposal]
+    getDescription (id) {
+      return this.proposals[id].description
+    },
+    getTitle (id) {
+      return this.proposals[id].title
     },
     getEmoji (proposal) {
       let length = this.getLength(this.votes)
@@ -71,9 +78,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.topProposal
-  font-weight bold
+  .list
+    padding 0.5em
 
-.highlightTopScores
-  background-color #ffffcc 
+  .sublabel
+    color grey 
+
+  .topProposal
+    font-weight bold
+
+  .highlightTopScores
+    background-color #ffffcc 
 </style>

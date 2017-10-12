@@ -6,7 +6,11 @@
       <NameList :votes="votes"/>
     </ProcessCard>
     <ProcessCard>
-      <EmojiVoteList :proposals="proposals" :tmpemojis="tmpemojis" />
+      <EmojiVoteList
+        :proposals="proposals"
+        :tmpemojis="tmpemojis"
+        @update:tmpemojis="obj => updateEmo(obj)"
+        />
       <br></br>
       <template v-if="submitted">
         <q-alert
@@ -64,6 +68,9 @@ export default {
     getTopic(this.id).then(this.getData)
   },
   methods: {
+    updateEmo (obj) {
+      this.tmpemojis[obj.id] = obj.val
+    },
     votesExist () {
       if (Object.keys(this.votes).length > 0) return true
       else return false
@@ -94,7 +101,6 @@ export default {
 
       if (!error) { // if no errors proceed
         let tmp = this
-        console.log(this.tmpemojis)
 
         setVotes(this.id, this.name, this.tmpemojis).then(log => {
           if (log === -2) tmp.nameExists = true

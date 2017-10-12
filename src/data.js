@@ -26,11 +26,14 @@ export const getTopic = (id) => {
   })
 }
 
-export const setProposal = (id, title, description) => {
+export const setProposal = (id, obj) => {
   return getTopic(id).then(topic => {
     // add proposal
-    topic.emojis[title] = 0
-    topic.proposals[title] = description
+    topic.proposals[obj.id] = {
+      description: obj.description,
+      title: obj.title
+    }
+    topic.emojis[obj.id] = 0
     // put them back
     return db.put(topic)
   })
