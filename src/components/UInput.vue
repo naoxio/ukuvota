@@ -9,6 +9,7 @@
 <script>
   import { QInput, QField } from 'quasar'
   import anchorme from 'anchorme'
+
   export default {
     components: {
       QInput,
@@ -25,8 +26,8 @@
     },
     watch: {
       val (newVal) {
-        let results = anchorme(newVal)
-        this.$emit('update:value', results)
+        let result = anchorme(newVal)
+        this.$emit('update:value', result)
       }
     },
     data () {

@@ -1,7 +1,8 @@
 <template>
   <ProcessCard>
-    <h5><q-field :label="topic.question" /></h5>
-    <q-field :label="topic.description" />
+    <h5><ULabel :value="topic.question" /></h5>
+    <ULabel :value="topic.description" />
+    </br>
     <div class="row justify-between">
       <div v-if="proposalTimer !== -1">
         {{ $t('Proposal.time.label') }}
@@ -26,6 +27,7 @@
   import ProcessCard from 'layouts/ProcessCard'
   import Share from '@/Share'
   import { QField, QItem, QItemMain } from 'quasar'
+  import ULabel from '@/ULabel'
 
   export default {
     props: {
@@ -38,6 +40,7 @@
       NegativeScoreInfo,
       ProcessCard,
       Share,
+      ULabel,
       QField,
       QItem,
       QItemMain

@@ -1,7 +1,8 @@
 <template>
   <process-layout>
     <ProcessCard v-if="votesExist()" >
-      <h5><q-field :label="$t('Voted.list')" /></h5>
+      <h5><ULabel :value="$t('Voted.list')" /></h5>
+      </br>
       <NameList :votes="votes"/>
     </ProcessCard>
     <ProcessCard>
@@ -43,6 +44,7 @@ import { QAlert, QBtn, QField, QInput, QItemMain } from 'quasar'
 import { getTopic, setVotes } from 'data'
 import NameList from '@/NameList'
 import EmojiVoteList from '@/EmojiVoteList'
+import ULabel from '@/ULabel'
 
 export default {
   components: {
@@ -50,6 +52,7 @@ export default {
     ProcessLayout,
     ProcessCard,
     NameList,
+    ULabel,
     QAlert,
     QBtn,
     QField,

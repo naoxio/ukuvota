@@ -1,35 +1,30 @@
 <template>
   <process-layout>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <h5><q-field :label="$t('Proposal.add')"/></h5> 
-        <template v-if="submitted">
-          <q-alert
-            color="light"
-            icon="done"
-            dismissible
-            >
-            <q-item-main class="linklight" :label="$t('Proposal.added', { submittedProposal })" />
-          </q-alert>
-        </template>
-        <HyperInput
-          ref="pT"
-          :value.sync="newProposal"
-          :float-label="$t('Proposal.title')"
-          :error="proposalExists || proposalEmpty"
-          :error-label="getProposalError()" 
-        />
-        <HyperInput ref="pD" :value.sync="proposalDescription" :float-label="$t('DescriptionLabel')" />
-   
-        <div class="row justify-end">
-          <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
-        </div>
-      </q-card-main>
-    </q-card>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <h5><q-field :label="$t('Proposals.current')"></q-field></h5>
-      </q-card-main>
+    <ProcessCard>
+      <h5><ULabel :value="$t('Proposal.add')"/></h5> 
+      <template v-if="submitted">
+        <q-alert
+          color="light"
+          icon="done"
+          dismissible
+          >
+          <q-item-main class="linklight" :label="$t('Proposal.added', { submittedProposal })" />
+        </q-alert>
+      </template>
+      <UInput
+        ref="pT"
+        :value.sync="newProposal"
+        :float-label="$t('Proposal.title')"
+        :error="proposalExists || proposalEmpty"
+        :error-label="getProposalError()" 
+      />
+      <UInput ref="pD" :value.sync="proposalDescription" :float-label="$t('DescriptionLabel')" />
+      <div class="row justify-end">
+        <q-btn @click="addProposal">{{ $t('Add') }}</q-btn>
+      </div>
+    </ProcessCard>
+    <ProcessCard>
+      <h5><ULabel :value="$t('Proposals.current')"/></h5>
       <q-list>
         <div v-for="(description, title) in proposals" :key="title">
           <q-item v-if="title !== '_'">
@@ -37,19 +32,23 @@
           </q-item>
         </div>
       </q-list>
-    </q-card>
+    </ProcessCard>
   </process-layout>
 </template>
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
+  import ProcessCard from 'layouts/ProcessCard'
   import { QAlert, QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
   import { getProposals, setProposal } from 'src/data'
-  import HyperInput from '@/HyperInput'
+  import UInput from '@/UInput'
+  import ULabel from '@/ULabel'
 
   export default {
     components: {
-      HyperInput,
+      UInput,
+      ULabel,
       ProcessLayout,
+      ProcessCard,
       QAlert,
       QBtn,
       QCard,
