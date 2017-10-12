@@ -2,15 +2,7 @@
   <process-layout>
     <ProcessCard>
       <h5><ULabel :value="$t('Proposal.add')"/></h5> 
-      <template v-if="submitted">
-        <q-alert
-          color="light"
-          icon="done"
-          dismissible
-          >
-          <q-item-main class="linklight" :label="$t('Proposal.added', { submittedProposal })" />
-        </q-alert>
-      </template>
+      <UAlert :submitted="submitted" :value="$t('Proposal.added', { submittedProposal })" />
       <UInput
         ref="pT"
         :value.sync="newProposal"
@@ -38,21 +30,20 @@
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
   import ProcessCard from 'layouts/ProcessCard'
-  import { QAlert, QBtn, QCard, QCardMain, QField, QInput, QItem, QItemMain, QList } from 'quasar'
+  import { QBtn, QField, QInput, QItem, QItemMain, QList } from 'quasar'
   import { getProposals, setProposal } from 'src/data'
   import UInput from '@/UInput'
   import ULabel from '@/ULabel'
+  import UAlert from '@/UAlert'
 
   export default {
     components: {
-      UInput,
-      ULabel,
       ProcessLayout,
       ProcessCard,
-      QAlert,
+      UAlert,
+      UInput,
+      ULabel,
       QBtn,
-      QCard,
-      QCardMain,
       QField,
       QInput,
       QItem,
@@ -120,9 +111,3 @@
   }
 
 </script>
-<style lang="stylus">
-.linklight
-  a
-    text-decoration none
-    color yellow
-</style>
