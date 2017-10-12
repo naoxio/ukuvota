@@ -3,7 +3,7 @@
     <div style="max-width: 700px; text-align: left;">
       <div style="text-align: center">
         <img @dblclick="rotateLogo" id="logo" src="statics/logo.png" width="92px" />
-        <p class="title">Ukuvota</p>
+        <p class="title">kssuvota</p>
       </div>
       <br/>
       <MarkdownContent name="summary" />
