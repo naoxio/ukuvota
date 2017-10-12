@@ -1,7 +1,7 @@
 <template>
   <process-layout>
     <ProcessCard v-if="votesExist()" >
-      <h5><ULabel :value="$t('Voted.list')" /></h5>
+      <h5 class="grey"><ULabel :value="$t('Voted.list')" /></h5>
       </br>
       <NameList :votes="votes"/>
     </ProcessCard>
@@ -129,3 +129,8 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+  .grey
+    color grey
+</style>
