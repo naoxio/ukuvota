@@ -11,6 +11,8 @@
           :label="obj.title"
           @update:newData="val => updateProposal(val)"
           :sublabel="obj.description"
+          :floatlabel="$t('Proposal.title')"
+          :floatsublabel="$t('DescriptionLabel')"
           />
       </div>
     </ProcessCard>

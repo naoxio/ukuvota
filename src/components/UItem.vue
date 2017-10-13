@@ -2,8 +2,8 @@
   <div class="row justify-between items-start">
     <div class="col">
       <div v-if="editme">
-        <UInput :hyperlink="false" @keyup.enter.native="save"  :value.sync="la" />
-        <UInput :hyperlink="false" @keyup.enter.native="save" class="sublabel" :value.sync="subla" />
+        <UInput :floatLabel="floatlabel" :hyperlink="false" @keyup.enter.native="save"  :value.sync="la" />
+        <UInput :floatLabel="floatsublabel" :hyperlink="false" @keyup.enter.native="save" class="sublabel" :value.sync="subla" />
       </div>
       <div v-else>
         <ULabel :hyperlink="true" :value="la" />
@@ -29,7 +29,9 @@
   export default {
     props: {
       label: { require: true },
+      floatlabel: { required: false },
       sublabel: { required: false },
+      floatsublabel: { required: false },
       editable: { default: false },
       editifblank: { default: false },
       uid: { required: false }
@@ -38,6 +40,7 @@
       if (this.label === '' && this.sublabel === '' && this.editifblank) {
         this.editme = true
       }
+      console.log(this.floatlabel)
     },
     methods: {
       edit () {
