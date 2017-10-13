@@ -12,7 +12,6 @@ build:
   script:
   - yarn
   - yarn lint
-  - xvfb-run yarn test
   - yarn build
   artifacts:
     paths:
