@@ -28,6 +28,7 @@ Voting:
 Topic:
   questionLabel: Frage zum Thema
   errorLabel: Bitte fügen Sie eine Frage zum Thema hinzu
+  notFound: das Thema mit der ID {id} konnte nicht gefunden werden
 
 NegativeScoreWeighting: Negativer Score-Gewichtung
 ShareableURL: Freigegebene URL

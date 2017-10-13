@@ -63,6 +63,9 @@
     mounted () {
       this.id = this.$route.params.id
       getTopic(this.id).then((topic) => {
+        if (topic.error === 'not_found') {
+          this.$router.push({ name: 'notfound', params: { id: this.id } })
+        }
         this.topic = topic
         if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
         else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight

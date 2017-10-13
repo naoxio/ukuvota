@@ -35,6 +35,7 @@ export default new VueRouter({
     { name: 'collect', path: '/app/:id/collect', component: load('Collect') },
     { name: 'vote', path: '/app/:id/vote', component: load('Vote') },
     { name: 'results', path: '/app/:id/results', component: load('Results') },
+    { name: 'notfound', path: '/:id/notfound', component: load('NotFound') },
 
     // Always leave this last one
     { path: '*', component: load('Error404') } // Not found

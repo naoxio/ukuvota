@@ -28,6 +28,7 @@ Voting:
 Topic:
   questionLabel: Topic Question
   errorLabel: Please add a Topic Question
+  notFound: The topic with the id of {id} could not be found
 
 NegativeScoreWeighting: Negative score weighting
 ShareableURL: Shareable URL

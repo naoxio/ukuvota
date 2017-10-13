@@ -11,8 +11,7 @@ export const setTopic = (topic) => {
       topic._rev = doc._rev
       return db.put(topic)
     }).then().catch(err => {
-      console.log(err)
-      return -1
+      return err
     })
   })
 }
@@ -21,8 +20,7 @@ export const getTopic = (id) => {
   return db.get(id).then(doc => {
     return doc
   }).then().catch(err => {
-    console.log(err)
-    return -1
+    return err
   })
 }
 
