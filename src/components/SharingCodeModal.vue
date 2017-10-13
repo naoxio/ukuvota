@@ -4,7 +4,7 @@
       <q-icon color="primary" name="fa-qrcode" />
     </div>
     <q-modal ref="qr" :content-css="{padding: '50px', maxWidth: '700px'}">
-      <vue-qr :logoSrc="logopath" :text="urlpath" binarize="true" />
+      <vue-qr :logoSrc="logopath" :text="urlpath" />
       <q-btn color="primary" @click="$refs.qr.close()">{{ $t('Close') }}</q-btn>
     </q-modal>
   </span>
