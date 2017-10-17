@@ -1,26 +1,31 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import { LocalStorage } from 'quasar'
 
 Vue.use(Vuex)
 
+const getLocal = (item, given) => {
+  let local = LocalStorage.get.item(item)
+  console.log(local)
+  if (local === null) return given
+  return local
+}
 const store = new Vuex.Store({
   state: {
-    hash: 'Vasya'
+    theme: getLocal('theme', 'light')
   },
   actions: {
-    UPDATE_CREDENTIALS: function ({ commit }, newHash) {
-      commit('SET_CREDENTIALS', newHash)
+    updateTheme: function ({ commit }, newVal) {
+      commit('setTheme', newVal)
     }
   },
   mutations: {
-    SET_CREDENTIALS: (state, newHash) => {
-      state.hash = newHash
+    setTheme: (state, newVal) => {
+      state.theme = newVal
     }
   },
   getters: {
-    GET_CREDENTIALS: state => {
-      return state.hash
-    }
+    getTheme: state => state.theme
   }
 })
 

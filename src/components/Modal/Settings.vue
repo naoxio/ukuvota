@@ -1,13 +1,13 @@
 <template>
   <div class="row">
-    <lang-switcher class="lang"/>
+    <Language class="lang"/>
     <q-btn color="primary" @click="$refs.settings.open()" flat>
       <q-icon name="settings" />
       <q-modal ref="settings" :content-css="{padding: '50px', maxWidth: '700px'}">
         <h5>{{ $t('GlobalSettings') }}</h5>
         <div>
-          <div :class="row()">{{ $t('Language') }} <lang-switcher /></div>
-          <div :class="row()"> </div>
+          <div :class="row()">{{ $t('Language') }} <Language /></div>
+          <div :class="row()">{{ $t('Theme') }} <Theme /> </div>
         </div>
 
         <p class="caption">{{ $t('LocalSave') }}</p>
@@ -21,10 +21,13 @@
 </template>
 <script>
   import { QBtn, QModal, QIcon } from 'quasar'
-  import LangSwitcher from '@/Select/Language'
+  import Language from '@/Select/Language'
+  import Theme from '@/Select/Theme'
+
   export default {
     components: {
-      LangSwitcher,
+      Language,
+      Theme,
       QBtn,
       QModal,
       QIcon
@@ -47,5 +50,6 @@
     .lang
       display none
 
-    
+  .caption
+    color grey
 </style>

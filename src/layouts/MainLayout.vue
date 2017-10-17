@@ -1,5 +1,5 @@
 <template>
-  <q-layout ref="layout" view="hHh Lpr fff">
+  <q-layout :class="theme" ref="layout" view="hHh Lpr fff">
     <MainMenu slot="header" />
     <div class="layout-view">
       <div class="layout-padding">
@@ -16,7 +16,8 @@
   import LangSwitcher from '@/Select/Language'
   import MainMenu from '@/Layout/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
-  
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'index',
     components: {
@@ -24,8 +25,10 @@
       MainMenu,
       QLayout
     },
-    data () {
-      return {}
+    computed: {
+      ...mapGetters({
+        theme: 'getTheme'
+      })
     },
     mounted () {
       let sessionID = LocalStorage.get.item('SessionID')
@@ -38,6 +41,19 @@
 </script>
 
 <style lang="stylus">
-body
-  font-family 'coolFont'
+  body
+    font-family 'coolFont'
+
+  .light
+    color black
+    background-color white
+    .layout-header 
+      background-color white
+
+  .purple
+    .layout-header 
+      background-color white
+    *
+      color purple
+
 </style>
