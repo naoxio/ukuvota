@@ -24,7 +24,7 @@ import ULabel from '@/ULabel'
 
 export default {
   props: {
-    results: { required: true },
+    results: { required: false },
     votes: { required: true },
     proposals: { required: true },
     max: { required: true }
@@ -35,6 +35,9 @@ export default {
     QItemMain,
     QItemSide,
     ULabel
+  },
+  mounted () {
+    console.log(Object.keys(this.votes))
   },
   methods: {
     getPercentage (proposal) {

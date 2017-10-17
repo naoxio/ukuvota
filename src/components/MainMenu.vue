@@ -15,13 +15,15 @@
     <div class="col">
     </div>
     <div class="col-auto">
-      <lang-switcher class="lang"/>
     </div>
+
+    <SettingsModal/>
   </div>
 </template>
 
 <script>
   import LangSwitcher from '@/LangSwitcher'
+  import SettingsModal from '@/SettingsModal'
 
   import { openURL, QBtn, QIcon } from 'quasar'
   
@@ -29,12 +31,17 @@
     name: 'index',
     components: {
       LangSwitcher,
+      SettingsModal,
       QBtn,
       QIcon
     },
     methods: {
       launch (url) {
         openURL(url)
+      },
+      openSettings () {
+        console.log(this.$refs)
+        this.$refs.settings.open()
       },
       goTo (name) {
         this.$router.push({name: name})
@@ -49,17 +56,8 @@
 </script>
 
 <style lang="stylus" scoped>  
-  @media screen and (max-width: 300px)
-    .nav
-      img
-        height 10px
 
-  @media screen and (max-width: 300px)
-    .nav
-      img
-       height 16px
-  
-  @media screen and (max-width: 400px) and (min-width: 300px)
+  @media screen and (max-width: 400px)
     .nav
       img
        height 22px
@@ -72,7 +70,4 @@
   .nav
     width 100%
     background-color white
-
-  .lang
-    margin-left 1em
 </style>

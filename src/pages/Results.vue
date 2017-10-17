@@ -1,42 +1,39 @@
 <template>
   <process-layout>
-    <q-card style="max-width: 700px; text-align: left;">
-      <q-card-main>
-        <div v-if="noResults">
-          <NoResults />
+    <ProcessCard>
+      <div v-if="noResults">
+        <NoResults />
+      </div>
+      <div v-else>
+        <EmojiResults :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
+        <p class="caption">{{ $t('Names.voted') }}:</p>
+        <NameList :votes="votes" :select="false" />
+        </br>
+        <div class="row justify-between">
+          <p style="color: red"> {{ $t('Results.disclaimer')}} </p>
+          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
         </div>
-        <div v-else>
-          <EmojiList :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
-          <p class="caption">{{ $t('Names.voted') }}:</p>
-          <NameList :votes="votes" :select="false" />
-          </br>
-          <div class="row justify-between">
-            <p style="color: red"> {{ $t('Results.disclaimer')}} </p>
-            <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
-          </div>
-        </div>
-     </q-card-main>
-   </q-card>
+      </div>
+    </ProcessCard>
   </process-layout>
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import { QCard, QCardMain } from 'quasar'
+import ProcessCard from 'layouts/ProcessCard'
 import { getTopic } from 'src/data'
 import DataTable from '@/DataTable'
 import NoResults from '@/NoResults'
 import NameList from '@/NameList'
-import EmojiList from '@/EmojiList'
+import EmojiResults from '@/EmojiResults'
 
 export default {
   components: {
     ProcessLayout,
+    ProcessCard,
     DataTable,
     NameList,
     NoResults,
-    EmojiList,
-    QCard,
-    QCardMain
+    EmojiResults
   },
   mounted () {
     this.id = this.$route.params.id

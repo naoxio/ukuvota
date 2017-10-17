@@ -79,4 +79,8 @@ Time:
   seconds: Sekunden
   second: Sekunde
 
+GlobalSettings: Globale Einstellungen
+Language: Sprache
+
 Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'
+LocalSave: Alle Einstellungen werden lokal gespeichert
