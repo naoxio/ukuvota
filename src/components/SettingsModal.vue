@@ -7,7 +7,7 @@
         <h5>{{ $t('GlobalSettings') }}</h5>
         <div>
           <div :class="row()">{{ $t('Language') }} <lang-switcher /></div>
-          <div :class="row()"> asdf<lang-switcher /></div>
+          <div :class="row()"> </div>
         </div>
 
         <p class="caption">{{ $t('LocalSave') }}</p>
