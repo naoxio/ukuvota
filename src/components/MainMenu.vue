@@ -4,13 +4,13 @@
       <img src="statics/icons/home.png" />
     </q-btn>
     <q-btn @click="goTo('manual')" color="primary" flat>
-      <img src="statics/icons/book.png" />
+      <q-icon name="book" />
     </q-btn>
     <q-btn @click="launch('https://gitlab.com/ukuvota/ukuvota/')" color="primary" flat>
-      <img src="statics/icons/gitlab.png" />
+      <q-icon name="code" />
     </q-btn>
     <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
-      <img src="statics/icons/gitter.png" />
+      <q-icon name="chat" />
     </q-btn>
     <div class="col">
     </div>
