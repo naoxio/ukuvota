@@ -1,6 +1,6 @@
 <template>
   <process-layout>
-    <ProcessCard>
+    <UCard>
       <div v-if="noResults">
         <NoResults />
       </div>
@@ -14,22 +14,22 @@
           <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
         </div>
       </div>
-    </ProcessCard>
+    </UCard>
   </process-layout>
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import ProcessCard from 'layouts/ProcessCard'
+import UCard from '@/General/UCard'
 import { getTopic } from 'src/data'
-import DataTable from '@/DataTable'
-import NoResults from '@/NoResults'
-import NameList from '@/NameList'
-import EmojiResults from '@/EmojiResults'
+import DataTable from '@/Modal/DataTable'
+import NoResults from '@/Content/NoResults'
+import NameList from '@/List/Names'
+import EmojiResults from '@/List/EmojiResults'
 
 export default {
   components: {
     ProcessLayout,
-    ProcessCard,
+    UCard,
     DataTable,
     NameList,
     NoResults,

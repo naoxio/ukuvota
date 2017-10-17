@@ -1,6 +1,6 @@
 <template>
   <process-layout>
-    <ProcessCard>
+    <UCard>
       <h5><ULabel :value="$t('Proposals.current')"/></h5>
       <div v-for="(obj, id) in proposals" :key="id">
         <UItem
@@ -15,7 +15,7 @@
           :floatsublabel="$t('DescriptionLabel')"
           />
       </div>
-    </ProcessCard>
+    </UCard>
     <q-fixed-position corner="bottom-right" :offset="[18, 18]">
       <q-btn round color="primary" icon="add" @click="addProposal"/>
     </q-fixed-position>
@@ -23,20 +23,20 @@
 </template>
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
-  import ProcessCard from 'layouts/ProcessCard'
 
   import { uid, scroll, QBtn, QFixedPosition, QIcon } from 'quasar'
   import { getProposals, setProposal } from 'src/data'
-  import UAlert from '@/UAlert'
-  import UInput from '@/UInput'
-  import UItem from '@/UItem'
-  import ULabel from '@/ULabel'
+  import UAlert from '@/General/UAlert'
+  import UCard from '@/General/UCard'
+  import UInput from '@/General/UInput'
+  import UItem from '@/General/UItem'
+  import ULabel from '@/General/ULabel'
 
   const { setScrollPosition } = scroll
   export default {
     components: {
       ProcessLayout,
-      ProcessCard,
+      UCard,
       UAlert,
       UInput,
       UItem,

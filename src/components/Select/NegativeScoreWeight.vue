@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-  import NegativeScoreInfo from '@/NegativeScoreInfo'
+  import NegativeScoreInfo from '@/Modal/NegativeScore'
   import { QSelect } from 'quasar'
 
   export default {

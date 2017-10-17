@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import MarkdownContent from '@/MarkdownContent'
+  import MarkdownContent from '@/Content/Markdown'
   import {
     QBtn,
     QIcon,

@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import LangSwitcher from '@/LangSwitcher'
-  import MainMenu from '@/MainMenu'
+  import LangSwitcher from '@/Select/Language'
+  import MainMenu from '@/Layout/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
   
   export default {

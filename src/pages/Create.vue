@@ -19,12 +19,12 @@
 
 <script>
   import MainLayout from 'layouts/MainLayout'
-  import TimeSelector from '@/TimeSelector'
+  import TimeSelector from '@/Select/Time'
   import { setTopic, setProposal } from 'src/data'
   import { buildOutput } from 'src/timer'
-  import UInput from '@/UInput'
-  import ULabel from '@/ULabel'
-  import NegativeScoreWeightSelector from '@/NegativeScoreWeightSelector'
+  import UInput from '@/General/UInput'
+  import ULabel from '@/General/ULabel'
+  import NegativeScoreWeightSelector from '@/Select/NegativeScoreWeight'
 
   import { date, uid, scroll, QBtn } from 'quasar'
 

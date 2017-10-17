@@ -17,7 +17,8 @@
     "express-pouchdb": "^2.3.7",
     "morgan": "^1.8.2",
     "pouchdb": "^6.3.4",
-    "vue-qr": "^1.2.3"
+    "vue-qr": "^1.2.3",
+    "vuex": "^3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

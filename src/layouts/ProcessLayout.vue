@@ -14,7 +14,7 @@
   import MainLayout from 'layouts/MainLayout'
   import { getTopic } from 'src/data'
   import { formatTime } from 'src/timer'
-  import InfoCard from '@/InfoCard'
+  import InfoCard from '@/Content/InfoCard'
 
   export default {
     components: {

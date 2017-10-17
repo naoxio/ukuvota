@@ -20,7 +20,7 @@
 
 <script>
 import { QCheckbox, QItem, QItemMain, QItemSide } from 'quasar'
-import ULabel from '@/ULabel'
+import ULabel from '@/General/ULabel'
 
 export default {
   props: {

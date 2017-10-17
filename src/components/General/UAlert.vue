@@ -14,7 +14,7 @@
     
 <script>
   import { QAlert } from 'quasar'
-  import ULabel from '@/ULabel'
+  import ULabel from '@/General/ULabel'
 
   export default {
     components: {

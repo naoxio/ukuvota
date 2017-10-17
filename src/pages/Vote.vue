@@ -1,13 +1,13 @@
 <template>
   <process-layout>
-    <ProcessCard v-if="votesExist()" >
+    <UCard v-if="votesExist()" >
       <h5 class="grey">
         <ULabel :value="$t('Voted.list')" />
       </h5>
       </br>
       <NameList :votes="votes"/>
-    </ProcessCard>
-    <ProcessCard>
+    </UCard>
+    <UCard>
       <EmojiVoteList
         :proposals="proposals"
         :tmpemojis="tmpemojis"
@@ -39,24 +39,24 @@
       <div style="text-align: right">
         <q-btn @click="submit()" icon="arrow forward">{{ $t('Submit') }}</q-btn>
       </div>
-    </ProcessCard>
+    </UCard>
   </process-layout>
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import ProcessCard from 'layouts/ProcessCard'
+import UCard from '@/General/UCard'
 
 import { QAlert, QBtn, QField, QInput, QItemMain } from 'quasar'
 import { getTopic, setVotes } from 'data'
-import NameList from '@/NameList'
-import EmojiVoteList from '@/EmojiVoteList'
-import ULabel from '@/ULabel'
+import NameList from '@/List/Names'
+import EmojiVoteList from '@/List/EmojiVote'
+import ULabel from '@/General/ULabel'
 
 export default {
   components: {
     EmojiVoteList,
     ProcessLayout,
-    ProcessCard,
+    UCard,
     NameList,
     ULabel,
     QAlert,

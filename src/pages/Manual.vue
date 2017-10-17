@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import MarkdownContent from '@/MarkdownContent'
+import MarkdownContent from '@/Content/Markdown'
 import MainLayout from 'layouts/MainLayout'
 
 export default {

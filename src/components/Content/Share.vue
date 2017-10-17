@@ -6,18 +6,18 @@
         <input style="width: 100%" onClick="this.select();" :value="urlpath" />
       </div>
       <div class="col-auto">
-        <SharingCodeModal />
+        <SharingCode />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import SharingCodeModal from '@/SharingCodeModal'
+  import SharingCode from '@/Modal/SharingQR'
 
   export default {
     components: {
-      SharingCodeModal
+      SharingCode
     },
     data () {
       return {

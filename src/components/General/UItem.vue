@@ -22,8 +22,8 @@
 </template>
 
 <script>
-  import ULabel from '@/ULabel'
-  import UInput from '@/UInput'
+  import ULabel from '@/General/ULabel'
+  import UInput from '@/General/UInput'
   import { QIcon } from 'quasar'
 
   export default {

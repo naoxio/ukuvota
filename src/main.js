@@ -13,6 +13,7 @@ require(`./themes/app.${__THEME}.styl`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
+import store from './store'
 import i18n from './i18n'
 
 Vue.config.productionTip = false
@@ -32,6 +33,7 @@ Quasar.start(() => {
     el: '#q-app',
     i18n,
     router,
+    store,
     render: h => h(require('./App'))
   })
 })

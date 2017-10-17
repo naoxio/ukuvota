@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import ULabel from '@/ULabel'
+  import ULabel from '@/General/ULabel'
 
   export default {
     props: {

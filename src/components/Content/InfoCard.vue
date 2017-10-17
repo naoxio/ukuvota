@@ -1,5 +1,5 @@
 <template>
-  <ProcessCard>
+  <UCard>
     <h5><ULabel :value="topic.question" /></h5>
     <ULabel class="desc":value="topic.description" />
     <div class="row justify-between">
@@ -19,14 +19,14 @@
       </div>
     </div>
     <Share />
-  </ProcessCard>
+  </UCard>
 </template>
 <script>
-  import NegativeScoreInfo from '@/NegativeScoreInfo'
-  import ProcessCard from 'layouts/ProcessCard'
-  import Share from '@/Share'
+  import NegativeScoreInfo from '@/Modal/NegativeScore'
+  import UCard from '@/General/UCard'
+  import Share from '@/Content/Share'
   import { QField, QItem, QItemMain } from 'quasar'
-  import ULabel from '@/ULabel'
+  import ULabel from '@/General/ULabel'
 
   export default {
     props: {
@@ -37,7 +37,7 @@
     },
     components: {
       NegativeScoreInfo,
-      ProcessCard,
+      UCard,
       Share,
       ULabel,
       QField,

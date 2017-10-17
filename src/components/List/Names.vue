@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import NameSelect from '@/NameSelect'
+import NameSelect from '@/Select/Name'
 
 export default {
   props: {

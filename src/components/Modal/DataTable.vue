@@ -39,8 +39,8 @@
 
 <script>
   import { QBtn, QCheckbox, QIcon, QField, QModal } from 'quasar'
-  import NameSelect from '@/NameSelect'
-  import ULabel from '@/ULabel'
+  import NameSelect from '@/Select/Name'
+  import ULabel from '@/General/ULabel'
 
 export default {
     props: ['proposals', 'votes', 'negativeScore'],

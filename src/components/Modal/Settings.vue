@@ -21,7 +21,7 @@
 </template>
 <script>
   import { QBtn, QModal, QIcon } from 'quasar'
-  import LangSwitcher from '@/LangSwitcher'
+  import LangSwitcher from '@/Select/Language'
   export default {
     components: {
       LangSwitcher,

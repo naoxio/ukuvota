@@ -22,8 +22,8 @@
 </template>
 
 <script>
-  import LangSwitcher from '@/LangSwitcher'
-  import SettingsModal from '@/SettingsModal'
+  import LangSwitcher from '@/Select/Language'
+  import SettingsModal from '@/Modal/Settings'
 
   import { openURL, QBtn, QIcon } from 'quasar'
   
