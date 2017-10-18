@@ -1,5 +1,22 @@
 import PouchDB from 'pouchdb'
 
+const Repo = require('ipfs-repo')
+const repo = new Repo('/tmp/ipfs-repo')
+
+repo.init({ cool: 'config' }, (err) => {
+  if (err) {
+    throw err
+  }
+
+  repo.open((err) => {
+    if (err) {
+      throw err
+    }
+
+    console.log('repo is ready')
+  })
+})
+
 const BACKEND_URL = location.protocol + '//' + location.host + '/db'
 let db = new PouchDB(BACKEND_URL + '/topics')
 window.PouchDB = PouchDB

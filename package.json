@@ -15,6 +15,7 @@
     "anchorme": "^1.1.2",
     "express": "^4.15.4",
     "express-pouchdb": "^2.3.7",
+    "ipfs-repo": "^0.17.0",
     "morgan": "^1.8.2",
     "pouchdb": "^6.3.4",
     "vue-qr": "^1.2.3",

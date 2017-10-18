@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <Language class="lang"/>
-    <q-btn color="primary" @click="$refs.settings.open()" flat>
+    <!--q-btn color="primary" @click="$refs.settings.open()" flat>
       <q-icon name="settings" />
       <q-modal ref="settings" :content-css="{padding: '50px', maxWidth: '700px'}">
         <Global :rowStyle="row()"/>
@@ -11,7 +11,7 @@
           <q-btn color="primary" @click="$refs.settings.close()">{{ $t('Close') }}</q-btn>
         </center>
       </q-modal>
-    </q-btn>
+    </q-btn-->
   </div>
 </div>
 </template>
