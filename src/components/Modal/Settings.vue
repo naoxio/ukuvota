@@ -4,12 +4,8 @@
     <q-btn color="primary" @click="$refs.settings.open()" flat>
       <q-icon name="settings" />
       <q-modal ref="settings" :content-css="{padding: '50px', maxWidth: '700px'}">
-        <h5>{{ $t('GlobalSettings') }}</h5>
-        <div>
-          <div :class="row()">{{ $t('Language') }} <Language /></div>
-          <div :class="row()">{{ $t('Theme') }} <Theme /> </div>
-        </div>
-
+        <Global :rowStyle="row()"/>
+        <div v-if="isRoute('results')"><Results /></div>
         <p class="caption">{{ $t('LocalSave') }}</p>
         <center>
           <q-btn color="primary" @click="$refs.settings.close()">{{ $t('Close') }}</q-btn>
@@ -22,12 +18,14 @@
 <script>
   import { QBtn, QModal, QIcon } from 'quasar'
   import Language from '@/Select/Language'
-  import Theme from '@/Select/Theme'
+  import Global from '@/Setting/Global'
+  import Results from '@/Setting/Results'
 
   export default {
     components: {
       Language,
-      Theme,
+      Global,
+      Results,
       QBtn,
       QModal,
       QIcon
@@ -35,12 +33,18 @@
     methods: {
       row () {
         return 'row justify-between items-center'
+      },
+      isRoute (name) {
+        console.log(this.route, name)
+        if (name === this.route) return true
+        else return false
       }
     },
     data () {
       return {
         urlpath: window.location.href,
-        logopath: 'statics/logo.png'
+        logopath: 'statics/logo.png',
+        route: this.$route.name
       }
     }
   }

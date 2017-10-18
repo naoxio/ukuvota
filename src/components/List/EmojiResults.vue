@@ -2,7 +2,6 @@
   <div>
     <div class="row justify-between">
       <p class="caption">{{ $t('Results.title') }}!</p>
-      <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
     <div v-for="(value, id) in results" :key="value">
       <div :class="{ topProposal: getEmoji(id) === 3, highlightTopScores: highlightTopScores && getEmoji(id) === 3}">

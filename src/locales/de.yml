@@ -42,6 +42,8 @@ Results:
   noOneVoted: niemand hat gewählt
   tryAgain: versuche es noch einmal, diesmal sag es deinen Freunden!
 
+ResultSetting: Ergebniskonfigurationen
+
 HighlightTopScores: Markiere höchste Punktzahlen
 
 ## Buttons
