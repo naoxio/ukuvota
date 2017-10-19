@@ -8,19 +8,25 @@
     </div>
     <div v-for="(object, name, index) in votes" :key="name">
       <div :class="row()">
-        <NameSelect class="col-4 left" style="font-weight: bold" :options="selection" :name="name"/>
+        <NameSelect class="col-4 left bold":options="selection" :name="name"/>
         <div class="col-4" v-for="(obj, id) in proposals" :key="id">
           {{ getIndiScore(object, id) }}
         </div> 
       </div>
     </div>
-    <div :class="row('yellow')">
+    <div :class="row('yellow bold')">
+      <div class="col-4 left">{{ $t('Average') }}</div>
+      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+        {{ getAvgScore(id) }}
+      </div>
+    </div>
+
+    <div :class="row('yellow bold')">
       <div class="col-4 left">{{ $t('Total') }}</div>
       <div class="col-4" v-for="(obj, id) in proposals" :key="id">
         {{ getScore(id) }}
       </div>
     </div>
-
 
 </div>
 
@@ -48,6 +54,10 @@
             this.res[proposal] = this.res[proposal] + vote
           }
         }
+      },
+      getAvgScore (proposal) {
+        console.log(this.selection.length)
+        return this.res[proposal] / this.selection.length
       },
       getScore (proposal) {
         return this.res[proposal]
@@ -110,6 +120,9 @@
 
 .yellow
   background-color #ffffcc
+
+.bold
+  font-weight: bold
 
 table
   td
