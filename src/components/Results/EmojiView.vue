@@ -7,34 +7,36 @@
       <p class="caption">{{ $t('Results.title') }}!</p>
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
-    <div style="list" v-for="(value, id) in results" :key="value">
-      <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
-        <div class="list row justify-between items-center">
-          <div>
-            <ULabel :hyperlink="true" :value="getTitle(id)" />
-            <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
+    <div>
+      <div class="list" v-for="(value, id) in results" :key="value">
+        <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
+          <div class="list row justify-between items-center">
+            <div>
+              <ULabel :hyperlink="true" :value="getTitle(id)" />
+              <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
+            </div>
+            <div>
+              <q-tooltip v-if="!resHover.none">
+                <div v-if="resHover.avg">
+                  <div v-if="resHover.total">
+                    {{ $t('Average') }}: {{ getAvgScore(id) }}
+                  </div>
+                  <div v-else>
+                    {{ getAvgScore(id) }}
+                  </div>
+                </div>
+                <div v-if="resHover.total">
+                  <div v-if="resHover.total">
+                    {{ $t('Total') }}: {{ getScore(id) }}
+                  </div>
+                  <div v-else>
+                    {{ getScore(id) }}
+                  </div>
+                </div>
+              </q-tooltip>
+            <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
           </div>
-          <div>
-            <q-tooltip v-if="!resHover.none">
-              <div v-if="resHover.avg">
-                <div v-if="resHover.total">
-                  {{ $t('Average') }}: {{ getAvgScore(id) }}
-                </div>
-                <div v-else>
-                  {{ getAvgScore(id) }}
-                </div>
-              </div>
-              <div v-if="resHover.total">
-                <div v-if="resHover.total">
-                  {{ $t('Total') }}: {{ getScore(id) }}
-                </div>
-                <div v-else>
-                  {{ getScore(id) }}
-                </div>
-              </div>
-            </q-tooltip>
-          <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
-        </div>
+          </div>
         </div>
       </div>
     </div>

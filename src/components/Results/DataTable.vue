@@ -1,6 +1,5 @@
 <template>
 <div>
-
   <table id="table" class="horizontal-seperator loose vertical-separator">
     <tr>
       <th class="text-left">{{ $t('Name.title') }}</th>
@@ -29,21 +28,14 @@
       </td>
     </tr>
   </table>
-  <div class="row padding">
-    <q-btn @click="saveImage">
-      {{ $t('SaveImage')}}
-    </q-btn>
-  </div>
+  <ExportImage element="table"/>
 </div>
 </template>
-
 <script>
-  import { QBtn, QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
+  import { QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
-  import html2canvas from 'html2canvas'
-  import canvasToImage from 'canvas-to-image'
-
+  import ExportImage from '@/Content/ExportImage'
   export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
@@ -69,32 +61,17 @@
         let score = object[proposal]
         if (score < 0) score = score * this.negativeScore
         return score
-      },
-      saveImage () {
-        html2canvas(document.getElementById('table'), {
-          onrendered: function (canvas) {
-            let c = document.body.appendChild(canvas)
-            c.id = 'canvas'
-
-            canvasToImage('canvas', {
-              name: 'results',
-              type: 'jpg',
-              quality: 0.7
-            })
-            document.body.removeChild(canvas)
-          }
-        })
       }
     },
     components: {
       NameSelect,
       ULabel,
-      QBtn,
       QCheckbox,
       QField,
       QModal,
       QIcon,
-      QScrollArea
+      QScrollArea,
+      ExportImage
     },
     mounted () {
       this.res = {}
