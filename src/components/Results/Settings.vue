@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5>{{ $t('ResultSetting') }}</h5>
+    <h5>Customization is coming soon!</h5>
     <div>
       <!--div :class="rowStyle">{{ $t('Theme') }} <Theme /> </div>-->
     </div>

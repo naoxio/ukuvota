@@ -15,7 +15,7 @@
       <q-tab-pane class="nopad" name="tab-2">
         <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
       </q-tab-pane>
-      <q-tab-pane name="tab-r">
+      <q-tab-pane name="tab-3">
         <Settings />
       </q-tab-pane>
     </q-tabs>
