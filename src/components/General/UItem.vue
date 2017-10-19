@@ -40,7 +40,6 @@
       if (this.label === '' && this.sublabel === '' && this.editifblank) {
         this.editme = true
       }
-      console.log(this.floatlabel)
     },
     methods: {
       edit () {

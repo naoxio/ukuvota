@@ -1,40 +1,40 @@
 <template>
-  <div>
-    <div class="row padding">
-      <q-btn @click="saveImage">
-        {{ $t('SaveImage')}}
-      </q-btn>
-    </div>
-    <div id="table">
-      <div class="row red">
-        <ULabel class="col-4 left" :value="$t('Name.title')"/>
-        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-          <ULabel :hyperlink=true :value="obj.title" />
-        </div> 
-      </div>
-      <div v-for="(object, name, index) in votes" :key="name">
-        <div class="row">
-          <NameSelect class="col-4 left bold":options="selection" :name="name"/>
-          <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-            <div>{{ getIndiScore(object, id) }}</div>
-          </div> 
-        </div>
-      </div>
-      <div class="row yellow bold">
-        <div class="col-4 left">{{ $t('Average') }}</div>
-        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-          <div>{{ getAvgScore(id) }}</div>
-        </div>
-      </div>
-      <div class="row yellow bold">
-        <div class="col-4 left">{{ $t('Total') }}</div>
-        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-          <div>{{ getScore(id) }}</div>
-        </div>
-      </div>
+<div>
+
+  <table id="table" class="horizontal-seperator loose vertical-separator">
+    <tr>
+      <th class="text-left">{{ $t('Name.title') }}</th>
+      <th class="text-left" v-for="(obj, id) in proposals" :key="id">
+        <ULabel class="field" :hyperlink=true :value="obj.title" />
+      </th> 
+    </tr>
+    <tr v-for="(object, name, index) in votes" :key="name">
+      <td style="font-weight: bold" data-th="Name">
+        <NameSelect :options="selection" :name="name"/>
+      </td>
+      <td v-for="(obj, id) in proposals" :key="id">
+        <ULabel class="text-center" :value="getIndiScore(object, id)"/>
+      </td> 
+    </tr>
+    <tr class="text-right t-right">
+      <th class="text-left">{{ $t('Average') }}</th>
+      <td v-for="(obj, id) in proposals" :key="id">
+        <ULabel class="text-center" :value="getAvgScore(id)"/>
+      </td>
+    </tr>
+    <tr class="text-right t-right">
+      <th class="text-left">{{ $t('Total') }}</th>
+      <td v-for="(obj, id) in proposals" :key="id">
+        <ULabel class="text-center" :value="getScore(id)"/>
+      </td>
+    </tr>
+  </table>
+  <div class="row padding">
+    <q-btn @click="saveImage">
+      {{ $t('SaveImage')}}
+    </q-btn>
   </div>
 </div>
-
 </template>
 
 <script>
@@ -44,7 +44,7 @@
   import html2canvas from 'html2canvas'
   import canvasToImage from 'canvas-to-image'
 
-export default {
+  export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
       genResults (name) {
@@ -74,7 +74,6 @@ export default {
         html2canvas(document.getElementById('table'), {
           onrendered: function (canvas) {
             let c = document.body.appendChild(canvas)
-            console.log()
             c.id = 'canvas'
 
             canvasToImage('canvas', {
@@ -124,28 +123,19 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  #table
-    background-color white
   .info
     cursor pointer
     font-size 14px
     display inline
     padding-left 10px
 
-  .left
-    text-align left 
-    padding-left 1em
 
-  .red
-    background-color #FFEBEE
-
-  .yellow
-    background-color #ffffcc
-
-  .bold
-    font-weight: bold
-
+  table
+    width 100%
+    background-color white
+  
   .padding
     padding 1em
+
 
 </style>
