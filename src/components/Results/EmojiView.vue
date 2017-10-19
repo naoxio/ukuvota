@@ -59,7 +59,11 @@ export default {
       return this.proposals[id].title
     },
     getAvgEmoji (id) {
-      return Math.round(this.getAvgScore(id))
+      let emo = Math.round(this.getAvgScore(id))
+      if (emo < 0) {
+        emo = Math.round(emo / this.negativeScore)
+      }
+      return emo
     },
     getTotalEmoji (proposal) {
       let length = this.getLength(this.votes)
