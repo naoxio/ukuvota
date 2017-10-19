@@ -56,7 +56,6 @@
         }
       },
       getAvgScore (proposal) {
-        console.log(this.selection.length)
         return this.res[proposal] / this.selection.length
       },
       getScore (proposal) {

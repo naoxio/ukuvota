@@ -1,6 +1,10 @@
 <template>
   <div>
+    <p class="caption">{{ $t('Names.voted') }}</p>
+    <NameList :votes="votes" :select="false" />
+    </br>
     <div class="row justify-between">
+      <p class="caption">{{ $t('Results.title') }}!</p>
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
     <div style="list" v-for="(value, id) in results" :key="value">
@@ -14,8 +18,6 @@
         </div>
       </div>
     </div>
-    <p class="caption">{{ $t('Names.voted') }}:</p>
-    <NameList :votes="votes" :select="false" />
   </div>
 </template>
 
@@ -29,7 +31,8 @@ export default {
     results: { required: false },
     votes: { required: true },
     proposals: { required: true },
-    max: { required: true }
+    max: { required: true },
+    negativeScore: { required: true }
   },
   components: {
     QCheckbox,
@@ -39,16 +42,12 @@ export default {
     ULabel,
     NameList
   },
-  mounted () {
-    console.log(Object.keys(this.votes))
-  },
   methods: {
-    getPercentage (proposal) {
-      let score = this.getScore(proposal)
-      return score / this.max
-    },
     getScore (proposal) {
       return this.results[proposal]
+    },
+    getAvgScore (proposal) {
+      return this.results[proposal] / this.getLength(this.votes)
     },
     getLength (object) {
       return Object.keys(object).length
@@ -59,7 +58,10 @@ export default {
     getTitle (id) {
       return this.proposals[id].title
     },
-    getEmoji (proposal) {
+    getAvgEmoji (id) {
+      return Math.round(this.getAvgScore(id))
+    },
+    getTotalEmoji (proposal) {
       let length = this.getLength(this.votes)
       let multiplier = this.negativeScore - 1
       let p = this.getScore(proposal)
@@ -72,18 +74,29 @@ export default {
       else if (p >= this.max - length * 5 * multiplier) emo = -2
       else emo = -3
       return emo
+    },
+    getEmoji (proposal) {
+      if (this.getAverage) {
+        return this.getAvgEmoji(proposal)
+      }
+      else return this.getTotalEmoji(proposal)
     }
   },
   data () {
     return {
       selection: this.options,
-      highlightTopScores: false
+      highlightTopScores: false,
+      getAverage: true
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+  .caption
+    text-align left 
+    font-size 1.2em
+
   .list
     padding 0.5em
     text-align left 

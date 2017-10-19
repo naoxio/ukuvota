@@ -10,7 +10,7 @@
       <q-tab slot="title" name="tab-3" icon="settings" />
           <!-- Targets -->
       <q-tab-pane name="tab-1">
-        <EmojiView :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
+        <EmojiView :negativeScore="negativeScore" :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
       </q-tab-pane>
       <q-tab-pane class="nopad" name="tab-2">
         <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
