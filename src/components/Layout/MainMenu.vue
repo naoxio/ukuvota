@@ -6,7 +6,7 @@
     <q-btn @click="goTo('manual')" color="primary" flat>
       <q-icon name="book" />
     </q-btn>
-    <q-btn @click="launch('https://gitlab.com/ukuvota/ukuvota/')" color="primary" flat>
+    <q-btn @click="launch('https://gitlab.com/yunity/ukuvota/')" color="primary" flat>
       <q-icon name="code" />
     </q-btn>
     <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
