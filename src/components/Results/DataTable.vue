@@ -1,33 +1,38 @@
 <template>
   <div>
-    <div :class="row('red')">
-      <ULabel class="col-4 left" :value="$t('Name.title')"/>
-      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-        <ULabel :hyperlink=true :value="obj.title" />
-      </div> 
+    <div class="row padding">
+      <q-btn @click="saveImage">
+        {{ $t('SaveImage')}}
+      </q-btn>
     </div>
-    <div v-for="(object, name, index) in votes" :key="name">
-      <div :class="row()">
-        <NameSelect class="col-4 left bold":options="selection" :name="name"/>
+    <div id="table">
+      <div class="row red">
+        <ULabel class="col-4 left" :value="$t('Name.title')"/>
         <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-          {{ getIndiScore(object, id) }}
+          <ULabel :hyperlink=true :value="obj.title" />
         </div> 
       </div>
-    </div>
-    <div :class="row('yellow bold')">
-      <div class="col-4 left">{{ $t('Average') }}</div>
-      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-        {{ getAvgScore(id) }}
+      <div v-for="(object, name, index) in votes" :key="name">
+        <div class="row">
+          <NameSelect class="col-4 left bold":options="selection" :name="name"/>
+          <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+            <div>{{ getIndiScore(object, id) }}</div>
+          </div> 
+        </div>
       </div>
-    </div>
-
-    <div :class="row('yellow bold')">
-      <div class="col-4 left">{{ $t('Total') }}</div>
-      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
-        {{ getScore(id) }}
+      <div class="row yellow bold">
+        <div class="col-4 left">{{ $t('Average') }}</div>
+        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+          <div>{{ getAvgScore(id) }}</div>
+        </div>
       </div>
-    </div>
-
+      <div class="row yellow bold">
+        <div class="col-4 left">{{ $t('Total') }}</div>
+        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+          <div>{{ getScore(id) }}</div>
+        </div>
+      </div>
+  </div>
 </div>
 
 </template>
@@ -36,13 +41,12 @@
   import { QBtn, QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
+  import html2canvas from 'html2canvas'
+  import canvasToImage from 'canvas-to-image'
 
-  export default {
+export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
-      row (extra) {
-        return 'row justify-around items-center ' + extra
-      },
       genResults (name) {
         for (let proposal in this.proposals) {
           let vote = this.votes[name][proposal]
@@ -65,6 +69,22 @@
         let score = object[proposal]
         if (score < 0) score = score * this.negativeScore
         return score
+      },
+      saveImage () {
+        html2canvas(document.getElementById('table'), {
+          onrendered: function (canvas) {
+            let c = document.body.appendChild(canvas)
+            console.log()
+            c.id = 'canvas'
+
+            canvasToImage('canvas', {
+              name: 'results',
+              type: 'jpg',
+              quality: 0.7
+            })
+            document.body.removeChild(canvas)
+          }
+        })
       }
     },
     components: {
@@ -104,29 +124,28 @@
 </script>
 
 <style lang="stylus" scoped>
-.info
-  cursor pointer
-  font-size 14px
-  display inline
-  padding-left 10px
+  #table
+    background-color white
+  .info
+    cursor pointer
+    font-size 14px
+    display inline
+    padding-left 10px
 
-.left
-  text-align left 
-  padding-left 1em
+  .left
+    text-align left 
+    padding-left 1em
 
-.red
-  background-color #FFEBEE
+  .red
+    background-color #FFEBEE
 
-.yellow
-  background-color #ffffcc
+  .yellow
+    background-color #ffffcc
 
-.bold
-  font-weight: bold
+  .bold
+    font-weight: bold
 
-table
-  td
-    height 64px
-  th
-    height 64px
+  .padding
+    padding 1em
 
 </style>

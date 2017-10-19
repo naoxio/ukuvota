@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "anchorme": "^1.1.2",
+    "canvas-to-image": "^2.0.0",
     "express": "^4.15.4",
     "express-pouchdb": "^2.3.7",
+    "html2canvas": "^0.5.0-beta4",
     "morgan": "^1.8.2",
     "pouchdb": "^6.3.4",
     "vue-qr": "^1.2.3",
