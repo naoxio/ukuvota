@@ -89,3 +89,9 @@ LocalSave: All settings are saved locally
 
 Average: Average
 SaveImage: Save as Image
+
+EmojiView: Emoji View
+onEmojiHover: on emoji hover
+doNothing: do nothing
+showAverageScore: show average score
+showTotalScore: show total score

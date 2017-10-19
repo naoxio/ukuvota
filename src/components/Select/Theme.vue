@@ -3,13 +3,13 @@
 </template>
 
 <script>
-  import { LocalStorage, QSelect } from 'quasar'
+  import { QSelect } from 'quasar'
   import { mapActions, mapState } from 'vuex'
   export default {
     components: { QSelect },
     methods: {
       ...mapActions([
-        'updateTheme'
+        'updTheme'
       ])
     },
     data () {
@@ -25,10 +25,7 @@
       }
     },
     watch: {
-      theme (val) {
-        this.$store.dispatch('updateTheme', val)
-        LocalStorage.set('theme', val)
-      }
+      theme (val) { this.$store.dispatch('updTheme', val) }
     }
   }
 </script>

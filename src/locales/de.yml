@@ -89,3 +89,9 @@ LocalSave: Alle Einstellungen werden lokal gespeichert
 
 Average: Durchschnitt
 SaveImage: Als Bild speichern
+
+EmojiView: Emoji Ansicht
+onEmojiHover: wenn der Mauszeiger auf den Emoji zeigt
+doNothing: nichts tun
+showAverageScore: Durchschnittspunktzahl anzeigen
+showTotalScore: Gesamtpunktzahl anzeigen

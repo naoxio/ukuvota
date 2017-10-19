@@ -14,7 +14,27 @@
             <ULabel :hyperlink="true" :value="getTitle(id)" />
             <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
           </div>
+          <div>
+            <q-tooltip v-if="!resHover.none">
+              <div v-if="resHover.avg">
+                <div v-if="resHover.total">
+                  {{ $t('Average') }}: {{ getAvgScore(id) }}
+                </div>
+                <div v-else>
+                  {{ getAvgScore(id) }}
+                </div>
+              </div>
+              <div v-if="resHover.total">
+                <div v-if="resHover.total">
+                  {{ $t('Total') }}: {{ getScore(id) }}
+                </div>
+                <div v-else>
+                  {{ getScore(id) }}
+                </div>
+              </div>
+            </q-tooltip>
           <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
+        </div>
         </div>
       </div>
     </div>
@@ -22,78 +42,82 @@
 </template>
 
 <script>
-import { QCheckbox, QItem, QItemMain, QItemSide } from 'quasar'
-import ULabel from '@/General/ULabel'
-import NameList from '@/List/Names'
+  import { QCheckbox, QTooltip } from 'quasar'
+  import ULabel from '@/General/ULabel'
+  import NameList from '@/List/Names'
+  import { mapGetters } from 'vuex'
 
-export default {
-  props: {
-    results: { required: false },
-    votes: { required: true },
-    proposals: { required: true },
-    max: { required: true },
-    negativeScore: { required: true }
-  },
-  components: {
-    QCheckbox,
-    QItem,
-    QItemMain,
-    QItemSide,
-    ULabel,
-    NameList
-  },
-  methods: {
-    getScore (proposal) {
-      return this.results[proposal]
+  export default {
+    props: {
+      results: { required: false },
+      votes: { required: true },
+      proposals: { required: true },
+      max: { required: true },
+      negativeScore: { required: true }
     },
-    getAvgScore (proposal) {
-      return this.results[proposal] / this.getLength(this.votes)
+    components: {
+      QCheckbox,
+      QTooltip,
+      ULabel,
+      NameList
     },
-    getLength (object) {
-      return Object.keys(object).length
+    computed: {
+      ...mapGetters({
+        resHover: 'getResHover'
+      })
     },
-    getDescription (id) {
-      return this.proposals[id].description
-    },
-    getTitle (id) {
-      return this.proposals[id].title
-    },
-    getAvgEmoji (id) {
-      let emo = Math.round(this.getAvgScore(id))
-      if (emo < 0) {
-        emo = Math.round(emo / this.negativeScore)
+    methods: {
+      getScore (proposal) {
+        return this.results[proposal]
+      },
+      getAvgScore (proposal) {
+        return this.results[proposal] / this.getLength(this.votes)
+      },
+      getLength (object) {
+        return Object.keys(object).length
+      },
+      getDescription (id) {
+        return this.proposals[id].description
+      },
+      getTitle (id) {
+        return this.proposals[id].title
+      },
+      getAvgEmoji (id) {
+        let emo = Math.round(this.getAvgScore(id))
+        if (emo < 0) {
+          emo = Math.round(emo / this.negativeScore)
+        }
+        return emo
+      },
+      getTotalEmoji (proposal) {
+        let length = this.getLength(this.votes)
+        let multiplier = this.negativeScore - 1
+        let p = this.getScore(proposal)
+        let emo = 0
+        if (p === this.max) emo = 3
+        else if (p >= this.max - length) emo = 2
+        else if (p >= this.max - length * 2) emo = 1
+        else if (p >= this.max - length * 3) emo = 0
+        else if (p >= this.max - length * 4 * multiplier) emo = -1
+        else if (p >= this.max - length * 5 * multiplier) emo = -2
+        else emo = -3
+        return emo
+      },
+      getEmoji (proposal) {
+        if (this.getAverage) {
+          return this.getAvgEmoji(proposal)
+        }
+        else return this.getTotalEmoji(proposal)
       }
-      return emo
     },
-    getTotalEmoji (proposal) {
-      let length = this.getLength(this.votes)
-      let multiplier = this.negativeScore - 1
-      let p = this.getScore(proposal)
-      let emo = 0
-      if (p === this.max) emo = 3
-      else if (p >= this.max - length) emo = 2
-      else if (p >= this.max - length * 2) emo = 1
-      else if (p >= this.max - length * 3) emo = 0
-      else if (p >= this.max - length * 4 * multiplier) emo = -1
-      else if (p >= this.max - length * 5 * multiplier) emo = -2
-      else emo = -3
-      return emo
-    },
-    getEmoji (proposal) {
-      if (this.getAverage) {
-        return this.getAvgEmoji(proposal)
+    data () {
+      return {
+        selection: this.options,
+        highlightTopScores: false,
+        getAverage: true
       }
-      else return this.getTotalEmoji(proposal)
-    }
-  },
-  data () {
-    return {
-      selection: this.options,
-      highlightTopScores: false,
-      getAverage: true
     }
   }
-}
 </script>
 
 <style lang="stylus" scoped>
