@@ -8,7 +8,7 @@
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
     <div style="list" v-for="(value, id) in results" :key="value">
-      <div :class="{ topProposal: getEmoji(id) === 3, highlightTopScores: highlightTopScores && getEmoji(id) === 3}">
+      <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
         <div class="list row justify-between items-center">
           <div>
             <ULabel :hyperlink="true" :value="getTitle(id)" />
