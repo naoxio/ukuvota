@@ -19,13 +19,11 @@
   import { QBtn, QModal, QIcon } from 'quasar'
   import Language from '@/Select/Language'
   import Global from '@/Setting/Global'
-  import Results from '@/Setting/Results'
 
   export default {
     components: {
       Language,
       Global,
-      Results,
       QBtn,
       QModal,
       QIcon

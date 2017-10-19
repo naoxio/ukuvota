@@ -8,13 +8,10 @@
 </div>
 </template>
 <script>
-  import Language from '@/Select/Language'
-  import Theme from '@/Select/Theme'
 
   export default {
     components: {
-      Language,
-      Theme
+
     }
   }
 </script>

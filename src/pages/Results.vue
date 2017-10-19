@@ -1,39 +1,46 @@
 <template>
   <process-layout>
-    <UCard>
-      <div v-if="noResults">
-        <NoResults />
-      </div>
-      <div v-else>
-        <EmojiResults :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
-        <p class="caption">{{ $t('Names.voted') }}:</p>
-        <NameList :votes="votes" :select="false" />
-        </br>
-        <div class="row justify-between">
-          <p style="color: red"> {{ $t('Results.disclaimer')}} </p>
-          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
-        </div>
-      </div>
-    </UCard>
+    <u-card v-if="noResults">
+      <NoResults />
+    </u-card>
+    <q-tabs v-else class="tabs" align="justify">
+      <!-- Tabs - notice slot="title" -->
+      <q-tab default slot="title" name="tab-1" icon="tag faces" />
+      <q-tab slot="title" name="tab-2" icon="view list" />
+      <q-tab slot="title" name="tab-3" icon="settings" />
+          <!-- Targets -->
+      <q-tab-pane name="tab-1">
+        <EmojiView :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
+      </q-tab-pane>
+      <q-tab-pane class="nopad" name="tab-2">
+        <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />
+      </q-tab-pane>
+      <q-tab-pane name="tab-r">
+        <Settings />
+      </q-tab-pane>
+    </q-tabs>
   </process-layout>
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
 import UCard from '@/General/UCard'
 import { getTopic } from 'src/data'
-import DataTable from '@/Modal/DataTable'
-import NoResults from '@/Content/NoResults'
-import NameList from '@/List/Names'
-import EmojiResults from '@/List/EmojiResults'
-
+import DataTable from '@/Results/DataTable'
+import NoResults from '@/Results/NoVotes'
+import EmojiView from '@/Results/EmojiView'
+import Settings from '@/Results/Settings'
+import { QTabs, QTab, QTabPane } from 'quasar'
 export default {
   components: {
     ProcessLayout,
     UCard,
     DataTable,
-    NameList,
     NoResults,
-    EmojiResults
+    EmojiView,
+    Settings,
+    QTabs,
+    QTab,
+    QTabPane
   },
   mounted () {
     this.id = this.$route.params.id
@@ -99,3 +106,10 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .tabs
+    max-width 700px
+    margin 0
+  .nopad
+    padding 0
+</style>

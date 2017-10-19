@@ -1,50 +1,42 @@
 <template>
   <div>
-    <q-btn @click="$refs.dataTable.open()">{{ $t('Results.viewRaw') }}</q-btn>
-    <q-modal ref="dataTable">
-      <table class="q-table horizontal-seperator loose flipped vertical-separator">
-        <tr class="t-left">
-          <th class="text-left red">{{ $t('Name.title') }}</th>
-          <div v-for="(obj, id) in proposals" :key="id">
-            <th class="red">
-             <ULabel style="text-align: left" class="field" :hyperlink=true :value="obj.title" />
-            </th>
-          </div> 
-        </tr>
-        <div v-for="(object, name, index) in votes" :key="name">
-          <tr class="t-center">
-            <td class="red" style="font-weight: bold" data-th="Name">
-              <NameSelect :options="selection" :name="name"/>
-            </td>
-            <div v-for="(obj, id) in proposals" :key="id">
-              <td :data-th="id" class="text-center"> {{ getIndiScore(object, id) }}</td>
-            </div> 
-          </tr>
-        </div>
-        <tr class="text-right t-right">
-          <th class="red">{{ $t('Total') }}</th>
-          <div v-for="(obj, id) in proposals" :key="id">
-            <td :data-th="id" class="text-center yellow"> {{ getScore(id) }}</td>
-          </div>
-        </tr>
-      </table>
-      <br/>
-      <center>
-        <q-btn color="primary" @click="$refs.dataTable.close()">{{ $t('Close') }}</q-btn>
-      </center>
-      <br />
-    </q-modal>
-  </div>
+    <div :class="row('red')">
+      <ULabel class="col-4 left" :value="$t('Name.title')"/>
+      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+        <ULabel :hyperlink=true :value="obj.title" />
+      </div> 
+    </div>
+    <div v-for="(object, name, index) in votes" :key="name">
+      <div :class="row()">
+        <NameSelect class="col-4 left" style="font-weight: bold" :options="selection" :name="name"/>
+        <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+          {{ getIndiScore(object, id) }}
+        </div> 
+      </div>
+    </div>
+    <div :class="row('yellow')">
+      <div class="col-4 left">{{ $t('Total') }}</div>
+      <div class="col-4" v-for="(obj, id) in proposals" :key="id">
+        {{ getScore(id) }}
+      </div>
+    </div>
+
+
+</div>
+
 </template>
 
 <script>
-  import { QBtn, QCheckbox, QIcon, QField, QModal } from 'quasar'
+  import { QBtn, QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
 
-export default {
+  export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
+      row (extra) {
+        return 'row justify-around items-center ' + extra
+      },
       genResults (name) {
         for (let proposal in this.proposals) {
           let vote = this.votes[name][proposal]
@@ -73,7 +65,8 @@ export default {
       QCheckbox,
       QField,
       QModal,
-      QIcon
+      QIcon,
+      QScrollArea
     },
     mounted () {
       this.res = {}
@@ -108,11 +101,9 @@ export default {
   display inline
   padding-left 10px
 
-.t-left
-  margin-left auto
-
-.t-right
-  margin-right auto
+.left
+  text-align left 
+  padding-left 1em
 
 .red
   background-color #FFEBEE

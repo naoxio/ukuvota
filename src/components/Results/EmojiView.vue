@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="row justify-between">
-      <p class="caption">{{ $t('Results.title') }}!</p>
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
-    <div v-for="(value, id) in results" :key="value">
+    <div style="list" v-for="(value, id) in results" :key="value">
       <div :class="{ topProposal: getEmoji(id) === 3, highlightTopScores: highlightTopScores && getEmoji(id) === 3}">
         <div class="list row justify-between items-center">
           <div>
@@ -15,12 +14,15 @@
         </div>
       </div>
     </div>
+    <p class="caption">{{ $t('Names.voted') }}:</p>
+    <NameList :votes="votes" :select="false" />
   </div>
 </template>
 
 <script>
 import { QCheckbox, QItem, QItemMain, QItemSide } from 'quasar'
 import ULabel from '@/General/ULabel'
+import NameList from '@/List/Names'
 
 export default {
   props: {
@@ -34,7 +36,8 @@ export default {
     QItem,
     QItemMain,
     QItemSide,
-    ULabel
+    ULabel,
+    NameList
   },
   mounted () {
     console.log(Object.keys(this.votes))
@@ -83,7 +86,8 @@ export default {
 <style lang="stylus" scoped>
   .list
     padding 0.5em
-
+    text-align left 
+  
   .sublabel
     color grey 
 

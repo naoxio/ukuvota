@@ -16,7 +16,6 @@
     </div>
     <div class="col-auto">
     </div>
-
     <SettingsModal/>
   </div>
 </template>
