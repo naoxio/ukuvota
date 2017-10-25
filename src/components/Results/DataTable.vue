@@ -52,7 +52,7 @@
         }
       },
       getAvgScore (proposal) {
-        return this.res[proposal] / this.selection.length
+        return Math.round((this.res[proposal] / this.selection.length) * 100) * 0.01
       },
       getScore (proposal) {
         return this.res[proposal]
