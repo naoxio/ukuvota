@@ -2,8 +2,8 @@
 <div>
   <table id="table" class="horizontal-seperator loose vertical-separator">
     <tr>
-      <th class="text-left">{{ $t('Name.title') }}</th>
-      <th class="text-left" v-for="(obj, id) in proposals" :key="id">
+      <th class="text-center">{{ $t('Name.title') }}</th>
+      <th class="text-center" v-for="(obj, id) in proposals" :key="id">
         <ULabel class="field" :hyperlink=true :value="obj.title" />
       </th> 
     </tr>
