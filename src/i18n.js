@@ -8,7 +8,7 @@ const LOCALES = ['en', 'de']
 const detectLocale = () => {
   // Based on https://angular-translate.github.io/docs/#/guide/07_multi-language#multi-language_determining-preferred-language-automatically
   let val =
-    navigator.languages[0] ||
+    (navigator.languages && navigator.languages[0]) ||
     navigator.language ||
     navigator.browserLanguage ||
     navigator.systemLanguage ||
