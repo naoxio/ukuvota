@@ -18,20 +18,10 @@
             <div>
               <q-tooltip v-if="!resHover.none">
                 <div v-if="resHover.avg">
-                  <div v-if="resHover.total">
-                    {{ $t('Average') }}: {{ getAvgScore(id) }}
-                  </div>
-                  <div v-else>
-                    {{ getAvgScore(id) }}
-                  </div>
+                  {{ $t('Average') }}: {{ getAvgRoundedScore(id) }}
                 </div>
                 <div v-if="resHover.total">
-                  <div v-if="resHover.total">
-                    {{ $t('Total') }}: {{ getScore(id) }}
-                  </div>
-                  <div v-else>
-                    {{ getScore(id) }}
-                  </div>
+                  {{ $t('Total') }}: {{ getScore(id) }}
                 </div>
               </q-tooltip>
             <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
@@ -74,6 +64,9 @@
       },
       getAvgScore (proposal) {
         return this.results[proposal] / this.getLength(this.votes)
+      },
+      getAvgRoundedScore (id) {
+        return Math.round((getAvgScore(id)) * 100) * 0.01
       },
       getLength (object) {
         return Object.keys(object).length
