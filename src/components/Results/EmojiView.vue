@@ -24,7 +24,7 @@
                   {{ $t('Total') }}: {{ getTotalScore(id) }}
                 </div>
               </q-tooltip>
-              <img :class="{ pointer: !resHover.none }" :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
+              <UEmoji :class="{ pointer: !resHover.none }" :id="getEmoji(id)"/>
             </div>
           </div>
         </div>
@@ -36,6 +36,7 @@
 <script>
   import { QCheckbox, QTooltip } from 'quasar'
   import ULabel from '@/General/ULabel'
+  import UEmoji from '@/General/UEmoji'
   import NameList from '@/List/Names'
   import { mapState, mapGetters } from 'vuex'
   import { getOrderedList, getAvgScore, getAvgRoundedScore, getTotalScore, getIndiScore } from 'src/results'
@@ -45,7 +46,8 @@
       QCheckbox,
       QTooltip,
       ULabel,
-      NameList
+      NameList,
+      UEmoji
     },
     computed: {
       ...mapState([
