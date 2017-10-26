@@ -11,11 +11,11 @@
       <div class="list" v-for="(value, id) in results" :key="value">
         <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
           <div class="list row justify-between items-center">
-            <div>
+            <div class="col">
               <ULabel :hyperlink="true" :value="getTitle(id)" />
               <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
             </div>
-            <div>
+            <div class="col-auto">
               <q-tooltip v-if="!resHover.none">
                 <div v-if="resHover.avg">
                   {{ $t('Average') }}: {{ getAvgRoundedScore(id) }}
@@ -24,8 +24,8 @@
                   {{ $t('Total') }}: {{ getScore(id) }}
                 </div>
               </q-tooltip>
-            <img :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
-          </div>
+              <img :class="{ pointer: !resHover.none }" :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +116,9 @@
 </script>
 
 <style lang="stylus" scoped>
+  .pointer 
+    cursor pointer
+
   .caption
     text-align left 
     font-size 1.2em
