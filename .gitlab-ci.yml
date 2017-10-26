@@ -7,6 +7,7 @@ stages:
 image: alpine:latest
 
 install:
+  image: spaceywolfi/ukuvota-node
   stage: install
   script: yarn
   artifacts:
