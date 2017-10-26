@@ -9,7 +9,8 @@
     "dev": "node build/script.dev.js",
     "build": "node build/script.build.js",
     "lint": "eslint --ext .js,.vue src",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "anchorme": "^1.1.2",
@@ -23,6 +24,9 @@
     "vuex": "^3.0.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.2.13",
+    "@storybook/addon-links": "^3.2.13",
+    "@storybook/vue": "^3.2.13",
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.0.0",
     "babel-eslint": "^7.0.0",
