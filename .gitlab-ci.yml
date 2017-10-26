@@ -11,6 +11,7 @@ build:
   script:
   - yarn
   - yarn lint
+  - yarn test --ci
   - yarn build
   artifacts:
     paths:
