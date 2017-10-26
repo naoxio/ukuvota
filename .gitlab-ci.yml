@@ -7,10 +7,9 @@ image: alpine:latest
 
 build:
   # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: mhart/alpine-node
+  image: fusioncomau/alpine-node-git
   stage: build
   script:
-  - apk add git
   - yarn
   - yarn lint
   - yarn build
