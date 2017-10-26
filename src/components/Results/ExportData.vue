@@ -1,7 +1,7 @@
 <template>
  <div>
     <q-btn @click="exportText">
-      {{ $t('ExportText')}}
+      {{ $t('SaveText')}}
     </q-btn>
   </div>
 </template>
