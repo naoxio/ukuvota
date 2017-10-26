@@ -28,7 +28,12 @@
       </td>
     </tr>
   </table>
-  <ExportImage element="table"/>
+  </br>
+  <div class="row justify-around">
+    <ExportImage element="table"/>
+    <ExportData />
+  </div>
+  </br>
 </div>
 </template>
 <script>
@@ -36,6 +41,7 @@
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
   import ExportImage from '@/Content/ExportImage'
+  import ExportData from '@/Results/ExportData'
   export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
@@ -52,7 +58,7 @@
         }
       },
       getAvgScore (proposal) {
-        return Math.round((this.res[proposal] / this.selection.length) * 100) * 0.01
+        return Math.round((this.res[proposal] / this.selection.length) * 100) / 100
       },
       getScore (proposal) {
         return this.res[proposal]
@@ -71,7 +77,8 @@
       QModal,
       QIcon,
       QScrollArea,
-      ExportImage
+      ExportImage,
+      ExportData
     },
     mounted () {
       this.res = {}

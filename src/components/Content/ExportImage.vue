@@ -1,5 +1,5 @@
 <template>
- <div class="row padding">
+ <div>
     <q-btn @click="saveImage">
       {{ $t('SaveImage')}}
     </q-btn>
@@ -8,7 +8,8 @@
 <script>
   import { QBtn } from 'quasar'
   import html2canvas from 'html2canvas'
-  import canvasToImage from 'canvas-to-image'
+  import FileSaver from 'file-saver'
+
   export default {
     components: {
       QBtn
@@ -23,10 +24,8 @@
             let c = document.body.appendChild(canvas)
             c.id = 'canvas'
 
-            canvasToImage('canvas', {
-              name: 'results',
-              type: 'jpg',
-              quality: 0.7
+            c.toBlob(function (blob) {
+              FileSaver.saveAs(blob, 'results.jpg')
             })
             document.body.removeChild(canvas)
           }

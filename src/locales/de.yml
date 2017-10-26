@@ -11,6 +11,7 @@ Proposal:
   added: Vorschalg "{submittedProposal}" hinzugefügt!
 
 Proposals:
+  title: Vorschläge
   current: Aktuelle Vorschläge
 
 Vote:
@@ -54,6 +55,7 @@ Add: Hinzufügen
 
 ## Labels
 DescriptionLabel: Beschreibung (Optional)
+Description: Beschreibung
 
 ## Name Specific
 Name:

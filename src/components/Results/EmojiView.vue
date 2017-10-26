@@ -66,7 +66,7 @@
         return this.results[proposal] / this.getLength(this.votes)
       },
       getAvgRoundedScore (id) {
-        return Math.round((this.getAvgScore(id)) * 100) * 0.01
+        return Math.round((this.getAvgScore(id)) * 100) / 100
       },
       getLength (object) {
         return Object.keys(object).length
@@ -121,7 +121,6 @@
     font-size 1.2em
 
   .list
-    padding 0.5em
     text-align left 
   
   .sublabel

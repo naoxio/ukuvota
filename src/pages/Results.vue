@@ -30,6 +30,7 @@ import NoResults from '@/Results/NoVotes'
 import EmojiView from '@/Results/EmojiView'
 import Settings from '@/Results/Settings'
 import { QTabs, QTab, QTabPane } from 'quasar'
+
 export default {
   components: {
     ProcessLayout,

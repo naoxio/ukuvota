@@ -15,6 +15,7 @@
   import { getTopic } from 'src/data'
   import { formatTime } from 'src/timer'
   import InfoCard from '@/Content/InfoCard'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     components: {
@@ -22,6 +23,12 @@
       InfoCard
     },
     methods: {
+      ...mapActions([
+        'updTopic'
+      ]),
+      updateTopic (topic) {
+        this.$store.dispatch('updTopic', topic)
+      },
       timer () {
         if (this.redirect) this.autoRedirect()
       },
@@ -66,7 +73,7 @@
         if (topic.error === 'not_found') {
           this.$router.push({ name: 'notfound', params: { id: this.id } })
         }
-        this.topic = topic
+        this.updateTopic(topic)
         if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
         else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight
       }).then(() => {
@@ -79,8 +86,11 @@
     },
     data () {
       return {
+        ...mapState([
+          'topic'
+        ]),
+        topic: this.$store.state.topic,
         redirect: true,
-        topic: '',
         proposalTimer: '',
         votingTimer: '',
         negativeScoreWeight: ''

@@ -11,6 +11,7 @@ Proposal:
   added: Proposal "{submittedProposal}" added!
 
 Proposals:
+  title: Proposals
   current: Current Proposals
 
 Vote:
@@ -54,6 +55,7 @@ Add: Add
 
 ## Labels
 DescriptionLabel: Description (optional)
+Description: Description
 
 ## Name specific
 Name:
