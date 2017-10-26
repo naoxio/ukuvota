@@ -3,21 +3,23 @@
     <u-card v-if="noResults">
       <NoResults />
     </u-card>
-    <q-tabs v-else class="tabs" align="justify">
-      <!-- Tabs - notice slot="title" -->
-      <q-tab @click="ctx=false" default slot="title" name="tab-1" icon="tag faces" />
-      <q-tab @click="ctx='table'"slot="title" name="tab-2" icon="view list" />
-      <q-tab @click="ctx=false" slot="title" name="tab-3" icon="settings" />
-          <!-- Targets -->
-      <q-tab-pane name="tab-1">
-        <EmojiView :negativeScore="negativeScore" :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
-      </q-tab-pane>
-      <q-tab-pane class="nopad" name="tab-2">
-        <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />      </q-tab-pane>
-      <q-tab-pane name="tab-3">
-        <Settings />
-      </q-tab-pane>
-    </q-tabs>
+    <u-card v-else>
+      <q-tabs class="tabs" align="justify">
+        <!-- Tabs - notice slot="title" -->
+        <q-tab @click="ctx=false" default slot="title" name="tab-1" icon="tag faces" />
+        <q-tab @click="ctx='table'"slot="title" name="tab-2" icon="view list" />
+        <q-tab @click="ctx=false" slot="title" name="tab-3" icon="settings" />
+            <!-- Targets -->
+        <q-tab-pane name="tab-1">
+          <EmojiView :negativeScore="negativeScore" :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
+        </q-tab-pane>
+        <q-tab-pane class="nopad" name="tab-2">
+          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />      </q-tab-pane>
+        <q-tab-pane name="tab-3">
+          <Settings />
+        </q-tab-pane>
+      </q-tabs>
+    </u-card>
     <Export :canvas="ctx"/>
   </process-layout>
 </template>
