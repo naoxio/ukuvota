@@ -12,3 +12,4 @@ yarn-error.log
 mydb
 **/log.txt
 config.json
+storybook-static

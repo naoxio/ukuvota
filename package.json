@@ -10,7 +10,8 @@
     "build": "node build/script.build.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "jest",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "anchorme": "^1.1.2",
