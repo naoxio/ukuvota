@@ -24,7 +24,7 @@ build:lint:
   script: yarn lint
 
 build:test:
-  stage: build
+  <<: *build
   script: yarn test --ci
 
 build:dist:
