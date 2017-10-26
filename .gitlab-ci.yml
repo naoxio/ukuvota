@@ -14,7 +14,7 @@ install:
     - node_modules
     expire_in: 20 minutes
 
-.build: *build
+.build: &build
   image: spaceywolfi/ukuvota-node
   stage: build
 
