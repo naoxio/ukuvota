@@ -21,17 +21,14 @@
     methods: {
       ...mapActions([
         'updSelectedVoters'
-      ]),
-      updateSelected (val) {
-        this.$store.dispatch('updSelectedVoters', val)
-      }
+      ])
     },
     mounted () {
       if (this.selectedVoters === undefined) this.updateSelected(Object.keys(this.votes))
     },
     watch: {
       selectedVoters (val) {
-        this.updateSelected(val)
+        this.$store.dispatch('updSelectedVoters', val)
       }
     },
     data () {

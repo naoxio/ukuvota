@@ -34,7 +34,7 @@
 <script>
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     components: {
@@ -50,6 +50,9 @@
       ])
     },
     methods: {
+      ...mapActions([
+        'updSelectedVoters'
+      ]),
       makeResults () {
         this.res = {}
         for (let x = 0; x < this.selectedVoters.length; x++) {
@@ -81,6 +84,7 @@
       }
     },
     mounted () {
+      if (this.selectedVoters === undefined) this.$store.dispatch('updSelectedVoters', Object.keys(this.votes))
       this.makeResults()
     },
     data () {
