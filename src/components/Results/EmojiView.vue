@@ -8,7 +8,8 @@
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
     <div>
-      <div class="list" v-for="(value, id) in results" :key="value">
+      <div class="list" v-for="(value, id) in results" :key="id">
+
         <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
           <div class="list row justify-between items-center">
             <div class="col">
@@ -39,7 +40,7 @@
   import UEmoji from '@/General/UEmoji'
   import NameList from '@/List/Names'
   import { mapState, mapGetters } from 'vuex'
-  import { getOrderedList, getAvgScore, getAvgRoundedScore, getTotalScore, getIndiScore } from 'src/results'
+  import { getOrderedList, getResults, getAvgScore, getAvgRoundedScore, getTotalScore, getIndiScore, getAvgEmoji, getTotalEmoji } from 'src/results'
 
   export default {
     components: {
@@ -63,53 +64,39 @@
     watch: {
       selectedVoters (val) {
         if (val.length > 0) {
-          this.orderList()
+          this.update()
         }
+        console.log(this.proposals)
       }
     },
     mounted () {
-      if (this.selectedVoters.length > 0) this.orderList()
+      if (this.selectedVoters.length > 0) this.update()
       if (this.negativeScore === 'infinity') this.negativeScore = 1
       else this.negativeScore = this.negativeScore
     },
     methods: {
+      update () {
+        this.genResults()
+      },
+      genResults () { this.results = getResults(this.selectedVoters, this.proposals, this.votes, this.negativeScoreWeight) },
       orderList () {
-        let list = getOrderedList(this.selectedVoters, this.proposals, this.votes, this.negativeScoreWeight)
+        let list = getOrderedList(this.results)
         if (list === -1) this.noResults = true
         else this.sortedResults = list
       },
       getAvgScore (id) { return getAvgScore(id, this.results, this.selectedVoters) },
       getTotalScore (id) { return getTotalScore(id, this.results) },
-      getIndiScore (object, proposal) { return getIndiScore(object, proposal, this.negativeScoreWeight) },
-      getAvgRoundedScore (id) { return getAvgRoundedScore(id, this.res, this.selectedVoters) },
+      getIndiScore (object, id) { return getIndiScore(object, id, this.negativeScore) },
+      getAvgRoundedScore (id) { return getAvgRoundedScore(id, this.results, this.selectedVoters) },
       getDescription (id) { return this.proposals[id].description },
       getTitle (id) { return this.proposals[id].title },
-      getAvgEmoji (id) {
-        let emo = Math.round(this.getAvgScore(id))
-        if (emo < 0) {
-          emo = Math.round(emo / this.negativeScore)
-        }
-        return emo
-      },
-      getTotalEmoji (proposal) {
-        let length = this.getLength(this.votes)
-        let multiplier = this.negativeScore - 1
-        let p = this.getScore(proposal)
-        let emo = 0
-        if (p === this.max) emo = 3
-        else if (p >= this.max - length) emo = 2
-        else if (p >= this.max - length * 2) emo = 1
-        else if (p >= this.max - length * 3) emo = 0
-        else if (p >= this.max - length * 4 * multiplier) emo = -1
-        else if (p >= this.max - length * 5 * multiplier) emo = -2
-        else emo = -3
-        return emo
-      },
-      getEmoji (proposal) {
+      getAvgEmoji (id) { return getAvgEmoji(id, this.negativeScore, this.getAvgScore(id)) },
+      getTotalEmoji (id) { return getTotalEmoji(id, this.negativeScore, this.results, this.votes) },
+      getEmoji (id) {
         if (this.getAverage) {
-          return this.getAvgEmoji(proposal)
+          return this.getAvgEmoji(id)
         }
-        else return this.getTotalEmoji(proposal)
+        else return this.getTotalEmoji(id)
       }
     },
     data () {
@@ -118,8 +105,6 @@
         getAverage: true,
         results: {},
         sortedResults: {},
-        percentages: {},
-        total: 0,
         negativeScore: 3
       }
     }

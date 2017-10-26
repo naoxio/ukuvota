@@ -1,16 +1,5 @@
-export const genMax = (object) => {
-  let max = -999999999
-  for (let key in object) {
-    if (max < object[key]) max = object[key]
-  }
-  return max
-}
 
-export const getOrderedList = (selectedVoters, proposals, votes, negativeScoreWeight) => {
-  let results = {}
-  for (let x = 0; x < selectedVoters.length; x++) {
-    getResultForName(selectedVoters[x], proposals, votes, negativeScoreWeight, results)
-  }
+export const getOrderedList = (results) => {
   if (Object.keys(results).length !== 0) {
     // create an ordered lists with the highest score on top
     let myObj = results
@@ -68,4 +57,36 @@ export const getAvgRoundedScore = (id, results, selectedVoters) => {
 
 export const getLength = (object) => {
   return Object.keys(object).length
+}
+
+const genMax = (results) => {
+  let max = -999999999
+  for (let key in results) {
+    if (max < results[key]) max = results[key]
+  }
+  return max
+}
+
+export const getTotalEmoji = (id, negativeScore, results, votes) => {
+  let length = getLength(votes)
+  let multiplier = negativeScore - 1
+  let p = getTotalScore(id, results)
+  let emo = 0
+  let max = genMax(results)
+  if (p === max) emo = 3
+  else if (p >= max - length) emo = 2
+  else if (p >= max - length * 2) emo = 1
+  else if (p >= max - length * 3) emo = 0
+  else if (p >= max - length * 4 * multiplier) emo = -1
+  else if (p >= max - length * 5 * multiplier) emo = -2
+  else emo = -3
+  return emo
+}
+
+export const getAvgEmoji = (id, negativeScore, avgScore) => {
+  let emo = Math.round(avgScore)
+  if (emo < 0) {
+    emo = Math.round(emo / negativeScore)
+  }
+  return emo
 }
