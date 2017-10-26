@@ -7,7 +7,7 @@ image: alpine:latest
 
 build:
   # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: octohost/node-python-git-docker
+  image: docker pull mhart/alpine-node
   stage: build
   script:
   - yarn
