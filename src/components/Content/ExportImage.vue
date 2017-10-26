@@ -15,7 +15,6 @@
     },
     methods: {
       saveImage () {
-        console.log(this.element)
         html2canvas(document.getElementById(this.element), {
           onrendered: function (canvas) {
             let c = document.body.appendChild(canvas)
