@@ -43,7 +43,13 @@
 <style lang="stylus">
   body
     font-family 'coolFont'
-
+  
+  .q-tab-pane
+    border none
+  
+  .q-tabs-bar
+    border none
+  
   .light
     color black
     background-color white
