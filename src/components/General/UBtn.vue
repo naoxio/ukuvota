@@ -13,7 +13,7 @@
   export default {
     methods: {
       pressed () {
-        if (this.click !== 'undefined') this.click()
+        if (typeof this.click !== 'undefined') this.click()
         if (!this.launch === false) openURL(this.launch)
         if (!this.route === false) this.$router.push({name: this.route})
       }
