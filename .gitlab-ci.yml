@@ -7,7 +7,7 @@ image: alpine:latest
 
 build:
   # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: unfall24/yarn-node-alpine
+  image: offlinegmbh/alpine-yarn-node-git
   stage: build
   script:
   - yarn
