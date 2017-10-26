@@ -9,7 +9,7 @@
     </tr>
     <tr v-for="(object, name, index) in votes" :key="name">
       <td style="font-weight: bold" data-th="Name">
-        <NameSelect :options="selection" :name="name"/>
+        <NameSelect :name="name"/>
       </td>
       <td v-for="(obj, id) in proposals" :key="id">
         <ULabel class="text-center" :value="getIndiScore(object, id)"/>
@@ -32,13 +32,30 @@
 
 </template>
 <script>
-  import { QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
   import { mapState } from 'vuex'
 
   export default {
+    components: {
+      NameSelect,
+      ULabel
+    },
+    computed: {
+      ...mapState([
+        'proposals',
+        'negativeScoreWeight',
+        'votes',
+        'selectedVoters'
+      ])
+    },
     methods: {
+      makeResults () {
+        this.res = {}
+        for (let x = 0; x < this.selectedVoters.length; x++) {
+          this.genResults(this.selectedVoters[x])
+        }
+      },
       genResults (name) {
         for (let proposal in this.proposals) {
           let vote = this.votes[name][proposal]
@@ -52,7 +69,7 @@
         }
       },
       getAvgScore (proposal) {
-        return Math.round((this.res[proposal] / this.selection.length) * 100) / 100
+        return Math.round((this.res[proposal] / this.selectedVoters.length) * 100) / 100
       },
       getScore (proposal) {
         return this.res[proposal]
@@ -63,42 +80,8 @@
         return score
       }
     },
-    components: {
-      NameSelect,
-      ULabel,
-      QCheckbox,
-      QField,
-      QModal,
-      QIcon,
-      QScrollArea
-    },
-    computed: {
-      ...mapState([
-        'proposals',
-        'negativeScoreWeight',
-        'votes'
-      ]),
-      selection () {
-        return Object.keys(this.$store.state.votes)
-      }
-    },
     mounted () {
-      console.log(this.proposals)
-      this.res = {}
-      for (let x = 0; x < this.selection.length; x++) {
-        this.genResults(this.selection[x])
-      }
-    },
-    watch: {
-      selection (newVal) {
-        this.res = {}
-        for (let x = 0; x < newVal.length; x++) {
-          this.genResults(newVal[x])
-        }
-      },
-      votes (v) {
-        this.selection = Object.keys(v)
-      }
+      this.makeResults()
     },
     data () {
       return {

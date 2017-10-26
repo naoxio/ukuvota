@@ -22,12 +22,14 @@ const store = new Vuex.Store({
     topic: {},
     proposals: {},
     votes: {},
-    negativeScoreWeight: {}
+    negativeScoreWeight: {},
+    selectedVoters: undefined
   },
   actions: {
     updTheme: ({ commit }, val) => commit('setTheme', val),
     updResHover: ({ commit }, val) => commit('setResHover', val),
-    updTopic: ({ commit }, val) => commit('setTopic', val)
+    updTopic: ({ commit }, val) => commit('setTopic', val),
+    updSelectedVoters: ({ commit }, val) => commit('setSelectedVoters', val)
   },
   mutations: {
     setTheme: (state, val) => { setLocal('theme', val); state.theme = val },
@@ -37,12 +39,14 @@ const store = new Vuex.Store({
       state.proposals = val.proposals
       state.votes = val.votes
       state.negativeScoreWeight = val.negativeScoreWeight
-    }
+    },
+    setSelectedVoters: (state, val) => { state.selectedVoters = val }
   },
   getters: {
     getTheme: state => state.theme,
     getResHover: state => state.resHover,
-    getTopic: state => state.topic
+    getTopic: state => state.topic,
+    getSelectedVoters: state => state.selectedVoters
   }
 })
 
