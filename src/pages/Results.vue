@@ -3,7 +3,7 @@
     <u-card v-if="noResults">
       <NoResults />
     </u-card>
-    <u-card v-else>
+    <u-card nopad v-else>
       <q-tabs class="tabs" align="justify">
         <!-- Tabs - notice slot="title" -->
         <q-tab @click="ctx=false" default slot="title" name="tab-1" icon="tag faces" />

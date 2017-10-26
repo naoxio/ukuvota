@@ -10,17 +10,17 @@ storiesOf('Results / EmojiView', module)
   i18n,
   created () {
     this.$store.commit('setTopic', {
-      results: {
-        1: 3,
-        2: 2
-      },
       votes: {
         nick: {
-          1: 3,
+          1: 1,
           2: 2
         },
         peter: {
-          1: -3,
+          1: 0,
+          2: 2
+        },
+        tom: {
+          1: 0,
           2: 2
         }
       },
@@ -35,7 +35,7 @@ storiesOf('Results / EmojiView', module)
         }
       },
       negativeScoreWeight: -3,
-      selectedVoters: ['nick', 'peter']
+      selectedVoters: ['nick', 'peter', 'tom']
     })
   },
   render: h => h(EmojiView)
