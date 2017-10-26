@@ -14,8 +14,12 @@ install:
     - node_modules
     expire_in: 20 minutes
 
-build:lint:
+.build: *build
+  image: spaceywolfi/ukuvota-node
   stage: build
+
+build:lint:
+  <<: *build
   script: yarn lint
 
 build:test:
@@ -23,14 +27,14 @@ build:test:
   script: yarn test --ci
 
 build:dist:
-  stage: build
+  <<: *build
   script: yarn build
   artifacts:
     paths:
     - dist
 
 build:storybook:
-  stage: build
+  <<: *build
   script: yarn build-storybook
   artifacts:
     paths:
