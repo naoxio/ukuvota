@@ -24,7 +24,7 @@
     <tr class="text-right t-right">
       <th class="text-left">{{ $t('Total') }}</th>
       <td v-for="(obj, id) in proposals" :key="id">
-        <ULabel class="text-center" :value="getScore(id)"/>
+        <ULabel class="text-center" :value="getTotalScore(id)"/>
       </td>
     </tr>
   </table>
@@ -35,6 +35,7 @@
   import Name from '@/Select/Name'
   import ULabel from '@/General/ULabel'
   import { mapState } from 'vuex'
+  import { getResults, getAvgScore, getIndiScore, getTotalScore } from 'src/results'
 
   export default {
     components: {
@@ -50,35 +51,10 @@
       ])
     },
     methods: {
-      genResults () {
-        this.res = {}
-        for (let x = 0; x < this.selectedVoters.length; x++) {
-          this.getResultForName(this.selectedVoters[x])
-        }
-      },
-      getResultForName (name) {
-        for (let proposal in this.proposals) {
-          let vote = this.votes[name][proposal]
-          if (vote < 0) vote = vote * this.negativeScoreWeight
-          if (this.res[proposal] === undefined) {
-            this.res[proposal] = vote
-          }
-          else {
-            this.res[proposal] = this.res[proposal] + vote
-          }
-        }
-      },
-      getAvgScore (proposal) {
-        return Math.round((this.res[proposal] / this.selectedVoters.length) * 100) / 100
-      },
-      getScore (proposal) {
-        return this.res[proposal]
-      },
-      getIndiScore (object, proposal) {
-        let score = object[proposal]
-        if (score < 0) score = score * this.negativeScoreWeight
-        return score
-      }
+      genResults () { this.results = getResults(this.selectedVoters, this.proposals, this.votes, this.negativeScoreWeight) },
+      getAvgScore (id) { return getAvgScore(id, this.results, this.selectedVoters) },
+      getTotalScore (id) { return getTotalScore(id, this.results) },
+      getIndiScore (object, proposal) { return getIndiScore(object, proposal, this.negativeScoreWeight) }
     },
     mounted () {
       if (this.selectedVoters.length > 0) this.genResults()
@@ -90,7 +66,7 @@
     },
     data () {
       return {
-        res: {}
+        results: {}
       }
     }
   }

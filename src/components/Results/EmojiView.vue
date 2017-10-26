@@ -21,7 +21,7 @@
                   {{ $t('Average') }}: {{ getAvgRoundedScore(id) }}
                 </div>
                 <div v-if="resHover.total">
-                  {{ $t('Total') }}: {{ getScore(id) }}
+                  {{ $t('Total') }}: {{ getTotalScore(id) }}
                 </div>
               </q-tooltip>
               <img :class="{ pointer: !resHover.none }" :src="'statics/emo/' + getEmoji(id) + '.svg'" height="32px" />
@@ -38,6 +38,7 @@
   import ULabel from '@/General/ULabel'
   import NameList from '@/List/Names'
   import { mapState, mapGetters } from 'vuex'
+  import { getOrderedList, getAvgScore, getAvgRoundedScore, getTotalScore, getIndiScore } from 'src/results'
 
   export default {
     components: {
@@ -59,7 +60,6 @@
     },
     watch: {
       selectedVoters (val) {
-        console.log(val.length)
         if (val.length > 0) {
           this.orderList()
         }
@@ -72,61 +72,16 @@
     },
     methods: {
       orderList () {
-        this.results = {}
-        for (let x = 0; x < this.selectedVoters.length; x++) {
-          this.genResults(this.selectedVoters[x])
-        }
-        if (Object.keys(this.results).length !== 0) {
-          // calculate the highest score
-          this.genMax(this.results)
-          // create an ordered lists with the highest score on top
-          let myObj = this.results
-          this.sortedResults = {}
-          this.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
-            ..._sortedObj,
-            [key]: myObj[key]
-          }), {})
-        }
-        else {
-          this.noResults = true
-        }
+        let list = getOrderedList(this.selectedVoters, this.proposals, this.votes, this.negativeScoreWeight)
+        if (list === -1) this.noResults = true
+        else this.sortedResults = list
       },
-      genResults (name) {
-        for (let proposal in this.proposals) {
-          let vote = this.votes[name][proposal]
-          if (vote < 0) vote = vote * this.negativeScore
-          if (this.results[proposal] === undefined) {
-            this.results[proposal] = vote
-          }
-          else {
-            this.results[proposal] = this.results[proposal] + vote
-          }
-        }
-      },
-      genMax (object) {
-        this.max = -999999999
-        for (let key in object) {
-          if (this.max < object[key]) this.max = object[key]
-        }
-      },
-      getScore (proposal) {
-        return this.results[proposal]
-      },
-      getAvgScore (proposal) {
-        return this.results[proposal] / this.selectedVoters.length
-      },
-      getAvgRoundedScore (id) {
-        return Math.round((this.getAvgScore(id)) * 100) / 100
-      },
-      getLength (object) {
-        return Object.keys(object).length
-      },
-      getDescription (id) {
-        return this.proposals[id].description
-      },
-      getTitle (id) {
-        return this.proposals[id].title
-      },
+      getAvgScore (id) { return getAvgScore(id, this.results, this.selectedVoters) },
+      getTotalScore (id) { return getTotalScore(id, this.results) },
+      getIndiScore (object, proposal) { return getIndiScore(object, proposal, this.negativeScoreWeight) },
+      getAvgRoundedScore (id) { return getAvgRoundedScore(id, this.res, this.selectedVoters) },
+      getDescription (id) { return this.proposals[id].description },
+      getTitle (id) { return this.proposals[id].title },
       getAvgEmoji (id) {
         let emo = Math.round(this.getAvgScore(id))
         if (emo < 0) {
