@@ -102,7 +102,6 @@
     display inline
     padding-left 10px
 
-
   table
     width 100%
     background-color white

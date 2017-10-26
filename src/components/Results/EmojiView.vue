@@ -125,6 +125,7 @@
 
   .list
     text-align left 
+    padding 0.2em
   
   .sublabel
     color grey 
@@ -134,4 +135,6 @@
 
   .highlightTopScores
     background-color #ffffcc 
+    margin -0.5em
+    padding 0.5em 0.5em 0.5em 0.5em
 </style>
