@@ -6,11 +6,9 @@ stages:
 image: alpine:latest
 
 build:
-  # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: resin/kitra710-alpine-python
+  image: spaceywolfi/ukuvota-node
   stage: build
   script:
-  - apk add --no-cache yarn
   - yarn
   - yarn lint
   - yarn build
