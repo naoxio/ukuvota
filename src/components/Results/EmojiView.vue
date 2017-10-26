@@ -8,7 +8,7 @@
       <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
     </div>
     <div>
-      <div class="list" v-for="(value, id) in results" :key="id">
+      <div class="list" v-for="(value, id) in sortedResults" :key="id">
 
         <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
           <div class="list row justify-between items-center">
@@ -66,7 +66,6 @@
         if (val.length > 0) {
           this.update()
         }
-        console.log(this.proposals)
       }
     },
     mounted () {
@@ -77,6 +76,7 @@
     methods: {
       update () {
         this.genResults()
+        this.orderList()
       },
       genResults () { this.results = getResults(this.selectedVoters, this.proposals, this.votes, this.negativeScoreWeight) },
       orderList () {
@@ -101,7 +101,7 @@
     },
     data () {
       return {
-        highlightTopScores: false,
+        highlightTopScores: true,
         getAverage: true,
         results: {},
         sortedResults: {},
