@@ -15,7 +15,6 @@ install:
     - node_modules
     expire_in: 20 minutes
   cache:
-    key: ${CI_BUILD_REF_NAME}
     paths:
       - node_modules/
 
