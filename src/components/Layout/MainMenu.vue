@@ -1,29 +1,9 @@
 <template>
   <div class="nav row">
-    <q-btn @click="goTo('home')" color="primary" flat>
-      <img src="statics/icons/home.png" />
-      <q-tooltip delay="100">
-        {{ $t('Home') }}
-      </q-tooltip>
-    </q-btn>
-    <q-btn @click="goTo('manual')" color="primary" flat>
-      <q-icon name="book" />
-      <q-tooltip delay="100">
-        {{ $t('Manual') }}
-      </q-tooltip>
-    </q-btn>
-    <q-btn @click="launch('https://gitlab.com/yunity/ukuvota/')" color="primary" flat>
-      <q-icon name="code" />
-      <q-tooltip delay="100">
-        {{ $t('Code') }}
-      </q-tooltip>
-    </q-btn>
-    <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
-      <q-icon name="chat" />
-      <q-tooltip delay="100">
-        {{ $t('Chat') }}
-      </q-tooltip>
-    </q-btn>
+    <u-btn :imgStyle="imgStyle()" route="home" img="statics/icons/home.png" tooltipDelay="100" :tooltip="$t('Home')"/>
+    <u-btn route="manual" icon="book" tooltipDelay="100" :tooltip="$t('Manual')" />
+    <u-btn launch="https://gitlab.com/yunity/ukuvota/" icon="code" tooltipDelay="100" :tooltip="$t('Code')" />
+    <u-btn launch="https://gitter.im/ukuvota/Lobby/" icon="chat" tooltipDelay="100" :tooltip="$t('Chat')" />
     <div class="col">
     </div>
     <div class="col-auto">
@@ -35,28 +15,27 @@
 <script>
   import LangSwitcher from '@/Select/Language'
   import SettingsModal from '@/Modal/Settings'
-
-  import { openURL, QBtn, QIcon, QTooltip } from 'quasar'
+  import UBtn from '@/General/UBtn'
   
   export default {
     name: 'index',
     components: {
       LangSwitcher,
       SettingsModal,
-      QBtn,
-      QIcon,
-      QTooltip
+      UBtn
     },
     methods: {
-      launch (url) {
-        openURL(url)
+      imgStyle () {
+        return 'width: ' + this.imgWidth() + 'px'
+      },
+      imgWidth () {
+        let width = (window.innerWidth > 0) ? window.innerWidth : screen.width
+        let value = 22
+        if (width > 400) value = 28
+        return value
       },
       openSettings () {
-        console.log(this.$refs)
         this.$refs.settings.open()
-      },
-      goTo (name) {
-        this.$router.push({name: name})
       }
     },
     data () {
@@ -68,20 +47,6 @@
 </script>
 
 <style lang="stylus" scoped>  
-
-  @media screen and (max-width: 400px)
-    .nav
-      img
-       height 22px
-  
-  @media screen and (min-width: 400px)
-    .nav
-      img
-        height 28px
-  
   .nav
     width 100%
-  
-  .q-tooltip
-    margin-top 0.3em
 </style>
