@@ -2,15 +2,27 @@
   <div class="nav row">
     <q-btn @click="goTo('home')" color="primary" flat>
       <img src="statics/icons/home.png" />
+      <q-tooltip>
+        {{ $t('Home') }}
+      </q-tooltip>
     </q-btn>
     <q-btn @click="goTo('manual')" color="primary" flat>
       <q-icon name="book" />
+      <q-tooltip>
+        {{ $t('Manual') }}
+      </q-tooltip>
     </q-btn>
     <q-btn @click="launch('https://gitlab.com/yunity/ukuvota/')" color="primary" flat>
       <q-icon name="code" />
+      <q-tooltip>
+        {{ $t('Code') }}
+      </q-tooltip>
     </q-btn>
     <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
       <q-icon name="chat" />
+      <q-tooltip>
+        {{ $t('Chat') }}
+      </q-tooltip>
     </q-btn>
     <div class="col">
     </div>
@@ -24,7 +36,7 @@
   import LangSwitcher from '@/Select/Language'
   import SettingsModal from '@/Modal/Settings'
 
-  import { openURL, QBtn, QIcon } from 'quasar'
+  import { openURL, QBtn, QIcon, QTooltip } from 'quasar'
   
   export default {
     name: 'index',
@@ -32,7 +44,8 @@
       LangSwitcher,
       SettingsModal,
       QBtn,
-      QIcon
+      QIcon,
+      QTooltip
     },
     methods: {
       launch (url) {

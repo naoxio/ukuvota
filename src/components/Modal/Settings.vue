@@ -48,9 +48,9 @@
   }
 </script>
 <style lang="stylus" scoped>  
-  @media screen and (max-width: 400px)
+  /*@media screen and (max-width: 400px)
     .lang
-      display none
+      display none*/
 
   .caption
     color grey
