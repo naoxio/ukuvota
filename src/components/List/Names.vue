@@ -1,9 +1,8 @@
-
 <template> 
   <div class="row justify-around">
     <div v-for="(object, name, index) in votes" :key="name">
       <div v-if='select'>
-        <NameSelect :options="selection" :name="name"/>
+        <NameSelect :name="name"/>
       </div>
       <div v-else>
         {{ name }}
@@ -13,17 +12,22 @@
 </template>
 
 <script>
-import NameSelect from '@/Select/Name'
+  import NameSelect from '@/Select/Name'
+  import { mapState } from 'vuex'
 
-export default {
-  props: {
-    votes: { required: true },
-    select: { required: false }
-  },
-  components: {
-    NameSelect
+  export default {
+    props: {
+      select: { default: true }
+    },
+    computed: {
+      ...mapState([
+        'votes'
+      ])
+    },
+    components: {
+      NameSelect
+    }
   }
-}
 </script>
 
 <style lang="stylus" scoped>

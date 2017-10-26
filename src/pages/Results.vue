@@ -11,7 +11,7 @@
         <q-tab @click="ctx=false" slot="title" name="tab-3" icon="settings" />
             <!-- Targets -->
         <q-tab-pane name="tab-1">
-          <EmojiView :negativeScore="negativeScore" :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
+          <EmojiView />
         </q-tab-pane>
         <q-tab-pane class="nopad" name="tab-2">
           <DataTable />
@@ -53,60 +53,13 @@
       getTopic(this.id).then((topic) => {
         this.votes = topic.votes
         this.proposals = topic.proposals
-        if (topic.negativeScoreWeight === 'infinity') this.negativeScore = 1
-        else this.negativeScore = topic.negativeScoreWeight
-        this.orderList()
       })
     },
     methods: {
-      orderList () {
-        this.results = {}
-        for (let name in this.votes) {
-          this.genResults(name)
-        }
-        if (Object.keys(this.results).length !== 0) {
-          // calculate the highest score
-          this.genMax(this.results)
-          // create an ordered lists with the highest score on top
-          let myObj = this.results
-          this.sortedResults = {}
-          this.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
-            ..._sortedObj,
-            [key]: myObj[key]
-          }), {})
-        }
-        else {
-          this.noResults = true
-        }
-      },
-      genResults (name) {
-        for (let proposal in this.proposals) {
-          let vote = this.votes[name][proposal]
-          if (vote < 0) vote = vote * this.negativeScore
-          if (this.results[proposal] === undefined) {
-            this.results[proposal] = vote
-          }
-          else {
-            this.results[proposal] = this.results[proposal] + vote
-          }
-        }
-      },
-      genMax (object) {
-        this.max = -999999999
-        for (let key in object) {
-          if (this.max < object[key]) this.max = object[key]
-        }
-      }
+  
     },
     data () {
       return {
-        results: {},
-        votes: {},
-        sortedResults: {},
-        percentages: {},
-        proposals: {},
-        total: 0,
-        negativeScore: 3,
         noResults: false,
         ctx: false
       }

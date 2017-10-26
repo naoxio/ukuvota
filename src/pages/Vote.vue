@@ -45,7 +45,6 @@
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
 import UCard from '@/General/UCard'
-
 import { QAlert, QBtn, QField, QInput, QItemMain } from 'quasar'
 import { getTopic, setVotes } from 'data'
 import NameList from '@/List/Names'

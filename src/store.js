@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     proposals: {},
     votes: {},
     negativeScoreWeight: {},
-    selectedVoters: undefined
+    selectedVoters: {}
   },
   actions: {
     updTheme: ({ commit }, val) => commit('setTheme', val),
@@ -38,6 +38,7 @@ const store = new Vuex.Store({
       state.topic = val
       state.proposals = val.proposals
       state.votes = val.votes
+      state.selectedVoters = Object.keys(val.votes)
       state.negativeScoreWeight = val.negativeScoreWeight
     },
     setSelectedVoters: (state, val) => { state.selectedVoters = val }

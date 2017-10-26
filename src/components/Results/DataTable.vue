@@ -9,7 +9,7 @@
     </tr>
     <tr v-for="(object, name, index) in votes" :key="name">
       <td style="font-weight: bold" data-th="Name">
-        <NameSelect :name="name"/>
+        <Name :name="name"/>
       </td>
       <td v-for="(obj, id) in proposals" :key="id">
         <ULabel class="text-center" :value="getIndiScore(object, id)"/>
@@ -32,13 +32,13 @@
 
 </template>
 <script>
-  import NameSelect from '@/Select/Name'
+  import Name from '@/Select/Name'
   import ULabel from '@/General/ULabel'
-  import { mapState, mapActions } from 'vuex'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
-      NameSelect,
+      Name,
       ULabel
     },
     computed: {
@@ -50,16 +50,13 @@
       ])
     },
     methods: {
-      ...mapActions([
-        'updSelectedVoters'
-      ]),
-      makeResults () {
+      genResults () {
         this.res = {}
         for (let x = 0; x < this.selectedVoters.length; x++) {
-          this.genResults(this.selectedVoters[x])
+          this.getResultForName(this.selectedVoters[x])
         }
       },
-      genResults (name) {
+      getResultForName (name) {
         for (let proposal in this.proposals) {
           let vote = this.votes[name][proposal]
           if (vote < 0) vote = vote * this.negativeScoreWeight
@@ -84,8 +81,12 @@
       }
     },
     mounted () {
-      if (this.selectedVoters === undefined) this.$store.dispatch('updSelectedVoters', Object.keys(this.votes))
-      this.makeResults()
+      if (this.selectedVoters.length > 0) this.genResults()
+    },
+    watch: {
+      selectedVoters (val) {
+        this.genResults()
+      }
     },
     data () {
       return {
@@ -108,6 +109,5 @@
   
   .padding
     padding 1em
-
 
 </style>

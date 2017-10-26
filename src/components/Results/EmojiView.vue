@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="caption">{{ $t('Names.voted') }}</p>
-    <NameList :votes="votes" :select="false" />
+    <NameList />
     </br>
     <div class="row justify-between">
       <p class="caption">{{ $t('Results.title') }}!</p>
@@ -37,16 +37,9 @@
   import { QCheckbox, QTooltip } from 'quasar'
   import ULabel from '@/General/ULabel'
   import NameList from '@/List/Names'
-  import { mapGetters } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
-    props: {
-      results: { required: false },
-      votes: { required: true },
-      proposals: { required: true },
-      max: { required: true },
-      negativeScore: { required: true }
-    },
     components: {
       QCheckbox,
       QTooltip,
@@ -54,16 +47,73 @@
       NameList
     },
     computed: {
+      ...mapState([
+        'proposals',
+        'negativeScoreWeight',
+        'votes',
+        'resHover'
+      ]),
       ...mapGetters({
-        resHover: 'getResHover'
+        selectedVoters: 'getSelectedVoters'
       })
     },
+    watch: {
+      selectedVoters (val) {
+        console.log(val.length)
+        if (val.length > 0) {
+          this.orderList()
+        }
+      }
+    },
+    mounted () {
+      if (this.selectedVoters.length > 0) this.orderList()
+      if (this.negativeScore === 'infinity') this.negativeScore = 1
+      else this.negativeScore = this.negativeScore
+    },
     methods: {
+      orderList () {
+        this.results = {}
+        for (let x = 0; x < this.selectedVoters.length; x++) {
+          this.genResults(this.selectedVoters[x])
+        }
+        if (Object.keys(this.results).length !== 0) {
+          // calculate the highest score
+          this.genMax(this.results)
+          // create an ordered lists with the highest score on top
+          let myObj = this.results
+          this.sortedResults = {}
+          this.sortedResults = Object.keys(myObj).sort((a, b) => myObj[b] - myObj[a]).reduce((_sortedObj, key) => ({
+            ..._sortedObj,
+            [key]: myObj[key]
+          }), {})
+        }
+        else {
+          this.noResults = true
+        }
+      },
+      genResults (name) {
+        for (let proposal in this.proposals) {
+          let vote = this.votes[name][proposal]
+          if (vote < 0) vote = vote * this.negativeScore
+          if (this.results[proposal] === undefined) {
+            this.results[proposal] = vote
+          }
+          else {
+            this.results[proposal] = this.results[proposal] + vote
+          }
+        }
+      },
+      genMax (object) {
+        this.max = -999999999
+        for (let key in object) {
+          if (this.max < object[key]) this.max = object[key]
+        }
+      },
       getScore (proposal) {
         return this.results[proposal]
       },
       getAvgScore (proposal) {
-        return this.results[proposal] / this.getLength(this.votes)
+        return this.results[proposal] / this.selectedVoters.length
       },
       getAvgRoundedScore (id) {
         return Math.round((this.getAvgScore(id)) * 100) / 100
@@ -107,9 +157,13 @@
     },
     data () {
       return {
-        selection: this.options,
         highlightTopScores: false,
-        getAverage: true
+        getAverage: true,
+        results: {},
+        sortedResults: {},
+        percentages: {},
+        total: 0,
+        negativeScore: 3
       }
     }
   }
@@ -136,5 +190,5 @@
   .highlightTopScores
     background-color #ffffcc 
     margin -0.5em
-    padding 0.5em 0.5em 0.5em 0.5em
+    padding 0.5em
 </style>
