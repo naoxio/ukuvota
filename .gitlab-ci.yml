@@ -7,7 +7,7 @@ image: alpine:latest
 
 build:
   # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: 'registry.gitlab.com/foodsharing-dev/images:light'
+  image: unfall24/yarn-node-alpine
   stage: build
   script:
   - yarn
