@@ -93,7 +93,7 @@
         redirect: true,
         proposalTimer: '',
         votingTimer: '',
-        negativeScoreWeight: ''
+        negativeScoreWeight: this.$store.state.topic.negativeScoreWeight
       }
     }
   }
