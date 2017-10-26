@@ -2,25 +2,25 @@
   <div class="nav row">
     <q-btn @click="goTo('home')" color="primary" flat>
       <img src="statics/icons/home.png" />
-      <q-tooltip>
+      <q-tooltip delay="100">
         {{ $t('Home') }}
       </q-tooltip>
     </q-btn>
     <q-btn @click="goTo('manual')" color="primary" flat>
       <q-icon name="book" />
-      <q-tooltip>
+      <q-tooltip delay="100">
         {{ $t('Manual') }}
       </q-tooltip>
     </q-btn>
     <q-btn @click="launch('https://gitlab.com/yunity/ukuvota/')" color="primary" flat>
       <q-icon name="code" />
-      <q-tooltip>
+      <q-tooltip delay="100">
         {{ $t('Code') }}
       </q-tooltip>
     </q-btn>
     <q-btn @click="launch('https://gitter.im/ukuvota/Lobby')" color="primary" flat>
       <q-icon name="chat" />
-      <q-tooltip>
+      <q-tooltip delay="100">
         {{ $t('Chat') }}
       </q-tooltip>
     </q-btn>
@@ -81,4 +81,7 @@
   
   .nav
     width 100%
+  
+  .q-tooltip
+    margin-top 0.3em
 </style>
