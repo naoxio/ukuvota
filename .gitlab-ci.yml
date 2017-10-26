@@ -22,22 +22,22 @@ install:
   image: spaceywolfi/ukuvota-node
   stage: build
 
-build:lint:
+lint:
   <<: *build
   script: yarn lint
 
-build:test:
+test:
   <<: *build
   script: yarn test --ci
 
-build:dist:
+build:
   <<: *build
   script: yarn build
   artifacts:
     paths:
     - dist
 
-build:storybook:
+build-storybook:
   <<: *build
   script: yarn build-storybook
   artifacts:
