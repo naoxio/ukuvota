@@ -28,20 +28,13 @@
       </td>
     </tr>
   </table>
-  </br>
-  <div class="row justify-around">
-    <ExportImage element="table"/>
-    <ExportData />
-  </div>
-  </br>
 </div>
+
 </template>
 <script>
   import { QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
-  import ExportImage from '@/Content/ExportImage'
-  import ExportData from '@/Results/ExportData'
   export default {
     props: ['proposals', 'votes', 'negativeScore'],
     methods: {
@@ -76,9 +69,7 @@
       QField,
       QModal,
       QIcon,
-      QScrollArea,
-      ExportImage,
-      ExportData
+      QScrollArea
     },
     mounted () {
       this.res = {}

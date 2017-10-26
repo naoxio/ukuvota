@@ -1,18 +1,14 @@
 <template>
- <div>
-    <q-btn @click="exportText">
-      {{ $t('SaveText')}}
-    </q-btn>
-  </div>
+  <u-btn :click="exportText" icon="description" :tooltip="$t('SaveText')" />
 </template>
 <script>
-  import { QBtn } from 'quasar'
   import { mapState } from 'vuex'
   import FileSaver from 'file-saver'
+  import UBtn from '@/General/UBtn'
 
   export default {
     components: {
-      QBtn
+      UBtn
     },
     methods: {
       exportText () {
