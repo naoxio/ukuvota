@@ -19,7 +19,10 @@ const store = new Vuex.Store({
   state: {
     theme: getLocal('theme', 'light'),
     resHover: getLocal('resHover', { none: false, avg: true, total: false }),
-    topic: {}
+    topic: {},
+    proposals: {},
+    votes: {},
+    negativeScoreWeight: {}
   },
   actions: {
     updTheme: ({ commit }, val) => commit('setTheme', val),
@@ -29,7 +32,12 @@ const store = new Vuex.Store({
   mutations: {
     setTheme: (state, val) => { setLocal('theme', val); state.theme = val },
     setResHover: (state, val) => { setLocal('resHover', val); state.resHover = val },
-    setTopic: (state, val) => { state.topic = val }
+    setTopic: (state, val) => {
+      state.topic = val
+      state.proposals = val.proposals
+      state.votes = val.votes
+      state.negativeScoreWeight = val.negativeScoreWeight
+    }
   },
   getters: {
     getTheme: state => state.theme,

@@ -14,7 +14,8 @@
           <EmojiView :negativeScore="negativeScore" :results="sortedResults" :votes="votes" :proposals="proposals" :max="max"/>
         </q-tab-pane>
         <q-tab-pane class="nopad" name="tab-2">
-          <DataTable :proposals="proposals" :votes="votes" :negativeScore="negativeScore" />      </q-tab-pane>
+          <DataTable />
+        </q-tab-pane>
         <q-tab-pane name="tab-3">
           <Settings />
         </q-tab-pane>

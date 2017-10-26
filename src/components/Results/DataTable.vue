@@ -35,13 +35,14 @@
   import { QCheckbox, QIcon, QField, QModal, QScrollArea } from 'quasar'
   import NameSelect from '@/Select/Name'
   import ULabel from '@/General/ULabel'
+  import { mapState } from 'vuex'
+
   export default {
-    props: ['proposals', 'votes', 'negativeScore'],
     methods: {
       genResults (name) {
         for (let proposal in this.proposals) {
           let vote = this.votes[name][proposal]
-          if (vote < 0) vote = vote * this.negativeScore
+          if (vote < 0) vote = vote * this.negativeScoreWeight
           if (this.res[proposal] === undefined) {
             this.res[proposal] = vote
           }
@@ -58,7 +59,7 @@
       },
       getIndiScore (object, proposal) {
         let score = object[proposal]
-        if (score < 0) score = score * this.negativeScore
+        if (score < 0) score = score * this.negativeScoreWeight
         return score
       }
     },
@@ -71,7 +72,18 @@
       QIcon,
       QScrollArea
     },
+    computed: {
+      ...mapState([
+        'proposals',
+        'negativeScoreWeight',
+        'votes'
+      ]),
+      selection () {
+        return Object.keys(this.$store.state.votes)
+      }
+    },
     mounted () {
+      console.log(this.proposals)
       this.res = {}
       for (let x = 0; x < this.selection.length; x++) {
         this.genResults(this.selection[x])
@@ -90,7 +102,6 @@
     },
     data () {
       return {
-        selection: Object.keys(this.votes),
         res: {}
       }
     }
