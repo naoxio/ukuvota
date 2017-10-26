@@ -7,7 +7,7 @@ image: alpine:latest
 
 build:
   # shhh, borrow this nice image from fs that has all the browser test stuff
-  image: mhart/alpine-node
+  image: nikolaik/python-nodejs
   stage: build
   script:
   - apk add --no-cache git
