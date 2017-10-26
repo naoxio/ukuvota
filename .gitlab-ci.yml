@@ -10,7 +10,7 @@ build:
   image: mhart/alpine-node
   stage: build
   script:
-  - apk add git
+  - apk add --no-cache git
   - yarn
   - yarn lint
   - yarn build
