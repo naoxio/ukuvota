@@ -22,8 +22,8 @@ Proposals:
 Vote:
   added: Vote from {submitName} submitted!
 
-Voted:
-  list: People who already voted
+Select:
+  voters: Please select some Voters
 
 Voters: Voters
 

@@ -4,12 +4,11 @@
     <NameList />
     </br>
     <div class="row justify-between">
-      <h6><p class="caption">{{ $t('Results.title') }}!</p></h6>
+      <h6><ULabel :value="$t('Results.title')"/></h6>
       <!--q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" /-->
     </div>
-    <div>
-      <div class="list" v-for="(value, id) in sortedResults" :key="id">
-
+    <div v-if="selectedVoters.length > 0">
+      <div v-for="(value, id) in sortedResults" :key="id">
         <div :class="{ topProposal: getTotalEmoji(id) === 3, highlightTopScores: highlightTopScores && getTotalEmoji(id) === 3}">
           <div class="list row justify-between items-center">
             <div class="col">
@@ -30,6 +29,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="text-center">
+      {{ $t('Select.voters') }}
     </div>
   </div>
 </template>

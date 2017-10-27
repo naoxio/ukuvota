@@ -15,13 +15,13 @@
         <ULabel class="text-center" :value="getIndiScore(object, id)"/>
       </td> 
     </tr>
-    <tr class="text-right t-right">
+    <tr v-if="selectedVoters.length > 0" class="text-right t-right">
       <th class="text-left">{{ $t('Average') }}</th>
       <td v-for="(obj, id) in proposals" :key="id">
         <ULabel class="text-center" :value="getAvgScore(id)"/>
       </td>
     </tr>
-    <tr class="text-right t-right">
+    <tr v-if="selectedVoters.length > 0" class="text-right t-right">
       <th class="text-left">{{ $t('Total') }}</th>
       <td v-for="(obj, id) in proposals" :key="id">
         <ULabel class="text-center" :value="getTotalScore(id)"/>
