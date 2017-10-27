@@ -1,5 +1,7 @@
 <template>
   <div>
+    <q-datetime v-model="date" :min="min" type="datetime" />
+
     <div class="caption row justify-center" style="text-align: center">
       <div class="col" style="text-align: left">
         {{ label }}
@@ -21,20 +23,23 @@ import {
   QChip,
   QField,
   QSelect,
-  QSlider
+  QSlider,
+  QDatetime
 } from 'quasar'
 
 export default {
   props: {
     label: { required: true },
-    value: { required: true }
+    value: { required: true },
+    min: Date
   },
   components: {
     QCheckbox,
     QChip,
     QField,
     QSelect,
-    QSlider
+    QSlider,
+    QDatetime
   },
   watch: {
     days (val) {
@@ -52,7 +57,8 @@ export default {
     return {
       days,
       hours,
-      minutes
+      minutes,
+      date: '2018-10-24T10:40:14.674Z'
     }
   }
 }
