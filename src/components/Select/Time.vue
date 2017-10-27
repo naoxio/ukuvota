@@ -1,7 +1,6 @@
 <template>
   <div>
-    <u-datetime :model="date" :min="min" type="datetime" />
-    <!--div class="caption row justify-center" style="text-align: center">
+    <div class="caption row justify-center" style="text-align: center">
       <div class="col" style="text-align: left">
         {{ label }}
       </div>
@@ -12,22 +11,25 @@
 
     <q-slider :step="1" v-model="days" :min="0" :max="31" snap/>
     <q-slider :step="1" v-model="hours" :min="0" :max="23" snap/>
-    <q-slider :step="1" v-model="minutes" :min="1" :max="59" snap/-->
+    <q-slider :step="1" v-model="minutes" :min="1" :max="59" snap/>
   </div>
 </template>
 
 <script>
-import { QCheckbox, QChip, QField, QSelect, QSlider } from 'quasar'
-import UDatetime from '@/General/UDatetime'
+import {
+  QCheckbox,
+  QChip,
+  QField,
+  QSelect,
+  QSlider
+} from 'quasar'
 
 export default {
   props: {
     label: { required: true },
-    value: { required: true },
-    min: Date
+    value: { required: true }
   },
   components: {
-    UDatetime,
     QCheckbox,
     QChip,
     QField,
@@ -50,8 +52,7 @@ export default {
     return {
       days,
       hours,
-      minutes,
-      date: '2018-10-24T10:40:14.674Z'
+      minutes
     }
   }
 }

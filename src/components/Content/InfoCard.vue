@@ -54,5 +54,4 @@
 <style lang="stylus" scoped>
 .desc
   color grey
-  white-space pre-line
 </style>
