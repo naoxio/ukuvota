@@ -29,6 +29,7 @@
           :error-label="getNameError()"
           >
           <q-input
+            @keyup.enter="submit()"
             type="text"
             v-model="name"
             :error="nameExists || nameEmpty"

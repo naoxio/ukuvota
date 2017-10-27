@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <q-field :error-label="errorLabel">
-      <q-input :inverted=inverted :type="type" v-model="val" :error="error" :float-label="floatLabel" :max-height="50" :min-rows="7"/>
-    </q-field>
-  </div>
+  <q-field :error-label="errorLabel">
+    <q-input :inverted=inverted :type="type" v-model="val" :error="error" :float-label="floatLabel" :max-height="50" :min-rows="7"/>
+  </q-field>
 </template>
 
 <script>
@@ -16,14 +14,14 @@
       QField
     },
     props: {
-      value: { required: true },
-      errorLabel: { required: false },
+      value: String,
+      errorLabel: String,
       error: { required: false },
       type: { required: false },
-      floatLabel: { required: false },
-      minHeight: { required: false },
-      minRows: { required: false },
-      inverted: { required: false },
+      floatLabel: String,
+      minHeight: Number,
+      minRows: Number,
+      inverted: Boolean,
       hyperlink: { default: true }
     },
     watch: {

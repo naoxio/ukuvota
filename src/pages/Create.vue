@@ -1,12 +1,13 @@
 <template>
   <main-layout>
     <div style="max-width: 700px; text-align: left; padding: 1em;">
-      <ULabel :value="$t('Topic.questionLabel')" />
-      <UInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
+      <u-label :value="$t('Topic.questionLabel')" />
+      <u-input :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
       <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
-      <TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
-      <TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" />
-      <UInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
+      <u-datetime :value="voteDate" :min="today" type="datetime" />
+      <!--TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" /-->
+      <!--TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" /-->
+      <u-input :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
       <div style="text-align: right">
         <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
       </div>
@@ -24,6 +25,7 @@
   import { buildOutput } from 'src/timer'
   import UInput from '@/General/UInput'
   import ULabel from '@/General/ULabel'
+  import UDatetime from '@/General/UDatetime'
   import NegativeScoreWeightSelector from '@/Select/NegativeScoreWeight'
 
   import { date, uid, scroll, QBtn } from 'quasar'
@@ -36,6 +38,7 @@
     components: {
       UInput,
       ULabel,
+      UDatetime,
       MainLayout,
       NegativeScoreWeightSelector,
       TimeSelector,
@@ -101,6 +104,13 @@
             }
           })
         }
+      }
+    },
+    computed: {
+      voteDate () {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        return date
       }
     },
     data () {
