@@ -26,7 +26,7 @@
       icon: { default: false },
       img: { default: false },
       imgStyle: { defualt: {} },
-      tooltip: { required: false },
+      tooltip: String,
       tooltipDelay: { default: 0 }
     },
     components: {
