@@ -25,6 +25,8 @@ Vote:
 Voted:
   list: People who already voted
 
+Voters: Voters
+
 Voting:
   time:
     duration: Voting time will last for

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <p class="caption">{{ $t('Names.voted') }}</p>
+    <h6><ULabel :value="$t('Voters')" /></h6>
     <NameList />
     </br>
     <div class="row justify-between">
-      <p class="caption">{{ $t('Results.title') }}!</p>
-      <q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" />
+      <h6><p class="caption">{{ $t('Results.title') }}!</p></h6>
+      <!--q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" /-->
     </div>
     <div>
       <div class="list" v-for="(value, id) in sortedResults" :key="id">

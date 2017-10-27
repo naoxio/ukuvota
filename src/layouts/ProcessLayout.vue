@@ -87,13 +87,12 @@
     data () {
       return {
         ...mapState([
-          'topic'
+          'topic',
+          'negativeScoreWeight'
         ]),
-        topic: this.$store.state.topic,
         redirect: true,
         proposalTimer: '',
-        votingTimer: '',
-        negativeScoreWeight: this.$store.state.topic.negativeScoreWeight
+        votingTimer: ''
       }
     }
   }
