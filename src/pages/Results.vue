@@ -27,7 +27,6 @@
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
   import UCard from '@/General/UCard'
-  import { getTopic } from 'src/data'
   import DataTable from '@/Results/DataTable'
   import NoResults from '@/Results/NoVotes'
   import EmojiView from '@/Results/EmojiView'
@@ -50,10 +49,6 @@
     },
     mounted () {
       this.id = this.$route.params.id
-      getTopic(this.id).then((topic) => {
-        this.votes = topic.votes
-        this.proposals = topic.proposals
-      })
     },
     methods: {
   
