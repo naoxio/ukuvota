@@ -20,12 +20,12 @@
     },
     methods: {
       ...mapActions([
-        'updSelectedVoters'
+        'updateSelectedVoters'
       ])
     },
     watch: {
       selectedVoters (val) {
-        this.$store.dispatch('updSelectedVoters', val)
+        this.$store.dispatch('updateSelectedVoters', val)
       }
     },
     data () {

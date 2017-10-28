@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { LocalStorage } from 'quasar'
+import { LocalStorage, date } from 'quasar'
 
 Vue.use(Vuex)
 
@@ -23,13 +23,17 @@ const store = new Vuex.Store({
     proposals: {},
     votes: {},
     negativeScoreWeight: {},
-    selectedVoters: {}
+    selectedVoters: {},
+    proposalDeadline: new Date(new Date().getTime() + 3 * 86400000), // 86400000 is 1 day in milliseconds
+    voteDeadline: new Date(new Date().getTime() + 4 * 86400000)
   },
   actions: {
-    updTheme: ({ commit }, val) => commit('setTheme', val),
-    updResHover: ({ commit }, val) => commit('setResHover', val),
-    updTopic: ({ commit }, val) => commit('setTopic', val),
-    updSelectedVoters: ({ commit }, val) => commit('setSelectedVoters', val)
+    updateTheme: ({ commit }, val) => commit('setTheme', val),
+    updateResHover: ({ commit }, val) => commit('setResHover', val),
+    updateTopic: ({ commit }, val) => commit('setTopic', val),
+    updateSelectedVoters: ({ commit }, val) => commit('setSelectedVoters', val),
+    updateProposalDeadline: ({ commit }, val) => commit('setProposalDeadline', val),
+    updateVoteDeadline: ({ commit }, val) => commit('setVoteDeadline', val)
   },
   mutations: {
     setTheme: (state, val) => { setLocal('theme', val); state.theme = val },
@@ -41,13 +45,23 @@ const store = new Vuex.Store({
       state.selectedVoters = Object.keys(val.votes)
       state.negativeScoreWeight = val.negativeScoreWeight
     },
-    setSelectedVoters: (state, val) => { state.selectedVoters = val }
+    setSelectedVoters: (state, val) => { state.selectedVoters = val },
+    setProposalDeadline: (state, val) => {
+      let propMilli = date.formatDate(state.proposalDeadline, 'x')
+      let voteMilli = date.formatDate(state.voteDeadline, 'x')
+      let diff = 0
+      if (propMilli > voteMilli) diff = propMilli - voteMilli
+      else if (voteMilli > propMilli) diff = voteMilli - propMilli
+      state.voteDeadline = new Date(val.getTime() + diff)
+      state.proposalDeadline = val
+    },
+    setVoteDeadline: (state, val) => { state.voteDeadline = val }
   },
   getters: {
-    getTheme: state => state.theme,
-    getResHover: state => state.resHover,
-    getTopic: state => state.topic,
-    getSelectedVoters: state => state.selectedVoters
+    getProposalDeadlineFormatted: state => date.formatDate(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
+    getVoteDeadlineFormatted: state => date.formatDate(state.voteDeadline, 'MMM DD, YYYY HH:MM'),
+    getProposalDeadline: state => state.proposalDeadline,
+    getVoteDeadline: state => state.voteDeadline
   }
 })
 

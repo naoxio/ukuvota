@@ -9,7 +9,7 @@
     components: { QSelect },
     methods: {
       ...mapActions([
-        'updTheme'
+        'updateTheme'
       ])
     },
     data () {
@@ -25,7 +25,7 @@
       }
     },
     watch: {
-      theme (val) { this.$store.dispatch('updTheme', val) }
+      theme (val) { this.$store.dispatch('updateTheme', val) }
     }
   }
 </script>

@@ -18,6 +18,7 @@ Proposal:
 Proposals:
   title: Proposals
   current: Current Proposals
+  deadline: Proposals until
 
 Vote:
   added: Vote from {submitName} submitted!
@@ -31,7 +32,7 @@ Voting:
   time:
     duration: Voting time will last for
     ends: Voting time ends in
-    selectLabel:  Voting Time
+  deadline: Voting until
 
 Topic:
   questionLabel: Topic Question

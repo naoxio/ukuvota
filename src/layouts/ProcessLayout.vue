@@ -24,7 +24,7 @@
     },
     methods: {
       ...mapActions([
-        'updTopic'
+        'updateTopic'
       ]),
       timer () {
         if (this.redirect) this.autoRedirect()
@@ -70,7 +70,7 @@
         if (topic.error === 'not_found') {
           this.$router.push({ name: 'notfound', params: { id: this.id } })
         }
-        this.$store.dispatch('updTopic', topic)
+        this.$store.dispatch('updateTopic', topic)
         this.topic = topic
         if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
         else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight

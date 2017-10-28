@@ -43,10 +43,10 @@
       checkOtherTrue (val) { if (val) this.hoverNone = false },
       hoverOther (val) { this.checkOtherTrue(val); this.checkHoverNone(); this.updateHover() },
       ...mapActions([
-        'updResHover'
+        'updateResHover'
       ]),
       updateHover () {
-        this.$store.dispatch('updResHover', { none: this.hoverNone, avg: this.hoverAvg, total: this.hoverTotal })
+        this.$store.dispatch('updateResHover', { none: this.hoverNone, avg: this.hoverAvg, total: this.hoverTotal })
       }
     },
     watch: {

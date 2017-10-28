@@ -3,9 +3,11 @@
     <div style="max-width: 700px; text-align: left; padding: 1em;">
       <ULabel :value="$t('Topic.questionLabel')" />
       <UInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
-      <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
-      <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
-      <TimeSelector :label="$t('Voting.time.selectLabel')" v-model="voting" />
+      <NegativeScoreWeight :negativeScoreWeight.sync="negativeScoreWeight" />
+      <UDatetime :label="$t('Proposals.deadline')"store="ProposalDeadline" :min="today" type="datetime" />
+      <UDatetime :label="$t('Voting.deadline')" store="VoteDeadline" :min="proposalDeadline" type="datetime" />
+      <!--TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" /-->
+      <!--TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" /-->
       <UInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
       <div style="text-align: right">
         <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
@@ -19,25 +21,25 @@
 
 <script>
   import MainLayout from 'layouts/MainLayout'
-  import TimeSelector from '@/Select/Time'
   import { setTopic, setProposal } from 'src/data'
   import { buildOutput } from 'src/timer'
   import UInput from '@/General/UInput'
   import ULabel from '@/General/ULabel'
-  import NegativeScoreWeightSelector from '@/Select/NegativeScoreWeight'
-
+  import UDatetime from '@/General/UDatetime'
+  import NegativeScoreWeight from '@/Select/NegativeScoreWeight'
+  import { mapState } from 'vuex'
   import { date, uid, scroll, QBtn } from 'quasar'
-
   const { setScrollPosition } = scroll
   const { addToDate } = date
-  
+  const today = new Date()
+
   export default {
     components: {
       UInput,
       ULabel,
+      UDatetime,
       MainLayout,
-      NegativeScoreWeightSelector,
-      TimeSelector,
+      NegativeScoreWeight,
       QBtn
     },
     mounted () {
@@ -99,9 +101,21 @@
         }
       }
     },
+    computed: {
+      ...mapState([
+        'voteDeadline',
+        'proposalDeadline'
+      ]),
+      voteDate () {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        return date
+      }
+    },
     data () {
       return {
         id: '',
+        today,
         topicDescription: '',
         topicQuestion: '',
         topicMissing: false,

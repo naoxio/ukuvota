@@ -41,7 +41,7 @@
   import ULabel from '@/General/ULabel'
   import UEmoji from '@/General/UEmoji'
   import NameList from '@/List/Names'
-  import { mapState, mapGetters } from 'vuex'
+  import { mapState } from 'vuex'
   import { getOrderedList, getResults, getAvgScore, getAvgRoundedScore, getTotalScore, getIndiScore, getAvgEmoji, getTotalEmoji } from 'src/results'
 
   export default {
@@ -57,11 +57,9 @@
         'proposals',
         'negativeScoreWeight',
         'votes',
-        'resHover'
-      ]),
-      ...mapGetters({
-        selectedVoters: 'getSelectedVoters'
-      })
+        'resHover',
+        'selectedVoters'
+      ])
     },
     watch: {
       selectedVoters (val) {

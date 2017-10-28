@@ -18,12 +18,10 @@ Proposal:
 Proposals:
   title: Vorschläge
   current: Aktuelle Vorschläge
+  deadline: Vorschläge bis
 
 Vote:
   added: Abstimmung von {submitName} abgegeben!
-
-Voted:
-  list: Leute, die bereits gewählt haben
 
 Select:
   voters: Bitte wähle einige Wählx aus
@@ -35,6 +33,7 @@ Voting:
     duration: Dauer der Abstimmungszeit
     ends: Abstimmungszeit endet in
     selectLabel: Abstimmungszeit
+  deadline: Wahl bis
 
 Topic:
   questionLabel: Frage zum Thema

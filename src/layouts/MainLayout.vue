@@ -16,7 +16,7 @@
   import LangSwitcher from '@/Select/Language'
   import MainMenu from '@/Layout/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
-  import { mapGetters } from 'vuex'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'index',
@@ -26,9 +26,9 @@
       QLayout
     },
     computed: {
-      ...mapGetters({
-        theme: 'getTheme'
-      })
+      ...mapState([
+        'theme'
+      ])
     },
     mounted () {
       let sessionID = LocalStorage.get.item('SessionID')
