@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import LangSwitcher from '@/Select/Language'
-  import MainMenu from '@/Layout/MainMenu'
+  import LangSwitcher from '@/selectors/Language'
+  import MainMenu from 'layouts/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
   import { mapState } from 'vuex'
 

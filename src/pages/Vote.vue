@@ -44,12 +44,12 @@
 </template>
 <script>
 import ProcessLayout from 'layouts/ProcessLayout'
-import UCard from '@/General/UCard'
+import UCard from '@/general/UCard'
 import { QAlert, QBtn, QField, QInput, QItemMain } from 'quasar'
 import { getTopic, setVotes } from 'data'
-import NameList from '@/List/Names'
-import EmojiVoteList from '@/List/EmojiVote'
-import ULabel from '@/General/ULabel'
+import NameList from '@/lists/Names'
+import EmojiVoteList from '@/lists/EmojiVote'
+import ULabel from '@/general/ULabel'
 
 export default {
   components: {

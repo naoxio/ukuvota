@@ -13,8 +13,8 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import { getTopic } from 'src/data'
-  import { formatTime } from 'src/timer'
-  import InfoCard from '@/Content/InfoCard'
+  import { formatTime } from 'src/helpers/timer'
+  import InfoCard from '@/content/InfoCard'
   import { mapActions } from 'vuex'
 
   export default {

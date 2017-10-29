@@ -13,8 +13,8 @@ require(`./themes/app.${__THEME}.styl`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
-import store from './store'
-import i18n from './i18n'
+import store from './store/index'
+import i18n from './i18n/index'
 
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework

@@ -1,0 +1,108 @@
+Home: Startseite
+Manual: Handbuch
+Code: Code
+Chat: Chat
+
+SystemicConsensus: Systemisches Konsensieren
+
+Proposal:
+  title: Vorschlag
+  exists: Der Vorschlag existiert bereits
+  empty: Der Vorschlag ist leer
+  add: Vorschlag hinzufügen
+  added: Vorschalg "{submittedProposal}" hinzugefügt!
+  until: Vorschläge bis
+  duration: Dauer der Vorschlagszeit
+  selectLabel: Vorschlagszeit
+
+Proposals:
+  title: Vorschläge
+  current: Aktuelle Vorschläge
+
+Vote:
+  added: Abstimmung von {submitName} abgegeben!
+
+Select:
+  voters: Bitte wähle einige Wählx aus
+
+Voters: <a href="http://www.wiwo.de/erfolg/trends/gender-irrsinn-skurrile-unfaelle-im-kampf-gegen-den-sexismus/8131180.html">Wählx</a>
+
+Voting:
+  duration: Dauer der Abstimmungszeit
+  ends: Abstimmungszeit endet in
+  selectLabel: Abstimmungszeit
+  until: Wahl bis
+
+Topic:
+  questionLabel: Frage zum Thema
+  errorLabel: Bitte fügen Sie eine Frage zum Thema hinzu
+  notFound: das Thema mit der ID {id} konnte nicht gefunden werden
+
+NegativeScoreWeighting: Negativer Score-Gewichtung
+ShareableURL: Freigegebene URL
+StartWebApp: Web App starten
+
+Results:
+  title: Ergebnisse
+  noResults: Keine Ergebnisse
+  viewRaw: Datentabelle anzeigen
+  disclaimer: Bitte stellen Sie sicher, dass alle Daten gültig sind!
+  noOneVoted: niemand hat gewählt
+  tryAgain: versuche es noch einmal, diesmal sag es deinen Freunden!
+
+ResultSetting: Ergebniskonfigurationen
+
+HighlightTopScores: Markiere höchste Punktzahlen
+
+## Buttons
+Next: Weiter
+Close: Schließen
+Submit: Abschicken
+Add: Hinzufügen
+
+## Labels
+DescriptionLabel: Beschreibung (Optional)
+Description: Beschreibung
+
+## Name Specific
+Name:
+  title: Name
+  label: Ihr Name oder persistenter Alias
+  exists: Dieser Name existiert bereits
+  empty: Name ist leer
+
+Names:
+  voted: Namen, die gewählt haben
+
+Total: Gesamtzahl
+
+## Time Specific
+Time:
+  Days: Tage
+  Hours: Stunden
+  Minutes: Minuten
+  days: Tage
+  day: Tag
+  hours: Stunden
+  hour: Stunde
+  minutes: Minuten
+  minute: Minute
+  seconds: Sekunden
+  second: Sekunde
+
+GlobalSettings: Globale Einstellungen
+Language: Sprache
+
+Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'
+LocalSave: Alle Einstellungen werden lokal gespeichert
+
+Average: Durchschnitt
+SaveImage: Als Bild speichern
+SaveText: Als Text speichern
+ExportData: Daten exportieren
+
+EmojiView: Emoji Ansicht
+onEmojiHover: wenn der Mauszeiger auf den Emoji zeigt
+doNothing: nichts tun
+showAverageScore: Durchschnittspunktzahl anzeigen
+showTotalScore: Gesamtpunktzahl anzeigen

@@ -21,7 +21,7 @@
 <script>
 import MainLayout from 'layouts/MainLayout'
 import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
-import MarkdownContent from '@/Content/Markdown'
+import MarkdownContent from '@/content/Markdown'
 
 export default {
   components: {
