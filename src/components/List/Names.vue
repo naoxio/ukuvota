@@ -17,7 +17,7 @@
 
   export default {
     props: {
-      select: { default: true }
+      select: { default: false }
     },
     computed: {
       ...mapState([

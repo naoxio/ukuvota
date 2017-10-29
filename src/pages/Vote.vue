@@ -2,7 +2,7 @@
   <process-layout>
     <UCard v-if="votesExist()" >
       <h5 class="grey">
-        <ULabel :value="$t('Voted.list')" />
+        <ULabel :value="$t('Voters')" />
       </h5>
       </br>
       <NameList :votes="votes"/>
