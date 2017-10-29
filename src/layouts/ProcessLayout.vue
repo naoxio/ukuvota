@@ -13,7 +13,7 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import { getTopic } from 'src/data'
-  import { formatTime } from 'src/helpers/timer'
+  // import { formatTime } from 'src/helpers/timer'
   import InfoCard from '@/content/InfoCard'
   import { mapActions } from 'vuex'
 
@@ -43,14 +43,14 @@
         }
       },
       autoRedirect () {
-        this.proposalTimer = formatTime(this.topic.proposalTime)
+        // this.proposalTimer = formatTime(this.topic.proposalTime)
         if (this.proposalTimer !== -1) {
           this.checkCorrectRoute('collect')
           this.votingTimeLabel = this.$t('Voting.time.duration')
           this.votingTimer = this.topic.votingInterval
         }
         else if (this.proposalTimer === -1) {
-          this.votingTimer = formatTime(this.topic.votingTime)
+          // this.votingTimer = formatTime(this.topic.votingTime)
           if (this.votingTimer !== -1) {
             this.checkCorrectRoute('vote')
             this.votingTimeLabel = this.$t('Voting.time.ends')

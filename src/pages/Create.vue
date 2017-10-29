@@ -4,8 +4,8 @@
       <ULabel :value="$t('Topic.questionLabel')" />
       <UInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
       <NegativeScoreWeight :negativeScoreWeight.sync="negativeScoreWeight" />
-      <UDatetime :durationLabel="$t('Proposal.duration')"  :untilLabel="$t('Proposal.until')" store="ProposalDeadline" :min="today" type="datetime" />
-      <UDatetime :durationLabel="$t('Voting.duration')"  :untilLabel="$t('Voting.until')" store="VoteDeadline" :min="proposalDeadline" type="datetime" />
+      <UDatetime :durationLabel="$t('Proposal.duration')"  :untilLabel="$t('Proposal.until')" store="Proposal" :min="today" type="datetime" />
+      <UDatetime :durationLabel="$t('Voting.duration')"  :untilLabel="$t('Voting.until')" store="Vote" :min="proposalDeadline" type="datetime" />
       <!--TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" /-->
       <!--TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" /-->
       <UInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
@@ -22,7 +22,7 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import { setTopic, setProposal } from 'src/data'
-  import { buildOutput } from 'src/helpers/timer'
+  // import { buildOutput } from 'src/helpers/timer'
   import UInput from '@/general/UInput'
   import ULabel from '@/general/ULabel'
   import UDatetime from '@/general/UDatetime'
@@ -79,7 +79,7 @@
             'description': this.topicDescription,
             'proposalTime': endProposal,
             'votingTime': endVoting,
-            'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
+            'votingInterval': endVoting, // buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
             'negativeScoreWeight': this.negativeScoreWeight,
             'proposals': { },
             'votes': { },

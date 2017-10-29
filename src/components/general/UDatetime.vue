@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="row justify-center">
-      <div class="pad">
+      <div class="info">
         <ULabel :value="untilLabel" />
         <ULabel class="sublabel" :value="date" />
       </div>
-      <div class="pad">
+      <div class="info">
         <ULabel :value="durationLabel" />
-        <ULabel class="sublabel" :value="date" />
+        <ULabel class="sublabel" :value="duration" />
       </div>
     </div>
     <div>
       <q-icon name="today">
         <q-popover ref="popover">
-          <q-inline-datetime :min="min" v-model="value" :type="type">
+          <q-inline-datetime :min="min" v-model="deadline" :type="type">
             <q-btn @click="$refs.popover.close()">
               {{ $t('Close') }}
             </q-btn>
@@ -28,6 +28,9 @@
   import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect, QItem, QItemMain, QItemSide } from 'quasar'
   import ULabel from './ULabel'
   export default {
+    mounted () {
+      console.log(this.getDuration)
+    },
     props: {
       type: String,
       min: Date,
@@ -36,11 +39,12 @@
       durationLabel: String
     },
     watch: {
-      date (val) { this.value = this.$store.getters[this.getFnc] },
-      value (val) { this.$store.dispatch(this.updFnc + 'Sync', val) }
+      date (val) { this.deadline = this.$store.getters[this.getDeadlineFormatted] },
+      deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
     },
     computed: {
-      date () { return this.$store.getters[this.getFormatted] }
+      date () { return this.$store.getters[this.getDeadlineFormatted] },
+      duration () { return this.$store.getters[this.getDuration] }
     },
     components: {
       QBtn,
@@ -56,11 +60,11 @@
     },
     data () {
       return {
-        value: this.$store.getters['get' + this.store],
-        updFnc: 'update' + this.store,
-        getFormatted: 'get' + this.store + 'Formatted',
-        getFnc: 'get' + this.store,
-        selectedMonth: 11
+        deadline: this.$store.getters['get' + this.store + 'Deadline'],
+        updDeadline: 'update' + this.store + 'Deadline',
+        getDeadlineFormatted: 'get' + this.store + 'DeadlineFormatted',
+        getDuration: 'get' + this.store + 'Duration',
+        getDeadline: 'get' + this.store + 'Deadline'
       }
     }
   }
@@ -68,6 +72,8 @@
 <style lang="stylus" scoped>
   .sublabel
     color grey
-  .pad
+  .info
     padding 1em
+    text-align center
+    cursor default
 </style>

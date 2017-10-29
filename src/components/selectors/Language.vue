@@ -5,6 +5,7 @@
 <script>
   import { LocalStorage, QSelect } from 'quasar'
   import i18n from 'src/i18n'
+
   export default {
     components: { QSelect },
     data () {

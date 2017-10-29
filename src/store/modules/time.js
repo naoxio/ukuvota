@@ -1,8 +1,9 @@
 import { date } from 'quasar'
+import { addDays } from 'date-fns'
 
 export const state = {
-  proposalDeadline: new Date(new Date().getTime() + 3 * 86400000), // 86400000 is 1 day in milliseconds
-  voteDeadline: new Date(new Date().getTime() + 4 * 86400000)
+  proposalDeadline: addDays(new Date(), 3),
+  voteDeadline: addDays(new Date(), 4)
 }
 
 export const actions = {
@@ -20,20 +21,24 @@ export const mutations = {
     state.proposalDeadline = val
   },
   setProposalDeadlineSync: (state, val) => {
-    let propMilli = date.formatDate(state.proposalDeadline, 'x')
-    let voteMilli = date.formatDate(state.voteDeadline, 'x')
+    /* let propMilli = moment(state.proposalDeadline).millisecond()
+    let voteMilli = moment(state.voteDeadline).millisecond()
     let diff = 0
+    // moment(val).subtract(state.voteDeadline.milliseconds(), 'milliseconds')
     if (propMilli > voteMilli) diff = propMilli - voteMilli
     else if (voteMilli > propMilli) diff = voteMilli - propMilli
     state.voteDeadline = new Date(val.getTime() + diff)
-    state.proposalDeadline = val
+    state.proposalDeadline = val */
   },
   setVoteDeadline: (state, val) => { state.voteDeadline = val }
 }
 
 export const getters = {
-  getProposalDeadlineFormatted: state => date.formatDate(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
-  getVoteDeadlineFormatted: state => date.formatDate(state.voteDeadline, 'MMM DD, YYYY HH:MM'),
   getProposalDeadline: state => state.proposalDeadline,
-  getVoteDeadline: state => state.voteDeadline
+  getVoteDeadline: state => state.voteDeadline,
+  getProposalDuration: state => state.proposalDeadline, // moment(state.proposalDeadline).fromNow(),
+  getVoteDuration: state => state.proposalDeadline, // moment(state.voteDeadline).locale('de').fromNow(),
+  getProposalDeadlineFormatted: state => state.proposalDeadline, // state => moment(state.proposalDeadline).format('MMM DD, YYYY HH:MM'),
+  getVoteDeadlineFormatted: state => state.proposalDeadline // moment(state.voteDeadline).format('MMM DD, YYYY HH:MM')
+
 }
