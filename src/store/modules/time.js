@@ -1,5 +1,4 @@
-import { date } from 'quasar'
-import { addDays } from 'date-fns'
+import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWordsToNow } from 'src/datefns'
 
 export const state = {
   proposalDeadline: addDays(new Date(), 3),
@@ -15,20 +14,18 @@ export const actions = {
 
 export const mutations = {
   setProposalDeadline: (state, val) => {
-    let propMilli = date.formatDate(val, 'x')
-    let voteMilli = date.formatDate(state.voteDeadline, 'x')
-    if (propMilli > voteMilli) state.voteDeadline = val
+    if (isBefore(val, state.voteDeadline)) state.voteDeadline = val
     state.proposalDeadline = val
   },
   setProposalDeadlineSync: (state, val) => {
-    /* let propMilli = moment(state.proposalDeadline).millisecond()
-    let voteMilli = moment(state.voteDeadline).millisecond()
-    let diff = 0
+    let prop = state.proposalDeadline
+    let vote = state.voteDeadline
     // moment(val).subtract(state.voteDeadline.milliseconds(), 'milliseconds')
-    if (propMilli > voteMilli) diff = propMilli - voteMilli
-    else if (voteMilli > propMilli) diff = voteMilli - propMilli
-    state.voteDeadline = new Date(val.getTime() + diff)
-    state.proposalDeadline = val */
+    let diff = 0
+    if (isAfter(prop, vote)) diff = differenceInMilliseconds(prop, vote)
+    else if (isAfter(vote, prop)) diff = differenceInMilliseconds(vote, prop)
+    state.voteDeadline = new Date(getTime(val) + diff)
+    state.proposalDeadline = val
   },
   setVoteDeadline: (state, val) => { state.voteDeadline = val }
 }
@@ -36,9 +33,9 @@ export const mutations = {
 export const getters = {
   getProposalDeadline: state => state.proposalDeadline,
   getVoteDeadline: state => state.voteDeadline,
-  getProposalDuration: state => state.proposalDeadline, // moment(state.proposalDeadline).fromNow(),
-  getVoteDuration: state => state.proposalDeadline, // moment(state.voteDeadline).locale('de').fromNow(),
-  getProposalDeadlineFormatted: state => state.proposalDeadline, // state => moment(state.proposalDeadline).format('MMM DD, YYYY HH:MM'),
-  getVoteDeadlineFormatted: state => state.proposalDeadline // moment(state.voteDeadline).format('MMM DD, YYYY HH:MM')
+  getProposalDuration: state => distanceInWordsToNow(state.proposalDeadline),
+  getVoteDuration: state => distanceInWordsToNow(state.voteDeadline),
+  getProposalDeadlineFormatted: state => format(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
+  getVoteDeadlineFormatted: state => format(state.voteDeadline, 'MMM DD, YYYY HH:MM')
 
 }

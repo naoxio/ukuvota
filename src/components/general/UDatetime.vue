@@ -2,16 +2,19 @@
   <div>
     <div class="row justify-center">
       <div class="info">
-        <ULabel :value="untilLabel" />
-        <ULabel class="sublabel" :value="date" />
-      </div>
-      <div class="info">
         <ULabel :value="durationLabel" />
         <ULabel class="sublabel" :value="duration" />
       </div>
+      <div class="info">
+        <ULabel :value="untilLabel" />
+        <ULabel class="sublabel" :value="date" />
+      </div>
     </div>
-    <div>
-      <q-icon name="today">
+    <div class="row justify-between">
+      <q-btn flat> + 1 day</q-btn>
+      <q-btn flat> + 3 days</q-btn>
+      <q-btn flat> + 1 hour</q-btn>
+        <q-icon color="primary" class="icon" name="today">
         <q-popover ref="popover">
           <q-inline-datetime :min="min" v-model="deadline" :type="type">
             <q-btn @click="$refs.popover.close()">
@@ -28,9 +31,6 @@
   import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect, QItem, QItemMain, QItemSide } from 'quasar'
   import ULabel from './ULabel'
   export default {
-    mounted () {
-      console.log(this.getDuration)
-    },
     props: {
       type: String,
       min: Date,
@@ -39,7 +39,6 @@
       durationLabel: String
     },
     watch: {
-      date (val) { this.deadline = this.$store.getters[this.getDeadlineFormatted] },
       deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
     },
     computed: {
@@ -76,4 +75,7 @@
     padding 1em
     text-align center
     cursor default
+  .icon
+    cursor pointer
+    font-size 1.5em
 </style>

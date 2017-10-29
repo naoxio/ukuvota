@@ -12,7 +12,7 @@ Proposal:
   add: Vorschlag hinzufügen
   added: Vorschalg "{submittedProposal}" hinzugefügt!
   until: Vorschläge bis
-  duration: Dauer der Vorschlagszeit
+  duration:  Vorschlagszeit dauert
   selectLabel: Vorschlagszeit
 
 Proposals:
@@ -28,7 +28,7 @@ Select:
 Voters: <a href="http://www.wiwo.de/erfolg/trends/gender-irrsinn-skurrile-unfaelle-im-kampf-gegen-den-sexismus/8131180.html">Wählx</a>
 
 Voting:
-  duration: Dauer der Abstimmungszeit
+  duration: Abstimmungszeit dauert
   ends: Abstimmungszeit endet in
   selectLabel: Abstimmungszeit
   until: Wahl bis
