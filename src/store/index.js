@@ -1,9 +1,14 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import VuexPersistence from 'vuex-persist'
 
 import * as time from './modules/time'
 import * as settings from './modules/settings'
 import * as topic from './modules/topic'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 Vue.use(Vuex)
 
@@ -15,7 +20,8 @@ const store = new Vuex.Store({
     time,
     settings,
     topic
-  }
+  },
+  plugins: [vuexLocal.plugin]
 })
 
 export default store

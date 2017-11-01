@@ -2471,7 +2471,7 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-date-fns@^2.0.0:
+date-fns@2.0.0-alpha.7:
   version "2.0.0-alpha.7"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-alpha.7.tgz#245ad16f95764eababfb2c0a41fd5d033c20e57a"
 
@@ -5204,6 +5204,10 @@ lodash.keys@^3.1.2:
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
+
+lodash.merge@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
 lodash.pad@^4.1.0:
   version "4.5.1"
@@ -8641,6 +8645,17 @@ vue@2.3.4:
 vue@^2.2.6:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.4.tgz#ea9550b96a71465fd2b8b17b61673b3561861789"
+
+vuex-persist@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-0.3.0.tgz#e535a0cc21bc3bf6556c05484db76189906e0e7d"
+  dependencies:
+    lodash.merge "^4.6.0"
+    vuex "^2.3.1"
+
+vuex@^2.3.1:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.5.0.tgz#20f0265ade6c9a5ac6724a405d3ffdb4726c9741"
 
 vuex@^3.0.0:
   version "3.0.0"
