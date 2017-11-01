@@ -1,4 +1,4 @@
-import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWordsToNow } from 'src/datefns'
+import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWords, distanceInWordsToNow } from 'src/datefns'
 
 export const state = {
   proposalDeadline: addDays(new Date(), 3),
@@ -34,7 +34,7 @@ export const getters = {
   getProposalDeadline: state => state.proposalDeadline,
   getVoteDeadline: state => state.voteDeadline,
   getProposalDuration: state => distanceInWordsToNow(state.proposalDeadline),
-  getVoteDuration: state => distanceInWordsToNow(state.voteDeadline),
+  getVoteDuration: state => distanceInWords(state.proposalDeadline, state.voteDeadline),
   getProposalDeadlineFormatted: state => format(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
   getVoteDeadlineFormatted: state => format(state.voteDeadline, 'MMM DD, YYYY HH:MM')
 
