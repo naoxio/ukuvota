@@ -5,6 +5,7 @@
     <q-tooltip v-if="!tooltip === false" :delay="tooltipDelay">
       {{ tooltip }}
     </q-tooltip>
+    <slot/>
   </q-btn>
 </template>
 <script>

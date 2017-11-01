@@ -1,35 +1,46 @@
 <template>
-  <div>
-    <div class="row justify-center">
-      <div class="info">
-        <ULabel :value="durationLabel" />
-        <ULabel class="sublabel" :value="duration" />
-      </div>
-      <div class="info">
-        <ULabel :value="untilLabel" />
-        <ULabel class="sublabel" :value="date" />
-      </div>
+<div>
+  <div class="row justify-around">
+    <div class="info">
+      <ULabel :value="durationLabel" />
+      <ULabel class="sublabel" :value="duration" />
     </div>
-    <div class="row justify-between">
-      <q-btn flat> + 1 day</q-btn>
-      <q-btn flat> + 3 days</q-btn>
-      <q-btn flat> + 1 hour</q-btn>
-        <q-icon color="primary" class="icon" name="today">
+    <div class="info">
+      <ULabel :value="untilLabel" />
+      <ULabel class="sublabel" :value="date" />
+    </div>
+  </div>
+  <div class="row justify-around items-center">  
+    <div class="row">
+      <q-btn flat>today</q-btn>
+      <q-btn flat>tomorrow</q-btn>
+      <UWheelBtn :incrOptions="dayOptions" :incrValue="1"/>
+    </div> 
+    <div class="row">
+      <q-btn flat>evening</q-btn>
+      <q-btn flat>morning</q-btn>
+      <UWheelBtn :incrOptions="hourOptions" :incrValue="1"/>
+    </div>
+    <div>
+      <q-icon color="primary" class="icon" name="today">
         <q-popover ref="popover">
-          <q-inline-datetime :min="min" v-model="deadline" :type="type">
+         <q-inline-datetime :min="min" v-model="deadline" :type="type">
             <q-btn @click="$refs.popover.close()">
               {{ $t('Close') }}
             </q-btn>
           </q-inline-datetime>
         </q-popover>
       </q-icon>
-     </div>
-  </div>
+    </div>
+   </div>
+   </div>
 </template>
 
 <script>
-  import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect, QItem, QItemMain, QItemSide } from 'quasar'
+  import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
+  import UWheelBtn from '@/general/UWheelBtn'
   import ULabel from './ULabel'
+
   export default {
     props: {
       type: String,
@@ -41,29 +52,57 @@
     watch: {
       deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
     },
-    computed: {
-      date () { return this.$store.getters[this.getDeadlineFormatted] },
-      duration () { return this.$store.getters[this.getDuration] }
-    },
     components: {
+      ULabel,
+      UWheelBtn,
       QBtn,
       QPopover,
       QIcon,
       QInlineDatetime,
       QInput,
-      QSelect,
-      QItem,
-      QItemMain,
-      QItemSide,
-      ULabel
+      QSelect
+    },
+    methods: {
+      genLinearOptions (label, max) {
+        let output = []
+        for (let x = 1; x <= max; x++) {
+          let l = x + ' ' + label
+          output.push({ label: l, value: x })
+        }
+        return output
+      },
+      genFibOptions (label, max) {
+        let output = []
+        let a = 1, b = 1, temp
+
+        while (a <= max) {
+          temp = a
+          let l = a + ' ' + label
+          output.push({ label: l, value: a })
+          a = a + b
+          b = temp
+        }
+        return output
+      }
+    },
+
+    computed: {
+      date () { return this.$store.getters[this.getDeadlineFormatted] },
+      duration () { return this.$store.getters[this.getDuration] },
+      hourOptions () {
+        return this.genLinearOptions('hour', 3)
+      },
+      dayOptions () {
+        return this.genFibOptions('day', 55)
+      }
     },
     data () {
       return {
         deadline: this.$store.getters['get' + this.store + 'Deadline'],
         updDeadline: 'update' + this.store + 'Deadline',
+        getDeadline: 'get' + this.store + 'Deadline',
         getDeadlineFormatted: 'get' + this.store + 'DeadlineFormatted',
-        getDuration: 'get' + this.store + 'Duration',
-        getDeadline: 'get' + this.store + 'Deadline'
+        getDuration: 'get' + this.store + 'Duration'
       }
     }
   }
@@ -78,4 +117,6 @@
   .icon
     cursor pointer
     font-size 1.5em
+
+
 </style>

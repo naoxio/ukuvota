@@ -44,6 +44,9 @@
   body
     font-family 'coolFont'
   
+  .q-btn-standard
+    min-height 0
+
   .q-tab-pane
     border none
   

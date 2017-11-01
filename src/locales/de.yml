@@ -2,6 +2,7 @@ Home: Startseite
 Manual: Handbuch
 Code: Code
 Chat: Chat
+SourceCode: Quellcode
 
 SystemicConsensus: Systemisches Konsensieren
 
@@ -12,7 +13,7 @@ Proposal:
   add: Vorschlag hinzufügen
   added: Vorschalg "{submittedProposal}" hinzugefügt!
   until: Vorschläge bis
-  duration:  Vorschlagszeit dauert
+  duration:  Vorschlagszeit dauer
   selectLabel: Vorschlagszeit
 
 Proposals:
@@ -28,7 +29,7 @@ Select:
 Voters: <a href="http://www.wiwo.de/erfolg/trends/gender-irrsinn-skurrile-unfaelle-im-kampf-gegen-den-sexismus/8131180.html">Wählx</a>
 
 Voting:
-  duration: Abstimmungszeit dauert
+  duration: Abstimmungszeit dauer
   ends: Abstimmungszeit endet in
   selectLabel: Abstimmungszeit
   until: Wahl bis
