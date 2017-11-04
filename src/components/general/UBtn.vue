@@ -26,7 +26,7 @@
       route: { default: false },
       icon: { default: false },
       img: { default: false },
-      imgStyle: { defualt: {} },
+      imgStyle: { default: 'width: 32px' },
       tooltip: String,
       tooltipDelay: { default: 0 }
     },

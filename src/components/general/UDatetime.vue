@@ -1,25 +1,22 @@
 <template>
 <div>
-  <div class="row justify-around">
-    <div class="info">
-      <ULabel :value="durationLabel" />
-      <ULabel class="sublabel" :value="duration" />
-    </div>
-    <div class="info">
-      <ULabel :value="untilLabel" />
-      <ULabel class="sublabel" :value="date" />
-    </div>
+  <div class="row justify-between">
+    <ULabel :value="durationLabel" />
+    <ULabel class="sublabel" :value="duration" />
+    <ULabel :value="untilLabel" />
+    <ULabel class="sublabel" :value="date" />
   </div>
-  <div class="row justify-around items-center">  
+  <div class="row justify-between"> 
     <div class="row">
       <q-btn flat>today</q-btn>
       <q-btn flat>tomorrow</q-btn>
-      <UWheelBtn :incrOptions="dayOptions" :incrValue="1"/>
+      <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
     </div> 
     <div class="row">
-      <q-btn flat>evening</q-btn>
-      <q-btn flat>morning</q-btn>
-      <UWheelBtn :incrOptions="hourOptions" :incrValue="1"/>
+      <UBtn img="statics/icons/sunrise.svg" :tooltip="$t('Morning')" />
+      <UBtn img="statics/icons/sun.svg" :tooltip="$t('Midday')" />
+      <UBtn img="statics/icons/sunset.svg" :tooltip="$t('Evening')" />
+      <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
     </div>
     <div>
       <q-icon color="primary" class="icon" name="today">
@@ -33,26 +30,28 @@
       </q-icon>
     </div>
    </div>
-   </div>
+  </div>
 </template>
 
 <script>
   import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
-  import UWheelBtn from '@/general/UWheelBtn'
+  import UWheelBtn from './UWheelBtn'
   import ULabel from './ULabel'
-
+  import UBtn from './UBtn'
   export default {
     props: {
       type: String,
       min: Date,
       store: { required: true },
       untilLabel: String,
-      durationLabel: String
+      durationLabel: String,
+      changeLabel: String
     },
     watch: {
       deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
     },
     components: {
+      UBtn,
       ULabel,
       UWheelBtn,
       QBtn,

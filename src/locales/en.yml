@@ -2,6 +2,7 @@ Home: Home
 Manual: Manual
 Code: Code
 Chat: Chat
+ChangeValues: Change Values
 SourceCode: Source Code
 
 SystemicConsensus: Systemic Consensus
@@ -110,3 +111,7 @@ showAverageScore: show average score
 showTotalScore: show total score
 
 and: and
+
+Morning: Morning
+Midday: Midday
+Evening: Evening

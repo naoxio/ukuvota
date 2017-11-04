@@ -2,14 +2,16 @@ import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, 
 
 export const state = {
   proposalDeadline: addDays(new Date(), 3),
-  voteDeadline: addDays(new Date(), 4)
+  proposalDuration: distanceInWordsToNow(addDays(new Date(), 3)),
+  voteDeadline: addDays(new Date(), 4),
+  voteDuration: distanceInWords(addDays(new Date(), 3), addDays(new Date(), 4))
 }
 
 export const actions = {
-  updateProposalDeadline: ({ commit }, val) => commit('setProposalDeadline', val),
-  updateProposalDeadlineSync: ({ commit }, val) => commit('setProposalDeadlineSync', val),
-  updateVoteDeadline: ({ commit }, val) => commit('setVoteDeadline', val),
-  updateVoteDeadlineSync: ({ commit }, val) => commit('setVoteDeadline', val)
+  updateProposalDeadline: ({ commit }, val) => { commit('setProposalDeadline', val); commit('setDurations') },
+  updateProposalDeadlineSync: ({ commit }, val) => { commit('setProposalDeadlineSync', val); commit('setDurations') },
+  updateVoteDeadlineSync: ({ commit }, val) => { commit('setVoteDeadline', val); commit('setDurations') },
+  updateDurations: ({ commit }, val) => commit('setDurations')
 }
 
 export const mutations = {
@@ -27,14 +29,18 @@ export const mutations = {
     state.voteDeadline = new Date(getTime(val) + diff)
     state.proposalDeadline = val
   },
+  setDurations: state => {
+    state.proposalDuration = distanceInWordsToNow(state.proposalDeadline)
+    state.voteDuration = distanceInWords(state.proposalDeadline, state.voteDeadline)
+  },
   setVoteDeadline: (state, val) => { state.voteDeadline = val }
 }
 
 export const getters = {
   getProposalDeadline: state => state.proposalDeadline,
   getVoteDeadline: state => state.voteDeadline,
-  getProposalDuration: state => distanceInWordsToNow(state.proposalDeadline),
-  getVoteDuration: state => distanceInWords(state.proposalDeadline, state.voteDeadline),
+  getProposalDuration: state => state.proposalDuration,
+  getVoteDuration: state => state.voteDuration,
   getProposalDeadlineFormatted: state => format(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
   getVoteDeadlineFormatted: state => format(state.voteDeadline, 'MMM DD, YYYY HH:MM')
 

@@ -4,11 +4,11 @@
     <ULabel class="desc":value="topic.description" />
     <div class="row justify-between">
       <div v-if="proposalTimer !== -1">
-        {{ $t('Proposal.time.label') }}
+        {{ $t('Proposal.duration') }}
         <p class="text-dark">{{ proposalTimer }}</p>
       </div>
       <div v-if="votingTimer !== -1">
-        {{ $t('Voting.time.duration') }}
+        {{ $t('Voting.duration') }}
         <p class="text-dark">{{ votingTimer }}</p>
       </div>  
       <div>
@@ -46,7 +46,7 @@
     },
     data () {
       return {
-        votingTimeLabel: this.$t('Voting.time.duration')
+        votingTimeLabel: this.$t('Voting.duration')
       }
     }
   }

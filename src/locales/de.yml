@@ -2,6 +2,7 @@ Home: Startseite
 Manual: Handbuch
 Code: Code
 Chat: Chat
+ChangeValues: Werte ändern
 SourceCode: Quellcode
 
 SystemicConsensus: Systemisches Konsensieren
@@ -109,3 +110,7 @@ showAverageScore: Durchschnittspunktzahl anzeigen
 showTotalScore: Gesamtpunktzahl anzeigen
 
 and: und
+
+Morning: Früh
+Midday: Mittag
+Evening: Abend

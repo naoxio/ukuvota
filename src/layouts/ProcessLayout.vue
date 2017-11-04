@@ -1,11 +1,14 @@
 <template>
   <main-layout>
-    <InfoCard 
-      :topic="topic"
-      :proposalTimer="proposalTimer"
-      :votingTimer="votingTimer"
-      :negativeScoreWeight="negativeScoreWeight"
-      />
+    <div >
+      <InfoCard 
+        :class="{ hide: id === undefined }" 
+        :topic="topic"
+        :proposalTimer="proposalTimer"
+        :votingTimer="votingTimer"
+        :negativeScoreWeight="negativeScoreWeight"
+        />
+      </div>
     <slot />
   </main-layout>
 </template>
@@ -13,14 +16,21 @@
 <script>
   import MainLayout from 'layouts/MainLayout'
   import { getTopic } from 'src/data'
-  // import { formatTime } from 'src/helpers/timer'
   import InfoCard from '@/content/InfoCard'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     components: {
       MainLayout,
       InfoCard
+    },
+    computed: {
+      ...mapState([
+        'proposals',
+        'negativeScoreWeight',
+        'votes',
+        'selectedVoters'
+      ])
     },
     methods: {
       ...mapActions([
@@ -46,14 +56,14 @@
         // this.proposalTimer = formatTime(this.topic.proposalTime)
         if (this.proposalTimer !== -1) {
           this.checkCorrectRoute('collect')
-          this.votingTimeLabel = this.$t('Voting.time.duration')
+          this.votingTimeLabel = this.$t('Voting.duration')
           this.votingTimer = this.topic.votingInterval
         }
         else if (this.proposalTimer === -1) {
           // this.votingTimer = formatTime(this.topic.votingTime)
           if (this.votingTimer !== -1) {
             this.checkCorrectRoute('vote')
-            this.votingTimeLabel = this.$t('Voting.time.ends')
+            this.votingTimeLabel = this.$t('Voting.ends')
           }
           else if (this.votingTimer === -1) {
             this.checkCorrectRoute('results')
@@ -66,24 +76,27 @@
     },
     mounted () {
       this.id = this.$route.params.id
-      getTopic(this.id).then((topic) => {
-        if (topic.error === 'not_found') {
-          this.$router.push({ name: 'notfound', params: { id: this.id } })
-        }
-        this.$store.dispatch('updateTopic', topic)
-        this.topic = topic
-        if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
-        else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight
-      }).then(() => {
-        this.timer()
-        this.startIntervalUpdate()
-      })
+      if (this.id !== undefined) {
+        getTopic(this.id).then((topic) => {
+          if (topic.error === 'not_found') {
+            this.$router.push({ name: 'notfound', params: { id: this.id } })
+          }
+          this.$store.dispatch('updateTopic', topic)
+          this.topic = topic
+          if (topic.negativeScoreWeight === 'infinity') this.negativeScoreWeight = '∞'
+          else this.negativeScoreWeight = 'x' + topic.negativeScoreWeight
+        }).then(() => {
+          this.timer()
+          this.startIntervalUpdate()
+        })
+      }
     },
     beforeDestroy () {
       clearInterval(this.interval)
     },
     data () {
       return {
+        id: '',
         topic: {},
         redirect: true,
         proposalTimer: '',
@@ -92,3 +105,7 @@
     }
   }
 </script>
+<style lang="stylus" scoped>
+  .hide
+    display none
+</style>

@@ -1,6 +1,6 @@
 <template>
   <div class="nav row">
-    <u-btn :imgStyle="imgStyle()" route="home" img="statics/icons/home.png" :tooltipDelay="100" :tooltip="$t('Home')"/>
+    <u-btn :imgStyle="imgStyle" route="home" img="statics/icons/logo.svg" :tooltipDelay="100" :tooltip="$t('Home')"/>
     <u-btn route="manual" icon="book" :tooltipDelay="100" :tooltip="$t('Manual')" />
     <u-btn launch="https://gitlab.com/yunity/ukuvota/" icon="code" :tooltipDelay="100" :tooltip="$t('Code')" />
     <u-btn launch="https://gitter.im/ukuvota/Lobby/" icon="chat" :tooltipDelay="100" :tooltip="$t('Chat')" />
@@ -24,14 +24,16 @@
       SettingsModal,
       UBtn
     },
-    methods: {
+    computed: {
       imgStyle () {
         return 'width: ' + this.imgWidth() + 'px'
-      },
+      }
+    },
+    methods: {
       imgWidth () {
         let width = (window.innerWidth > 0) ? window.innerWidth : screen.width
-        let value = 22
-        if (width > 400) value = 28
+        let value = 36
+        if (width > 400) value = 48
         return value
       },
       openSettings () {

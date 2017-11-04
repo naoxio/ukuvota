@@ -69,7 +69,6 @@ const subValue = (key, date, output) => {
 
 const getFigOutput = (key, obj, fakeoutput) => {
   obj[1] = subValue(key, obj[1], fakeoutput)
-  console.log(formatDistanceStrict(...obj))
   return get2FigText(obj)
 }
 
@@ -81,7 +80,6 @@ const get2Fig = (obj) => {
   if (fakeoutput.includes('day')) { output += getFigOutput('day', obj, fakeoutput) }
   if (fakeoutput.includes('hour')) { output += getFigOutput('hour', obj, fakeoutput) }
   if (fakeoutput.includes('minute')) { output += getFigOutput('minute', obj, fakeoutput) }
-  console.log(output)
   return output
 }
 
