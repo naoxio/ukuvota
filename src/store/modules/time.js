@@ -1,4 +1,4 @@
-import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWords, distanceInWordsToNow } from 'src/datefns'
+import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWords, distanceInWordsToNow } from 'src/helpers/datefns'
 
 export const state = {
   proposalDeadline: addDays(new Date(), 3),
