@@ -26,13 +26,13 @@
 </template>
 <script>
   import ProcessLayout from 'layouts/ProcessLayout'
-  import UCard from '@/General/UCard'
-  import DataTable from '@/Results/DataTable'
-  import NoResults from '@/Results/NoVotes'
-  import EmojiView from '@/Results/EmojiView'
-  import Settings from '@/Results/Settings'
+  import UCard from '@/general/UCard'
+  import DataTable from '@/results/DataTable'
+  import NoResults from '@/results/NoVotes'
+  import EmojiView from '@/results/EmojiView'
+  import Settings from '@/results/Settings'
   import { QTabs, QTab, QTabPane } from 'quasar'
-  import Export from '@/Results/Export'
+  import Export from '@/results/Export'
 
   export default {
     components: {

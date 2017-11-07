@@ -2,18 +2,20 @@ Home: Startseite
 Manual: Handbuch
 Code: Code
 Chat: Chat
+ChangeValues: Werte ändern
+SourceCode: Quellcode
 
 SystemicConsensus: Systemisches Konsensieren
 
 Proposal:
   title: Vorschlag
-  time:
-    label: Vorschlagszeit endet in
-    selectLabel: Vorschlagszeit
   exists: Der Vorschlag existiert bereits
   empty: Der Vorschlag ist leer
   add: Vorschlag hinzufügen
   added: Vorschalg "{submittedProposal}" hinzugefügt!
+  until: Vorschläge bis
+  duration:  Vorschlagszeit dauer
+  selectLabel: Vorschlagszeit
 
 Proposals:
   title: Vorschläge
@@ -22,19 +24,16 @@ Proposals:
 Vote:
   added: Abstimmung von {submitName} abgegeben!
 
-Voted:
-  list: Leute, die bereits gewählt haben
-
 Select:
   voters: Bitte wähle einige Wählx aus
 
 Voters: <a href="http://www.wiwo.de/erfolg/trends/gender-irrsinn-skurrile-unfaelle-im-kampf-gegen-den-sexismus/8131180.html">Wählx</a>
 
 Voting:
-  time:
-    duration: Dauer der Abstimmungszeit
-    ends: Abstimmungszeit endet in
-    selectLabel: Abstimmungszeit
+  duration: Abstimmungszeit dauer
+  ends: Abstimmungszeit endet in
+  selectLabel: Abstimmungszeit
+  until: Wahl bis
 
 Topic:
   questionLabel: Frage zum Thema
@@ -109,3 +108,9 @@ onEmojiHover: wenn der Mauszeiger auf den Emoji zeigt
 doNothing: nichts tun
 showAverageScore: Durchschnittspunktzahl anzeigen
 showTotalScore: Gesamtpunktzahl anzeigen
+
+and: und
+
+Morning: Früh
+Midday: Mittag
+Evening: Abend

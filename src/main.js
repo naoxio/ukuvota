@@ -13,7 +13,7 @@ require(`./themes/app.${__THEME}.styl`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
-import store from './store'
+import store from './store/index'
 import i18n from './i18n'
 
 Vue.config.productionTip = false
@@ -24,7 +24,7 @@ if (__THEME === 'mat') {
 }
 import 'quasar-extras/material-icons'
 // import 'quasar-extras/ionicons'
-import 'quasar-extras/fontawesome'
+// import 'quasar-extras/fontawesome'
 // import 'quasar-extras/animate'
 
 Quasar.start(() => {

@@ -26,11 +26,11 @@
 
   import { uid, scroll, QBtn, QFixedPosition, QIcon } from 'quasar'
   import { getProposals, setProposal } from 'src/data'
-  import UAlert from '@/General/UAlert'
-  import UCard from '@/General/UCard'
-  import UInput from '@/General/UInput'
-  import UItem from '@/General/UItem'
-  import ULabel from '@/General/ULabel'
+  import UAlert from '@/general/UAlert'
+  import UCard from '@/general/UCard'
+  import UInput from '@/general/UInput'
+  import UItem from '@/general/UItem'
+  import ULabel from '@/general/ULabel'
 
   const { setScrollPosition } = scroll
   export default {

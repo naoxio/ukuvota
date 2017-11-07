@@ -12,7 +12,7 @@
         <q-alert color="light">{{ $t('Disclaimer') }}</q-alert>
         <br/>
         <router-link :to="{ name: 'create' }">
-          <q-btn>{{ $t('StartWebApp') }}</q-btn>
+          <UBtn>{{ $t('StartWebApp') }}</UBtn>
         </router-link>
       </center>
     </div>
@@ -20,12 +20,13 @@
 </template>
 <script>
 import MainLayout from 'layouts/MainLayout'
-import { QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
-import MarkdownContent from '@/Content/Markdown'
+import { QAlert, QCard, QCardMain, QField, QItem, QItemMain } from 'quasar'
+import UBtn from '@/general/UBtn'
+import MarkdownContent from '@/content/Markdown'
 
 export default {
   components: {
-    MarkdownContent, MainLayout, QAlert, QBtn, QCard, QCardMain, QField, QItem, QItemMain
+    MarkdownContent, MainLayout, QAlert, UBtn, QCard, QCardMain, QField, QItem, QItemMain
   },
   methods: {
     rotateLogo () {

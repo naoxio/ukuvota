@@ -2,23 +2,26 @@ Home: Home
 Manual: Manual
 Code: Code
 Chat: Chat
+ChangeValues: Change Values
+SourceCode: Source Code
 
 SystemicConsensus: Systemic Consensus
 
 Proposal:
   title: Proposal
-  time:
-    label: Proposal time ends in
-    selectLabel: Proposal Time
   exists: The proposal already exists
   empty: Proposal is empty
   add: Add Proposal
   added: Proposal "{submittedProposal}" added!
+  duration: Proposal duration
+  ends: Proposal time ends in
+  selectLabel: Proposal Time
+  until: Proposals until
 
 Proposals:
   title: Proposals
   current: Current Proposals
-
+ 
 Vote:
   added: Vote from {submitName} submitted!
 
@@ -28,10 +31,10 @@ Select:
 Voters: Voters
 
 Voting:
-  time:
-    duration: Voting time will last for
-    ends: Voting time ends in
-    selectLabel:  Voting Time
+  duration: Voting duration
+  ends: Voting time ends in
+  until: Voting until
+  
 
 Topic:
   questionLabel: Topic Question
@@ -106,3 +109,9 @@ onEmojiHover: on emoji hover
 doNothing: do nothing
 showAverageScore: show average score
 showTotalScore: show total score
+
+and: and
+
+Morning: Morning
+Midday: Midday
+Evening: Evening

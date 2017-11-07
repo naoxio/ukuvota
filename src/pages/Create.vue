@@ -1,44 +1,57 @@
 <template>
-  <main-layout>
+  <ProcessLayout>
     <div style="max-width: 700px; text-align: left; padding: 1em;">
       <ULabel :value="$t('Topic.questionLabel')" />
       <UInput :value.sync="topicQuestion" :errorLabel="$t('Topic.errorLabel')" :error="topicMissing" />
-      <NegativeScoreWeightSelector :negativeScoreWeight.sync="negativeScoreWeight" />
-      <TimeSelector :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" />
-      <TimeSelector :label="$t('Voting.time.selectLabel')" v-model="voting" />
+      <NegativeScoreWeight :negativeScoreWeight.sync="negativeScoreWeight" />
+      <UDatetime
+        store="Proposal"
+        :min="today"
+        type="datetime"
+        :durationLabel="$t('Proposal.duration') + ':'"
+        :untilLabel="$t('Proposal.until') + ':'"
+        />
+      </br>
+      <UDatetime
+        store="Vote"
+        :min="proposalDeadline"
+        type="datetime"
+        :durationLabel="$t('Voting.duration') + ':'"
+        :untilLabel="$t('Voting.until') + ':'"
+        />
+      <!--TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" /-->
+      <!--TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" /-->
       <UInput :value.sync="topicDescription" type="textarea" :float-label="$t('DescriptionLabel')" :max-height="50" :min-rows="7" />
       <div style="text-align: right">
-        <q-btn @click="submit" icon="arrow forward">{{ $t('Next') }}</q-btn>
+        <UBtn :click="submit" icon="arrow forward">{{ $t('Next') }}</UBtn>
       </div>
       <div style="color: red; text-align: right" v-if="serverError">
         something went wrong. server down?
       </div>
     </div>
-  </main-layout>
+  </ProcessLayout>
 </template>
 
 <script>
-  import MainLayout from 'layouts/MainLayout'
-  import TimeSelector from '@/Select/Time'
+  import ProcessLayout from 'layouts/ProcessLayout'
   import { setTopic, setProposal } from 'src/data'
-  import { buildOutput } from 'src/timer'
-  import UInput from '@/General/UInput'
-  import ULabel from '@/General/ULabel'
-  import NegativeScoreWeightSelector from '@/Select/NegativeScoreWeight'
-
-  import { date, uid, scroll, QBtn } from 'quasar'
-
+  // import { buildOutput } from 'src/helpers/timer'
+  import { UBtn, UInput, ULabel, UDatetime } from '@/general'
+  import NegativeScoreWeight from '@/selectors/NegativeScoreWeight'
+  import { mapState } from 'vuex'
+  import { date, uid, scroll } from 'quasar'
   const { setScrollPosition } = scroll
   const { addToDate } = date
-  
+  const today = new Date()
+
   export default {
     components: {
+      UBtn,
       UInput,
       ULabel,
-      MainLayout,
-      NegativeScoreWeightSelector,
-      TimeSelector,
-      QBtn
+      UDatetime,
+      ProcessLayout,
+      NegativeScoreWeight
     },
     mounted () {
       setScrollPosition(top, 0)
@@ -50,6 +63,7 @@
         if (this.topicQuestion.replace(/\s/g, '').length <= 0) {
           this.topicMissing = true
           error = true
+          setScrollPosition(top, 0)
         }
         else {
           this.topicMissing = false
@@ -77,7 +91,7 @@
             'description': this.topicDescription,
             'proposalTime': endProposal,
             'votingTime': endVoting,
-            'votingInterval': buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
+            'votingInterval': endVoting, // buildOutput(this.voting.days, this.voting.hours, this.voting.minutes, 0),
             'negativeScoreWeight': this.negativeScoreWeight,
             'proposals': { },
             'votes': { },
@@ -99,9 +113,21 @@
         }
       }
     },
+    computed: {
+      ...mapState([
+        'voteDeadline',
+        'proposalDeadline'
+      ]),
+      voteDate () {
+        let date = new Date()
+        date.setDate(date.getDate() + 1)
+        return date
+      }
+    },
     data () {
       return {
         id: '',
+        today,
         topicDescription: '',
         topicQuestion: '',
         topicMissing: false,
