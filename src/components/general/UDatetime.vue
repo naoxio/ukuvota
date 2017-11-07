@@ -12,17 +12,9 @@
       <ULabel class="sublabel" :value="date" />
     </div>
   </div>
-  <div class="row justify-between"> 
-    <div class="row">
-	  <div v-for="(symbol, index) in symbols">
-		<UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" />
-	  </div>
-      <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
-      <UBtn img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')" />
-      <UBtn img="statics/datetime/sun.svg" :tooltip="$t('Midday')" />
-      <UBtn img="statics/datetime/sunset.svg" :tooltip="$t('Evening')" />
-      <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
-      <UBtn :tooltip="$t('Calendar')" color="light" icon="today"> 
+  <div class="row justify-center"> 
+	<div class="bg-primary">
+	  <UBtn style="width: 100%; height: 100%" color="white" :tooltip="$t('Calendar')" icon="today"> 
         <q-popover ref="popover">
          <q-inline-datetime :min="min" v-model="deadline" :type="type">
             <q-btn @click="$refs.popover.close()">
@@ -31,6 +23,21 @@
           </q-inline-datetime>
         </q-popover>
       </UBtn>
+      </div>
+	  <div v-for="(symbol, index) in symbols" class="bg-light">
+		<UBtn :tooltip="getDayBtnLabel(symbol, index)" style="width: 100%; height: 100%">
+		  <img src="statics/datetime/cal.svg" />
+		  <p class="text-white"> aasdas {{ getDayInMonth(index) }} s</p>
+		</UBtn>
+		<!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
+	  </div>
+	  <div class="bg-primary">
+        <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
+        <UBtn img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
+        <UBtn img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
+        <UBtn img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
+        <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
+      </div>
     </div>
    </div>
   </div>
@@ -39,9 +46,12 @@
 <script>
   import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
   import UWheelBtn from './UWheelBtn'
+  import { addDays } from 'src/helpers/datefns'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
-  
+  // const astro = ['☉', '☾', '♂', '☿', '♃', '♀', '♄']
+  const nosym = ['0', '1', '2', '3', '4', '5', '6']
+  const symbols = nosym
   export default {
     props: {
       type: String,
@@ -73,21 +83,25 @@
         else output += day + ' ' + this.$t('Days')
         return output
       },
+      getDayInMonth (add) {
+        return addDays(new Date(), add).getDate()
+      },
       getDayString (symbol) {
-        switch (symbol) {
-          case '☉':
+        console.log(symbols)
+        switch (symbols.indexOf(symbol)) {
+          case 0:
             return this.$t('Sunday')
-          case '☾':
+          case 1:
             return this.$t('Monday')
-          case '♂':
+          case 2:
             return this.$t('Tuesday')
-          case '☿':
+          case 3:
             return this.$t('Wednesday')
-          case '♃':
+          case 4:
             return this.$t('Thursday')
-          case '♀':
+          case 5:
             return this.$t('Friday')
-          case '♄':
+          case 6:
             return this.$t('Saturday')
         }
       },
@@ -128,7 +142,7 @@
         return d.getDay()
       },
       symbols () {
-        let sym = ['☉', '☾', '♂', '☿', '♃', '♀', '♄']
+        let sym = symbols
         let resort = sym.slice(0, this.today)
         sym = sym.slice(this.today)
         Array.prototype.push.apply(sym, resort)

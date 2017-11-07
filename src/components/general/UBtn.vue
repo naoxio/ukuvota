@@ -1,5 +1,5 @@
 <template>
-  <q-btn @click="pressed" :color="color" flat>
+  <q-btn @click="pressed" :color="color" :flat="flat">
     <q-icon v-if="!icon === false" :name="icon" />
     <img v-if="!img === false" :src="img" :style="imgStyle" />
     <q-tooltip v-if="!tooltip === false" :delay="tooltipDelay">
@@ -24,6 +24,7 @@
       btnStyle: { default: '' },
       click: { required: false },
       color: { default: 'primary' },
+      flat: { default: true },
       launch: { default: false },
       route: { default: false },
       icon: { default: false },
