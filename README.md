@@ -71,7 +71,7 @@ Wolfi's contact:
  - mastodon: [wolfi@aleph.land](https://aleph.land/@wolfi)
  - ssb: [@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519](@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519)
 
-A good place to start are the issues labelled "enhancment" or "help wanted".
+A good place to start are the issues labelled "enhancement" or "help wanted".
 
 ## License
 [CC0 - No Rights Reserved](LICENSE)
