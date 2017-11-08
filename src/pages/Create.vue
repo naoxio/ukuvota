@@ -8,16 +8,16 @@
         store="Proposal"
         :min="today"
         type="datetime"
-        :durationLabel="$t('Proposal.duration')"
-        :untilLabel="$t('Proposal.until')"
+        :durationLabel="$t('Proposal.duration') + ':'"
+        :untilLabel="$t('Proposal.until') + ':'"
         />
       </br>
       <UDatetime
         store="Vote"
         :min="proposalDeadline"
         type="datetime"
-        :durationLabel="$t('Voting.duration')"
-        :untilLabel="$t('Voting.until')"
+        :durationLabel="$t('Voting.duration') + ':'"
+        :untilLabel="$t('Voting.until') + ':'"
         />
       <!--TimeSelector :min="today" :label="$t('Proposal.time.selectLabel')" v-model="proposal" style="padding: 1em 0em 1em 0em" /-->
       <!--TimeSelector :min="getVoteMinDate()" :label="$t('Voting.time.selectLabel')" v-model="voting" /-->

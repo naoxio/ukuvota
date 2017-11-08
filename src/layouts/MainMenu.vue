@@ -1,9 +1,9 @@
 <template>
   <div class="nav row">
-    <u-btn :imgStyle="imgStyle" route="home" img="statics/icons/logo.svg" :tooltipDelay="100" :tooltip="$t('Home')"/>
-    <u-btn route="manual" icon="book" :tooltipDelay="100" :tooltip="$t('Manual')" />
-    <u-btn launch="https://gitlab.com/yunity/ukuvota/" icon="code" :tooltipDelay="100" :tooltip="$t('Code')" />
-    <u-btn launch="https://gitter.im/ukuvota/Lobby/" icon="chat" :tooltipDelay="100" :tooltip="$t('Chat')" />
+    <UBtn :imgStyle="imgStyle" route="home" img="statics/icons/logo.svg" :tooltipDelay="100" :tooltip="$t('Home')"/>
+    <UBtn route="manual" icon="book" :tooltipDelay="100" :tooltip="$t('Manual')" />
+    <UBtn launch="https://gitlab.com/yunity/ukuvota/" icon="code" :tooltipDelay="100" :tooltip="$t('Code')" />
+    <UBtn launch="https://gitter.im/ukuvota/Lobby/" icon="chat" :tooltipDelay="100" :tooltip="$t('Chat')" />
     <div class="col">
     </div>
     <div class="col-auto">

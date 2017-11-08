@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Created with Inkscape ("http://www.inkscape.org/") -->
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -19,10 +19,11 @@
    enable-background="new 0 0 48 48"
    xml:space="preserve"
    sodipodi:docname="sun.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"><metadata
+   inkscape:version="0.48.4 r9939"
+   sodipodi:version="0.32"><metadata
      id="metadata9"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
      id="defs7" /><sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -32,24 +33,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="716"
+     inkscape:window-width="1024"
+     inkscape:window-height="719"
      id="namedview5"
      showgrid="false"
      inkscape:zoom="6.9532167"
-     inkscape:cx="15.982748"
+     inkscape:cx="-9.4730961"
      inkscape:cy="18.801475"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="-1"
      inkscape:window-maximized="1"
      inkscape:current-layer="Layer_1" /><path
      d="m 35.014,25 c 0.029,-0.328 0.045,-0.663 0.045,-1 0,-6.075 -4.926,-11 -11,-11 -6.075,0 -11,4.925 -11,11 0,0.337 0.015,0.672 0.044,1 h 2.011 c -0.036,-0.328 -0.055,-0.662 -0.055,-1 0,-4.971 4.029,-9 9,-9 4.969,0 9,4.029 9,9 0,0.338 -0.02,0.672 -0.055,1 z M 24.059,5 c -0.553,0 -1,0.432 -1,0.99 v 4.02 c 0,0.546 0.463,0.99 1,0.99 0.551,0 1,-0.431 1,-0.99 V 5.99 c 0,-0.546 -0.465,-0.99 -1,-0.99 z m 13.476,5.582 C 37.144,10.191 36.523,10.18 36.127,10.575 l -2.842,2.842 c -0.387,0.387 -0.373,1.029 0.008,1.407 0.389,0.391 1.012,0.403 1.406,0.007 l 2.842,-2.842 c 0.387,-0.386 0.373,-1.028 -0.006,-1.407 z m 5.582,13.477 c 0,-0.553 -0.434,-1 -0.992,-1 h -4.018 c -0.549,0 -0.99,0.463 -0.99,1 0,0.552 0.43,1 0.99,1 h 4.018 c 0.547,0 0.992,-0.464 0.992,-1 z M 5,24.059 c 0,0.552 0.432,1 0.991,1 h 4.018 c 0.548,0 0.991,-0.464 0.991,-1 0,-0.553 -0.432,-1 -0.991,-1 H 5.991 c -0.548,0 -0.991,0.462 -0.991,1 z m 5.582,-13.477 c -0.391,0.391 -0.402,1.012 -0.007,1.407 l 2.842,2.842 c 0.387,0.387 1.028,0.374 1.407,-0.007 0.391,-0.391 0.402,-1.012 0.007,-1.407 l -2.842,-2.842 c -0.386,-0.387 -1.028,-0.371 -1.407,0.007 z"
      id="path2"
      inkscape:connector-curvature="0"
-     style="fill:#f0a630"
-     sodipodi:nodetypes="csssccsssccsssssssscscccssssssssssssssscsscscc" /><path
+     style="fill:#ff8a65;fill-rule:evenodd;fill-opacity:1" /><path
      d="m 13.103,23.118 c -0.029,0.328 -0.045,0.663 -0.045,1 0,6.075 4.926,11 11,11 6.075,0 11,-4.925 11,-11 0,-0.337 -0.015,-0.672 -0.044,-1 h -2.011 c 0.036,0.328 0.055,0.662 0.055,1 0,4.971 -4.029,9 -9,9 -4.969,0 -9,-4.029 -9,-9 0,-0.338 0.02,-0.672 0.055,-1 z m 10.955,20 c 0.553,0 1,-0.432 1,-0.99 v -4.02 c 0,-0.546 -0.463,-0.99 -1,-0.99 -0.551,0 -1,0.431 -1,0.99 v 4.02 c 0,0.546 0.465,0.99 1,0.99 z M 10.582,37.536 c 0.391,0.391 1.012,0.402 1.408,0.007 l 2.842,-2.842 c 0.387,-0.387 0.373,-1.029 -0.008,-1.407 -0.389,-0.391 -1.012,-0.403 -1.406,-0.007 l -2.842,2.842 c -0.387,0.386 -0.373,1.028 0.006,1.407 z M 5,24.059 c 0,0.553 0.434,1 0.992,1 h 4.018 c 0.549,0 0.99,-0.463 0.99,-1 0,-0.552 -0.43,-1 -0.99,-1 H 5.992 c -0.547,0 -0.992,0.464 -0.992,1 z m 38.117,0 c 0,-0.552 -0.432,-1 -0.991,-1 h -4.018 c -0.548,0 -0.991,0.464 -0.991,1 0,0.553 0.432,1 0.991,1 h 4.018 c 0.548,0 0.991,-0.462 0.991,-1 z m -5.582,13.477 c 0.391,-0.391 0.402,-1.012 0.007,-1.407 L 34.7,33.287 c -0.387,-0.387 -1.028,-0.374 -1.407,0.007 -0.391,0.391 -0.402,1.012 -0.007,1.407 l 2.842,2.842 c 0.386,0.387 1.028,0.371 1.407,-0.007 z"
      id="path2-3"
      inkscape:connector-curvature="0"
-     style="fill:#f0a630"
-     sodipodi:nodetypes="csssccsssccsssssssscscccssssssssssssssscsscscc" /></svg>
+     style="fill:#ff8a65;fill-rule:evenodd;fill-opacity:1" /></svg>

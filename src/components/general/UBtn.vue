@@ -1,11 +1,12 @@
 <template>
-  <q-btn @click="pressed" color="primary" flat>
+  <q-btn @click="pressed" :color="color" flat>
     <q-icon v-if="!icon === false" :name="icon" />
     <img v-if="!img === false" :src="img" :style="imgStyle" />
     <q-tooltip v-if="!tooltip === false" :delay="tooltipDelay">
       {{ tooltip }}
     </q-tooltip>
-    <slot/>
+    <slot />
+    <span style="font-size: 1.5em;">{{ text }}</span>
   </q-btn>
 </template>
 <script>
@@ -22,11 +23,13 @@
     props: {
       btnStyle: { default: '' },
       click: { required: false },
+      color: { default: 'primary' },
       launch: { default: false },
       route: { default: false },
       icon: { default: false },
       img: { default: false },
       imgStyle: { default: 'width: 32px' },
+      text: String,
       tooltip: String,
       tooltipDelay: { default: 0 }
     },

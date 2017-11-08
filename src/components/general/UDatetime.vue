@@ -1,25 +1,28 @@
 <template>
 <div>
   <div class="row justify-between">
-    <ULabel :value="durationLabel" />
-    <ULabel class="sublabel" :value="duration" />
-    <ULabel :value="untilLabel" />
-    <ULabel class="sublabel" :value="date" />
+    <div class="row no-wrap">
+      <ULabel :value="durationLabel" />
+      &nbsp;
+      <ULabel class="sublabel" :value="duration" />
+    </div>
+    <div class="row no-wrap">
+      <ULabel :value="untilLabel" />
+      &nbsp;
+      <ULabel class="sublabel" :value="date" />
+    </div>
   </div>
   <div class="row justify-between"> 
     <div class="row">
-      <q-btn flat>today</q-btn>
-      <q-btn flat>tomorrow</q-btn>
+	  <div v-for="(symbol, index) in symbols">
+		<UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" />
+	  </div>
       <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
-    </div> 
-    <div class="row">
-      <UBtn img="statics/icons/sunrise.svg" :tooltip="$t('Morning')" />
-      <UBtn img="statics/icons/sun.svg" :tooltip="$t('Midday')" />
-      <UBtn img="statics/icons/sunset.svg" :tooltip="$t('Evening')" />
+      <UBtn img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')" />
+      <UBtn img="statics/datetime/sun.svg" :tooltip="$t('Midday')" />
+      <UBtn img="statics/datetime/sunset.svg" :tooltip="$t('Evening')" />
       <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
-    </div>
-    <div>
-      <q-icon color="primary" class="icon" name="today">
+      <UBtn :tooltip="$t('Calendar')" color="light" icon="today"> 
         <q-popover ref="popover">
          <q-inline-datetime :min="min" v-model="deadline" :type="type">
             <q-btn @click="$refs.popover.close()">
@@ -27,7 +30,7 @@
             </q-btn>
           </q-inline-datetime>
         </q-popover>
-      </q-icon>
+      </UBtn>
     </div>
    </div>
   </div>
@@ -38,6 +41,7 @@
   import UWheelBtn from './UWheelBtn'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
+  
   export default {
     props: {
       type: String,
@@ -62,6 +66,31 @@
       QSelect
     },
     methods: {
+      getDayBtnLabel (symbol, day) {
+        let output = this.getDayString(symbol) + ' - '
+        if (day === 0) output += this.$t('Today')
+        else if (day === 1) output += this.$t('Tomorrow')
+        else output += day + ' ' + this.$t('Days')
+        return output
+      },
+      getDayString (symbol) {
+        switch (symbol) {
+          case '☉':
+            return this.$t('Sunday')
+          case '☾':
+            return this.$t('Monday')
+          case '♂':
+            return this.$t('Tuesday')
+          case '☿':
+            return this.$t('Wednesday')
+          case '♃':
+            return this.$t('Thursday')
+          case '♀':
+            return this.$t('Friday')
+          case '♄':
+            return this.$t('Saturday')
+        }
+      },
       genLinearOptions (label, max) {
         let output = []
         for (let x = 1; x <= max; x++) {
@@ -93,6 +122,17 @@
       },
       dayOptions () {
         return this.genFibOptions('day', 55)
+      },
+      today () {
+        let d = new Date()
+        return d.getDay()
+      },
+      symbols () {
+        let sym = ['☉', '☾', '♂', '☿', '♃', '♀', '♄']
+        let resort = sym.slice(0, this.today)
+        sym = sym.slice(this.today)
+        Array.prototype.push.apply(sym, resort)
+        return sym
       }
     },
     data () {
@@ -116,6 +156,4 @@
   .icon
     cursor pointer
     font-size 1.5em
-
-
 </style>
