@@ -13,3 +13,6 @@ mydb
 **/log.txt
 config.json
 storybook-static
+*~
+*.swp
+*.swo
