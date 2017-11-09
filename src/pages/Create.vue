@@ -114,10 +114,10 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'getVoteDeadline',
-        'getProposalDeadline'
-      ]),
+      ...mapGetters({
+        voteDeadline: 'getVoteDeadline',
+        proposalDeadline: 'getProposalDeadline'
+      }),
       voteDate () {
         let date = new Date()
         date.setDate(date.getDate() + 1)
