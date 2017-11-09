@@ -38,7 +38,7 @@
   // import { buildOutput } from 'src/helpers/timer'
   import { UBtn, UInput, ULabel, UDatetime } from '@/general'
   import NegativeScoreWeight from '@/selectors/NegativeScoreWeight'
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
   import { date, uid, scroll } from 'quasar'
   const { setScrollPosition } = scroll
   const { addToDate } = date
@@ -114,9 +114,9 @@
       }
     },
     computed: {
-      ...mapState([
-        'voteDeadline',
-        'proposalDeadline'
+      ...mapGetters([
+        'getVoteDeadline',
+        'getProposalDeadline'
       ]),
       voteDate () {
         let date = new Date()

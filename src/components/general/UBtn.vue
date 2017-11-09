@@ -6,7 +6,8 @@
       {{ tooltip }}
     </q-tooltip>
     <slot />
-    <span style="font-size: 1.5em;">{{ text }}</span>
+    <span v-if="!img === false && !text === false">&nbsp;</span>
+    <span v-if="!text === false" style="font-size: 1.5em;">{{ text }}</span>
   </q-btn>
 </template>
 <script>
@@ -30,7 +31,7 @@
       icon: { default: false },
       img: { default: false },
       imgStyle: { default: 'width: 32px' },
-      text: String,
+      text: { default: false },
       tooltip: String,
       tooltipDelay: { default: 0 }
     },

@@ -25,10 +25,7 @@
       </UBtn>
       </div>
 	  <div v-for="(symbol, index) in symbols" class="bg-light">
-		<UBtn :tooltip="getDayBtnLabel(symbol, index)" style="width: 100%; height: 100%">
-		  <img src="statics/datetime/cal.svg" />
-		  <p class="text-white"> aasdas {{ getDayInMonth(index) }} s</p>
-		</UBtn>
+		<UBtn class="text-white" :text="String(getDayInMonth(index))" imgStyle="margin: 0.2em 0; height: 1em" img="statics/datetime/cal.svg" :tooltip="getDayBtnLabel(symbol, index)" style="width: 100%; height: 100%" />
 		<!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
 	  </div>
 	  <div class="bg-primary">
@@ -80,14 +77,13 @@
         let output = this.getDayString(symbol) + ' - '
         if (day === 0) output += this.$t('Today')
         else if (day === 1) output += this.$t('Tomorrow')
-        else output += day + ' ' + this.$t('Days')
+        else return this.getDayString(symbol)
         return output
       },
       getDayInMonth (add) {
-        return addDays(new Date(), add).getDate()
+        return addDays(this.min, add).getDate()
       },
       getDayString (symbol) {
-        console.log(symbols)
         switch (symbols.indexOf(symbol)) {
           case 0:
             return this.$t('Sunday')
