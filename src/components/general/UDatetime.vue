@@ -1,42 +1,53 @@
 <template>
-<div>
-  <div class="row justify-between">
-    <div class="row no-wrap">
-      <ULabel :value="durationLabel" />
-      &nbsp;
-      <ULabel class="sublabel" :value="duration" />
+  <div>
+    <div class="row justify-between">
+      <div class="row no-wrap">
+        <ULabel :value="durationLabel" />
+        &nbsp;
+        <ULabel class="sublabel" :value="duration" />
+      </div>
+      <div class="row no-wrap">
+        <ULabel :value="untilLabel" />
+        &nbsp;
+        <ULabel class="sublabel" :value="caldate" />
+      </div>
     </div>
-    <div class="row no-wrap">
-      <ULabel :value="untilLabel" />
-      &nbsp;
-      <ULabel class="sublabel" :value="date" />
-    </div>
-  </div>
-  <div class="row justify-center"> 
-	<div class="bg-primary">
-	  <UBtn style="width: 100%; height: 100%" color="white" :tooltip="$t('Calendar')" icon="today"> 
-        <q-popover ref="popover">
-         <q-inline-datetime :min="min" v-model="deadline" :type="type">
-            <q-btn @click="$refs.popover.close()">
-              {{ $t('Close') }}
-            </q-btn>
-          </q-inline-datetime>
-        </q-popover>
-      </UBtn>
+    <div class="row justify-center"> 
+      <div class="bg-primary">
+        <UBtn
+          style="width: 100%; height: 100%"
+          color="white"
+          :tooltip="$t('Calendar')"
+          icon="today"> 
+          <q-popover ref="popover">
+            <q-inline-datetime :min="min" v-model="deadline" :type="type">
+              <q-btn @click="$refs.popover.close()">
+                {{ $t('Close') }}
+              </q-btn>
+            </q-inline-datetime>
+          </q-popover>
+        </UBtn>
       </div>
 	  <div v-for="(symbol, index) in symbols" class="bg-light">
-		<UBtn class="text-white" :text="String(getDayInMonth(index))" imgStyle="margin: 0.2em 0; height: 1em" img="statics/datetime/cal.svg" :tooltip="getDayBtnLabel(symbol, index)" style="width: 100%; height: 100%" />
-		<!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
-	  </div>
-	  <div class="bg-primary">
+		  <UBtn
+        class="text-white"
+        :text="String(getDayInMonth(index))"
+        imgStyle="margin: 0.2em 0; height: 1em"
+        img="statics/datetime/cal.svg"
+        :tooltip="getDayBtnLabel(symbol, index)"
+        style="width: 100%; height: 100%" />
+        <!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
+      </div>
+      <div class="bg-primary">
         <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
-        <UBtn img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
-        <UBtn img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
-        <UBtn img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
+        <UBtn @click="setTime(8)" img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
+        <UBtn @click="setTime(12)" img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
+        <UBtn @click="setTime(20)" img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
+        <UBtn @click="setTime(24)" img="statics/datetime/stars.svg" :tooltip="$t('Midnight')"/>
         <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
+        </div>
       </div>
     </div>
-   </div>
   </div>
 </template>
 
@@ -73,6 +84,9 @@
       QSelect
     },
     methods: {
+      setTime (hour) {
+        console.log(hour)
+      },
       getDayBtnLabel (symbol, day) {
         let output = this.getDayString(symbol) + ' - '
         if (day === 0) output += this.$t('Today')
@@ -125,7 +139,7 @@
     },
 
     computed: {
-      date () { return this.$store.getters[this.getDeadlineFormatted] },
+      caldate () { return this.$store.getters[this.getDeadlineFormatted] },
       duration () { return this.$store.getters[this.getDuration] },
       hourOptions () {
         return this.genLinearOptions('hour', 3)
