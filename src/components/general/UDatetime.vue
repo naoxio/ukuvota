@@ -11,40 +11,56 @@
         &nbsp;
         <ULabel class="sublabel" :value="caldate" />
       </div>
-    </div>
-    <div class="row justify-center"> 
-      <div class="bg-primary">
-        <UBtn
-          style="width: 100%; height: 100%"
-          color="white"
-          :tooltip="$t('Calendar')"
-          icon="today"> 
-          <q-popover ref="popover">
-            <q-inline-datetime :min="min" v-model="deadline" :type="type">
-              <q-btn @click="$refs.popover.close()">
-                {{ $t('Close') }}
-              </q-btn>
-            </q-inline-datetime>
-          </q-popover>
-        </UBtn>
+      <div class="row"> 
+        <div class="bg-primary">
+          <UBtn
+            style="width: 100%; height: 100%"
+            color="white"
+            :tooltip="$t('DatePicker')"
+            icon="today"> 
+            <q-popover ref="popover">
+              <q-inline-datetime :min="min" v-model="deadline" type="date">
+                <q-btn @click="$refs.popover.close()">
+                  {{ $t('Close') }}
+                </q-btn>
+              </q-inline-datetime>
+            </q-popover>
+          </UBtn>
+        </div>
+	      <div v-for="(symbol, index) in symbols" class="bg-light">
+		      <UBtn
+            class="text-white"
+            :text="String(getDayInMonth(index))"
+            imgStyle="margin: 0.2em 0; height: 1em"
+            img="statics/datetime/cal.svg"
+            :tooltip="getDayString(symbol)"
+            style="width: 100%; height: 100%" />
+            <!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
+        </div>
       </div>
-	  <div v-for="(symbol, index) in symbols" class="bg-light">
-		  <UBtn
-        class="text-white"
-        :text="String(getDayInMonth(index))"
-        imgStyle="margin: 0.2em 0; height: 1em"
-        img="statics/datetime/cal.svg"
-        :tooltip="getDayBtnLabel(symbol, index)"
-        style="width: 100%; height: 100%" />
-        <!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
-      </div>
-      <div class="bg-primary">
-        <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
-        <UBtn @click="setTime(8)" img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
-        <UBtn @click="setTime(12)" img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
-        <UBtn @click="setTime(20)" img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
-        <UBtn @click="setTime(24)" img="statics/datetime/stars.svg" :tooltip="$t('Midnight')"/>
-        <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
+      <div class="row">
+        <div class="bg-primary">
+          <UBtn
+            style="width: 100%; height: 100%"
+            color="white"
+            :tooltip="$t('TimePicker')"
+            icon="access time"> 
+            <q-popover ref="popover">
+              <q-inline-datetime :min="min" v-model="deadline" type="time">
+                <q-btn @click="$refs.popover.close()">
+                  {{ $t('Close') }}
+                </q-btn>
+              </q-inline-datetime>
+            </q-popover>
+          </UBtn>
+        </div>
+        <div class="bg-light">
+          <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
+          <UBtn @click="setTime(8)" img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
+          <UBtn @click="setTime(12)" img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
+          <UBtn @click="setTime(20)" img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
+          <UBtn @click="setTime(24)" img="statics/datetime/stars.svg" :tooltip="$t('Midnight')"/>
+          <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
     </div>
@@ -62,7 +78,6 @@
   const symbols = nosym
   export default {
     props: {
-      type: String,
       min: Date,
       store: { required: true },
       untilLabel: String,
@@ -87,13 +102,6 @@
       setTime (hour) {
         console.log(hour)
       },
-      getDayBtnLabel (symbol, day) {
-        let output = this.getDayString(symbol) + ' - '
-        if (day === 0) output += this.$t('Today')
-        else if (day === 1) output += this.$t('Tomorrow')
-        else return this.getDayString(symbol)
-        return output
-      },
       getDayInMonth (add) {
         return addDays(this.min, add).getDate()
       },
@@ -114,30 +122,8 @@
           case 6:
             return this.$t('Saturday')
         }
-      },
-      genLinearOptions (label, max) {
-        let output = []
-        for (let x = 1; x <= max; x++) {
-          let l = x + ' ' + label
-          output.push({ label: l, value: x })
-        }
-        return output
-      },
-      genFibOptions (label, max) {
-        let output = []
-        let a = 1, b = 1, temp
-
-        while (a <= max) {
-          temp = a
-          let l = a + ' ' + label
-          output.push({ label: l, value: a })
-          a = a + b
-          b = temp
-        }
-        return output
       }
     },
-
     computed: {
       caldate () { return this.$store.getters[this.getDeadlineFormatted] },
       duration () { return this.$store.getters[this.getDuration] },
@@ -147,13 +133,9 @@
       dayOptions () {
         return this.genFibOptions('day', 55)
       },
-      today () {
-        let d = new Date()
-        return d.getDay()
-      },
       symbols () {
         let sym = symbols
-        let resort = sym.slice(0, this.today)
+        let resort = sym.slice(0, this.min.getDay())
         sym = sym.slice(this.today)
         Array.prototype.push.apply(sym, resort)
         return sym
