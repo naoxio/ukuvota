@@ -18,9 +18,9 @@
             color="white"
             :tooltip="$t('DatePicker')"
             icon="today"> 
-            <q-popover ref="popover">
+            <q-popover ref="date">
               <q-inline-datetime :min="min" v-model="deadline" type="date">
-                <q-btn @click="$refs.popover.close()">
+                <q-btn @click="$refs.date.close()">
                   {{ $t('Close') }}
                 </q-btn>
               </q-inline-datetime>
@@ -45,9 +45,9 @@
             color="white"
             :tooltip="$t('TimePicker')"
             icon="access time"> 
-            <q-popover ref="popover">
+            <q-popover ref="time">
               <q-inline-datetime :min="min" v-model="deadline" type="time">
-                <q-btn @click="$refs.popover.close()">
+                <q-btn @click="$refs.time.close()">
                   {{ $t('Close') }}
                 </q-btn>
               </q-inline-datetime>
