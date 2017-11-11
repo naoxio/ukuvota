@@ -27,13 +27,13 @@
             </q-popover>
           </UBtn>
         </div>
-	      <div v-for="(symbol, index) in symbols" class="bg-light">
+	      <div v-for="day in 7" :key="day" class="bg-light">
 		      <UBtn
             class="text-white"
-            :text="String(getDayInMonth(index))"
+            :text="String(getDayInMonth(day - 1))"
             imgStyle="margin: 0.2em 0; height: 1em"
             img="statics/datetime/cal.svg"
-            :tooltip="getDayString(symbol)"
+            :tooltip="getDayString(day - 1)"
             style="width: 100%; height: 100%" />
             <!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
         </div>
@@ -73,12 +73,10 @@
   import { addDays } from 'src/helpers/datefns'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
-  // const astro = ['☉', '☾', '♂', '☿', '♃', '♀', '♄']
-  const nosym = ['0', '1', '2', '3', '4', '5', '6']
-  const symbols = nosym
+
   export default {
     props: {
-      min: Date,
+      min: { required: false },
       store: { required: true },
       untilLabel: String,
       durationLabel: String,
@@ -103,10 +101,11 @@
         console.log(hour)
       },
       getDayInMonth (add) {
-        return addDays(this.min, add).getDate()
+        return addDays(this.getMin(), add).getDate()
       },
-      getDayString (symbol) {
-        switch (symbols.indexOf(symbol)) {
+      getDayString (add) {
+        let day = addDays(this.getMin(), add).getDay()
+        switch (day) {
           case 0:
             return this.$t('Sunday')
           case 1:
@@ -122,24 +121,15 @@
           case 6:
             return this.$t('Saturday')
         }
+      },
+      getMin () {
+        if (this.min instanceof Date) { return this.min }
+        else return new Date(this.min)
       }
     },
     computed: {
       caldate () { return this.$store.getters[this.getDeadlineFormatted] },
-      duration () { return this.$store.getters[this.getDuration] },
-      hourOptions () {
-        return this.genLinearOptions('hour', 3)
-      },
-      dayOptions () {
-        return this.genFibOptions('day', 55)
-      },
-      symbols () {
-        let sym = symbols
-        let resort = sym.slice(0, this.min.getDay())
-        sym = sym.slice(this.today)
-        Array.prototype.push.apply(sym, resort)
-        return sym
-      }
+      duration () { return this.$store.getters[this.getDuration] }
     },
     data () {
       return {
