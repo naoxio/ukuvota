@@ -31,7 +31,7 @@
 		      <UBtn
             class="text-white"
             :text="String(getDayInMonth(day - 1))"
-            imgStyle="margin: 0.2em 0; height: 1em"
+            :imgStyle="getBtnImgTextStyle()"
             img="statics/datetime/cal.svg"
             :tooltip="getDayString(day - 1)"
             style="width: 100%; height: 100%" />
@@ -54,12 +54,10 @@
             </q-popover>
           </UBtn>
         </div>
-        <div class="bg-light">
+        <div v-for="hour in 3" :key="hour" class="bg-light">
           <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
-          <UBtn @click="setTime(8)" img="statics/datetime/sunrise.svg" :tooltip="$t('Morning')"/>
-          <UBtn @click="setTime(12)" img="statics/datetime/sun.svg" :tooltip="$t('Midday')"/>
-          <UBtn @click="setTime(20)" img="statics/datetime/sunset.svg" :tooltip="$t('Evening')"/>
-          <UBtn @click="setTime(24)" img="statics/datetime/stars.svg" :tooltip="$t('Midnight')"/>
+          
+          <UBtn class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour * 8)" :img="'statics/datetime/hour-' + hour * 8 + '.svg'" :tooltip="getHourString(hour * 8)"/>
           <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
@@ -97,11 +95,27 @@
       QSelect
     },
     methods: {
+      getBtnImgTextStyle () {
+        return 'margin: 0.2em 0; height: 1em'
+      },
+      getBtnImgStyle () {
+        return 'margin: 0; height: 2em'
+      },
       setTime (hour) {
         console.log(hour)
       },
       getDayInMonth (add) {
         return addDays(this.getMin(), add).getDate()
+      },
+      getHourString (hour) {
+        switch (hour) {
+          case 8:
+            return this.$t('Morning')
+          case 16:
+            return this.$t('Afternoon')
+          case 24:
+            return this.$t('Night')
+        }
       },
       getDayString (add) {
         let day = addDays(this.getMin(), add).getDay()

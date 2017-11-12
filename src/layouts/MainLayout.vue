@@ -52,7 +52,10 @@
   
   .q-tabs-bar
     border none
-  
+  .q-btn-rectangle
+    border-radius: 0
+  .q-btn
+    padding 0.5em
   .light
     color black
     background-color white
