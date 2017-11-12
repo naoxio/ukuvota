@@ -1,10 +1,10 @@
-import { getTime, differenceInMilliseconds, isBefore, isAfter, addDays, format, distanceInWords, distanceInWordsToNow } from 'src/helpers/datefns'
+import { getTime, differenceInMilliseconds, isBefore, isAfter, noTimeDate, addDays, distanceInWords, distanceInWordsToNow } from 'src/helpers/datefns'
 
 export const state = {
-  proposalDeadline: addDays(new Date(), 3),
-  proposalDuration: distanceInWordsToNow(addDays(new Date(), 3)),
-  voteDeadline: addDays(new Date(), 4),
-  voteDuration: distanceInWords(addDays(new Date(), 3), addDays(new Date(), 4))
+  proposalDeadline: noTimeDate(addDays(new Date(), 3)),
+  proposalDuration: distanceInWordsToNow(noTimeDate(addDays(new Date(), 3))),
+  voteDeadline: noTimeDate(addDays(new Date(), 5)),
+  voteDuration: distanceInWords(noTimeDate(addDays(new Date(), 3)), noTimeDate(addDays(new Date(), 5)))
 }
 
 export const actions = {
@@ -40,8 +40,6 @@ export const getters = {
   getProposalDeadline: state => state.proposalDeadline,
   getVoteDeadline: state => state.voteDeadline,
   getProposalDuration: state => state.proposalDuration,
-  getVoteDuration: state => state.voteDuration,
-  getProposalDeadlineFormatted: state => format(state.proposalDeadline, 'MMM DD, YYYY HH:MM'),
-  getVoteDeadlineFormatted: state => format(state.voteDeadline, 'MMM DD, YYYY HH:MM')
+  getVoteDuration: state => state.voteDuration
 
 }

@@ -10,6 +10,8 @@ import {
   subMonths,
   subDays,
   subHours,
+  setHours,
+  setMinutes,
   subMinutes
 } from 'date-fns'
 import { includes } from 'src/helpers/strings'
@@ -82,6 +84,10 @@ const get2Fig = (obj) => {
   if (includes(foutput, 'hour')) { output += getFigOutput('hour', obj, foutput) }
   if (includes(foutput, 'minute')) { output += getFigOutput('minute', obj, foutput) }
   return output
+}
+
+export const noTimeDate = (...args) => {
+  return setMinutes(setHours(...args, 24), 0)
 }
 
 export const format = (...args) => {

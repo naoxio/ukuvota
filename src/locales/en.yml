@@ -112,10 +112,13 @@ showTotalScore: show total score
 
 and: and
 
+DatePicker: Date Picker
+TimePicker: Time Picker
+
 Morning: Morning
-Midday: Midday
+Afternoon: Afternoon
 Evening: Evening
-Midnight: Midnight
+Night: Night
 
 Today: Today
 Tomorrow: Tomorrow

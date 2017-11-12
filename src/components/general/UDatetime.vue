@@ -1,23 +1,20 @@
 <template>
   <div>
+    <div class="row no-wrap">
+      <ULabel :value="durationLabel" />
+      &nbsp;
+      <ULabel class="sublabel" :value="duration" />
+    </div>
     <div class="row justify-between">
-      <div class="row no-wrap">
-        <ULabel :value="durationLabel" />
-        &nbsp;
-        <ULabel class="sublabel" :value="duration" />
-      </div>
-      <div class="row no-wrap">
-        <ULabel :value="untilLabel" />
-        &nbsp;
-        <ULabel class="sublabel" :value="caldate" />
-      </div>
       <div class="row"> 
         <div class="bg-primary">
           <UBtn
-            style="width: 100%; height: 100%"
+            style="width: 100%; height: 100%;font-size: 0.6em"
             color="white"
             :tooltip="$t('DatePicker')"
-            icon="today"> 
+            icon="today"
+            :text="getDate()"
+            > 
             <q-popover ref="date">
               <q-inline-datetime :min="min" v-model="deadline" type="date">
                 <q-btn @click="$refs.date.close()">
@@ -34,19 +31,19 @@
             :imgStyle="getBtnImgTextStyle()"
             img="statics/datetime/cal.svg"
             :tooltip="getDayString(day - 1)"
-            style="width: 100%; height: 100%" />
-            <!--UBtn color="light" :tooltip="getDayBtnLabel(symbol, index)" :text="symbol" :flat="false"/-->
+            style="width: 100%; height: 100%;" />
         </div>
       </div>
       <div class="row">
         <div class="bg-primary">
           <UBtn
-            style="width: 100%; height: 100%"
+            style="width: 100%; height: 100%; font-size: 0.6em"
             color="white"
             :tooltip="$t('TimePicker')"
+            :text="getTime()"
             icon="access time"> 
             <q-popover ref="time">
-              <q-inline-datetime :min="min" v-model="deadline" type="time">
+              <q-inline-datetime format24h :min="min" v-model="deadline" type="time">
                 <q-btn @click="$refs.time.close()">
                   {{ $t('Close') }}
                 </q-btn>
@@ -57,7 +54,7 @@
         <div v-for="hour in 3" :key="hour" class="bg-light">
           <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
           
-          <UBtn class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour * 8)" :img="'statics/datetime/hour-' + hour * 8 + '.svg'" :tooltip="getHourString(hour * 8)"/>
+          <UBtn style="width: 100%; height: 100%" class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour * 8)" :img="'statics/datetime/hour-' + hour * 8 + '.svg'" :tooltip="getHourString(hour * 8)"/>
           <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
@@ -68,7 +65,7 @@
 <script>
   import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
   import UWheelBtn from './UWheelBtn'
-  import { addDays } from 'src/helpers/datefns'
+  import { addDays, format } from 'src/helpers/datefns'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
 
@@ -79,6 +76,9 @@
       untilLabel: String,
       durationLabel: String,
       changeLabel: String
+    },
+    mounted () {
+      console.log(this.deadline)
     },
     watch: {
       deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
@@ -95,6 +95,16 @@
       QSelect
     },
     methods: {
+      getDate () {
+        return format(this.deadline, 'D MMM')
+      },
+      getTime () {
+        let hours = String(this.deadline.getHours())
+        let minutes = String(this.deadline.getMinutes())
+        if (hours.length === 1) hours = '0' + hours
+        if (minutes.length === 1) minutes = '0' + minutes
+        return hours + ':' + minutes
+      },
       getBtnImgTextStyle () {
         return 'margin: 0.2em 0; height: 1em'
       },
@@ -147,10 +157,9 @@
     },
     data () {
       return {
-        deadline: this.$store.getters['get' + this.store + 'Deadline'],
+        deadline: new Date(this.$store.getters['get' + this.store + 'Deadline']),
         updDeadline: 'update' + this.store + 'Deadline',
         getDeadline: 'get' + this.store + 'Deadline',
-        getDeadlineFormatted: 'get' + this.store + 'DeadlineFormatted',
         getDuration: 'get' + this.store + 'Duration'
       }
     }

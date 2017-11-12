@@ -111,9 +111,13 @@ showTotalScore: Gesamtpunktzahl anzeigen
 
 and: und
 
+DatePicker: Datumswähler
+TimePicker: Zeitwähler
+
 Morning: Früh
-Midday: Mittag
+Afternoon: Nachmittag
 Evening: Abend
+Night: Nacht
 
 Today: Heute
 Tomorrow: Morgen
