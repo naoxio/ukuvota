@@ -51,10 +51,10 @@
             </q-popover>
           </UBtn>
         </div>
-        <div v-for="hour in 3" :key="hour" class="bg-light">
+        <div v-for="hour in times" :key="hour" class="bg-light">
           <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
           
-          <UBtn style="width: 100%; height: 100%" class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour * 8)" :img="'statics/datetime/hour-' + hour * 8 + '.svg'" :tooltip="getHourString(hour * 8)"/>
+          <UBtn style="width: 100%; height: 100%" class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour)" :img="'statics/datetime/hour-' + hour + '.svg'" :tooltip="getHourString(hour)"/>
           <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
@@ -68,7 +68,6 @@
   import { addDays, format } from 'src/helpers/datefns'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
-
   export default {
     props: {
       min: { required: false },
@@ -121,8 +120,10 @@
         switch (hour) {
           case 8:
             return this.$t('Morning')
-          case 16:
-            return this.$t('Afternoon')
+          case 12:
+            return this.$t('Midday')
+          case 20:
+            return this.$t('Evening')
           case 24:
             return this.$t('Night')
         }
@@ -157,6 +158,7 @@
     },
     data () {
       return {
+        times: [8, 12, 20, 24],
         deadline: new Date(this.$store.getters['get' + this.store + 'Deadline']),
         updDeadline: 'update' + this.store + 'Deadline',
         getDeadline: 'get' + this.store + 'Deadline',
