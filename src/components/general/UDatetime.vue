@@ -157,7 +157,7 @@
     data () {
       return {
         times: [8, 12, 20, 24],
-        days: [1, 2, 3, 4, 5, 6, 7, 8],
+        days: [1, 2, 3, 4, 5, 6, 7],
         deadline: new Date(this.$store.getters['get' + this.store + 'Deadline']),
         updDeadline: 'update' + this.store + 'Deadline',
         getDeadline: 'get' + this.store + 'Deadline',
