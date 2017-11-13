@@ -9,7 +9,8 @@
       <div class="row"> 
         <div class="bg-primary">
           <UBtn
-            style="width: 100%; height: 100%;font-size: 0.6em"
+            style="font-size: 0.6em;"
+            class="btn-info"
             color="white"
             :tooltip="$t('DatePicker')"
             icon="today"
@@ -24,21 +25,20 @@
             </q-popover>
           </UBtn>
         </div>
-	      <div v-for="day in 7" :key="day" class="bg-light">
+	      <div v-for="day in days" :key="day" class="bg-light">
 		      <UBtn
-            class="text-white"
+            class="text-white btn-item"
             :text="String(getDayInMonth(day - 1))"
-            :imgStyle="getBtnImgTextStyle()"
-            img="statics/datetime/cal.svg"
             :tooltip="getDayString(day - 1)"
-            style="width: 100%; height: 100%;" />
+            />
         </div>
       </div>
       <div class="row">
         <div class="bg-primary">
           <UBtn
-            style="width: 100%; height: 100%; font-size: 0.6em"
+            style="font-size: 0.6em"
             color="white"
+            class="btn-info"
             :tooltip="$t('TimePicker')"
             :text="getTime()"
             icon="access time"> 
@@ -54,7 +54,7 @@
         <div v-for="hour in times" :key="hour" class="bg-light">
           <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
           
-          <UBtn style="width: 100%; height: 100%" class="text-white" :imgStyle="getBtnImgStyle()" @click="setTime(hour)" :img="'statics/datetime/hour-' + hour + '.svg'" :tooltip="getHourString(hour)"/>
+          <UBtn class="text-white btn-item" :imgStyle="getBtnImgStyle()" @click="setTime(hour)" :img="'statics/datetime/hour-' + hour + '.svg'" :tooltip="getHourString(hour)"/>
           <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import { QBtn, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
+  import { QBtn, QChip, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
   import UWheelBtn from './UWheelBtn'
   import { addDays, format } from 'src/helpers/datefns'
   import ULabel from './ULabel'
@@ -87,6 +87,7 @@
       ULabel,
       UWheelBtn,
       QBtn,
+      QChip,
       QPopover,
       QIcon,
       QInlineDatetime,
@@ -103,9 +104,6 @@
         if (hours.length === 1) hours = '0' + hours
         if (minutes.length === 1) minutes = '0' + minutes
         return hours + ':' + minutes
-      },
-      getBtnImgTextStyle () {
-        return 'margin: 0.2em 0; height: 1em'
       },
       getBtnImgStyle () {
         return 'margin: 0; height: 2em'
@@ -159,6 +157,7 @@
     data () {
       return {
         times: [8, 12, 20, 24],
+        days: [1, 2, 3, 4, 5, 6, 7, 8],
         deadline: new Date(this.$store.getters['get' + this.store + 'Deadline']),
         updDeadline: 'update' + this.store + 'Deadline',
         getDeadline: 'get' + this.store + 'Deadline',
@@ -177,4 +176,11 @@
   .icon
     cursor pointer
     font-size 1.5em
+  .btn-info
+    width 6.5em
+    height 100%
+  .btn-item
+    width 2.233em
+    height 100%
+    
 </style>

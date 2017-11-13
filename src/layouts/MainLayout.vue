@@ -55,7 +55,7 @@
   .q-btn-rectangle
     border-radius: 0
   .q-btn
-    padding 0.5em
+    padding 0.4em
   .light
     color black
     background-color white
