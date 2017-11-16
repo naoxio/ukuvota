@@ -1,5 +1,6 @@
 <template>
   <div>
+    <q-chip flat>asd</q-chip>
     <div class="row no-wrap">
       <ULabel :value="durationLabel" />
       &nbsp;
@@ -27,9 +28,11 @@
         </div>
 	      <div v-for="day in days" :key="day" class="bg-light">
 		      <UBtn
+            :click="setDate"
+            :clickVar="day" 
             class="text-white btn-item"
-            :text="String(getDayInMonth(day - 1))"
-            :tooltip="getDayString(day - 1)"
+            :text="String(getDayInMonth(day))"
+            :tooltip="getDayString(day)"
             />
         </div>
       </div>
@@ -47,14 +50,14 @@
                 <q-btn @click="$refs.time.close()">
                   {{ $t('Close') }}
                 </q-btn>
-              </q-inline-datetime>
+              </q-inline-datetime>Nachmittag
             </q-popover>
           </UBtn>
         </div>
         <div v-for="hour in times" :key="hour" class="bg-light">
           <!--UWheelBtn :incrOptions="dayOptions" :incrValue="1"/-->
           
-          <UBtn class="text-white btn-item" :imgStyle="getBtnImgStyle()" @click="setTime(hour)" :img="'statics/datetime/hour-' + hour + '.svg'" :tooltip="getHourString(hour)"/>
+          <UBtn class="text-white btn-item" :imgStyle="getBtnImgStyle()" :click="setTime" :clickVar="hour" :img="'statics/datetime/hour-' + hour + '.svg'" :tooltip="getHourString(hour)"/>
           <!--UWheelBtn :incrOptions="hourOptions" :incrValue="1"/-->
         </div>
       </div>
@@ -65,9 +68,10 @@
 <script>
   import { QBtn, QChip, QPopover, QIcon, QInput, QInlineDatetime, QSelect } from 'quasar'
   import UWheelBtn from './UWheelBtn'
-  import { addDays, format } from 'src/helpers/datefns'
+  import { addDays, format, setHours, setDate } from 'src/helpers/datefns'
   import ULabel from './ULabel'
   import UBtn from './UBtn'
+
   export default {
     props: {
       min: { required: false },
@@ -75,9 +79,6 @@
       untilLabel: String,
       durationLabel: String,
       changeLabel: String
-    },
-    mounted () {
-      console.log(this.deadline)
     },
     watch: {
       deadline (val) { this.$store.dispatch(this.updDeadline + 'Sync', val) }
@@ -95,8 +96,17 @@
       QSelect
     },
     methods: {
+      updateDeadline () {
+        this.$store.dispatch(this.updDeadline + 'Sync', this.deadline)
+      },
       getDate () {
         return format(this.deadline, 'D MMM')
+      },
+      setDate (day) {
+        this.deadline = this.getMin()
+        this.deadline = setDate(this.deadline, day)
+//        this.deadline = setTime(this.deadline, this.time)
+        this.updateDeadline()
       },
       getTime () {
         let hours = String(this.deadline.getHours())
@@ -105,11 +115,12 @@
         if (minutes.length === 1) minutes = '0' + minutes
         return hours + ':' + minutes
       },
+      setTime (hour) {
+        this.deadline = setHours(this.deadline, hour)
+        this.updateDeadline()
+      },
       getBtnImgStyle () {
         return 'margin: 0; height: 2em'
-      },
-      setTime (hour) {
-        console.log(hour)
       },
       getDayInMonth (add) {
         return addDays(this.getMin(), add).getDate()
@@ -157,7 +168,7 @@
     data () {
       return {
         times: [8, 12, 20, 24],
-        days: [1, 2, 3, 4, 5, 6, 7],
+        days: [0, 1, 2, 3, 4, 5, 6],
         deadline: new Date(this.$store.getters['get' + this.store + 'Deadline']),
         updDeadline: 'update' + this.store + 'Deadline',
         getDeadline: 'get' + this.store + 'Deadline',

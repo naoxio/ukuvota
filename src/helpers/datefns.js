@@ -10,7 +10,7 @@ import {
   subMonths,
   subDays,
   subHours,
-  setHours,
+  setHours as setHoursFoo,
   setMinutes,
   subMinutes
 } from 'date-fns'
@@ -87,7 +87,11 @@ const get2Fig = (obj) => {
 }
 
 export const noTimeDate = (...args) => {
-  return setMinutes(setHours(...args, 24), 0)
+  return setHours(...args, 0)
+}
+
+export const setHours = (...args) => {
+  return setMinutes(setHoursFoo(...args), 0)
 }
 
 export const format = (...args) => {

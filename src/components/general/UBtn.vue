@@ -16,7 +16,7 @@
   export default {
     methods: {
       pressed () {
-        if (typeof this.click !== 'undefined') this.click()
+        if (typeof this.click !== 'undefined') this.click(this.clickVar)
         if (!this.launch === false) openURL(this.launch)
         if (!this.route === false) this.$router.push({name: this.route})
       }
@@ -24,6 +24,7 @@
     props: {
       btnStyle: { default: '' },
       click: { required: false },
+      clickVar: { default: null },
       color: { default: 'primary' },
       flat: { default: true },
       launch: { default: false },
