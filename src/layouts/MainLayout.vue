@@ -13,7 +13,6 @@
 </template>
 
 <script>
-  import LangSwitcher from '@/selectors/Language'
   import MainMenu from 'layouts/MainMenu'
   import { LocalStorage, uid, QLayout } from 'quasar'
   import { mapState } from 'vuex'
@@ -21,7 +20,6 @@
   export default {
     name: 'index',
     components: {
-      LangSwitcher,
       MainMenu,
       QLayout
     },
