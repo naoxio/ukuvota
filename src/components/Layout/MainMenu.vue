@@ -1,8 +1,8 @@
 <template>
   <div class="nav row">
-    <u-btn :imgStyle="imgStyle()" launch="https://ukuvota.world" img="statics/icons/home.png" :tooltipDelay="100" :tooltip="$t('Home')"/>
-    <u-btn launch="https://ukuvota.world/docs" icon="book" :tooltipDelay="100" :tooltip="$t('Manual')" />
-    <u-btn launch="https://git.ukuvota.world/ukuvota" icon="code" :tooltipDelay="100" :tooltip="$t('Code')" />
+    <u-btn :imgStyle="imgStyle()" route="home" img="statics/icons/home.png" :tooltipDelay="100" :tooltip="$t('Home')"/>
+    <u-btn route="manual" icon="book" :tooltipDelay="100" :tooltip="$t('Manual')" />
+    <u-btn launch="https://gitlab.com/yunity/ukuvota" icon="code" :tooltipDelay="100" :tooltip="$t('Code')" />
     <div class="col">
     </div>
     <div class="col-auto">
