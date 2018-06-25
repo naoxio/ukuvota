@@ -9,7 +9,9 @@
       <MarkdownContent name="summary" />
       <center>
         <br/>
-        <q-alert color="light">{{ $t('Disclaimer') }}</q-alert>
+        <q-alert color="dark">
+            <div v-html="$t('Disclaimer')"></div>
+        </q-alert>
         <br/>
         <router-link :to="{ name: 'create' }">
           <q-btn>{{ $t('StartWebApp') }}</q-btn>

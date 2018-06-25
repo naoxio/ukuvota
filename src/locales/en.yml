@@ -93,7 +93,9 @@ Time:
 GlobalSettings: Global Settings
 Language: Language
 
-Disclaimer: 'Disclaimer: This is just a prototype, there is no guarantee while using the web app. Do not add any confidential data!'
+Disclaimer: 'WARNING: This is just the first prototype to play around with!
+Currently we are working hard on developing a brand new production ready Ukuvota experience. Latest development can be seen at our <a href="https://gitlab.com/yunity/ukuvota"> gitlab repo!'
+
 LocalSave: All settings are saved locally
 
 Average: Average

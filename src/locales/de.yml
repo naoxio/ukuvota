@@ -96,7 +96,10 @@ Time:
 GlobalSettings: Globale Einstellungen
 Language: Sprache
 
-Disclaimer: 'Anmerkung: Dies ist nur ein Prototyp, es gibt keine Garantie während der Nutzung der Web-Applikation. Keine vertraulichen Daten hinzufügen!'
+Disclaimer: 'WARNING: This is just the first prototype to play ar
+ound with!
+Currently we are working hard on developing a brand new production ready Ukuvota experience. Latest development can be seen at our <a href="https://gitlab.com/yunity/ukuvota"> gitlab repo!'
+
 LocalSave: Alle Einstellungen werden lokal gespeichert
 
 Average: Durchschnitt
