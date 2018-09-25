@@ -9,12 +9,11 @@ Ukuvota uses a cooperative and scalable process to help individuals reach collec
 More about Ukuvota can be read on the homepage: [https://ukuvota.world](https://ukuvota.world)
 
 ## Technology used
-The front-end is made using the Quasar Framework
-The back-end is made using PouchDB
+The front-end is made using the Quasar Framework. The back-end is made using PouchDB.
 
 ## Installing
 ``` bash
-# install quasar-cli globally 
+# install quasar-cli globally
 $ npm install -g quasar-cli
 
 # install yarn for dependencie management
