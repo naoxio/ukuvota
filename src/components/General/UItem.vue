@@ -2,12 +2,12 @@
   <div class="row justify-between items-start">
     <div class="col">
       <div v-if="editme">
-        <UInput :floatLabel="floatlabel" :hyperlink="false" @keyup.enter.native="save"  :value.sync="la" />
-        <UInput :floatLabel="floatsublabel" :hyperlink="false" @keyup.enter.native="save" class="sublabel" :value.sync="subla" />
+        <UInput :floatLabel="floatlabel" @keyup.ctrl.enter.native="save"  :value.sync="la" />
+        <UInput :floatLabel="floatsublabel" @keyup.ctrl.enter.native="save" class="sublabel" :value.sync="subla" type="textarea" :min-rows="2" />
       </div>
       <div v-else>
-        <ULabel :hyperlink="true" :value="la" />
-        <ULabel :hyperlink="true" class="sublabel" :value="subla" />
+        <ULabel hyperlink :value="la" />
+        <ULabel hyperlink class="sublabel" :value="subla" multiline />
       </div>
     </div>
     <div class="col-auto" v-if="editable">
@@ -15,7 +15,7 @@
         <q-icon @click="edit" name="edit" />
       </div>
       <div v-else>
-        <q-icon@click="save" name="save" />
+        <q-icon @click="save" name="save" />
       </div>
     </div>
   </div>

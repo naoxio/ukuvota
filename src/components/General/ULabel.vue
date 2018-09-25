@@ -1,5 +1,5 @@
 <template>
-  <div v-html="trusted" />
+  <div v-html="trusted" :class="{ multiline }" />
 </template>
 <script>
   import sanitizeHtml from 'sanitize-html'
@@ -8,7 +8,8 @@
   export default {
     props: {
       value: { required: true },
-      hyperlink: { default: false }
+      hyperlink: { default: false, type: Boolean },
+      multiline: { default: false, type: Boolean }
     },
     computed: {
       trusted () {
@@ -21,4 +22,6 @@
 <style lang="stylus" scoped>
   *
     margin 0.5em 0 0.5em 0
+  .multiline
+    white-space pre-wrap
 </style>
