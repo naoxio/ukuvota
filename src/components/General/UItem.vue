@@ -3,11 +3,11 @@
     <div class="col">
       <div v-if="editme">
         <UInput :floatLabel="floatlabel" @keyup.ctrl.enter.native="save"  :value.sync="la" />
-        <UInput :floatLabel="floatsublabel" @keyup.ctrl.enter.native="save" class="sublabel" :value.sync="subla" type="textarea" :min-rows="2" />
+        <UInput :floatLabel="floatsublabel" @keyup.ctrl.enter.native="save" :value.sync="subla" type="textarea" :min-rows="2" />
       </div>
       <div v-else>
         <ULabel hyperlink :value="la" />
-        <ULabel hyperlink class="sublabel" :value="subla" multiline />
+        <UserMarkdown class="sublabel" :source="subla" />
       </div>
     </div>
     <div class="col-auto" v-if="editable">
@@ -24,6 +24,7 @@
 <script>
   import ULabel from '@/General/ULabel'
   import UInput from '@/General/UInput'
+  import UserMarkdown from '@/General/UserMarkdown'
   import { QIcon } from 'quasar'
 
   export default {
@@ -61,7 +62,8 @@
     components: {
       ULabel,
       UInput,
-      QIcon
+      QIcon,
+      UserMarkdown
     },
     data () {
       return {
@@ -76,7 +78,7 @@
 <style lang="stylus" scoped>
 @import '~variables'
 
-.sublabel
+.sublabel >>> *:not(a)
   color grey
 
 .q-icon
