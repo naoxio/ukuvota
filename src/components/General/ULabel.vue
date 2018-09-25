@@ -1,14 +1,8 @@
 <template>
-  <div>
-    <div v-if="hyperlink">
-      <span v-html="val"/>
-    </div>
-    <div v-else>
-      <span v-html="value"/>
-    </div>
-  </div>
+  <div v-html="trusted" />
 </template>
 <script>
+  import sanitizeHtml from 'sanitize-html'
   import anchorme from 'anchorme'
 
   export default {
@@ -16,13 +10,10 @@
       value: { required: true },
       hyperlink: { default: false }
     },
-    mounted () {
-      if (this.hyperlink) this.val = anchorme(this.value)
-      else this.val = this.value
-    },
-    data () {
-      return {
-        val: this.value
+    computed: {
+      trusted () {
+        const untrusted = this.hyperlink ? anchorme(this.value) : this.value
+        return sanitizeHtml(untrusted)
       }
     }
   }
