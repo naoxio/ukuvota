@@ -8,7 +8,6 @@
 
 <script>
   import { QInput, QField } from 'quasar'
-  import anchorme from 'anchorme'
 
   export default {
     components: {
@@ -23,14 +22,11 @@
       floatLabel: { required: false },
       maxHeight: { required: false },
       minRows: { required: false },
-      inverted: { required: false },
-      hyperlink: { default: true }
+      inverted: { required: false }
     },
     watch: {
       val (newVal) {
-        let result = newVal
-        if (this.hyperlink) result = anchorme(newVal)
-        this.$emit('update:value', result)
+        this.$emit('update:value', newVal)
       }
     },
     data () {
