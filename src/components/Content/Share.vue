@@ -7,6 +7,7 @@
       </div>
       <div class="col-auto">
         <SharingCode />
+        <ManualNotificationHelper />
       </div>
     </div>
   </div>
@@ -14,10 +15,12 @@
 
 <script>
   import SharingCode from '@/Modal/SharingQR'
+  import ManualNotificationHelper from '@/Modal/ManualNotificationHelper'
 
   export default {
     components: {
-      SharingCode
+      SharingCode,
+      ManualNotificationHelper
     },
     data () {
       return {
