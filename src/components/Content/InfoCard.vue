@@ -1,7 +1,7 @@
 <template>
   <UCard>
     <h5><ULabel :value="topic.question" /></h5>
-    <ULabel class="desc":value="topic.description" />
+    <UserMarkdown class="desc" :source="topic.description" />
     <div class="row justify-between">
       <div v-if="proposalTimer !== -1">
         {{ $t('Proposal.time.label') }}
@@ -10,7 +10,7 @@
       <div v-if="votingTimer !== -1">
         {{ $t('Voting.time.duration') }}
         <p class="text-dark">{{ votingTimer }}</p>
-      </div>  
+      </div>
       <div>
         {{ $t('NegativeScoreWeighting') }}
         <p class="text-dark">{{ negativeScoreWeight }}
@@ -27,6 +27,7 @@
   import Share from '@/Content/Share'
   import { QField, QItem, QItemMain } from 'quasar'
   import ULabel from '@/General/ULabel'
+  import UserMarkdown from '@/General/UserMarkdown'
 
   export default {
     props: {
@@ -37,6 +38,7 @@
     },
     components: {
       NegativeScoreInfo,
+      UserMarkdown,
       UCard,
       Share,
       ULabel,
@@ -52,6 +54,6 @@
   }
 </script>
 <style lang="stylus" scoped>
-.desc
+.desc >>> *:not(a)
   color grey
 </style>

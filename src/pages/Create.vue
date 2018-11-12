@@ -30,7 +30,7 @@
 
   const { setScrollPosition } = scroll
   const { addToDate } = date
-  
+
   export default {
     components: {
       UInput,
@@ -54,7 +54,7 @@
         else {
           this.topicMissing = false
         }
-  
+
         if (!error) { // if no errors proceed
           this.id = uid()
           let today = new Date()
@@ -126,7 +126,8 @@
         defaultP2: {
           id: uid(),
           title: 'Repeat process',
-          description: 'reapeat the process and look for other options' }
+          description: 'repeat the process and look for other options'
+        }
       }
     }
   }

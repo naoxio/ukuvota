@@ -35,7 +35,11 @@ const store = new Vuex.Store({
     setTheme: (state, val) => { setLocal('theme', val); state.theme = val },
     setResHover: (state, val) => { setLocal('resHover', val); state.resHover = val },
     setTopic: (state, val) => {
-      state.topic = val
+      state.topic = {
+        ...val,
+        proposalTime: new Date(val.proposalTime),
+        votingTime: new Date(val.votingTime)
+      }
       state.proposals = val.proposals
       state.votes = val.votes
       state.selectedVoters = Object.keys(val.votes)
