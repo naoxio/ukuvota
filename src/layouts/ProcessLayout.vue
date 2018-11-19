@@ -1,6 +1,6 @@
 <template>
   <main-layout>
-    <InfoCard 
+    <InfoCard
       :topic="topic"
       :proposalTimer="proposalTimer"
       :votingTimer="votingTimer"
@@ -87,7 +87,8 @@
         topic: {},
         redirect: true,
         proposalTimer: '',
-        votingTimer: ''
+        votingTimer: '',
+        negativeScoreWeight: '='
       }
     }
   }
