@@ -1,18 +1,20 @@
 <template>
   <div>
     <div v-for="(obj, id) in proposals" :key="id">
-      <ULabel class="title" :hyperlink="true" :value="obj.title" />
-      <ULabel class="desc" :hyperlink="true" :value="obj.description" />
-      <div class="row justify-around">
-        <div v-for="file in emo" :key="file">
-          <div
-            :class="{ selected: isSelected(id, file) }" 
-            @click="select(id, file)"
-            >
-            <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
+      <template v-if="obj.title">
+        <ULabel class="title" :hyperlink="true" :value="obj.title" />
+        <ULabel v-if="obj.description" class="desc" :hyperlink="true" :value="obj.description" markdown />
+        <div class="row justify-around">
+          <div v-for="file in emo" :key="file">
+            <div
+              :class="{ selected: isSelected(id, file) }"
+              @click="select(id, file)"
+              >
+              <img class="emo" :src="'statics/emo/' + file + '.svg'" height="32px" />
+            </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -46,12 +48,12 @@
 
 <style lang="stylus" scoped>
   .title
-    color grey 
+    color grey
     font-size 1.5em
 
   .desc
     color grey
-  
+
   .emo
     filter grayscale(1)
 

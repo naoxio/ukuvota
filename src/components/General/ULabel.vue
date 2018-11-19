@@ -1,15 +1,21 @@
 <template>
-  <div v-html="trusted" :class="{ multiline }" />
+  <div v-if="!markdown" v-html="trusted" :class="{ multiline }" />
+  <UserMarkdown v-else class="sublabel" :source="value" />
 </template>
 <script>
   import sanitizeHtml from 'sanitize-html'
   import anchorme from 'anchorme'
+  import UserMarkdown from '@/General/UserMarkdown'
 
   export default {
+    components: {
+      UserMarkdown
+    },
     props: {
       value: { required: true },
       hyperlink: { default: false, type: Boolean },
-      multiline: { default: false, type: Boolean }
+      multiline: { default: false, type: Boolean },
+      markdown: { default: false, type: Boolean }
     },
     computed: {
       trusted () {

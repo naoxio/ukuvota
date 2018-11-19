@@ -13,7 +13,7 @@
           <div class="list row justify-between items-center">
             <div class="col">
               <ULabel :hyperlink="true" :value="getTitle(id)" />
-              <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" />
+              <ULabel class="sublabel" :hyperlink="true" :value="getDescription(id)" markdown />
             </div>
             <div class="col-auto">
               <q-tooltip v-if="!resHover.none">
@@ -114,25 +114,25 @@
 </script>
 
 <style lang="stylus" scoped>
-  .pointer 
+  .pointer
     cursor pointer
 
   .caption
-    text-align left 
+    text-align left
     font-size 1.2em
 
   .list
-    text-align left 
+    text-align left
     padding 0.2em
-  
+
   .sublabel
-    color grey 
+    color grey
 
   .topProposal
     font-weight bold
 
   .highlightTopScores
-    background-color #ffffcc 
+    background-color #ffffcc
     margin -0.5em
     padding 0.5em
 </style>
