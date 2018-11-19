@@ -1,7 +1,7 @@
 <template>
   <UCard>
     <h5><ULabel :value="topic.question" /></h5>
-    <UserMarkdown class="desc" :source="topic.description" />
+    <UserMarkdown v-if="topic.description" class="desc" :source="topic.description" />
     <div class="row justify-between">
       <div v-if="proposalTimer !== -1">
         {{ $t('Proposal.time.label') }}
