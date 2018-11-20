@@ -67,8 +67,8 @@
           },
           */
           {
-            message: 'Proposal period ends in 12 hours',
-            time: addHours(this.topic.proposalTime, -12)
+            message: 'Proposal period ends in 24 hours',
+            time: addHours(this.topic.proposalTime, -24)
           },
           {
             message: 'Proposal period ends in 3 hours',
@@ -79,8 +79,8 @@
             time: this.topic.proposalTime
           },
           {
-            message: 'Voting period ends in 12 hours',
-            time: addHours(this.topic.votingTime, -12)
+            message: 'Voting period ends in 24 hours',
+            time: addHours(this.topic.votingTime, -24)
           },
           {
             message: 'Voting period ends in 3 hours!',
