@@ -65,11 +65,6 @@ Once you have verified that you haven't broken everything, then you can trigger 
 ## Contributing
 We would be happy to accept PRs! If you want to work on something, it'd be good to talk beforehand to make sure nobody else is working on it. You can reach us on [gitter](https://gitter.im/ukuvota/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link) or contacting the current main developer wolif.
 
-Wolfi's contact:
- - email: [wolfi@disroot.org](mailto: wolfi@disroot.org)
- - mastodon: [wolfi@aleph.land](https://aleph.land/@wolfi)
- - ssb: [@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519](@YcK5t+i51ToFERtEf3g66dn9rM89zLMzlG9MOHBHnQk=.ed25519)
-
 A good place to start are the issues labelled "feature" or "help wanted".
 
 ## License
