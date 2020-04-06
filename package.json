@@ -22,7 +22,7 @@
     "markdown-it": "^8.4.2",
     "markdown-it-link-attributes": "^2.1.0",
     "morgan": "^1.8.2",
-    "pouchdb": "6.4.3",
+    "pouchdb": "7.2.1",
     "sanitize-html": "^1.19.0",
     "vue-qr": "^1.2.3",
     "vuex": "^3.0.0"
