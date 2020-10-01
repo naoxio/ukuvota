@@ -18,11 +18,10 @@
       getRawData () {
         let output =
           this.$t('Topic.questionLabel') + ': ' + this.topic.question + '\n' +
-          this.$t('Description') + ': ' + this.topic.description + '\n' +
           this.$t('NegativeScoreWeighting') + ': ' + this.topic.negativeScoreWeight + '\n' +
           this.$t('Proposals.title') + ': '
         for (let t in this.proposals) {
-          output += this.proposals[t].title + ' '
+          output += '\'' + this.proposals[t].title + '\' '
         }
         output += '\n'
         for (let v in this.votes) {
@@ -37,14 +36,15 @@
         return output
       }
     },
-    data () {
-      return {
-        ...mapState([
-          'topic'
-        ]),
-        topic: this.$store.state.topic,
-        proposals: this.$store.state.topic.proposals,
-        votes: this.$store.state.topic.votes
+    computed: {
+      ...mapState([
+        'topic'
+      ]),
+      proposals () {
+        return this.topic && this.topic.proposals
+      },
+      votes () {
+        return this.topic && this.topic.votes
       }
     }
   }
