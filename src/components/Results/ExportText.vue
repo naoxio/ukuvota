@@ -21,7 +21,7 @@
           this.$t('NegativeScoreWeighting') + ': ' + this.topic.negativeScoreWeight + '\n' +
           this.$t('Proposals.title') + ': '
         for (let t in this.proposals) {
-          output += '\'' + this.proposals[t].title + '\' '
+          output += '"' + this.proposals[t].title + '" '
         }
         output += '\n'
         for (let v in this.votes) {
