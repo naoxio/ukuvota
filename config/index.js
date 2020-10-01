@@ -3,13 +3,13 @@ var path = require('path')
 module.exports = {
   // Webpack aliases
   aliases: {
-    '@': path.resolve(__dirname, '../src/components'),    
-    assets: path.resolve(__dirname, '../src/assets'),   
+    '@': path.resolve(__dirname, '../src/components'),
+    assets: path.resolve(__dirname, '../src/assets'),
     content: path.resolve(__dirname, '../src/content'),
     layouts: path.resolve(__dirname, '../src/layouts'),
-    locales: path.resolve(__dirname, '../src/locales'), 
+    locales: path.resolve(__dirname, '../src/locales'),
     pages: path.resolve(__dirname, '../src/pages'),
-    quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),    
+    quasar: path.resolve(__dirname, '../node_modules/quasar-framework/'),
     src: path.resolve(__dirname, '../src'),
     variables: path.resolve(__dirname, '../src/themes/quasar.variables.styl')
   },
@@ -51,7 +51,7 @@ module.exports = {
     proxyTable: {
       // proxy all requests starting with /api
       '/db': {
-        target: 'http://localhost:3000',
+        target: 'https://ukuvota.world',
         changeOrigin: true,
         ws: true
       }

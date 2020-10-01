@@ -22,6 +22,11 @@
       MainLayout,
       InfoCard
     },
+    watch: {
+      topic (topic) {
+        document.title = topic.question
+      }
+    },
     methods: {
       ...mapActions([
         'updTopic'
@@ -81,6 +86,7 @@
     },
     beforeDestroy () {
       clearInterval(this.interval)
+      document.title = 'Ukuvota'
     },
     data () {
       return {
