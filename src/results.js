@@ -52,7 +52,8 @@ export const getIndiScore = (object, id, negativeScoreWeight) => {
 }
 
 export const getAvgRoundedScore = (id, results, selectedVoters) => {
-  return Math.round((getAvgScore(id, results, selectedVoters)) * 100) / 100
+  const score = getAvgScore(id, results, selectedVoters)
+  return score.toPrecision(3).slice(0, score > 0 ? 4 : 5)
 }
 
 export const getLength = (object) => {

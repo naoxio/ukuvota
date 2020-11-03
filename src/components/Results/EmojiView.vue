@@ -5,6 +5,12 @@
     </br>
     <div class="row justify-between">
       <h6><ULabel :value="$t('Results.title')"/></h6>
+      <div v-if="resHover.avg">
+        {{ $t('Average') }}
+      </div>
+      <div v-if="resHover.total">
+        {{ $t('Total') }}
+      </div>
       <!--q-checkbox v-model="highlightTopScores" :label="$t('HighlightTopScores')" /-->
     </div>
     <div v-if="selectedVoters.length > 0">
@@ -24,7 +30,10 @@
                   {{ $t('Total') }}: {{ getTotalScore(id) }}
                 </div>
               </q-tooltip>
-              <UEmoji :class="{ pointer: !resHover.none }" :id="getEmoji(id)"/>
+              <div class="text-center" style="border: 1px solid; padding: 4px; margin-left: 2px">
+                {{ resHover.avg ? getAvgRoundedScore(id) : '' }}
+                {{ resHover.total ? getTotalScore(id) : '' }}
+              </div>
             </div>
           </div>
         </div>
