@@ -14,7 +14,7 @@ The front-end is made using the Quasar Framework. The back-end is made using Pou
 ## Installing
 ``` bash
 # install quasar-cli globally
-$ npm install -g quasar-cli
+$ npm install -g quasar-cli@v0.6.5
 
 # install yarn for dependencie management
 $ npm install -g yarn
