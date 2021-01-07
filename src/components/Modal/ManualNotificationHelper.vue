@@ -93,7 +93,8 @@
         ].map(r => {
           return {
             message: r.message,
-            command: `${command} ${this.channel} "[${prefix}] ${r.message} -> ${url}" ${r.time.toLocaleString()}`
+            // using Canadian locale to get YYYY-MM-DD and not have slack switching month and day
+            command: `${command} ${this.channel} "[${prefix}] ${r.message} -> ${url}" ${r.time.toLocaleString('en-CA')}`
           }
         })
       }
