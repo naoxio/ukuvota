@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "about": "Über",
+    "back": "Zurück",
+    "go": "Los",
+    "home": "Startseite",
+    "quick": "Schnell",
+    "donate": "Spenden",
+    "toggle_dark": "Dunkelmodus umschalten",
+    "toggle_langs": "Sprachen ändern",
+    "start_quick": "Starten Sie den schnellen Prozess"
+  },
+  "intro": {
+    "desc": "Vite Startvorlage mit Vorlieben",
+    "dynamic-route": "Demo einer dynamischen Route",
+    "hi": "Hi, {name}!",
+    "aka": "Auch bekannt als",
+    "whats-your-name": "Wie heißt du?"
+  },
+  "not-found": "Nicht gefunden",
+  "quick": {
+    "title": "Schneller Prozess",
+    "topic": "Thema Frage",
+    "topicRule": "Bitte geben Sie Ihre Themenfrage ein",
+    "description": "Beschreibung",
+    "weighting": "Negative Punktegewichtung",
+    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "switchCalendar": "Zum Kalender-Auswähler wechseln",
+    "switchSlider": "Wechsel zum Schieberegler",
+    "proposalTime": "Vorschlagzeit",
+    "votingTime": "Abstimmungszeit",
+    "proposalEndTime": "Vorschlagsammlung endet in",
+    "votingEndTime": "Abstimmung endet in",
+    "votingLastFor": "Abstimmung dauert",
+    "addDefaultProposals": "Standardvorschläge hinzufügen",
+    "defaultPropoqsals": "Standardvorschläge",
+    "maxProposals": "Maximale Anzahl von Vorschlägen",
+    "amountProposals": "Anzahl von Vorschlägen",
+    "limitProposals": "Anzahl von Vorschlägen begrenzen",
+    "starting": "Prozess beginnt...",
+    "emptyProposal": "Vorschlagstitel fehlt",
+    "strategy": {
+      "title": "Wählen Sie eine Strategie für Ihren schnellen Prozess",
+      "full": "Vollständige Strategie",
+      "voting": "Abstimmungsstrategie"
+    }
+  },
+  "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
+  "layouts": {
+    "title": "Ukuvota"
+  },
+  "TBD": "TBD",
+  "pages": {
+    "title": {
+      "top": "Ukuvota"
+    }
+  },
+  "captchaCode": "Captcha-Code",
+  "create": "Erstellen",
+  "footer": {
+    "powered": "betrieben von",
+    "hosted": "gehostet bei",
+    "supported": "unterstützt mit",
+    "donations": "Spenden",
+    "maintained": "gewartet von"
+  },
+  "noRightsReserved": "keine Rechte vorbehalten",
+  "proposal": {
+    "zero": {
+      "title": "Aktueller Stand",
+      "description": "Die Dinge so belassen, wie sie sind."
+    },
+    "one": {
+      "title": "Prozess wiederholen",
+      "description": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen."
+    }
+  },
+
+  "time": {
+    "minutes": "Minuten",
+    "hours": "Stunden",
+    "days": "Tage"
+  },
+  "redirect": {
+    "legacy": "Weiterleitung zur alten Version..."
+  },
+  "pleaseInput": "Bitte eintragen"
+}

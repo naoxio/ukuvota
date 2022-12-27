@@ -1,0 +1,18 @@
+---
+import { t, changeLanguage } from "i18next";
+import BaseLayout from "templates:BaseLayout";
+
+changeLanguage("en");
+---
+
+<BaseLayout>
+    <h1>{ t('nav.donate') }</h1>
+    <ul>
+        <li>
+            <a href="https://en.liberapay.com/ukuvota">Liberapay</a>
+        </li>
+        <li>
+            <a href="https://patreon.com/ukuvota">Patreon</a>
+        </li>
+    </ul>
+</BaseLayout>

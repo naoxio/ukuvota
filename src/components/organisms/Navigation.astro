@@ -1,0 +1,61 @@
+---
+import { Icon } from 'astro-icon'
+import i18next, { t } from "i18next";
+import { localizePath } from "astro-i18next";
+
+const supportedLanguages = i18next.languages;
+const currentLanguage = i18next.language;
+
+
+const { pathname } = Astro.url;
+
+---
+<style>
+  .sun { display: none; }
+  .moon { display: block; }
+
+  :global(.dark) .sun { display: block; }
+  :global(.dark) .moon { display: none; }
+</style>
+
+
+<div class="navbar bg-base-100">
+
+    <a class="btn btn-link" href={localizePath("/")}>{ t('nav.home') }</a>
+    <a class="btn btn-link" href={localizePath("/quick")}>{ t('nav.quick')}</a>
+    <a class="btn btn-link" href={localizePath("/about")}>{ t('nav.about') } </a>
+
+    <a class="btn btn-link" href={localizePath("/donate")}>{t('nav.donate')}</a>
+    <span class="flex-grow" />
+
+    <select class="select select-xs mx-2" onchange="location = this.value">
+      {
+        supportedLanguages.map((supportedLanguage: string) => {
+          let value = localizePath(pathname, supportedLanguage);
+
+          return (
+          <option selected={supportedLanguage === currentLanguage} value={value}>{ supportedLanguage }</option>
+
+          )
+        }
+      )}
+    </select>
+
+    <button id="themeSelector" class="btn btn-ghost btn-sm">
+      <Icon class="sun" width="22" name="carbon:sun"/>
+      <Icon class="moon" width="22" name="carbon:moon" />
+    </button>
+</div>
+<script>
+  const themeSelector = document.getElementById('themeSelector')
+  themeSelector.addEventListener('click', () => {
+    let theme = window.localStorage.getItem("theme")
+    theme = theme === 'dark' ? 'light' : 'dark'
+    document.documentElement.dataset.theme = theme
+    document.documentElement.classList = theme
+
+    window.localStorage.setItem("theme", theme)
+  })  
+</script>
+
+

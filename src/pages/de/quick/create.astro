@@ -1,0 +1,98 @@
+---
+import BaseLayout from "templates:BaseLayout";
+import TimeSelector from "molecules:TimeSelector";
+import { weightingOptions } from "composables/weightingOptions";
+import { t, changeLanguage } from "i18next";
+import WeightingInfo from "molecules:WeightingInfo";
+
+changeLanguage("de");
+
+const weightOptions = weightingOptions();
+const topicDescription = "";
+const topicQuestion = "";
+const weighting = weightOptions[2].value;
+---
+
+
+<BaseLayout>
+
+  <h1>{ t('quick.title')  }</h1>
+  <quick-form>
+    <p>{ t('quick.topic') }</p>
+    <input name="topicQuestion" class="input" value={topicQuestion} type="text">
+    <br>
+    <p>{ t('quick.description') }</p>
+    <textarea name="topicDescription" class="textarea" value={topicDescription} />
+    <br><br>
+    <span>{ t('quick.weighting') }</span>
+    <span class="flex justify-center">
+      <select name="weighting" class="select" value={weighting}>
+        { weightOptions.map((weight) => 
+          <>
+            <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
+          </>
+        )}
+      </select>
+      <WeightingInfo />
+    </span>
+    <br>
+    <TimeSelector/>
+    <div class="text-center">
+      <button id="submit" type="submit" class="btn btn-primary">
+        { t('create') }
+      </button>
+    </div>
+  </quick-form>
+</BaseLayout>
+
+<script>
+  class QuickForm extends HTMLElement {
+    form = {}
+    findValues(inputs: NodeListOf<any>) {
+      Array.from(inputs).forEach((input) => {
+        if(input.name) {
+          this.form[input.name] = input.value
+        }
+      })
+    }
+    constructor() {
+        super()
+        const buttons = this.querySelectorAll('button')
+        const inputs = this.querySelectorAll('input')
+        const textareas = this.querySelectorAll('textarea')
+        const selectors = this.querySelectorAll('select')
+  
+        const button = Array.from(buttons).find((btn) => btn.id === 'submit')
+
+        button.addEventListener('click', () => {
+          this.form = {}
+          this.findValues(inputs)
+          this.findValues(textareas)
+          this.findValues(selectors)
+          const lang = document.documentElement.lang
+          if (this.form['topicQuestion'] === '') {
+            console.log('error')
+          }
+          else {
+            this.form['strategy'] = 1
+            this.form['proposals'] = []
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = (() => {
+              if (xhr.readyState === 4) {
+                const id = JSON.parse(xhr.response)['id']
+                window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${id}/proposals`
+              }
+            })
+            xhr.open("POST", '/quick/process', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(this.form))
+
+          }
+
+        })
+    }
+  }
+  customElements.define('quick-form', QuickForm)
+
+
+</script>

@@ -1,0 +1,25 @@
+---
+import { Icon } from 'astro-icon'
+
+import { t } from "i18next";
+import { localizePath } from "astro-i18next";
+import ContentDoc from "atoms:ContentDoc";
+
+---
+<label for="my-modal" class="btn btn-ghost btn-sm btn-circle">
+  <Icon width="22" name="carbon:information"/>
+</label>
+
+<input type="checkbox" id="my-modal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <label for="my-modal" class="btn btn-sm btn-circle absolute right-2 top-2">
+      <Icon width="22" name="carbon:close"/>
+
+    </label>
+
+    <h3>{ t('quick.weighting') }</h3>
+    <ContentDoc file_name="NegativeScoreWeighting"/>
+
+  </div>
+</div>

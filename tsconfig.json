@@ -1,0 +1,18 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "jsx": "preserve",
+    "paths": {
+      "content/*": ["content/*"],
+      "composables/*": ["composables/*"],
+      "atoms:*": ["components/atoms/*.astro"],
+      "molecules:*": ["components/molecules/*.astro"],
+      "organisms:*": ["components/organisms/*.astro"],
+      "templates:*": ["components/templates/*.astro"]
+    },
+  },
+  "include": ["src/**/*.astro"],
+  "exclude": ["dist"]
+
+}

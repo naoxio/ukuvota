@@ -1,0 +1,1 @@
+Similar to the full strategy with the difference being that there is no proposal phase, all proposals people should vote are added in the creation phase.

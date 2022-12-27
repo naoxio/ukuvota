@@ -1,0 +1,26 @@
+---
+import { t, changeLanguage } from "i18next";
+import { localizePath } from "astro-i18next";
+import BaseLayout from "templates:BaseLayout";
+import ContentDoc from "atoms:ContentDoc";
+
+changeLanguage("en");
+---
+<BaseLayout>
+    <h1>Select a strategy for your Quick Process</h1>
+    <div class="flex flex-wrap justify-center">
+        <a class="w-80 card" href={localizePath("/quick/create")}>
+            <div class="card-body">
+                <h1>{ t('quick.strategy.full') }</h1>
+                <ContentDoc file_name="QuickFullStrategy"/>
+            </div>
+        </a>
+        <a class="w-80 card" href={localizePath("/donate")}>
+            <div class="card-body">
+                <h1>{ t('quick.strategy.voting') }</h1>
+                <ContentDoc file_name="QuickVotingStrategy"/>
+                <b>{ t('wip') }</b>
+            </div>
+        </a>
+    </div>
+</BaseLayout>

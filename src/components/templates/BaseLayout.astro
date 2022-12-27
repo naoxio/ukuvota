@@ -1,0 +1,47 @@
+---
+import i18next from "i18next";
+import { HeadHrefLangs } from "astro-i18next/components";
+
+import Footer from "organisms:Footer";
+import Navigation from "organisms:Navigation";
+
+import "../../global.css"
+const {title, description} = Astro.props;
+
+---
+
+<html lang={i18next.language} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <HeadHrefLangs />
+
+  </head>
+  <body>
+    <Navigation/>
+    <div class="container">
+        <div class="main">
+            <slot />
+        </div>
+        <br/>
+        <Footer/>
+    </div>
+  </body>
+</html>
+<script is:inline>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme"))
+      return localStorage.getItem("theme");
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+      return "dark";
+    return "light";
+  })();
+  document.documentElement.dataset.theme=theme
+  document.documentElement.classList = theme
+
+  window.localStorage.setItem("theme", theme);
+</script>

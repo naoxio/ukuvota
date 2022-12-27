@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "about": "About",
+    "back": "Back",
+    "go": "GO",
+    "home": "Home",
+    "quick": "Quick",
+    "donate": "Donate",
+    "toggle_dark": "Toggle dark mode",
+    "toggle_langs": "Change languages",
+    "start_quick": "Start quick process"
+  },
+  "intro": {
+    "desc": "Opinionated Vite Starter Template",
+    "dynamic-route": "Demo of dynamic route",
+    "hi": "Hi, {name}!",
+    "aka": "Also known as",
+    "whats-your-name": "What's your name?"
+  },
+  "not-found": "Not found",
+  "quick": {
+    "title": "Quick Process",
+    "topic": "Topic Question",
+    "topicRule": "Please input your Topic Question",
+    "description": "Description",
+    "weighting": "Negative Score Weighting",
+    "timeLeftHeading": "Select the time for proposals and voting",
+    "switchCalendar": "Switch to calendar selector",
+    "switchSlider": "Switch to slide selector",
+    "proposalTime": "Proposal Time",
+    "votingTime": "Voting Time",
+    "proposalEndTime": "Proposal phase ends in",
+    "votingEndTime": "Voting ends in",
+    "votingLastFor": "Voting will last for",
+    "addDefaultProposals": "Add default proposals",
+    "defaultProposals": "Default proposals",
+    "maxProposals": "Maximum amount of proposals",
+    "amountProposals": "Amount of proposals",
+    "limitProposals": "Limit amount of proposals",
+    "starting": "Process starting...",
+    "emptyProposal": "Empty proposal",
+    "strategy": {
+      "title": "Select a strategy for your Quick Process",
+      "full": "Full Strategy",
+      "voting": "Voting Strategy"
+    }
+  },
+  "wip": "Not implemented yet, please consider donating to help support this project!",
+  "layouts": {
+    "title": "Ukuvota"
+  },
+  "TBD": "TBD",
+  "pages": {
+    "title": {
+      "top": "Ukuvota"
+    }
+  },
+  "captchaCode": "Captcha code",
+  "create": "Create",
+  "footer": {
+    "powered": "powered by",
+    "hosted": "hostedy by",
+    "supported": "supported with",
+    "donations": "donations",
+    "maintained": "maintained by"
+  },
+  "noRightsReserved": "no rights reserved",
+  "proposal": {
+    "zero": {
+      "title": "Status quo",
+      "description": "Keep things the way they are."
+    },
+    "one": {
+      "title": "Repeat process",
+      "description": "Repeat the process and look for other options."
+    }
+  },
+  "time": {
+    "minutes": "Minutes",
+    "hours": "Hours",
+    "days": "Days"
+  },
+  "redirect": {
+    "legacy": "Redirecting to legacy version..."
+  },
+  "pleaseInput": "Please input"
+
+}

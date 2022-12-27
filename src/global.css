@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html, body {
+    position: fixed;
+    scroll: smooth;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-smoothing: grayscale;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+
+.container {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    overflow-y: scroll;
+    height: calc(100% - 3rem);
+    left: calc(-50vw + 50%);
+    right: calc(-50vw + 50%);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: calc(100% - 4rem)
+
+  }
+  
+.container:not(*:root) {
+    overflow-y: overlay;
+}
+
+.main {
+    padding: 2rem 4rem;
+    max-width: 800px;
+    margin: auto;
+}
+.link, .link:hover, .btn, .btn:hover  {
+    text-decoration: none;
+}
+p, li {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    transition: background-color 0.1s ease-in-out;
+}
+
+h1 { font-size: 2em; margin: .67em 0 }
+h2 { font-size: 1.5em; margin: .75em 0 }
+h3 { font-size: 1.17em; margin: .83em 0 }
+
+ul {
+    list-style: initial;
+    margin: initial;
+    padding: 0 0 0 40px;
+}
+li {
+    display: list-item;
+}

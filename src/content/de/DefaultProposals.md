@@ -1,0 +1,2 @@
+- **Dinge so zu belassen wie sie vorher waren ist auch eine Option aber nicht der Standard.** Diese Option als Standard zu behandeln beinhaltet eine deutlich konservative Tendenz - es als eine normale Option zu führen mindert diese Tendenz und hilft der Gruppe sich weiter zu entwickeln.
+- **Nach anderen Ideen suchen" ist immer eine Option.** Wenn keine der bereits vorhandenen Vorschläge gut genug ist, können entschieden werden nach besseren Möglichkeiten zu suchen - so ist definitv immer eine akzeptable Option für JedeN dabei.

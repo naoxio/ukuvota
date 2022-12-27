@@ -1,0 +1,22 @@
+---
+import BaseLayout from "templates:BaseLayout";
+import { localizePath } from "astro-i18next";
+import i18next, { t, changeLanguage } from "i18next";
+import ContentDoc from "atoms:ContentDoc";
+
+changeLanguage("de");
+---
+
+<BaseLayout title="Ukuvota" >
+	<div class="text-center">
+		<div class="pt-4 flex justify-center">
+			<img class="flex justify-center" alt="Ukuvota logo" width="128px" src="/logo.png">
+		</div>
+		<h1>Ukuvota</h1>
+	</div>
+	<ContentDoc file_name="Introduction"/>
+
+	<div class="text-center">
+		<a href={localizePath("/quick")} class="btn btn-primary btn-xs">{ t('nav.start_quick') }</a>  
+	</div>
+</BaseLayout>
