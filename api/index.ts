@@ -28,16 +28,7 @@ const defineRoutes = (fastify) => {
     import('@fastify/leveldb'),
     { name: 'db' }
   )
-  fastify.register(import('@fastify/websocket'))
 
-  fastify.register(async function (fastify) {
-    fastify.get('/', { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
-      connection.socket.on('message', message => {
-        // message.toString() === 'hi from client'
-        connection.socket.send('hi from server')
-      }) 
-    })
-  })
 
   fastify.register(import('@fastify/static'), {
     root: path.join(__dirname, 'public'),
