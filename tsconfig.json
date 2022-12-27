@@ -7,6 +7,9 @@
     // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
     "baseUrl": "src",
+    // Enable stricter transpilation for better output.
+    "isolatedModules": true,
+    "types": [ "node", "astro/client"],
     "jsx": "preserve",
     "paths": {
       "content/*": ["content/*"],
@@ -18,6 +21,5 @@
     },
   },
   "include": ["src/**/*.astro"],
-  "exclude": ["dist"],
-  "types": [ "node" ],
+  "exclude": ["dist"]
 }
