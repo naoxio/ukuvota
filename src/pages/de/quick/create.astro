@@ -4,6 +4,7 @@ import TimeSelector from "molecules:TimeSelector";
 import { weightingOptions } from "composables/weightingOptions";
 import { t, changeLanguage } from "i18next";
 import WeightingInfo from "molecules:WeightingInfo";
+import DefaultProposalInfo from "molecules:DefaultProposalInfo";
 
 changeLanguage("de");
 
@@ -11,21 +12,34 @@ const weightOptions = weightingOptions();
 const topicDescription = "";
 const topicQuestion = "";
 const weighting = weightOptions[2].value;
+const defaultProposals = true;
+const limitProposals = false;
+const maxProposals = 10;
+const proposals = [
+    {
+        title: t("proposal.zero.title"),
+        description: t("proposal.zero.description"),
+    },
+    {
+        title: t("proposal.one.title"),
+        description: t("proposal.one.description"),
+    },
+];
 ---
 
 
 <BaseLayout>
 
   <h1>{ t('quick.title')  }</h1>
-  <quick-form>
+  <quick-form data-proposals={JSON.stringify(proposals)}>
     <p>{ t('quick.topic') }</p>
-    <input name="topicQuestion" class="input" value={topicQuestion} type="text">
+    <input name="topicQuestion" class="input w-full" value={topicQuestion} type="text">
     <br>
     <p>{ t('quick.description') }</p>
-    <textarea name="topicDescription" class="textarea" value={topicDescription} />
+    <textarea name="topicDescription" class="textarea w-full" value={topicDescription} />
     <br><br>
     <span>{ t('quick.weighting') }</span>
-    <span class="flex justify-center">
+    <span class="flex justify-center items-center">
       <select name="weighting" class="select" value={weighting}>
         { weightOptions.map((weight) => 
           <>
@@ -37,6 +51,15 @@ const weighting = weightOptions[2].value;
     </span>
     <br>
     <TimeSelector/>
+    <div class="flex justify-around align-center items-center">
+      <div class="flex justify-center items-center">
+        <input name="defaultProposals" type="checkbox" checked={defaultProposals} class="checkbox" />
+
+        <span>&nbsp;{ t('quick.addDefaultProposals') }</span>
+        <DefaultProposalInfo />
+      </div>
+    </div>
+    <br>
     <div class="text-center">
       <button id="submit" type="submit" class="btn btn-primary">
         { t('create') }
@@ -51,7 +74,10 @@ const weighting = weightOptions[2].value;
     findValues(inputs: NodeListOf<any>) {
       Array.from(inputs).forEach((input) => {
         if(input.name) {
-          this.form[input.name] = input.value
+          if (input.type === "checkbox")
+            this.form[input.name] = input.checked
+          else
+            this.form[input.name] = input.value
         }
       })
     }
@@ -61,10 +87,10 @@ const weighting = weightOptions[2].value;
         const inputs = this.querySelectorAll('input')
         const textareas = this.querySelectorAll('textarea')
         const selectors = this.querySelectorAll('select')
-  
+        const proposals = JSON.parse(this.dataset.proposals)
         const button = Array.from(buttons).find((btn) => btn.id === 'submit')
 
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async() => {
           this.form = {}
           this.findValues(inputs)
           this.findValues(textareas)
@@ -75,18 +101,13 @@ const weighting = weightOptions[2].value;
           }
           else {
             this.form['strategy'] = 1
-            this.form['proposals'] = []
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = (() => {
-              if (xhr.readyState === 4) {
-                const id = JSON.parse(xhr.response)['id']
-                window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${id}/proposals`
-              }
-            })
-            xhr.open("POST", '/quick/process', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(this.form))
-
+            this.form['proposals'] = this.form.defaultProposals ? proposals : [] 
+            const res = await fetch(`${location.origin}/quick/process`, {
+              method: "POST",
+              body: JSON.stringify(this.form)
+            });
+            const json = await res.json();
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
           }
 
         })

@@ -13,7 +13,11 @@
 	"dependencies": {
 		"@astrojs/tailwind": "^2.1.3",
 		"@fastify/leveldb": "^5.0.1",
+		"@fastify/static": "^6.6.0",
+		"@fastify/websocket": "^7.1.1",
 		"@matthewp/astro-fastify": "^2.0.3",
+		"@types/node": "^18.11.18",
+		"@types/ws": "^8.5.3",
 		"astro": "^1.7.2",
 		"astro-i18next": "1.0.0-beta.14",
 		"astro-icon": "^0.8.0",

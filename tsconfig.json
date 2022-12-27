@@ -13,6 +13,6 @@
     },
   },
   "include": ["src/**/*.astro"],
-  "exclude": ["dist"]
-
+  "exclude": ["dist"],
+  "types": [ "node" ],
 }

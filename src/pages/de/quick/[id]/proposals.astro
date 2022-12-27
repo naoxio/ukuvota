@@ -1,6 +1,8 @@
 ---
-import { changeLanguage } from "i18next";
+import { Icon } from "astro-icon";
+import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
+import Countdown from "molecules:Countdown";
 
 changeLanguage("de");
 
@@ -8,22 +10,54 @@ const processId = Astro.params.id;
 const { request, url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
-console.log(data);
+const quick = JSON.parse(data.process);
 ---
 
 <BaseLayout>
+    <div class="mt-5">
+        <div class="flex flex-col px-4 pb-3">
+            <h1>{ quick.title }</h1>
+            <p>{ quick.description }</p>
+            <div id="infoCard" class="flex flex-wrap items-center justify-center">
+                <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
+                <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
+                <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
+            </div>
+        </div>
+        <div class="flex flex-col justify-between items-center text-left">
+           { quick.proposals.map((proposal) => (
+                <>
+                    <div class="w-full">
 
+                        { proposal.edit ?
+                            <div class="flex flex-col w-full mr-6">
+                                <input value={ proposal.title } placeholder="Proposal Title" class="input my-2 w-full" type="text"/>
+                                <input value={ proposal.description } placeholder="Description" class="input my-2" type="text"/>
+                            </div> :
+                            <div>
+                                <h3>{ proposal.title }</h3>
+                                <p>{ proposal.description }</p>
+                            </div>
+                        }
+                    </div>
+
+                </>
+
+            ))}
+        </div>
+        <div class="text-center">
+            <button class="btn btn-circle p-2" >
+                <Icon name="carbon:add"/>
+            </button>
+        </div>
+    </div>
 </BaseLayout>
 
 <script>
-
-/*const id = window.location.pathname.split('/quick/')[1].split('/')[0]
-const xhr = new XMLHttpRequest();
-xhr.onreadystatechange = (() => {
-    if (xhr.readyState === 4) {
-        console.log(xhr.response)
-    }
-})
-xhr.open("Get", `/quick/process/${id}`, true);
-xhr.setRequestHeader('Content-Type', 'application/json');*/
+    const card = document.getElementById('infoCard')
+    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
+    const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
+    const data = await res.json();
+    const quick = JSON.parse(data.process)
+    console.log(quick.proposals)
 </script>

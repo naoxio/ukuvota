@@ -11,7 +11,8 @@ interface Proposal {
   description: string,
   createdAt: number
 }
-const getTimestamp = (minutes, hours, days) => {
+const getTimestamp = (minutes: string, hours: string, days: string) => {
+  console.log(minutes, hours, days)
   let rtn = 0
   rtn += parseInt(minutes) * 60 * 1000
   rtn += parseInt(hours) * 3600 * 1000
@@ -34,20 +35,20 @@ const defineRoutes = (fastify) => {
   
 
 
-  fastify.get('/quick/process/:id', async(req) => {
+  fastify.get('/quick/process/:id', async(req: any) => {
     const process = await fastify.level.db.get(req.params.id)
     console.log(process)
     return { status: 'ok', process}
   });
 
-  fastify.post('/quick/process', async(req) => {
-    const body = req.body
+  fastify.post('/quick/process', async(req: any) => {
+    const body = JSON.parse(req.body)
     const uuid = crypto.randomUUID()
-    const proposalEnd = +new Date() +getTimestamp(body.proposalMinutes, body.proposalHours, body.proposalDays)
+    const proposalEnd = +new Date() + getTimestamp(body.proposalMinutes, body.proposalHours, body.proposalDays)
     const votingEnd = proposalEnd + getTimestamp(body.votingMinutes, body.votingHours, body.votingDays)
     let proposals = [] as Proposal[]
     if (body.proposals) {
-      for (let i = 0; i < body.proposals; i++) {
+      for (let i = 0; i < body.proposals.length; i++) {
         const proposalId = crypto.randomUUID()
         const proposal = body.proposals[i]
         proposals.push({

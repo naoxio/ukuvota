@@ -14,19 +14,19 @@ const { timeleft, label, fromtime } = Astro.props;
 <quick-counter data-timeleft={timeleft} data-fromtime={fromtime} class="flex flex-col justify-center items-center w-60">
     <h3>{ label }</h3>
     <div class="flex justify-center items-center">
-        <div id="days">
+        <div id="days" style="display: none;">
             <span name="val"></span>
             { t('time.days') }&nbsp;
         </div>
-        <div id="hours">
+        <div id="hours" style="display: none;">
             <span name="val"></span>
             { t('time.hours') }&nbsp;
         </div>
-        <span id="minutes">
+        <span id="minutes" style="display: none;">
             <span name="val"></span>
             { t('time.minutes') }&nbsp;
         </span>
-        <span id="seconds">
+        <span id="seconds" style="display: none;">
             <span name="val"></span>
             { t('time.seconds') }&nbsp;
         </span>
@@ -42,7 +42,6 @@ const { timeleft, label, fromtime } = Astro.props;
 
         constructor() {
             super()
-            console.log(this)
             const el_days = this.querySelector('#days')
             const el_hours = this.querySelector('#hours')
             const el_minutes = this.querySelector('#minutes')
@@ -53,7 +52,6 @@ const { timeleft, label, fromtime } = Astro.props;
             this.timeleft = +new Date(this.dataset.timeleft);
             let updateTime = this.fromtime ? false : true
             const countdown = () => {
-                console.log('fromtime', this.fromtime)
                 let timestamp = this.fromtime ? this.fromtime : +new Date()
                 let time = (timestamp - this.timeleft) / 1000
                 time = Math.abs(time)
