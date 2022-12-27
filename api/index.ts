@@ -1,9 +1,8 @@
 import crypto from 'crypto'
 import path from 'path'
-import url from 'url'
+import desm from 'desm'
 
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = desm(import.meta.url)
 
 interface Proposal {
   id: string,
@@ -29,12 +28,11 @@ const defineRoutes = (fastify) => {
     { name: 'db' }
   )
 
-
   fastify.register(import('@fastify/static'), {
-    root: path.join(__dirname, 'public'),
-    prefix: '/public/', // optional: default '/'
-  })
-  
+    root: path.join(__dirname, '../../public'),
+    prefix: '/public',
+    decorateReply: false 
+  });
 
 
   fastify.get('/quick/process/:id', async(req: any) => {

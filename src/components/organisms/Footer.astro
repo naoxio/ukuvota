@@ -2,6 +2,7 @@
 import { t } from "i18next"
 import { localizePath } from "astro-i18next";
 
+
 const menu = [
     {
         href: 'mailto:ukuvota@proton.me',
@@ -36,6 +37,7 @@ const menu = [
     },
 ]
 
+
 ---
 
 
@@ -66,7 +68,7 @@ const menu = [
         {menu.map((item) => (
         <>
             <a href={item.href} target="_blank">
-                <img v-if="item.icon" width="32" src={`/icons/${item.icon}.png`} />
+                <img width="32" src={`/public/icons/${item.icon}.png`} />
             </a>
         </>
         ))}

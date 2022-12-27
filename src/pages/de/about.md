@@ -41,7 +41,7 @@ Allerdings sind die meisten Entscheidungen nicht binär; es gibt fast immer mehr
 
 Hence the first feature of cooperative voting is to include the option to 'find other options'. Providing a way for people to vote again on different options essentially allows people to vote on _every_ option, including options not yet conceived; this ensures that there is always an acceptable option for every participant.
 
-![ein Diagramm, das die umfassende Natur der Option "Finden andere Optionen" darstellt](/manual/a_findOtherOptions.svg)
+![ein Diagramm, das die umfassende Natur der Option "Finden andere Optionen" darstellt](/static/manual/a_findOtherOptions.svg)
 
 ## Ausdruck: das ganze Bild erhalten
 
@@ -53,7 +53,7 @@ Obwohl kein Wahlsystem frei von der Möglichkeit taktischer Abstimmung in Anwese
 
 Folglich ist das zweite Merkmal des kooperativen Abstimmens, dass Teilnehmer jede Option aus einem ausdrucksstarken Bereich bewerten können. Ein Bereich von weniger als 10 Punkten wird für die kognitive Leichtigkeit empfohlen, verbal oder bildliche Indikatoren können verwendet werden, um zu verdeutlichen, was die numerischen Werte bedeuten.
 
-![ein grafischer Vergleich der Pluralitäts-, Rang- und Bewertungsmethoden](/manual/b_scoreEach.svg)
+![ein grafischer Vergleich der Pluralitäts-, Rang- und Bewertungsmethoden](/static/manual/b_scoreEach.svg)
 
 ## Kombination: akzeptable, erreichbare Ergebnisse
 
@@ -65,7 +65,7 @@ Allerdings ist es problematisch, negative Bewertungen als "unendlich" wichtiger 
 
 Daher ist das dritte Merkmal des kooperativen Abstimmens, negative Bewertungen angemessen zu multiplizieren. Dieser Faktor stellt einen Wechselkurs zwischen positiver und negativer Meinung dar, der zwischen Gruppen wahrscheinlich unterschiedlich ist. Er sollte zumindest größer als 1 sein, um die Akzeptanz gegenüber der Präferenz zu schätzen und kleiner als die Anzahl der Gruppenmitglieder, um positive Bewertungen sinnvoll zu machen: Ein Faktor von zwei könnte ein geeigneter Ausgangspunkt sein.
 
-![eine Skala mit einem traurigen Emoji, das schwerer wiegt als einem glücklichen](/manual/c_weightingFactor.svg)
+![eine Skala mit einem traurigen Emoji, das schwerer wiegt als einem glücklichen](/static/manual/c_weightingFactor.svg)
 
 ## Ein Beispiel: zurück zum Fahrradschuppen
 

@@ -41,7 +41,7 @@ However most decisions are not binary; there is almost always more than one alte
 
 Hence the first feature of cooperative voting is to include the option to 'find other options'. Providing a way for people to vote again on different options essentially allows people to vote on _every_ option, including options not yet conceived; this ensures that there is always an acceptable option for every participant.
 
-![a diagram representing the expansive nature of the "find other options" option](/manual/a_findOtherOptions.svg)
+![a diagram representing the expansive nature of the "find other options" option](/static/manual/a_findOtherOptions.svg)
 
 ## Expression: getting the whole picture
 
@@ -53,7 +53,7 @@ While no voting system is free from the possibility of tactical voting in the pr
 
 Hence the second feature of cooperative voting is to allow participants to score each option from an expressive range. A range of less than 10 points is recommended for cognitive ease, verbal or pictorial indicators can be used to clarify what is meant by the numerical values.
 
-![a graphical comparison of plurality, rank and score methods](/manual/b_scoreEach.svg)
+![a graphical comparison of plurality, rank and score methods](/static/manual/b_scoreEach.svg)
 
 ## Combination: acceptable, achievable outcomes
 
@@ -65,7 +65,7 @@ However, considering negative scores to be 'infinitely' more important than posi
 
 Hence the third feature of cooperative voting is to appropriately multiply negative scores. This factor represents an exchange rate between positive and negative opinion which is likely to differ between groups. It should at least be larger than 1 to value acceptance over preference and less than the number of group members to make positive scores meaningful: a factor of two may be an appropriate starting point.
 
-![a scale with a sad emoji weighing more than a happy one](/manual/c_weightingFactor.svg)
+![a scale with a sad emoji weighing more than a happy one](/static/manual/c_weightingFactor.svg)
 
 ## An example: back to the bike-shed
 
