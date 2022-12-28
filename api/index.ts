@@ -33,19 +33,38 @@ const defineRoutes = (fastify) => {
     prefix: '/public',
     decorateReply: false 
   });
+  fastify.get('/quick/process/:processId/proposal', async(req: any)  => {
+    const processId = req.params.processId
+    const proposalId = crypto.randomUUID()
+    const process = JSON.parse(await fastify.level.db.get(processId))
+    const proposal = {
+      id: proposalId,
+      title: '',
+      description: '',
+      createdAt: +new Date(),
+    }
+    process.proposals.push(proposal)
+    await fastify.level.db.put(processId, JSON.stringify(process))
+    return { status: 'ok', proposal}
+  })
+  fastify.get('/quick/process/:processId/proposal/:proposalId/delete', async(req: any) => {
+    const processId = req.params.processId
+    const process = JSON.parse(await fastify.level.db.get(processId))
+    process.proposals = process.proposals.filter(proposal => proposal.id !== req.params.proposalId)
+    await fastify.level.db.put(processId, JSON.stringify(process))
+    return { status: 'ok' }
+  })
   fastify.post('/quick/process/:processId/proposal/:proposalId', async(req: any) => {
     const processId = req.params.processId
     const body = JSON.parse(req.body)
     const process = JSON.parse(await fastify.level.db.get(processId))
-    const proposalIndex = process.proposals.findIndex((proposal) => proposal.id = req.params.proposalId)
+    const proposalIndex = process.proposals.findIndex((proposal) => proposal.id === req.params.proposalId)
     if (proposalIndex === -1) return { status: '-1'}
 
     const proposal = process.proposals[proposalIndex]
     proposal.title = body.title
     proposal.description = body.description
-    console.log(proposal, process)
     await fastify.level.db.put(processId, JSON.stringify(process))
-
     return { status: 'ok' }
   });
 

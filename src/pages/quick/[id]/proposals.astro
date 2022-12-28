@@ -25,32 +25,35 @@ const quick = JSON.parse(data.process);
             </div>
         </div>
         <proposal-list>
-            <div class="proposal">
-                <div class="view flex justify-between items-center">
-                    <div class="flex flex-col">
-        
+            <div class="proposals">
+                <div class="proposal">
+                    <div class="view flex justify-between items-center">
+                        <div class="flex flex-col">
+            
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 btn-md">
+                            <Icon name="carbon:edit"/>
+                        </button>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 btn-md">
-                        <Icon name="carbon:edit"/>
-                    </button>
-                </div>
-                <div class="edit flex justify-between items-center" style="display: none;">
-                    <div class="content flex flex-col w-full">
-                        <input type="text" class="input input-sm my-2"/>
-                        <input type="text" class="input input-sm my-2"/>
+                    <div class="edit flex justify-between items-center" style="display: none;">
+                        <div class="content flex flex-col w-full">
+                            <input type="text" class="input input-sm my-2"/>
+                            <input type="text" class="input input-sm my-2"/>
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+                            <Icon name="carbon:save"/>
+                        </button>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
-                        <Icon name="carbon:save"/>
-                    </button>
                 </div>
+            </div>
+            <div class="text-center mt-2">
+                <button id="add-proposal" class="btn btn-circle p-2" >
+                    <Icon name="carbon:add"/>
+                </button>
             </div>
         </proposal-list>
          
-        <div class="text-center">
-            <button class="btn btn-circle p-2" >
-                <Icon name="carbon:add"/>
-            </button>
-        </div>
+     
     </div>
 </BaseLayout>
 
@@ -59,9 +62,9 @@ const quick = JSON.parse(data.process);
     const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
-
     class ProposalList extends HTMLElement {
         proposal_html = null
+        proposals = null
         updateProposalView(view, title, description) {
             const view_content = view.querySelector('div')
                 view_content.innerHTML = `
@@ -70,35 +73,39 @@ const quick = JSON.parse(data.process);
                 `
         }
         
-        constructor() {
-            super()
-            this.proposal_html = this.getElementsByClassName('proposal')[0]
-            this.innerHTML = ""
-            quick.proposals.forEach(data => {
-                const proposal = this.proposal_html.cloneNode(true)
-                const view = proposal.querySelector('div.view')
-                const edit = proposal.querySelector('div.edit')
-                this.updateProposalView(view, data.title, data.description)
-                
-                const edit_button = view.querySelector('button')
-                edit_button.addEventListener('click', () => {
-                    view.style.display = 'none'
-                    edit.style.display = 'flex'
+        addProposal(data, editing: boolean = false) {
+            const proposal = this.proposal_html.cloneNode(true)
+            const view = proposal.querySelector('div.view')
+            const edit = proposal.querySelector('div.edit')
+            this.updateProposalView(view, data.title, data.description)
+            if (editing) {
+                view.style.display = 'none'
+                edit.style.display = 'flex'
+            }
+            const edit_button = view.querySelector('button')
+            edit_button.addEventListener('click', () => {
+                view.style.display = 'none'
+                edit.style.display = 'flex'
 
-                })
+            })
 
-                const edit_content = edit.querySelector('div')
-                const inputs = edit_content.querySelectorAll('input')
-                inputs[0].value = data.title
-                inputs[1].value = data.description
+            const edit_content = edit.querySelector('div')
+            const inputs = edit_content.querySelectorAll('input')
+            inputs[0].value = data.title
+            inputs[1].value = data.description
 
-                const save_button = edit.querySelector('button')
-                save_button.addEventListener('click', async() => {
-                    view.style.display = 'flex'
-                    edit.style.display = 'none'
-                    console.log(inputs[0].value)
-                    console.log(inputs[1].value)
-                    const proposalId = data.id
+            const save_button = edit.querySelector('button')
+            save_button.addEventListener('click', async() => {
+                view.style.display = 'flex'
+                edit.style.display = 'none'
+                console.log(inputs[0].value)
+                console.log(inputs[1].value)
+                const proposalId = data.id
+                console.log(data.id)
+                if (inputs[0].value === '' && inputs[1].value === '') {
+                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
+                    const data = await res.json();                }
+                else {
                     const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}`, {
                         method: "POST",
                         body: JSON.stringify({
@@ -108,12 +115,29 @@ const quick = JSON.parse(data.process);
                     });
                     const json = await res.json();
                     console.log(json)
-                    this.updateProposalView(view, inputs[0].value, inputs[1].value)
-
-
-                })
-                this.appendChild(proposal)
+                }
+                this.updateProposalView(view, inputs[0].value, inputs[1].value)
+            })
+            this.proposals.appendChild(proposal)
+        }
+        constructor() {
+            super()
+            this.proposals = this.querySelector('div.proposals')
+            this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true)
+            this.proposals.innerHTML = ""
+            quick.proposals.forEach(data => {
+                this.addProposal(data)
             });
+
+            const addButton = this.querySelector('button#add-proposal')
+            console.log(addButton)
+            addButton.addEventListener('click', async() => {
+                const res = await fetch(`${location.origin}/quick/process/${processId}/proposal`, { method: "GET" });
+                const data = await res.json();
+                this.addProposal(data.proposal, true)
+                
+            })
+
 
         }
     }
