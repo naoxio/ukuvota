@@ -97,6 +97,7 @@ const defineRoutes = (fastify) => {
       proposalEnd: new Date(proposalEnd).toISOString(),
       votingEnd: new Date(votingEnd).toISOString(),
       strategy: body.strategy,
+      weighting: body.weighting,
       proposals,
     }
     await fastify.level.db.put(uuid, JSON.stringify(process))

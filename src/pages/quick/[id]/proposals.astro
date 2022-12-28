@@ -3,6 +3,7 @@ import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
 import Countdown from "molecules:Countdown";
+import InfoCard from "organisms:QuickInfoCard";
 import { resolve } from "path";
 
 changeLanguage("en");
@@ -17,47 +18,41 @@ const quick = JSON.parse(data.process);
 ---
 
 <BaseLayout>
-    <div class="mt-5">
-        <div class="flex flex-col px-4 pb-3">
-            <h1>{ quick.title }</h1>
-            <p>{ quick.description }</p>
-            <div id="infoCard" class="flex flex-wrap items-center justify-center">
-                <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
-                <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-                <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
-            </div>
-        </div>
-        <proposal-list>
-            <div class="proposals">
-                <div class="proposal">
-                    <div class="view flex justify-between items-center">
-                        <div class="flex flex-col">
-            
-                        </div>
-                        <button class="btn btn-circle btn-ghost p-2 btn-md">
-                            <Icon name="carbon:edit"/>
-                        </button>
+    <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+        <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
+        <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
+        <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
+    </InfoCard>
+    <proposal-list>
+        <div class="proposals">
+            <div class="proposal">
+                <div class="view flex justify-between items-center">
+                    <div class="flex flex-col">
+        
                     </div>
-                    <div class="edit flex justify-between items-center" style="display: none;">
-                        <div class="content flex flex-col w-full">
-                            <input type="text" class="input input-bordered input-sm my-2"/>
-                            <input type="text" class="input input-bordered input-sm my-2"/>
-                        </div>
-                        <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
-                            <Icon name="carbon:save"/>
-                        </button>
+                    <button class="btn btn-circle btn-ghost p-2 btn-md">
+                        <Icon name="carbon:edit"/>
+                    </button>
+                </div>
+                <div class="edit flex justify-between items-center" style="display: none;">
+                    <div class="content flex flex-col w-full">
+                        <input type="text" class="input input-bordered input-sm my-2"/>
+                        <input type="text" class="input input-bordered input-sm my-2"/>
                     </div>
+                    <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+                        <Icon name="carbon:save"/>
+                    </button>
                 </div>
             </div>
-            <div class="text-center mt-2">
-                <button id="add-proposal" class="btn btn-circle p-2" >
-                    <Icon name="carbon:add"/>
-                </button>
-            </div>
-        </proposal-list>
+        </div>
+        <div class="text-center mt-2">
+            <button id="add-proposal" class="btn btn-circle p-2" >
+                <Icon name="carbon:add"/>
+            </button>
+        </div>
+    </proposal-list>
          
      
-    </div>
 </BaseLayout>
 
 <script>
@@ -148,18 +143,14 @@ const quick = JSON.parse(data.process);
     customElements.define('proposal-list', ProposalList)
 
 
-const checkTime = () => {
-    const time =  +new Date(quick.proposalEnd) - +new Date()
-    if (time <= 0)
-        window.location.href = `${window.location.origin}/quick/${processId}/voting`
-    else
-        setTimeout(checkTime, 1000)
-}
-checkTime()
-
-
-console.log(window.location)
-
+    const checkTime = () => {
+        const time =  +new Date(quick.proposalEnd) - +new Date()
+        if (time <= 0)
+            window.location.href = `${window.location.origin}/quick/${processId}/voting`
+        else
+            setTimeout(checkTime, 1000)
+    }
+    checkTime()
 
         
 </script>

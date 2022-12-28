@@ -1,26 +1,63 @@
 ---
-import { changeLanguage } from "i18next";
+import { t, changeLanguage } from "i18next";
+import Countdown from "molecules:Countdown";
 import BaseLayout from "templates:BaseLayout";
+import InfoCard from "organisms:QuickInfoCard";
 
 changeLanguage("en");
+
+const emojis = await Astro.glob('../../../assets/emojis/*.svg');
 
 const processId = Astro.params.id;
 const { url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
-
+console.log(quick)
 ---
 
 <BaseLayout>
-    <div class="mt-5">
-        <div class="flex flex-col px-4 pb-3">
-            <h1>{ quick.title }</h1>
-            <p>{ quick.description }</p>
-            <div id="infoCard" class="flex flex-wrap items-center justify-center">
-                <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-                <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
+    <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+        <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
+  
+    </InfoCard>
+    <br/>
+    <voting-list>
+        <div class="proposal">
+            <h4>Title</h4>
+            <p>Description</p>
+            <div class="flex">
+                <img width="64" src={emojis[0].default} />
+                <img width="64" src={emojis[1].default} />
+                <img width="64" src={emojis[2].default} />
+                <img width="64" src={emojis[3].default} />
+                <img width="64" src={emojis[4].default} />
+                <img width="64" src={emojis[5].default} />
+                <img width="64" src={emojis[6].default} />
             </div>
         </div>
-    </div>
+    </voting-list>
 </BaseLayout>
+
+<script>
+    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
+    const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
+    const data = await res.json();
+    const quick = JSON.parse(data.process)
+    class VotingList extends HTMLElement {
+        constructor() {
+            super()
+        }
+    }
+    customElements.define('voting-list', VotingList)
+
+    const checkTime = () => {
+        const time =  +new Date(quick.votingEnd) - +new Date()
+        /*if (time <= 0)
+
+            window.location.href = `${window.location.origin}/quick/${processId}/results`
+        else
+            setTimeout(checkTime, 1000)*/
+    }
+    checkTime()
+</script>
