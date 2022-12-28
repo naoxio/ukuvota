@@ -26,16 +26,22 @@ const quick = JSON.parse(data.process);
         </div>
         <proposal-list>
             <div class="proposal">
-                <div class="flex justify-between items-center">
+                <div class="view flex justify-between items-center">
+                    <div class="flex flex-col">
+        
+                    </div>
+                    <button class="btn btn-circle btn-ghost p-2 btn-md">
+                        <Icon name="carbon:edit"/>
+                    </button>
+                </div>
+                <div class="edit flex justify-between items-center" style="display: none;">
                     <div class="content flex flex-col">
-                        <h3></h3>
-                        <p></p>
+                        <input type="text" class="input input-sm my-2"/>
+                        <input type="text" class="input input-sm my-2"/>
                     </div>
-                    <div>
-                        <button class="btn btn-circle btn-ghost p-2 btn-lm">
-                            <Icon name="carbon:edit"/>
-                        </button>
-                    </div>
+                    <button class="btn btn-circle btn-ghost p-2 btn-md">
+                        <Icon name="carbon:save"/>
+                    </button>
                 </div>
             </div>
         </proposal-list>
@@ -61,15 +67,39 @@ const quick = JSON.parse(data.process);
         constructor() {
             super()
             this.proposal_html = this.getElementsByClassName('proposal')[0]
+            console.log(this.proposal_html)
             this.innerHTML = ""
             quick.proposals.forEach(data => {
-                let proposal = this.proposal_html.cloneNode(true)
-                let content = proposal.getElementsByClassName('content')[0]
-                let title = content.querySelector('h3')
-                title.innerHTML = data.title
-                let description = content.querySelector('p')
-                description.innerHTML = data.description
-                this.innerHTML += proposal.innerHTML
+                const proposal = this.proposal_html.cloneNode(true)
+                const view = proposal.querySelector('div.view')
+                const edit = proposal.querySelector('div.edit')
+                const view_content = view.querySelector('div')
+                view_content.innerHTML = `
+                    <h3>${data.title}</h3>
+                    <p>${data.description}</p>
+                `
+                
+                const button1 = view.querySelector('button')
+                button1.addEventListener('click', () => {
+                    console.log('hi ' + data.title)
+                    view.style.display = 'none'
+                    edit.style.display = 'flex'
+
+                })
+
+                const edit_content = edit.querySelector('div')
+                const inputs = edit_content.querySelectorAll('input')
+                inputs[0].value = data.title
+                inputs[1].value = data.description
+
+                const button2 = edit.querySelector('button')
+                button2.addEventListener('click', () => {
+                    console.log('hi ' + data.title)
+                    view.style.display = 'flex'
+                    edit.style.display = 'none'
+
+                })
+                this.appendChild(proposal)
             });
 
         }
