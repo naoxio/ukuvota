@@ -40,22 +40,40 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
             <h2>
               { t('quick.proposalTime') }
             </h2>
-            { t('time.minutes') }
+            <div class="flex items-center">
+                <p>{ t('time.minutes') }: &nbsp;</p>
+                <label for="proposalMinuets">{proposalTimeLeft.minutes}</label>
+            </div>
             <input name="proposalMinutes" type="range" min="1" max="60" value={proposalTimeLeft.minutes} class="range" />
-            { t('time.hours') }
+            <div class="flex items-center">
+                <p>{ t('time.hours') }: &nbsp;</p>
+                <label for="proposalHours">{proposalTimeLeft.hours}</label>
+            </div>
             <input name="proposalHours" type="range" min="0" max="24" value={proposalTimeLeft.hours} class="range" />
-            { t('time.days') }
+            <div class="flex items-center">
+                <p>{ t('time.days') }: &nbsp;</p>
+                <label for="proposalDays">{proposalTimeLeft.days}</label>
+            </div>
             <input name="proposalDays" type="range" min="0" max="90" value={proposalTimeLeft.days} class="range" />
           </div>
           <div class="p-4 m-4">
             <h2>
                 { t('quick.votingTime') }
             </h2>
-            { t('time.minutes') }
+            <div class="flex items-center">
+                <p>{ t('time.minutes') }: &nbsp;</p>
+                <label for="votingMinutes">{votingTimeLeft.minutes}</label>
+            </div>
             <input name="votingMinutes" type="range" min="1" max="60" value={votingTimeLeft.minutes} class="range" />
-            { t('time.hours') }
+            <div class="flex items-center">
+                <p>{ t('time.hours') }: &nbsp;</p>
+                <label for="votingHours">{votingTimeLeft.hours}</label>
+            </div>
             <input name="votingHours" type="range" min="0" max="24" value={votingTimeLeft.hours} class="range" />
-            { t('time.days') }
+            <div class="flex items-center">
+                <p>{ t('time.days') }: &nbsp;</p>
+                <label for="votingDays">{votingTimeLeft.days}</label>
+            </div>
             <input name="votingDays" type="range" min="0" max="90" value={votingTimeLeft.days} class="range" />
           </div>
     </div>
@@ -63,7 +81,7 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
 <script>
   
     class TimeSelector extends HTMLElement {
-        hideOrShow(className, val) {
+        hideOrShow(className: string, val: boolean) {
             const list = this.getElementsByClassName(className)
             for (let i = 0; i < list.length; i++) {
                 const slider = list[i]
@@ -79,6 +97,15 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
             super()
             let message = Boolean(this.dataset.message);
             const button = this.querySelector('button')
+            const inputs = this.querySelectorAll('input')
+            const labels = this.querySelectorAll('label')
+            for (let i = 0; i < inputs.length; i++) {
+                const input = inputs[i]
+                const label = labels[i]
+                input.addEventListener('input', () => {
+                    label.innerHTML = input.value
+                })
+            }
 
             this.updateDOM(message)
             button.addEventListener('click', () => {

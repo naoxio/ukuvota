@@ -12,7 +12,6 @@ const { url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
-console.log(quick)
 ---
 <style>
     .gray {
@@ -71,7 +70,7 @@ console.log(quick)
             proposal.querySelector('h3').innerHTML = data.title
             proposal.querySelector('p').innerHTML = data.description
             const buttons = proposal.querySelectorAll('button')
-            buttons.forEach(button => {
+            buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', () => {
                     const icon = button.querySelector('svg')
                     buttons.forEach(btn => {
@@ -89,7 +88,7 @@ console.log(quick)
             super()
             this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
             this.innerHTML = ""
-            quick.proposals.forEach(data => {
+            quick.proposals.forEach((data: any) => {
                 this.addProposal(data)
             });
         }
