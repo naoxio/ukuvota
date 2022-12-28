@@ -101,7 +101,7 @@ const proposals = [
           }
           else {
             this.form['strategy'] = 1
-            this.form['proposals'] = this.form.defaultProposals ? proposals : [] 
+            this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
             const res = await fetch(`${location.origin}/quick/process`, {
               method: "POST",
               body: JSON.stringify(this.form)

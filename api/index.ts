@@ -33,11 +33,24 @@ const defineRoutes = (fastify) => {
     prefix: '/public',
     decorateReply: false 
   });
+  fastify.post('/quick/process/:processId/proposal/:proposalId', async(req: any) => {
+    const processId = req.params.processId
+    const body = JSON.parse(req.body)
+    const process = JSON.parse(await fastify.level.db.get(processId))
+    const proposalIndex = process.proposals.findIndex((proposal) => proposal.id = req.params.proposalId)
+    if (proposalIndex === -1) return { status: '-1'}
 
+    const proposal = process.proposals[proposalIndex]
+    proposal.title = body.title
+    proposal.description = body.description
+    console.log(proposal, process)
+    await fastify.level.db.put(processId, JSON.stringify(process))
+
+    return { status: 'ok' }
+  });
 
   fastify.get('/quick/process/:id', async(req: any) => {
     const process = await fastify.level.db.get(req.params.id)
-    console.log(process)
     return { status: 'ok', process}
   });
 

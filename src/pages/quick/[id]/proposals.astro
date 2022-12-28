@@ -35,11 +35,11 @@ const quick = JSON.parse(data.process);
                     </button>
                 </div>
                 <div class="edit flex justify-between items-center" style="display: none;">
-                    <div class="content flex flex-col">
+                    <div class="content flex flex-col w-full">
                         <input type="text" class="input input-sm my-2"/>
                         <input type="text" class="input input-sm my-2"/>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 btn-md">
+                    <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
                         <Icon name="carbon:save"/>
                     </button>
                 </div>
@@ -59,29 +59,29 @@ const quick = JSON.parse(data.process);
     const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
-    console.log(quick.proposals)
-
 
     class ProposalList extends HTMLElement {
         proposal_html = null
+        updateProposalView(view, title, description) {
+            const view_content = view.querySelector('div')
+                view_content.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                `
+        }
+        
         constructor() {
             super()
             this.proposal_html = this.getElementsByClassName('proposal')[0]
-            console.log(this.proposal_html)
             this.innerHTML = ""
             quick.proposals.forEach(data => {
                 const proposal = this.proposal_html.cloneNode(true)
                 const view = proposal.querySelector('div.view')
                 const edit = proposal.querySelector('div.edit')
-                const view_content = view.querySelector('div')
-                view_content.innerHTML = `
-                    <h3>${data.title}</h3>
-                    <p>${data.description}</p>
-                `
+                this.updateProposalView(view, data.title, data.description)
                 
-                const button1 = view.querySelector('button')
-                button1.addEventListener('click', () => {
-                    console.log('hi ' + data.title)
+                const edit_button = view.querySelector('button')
+                edit_button.addEventListener('click', () => {
                     view.style.display = 'none'
                     edit.style.display = 'flex'
 
@@ -92,11 +92,24 @@ const quick = JSON.parse(data.process);
                 inputs[0].value = data.title
                 inputs[1].value = data.description
 
-                const button2 = edit.querySelector('button')
-                button2.addEventListener('click', () => {
-                    console.log('hi ' + data.title)
+                const save_button = edit.querySelector('button')
+                save_button.addEventListener('click', async() => {
                     view.style.display = 'flex'
                     edit.style.display = 'none'
+                    console.log(inputs[0].value)
+                    console.log(inputs[1].value)
+                    const proposalId = data.id
+                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}`, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            title: inputs[0].value,
+                            description: inputs[1].value
+                        })
+                    });
+                    const json = await res.json();
+                    console.log(json)
+                    this.updateProposalView(view, inputs[0].value, inputs[1].value)
+
 
                 })
                 this.appendChild(proposal)
