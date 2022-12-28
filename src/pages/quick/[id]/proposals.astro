@@ -3,14 +3,17 @@ import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
 import Countdown from "molecules:Countdown";
+import { resolve } from "path";
 
 changeLanguage("en");
 
 const processId = Astro.params.id;
-const { request, url } = Astro;
+const { url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
+
+
 ---
 
 <BaseLayout>
@@ -37,8 +40,8 @@ const quick = JSON.parse(data.process);
                     </div>
                     <div class="edit flex justify-between items-center" style="display: none;">
                         <div class="content flex flex-col w-full">
-                            <input type="text" class="input input-sm my-2"/>
-                            <input type="text" class="input input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
                         </div>
                         <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
                             <Icon name="carbon:save"/>
@@ -62,6 +65,7 @@ const quick = JSON.parse(data.process);
     const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
+
     class ProposalList extends HTMLElement {
         proposal_html = null
         proposals = null
@@ -142,6 +146,20 @@ const quick = JSON.parse(data.process);
         }
     }
     customElements.define('proposal-list', ProposalList)
+
+
+const checkTime = () => {
+    const time =  +new Date(quick.proposalEnd) - +new Date()
+    if (time <= 0)
+        window.location.href = `${window.location.origin}/quick/${processId}/voting`
+    else
+        setTimeout(checkTime, 1000)
+}
+checkTime()
+
+
+console.log(window.location)
+
 
         
 </script>

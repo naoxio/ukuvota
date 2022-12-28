@@ -57,7 +57,8 @@ const { timeleft, label, fromtime } = Astro.props;
             let updateTime = this.fromtime ? false : true
             const countdown = () => {
                 let timestamp = this.fromtime ? this.fromtime : +new Date()
-                let time = (timestamp - this.timeleft) / 1000
+                let time = (this.timeleft - timestamp) / 1000
+                console.log(time)
                 time = Math.abs(time)
                 let seconds = time % 60
                 time = (time - seconds) / 60

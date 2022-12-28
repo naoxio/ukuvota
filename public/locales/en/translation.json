@@ -76,6 +76,7 @@
     }
   },
   "time": {
+    "seconds": "Seconds",
     "minutes": "Minutes",
     "hours": "Hours",
     "days": "Days"
