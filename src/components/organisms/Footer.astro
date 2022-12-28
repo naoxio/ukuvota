@@ -1,8 +1,12 @@
 ---
 import { t } from "i18next"
 import { localizePath } from "astro-i18next";
+import { getAssets } from "composables/getAssets"
 
-
+const icons = getAssets(await Astro.glob('../../assets/icons/*.png'));
+const getIcon = (name: string) => {
+    return icons.find(icon => icon.name === name).src
+}
 const menu = [
     {
         href: 'mailto:ukuvota@proton.me',
@@ -68,7 +72,7 @@ const menu = [
         {menu.map((item) => (
         <>
             <a href={item.href} target="_blank">
-                <img width="32" src={`/public/icons/${item.icon}.png`} />
+                <img width="32" src={ getIcon(item.icon) } />
             </a>
         </>
         ))}
