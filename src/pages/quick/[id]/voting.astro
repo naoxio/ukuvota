@@ -1,6 +1,26 @@
 ---
 import { changeLanguage } from "i18next";
+import BaseLayout from "templates:BaseLayout";
 
 changeLanguage("en");
+
+const processId = Astro.params.id;
+const { url } = Astro;
+const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
+const data = await res.json();
+const quick = JSON.parse(data.process);
+
 ---
 
+<BaseLayout>
+    <div class="mt-5">
+        <div class="flex flex-col px-4 pb-3">
+            <h1>{ quick.title }</h1>
+            <p>{ quick.description }</p>
+            <div id="infoCard" class="flex flex-wrap items-center justify-center">
+                <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
+                <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
+            </div>
+        </div>
+    </div>
+</BaseLayout>
