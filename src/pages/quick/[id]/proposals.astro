@@ -20,7 +20,6 @@ const quick = JSON.parse(data.process);
     <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
         <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
         <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-        <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
     </InfoCard>
     <proposal-list>
         <div class="proposals">
@@ -30,7 +29,7 @@ const quick = JSON.parse(data.process);
         
                     </div>
                     <button class="btn btn-circle btn-ghost p-2 btn-md">
-                        <Icon name="carbon:edit"/>
+                        <Icon name="edit"/>
                     </button>
                 </div>
                 <div class="edit flex justify-between items-center" style="display: none;">
@@ -39,14 +38,14 @@ const quick = JSON.parse(data.process);
                         <input type="text" class="input input-bordered input-sm my-2"/>
                     </div>
                     <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
-                        <Icon name="carbon:save"/>
+                        <Icon name="save"/>
                     </button>
                 </div>
             </div>
         </div>
         <div class="text-center mt-2">
             <button id="add-proposal" class="btn btn-circle p-2" >
-                <Icon name="carbon:add"/>
+                <Icon name="add"/>
             </button>
         </div>
     </proposal-list>

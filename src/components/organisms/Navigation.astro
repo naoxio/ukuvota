@@ -42,8 +42,8 @@ const { pathname } = Astro.url;
     </select>
 
     <button id="themeSelector" class="btn btn-ghost btn-sm">
-      <Icon class="sun" width="22" name="carbon:sun"/>
-      <Icon class="moon" width="22" name="carbon:moon" />
+      <Icon class="sun" width="22" name="sun"/>
+      <Icon class="moon" width="22" name="moon" />
     </button>
 </div>
 <script>
@@ -52,7 +52,7 @@ const { pathname } = Astro.url;
     let theme = window.localStorage.getItem("theme")
     theme = theme === 'dark' ? 'light' : 'dark'
     document.documentElement.dataset.theme = theme
-    document.documentElement.classList = theme
+    document.documentElement.className = theme
 
     window.localStorage.setItem("theme", theme)
   })  

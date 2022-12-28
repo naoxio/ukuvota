@@ -3,10 +3,9 @@ import { t, changeLanguage } from "i18next";
 import Countdown from "molecules:Countdown";
 import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
+import { Icon } from 'astro-icon'
 
 changeLanguage("en");
-
-const emojis = await Astro.glob('../../../assets/emojis/*.svg');
 
 const processId = Astro.params.id;
 const { url } = Astro;
@@ -26,14 +25,14 @@ console.log(quick)
         <div class="proposal">
             <h4>Title</h4>
             <p>Description</p>
-            <div class="flex">
-                <img width="64" src={emojis[0].default} />
-                <img width="64" src={emojis[1].default} />
-                <img width="64" src={emojis[2].default} />
-                <img width="64" src={emojis[3].default} />
-                <img width="64" src={emojis[4].default} />
-                <img width="64" src={emojis[5].default} />
-                <img width="64" src={emojis[6].default} />
+            <div class="flex justify-between">
+                <Icon width="48" name="rage"/>
+                <Icon width="48" name="angry"/>
+                <Icon width="48" name="sad"/>
+                <Icon width="48" name="neutral"/>
+                <Icon width="48" name="smiling"/>
+                <Icon width="48" name="happy"/>
+                <Icon width="48" name="loving"/>
             </div>
         </div>
     </voting-list>
