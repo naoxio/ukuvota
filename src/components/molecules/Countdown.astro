@@ -11,30 +11,36 @@ const { timeleft, label, fromtime } = Astro.props;
 
 
 ---
+<style>
+    .visible {
+        display: block
+    }
+    .hidden {
+        display: none
+    }
+</style>
 <quick-counter data-timeleft={timeleft} data-fromtime={fromtime} class="flex flex-col justify-center items-center w-60">
     <h3>{ label }</h3>
     <div class="flex justify-center items-center">
-        <div id="days" style="display: none;">
-            <span name="val"></span>
+        <div id="days" class="hidden">
+            <span></span>
             { t('time.days') }&nbsp;
         </div>
-        <div id="hours" style="display: none;">
-            <span name="val"></span>
+        <div id="hours" class="hidden">
+            <span></span>
             { t('time.hours') }&nbsp;
         </div>
-        <span id="minutes" style="display: none;">
-            <span name="val"></span>
+        <span id="minutes" class="hidden">
+            <span></span>
             { t('time.minutes') }&nbsp;
         </span>
-        <span id="seconds" style="display: none;">
-            <span name="val"></span>
+        <span id="seconds" class="hidden">
+            <span></span>
             { t('time.seconds') }&nbsp;
         </span>
     </div>
 </quick-counter>
 <script>
-
-
     class QuickCounter extends HTMLElement {
         updateTime = false
         timeleft = 0
@@ -46,8 +52,6 @@ const { timeleft, label, fromtime } = Astro.props;
             const el_hours = this.querySelector('#hours')
             const el_minutes = this.querySelector('#minutes')
             const el_seconds = this.querySelector('#seconds')
-
-            this.timestamp = +new Date()
             this.fromtime = this.dataset.fromtime;
             this.timeleft = +new Date(this.dataset.timeleft);
             let updateTime = this.fromtime ? false : true
@@ -69,15 +73,15 @@ const { timeleft, label, fromtime } = Astro.props;
                 minutes = Math.floor(minutes)
                 seconds = Math.floor(seconds)
 
-                el_days.style.display = days > 0 ? 'block' : 'none'
-                el_hours.style.display = hours > 0 ? 'block' : 'none'
-                el_minutes.style.display = minutes > 0 ? 'block' : 'none'
-                el_seconds.style.display = days <= 0 && hours <= 0 && seconds > 0 ? 'block' : 'none'
+                el_days.className = days > 0 ? 'visible' : 'hidden'
+                el_hours.className = hours > 0 ? 'visible' : 'hidden'
+                el_minutes.className = minutes > 0 ? 'visible' : 'hidden'
+                el_seconds.className = days <= 0 && hours <= 0 && seconds > 0 ? 'visible' : 'hidden'
 
-                el_days.querySelector('span').innerHTML = days
-                el_hours.querySelector('span').innerHTML = hours
-                el_minutes.querySelector('span').innerHTML = minutes
-                el_seconds.querySelector('span').innerHTML = seconds
+                el_days.querySelector('span').innerHTML = String(days)
+                el_hours.querySelector('span').innerHTML = String(hours)
+                el_minutes.querySelector('span').innerHTML = String(minutes)
+                el_seconds.querySelector('span').innerHTML = String(seconds)
                 if (updateTime)
                     setTimeout(countdown, 1000)
             }

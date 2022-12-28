@@ -24,27 +24,22 @@ const quick = JSON.parse(data.process);
                 <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
             </div>
         </div>
-        <div class="flex flex-col justify-between items-center text-left">
-           { quick.proposals.map((proposal) => (
-                <>
-                    <div class="w-full">
-
-                        { proposal.edit ?
-                            <div class="flex flex-col w-full mr-6">
-                                <input value={ proposal.title } placeholder="Proposal Title" class="input my-2 w-full" type="text"/>
-                                <input value={ proposal.description } placeholder="Description" class="input my-2" type="text"/>
-                            </div> :
-                            <div>
-                                <h3>{ proposal.title }</h3>
-                                <p>{ proposal.description }</p>
-                            </div>
-                        }
+        <proposal-list>
+            <div class="proposal">
+                <div class="flex justify-between items-center">
+                    <div class="content flex flex-col">
+                        <h3></h3>
+                        <p></p>
                     </div>
-
-                </>
-
-            ))}
-        </div>
+                    <div>
+                        <button class="btn btn-circle btn-ghost p-2 btn-lm">
+                            <Icon name="carbon:edit"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </proposal-list>
+         
         <div class="text-center">
             <button class="btn btn-circle p-2" >
                 <Icon name="carbon:add"/>
@@ -54,10 +49,32 @@ const quick = JSON.parse(data.process);
 </BaseLayout>
 
 <script>
-    const card = document.getElementById('infoCard')
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
     console.log(quick.proposals)
+
+
+    class ProposalList extends HTMLElement {
+        proposal_html = null
+        constructor() {
+            super()
+            this.proposal_html = this.getElementsByClassName('proposal')[0]
+            this.innerHTML = ""
+            quick.proposals.forEach(data => {
+                let proposal = this.proposal_html.cloneNode(true)
+                let content = proposal.getElementsByClassName('content')[0]
+                let title = content.querySelector('h3')
+                title.innerHTML = data.title
+                let description = content.querySelector('p')
+                description.innerHTML = data.description
+                this.innerHTML += proposal.innerHTML
+            });
+
+        }
+    }
+    customElements.define('proposal-list', ProposalList)
+
+        
 </script>

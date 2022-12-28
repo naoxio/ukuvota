@@ -3,6 +3,7 @@ import BaseLayout from "templates:BaseLayout";
 import { localizePath } from "astro-i18next";
 import i18next, { t, changeLanguage } from "i18next";
 import ContentDoc from "atoms:ContentDoc";
+import logo from "../../assets/logo.png";
 
 changeLanguage("de");
 ---
@@ -10,7 +11,7 @@ changeLanguage("de");
 <BaseLayout title="Ukuvota" >
 	<div class="text-center">
 		<div class="pt-4 flex justify-center">
-			<img class="flex justify-center" alt="Ukuvota logo" width="128px" src="/static/logo.png">
+			<img class="flex justify-center" alt="Ukuvota logo" width="128px" src={logo}>
 		</div>
 		<h1>Ukuvota</h1>
 	</div>
