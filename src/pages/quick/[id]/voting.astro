@@ -14,28 +14,49 @@ const data = await res.json();
 const quick = JSON.parse(data.process);
 console.log(quick)
 ---
-
+<style>
+    .gray {
+        filter: grayscale(100%);
+    }
+</style>
 <BaseLayout>
-    <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
-        <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-  
-    </InfoCard>
-    <br/>
-    <voting-list>
-        <div class="proposal">
-            <h4>Title</h4>
-            <p>Description</p>
-            <div class="flex justify-between">
-                <Icon width="48" name="rage"/>
-                <Icon width="48" name="angry"/>
-                <Icon width="48" name="sad"/>
-                <Icon width="48" name="neutral"/>
-                <Icon width="48" name="smiling"/>
-                <Icon width="48" name="happy"/>
-                <Icon width="48" name="loving"/>
+    <div class="card bg-base-200 px-4 my-4 py-6">
+
+        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
+    
+        </InfoCard>
+        <voting-list>
+            <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                <h3>Title</h3>
+                <p>Description</p>
+                <br/>
+                <div class="flex justify-between">
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" name="rage"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" name="angry"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" name="sad"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="" width="48" name="neutral"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" width="48" name="smiling"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" width="48" name="happy"/>
+                    </button>
+                    <button class="btn btn-ghost btn-circle">
+                        <Icon class="gray" width="48" name="loving"/>
+                    </button>
+                </div>
             </div>
-        </div>
-    </voting-list>
+        </voting-list>
+    </div>
 </BaseLayout>
 
 <script>
@@ -44,8 +65,33 @@ console.log(quick)
     const data = await res.json();
     const quick = JSON.parse(data.process)
     class VotingList extends HTMLElement {
+        proposal_html = null
+        addProposal(data: any) {
+            const proposal = this.proposal_html.cloneNode(true)
+            proposal.querySelector('h3').innerHTML = data.title
+            proposal.querySelector('p').innerHTML = data.description
+            const buttons = proposal.querySelectorAll('button')
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const icon = button.querySelector('svg')
+                    buttons.forEach(btn => {
+                        const icon = btn.querySelector('svg')
+                        icon.style.filter = "grayscale(100%)"
+                    })
+                    icon.style.filter = "grayscale(0%)"
+
+                })
+            })
+            this.appendChild(proposal)
+
+        }
         constructor() {
             super()
+            this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
+            this.innerHTML = ""
+            quick.proposals.forEach(data => {
+                this.addProposal(data)
+            });
         }
     }
     customElements.define('voting-list', VotingList)

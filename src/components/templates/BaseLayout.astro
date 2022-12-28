@@ -23,13 +23,11 @@ const {title, description} = Astro.props;
   </head>
   <body>
     <Navigation/>
-    <div class="container">
-        <div class="main">
-            <slot />
-        </div>
-        <br/>
-        <Footer/>
-    </div>
+    <main>
+        <slot />
+    </main>
+    <br/>
+    <Footer/>
   </body>
 </html>
 <script is:inline>

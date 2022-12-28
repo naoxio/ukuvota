@@ -17,40 +17,40 @@ const quick = JSON.parse(data.process);
 ---
 
 <BaseLayout>
-    <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
-        <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
-        <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-    </InfoCard>
-    <proposal-list>
-        <div class="proposals">
-            <div class="proposal">
-                <div class="view flex justify-between items-center">
-                    <div class="flex flex-col">
-        
+    <div class="card bg-base-200 px-4 my-4 py-6">
+        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
+            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
+        </InfoCard>
+        <proposal-list>
+            <div class="proposals">
+                <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                    <div class="view flex justify-between items-center">
+                        <div class="flex flex-col">
+            
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 btn-md">
+                            <Icon name="edit"/>
+                        </button>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 btn-md">
-                        <Icon name="edit"/>
-                    </button>
-                </div>
-                <div class="edit flex justify-between items-center" style="display: none;">
-                    <div class="content flex flex-col w-full">
-                        <input type="text" class="input input-bordered input-sm my-2"/>
-                        <input type="text" class="input input-bordered input-sm my-2"/>
+                    <div class="edit flex justify-between items-center" style="display: none;">
+                        <div class="content flex flex-col w-full">
+                            <input type="text" class="input input-bordered input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+                            <Icon name="save"/>
+                        </button>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
-                        <Icon name="save"/>
-                    </button>
                 </div>
             </div>
-        </div>
-        <div class="text-center mt-2">
-            <button id="add-proposal" class="btn btn-circle p-2" >
-                <Icon name="add"/>
-            </button>
-        </div>
-    </proposal-list>
-         
-     
+            <div class="text-center mt-2">
+                <button id="add-proposal" class="btn btn-circle p-2" >
+                    <Icon name="add"/>
+                </button>
+            </div>
+        </proposal-list> 
+    </div>
 </BaseLayout>
 
 <script>

@@ -17,16 +17,19 @@ const weight = weightingOptions()[Number(weighting) - 1].label
 ---
 
 <div class="flex flex-col px-4 pb-3">
-    <h1>{ title }</h1>
-    <p>{ description }</p>
-    <div id="infoCard" class="flex flex-wrap items-center justify-center">
-        <slot/>
-        <div class="flex flex-col justify-center items-center w-60">
-            <h3>{ t('quick.weighting') }</h3>
-            <div class="flex items-center">
-                {weight}
-                <WeightingInfo/>
+    <div class="card-body">
+
+        <h1 class="card-title">{ title }</h1>
+        <p>{ description }</p>
+        <div id="infoCard" class="flex flex-wrap items-center justify-center">
+            <slot/>
+            <div class="flex flex-col justify-center items-center w-60">
+                <h3>{ t('quick.weighting') }</h3>
+                <div class="flex items-center">
+                    {weight}
+                    <WeightingInfo/>
+                </div>
             </div>
-         </div>
+        </div>
     </div>
 </div>
