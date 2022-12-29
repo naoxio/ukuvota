@@ -42,4 +42,12 @@ const {title, description} = Astro.props;
   document.documentElement.classList = theme
 
   window.localStorage.setItem("theme", theme);
+
+  const hash = window.location.hash
+  
+  if (hash.includes('#/app/'))
+    window.location.href = `https://legacy.ukuvota.world/${hash}`
+  
+
+
 </script>
