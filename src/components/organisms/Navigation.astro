@@ -54,8 +54,13 @@ const selected = (item: any) => {
   nav .btn-link:hover{
     color: indianred;
   }
-  .selected {
+  nav .selected {
     color:indianred !important;
+  }
+  @media screen and (max-width: 600px) {
+    nav .label {
+      display: none;
+    }
   }
   
 </style>
@@ -67,7 +72,7 @@ const selected = (item: any) => {
       <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
         <span class="flex items-center"> 
           <Icon width="22" name={item.icon}/>
-          <p class="pl-1">{t('nav.' + item.label)}</p>
+          <p class="label pl-1">{t('nav.' + item.label)}</p>
         </span>
       </a>
     </>

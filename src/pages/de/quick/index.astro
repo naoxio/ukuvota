@@ -8,19 +8,17 @@ changeLanguage("de");
 ---
 <BaseLayout>
     <h1>Select a strategy for your Quick Process</h1>
-    <div class="flex flex-wrap justify-center">
-        <a class="w-80 card" href={localizePath("/quick/create")}>
-            <div class="card-body">
-                <h1>{ t('quick.strategy.full') }</h1>
-                <ContentDoc file_name="QuickFullStrategy"/>
-            </div>
-        </a>
-        <a class="w-80 card" href={localizePath("/donate")}>
-            <div class="card-body">
-                <h1>{ t('quick.strategy.voting') }</h1>
-                <ContentDoc file_name="QuickVotingStrategy"/>
-                <b>{ t('wip') }</b>
-            </div>
-        </a>
-    </div>
+    <a class="card bg-base-200 my-4" href={localizePath("/quick/create")}>
+        <div class="card-body">
+            <h2>{ t('quick.strategy.full') }</h2>
+            <ContentDoc file_name="QuickFullStrategy"/>
+        </div>
+    </a>
+    <a class="card bg-base-200 my-4" href={localizePath("/donate")}>
+        <div class="card-body">
+            <h2>{ t('quick.strategy.voting') }</h2>
+            <ContentDoc file_name="QuickVotingStrategy"/>
+            <b>{ t('wip') }</b>
+        </div>
+    </a>
 </BaseLayout>
