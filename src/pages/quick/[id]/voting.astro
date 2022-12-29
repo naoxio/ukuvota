@@ -19,40 +19,48 @@ const quick = JSON.parse(data.process);
     }
 </style>
 <BaseLayout>
-    <div class="card bg-base-200 px-4 my-4 py-6">
+    <div class="card bg-base-200 px-6 my-4 py-6">
 
         <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
             <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
     
         </InfoCard>
         <voting-list>
-            <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-                <h3>Title</h3>
-                <p>Description</p>
-                <br/>
-                <div class="flex justify-between">
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" name="rage"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" name="angry"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" name="sad"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="" width="48" name="neutral"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" width="48" name="smiling"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" width="48" name="happy"/>
-                    </button>
-                    <button class="btn btn-ghost btn-circle">
-                        <Icon class="gray" width="48" name="loving"/>
-                    </button>
+            <div class="proposals">
+                <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                    <h3>Title</h3>
+                    <p>Description</p>
+                    <br/>
+                    <div class="flex justify-between">
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" name="rage"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" name="angry"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" name="sad"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="" width="48" name="neutral"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" width="48" name="smiling"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" width="48" name="happy"/>
+                        </button>
+                        <button class="btn btn-ghost btn-circle">
+                            <Icon class="gray" width="48" name="loving"/>
+                        </button>
+                    </div>
                 </div>
+            </div>
+            <div class="text-center mt-2 flex items-center">
+                <input type="text" class="input w-full m-2"/>
+                <button id="submit-vote" class="btn btn-primary p-2" >
+                    submit
+                </button>
             </div>
         </voting-list>
     </div>
@@ -65,6 +73,7 @@ const quick = JSON.parse(data.process);
     const quick = JSON.parse(data.process)
     class VotingList extends HTMLElement {
         proposal_html = null
+        proposals = null
         addProposal(data: any) {
             const proposal = this.proposal_html.cloneNode(true)
             proposal.querySelector('h3').innerHTML = data.title
@@ -81,16 +90,24 @@ const quick = JSON.parse(data.process);
 
                 })
             })
-            this.appendChild(proposal)
+            this.proposals.appendChild(proposal)
 
         }
         constructor() {
             super()
+            this.proposals = this.querySelector('div.proposals')
             this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
-            this.innerHTML = ""
+            this.proposals.innerHTML = ""
+
             quick.proposals.forEach((data: any) => {
                 this.addProposal(data)
             });
+
+            const submit = this.querySelector('button#submit-vote')
+            submit.addEventListener('click', async() => {
+                console.log('hi')
+                
+            })
         }
     }
     customElements.define('voting-list', VotingList)
