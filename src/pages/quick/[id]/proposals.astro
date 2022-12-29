@@ -12,8 +12,6 @@ const { url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
-
-
 ---
 
 <BaseLayout>

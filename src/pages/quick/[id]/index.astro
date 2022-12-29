@@ -5,26 +5,23 @@ import BaseLayout from "templates:BaseLayout";
 changeLanguage("en");
 
 const { url } = Astro;
-
 const processId = Astro.params.id;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
-const proposalTime = +new Date(quick.proposalEnd) - +new Date()
-const votingTime = +new Date(quick.votingEnd) - +new Date()
-
+const proposalTime = +new Date(quick.proposalEnd) - +new Date();
+const votingTime = +new Date(quick.votingEnd) - +new Date();
 if (!quick) {
-    return Astro.redirect('/quick')
+    return Astro.redirect("/quick");
 }
-
 if (proposalTime > 0) {
-    return Astro.redirect(`${url.origin}/quick/${processId}/proposals`)
+    return Astro.redirect(`${url.origin}/quick/${processId}/proposals`);
 }
 else if (votingTime > 0) {
-    return Astro.redirect(`${url.origin}/quick/${processId}/voting`)
+    return Astro.redirect(`${url.origin}/quick/${processId}/voting`);
 }
 else {
-    return Astro.redirect(`${url.origin}/quick/${processId}/results`)
+    return Astro.redirect(`${url.origin}/quick/${processId}/results`);
 }
 ---
 

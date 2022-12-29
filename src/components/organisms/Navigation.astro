@@ -9,23 +9,69 @@ const currentLanguage = i18next.language;
 
 const { pathname } = Astro.url;
 
+const menu = [
+  {
+    path: '/',
+    icon: 'campsite',
+    label: 'home',
+  },
+  {
+    path: '/quick',
+    icon: 'flash',
+    label: 'quick',
+  },
+  {
+    path: '/about',
+    icon: 'book',
+    label: 'about',
+  },
+  {
+    path: '/donate',
+    icon: 'favorite',
+    label: 'donate',
+  }
+]
+
+const selected = (item: any) => {
+  const pathname = Astro.url.pathname
+  if (pathname.includes(item.path) && item.path !== '/' || item.path === pathname)
+    return 'selected'
+  else
+    return ''
+}
+
 ---
-<style>
+<style is:inline>
   .sun { display: none; }
   .moon { display: block; }
 
   :global(.dark) .sun { display: block; }
   :global(.dark) .moon { display: none; }
+
+  nav .btn-link {
+    color: inherit;
+  }
+  nav .btn-link:hover{
+    color: indianred;
+  }
+  .selected {
+    color:indianred !important;
+  }
+  
 </style>
 
 
-<div class="navbar bg-base-200">
-
-    <a class="btn btn-link" href={localizePath("/")}>{ t('nav.home') }</a>
-    <a class="btn btn-link" href={localizePath("/quick")}>{ t('nav.quick')}</a>
-    <a class="btn btn-link" href={localizePath("/about")}>{ t('nav.about') } </a>
-
-    <a class="btn btn-link" href={localizePath("/donate")}>{t('nav.donate')}</a>
+<nav class="navbar bg-base-200">
+  { menu.map((item) => (
+    <>
+      <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
+        <span class="flex items-center"> 
+          <Icon width="22" name={item.icon}/>
+          <p class="pl-1">{t('nav.' + item.label)}</p>
+        </span>
+      </a>
+    </>
+  ))}
     <span class="flex-grow" />
 
     <select class="select select-xs mx-2" onchange="location = this.value">
@@ -45,7 +91,7 @@ const { pathname } = Astro.url;
       <Icon class="sun" width="22" name="sun"/>
       <Icon class="moon" width="22" name="moon" />
     </button>
-</div>
+  </nav>
 <script>
   const themeSelector = document.getElementById('themeSelector')
   themeSelector.addEventListener('click', () => {

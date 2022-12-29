@@ -33,10 +33,10 @@ const proposals = [
   <h1>{ t('quick.title')  }</h1>
   <quick-form data-proposals={JSON.stringify(proposals)}>
     <p>{ t('quick.topic') }</p>
-    <input name="topicQuestion" class="input w-full" value={topicQuestion} type="text">
+    <input name="topicQuestion" class="input input-bordered w-full" value={topicQuestion} type="text">
     <br>
     <p>{ t('quick.description') }</p>
-    <textarea name="topicDescription" class="textarea w-full" value={topicDescription} />
+    <textarea name="topicDescription" class="textarea textarea-bordered w-full" value={topicDescription} />
     <br><br>
     <span>{ t('quick.weighting') }</span>
     <span class="flex justify-center items-center">
@@ -88,7 +88,7 @@ const proposals = [
         const textareas = this.querySelectorAll('textarea')
         const selectors = this.querySelectorAll('select')
         const proposals = JSON.parse(this.dataset.proposals)
-        const button = Array.from(buttons).find((btn) => btn.id === 'submit')
+        const button = Array.from(buttons).find(btn => btn.id === 'submit')
 
         button.addEventListener('click', async() => {
           this.form = {}
@@ -101,7 +101,7 @@ const proposals = [
           }
           else {
             this.form['strategy'] = 1
-            this.form['proposals'] = this.form.defaultProposals ? proposals : [] 
+            this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
             const res = await fetch(`${location.origin}/quick/process`, {
               method: "POST",
               body: JSON.stringify(this.form)

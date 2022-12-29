@@ -3,61 +3,145 @@ import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
 import Countdown from "molecules:Countdown";
+import InfoCard from "organisms:QuickInfoCard";
 
 changeLanguage("de");
 
 const processId = Astro.params.id;
-const { request, url } = Astro;
+const { url } = Astro;
 const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
 ---
 
 <BaseLayout>
-    <div class="mt-5">
-        <div class="flex flex-col px-4 pb-3">
-            <h1>{ quick.title }</h1>
-            <p>{ quick.description }</p>
-            <div id="infoCard" class="flex flex-wrap items-center justify-center">
-                <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
-                <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-                <!--WeightingCard class="m-2 px-3 rounded w-55 h-40" :weighting-label="weightOptions[quick.weighting - 1].label" /-->
-            </div>
-        </div>
-        <div class="flex flex-col justify-between items-center text-left">
-           { quick.proposals.map((proposal) => (
-                <>
-                    <div class="w-full">
-
-                        { proposal.edit ?
-                            <div class="flex flex-col w-full mr-6">
-                                <input value={ proposal.title } placeholder="Proposal Title" class="input my-2 w-full" type="text"/>
-                                <input value={ proposal.description } placeholder="Description" class="input my-2" type="text"/>
-                            </div> :
-                            <div>
-                                <h3>{ proposal.title }</h3>
-                                <p>{ proposal.description }</p>
-                            </div>
-                        }
+    <div class="card bg-base-200 px-4 my-4 py-6">
+        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
+            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
+        </InfoCard>
+        <proposal-list>
+            <div class="proposals">
+                <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                    <div class="view flex justify-between items-center">
+                        <div class="flex flex-col">
+            
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 btn-md">
+                            <Icon name="edit"/>
+                        </button>
                     </div>
-
-                </>
-
-            ))}
-        </div>
-        <div class="text-center">
-            <button class="btn btn-circle p-2" >
-                <Icon name="add"/>
-            </button>
-        </div>
+                    <div class="edit flex justify-between items-center" style="display: none;">
+                        <div class="content flex flex-col w-full">
+                            <input type="text" class="input input-bordered input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
+                        </div>
+                        <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+                            <Icon name="save"/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-2">
+                <button id="add-proposal" class="btn btn-circle p-2" >
+                    <Icon name="add"/>
+                </button>
+            </div>
+        </proposal-list> 
     </div>
 </BaseLayout>
 
 <script>
-    const card = document.getElementById('infoCard')
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
-    console.log(quick.proposals)
+
+    class ProposalList extends HTMLElement {
+        proposal_html = null
+        proposals = null
+        updateProposalView(view, title, description) {
+            const view_content = view.querySelector('div')
+                view_content.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                `
+        }
+        
+        addProposal(data, editing: boolean = false) {
+            const proposal = this.proposal_html.cloneNode(true)
+            const view = proposal.querySelector('div.view')
+            const edit = proposal.querySelector('div.edit')
+            this.updateProposalView(view, data.title, data.description)
+            if (editing) {
+                view.style.display = 'none'
+                edit.style.display = 'flex'
+            }
+            const edit_button = view.querySelector('button')
+            edit_button.addEventListener('click', () => {
+                view.style.display = 'none'
+                edit.style.display = 'flex'
+
+            })
+
+            const edit_content = edit.querySelector('div')
+            const inputs = edit_content.querySelectorAll('input')
+            inputs[0].value = data.title
+            inputs[1].value = data.description
+
+            const save_button = edit.querySelector('button')
+            save_button.addEventListener('click', async() => {
+                view.style.display = 'flex'
+                edit.style.display = 'none'
+                const proposalId = data.id
+                if (inputs[0].value === '' && inputs[1].value === '') {
+                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
+                    const data = await res.json();                }
+                else {
+                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}`, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            title: inputs[0].value,
+                            description: inputs[1].value
+                        })
+                    });
+                    const json = await res.json();
+                }
+                this.updateProposalView(view, inputs[0].value, inputs[1].value)
+            })
+            this.proposals.appendChild(proposal)
+        }
+        constructor() {
+            super()
+            this.proposals = this.querySelector('div.proposals')
+            this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true)
+            this.proposals.innerHTML = ""
+            quick.proposals.forEach(data => {
+                this.addProposal(data)
+            });
+
+            const addButton = this.querySelector('button#add-proposal')
+            addButton.addEventListener('click', async() => {
+                const res = await fetch(`${location.origin}/quick/process/${processId}/proposal`, { method: "GET" });
+                const data = await res.json();
+                this.addProposal(data.proposal, true)
+                
+            })
+
+
+        }
+    }
+    customElements.define('proposal-list', ProposalList)
+
+
+    const checkTime = () => {
+        const time =  +new Date(quick.proposalEnd) - +new Date()
+        if (time <= 0)
+            window.location.href = `${window.location.origin}/quick/${processId}/voting`
+        else
+            setTimeout(checkTime, 1000)
+    }
+    checkTime()
+
+        
 </script>

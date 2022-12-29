@@ -22,6 +22,7 @@ main {
     max-width: 800px;
     margin: auto;
 }
+
 .link, .link:hover, .btn, .btn:hover  {
     text-decoration: none;
 }
