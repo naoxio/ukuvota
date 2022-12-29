@@ -9,7 +9,7 @@ changeLanguage("en");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
+const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
 ---
@@ -68,7 +68,7 @@ const quick = JSON.parse(data.process);
 
 <script>
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
+    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
     class VotingList extends HTMLElement {
