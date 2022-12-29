@@ -84,6 +84,15 @@
   "redirect": {
     "legacy": "Redirecting to legacy version..."
   },
-  "pleaseInput": "Please input"
-
+  "pleaseInput": "Please input",
+  "alert": {
+    "quick": {
+      "success": {
+        "createProcess": "Process starting..."
+      },
+      "error": {
+        "topicQuestion": "Please add a Topic Question"
+      } 
+    }
+  }
 }

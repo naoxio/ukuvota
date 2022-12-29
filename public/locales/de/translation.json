@@ -85,5 +85,15 @@
   "redirect": {
     "legacy": "Weiterleitung zur alten Version..."
   },
-  "pleaseInput": "Bitte eintragen"
+  "pleaseInput": "Bitte eintragen",
+  "alert": {
+    "quick": {
+      "success": {
+        "createProcess": "Prozess startet..."
+      },
+      "error": {
+        "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu"
+      } 
+    }
+  }
 }
