@@ -58,6 +58,7 @@ const quick = JSON.parse(data.process);
     const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
+    const ws = new WebSocket(`ws://${window.location.host}`);
 
     class ProposalList extends HTMLElement {
         proposal_html = null
@@ -72,6 +73,7 @@ const quick = JSON.parse(data.process);
         
         addProposal(data, editing: boolean = false) {
             const proposal = this.proposal_html.cloneNode(true)
+            proposal.id = data.id
             const view = proposal.querySelector('div.view')
             const edit = proposal.querySelector('div.edit')
             this.updateProposalView(view, data.title, data.description)
@@ -79,6 +81,14 @@ const quick = JSON.parse(data.process);
                 view.style.display = 'none'
                 edit.style.display = 'flex'
             }
+            else {
+                if (data.title === '' && data.description === '')
+                    proposal.style.display = 'none'
+                else {
+                    proposal.style.display = 'block'
+                }
+            }
+
             const edit_button = view.querySelector('button')
             edit_button.addEventListener('click', () => {
                 view.style.display = 'none'
@@ -97,9 +107,11 @@ const quick = JSON.parse(data.process);
                 edit.style.display = 'none'
                 const proposalId = data.id
                 if (inputs[0].value === '' && inputs[1].value === '') {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
-                    const data = await res.json();
-                    this.proposals.removeChild(proposal) 
+                    ws.send(JSON.stringify({
+                        method: 'removeProposal',
+                        processId,
+                        proposalId
+                    }))     
                 }
                 else {
                     const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}`, {
@@ -118,22 +130,47 @@ const quick = JSON.parse(data.process);
         }
         constructor() {
             super()
+
             this.proposals = this.querySelector('div.proposals')
             this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true)
             this.proposals.innerHTML = ""
-            quick.proposals.forEach(data => {
-                this.addProposal(data)
+            
+            ws.onmessage = (event) => {
+                let data = JSON.parse(event.data)
+                console.log('data from websocket')
+                console.log(data)
+                if ('method' in data) {
+                    if (data.method === 'addProposal') {
+                        this.addProposal(data.proposal, data.edit)
+                    }
+                    else if (data.method === 'removeProposal') {
+                        for (const child of this.proposals.children) {
+                            if (child.id === data.proposalId) {
+                                this.proposals.removeChild(child)
+                                break
+                            }
+                        }
+                    }
+                }
+            };
+            ws.onopen = (event) => {
+                ws.send(JSON.stringify({
+                    method: 'setProcess',
+                    processId
+                }))
+            };
+
+            quick.proposals.forEach(proposal => {
+                this.addProposal(proposal)
             });
 
             const addButton = this.querySelector('button#add-proposal')
             addButton.addEventListener('click', async() => {
-                const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal`, { method: "GET" });
-                const data = await res.json();
-                this.addProposal(data.proposal, true)
-                
+                ws.send(JSON.stringify({
+                    method: 'addProposal',
+                    processId
+                }))                
             })
-
-
         }
     }
     customElements.define('proposal-list', ProposalList)
@@ -149,4 +186,5 @@ const quick = JSON.parse(data.process);
     checkTime()
 
         
+
 </script>

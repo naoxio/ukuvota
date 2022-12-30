@@ -15,25 +15,14 @@ const getTimestamp = (minutes, hours, days) => {
 }
 
 const app = express();
+const process_map = new Map();
+const user_map = new Map();
 
 app.use(express.static('dist/client/'));
 app.use(ssrHandler);
 app.use(express.json())
 
-app.get('/api/quick/process/:processId/proposal', async(req, res)  => {
-  const processId = req.params.processId
-  const proposalId = crypto.randomUUID()
-  const process = JSON.parse(await db.get(processId))
-  const proposal = {
-    id: proposalId,
-    title: '',
-    description: '',
-    createdAt: +new Date(),
-  }
-  process.proposals.push(proposal)
-  await db.put(processId, JSON.stringify(process))
-  res.json({proposal})
-})
+
 app.get('/api/quick/process/:processId/proposal/:proposalId/delete', async(req, res) => {
   const processId = req.params.processId
   const process = JSON.parse(await db.get(processId))
@@ -95,20 +84,86 @@ app.post('/api/quick/process', async(req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+wss.on('connection', async (ws, req) => {
+  const userId = crypto.randomUUID()
+  user_map.set(userId, [])
+  ws.on('message', async(message) => {
+    let data = JSON.parse(message)
+    const processId = data.processId
 
-wss.on('connection', function (ws, request) {
-  ws.on('message', function (message) {
-    //
-    // Here we can now use session parameters.
-    //
-    console.log(`Received message ${message}`);
-    ws.send(`Hello, you sent -> ${message}`);
+    if ('method' in data) {
+      if (data.method === 'setProcess') {
+        let users = process_map.get(data.processId)
+        if (!users)
+          users = []
+        
+        users.push({
+          id: userId,
+          ws
+        })
+        process_map.set(processId, users)
+
+        let processes = user_map.get(userId)
+        processes.push(processId)
+        user_map.set(userId, processes)
+
+      }
+      else if (data.method === 'addProposal') {
+        const proposalId = crypto.randomUUID()
+        const process = JSON.parse(await db.get(processId))
+        const proposal = {
+          id: proposalId,
+          title: '',
+          description: '',
+          createdAt: +new Date(),
+        }
+        process.proposals.push(proposal)
+        await db.put(processId, JSON.stringify(process))
+        let users = process_map.get(processId)
+        users.forEach(user => {
+          const rtn = {
+            method: data.method,
+            edit: userId === user.id,
+            proposal
+          }
+          user.ws.send(JSON.stringify(rtn))
+        });
+        
+      }
+      else if (data.method === 'removeProposal') {
+        const processId = data.processId
+        const proposalId = data.proposalId
+        const process = JSON.parse(await db.get(processId))
+        process.proposals = process.proposals.filter(proposal => proposal.id !== proposalId)
+        await db.put(processId, JSON.stringify(process))
+
+        let users = process_map.get(processId)
+        users.forEach(user => {
+          const rtn = {
+            method: data.method,
+            proposalId
+          }
+          user.ws.send(JSON.stringify(rtn))
+        });
+        
+      }
+    }
   });
 
   ws.on('close', function () {
     console.log('Closing connection')
+    let processes = user_map.get(userId)
+    user_map.delete(userId);
+    processes.forEach(processId => {
+      let users = process_map.get(processId)
+      users.filter(user => user.id !== userId)
+      process_map.set(processId, users)
+      if (users.length === 0)
+        process_map.delete(processId)
+    })
+
+
   });
-  ws.send('Hi there, I am a WebSocket server');
 });
 
 server.listen(8080, function () {
