@@ -4,14 +4,18 @@ import Countdown from "molecules:Countdown";
 import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
+import { quickTest } from "composables/quickTestData";
+
 
 changeLanguage("en");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === 'dev';
+
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 <style>
     .gray {
@@ -69,10 +73,12 @@ const quick = JSON.parse(data.process);
 </BaseLayout>
 
 <script>
+
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
-    const data = await res.json();
-    const quick = JSON.parse(data.process)
+    const isDev = processId === 'dev';
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const quick = isDev ? {} : JSON.parse(data.process)
     class VotingList extends HTMLElement {
         proposal_html = null
         proposals = null
@@ -82,17 +88,19 @@ const quick = JSON.parse(data.process);
             proposal.querySelector('h3').innerHTML = data.title
             proposal.querySelector('p').innerHTML = data.description
             const buttons = proposal.querySelectorAll('button')
-            buttons.forEach((button: HTMLButtonElement) => {
-                button.addEventListener('click', () => {
-                    const icon = button.querySelector('svg')
-                    buttons.forEach(btn => {
-                        const icon = btn.querySelector('svg')
-                        icon.style.filter = "grayscale(100%)"
-                    })
-                    icon.style.filter = "grayscale(0%)"
+            proposal.addEventListener('click', (event) => {
+                if (event.target.matches('button')) {
+                    const svgs = buttons.querySelectorAll('svg');
+                    svgs.forEach((svg: SVGElement) => {
+                        
+                        svg.classList.add('gray');
+                    });
+                    const svg = event.target.querySelector('svg');
 
-                })
-            })
+                    svg.classList.remove('gray');
+                }
+            });
+
             this.proposals.appendChild(proposal)
 
         }
@@ -101,27 +109,22 @@ const quick = JSON.parse(data.process);
             this.proposals = this.querySelector('div.proposals')
             this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
             this.proposals.innerHTML = ""
-
             quick.proposals.forEach((data: any) => {
                 this.addProposal(data)
             });
 
             const submit = this.querySelector('button#submit-vote')
             submit.addEventListener('click', async() => {
-                console.log('hi')
-                const votes = []
+                const votesMap = new Map();
                 this.proposals.forEach((proposal: any) => {
-                    const svgs = proposal.querySelector('svg')
-                    for (let i = 0; i < svgs.length; i++) {
-                        const svg = svgs[i]
-                        if (svg.style.filter === "grayscale(0%)") {
-                            votes.push({
-                                proposalId: proposal.id,
-                                vote: i
-                            })
+                    const svgs = proposal.querySelectorAll('svg')
+                    svgs.forEach((svg: SVGElement, index: number) => {
+                        if (!svg.classList.contains('gray')) {
+                            votesMap.set(proposal.id, index);
                         }
-                    }
-                })
+                    });
+                });
+                const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
                 const senderName: HTMLInputElement = this.querySelector('input#sender-name')
                 const vote = {
                     name: senderName.value,

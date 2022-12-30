@@ -4,14 +4,18 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
 import Countdown from "molecules:Countdown";
 import InfoCard from "organisms:QuickInfoCard";
+import { quickTest } from "composables/quickTestData";
 
 changeLanguage("en");
 
+
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === 'dev';
+
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 
 <BaseLayout>
@@ -55,15 +59,17 @@ const quick = JSON.parse(data.process);
 
 <script>
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
-    const data = await res.json();
-    const quick = JSON.parse(data.process)
+    const isDev = processId === 'dev';
+
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const quick = isDev ? {} : JSON.parse(data.process)
     const ws = new WebSocket(`ws://${window.location.host}`);
 
     class ProposalList extends HTMLElement {
         proposal_html = null
         proposals = null
-        updateProposalView(proposal, title, description) {
+        updateProposalView(proposal, title: string, description: string) {
             const view_content = proposal.querySelector('div.view').querySelector('div')
             view_content.innerHTML = `
                 <h3>${title}</h3>

@@ -1,13 +1,25 @@
 ---
 import BaseLayout from "templates:BaseLayout";
+import InfoCard from "organisms:QuickInfoCard";
+
+import { quickTest } from "composables/quickTestData";
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === 'dev';
+
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 
 <BaseLayout>
+    <div class="card bg-base-200 px-6 my-4 py-6">
+        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
 
+        </InfoCard>
+        <div>
+            
+        </div>
+    </div>
 </BaseLayout>
