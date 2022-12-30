@@ -8,11 +8,26 @@ import logo from "../assets/logo.png";
 changeLanguage("en");
 
 ---
+<style>
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to { 
+    transform: rotate(360deg);
+  }
+}
 
+#logo.trippy {
+    animation: rotate 0.5s infinite linear;
+
+}
+
+</style>
 <BaseLayout title="Ukuvota" >
 	<div class="text-center">
 		<div class="pt-4 flex justify-center">
-			<img class="flex justify-center" alt="Ukuvota logo" width="128px" src={logo}>
+			<img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo}>
 		</div>
 		<h1>Ukuvota</h1>
 	</div>
@@ -22,3 +37,14 @@ changeLanguage("en");
 		<a href={localizePath("/quick")} class="btn btn-primary btn-md">{ t('nav.start_quick') }</a>  
 	</div>
 </BaseLayout>
+<script>
+
+const logo: HTMLImageElement = document.querySelector('#logo')
+logo.addEventListener('click', () => {
+	if (logo.classList.contains('trippy'))
+		logo.classList.remove('trippy')
+	else
+		logo.classList.add('trippy')
+
+})
+</script>
