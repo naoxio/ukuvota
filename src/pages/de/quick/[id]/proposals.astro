@@ -9,7 +9,7 @@ changeLanguage("de");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/quick/process/${processId}`, { method: "GET" });
+const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = await res.json();
 const quick = JSON.parse(data.process);
 ---
@@ -33,8 +33,10 @@ const quick = JSON.parse(data.process);
                     </div>
                     <div class="edit flex justify-between items-center" style="display: none;">
                         <div class="content flex flex-col w-full">
-                            <input type="text" class="input input-bordered input-sm my-2"/>
-                            <input type="text" class="input input-bordered input-sm my-2"/>
+                            <b>{ t('quick.topic') }</b>
+                            <input type="text" placeholder={ t('pleaseInput') } class="input input-bordered input-sm my-2"/>
+                            <label>{ t('quick.description') }</label>
+                            <input type="text" placeholder={ t('pleaseInput') } class="input input-bordered input-sm my-2"/>
                         </div>
                         <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
                             <Icon name="save"/>
@@ -53,7 +55,7 @@ const quick = JSON.parse(data.process);
 
 <script>
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/quick/process/${processId}`, { method: "GET" });
+    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = await res.json();
     const quick = JSON.parse(data.process)
 
@@ -95,11 +97,14 @@ const quick = JSON.parse(data.process);
                 edit.style.display = 'none'
                 const proposalId = data.id
                 if (inputs[0].value === '' && inputs[1].value === '') {
-                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
-                    const data = await res.json();                }
+                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
+                    const data = await res.json();
+                    this.proposals.removeChild(proposal) 
+                }
                 else {
-                    const res = await fetch(`${location.origin}/quick/process/${processId}/proposal/${proposalId}`, {
+                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}`, {
                         method: "POST",
+                        headers: {'Content-Type':'application/json'},
                         body: JSON.stringify({
                             title: inputs[0].value,
                             description: inputs[1].value
@@ -122,7 +127,7 @@ const quick = JSON.parse(data.process);
 
             const addButton = this.querySelector('button#add-proposal')
             addButton.addEventListener('click', async() => {
-                const res = await fetch(`${location.origin}/quick/process/${processId}/proposal`, { method: "GET" });
+                const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal`, { method: "GET" });
                 const data = await res.json();
                 this.addProposal(data.proposal, true)
                 

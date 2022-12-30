@@ -104,6 +104,7 @@ const quick = JSON.parse(data.process);
                 else {
                     const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}`, {
                         method: "POST",
+                        headers: {'Content-Type':'application/json'},
                         body: JSON.stringify({
                             title: inputs[0].value,
                             description: inputs[1].value

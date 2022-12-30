@@ -147,6 +147,7 @@ const proposals = [
             this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
             const res = await fetch(`${location.origin}/api/quick/process`, {
               method: "POST",
+              headers: {'Content-Type':'application/json'},
               body: JSON.stringify(this.form)
             });
             const json = await res.json();
