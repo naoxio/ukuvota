@@ -1,0 +1,13 @@
+---
+import BaseLayout from "templates:BaseLayout";
+
+const processId = Astro.params.id;
+const { url } = Astro;
+const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = await res.json();
+const quick = JSON.parse(data.process);
+---
+
+<BaseLayout>
+
+</BaseLayout>

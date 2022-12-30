@@ -27,6 +27,30 @@ app.get('/api/quick/process/:id', async(req, res) => {
   res.json({ process })
 });
 
+app.post('/api/quick/process/:id/vote', async(req, res) => {
+  const processId = req.params.id
+  const process = await db.get(processId)
+  const body = req.body
+  const votes = []
+  body.votes.forEach((vote) => {
+    votes.push({
+      proposalId: vote.proposalId,
+      vote: vote.vote
+    })
+  })
+  const vote = {
+    name: body.name,
+    votes
+  }
+  if (process.voters)
+    process.voters.push(vote) 
+  else
+    process.voters = [vote]
+
+  await db.put(processId, JSON.stringify(process))
+  res.json({})
+});
+
 app.post('/api/quick/process', async(req, res) => {
   const body = req.body
   const uuid = crypto.randomUUID()

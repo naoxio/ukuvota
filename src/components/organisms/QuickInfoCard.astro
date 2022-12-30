@@ -1,9 +1,12 @@
 ---
+import { Icon } from 'astro-icon'
 import { t } from 'i18next';
 
 import { weightingOptions } from "composables/weightingOptions";
 import WeightingInfo from 'molecules:WeightingInfo';
+import QRCode from 'atoms:QRCode'
 
+const { url } = Astro;
 
 interface Props {
     title: string,
@@ -30,5 +33,42 @@ const weight = weightingOptions()[Number(weighting) - 1].label
                 </div>
             </div>
         </div>
+        <div class="flex items-center">
+            <div class="w-full pr-2">
+                <p>{ t('quick.sharaeableUrl') }</p>
+                <input id="sharaeableUrl" type="text" class="input input-bordered w-full" value={ url.href }/>
+            </div>
+            <label for="qr-code-modal" class="btn btn-ghost btn-circle m-2">
+                <Icon width="22" name="qr-code"/>
+
+            </label>
+              
+                          
+        </div>
     </div>
 </div>
+
+<input type="checkbox" id="qr-code-modal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <label for="qr-code-modal" class="btn btn-sm btn-circle absolute right-2 top-2">
+      <Icon width="22" name="close"/>
+
+    </label>
+    <h3>{ t('quick.qrcode') }</h3>
+    <div class="flex justify-center">
+        <QRCode text="Astro.url.href" />
+    </div>
+  </div>
+</div>
+
+<script>
+const sharaeableUrl: HTMLInputElement = document.querySelector('input#sharaeableUrl')
+sharaeableUrl.addEventListener('click', () => {
+    sharaeableUrl.focus()
+    sharaeableUrl.select()
+    sharaeableUrl.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(sharaeableUrl.value);
+
+})
+</script>

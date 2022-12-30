@@ -56,8 +56,10 @@ const quick = JSON.parse(data.process);
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-2 flex items-center">
-                <input type="text" class="input w-full m-2"/>
+            <br/>   
+            <p>Your name or persistent alias</p>
+            <div class="text-center flex items-center">
+                <input id="sender-name" type="text" class="input w-full m-2"/>
                 <button id="submit-vote" class="btn btn-primary p-2" >
                     {t('quick.submitVote')}
                 </button>
@@ -76,6 +78,7 @@ const quick = JSON.parse(data.process);
         proposals = null
         addProposal(data: any) {
             const proposal = this.proposal_html.cloneNode(true)
+            proposal.id = data.id
             proposal.querySelector('h3').innerHTML = data.title
             proposal.querySelector('p').innerHTML = data.description
             const buttons = proposal.querySelectorAll('button')
@@ -106,7 +109,31 @@ const quick = JSON.parse(data.process);
             const submit = this.querySelector('button#submit-vote')
             submit.addEventListener('click', async() => {
                 console.log('hi')
-                
+                const votes = []
+                this.proposals.forEach((proposal: any) => {
+                    const svgs = proposal.querySelector('svg')
+                    for (let i = 0; i < svgs.length; i++) {
+                        const svg = svgs[i]
+                        if (svg.style.filter === "grayscale(0%)") {
+                            votes.push({
+                                proposalId: proposal.id,
+                                vote: i
+                            })
+                        }
+                    }
+                })
+                const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+                const vote = {
+                    name: senderName.value,
+                    votes
+                }
+                const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                    method: "POST",
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify(vote)
+                });
+                const json = await res.json();
+
             })
         }
     }
@@ -114,11 +141,11 @@ const quick = JSON.parse(data.process);
 
     const checkTime = () => {
         const time =  +new Date(quick.votingEnd) - +new Date()
-        /*if (time <= 0)
+        if (time <= 0)
 
             window.location.href = `${window.location.origin}/quick/${processId}/results`
         else
-            setTimeout(checkTime, 1000)*/
+            setTimeout(checkTime, time)
     }
     checkTime()
 </script>

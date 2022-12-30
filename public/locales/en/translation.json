@@ -43,7 +43,8 @@
       "title": "Select a strategy for your Quick Process",
       "full": "Full Strategy",
       "voting": "Voting Strategy"
-    }
+    },
+    "submitVote": "Submit Vote"
   },
   "wip": "Not yet implemented, please consider donating to help support this project!",
   "layouts": {
