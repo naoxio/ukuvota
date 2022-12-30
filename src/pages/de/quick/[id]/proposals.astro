@@ -144,9 +144,16 @@ const quick = JSON.parse(data.process);
         if (time <= 0)
             window.location.href = `${window.location.origin}/quick/${processId}/voting`
         else
-            setTimeout(checkTime, 1000)
+            setTimeout(checkTime, time)
     }
     checkTime()
 
-        
+    const ws = new WebSocket(`ws://${window.location.host}`);
+    ws.onmessage = (event) => {
+    console.log(event.data);
+    };
+    ws.onopen = (event) => {
+    ws.send("Here's some text that the server is urgently awaiting!")
+    };
+
 </script>
