@@ -47,9 +47,7 @@ const proposals = [
     <span class="flex justify-center items-center">
       <select name="weighting" class="select" value={weighting}>
         { weightOptions.map((weight) => 
-          <>
-            <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
-          </>
+          <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
         )}
       </select>
       <WeightingInfo />
@@ -109,7 +107,7 @@ const proposals = [
         }
       })
     }
-    addAlert(alert){
+    addAlert(alert: HTMLDivElement){
       const list =  this.alertManager.querySelector('div.alert-list')
       alert.style.display = "block"
       list.appendChild(alert)
@@ -118,44 +116,42 @@ const proposals = [
       }, 3000)
     }
     constructor() {
-        super()
-        const buttons = this.querySelectorAll('button')
-        const inputs = this.querySelectorAll('input')
-        const textareas = this.querySelectorAll('textarea')
-        const selectors = this.querySelectorAll('select')
-        this.alertManager = this.querySelector('div.alert-manager')
-        this.successAlert = this.alertManager.querySelector('div.alert-success').cloneNode(true)
-        this.errorAlert = this.alertManager.querySelector('div.alert-error').cloneNode(true)
-        //this.alertList.innerHTML = ""
+      super()
+      const buttons = this.querySelectorAll('button')
+      const inputs = this.querySelectorAll('input')
+      const textareas = this.querySelectorAll('textarea')
+      const selectors = this.querySelectorAll('select')
+      this.alertManager = this.querySelector('div.alert-manager')
+      this.successAlert = this.alertManager.querySelector('div.alert-success').cloneNode(true)
+      this.errorAlert = this.alertManager.querySelector('div.alert-error').cloneNode(true)
+      //this.alertList.innerHTML = ""
 
-        const proposals = JSON.parse(this.dataset.proposals)
-        const button = Array.from(buttons).find(btn => btn.id === 'submit')
+      const proposals = JSON.parse(this.dataset.proposals)
+      const button = Array.from(buttons).find(btn => btn.id === 'submit')
 
-        button.addEventListener('click', async() => {
-          this.form = {}
-          this.findValues(inputs)
-          this.findValues(textareas)
-          this.findValues(selectors)
-          const lang = document.documentElement.lang
-          if (this.form['topicQuestion'] === '') {
-            this.addAlert(this.errorAlert.cloneNode(true))
-          }
-          else {
-            this.addAlert(this.successAlert.cloneNode(true))
+      button.addEventListener('click', async() => {
+        this.form = {}
+        this.findValues(inputs)
+        this.findValues(textareas)
+        this.findValues(selectors)
+        const lang = document.documentElement.lang
+        if (this.form['topicQuestion'] === '') {
+          this.addAlert(this.errorAlert.cloneNode(true))
+        }
+        else {
+          this.addAlert(this.successAlert.cloneNode(true))
 
-            this.form['strategy'] = 1
-            this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
-            const res = await fetch(`${location.origin}/api/quick/process`, {
-              method: "POST",
-              headers: {'Content-Type':'application/json'},
-              body: JSON.stringify(this.form)
-            });
-            const json = await res.json();
-            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
-
-          }
-
-        })
+          this.form['strategy'] = 1
+          this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
+          const res = await fetch(`${location.origin}/api/quick/process`, {
+            method: "POST",
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(this.form)
+          });
+          const json = await res.json();
+          window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
+        }
+      })
     }
   }
   customElements.define('quick-form', QuickForm)

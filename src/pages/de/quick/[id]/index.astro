@@ -11,16 +11,14 @@ const data = await res.json();
 const quick = JSON.parse(data.process);
 const proposalTime = +new Date(quick.proposalEnd) - +new Date();
 const votingTime = +new Date(quick.votingEnd) - +new Date();
-if (!quick) {
+switch(true) {
+  case !quick:
     return Astro.redirect("/quick");
-}
-if (proposalTime > 0) {
+  case proposalTime > 0:
     return Astro.redirect(`${url.origin}/api/quick/${processId}/proposals`);
-}
-else if (votingTime > 0) {
+  case votingTime > 0:
     return Astro.redirect(`${url.origin}/api/quick/${processId}/voting`);
-}
-else {
+  default:
     return Astro.redirect(`${url.origin}/api/quick/${processId}/results`);
 }
 ---
