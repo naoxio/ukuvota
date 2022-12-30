@@ -63,12 +63,11 @@ const quick = JSON.parse(data.process);
     class ProposalList extends HTMLElement {
         proposal_html = null
         proposals = null
-        updateProposalView(view, title, description) {
-            const view_content = view.querySelector('div')
-                view_content.innerHTML = `
-                    <h3>${title}</h3>
-                    <p>${description}</p>
-                `
+        updateProposalView(proposal, title, description) {
+            const view_content = proposal.querySelector('div.view').querySelector('div')
+            view_content.innerHTML = `
+                <h3>${title}</h3>
+                <p>${description}</p>`
         }
         
         addProposal(data, editing: boolean = false) {
@@ -76,24 +75,17 @@ const quick = JSON.parse(data.process);
             proposal.id = data.id
             const view = proposal.querySelector('div.view')
             const edit = proposal.querySelector('div.edit')
-            this.updateProposalView(view, data.title, data.description)
+            this.updateProposalView(proposal, data.title, data.description)
             if (editing) {
                 view.style.display = 'none'
                 edit.style.display = 'flex'
             }
-            else {
-                if (data.title === '' && data.description === '')
-                    proposal.style.display = 'none'
-                else {
-                    proposal.style.display = 'block'
-                }
-            }
+            else proposal.style.display = data.title === '' && data.description === '' ? 'none' : 'block'
 
             const edit_button = view.querySelector('button')
             edit_button.addEventListener('click', () => {
                 view.style.display = 'none'
                 edit.style.display = 'flex'
-
             })
 
             const edit_content = edit.querySelector('div')
@@ -112,19 +104,15 @@ const quick = JSON.parse(data.process);
                         processId,
                         proposalId
                     }))     
+                } else {
+                    ws.send(JSON.stringify({
+                        method: 'updateProposal',
+                        title: inputs[0].value,
+                        description: inputs[1].value,
+                        processId,
+                        proposalId
+                    }))         
                 }
-                else {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}`, {
-                        method: "POST",
-                        headers: {'Content-Type':'application/json'},
-                        body: JSON.stringify({
-                            title: inputs[0].value,
-                            description: inputs[1].value
-                        })
-                    });
-                    const json = await res.json();
-                }
-                this.updateProposalView(view, inputs[0].value, inputs[1].value)
             })
             this.proposals.appendChild(proposal)
         }
@@ -137,16 +125,21 @@ const quick = JSON.parse(data.process);
             
             ws.onmessage = (event) => {
                 let data = JSON.parse(event.data)
-                console.log('data from websocket')
-                console.log(data)
                 if ('method' in data) {
                     if (data.method === 'addProposal') {
                         this.addProposal(data.proposal, data.edit)
-                    }
-                    else if (data.method === 'removeProposal') {
+                    } else if (data.method === 'removeProposal') {
                         for (const child of this.proposals.children) {
                             if (child.id === data.proposalId) {
                                 this.proposals.removeChild(child)
+                                break
+                            }
+                        }
+                    }
+                    else if (data.method === 'updateProposal') {
+                        for (const child of this.proposals.children) {
+                            if (child.id === data.proposalId) {
+                                this.updateProposalView(child, data.title, data.description)
                                 break
                             }
                         }

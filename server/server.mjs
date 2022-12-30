@@ -22,28 +22,6 @@ app.use(express.static('dist/client/'));
 app.use(ssrHandler);
 app.use(express.json())
 
-
-app.get('/api/quick/process/:processId/proposal/:proposalId/delete', async(req, res) => {
-  const processId = req.params.processId
-  const process = JSON.parse(await db.get(processId))
-  process.proposals = process.proposals.filter(proposal => proposal.id !== req.params.proposalId)
-  await db.put(processId, JSON.stringify(process))
-  res.json({})
-})
-app.post('/api/quick/process/:processId/proposal/:proposalId', async(req, res) => {
-  const processId = req.params.processId
-  const body = req.body
-  const process = JSON.parse(await db.get(processId))
-  const proposalIndex = process.proposals.findIndex((proposal) => proposal.id === req.params.proposalId)
-  if (proposalIndex === -1) return { status: '-1'}
-
-  const proposal = process.proposals[proposalIndex]
-  proposal.title = body.title
-  proposal.description = body.description
-  await db.put(processId, JSON.stringify(process))
-  res.json({})
-});
-
 app.get('/api/quick/process/:id', async(req, res) => {
   const process = await db.get(req.params.id)
   res.json({ process })
@@ -90,6 +68,7 @@ wss.on('connection', async (ws, req) => {
   ws.on('message', async(message) => {
     let data = JSON.parse(message)
     const processId = data.processId
+    const users = process_map.get(processId)
 
     if ('method' in data) {
       if (data.method === 'setProcess') {
@@ -106,7 +85,6 @@ wss.on('connection', async (ws, req) => {
         let processes = user_map.get(userId)
         processes.push(processId)
         user_map.set(userId, processes)
-
       }
       else if (data.method === 'addProposal') {
         const proposalId = crypto.randomUUID()
@@ -119,7 +97,7 @@ wss.on('connection', async (ws, req) => {
         }
         process.proposals.push(proposal)
         await db.put(processId, JSON.stringify(process))
-        let users = process_map.get(processId)
+
         users.forEach(user => {
           const rtn = {
             method: data.method,
@@ -131,13 +109,11 @@ wss.on('connection', async (ws, req) => {
         
       }
       else if (data.method === 'removeProposal') {
-        const processId = data.processId
         const proposalId = data.proposalId
         const process = JSON.parse(await db.get(processId))
         process.proposals = process.proposals.filter(proposal => proposal.id !== proposalId)
         await db.put(processId, JSON.stringify(process))
 
-        let users = process_map.get(processId)
         users.forEach(user => {
           const rtn = {
             method: data.method,
@@ -145,7 +121,26 @@ wss.on('connection', async (ws, req) => {
           }
           user.ws.send(JSON.stringify(rtn))
         });
-        
+      }
+      else if (data.method === 'updateProposal') {
+        const process = JSON.parse(await db.get(processId))
+        const proposalId = data.proposalId
+
+        const proposalIndex = process.proposals.findIndex((proposal) => proposal.id === proposalId)      
+        const proposal = process.proposals[proposalIndex]
+        proposal.title = data.title
+        proposal.description = data.description
+        await db.put(processId, JSON.stringify(process))
+
+        users.forEach(user => {
+          const rtn = {
+            method: data.method,
+            title: data.title,
+            description: data.description,
+            proposalId
+          }
+          user.ws.send(JSON.stringify(rtn))
+        });
       }
     }
   });
