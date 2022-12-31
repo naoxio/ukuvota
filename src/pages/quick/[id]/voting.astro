@@ -32,8 +32,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
         <voting-list>
             <div class="proposals">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-                    <h3>Title</h3>
-                    <p>Description</p>
+                    <h3></h3>
+                    <p></p>
                     <br/>
                     <div class="flex justify-between">
                         <button class="btn btn-ghost btn-circle">
@@ -73,12 +73,13 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 </BaseLayout>
 
 <script>
+    import { quickTest } from "composables/quickTestData";
 
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
-    const quick = isDev ? {} : JSON.parse(data.process)
+    const quick = isDev ? quickTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
         proposal_html = null
         proposals = null

@@ -7,17 +7,34 @@ export function quickTest() {
         title: 'Topic Question Test',
         proposals: [
             {
+                id: 0,
                 title: 'Example proposal',
                 description: 'Example description'
             },
             {
+                id: 1,
                 title: 'Example proposal2',
                 description: 'Example description'
             },
             {
+                id: 2,
                 title: 'Example proposal3',
                 description: 'Example description'
             },
+        ],
+        votes: [
+            {
+                proposalId: 0,
+                vote: 0
+            },
+            {
+                proposalId: 1,
+                vote: 2
+            },
+            {
+                proposalId: 2,
+                vote: 6
+            }
         ]
     }
 }

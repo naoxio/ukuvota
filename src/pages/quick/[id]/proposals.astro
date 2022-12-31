@@ -58,12 +58,14 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 </BaseLayout>
 
 <script>
+    import { quickTest } from "composables/quickTestData";
+
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const isDev = processId === 'dev';
 
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
-    const quick = isDev ? {} : JSON.parse(data.process)
+    const quick = isDev ? quickTest() : JSON.parse(data.process)
     const ws = new WebSocket(`ws://${window.location.host}`);
 
     class ProposalList extends HTMLElement {
