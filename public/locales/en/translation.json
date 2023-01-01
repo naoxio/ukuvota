@@ -27,6 +27,10 @@
     "timeLeftHeading": "Select the time for proposals and voting",
     "switchCalendar": "Switch to calendar selector",
     "switchSlider": "Switch to slide selector",
+    "proposal": "Proposal",
+    "average": "Average",
+    "total": "Total",
+    "results": "Results",
     "proposalTime": "Proposal Time",
     "votingTime": "Voting Time",
     "proposalEndTime": "Proposal phase ends in",
@@ -46,7 +50,9 @@
     },
     "submitVote": "Submit Vote",
     "shareableUrl": "Shareable link",
-    "qrcode": "Qr-Code"
+    "qrcode": "Qr-Code",
+    "voterName": "Your name or persistent alias",
+    "voters": "Voters"
   },
   "wip": "Not yet implemented, please consider donating to help support this project!",
   "layouts": {

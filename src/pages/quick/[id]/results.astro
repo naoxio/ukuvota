@@ -34,7 +34,8 @@ console.log(quick)
             </div>
 
             <div class="tab-content hide">
-                <h3>{ t('voters') } ({ quick.voters.length }):</h3>
+                <h2>{ t('quick.results') }</h2>
+                <h3>{ t('quick.voters') } ({ quick.voters.length }):</h3>
                 <div class="flex justify-around">
                     { quick.voters.map((voter: any) => (
                         <div class="flex items-center p-1">
@@ -45,12 +46,42 @@ console.log(quick)
                         </div>
                     ))}
                 </div>
+                <br/>
+                <div class="overflow-x-auto">
+                    <table class="table w-full">
+                      <!-- head -->
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>{ t('quick.proposal') }</th>
+                          <th>{ t('quick.average') }</th>
+                          <th>{ t('quick.total') }</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                        { quick.proposals.map((proposal, index) => (
+                            <tr>
+                                <th>{ index + 1}</th>
+                                <td>{ proposal.title }</td>
+                                <td>avg</td>
+                                <td>total</td>
+                            </tr>
+                       ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
             </div>
             <div class="tab-content hide">
-                2
+                <div>
+
+                </div>
             </div>
             <div class="tab-content hide">
-                3
+                <div>
+
+                </div>
             </div>
         </results-card>
     </div>

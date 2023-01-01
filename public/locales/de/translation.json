@@ -27,6 +27,10 @@
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
     "switchCalendar": "Zum Kalender-Auswähler wechseln",
     "switchSlider": "Wechsel zum Schieberegler",
+    "proposal": "Vorschlag",
+    "average": "Durchschnitt",
+    "total": "Gesamtzahl",
+    "results": "Ergebnisse",
     "proposalTime": "Vorschlagzeit",
     "votingTime": "Abstimmungszeit",
     "proposalEndTime": "Vorschlagsammlung endet in",
@@ -46,7 +50,9 @@
     },
     "submitVote": "Wahl abschicken",
     "shareableUrl": "Teilbarer Link",
-    "qrcode": "Qr-Code"
+    "qrcode": "Qr-Code",
+    "voterName": "Ihr Name oder dauerhafter Alias",
+    "voters": "WählerInnen"
   },
   "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
   "layouts": {
