@@ -22,18 +22,40 @@ export function quickTest() {
                 description: 'Example description'
             },
         ],
-        votes: [
+        voters: [
             {
-                proposalId: 0,
-                vote: 0
+                name: "Kim Dotcom",
+                votes: [
+                    {
+                        proposalId: 0,
+                        vote: 0
+                    },
+                    {
+                        proposalId: 1,
+                        vote: 2
+                    },
+                    {
+                        proposalId: 2,
+                        vote: 6
+                    }
+                ]
             },
             {
-                proposalId: 1,
-                vote: 2
-            },
-            {
-                proposalId: 2,
-                vote: 6
+                name: "Elon Musk",
+                votes: [
+                    {
+                        proposalId: 0,
+                        vote: 4
+                    },
+                    {
+                        proposalId: 1,
+                        vote: 0
+                    },
+                    {
+                        proposalId: 2,
+                        vote: 7
+                    }
+                ]
             }
         ]
     }

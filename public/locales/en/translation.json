@@ -91,7 +91,8 @@
   "alert": {
     "quick": {
       "success": {
-        "createProcess": "Process starting..."
+        "createProcess": "Process starting...",
+        "submitVote": "Vote submitted"
       },
       "error": {
         "topicQuestion": "Please add a Topic Question"

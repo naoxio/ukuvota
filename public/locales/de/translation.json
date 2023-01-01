@@ -92,7 +92,9 @@
   "alert": {
     "quick": {
       "success": {
-        "createProcess": "Prozess startet..."
+        "createProcess": "Prozess startet...",
+        "submitVote": "Wahl eingereicht"
+
       },
       "error": {
         "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu"

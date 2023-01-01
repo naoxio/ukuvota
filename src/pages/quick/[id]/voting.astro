@@ -6,6 +6,9 @@ import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
 
+import Alert from "molecules:Alert";
+import AlertManager from "organisms:AlertManager";
+
 
 changeLanguage("en");
 
@@ -16,6 +19,7 @@ const isDev = processId === 'dev';
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
+
 ---
 <style>
     .gray {
@@ -68,11 +72,15 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     {t('quick.submitVote')}
                 </button>
             </div>
+            <AlertManager>
+                <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.submitVote') } />
+            </AlertManager>
         </voting-list>
     </div>
 </BaseLayout>
 
 <script>
+    import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
 
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
@@ -81,6 +89,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
+        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
+        alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
         proposals = null
         addProposal(data: any) {
@@ -138,6 +148,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     body: JSON.stringify(vote)
                 });
                 const json = await res.json();
+                addAlert(this.alertList, this.alerts[0].cloneNode(true))
 
             })
         }

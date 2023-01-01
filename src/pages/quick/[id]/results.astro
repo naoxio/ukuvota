@@ -1,8 +1,10 @@
 ---
 import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
+import { Icon } from "astro-icon";
 
 import { quickTest } from "composables/quickTestData";
+import { t } from "i18next";
 
 const processId = Astro.params.id;
 const { url } = Astro;
@@ -19,8 +21,24 @@ console.log(quick)
         <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
 
         </InfoCard>
-        <div>
-            
+        <div class="card bg-base-100 p-4 m-2">
+            <div class="tabs flex flex-nowrap w-full justify-between">
+                <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
+                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="settings"/></a>
+            </div>
+            <h3>{ t('voters') } ({ quick.voters.length }):</h3>
+            <div class="flex justify-around">
+                { quick.voters.map((voter: any) => (
+                    <div class="flex items-center p-1">
+                        <input type="checkbox" checked="checked" class="checkbox" />
+
+                        <span class="m-1">
+                            { voter.name }
+                        </span>
+                    </div>
+                ))}
+            </div>
         </div>
     </div>
 </BaseLayout>
