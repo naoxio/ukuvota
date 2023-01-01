@@ -44,7 +44,9 @@
       "full": "Vollständige Strategie",
       "voting": "Abstimmungsstrategie"
     },
-    "submitVote": "Wahl abschicken"
+    "submitVote": "Wahl abschicken",
+    "shareableUrl": "Teilbarer Link",
+    "qrcode": "Qr-Code"
   },
   "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
   "layouts": {

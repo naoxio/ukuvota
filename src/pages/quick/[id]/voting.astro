@@ -89,18 +89,19 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
             proposal.querySelector('h3').innerHTML = data.title
             proposal.querySelector('p').innerHTML = data.description
             const buttons = proposal.querySelectorAll('button')
-            proposal.addEventListener('click', (event) => {
-                if (event.target.matches('button')) {
-                    const svgs = buttons.querySelectorAll('svg');
+            buttons.forEach((button: HTMLButtonElement) => {
+                button.addEventListener('click', (event) => {
+                    const svgs = proposal.querySelectorAll('svg');
                     svgs.forEach((svg: SVGElement) => {
-                        
                         svg.classList.add('gray');
                     });
-                    const svg = event.target.querySelector('svg');
+
+                    const svg = button.querySelector('svg');
 
                     svg.classList.remove('gray');
-                }
-            });
+                })
+            })
+
 
             this.proposals.appendChild(proposal)
 

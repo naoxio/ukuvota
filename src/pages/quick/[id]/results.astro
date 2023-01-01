@@ -11,6 +11,7 @@ const isDev = processId === 'dev';
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
+console.log(quick)
 ---
 
 <BaseLayout>

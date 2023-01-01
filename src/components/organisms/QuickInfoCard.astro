@@ -33,18 +33,21 @@ const weight = weightingOptions()[Number(weighting) - 1].label
                 </div>
             </div>
         </div>
-        <div class="flex items-center">
-            <div class="w-full pr-2">
-                <p>{ t('quick.sharaeableUrl') }</p>
-                <input id="sharaeableUrl" type="text" class="input input-bordered w-full" value={ url.href }/>
-            </div>
-            <label for="qr-code-modal" class="btn btn-ghost btn-circle m-2">
-                <Icon width="22" name="qr-code"/>
+        <div class="w-full pr-2">
+            <p>{ t('quick.shareableUrl') }</p>
+            <div class="flex items-center">
 
-            </label>
+                <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
+                <label for="qr-code-modal" class="btn btn-ghost btn-circle m-2">
+                    <Icon width="22" name="qr-code"/>
+    
+                </label>
+
+            </div>
+        </div>
+
               
                           
-        </div>
     </div>
 </div>
 
@@ -63,7 +66,7 @@ const weight = weightingOptions()[Number(weighting) - 1].label
 </div>
 
 <script>
-const sharaeableUrl: HTMLInputElement = document.querySelector('input#sharaeableUrl')
+const sharaeableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
 sharaeableUrl.addEventListener('click', () => {
     sharaeableUrl.focus()
     sharaeableUrl.select()

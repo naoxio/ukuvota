@@ -91,13 +91,11 @@ wss.on('connection', async (ws, req) => {
   ws.on('message', async(message) => {
     let data = JSON.parse(message)
     const processId = data.processId
-    const users = process_map.get(processId)
+    const users = process_map.get(processId) || []
 
     if ('method' in data) {
       switch (data.method) {
         case 'setProcess': {
-          if (!users)
-            users = []
           
           users.push({
             id: userId,
@@ -122,14 +120,13 @@ wss.on('connection', async (ws, req) => {
           process.proposals.push(proposal)
           const updates = [
             db.put(processId, JSON.stringify(process)),
-            sendToAllUsers(
-              users,
-              {
+            users.forEach(user => {
+              user.ws.send(JSON.stringify({
                 method: data.method,
                 edit: userId === user.id,
                 proposal,
-              }
-            ),
+              }));
+            }),
           ];
           await Promise.all(updates); 
           break;
