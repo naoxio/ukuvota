@@ -37,6 +37,7 @@ app.post('/api/quick/process/:id/vote', async(req, res) => {
   }));
 
   const vote = {
+    id: crypto.randomUUID(),
     name: body.name,
     votes
   }

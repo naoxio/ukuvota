@@ -31,13 +31,14 @@ quick.proposals.forEach((proposal) => {
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 const getAverageScore = (total: number) => {
     let i = total / quick.voters.length;
-    if (i < 0)
-        i /= quick.weighting;
-    return Math.round((i + 3) * 100) / 100
+    return Math.round(i * 100) / 100
 }
 const getAverageEmoji = (total: number) => {
-    const i = Math.round(getAverageScore(total))
-    return emojis[i];
+    let i = getAverageScore(total)
+    if (i < 0)
+        i /= quick.weighting;
+    i = Math.round(i)
+    return emojis[i + 3];
 };
 const sortedProposals = quick.proposals.sort((a, b) => {
     return b.total - a.total;
@@ -89,10 +90,10 @@ const getHighlighting = (index) => {
             <div class="tab-content hide">
                 <h2>{ t('quick.results') }</h2>
                 <h3>{ t('quick.voters') } ({ quick.voters.length }):</h3>
-                <div class="flex justify-around">
+                <div class="flex justify-around flex-wrap">
                     { quick.voters.map((voter: any) => (
-                        <div class="flex items-center p-1">
-                            <input type="checkbox" checked="checked" class="checkbox" />
+                        <div class="flex items-center p-2">
+                            <input type="checkbox" checked="checked" class="checkbox checkbox-xs" />
                             <span class="m-1">
                                 { voter.name }
                             </span>

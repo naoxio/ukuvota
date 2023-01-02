@@ -24,7 +24,8 @@ export function quickTest() {
         ],
         voters: [
             {
-                name: "Kim Dotcom",
+                id: '0',
+                name: "Kim",
                 votes: [
                     {
                         proposalId: '0',
@@ -41,7 +42,8 @@ export function quickTest() {
                 ]
             },
             {
-                name: "Elon Musk",
+                id: '1',
+                name: "Elon",
                 votes: [
                     {
                         proposalId: '0',
@@ -58,7 +60,8 @@ export function quickTest() {
                 ]
             },
             {
-                name: "Bill Gates",
+                id: '2',
+                name: "Billy",
                 votes: [
                     {
                         proposalId: '0',
@@ -67,6 +70,60 @@ export function quickTest() {
                     {
                         proposalId: '1',
                         vote: 3
+                    },
+                    {
+                        proposalId: '2',
+                        vote: 3
+                    }
+                ]
+            },
+            {
+                id: '3',
+                name: "Doug",
+                votes: [
+                    {
+                        proposalId: '0',
+                        vote: 0
+                    },
+                    {
+                        proposalId: '1',
+                        vote: 2
+                    },
+                    {
+                        proposalId: '2',
+                        vote: 1
+                    }
+                ]
+            },
+            {
+                id: '4',
+                name: "Phillip",
+                votes: [
+                    {
+                        proposalId: '0',
+                        vote: -3
+                    },
+                    {
+                        proposalId: '1',
+                        vote: 3
+                    },
+                    {
+                        proposalId: '2',
+                        vote: -3
+                    }
+                ]
+            },
+            {
+                id: '5',
+                name: "Julia",
+                votes: [
+                    {
+                        proposalId: '0',
+                        vote: 0
+                    },
+                    {
+                        proposalId: '1',
+                        vote: -2
                     },
                     {
                         proposalId: '2',
