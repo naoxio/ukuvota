@@ -128,13 +128,16 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             }, 0);
         };
 
-        getAverageScore(total: number) {
-            let i = total / quick.voters.length;
-            return Math.round(i * 100) / 100
+        getAverageScore(total: number, voters) {
+            if (voters.length > 0) {
+                let i = total / voters.length;
+                return Math.round(i * 100) / 100
+            }
+            return 0
         }
 
-        getAverageEmoji(total: number) {
-            let i = this.getAverageScore(total)
+        getAverageEmoji(total: number, voters) {
+            let i = this.getAverageScore(total, voters)
             if (i < 0)
                 i /= quick.weighting;
             i = Math.round(i)
@@ -169,9 +172,9 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                         <p>${ proposal.description }</p>
                     </td>
                     <td align="center">
-                        <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${ this.getAverageScore(proposal.total) }>`
+                        <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${ this.getAverageScore(proposal.total, selectedVoters) }>`
 
-                row.querySelector('div.emoji-container').appendChild(this.getAverageEmoji(proposal.total))
+                row.querySelector('div.emoji-container').appendChild(this.getAverageEmoji(proposal.total, selectedVoters))
 
                 row.innerHTML += `
                         </div>
