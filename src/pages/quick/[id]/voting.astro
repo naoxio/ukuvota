@@ -5,21 +5,17 @@ import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
-
 import Alert from "molecules:Alert";
 import AlertManager from "organisms:AlertManager";
-
 
 changeLanguage("en");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const isDev = processId === 'dev';
-
+const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-
 ---
 <style>
     .gray {

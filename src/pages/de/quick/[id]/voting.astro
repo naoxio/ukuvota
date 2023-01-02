@@ -4,14 +4,18 @@ import Countdown from "molecules:Countdown";
 import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
+import { quickTest } from "composables/quickTestData";
+import Alert from "molecules:Alert";
+import AlertManager from "organisms:AlertManager";
 
 changeLanguage("de");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === "dev";
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 <style>
     .gray {
@@ -26,10 +30,10 @@ const quick = JSON.parse(data.process);
     
         </InfoCard>
         <voting-list>
-            <div class="proposals">
+            <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-                    <h3>Title</h3>
-                    <p>Description</p>
+                    <h3></h3>
+                    <p></p>
                     <br/>
                     <div class="flex justify-between">
                         <button class="btn btn-ghost btn-circle">
@@ -56,48 +60,60 @@ const quick = JSON.parse(data.process);
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-2 flex items-center">
-                <input type="text" class="input w-full m-2"/>
+            <br/>   
+            <p>{ t('quick.voterName') }</p>
+            <div class="text-center flex items-center">
+                <input id="sender-name" type="text" class="input w-full m-2"/>
                 <button id="submit-vote" class="btn btn-primary p-2" >
                     {t('quick.submitVote')}
                 </button>
             </div>
+            <AlertManager>
+                <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.submitVote') } />
+            </AlertManager>
         </voting-list>
     </div>
 </BaseLayout>
 
 <script>
+    import { addAlert } from 'composables/addAlert'
+    import { quickTest } from "composables/quickTestData";
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
-    const data = await res.json();
-    const quick = JSON.parse(data.process)
+    const isDev = processId === 'dev';
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const quick = isDev ? quickTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
+        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
+        alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
-        proposals = null
+        proposal_list = null
         addProposal(data: any) {
             const proposal = this.proposal_html.cloneNode(true)
+            proposal.id = data.id
             proposal.querySelector('h3').innerHTML = data.title
             proposal.querySelector('p').innerHTML = data.description
             const buttons = proposal.querySelectorAll('button')
             buttons.forEach((button: HTMLButtonElement) => {
-                button.addEventListener('click', () => {
-                    const icon = button.querySelector('svg')
-                    buttons.forEach(btn => {
-                        const icon = btn.querySelector('svg')
-                        icon.style.filter = "grayscale(100%)"
-                    })
-                    icon.style.filter = "grayscale(0%)"
+                button.addEventListener('click', (event) => {
+                    const svgs = proposal.querySelectorAll('svg');
+                    svgs.forEach((svg: SVGElement) => {
+                        svg.classList.add('gray');
+                    });
 
+                    const svg = button.querySelector('svg');
+
+                    svg.classList.remove('gray');
                 })
             })
-            this.proposals.appendChild(proposal)
 
+            this.proposal_list.appendChild(proposal)
         }
         constructor() {
             super()
-            this.proposals = this.querySelector('div.proposals')
-            this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
-            this.proposals.innerHTML = ""
+            this.proposal_list = this.querySelector('div.proposal-list')
+            this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
+            this.proposal_list.innerHTML = ""
 
             quick.proposals.forEach((data: any) => {
                 this.addProposal(data)
@@ -105,8 +121,31 @@ const quick = JSON.parse(data.process);
 
             const submit = this.querySelector('button#submit-vote')
             submit.addEventListener('click', async() => {
-                console.log('hi')
-                
+                const votesMap = new Map();
+                const proposals = this.proposal_list.querySelectorAll('div.proposal')
+                Array.from(proposals).forEach((proposal: any) => {
+                    const svgs = proposal.querySelectorAll('svg')
+                    for (const [i, svg] of svgs.entries()) {
+                        if (!svg.classList.contains('gray')) {
+                            votesMap.set(proposal.id, i - 3);
+                        }
+                    };
+                });
+                const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
+                const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+                const vote = {
+                    name: senderName.value,
+                    votes
+                }
+                if (!isDev) {
+                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                        method: "POST",
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify(vote)
+                    });
+                    const json = await res.json();
+                }
+                addAlert(this.alertList, this.alerts[0].cloneNode(true))
             })
         }
     }
@@ -114,11 +153,11 @@ const quick = JSON.parse(data.process);
 
     const checkTime = () => {
         const time =  +new Date(quick.votingEnd) - +new Date()
-        /*if (time <= 0)
+        if (time <= 0)
 
             window.location.href = `${window.location.origin}/quick/${processId}/results`
         else
-            setTimeout(checkTime, 1000)*/
+            setTimeout(checkTime, time)
     }
     checkTime()
 </script>

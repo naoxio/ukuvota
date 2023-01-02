@@ -4,14 +4,16 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates:BaseLayout";
 import Countdown from "molecules:Countdown";
 import InfoCard from "organisms:QuickInfoCard";
+import { quickTest } from "composables/quickTestData";
 
 changeLanguage("de");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === "dev";
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 
 <BaseLayout>
@@ -34,9 +36,9 @@ const quick = JSON.parse(data.process);
                     <div class="edit flex justify-between items-center" style="display: none;">
                         <div class="content flex flex-col w-full">
                             <b>{ t('quick.topic') }</b>
-                            <input type="text" placeholder={ t('pleaseInput') } class="input input-bordered input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
                             <label>{ t('quick.description') }</label>
-                            <input type="text" placeholder={ t('pleaseInput') } class="input input-bordered input-sm my-2"/>
+                            <input type="text" class="input input-bordered input-sm my-2"/>
                         </div>
                         <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
                             <Icon name="save"/>
@@ -54,86 +56,136 @@ const quick = JSON.parse(data.process);
 </BaseLayout>
 
 <script>
+    import { quickTest } from "composables/quickTestData";
+
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const res = await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
-    const data = await res.json();
-    const quick = JSON.parse(data.process)
+    const isDev = processId === 'dev';
+
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const quick = isDev ? quickTest() : JSON.parse(data.process)
+    const ws = new WebSocket(`ws://${window.location.host}`);
 
     class ProposalList extends HTMLElement {
         proposal_html = null
         proposals = null
-        updateProposalView(view, title, description) {
-            const view_content = view.querySelector('div')
-                view_content.innerHTML = `
-                    <h3>${title}</h3>
-                    <p>${description}</p>
-                `
+        updateProposalView(proposal, title: string, description: string) {
+            const view_content = proposal.querySelector('div.view').querySelector('div')
+            view_content.innerHTML = `
+                <h3>${title}</h3>
+                <p>${description}</p>`
         }
-        
+        updateProposalEdit(proposal, title, description) {
+            const edit_content = proposal.querySelector('div.edit').querySelector('div')
+            const inputs = edit_content.querySelectorAll('input')
+            inputs[0].value = title
+            inputs[1].value = description
+        }
         addProposal(data, editing: boolean = false) {
             const proposal = this.proposal_html.cloneNode(true)
+            proposal.id = data.id
             const view = proposal.querySelector('div.view')
             const edit = proposal.querySelector('div.edit')
-            this.updateProposalView(view, data.title, data.description)
+            this.updateProposalView(proposal, data.title, data.description)
             if (editing) {
                 view.style.display = 'none'
                 edit.style.display = 'flex'
             }
+
             const edit_button = view.querySelector('button')
             edit_button.addEventListener('click', () => {
                 view.style.display = 'none'
                 edit.style.display = 'flex'
-
             })
 
             const edit_content = edit.querySelector('div')
             const inputs = edit_content.querySelectorAll('input')
             inputs[0].value = data.title
             inputs[1].value = data.description
+            const proposalId = data.id
 
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    ws.send(JSON.stringify({
+                        method: 'updateProposal',
+                        title: inputs[0].value,
+                        description: inputs[1].value,
+                        processId,
+                        proposalId
+                    }))
+                })
+            })
             const save_button = edit.querySelector('button')
-            save_button.addEventListener('click', async() => {
+            save_button.addEventListener('click', () => {
                 view.style.display = 'flex'
                 edit.style.display = 'none'
-                const proposalId = data.id
                 if (inputs[0].value === '' && inputs[1].value === '') {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}/delete`, { method: "GET" });
-                    const data = await res.json();
-                    this.proposals.removeChild(proposal) 
+                    ws.send(JSON.stringify({
+                        method: 'removeProposal',
+                        processId,
+                        proposalId
+                    }))     
+                } else {
+                    ws.send(JSON.stringify({
+                        method: 'updateProposal',
+                        title: inputs[0].value,
+                        description: inputs[1].value,
+                        processId,
+                        proposalId
+                    }))         
                 }
-                else {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal/${proposalId}`, {
-                        method: "POST",
-                        headers: {'Content-Type':'application/json'},
-                        body: JSON.stringify({
-                            title: inputs[0].value,
-                            description: inputs[1].value
-                        })
-                    });
-                    const json = await res.json();
-                }
-                this.updateProposalView(view, inputs[0].value, inputs[1].value)
             })
             this.proposals.appendChild(proposal)
         }
         constructor() {
             super()
+
             this.proposals = this.querySelector('div.proposals')
             this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true)
             this.proposals.innerHTML = ""
-            quick.proposals.forEach(data => {
-                this.addProposal(data)
+            
+            ws.onmessage = (event) => {
+                let data = JSON.parse(event.data)
+                if ('method' in data) {
+                    if (data.method === 'addProposal') {
+                        this.addProposal(data.proposal, data.edit)
+                    } else if (data.method === 'removeProposal') {
+                        for (const child of this.proposals.children) {
+                            if (child.id === data.proposalId) {
+                                this.proposals.removeChild(child)
+                                break
+                            }
+                        }
+                    }
+                    else if (data.method === 'updateProposal') {
+                        for (const child of this.proposals.children) {
+                            if (child.id === data.proposalId) {
+                                this.updateProposalView(child, data.title, data.description)
+                                this.updateProposalEdit(child, data.title, data.description)
+                                break
+                            }
+                        }
+                    }
+                }
+            };
+            ws.onopen = (event) => {
+                ws.send(JSON.stringify({
+                    method: 'setProcess',
+                    processId
+                }))
+            };
+
+            quick.proposals.forEach(proposal => {
+                this.addProposal(proposal)
             });
 
             const addButton = this.querySelector('button#add-proposal')
             addButton.addEventListener('click', async() => {
-                const res = await fetch(`${location.origin}/api/quick/process/${processId}/proposal`, { method: "GET" });
-                const data = await res.json();
-                this.addProposal(data.proposal, true)
-                
+                ws.send(JSON.stringify({
+                    method: 'addProposal',
+                    processId
+                }))                
             })
-
-
         }
     }
     customElements.define('proposal-list', ProposalList)
@@ -144,21 +196,10 @@ const quick = JSON.parse(data.process);
         if (time <= 0)
             window.location.href = `${window.location.origin}/quick/${processId}/voting`
         else
-            setTimeout(checkTime, time)
+            setTimeout(checkTime, 1000)
     }
     checkTime()
 
-    
+        
 
 </script>
-<script is:global>
-
-    const ws = new WebSocket(`ws://${window.location.host}`);
-    ws.onmessage = (event) => {
-        console.log(event.data);
-    };
-    ws.onopen = (event) => {
-        ws.send("Here's some text that the server is urgently awaiting!")
-    };
-
-    </script>

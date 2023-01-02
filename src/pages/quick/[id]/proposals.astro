@@ -8,11 +8,9 @@ import { quickTest } from "composables/quickTestData";
 
 changeLanguage("en");
 
-
 const processId = Astro.params.id;
 const { url } = Astro;
-const isDev = processId === 'dev';
-
+const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);

@@ -1,13 +1,168 @@
 ---
 import BaseLayout from "templates:BaseLayout";
+import InfoCard from "organisms:QuickInfoCard";
+import { Icon } from "astro-icon";
+import { quickTest } from "composables/quickTestData";
+import { t, changeLanguage } from "i18next";
+
+changeLanguage("de");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const res = await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data = await res.json();
-const quick = JSON.parse(data.process);
+const isDev = processId === "dev";
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
+const getTotal = (proposalId: string) => {
+    return quick.voters.reduce((sum: number, voter: any) => {
+        const matchingVote = voter.votes.find((vote: any) => vote.proposalId === proposalId);
+        if (matchingVote) {
+            let v = matchingVote.vote;
+            if (v < 0)
+                v *= quick.weighting;
+            return sum + v;
+        }
+        return sum;
+    }, 0);
+};
+quick.proposals.forEach((proposal) => {
+    proposal["total"] = getTotal(proposal.id);
+});
+const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+const getAverageEmoji = (total: number) => {
+    let i = total / quick.voters.length;
+    if (i < 0)
+        i /= quick.weighting;
+    i = Math.round(i);
+    console.log(i);
+    return emojis[i + 3];
+};
+const sortedProposals = quick.proposals.sort((a, b) => {
+    return b.total - a.total;
+});
+const getHighlighting = (index) => {
+    if (index === 0) {
+        return "one";
+    }
+    else if (index === 1) {
+        return "two";
+    }
+    else if (index === 2) {
+        return "three";
+    }
+    else {
+        return "";
+    }
+};
 ---
+<style>
+    .hide {
+        display: none;
+    }
+    .one td, .one th {
+        background-color: rgba(205, 92, 92, 0.3);
+    }
+
+    .two td, .two th {
+        background-color: rgba(205, 92, 92, 0.2);
+    }
+
+    .three td, .three th {
+        background-color: rgba(205, 92, 92, 0.1);
+    }
+</style>
 
 <BaseLayout>
+    <div class="card bg-base-200 px-6 my-4 py-6">
+        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
 
+        </InfoCard>
+        <results-card class="card bg-base-100 p-4 m-2">
+            <div class="tabs flex flex-nowrap w-full justify-between">
+                <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
+                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="settings"/></a>
+            </div>
+
+            <div class="tab-content hide">
+                <h2>{ t('quick.results') }</h2>
+                <h3>{ t('quick.voters') } ({ quick.voters.length }):</h3>
+                <div class="flex justify-around">
+                    { quick.voters.map((voter: any) => (
+                        <div class="flex items-center p-1">
+                            <input type="checkbox" checked="checked" class="checkbox" />
+                            <span class="m-1">
+                                { voter.name }
+                            </span>
+                        </div>
+                    ))}
+                </div>
+                <br/>
+                <div class="overflow-x-auto">
+                    <table class="table w-full">
+                      <!-- head -->
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>{ t('quick.proposal') }</th>
+                          <th>{ t('quick.averageScore') }</th>
+                          <th>{ t('quick.totalScore') }</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                        { sortedProposals.map((proposal, index) => (
+                            <tr class={ getHighlighting(index) }>
+                                <th>{ index + 1}</th>
+                                <td>
+                                    <h3>{ proposal.title }</h3>
+                                    <p>{ proposal.description }</p>
+                                </td>
+                                <td><Icon name={ getAverageEmoji(proposal.total) }  width="48" /></td>
+                                <td>{ proposal.total }</td>
+                            </tr>
+                       ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+            </div>
+            <div class="tab-content hide">
+                <div>
+
+                </div>
+            </div>
+            <div class="tab-content hide">
+                <div>
+
+                </div>
+            </div>
+        </results-card>
+    </div>
 </BaseLayout>
+<script>
+    class ResultsCard extends HTMLElement {
+        constructor() {
+            super()
+            const tabs = this.querySelectorAll('a.tab')
+            const contents = this.querySelectorAll('div.tab-content')
+            for (const [i, tab] of tabs.entries()) {
+                tab.addEventListener('click', () => {
+                    contents.forEach(content => content.classList.add('hide'))
+                    tabs.forEach(tab => tab.classList.remove('tab-active'))
+                    tab.classList.add('tab-active')
+                    contents[i].classList.remove('hide')
+                })
+
+                if (tab.classList.contains('tab-active')) {
+                    contents[i].classList.remove('hide')
+                } else {
+                    contents[i].classList.add('hide')
+                }
+            }
+
+
+        }
+    }
+    customElements.define('results-card', ResultsCard)
+</script>

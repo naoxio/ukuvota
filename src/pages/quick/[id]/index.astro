@@ -7,23 +7,21 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const isDev = processId === 'dev';
+const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
-const data =  isDev ? null : await res.json();
+const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-
 const proposalTime = +new Date(quick.proposalEnd) - +new Date();
 const votingTime = +new Date(quick.votingEnd) - +new Date();
-
-switch(true) {
-  case !quick:
-    return Astro.redirect("/quick");
-  case proposalTime > 0:
-    return Astro.redirect(`${url.origin}/api/quick/${processId}/proposals`);
-  case votingTime > 0:
-    return Astro.redirect(`${url.origin}/api/quick/${processId}/voting`);
-  default:
-    return Astro.redirect(`${url.origin}/api/quick/${processId}/results`);
+switch (true) {
+    case !quick:
+        return Astro.redirect("/quick");
+    case proposalTime > 0:
+        return Astro.redirect(`${url.origin}/api/quick/${processId}/proposals`);
+    case votingTime > 0:
+        return Astro.redirect(`${url.origin}/api/quick/${processId}/voting`);
+    default:
+        return Astro.redirect(`${url.origin}/api/quick/${processId}/results`);
 }
 ---
 

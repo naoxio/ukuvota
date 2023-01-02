@@ -2,62 +2,60 @@
 import BaseLayout from "templates:BaseLayout";
 import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
-
 import { quickTest } from "composables/quickTestData";
-import { t } from "i18next";
+import { t, changeLanguage } from "i18next";
+
+changeLanguage("en");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-const isDev = processId === 'dev';
-
+const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-
 const getTotal = (proposalId: string) => {
-  return quick.voters.reduce((sum: number, voter: any) => {
-    const matchingVote = voter.votes.find((vote: any) => vote.proposalId === proposalId)
-    if (matchingVote) {
-        let v = matchingVote.vote
-        if (v < 0)
-            v *= quick.weighting
-        console.log(v)
-        return sum + v
-    }
-    return sum
-  }, 0)
-}
+    return quick.voters.reduce((sum: number, voter: any) => {
+        const matchingVote = voter.votes.find((vote: any) => vote.proposalId === proposalId);
+        if (matchingVote) {
+            let v = matchingVote.vote;
+            if (v < 0)
+                v *= quick.weighting;
+            return sum + v;
+        }
+        return sum;
+    }, 0);
+};
 quick.proposals.forEach((proposal) => {
-    proposal['total'] = getTotal(proposal.id)
-})
-
-const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
-
-const getAverageEmoji = (total: number) => {
-    let i = total / quick.voters.length
+    proposal["total"] = getTotal(proposal.id);
+});
+const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+const getAverageScore = (total: number) => {
+    let i = total / quick.voters.length;
     if (i < 0)
-        i /= quick.weighting
-    i = Math.round(i)
-    console.log(i)
-    return emojis[i + 3]
+        i /= quick.weighting;
+    return Math.round((i + 3) * 100) / 100
 }
-
-
+const getAverageEmoji = (total: number) => {
+    const i = Math.round(getAverageScore(total))
+    return emojis[i];
+};
 const sortedProposals = quick.proposals.sort((a, b) => {
-  return b.total - a.total;
-})
-
+    return b.total - a.total;
+});
 const getHighlighting = (index) => {
     if (index === 0) {
-        return 'one';
-    } else if (index === 1) {
-        return 'two';
-    } else if (index === 2) {
-        return 'three';
-    } else {
-        return '';
+        return "one";
     }
-}
+    else if (index === 1) {
+        return "two";
+    }
+    else if (index === 2) {
+        return "three";
+    }
+    else {
+        return "";
+    }
+};
 ---
 <style>
     .hide {
@@ -107,23 +105,27 @@ const getHighlighting = (index) => {
                       <!-- head -->
                       <thead>
                         <tr>
-                          <th></th>
+                          <td></td>
                           <th>{ t('quick.proposal') }</th>
-                          <th>{ t('quick.average') }</th>
-                          <th>{ t('quick.total') }</th>
+                          <th >{ t('quick.averageScore') }</th>
+                          <th>{ t('quick.totalScore') }</th>
                         </tr>
                       </thead>
                       <tbody>
                         
-                        { sortedProposals.map((proposal, index) => (
-                            <tr class={ getHighlighting(index) }>
-                                <th>{ index + 1}</th>
+                        { sortedProposals.map((proposal: any, index: number) => (
+                            <tr class={ getHighlighting(index)}>
+                                <td>{ index + 1}</td>
                                 <td>
                                     <h3>{ proposal.title }</h3>
                                     <p>{ proposal.description }</p>
                                 </td>
-                                <td><Icon name={ getAverageEmoji(proposal.total) }  width="48" /></td>
-                                <td>{ proposal.total }</td>
+                                <td align="center">
+                                    <div class="tooltip cursor-pointer tooltip-left" data-tip={ getAverageScore(proposal.total) }>
+                                        <Icon name={ getAverageEmoji(proposal.total) }  width="48" />
+                                    </div>
+                                </td>
+                                <td align="center">{ proposal.total }</td>
                             </tr>
                        ))}
                       </tbody>

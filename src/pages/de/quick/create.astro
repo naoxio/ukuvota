@@ -4,6 +4,8 @@ import TimeSelector from "molecules:TimeSelector";
 import { weightingOptions } from "composables/weightingOptions";
 import { t, changeLanguage } from "i18next";
 import WeightingInfo from "molecules:WeightingInfo";
+import Alert from "molecules:Alert";
+import AlertManager from "organisms:AlertManager";
 import DefaultProposalInfo from "molecules:DefaultProposalInfo";
 
 changeLanguage("de");
@@ -24,14 +26,6 @@ const proposals = [
     },
 ];
 ---
-<style>
-  .alert-list {
-    position: fixed;
-    top: 2rem;
-    left: 0;
-    right: 0;
-  }
-</style>
 
 <BaseLayout>
 
@@ -47,9 +41,7 @@ const proposals = [
     <span class="flex justify-center items-center">
       <select name="weighting" class="select" value={weighting}>
         { weightOptions.map((weight) => 
-          <>
-            <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
-          </>
+          <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
         )}
       </select>
       <WeightingInfo />
@@ -65,22 +57,10 @@ const proposals = [
       </div>
     </div>
     <br/>
-    <div class="alert-manager">
-      <div class="m-0 p-0 flex flex-col items-center alert-list">
-        <div class="alert alert-error w-80 shadow-lg m-2" style="display: none">
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>{ t('alert.quick.error.topicQuestion') }</span>
-          </div>
-        </div>
-        <div class="alert alert-success w-80 shadow-lg m-2" style="display: none">
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>{ t('alert.quick.success.createProcess') }</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AlertManager>
+      <Alert type="error" icon="warning" label={ t('alert.quick.error.topicQuestion') } />
+      <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.createProcess') } />
+    </AlertManager>
     <br/>
     <div class="text-center">
       <button id="submit" type="submit" class="btn btn-primary">
@@ -94,11 +74,12 @@ const proposals = [
 </BaseLayout>
 
 <script>
+  import { addAlert } from 'composables/addAlert'
+
   class QuickForm extends HTMLElement {
     form = {}
-    alertManager = null
-    successAlert = null
-    errorAlert = null
+    alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
+    alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
     findValues(inputs: NodeListOf<any>) {
       Array.from(inputs).forEach((input) => {
         if(input.name) {
@@ -109,42 +90,36 @@ const proposals = [
         }
       })
     }
-    addAlert(alert){
-      const list =  this.alertManager.querySelector('div.alert-list')
-      alert.style.display = "block"
-      list.appendChild(alert)
-      setTimeout(() => {
-        list.removeChild(alert)
-      }, 3000)
-    }
+
     constructor() {
-        super()
-        const buttons = this.querySelectorAll('button')
-        const inputs = this.querySelectorAll('input')
-        const textareas = this.querySelectorAll('textarea')
-        const selectors = this.querySelectorAll('select')
-        this.alertManager = this.querySelector('div.alert-manager')
-        this.successAlert = this.alertManager.querySelector('div.alert-success').cloneNode(true)
-        this.errorAlert = this.alertManager.querySelector('div.alert-error').cloneNode(true)
-        //this.alertList.innerHTML = ""
+      super()
+      const buttons = this.querySelectorAll('button')
+      const inputs = this.querySelectorAll('input')
+      const textareas = this.querySelectorAll('textarea')
+      const selectors = this.querySelectorAll('select')
 
-        const proposals = JSON.parse(this.dataset.proposals)
-        const button = Array.from(buttons).find(btn => btn.id === 'submit')
+      const proposals = JSON.parse(this.dataset.proposals)
+      const button = Array.from(buttons).find(btn => btn.id === 'submit')
+      
+      button.addEventListener('click', async() => {
+        this.form = {}
+        this.findValues(inputs)
+        this.findValues(textareas)
+        this.findValues(selectors)
+        const lang = document.documentElement.lang
+        if (this.form['topicQuestion'] === '') {
+          addAlert(this.alertList, this.alerts[0].cloneNode(true))
+        }
+        else {
+          addAlert(this.alertList, this.alerts[1].cloneNode(true))
 
-        button.addEventListener('click', async() => {
-          this.form = {}
-          this.findValues(inputs)
-          this.findValues(textareas)
-          this.findValues(selectors)
-          const lang = document.documentElement.lang
-          if (this.form['topicQuestion'] === '') {
-            this.addAlert(this.errorAlert.cloneNode(true))
+          this.form['strategy'] = 1
+          this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
+          
+          if (import.meta.env.DEV) {
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/dev/proposals`
           }
           else {
-            this.addAlert(this.successAlert.cloneNode(true))
-
-            this.form['strategy'] = 1
-            this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
             const res = await fetch(`${location.origin}/api/quick/process`, {
               method: "POST",
               headers: {'Content-Type':'application/json'},
@@ -152,13 +127,11 @@ const proposals = [
             });
             const json = await res.json();
             window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
-
           }
-
-        })
+        }
+      })
     }
   }
   customElements.define('quick-form', QuickForm)
-
 
 </script>
