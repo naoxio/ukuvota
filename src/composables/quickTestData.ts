@@ -45,7 +45,7 @@ export function quickTest() {
                 votes: [
                     {
                         proposalId: '0',
-                        vote: 3
+                        vote: -2
                     },
                     {
                         proposalId: '1',
@@ -54,6 +54,23 @@ export function quickTest() {
                     {
                         proposalId: '2',
                         vote: 1
+                    }
+                ]
+            },
+            {
+                name: "Bill Gates",
+                votes: [
+                    {
+                        proposalId: '0',
+                        vote: -2
+                    },
+                    {
+                        proposalId: '1',
+                        vote: 3
+                    },
+                    {
+                        proposalId: '2',
+                        vote: 3
                     }
                 ]
             }

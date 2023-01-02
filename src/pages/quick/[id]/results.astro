@@ -14,24 +14,32 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/proces
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 
-const findTotal = (proposalId: string) => {
+const getTotal = (proposalId: string) => {
   return quick.voters.reduce((sum: number, voter: any) => {
     const matchingVote = voter.votes.find((vote: any) => vote.proposalId === proposalId)
     if (matchingVote) {
-      return sum + matchingVote.vote
+        let v = matchingVote.vote
+        if (v < 0)
+            v *= quick.weighting
+        console.log(v)
+        return sum + v
     }
     return sum
   }, 0)
 }
 quick.proposals.forEach((proposal) => {
-    proposal['total'] = findTotal(proposal.id)
+    proposal['total'] = getTotal(proposal.id)
 })
 
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
 
 const getAverageEmoji = (total: number) => {
-    const index = Math.round(total / quick.voters.length)
-    return emojis[index + 3]
+    let i = total / quick.voters.length
+    if (i < 0)
+        i /= quick.weighting
+    i = Math.round(i)
+    console.log(i)
+    return emojis[i + 3]
 }
 
 
