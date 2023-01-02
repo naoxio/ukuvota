@@ -40,39 +40,41 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             </div>
 
             <div class="tab-content hide">
-                <h2>{ t('quick.results') }</h2>
-                <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
-                <div class="flex justify-around flex-wrap">
-                    { quick.voters.map((voter: any) => (
-                        <div class="flex items-center p-2">
-                            <input id={voter.id} type="checkbox" checked class="voter checkbox checkbox-xs" />
-                            <span class="m-1">
-                                { voter.name }
-                            </span>
-                        </div>
-                    ))}
+                <div class="screenshot-results">
+                    <h2>{ t('quick.results') }</h2>
+                    <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
+                    <div class="flex justify-around flex-wrap">
+                        { quick.voters.map((voter: any) => (
+                            <div class="flex items-center p-2">
+                                <input id={voter.id} type="checkbox" checked class="voter checkbox checkbox-xs" />
+                                <span class="m-1">
+                                    { voter.name }
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <br/>
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                        <!-- head -->
+                        <thead>
+                            <tr class="table-row-one">
+                            <td></td>
+                            <th>{ t('quick.proposal') }</th>
+                            <th >{ t('quick.averageScore') }</th>
+                            <th>{ t('quick.totalScore') }</th>
+                            </tr>
+                        </thead>
+                        <tbody class="proposal-list">
+                        </tbody>
+                        </table>
+                    </div>
+                    <br/>
                 </div>
-                <br/>
-                <div class="overflow-x-auto">
-                    <table class="table w-full">
-                      <!-- head -->
-                      <thead>
-                        <tr class="table-row-one">
-                          <td></td>
-                          <th>{ t('quick.proposal') }</th>
-                          <th >{ t('quick.averageScore') }</th>
-                          <th>{ t('quick.totalScore') }</th>
-                        </tr>
-                      </thead>
-                      <tbody class="proposal-list">
-                      </tbody>
-                    </table>
-                  </div>
                   <div class="card">
                     <h3>{ t('quick.exportData') }</h3>
                     <div class="flex justify-around exports">
                         <button class="export-markdown btn btn-ghost">Markdown</button>
-                        <button class="export-json btn btn-ghost">JSON</button>
                         <button class="export-image btn btn-ghost">Image</button>
                     </div>
                 </div>
@@ -94,6 +96,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
     </div>
 </BaseLayout>
 <script>
+    import download from 'downloadjs'
+    import { toPng } from 'html-to-image';
     import { quickTest } from "composables/quickTestData";
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -111,6 +115,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         document.body.removeChild(elem);
     }
 
+    
 
     const getHighlighting = (className: string) => {
         if (className === "color-0") {
@@ -127,9 +132,10 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         }
     };
 
+   
     class ResultsCard extends HTMLElement {
         voters = this.querySelectorAll('input.voter')
-        proposal_list = this.querySelector('tbody.proposal-list')
+        proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
         getTotal(proposalId: string, selectedVoters) {
             return selectedVoters.reduce((sum: number, voter: any) => {
@@ -285,11 +291,10 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                     if (button.classList.contains("export-markdown")) {
                         this.getMarkdownFile()
                     }
-                    else if (button.classList.contains("export-json")) {
-
-                    }
                     else if (button.classList.contains("export-image")) {
-
+                        toPng(this.querySelector('div.screenshot-results') as HTMLElement).then((dataUrl) => {
+                            download(dataUrl, quick.title + '.png')
+                        })
                     }
                 })
             })
