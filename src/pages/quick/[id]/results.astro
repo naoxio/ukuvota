@@ -36,7 +36,6 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             <div class="tabs flex flex-nowrap w-full justify-between">
                 <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
                 <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
-                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="settings"/></a>
             </div>
 
             <div class="tab-content hide">
@@ -74,22 +73,20 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                   <div class="card">
                     <h3>{ t('quick.exportData') }</h3>
                     <div class="flex justify-around exports">
-                        <button class="export-markdown btn btn-ghost">Markdown</button>
-                        <button class="export-image btn btn-ghost">Image</button>
+                        <button class="export-markdown btn btn-ghost"><Icon width="32" name="document-download"/></button>
+                        <button class="export-image btn btn-ghost"><Icon width="32" name="camera" /></button>
                     </div>
                 </div>
                   
             </div>
             <div class="tab-content hide">
                 <div>
-
+                    <br/>
+                    <br/>
+                    { t('wip')}
                 </div>
             </div>
-            <div class="tab-content hide">
-                <div>
 
-                </div>
-            </div>
 
         </results-card>
        
