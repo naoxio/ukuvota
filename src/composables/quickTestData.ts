@@ -28,15 +28,15 @@ export function quickTest() {
                 votes: [
                     {
                         proposalId: '0',
-                        vote: 0
+                        vote: -3
                     },
                     {
                         proposalId: '1',
-                        vote: 2
+                        vote: 0
                     },
                     {
                         proposalId: '2',
-                        vote: 6
+                        vote: 2
                     }
                 ]
             },
@@ -45,15 +45,15 @@ export function quickTest() {
                 votes: [
                     {
                         proposalId: '0',
-                        vote: 4
+                        vote: 3
                     },
                     {
                         proposalId: '1',
-                        vote: 0
+                        vote: -2
                     },
                     {
                         proposalId: '2',
-                        vote: 7
+                        vote: 1
                     }
                 ]
             }

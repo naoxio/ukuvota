@@ -34,7 +34,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
     
         </InfoCard>
         <voting-list>
-            <div class="proposals">
+            <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
                     <h3></h3>
                     <p></p>
@@ -82,7 +82,6 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 <script>
     import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
-
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
@@ -92,7 +91,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
         alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
-        proposals = null
+        proposal_list = null
         addProposal(data: any) {
             const proposal = this.proposal_html.cloneNode(true)
             proposal.id = data.id
@@ -112,15 +111,14 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                 })
             })
 
-
-            this.proposals.appendChild(proposal)
-
+            this.proposal_list.appendChild(proposal)
         }
         constructor() {
             super()
-            this.proposals = this.querySelector('div.proposals')
-            this.proposal_html = this.querySelector('div.proposal').cloneNode(true)
-            this.proposals.innerHTML = ""
+            this.proposal_list = this.querySelector('div.proposal-list')
+            this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
+            this.proposal_list.innerHTML = ""
+
             quick.proposals.forEach((data: any) => {
                 this.addProposal(data)
             });
@@ -128,13 +126,14 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
             const submit = this.querySelector('button#submit-vote')
             submit.addEventListener('click', async() => {
                 const votesMap = new Map();
-                this.proposals.forEach((proposal: any) => {
+                const proposals = this.proposal_list.querySelectorAll('div.proposal')
+                Array.from(proposals).forEach((proposal: any) => {
                     const svgs = proposal.querySelectorAll('svg')
-                    svgs.forEach((svg: SVGElement, index: number) => {
+                    for (const [i, svg] of svgs.entries()) {
                         if (!svg.classList.contains('gray')) {
-                            votesMap.set(proposal.id, index);
+                            votesMap.set(proposal.id, i - 3);
                         }
-                    });
+                    };
                 });
                 const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
                 const senderName: HTMLInputElement = this.querySelector('input#sender-name')
@@ -142,14 +141,15 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     name: senderName.value,
                     votes
                 }
-                const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
-                    method: "POST",
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify(vote)
-                });
-                const json = await res.json();
+                if (!isDev) {
+                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                        method: "POST",
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify(vote)
+                    });
+                    const json = await res.json();
+                }
                 addAlert(this.alertList, this.alerts[0].cloneNode(true))
-
             })
         }
     }
