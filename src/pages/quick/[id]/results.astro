@@ -14,7 +14,6 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/proces
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-
 ---
 <style>
     .hide {
@@ -82,6 +81,15 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                 </div>
             </div>
         </results-card>
+        <br/>
+        <div class="card">
+            <h3>{ t('quick.exportData') }</h3>
+            <div class="flex justify-around">
+                <button class="btn btn-ghost">Markdown</button>
+                <button class="btn btn-ghost">JSON</button>
+                <button class="btn btn-ghost">Image</button>
+            </div>
+        </div>
     </div>
 </BaseLayout>
 <script>

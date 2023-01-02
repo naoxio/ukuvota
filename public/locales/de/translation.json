@@ -52,7 +52,8 @@
     "shareableUrl": "Teilbarer Link",
     "qrcode": "Qr-Code",
     "voterName": "Ihr Name oder dauerhafter Alias",
-    "voters": "WählerInnen"
+    "voters": "WählerInnen",
+    "exportData": "Daten exportieren"
   },
   "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
   "layouts": {
