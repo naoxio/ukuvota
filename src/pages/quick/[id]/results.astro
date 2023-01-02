@@ -13,66 +13,14 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-const getTotal = (proposalId: string) => {
-    return quick.voters.reduce((sum: number, voter: any) => {
-        const matchingVote = voter.votes.find((vote: any) => vote.proposalId === proposalId);
-        if (matchingVote) {
-            let v = matchingVote.vote;
-            if (v < 0)
-                v *= quick.weighting;
-            return sum + v;
-        }
-        return sum;
-    }, 0);
-};
-quick.proposals.forEach((proposal) => {
-    proposal["total"] = getTotal(proposal.id);
-});
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-const getAverageScore = (total: number) => {
-    let i = total / quick.voters.length;
-    return Math.round(i * 100) / 100
-}
-const getAverageEmoji = (total: number) => {
-    let i = getAverageScore(total)
-    if (i < 0)
-        i /= quick.weighting;
-    i = Math.round(i)
-    return emojis[i + 3];
-};
-const sortedProposals = quick.proposals.sort((a, b) => {
-    return b.total - a.total;
-});
-const getHighlighting = (index) => {
-    if (index === 0) {
-        return "one";
-    }
-    else if (index === 1) {
-        return "two";
-    }
-    else if (index === 2) {
-        return "three";
-    }
-    else {
-        return "";
-    }
-};
+
 ---
 <style>
     .hide {
         display: none;
     }
-    .one td, .one th {
-        background-color: rgba(205, 92, 92, 0.3);
-    }
 
-    .two td, .two th {
-        background-color: rgba(205, 92, 92, 0.2);
-    }
-
-    .three td, .three th {
-        background-color: rgba(205, 92, 92, 0.1);
-    }
 </style>
 
 <BaseLayout>
@@ -81,6 +29,11 @@ const getHighlighting = (index) => {
 
         </InfoCard>
         <results-card class="card bg-base-100 p-4 m-2">
+            <div class="hide">
+                { emojis.map(emoji => (
+                    <Icon class="emoji" name={emoji} width="48" />
+                ))}
+            </div>
             <div class="tabs flex flex-nowrap w-full justify-between">
                 <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
                 <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
@@ -89,11 +42,11 @@ const getHighlighting = (index) => {
 
             <div class="tab-content hide">
                 <h2>{ t('quick.results') }</h2>
-                <h3>{ t('quick.voters') } ({ quick.voters.length }):</h3>
+                <h3 >{ t('quick.voters') } <span class="num-voters">({ quick.voters.length })</span>:</h3>
                 <div class="flex justify-around flex-wrap">
                     { quick.voters.map((voter: any) => (
                         <div class="flex items-center p-2">
-                            <input type="checkbox" checked="checked" class="checkbox checkbox-xs" />
+                            <input id={voter.id} type="checkbox" checked class="voter checkbox checkbox-xs" />
                             <span class="m-1">
                                 { voter.name }
                             </span>
@@ -112,23 +65,7 @@ const getHighlighting = (index) => {
                           <th>{ t('quick.totalScore') }</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        
-                        { sortedProposals.map((proposal: any, index: number) => (
-                            <tr class={ getHighlighting(index)}>
-                                <td>{ index + 1}</td>
-                                <td>
-                                    <h3>{ proposal.title }</h3>
-                                    <p>{ proposal.description }</p>
-                                </td>
-                                <td align="center">
-                                    <div class="tooltip cursor-pointer tooltip-left" data-tip={ getAverageScore(proposal.total) }>
-                                        <Icon name={ getAverageEmoji(proposal.total) }  width="48" />
-                                    </div>
-                                </td>
-                                <td align="center">{ proposal.total }</td>
-                            </tr>
-                       ))}
+                      <tbody class="proposal-list">
                       </tbody>
                     </table>
                   </div>
@@ -148,7 +85,112 @@ const getHighlighting = (index) => {
     </div>
 </BaseLayout>
 <script>
+    import { quickTest } from "composables/quickTestData";
+    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
+    const isDev = processId === 'dev';
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const quick = isDev ? quickTest() : JSON.parse(data.process)
+    
+    
+
+    const getHighlighting = (className: string) => {
+        if (className === "color-0") {
+            return "rgba(205, 92, 92, 0.3)";
+        }
+        else if (className === "color-1") {
+            return "rgba(205, 92, 92, 0.2)";
+        }
+        else if (className === "color-2") {
+            return "rgba(205, 92, 92, 0.1)";
+        }
+        else {
+            return "";
+        }
+    };
+
     class ResultsCard extends HTMLElement {
+        voters = this.querySelectorAll('input.voter')
+        proposal_list = this.querySelector('tbody.proposal-list')
+        emojis = this.querySelectorAll('svg.emoji')
+        getTotal(proposalId: string, selectedVoters) {
+            return selectedVoters.reduce((sum: number, voter: any) => {
+                const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
+                const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
+                if (matchingVote) {
+                    let v = matchingVote.vote;
+                    if (v < 0)
+                        v *= quick.weighting;
+                    return sum + v;
+                }
+            
+                return sum;
+            }, 0);
+        };
+
+        getAverageScore(total: number) {
+            let i = total / quick.voters.length;
+            return Math.round(i * 100) / 100
+        }
+
+        getAverageEmoji(total: number) {
+            let i = this.getAverageScore(total)
+            if (i < 0)
+                i /= quick.weighting;
+            i = Math.round(i)
+            return this.emojis[i + 3];
+        };
+        
+
+        updateTable() {
+            const selectedVoters = Array.from(this.voters).filter((vote: HTMLInputElement) => vote.checked)
+            const proposals = quick.proposals
+            this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`
+            proposals.forEach((proposal: any) => {
+                proposal["total"] = this.getTotal(proposal.id, selectedVoters);
+            });
+            const sortedProposals = proposals.sort((a, b) => {
+                return b.total - a.total;
+            });
+            this.proposal_list.innerHTML = ''
+
+            let rank = 0
+            let prevProposal = null
+            sortedProposals.forEach((proposal: any, index: number) => {
+                if (prevProposal)
+                    rank += prevProposal.total === proposal.total ? 0 : 1
+                prevProposal = proposal
+                let row = document.createElement('tr')
+                row.className = 'color-' + rank
+                row.innerHTML += `
+                    <td>${index + 1}</td>
+                    <td>
+                        <h3>${ proposal.title }</h3>
+                        <p>${ proposal.description }</p>
+                    </td>
+                    <td align="center">
+                        <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${ this.getAverageScore(proposal.total) }>`
+
+                row.querySelector('div.emoji-container').appendChild(this.getAverageEmoji(proposal.total))
+
+                row.innerHTML += `
+                        </div>
+                    </td>
+                    <td align="center">${ proposal.total }</td>
+                `
+
+                this.proposal_list.appendChild(row)
+            })
+
+            const items = this.proposal_list.querySelectorAll('tr')
+            items.forEach((item, index) => {
+                const rows = item.querySelectorAll('td')
+                rows.forEach((row) => {
+                    row.style.backgroundColor = getHighlighting(item.className);
+                })
+            })
+
+        }
         constructor() {
             super()
             const tabs = this.querySelectorAll('a.tab')
@@ -167,6 +209,14 @@ const getHighlighting = (index) => {
                     contents[i].classList.add('hide')
                 }
             }
+
+            this.voters.forEach((voter: HTMLInputElement) => {
+                voter.addEventListener('click', () => {
+                    this.updateTable()
+                })
+            });
+
+            this.updateTable()
 
 
         }
