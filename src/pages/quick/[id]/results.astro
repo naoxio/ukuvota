@@ -13,8 +13,6 @@ const isDev = processId === 'dev';
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-console.log(quick)
-
 
 const findTotal = (proposalId: string) => {
   return quick.voters.reduce((sum: number, voter: any) => {
@@ -25,14 +23,48 @@ const findTotal = (proposalId: string) => {
     return sum
   }, 0)
 }
+quick.proposals.forEach((proposal) => {
+    proposal['total'] = findTotal(proposal.id)
+})
 
-const findAverage = (total: number) => {
-    return total / quick.voters.length
+const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
+
+const getAverageEmoji = (total: number) => {
+    const index = Math.round(total / quick.voters.length)
+    return emojis[index + 3]
+}
+
+
+const sortedProposals = quick.proposals.sort((a, b) => {
+  return b.total - a.total;
+})
+
+const getHighlighting = (index) => {
+    if (index === 0) {
+        return 'one';
+    } else if (index === 1) {
+        return 'two';
+    } else if (index === 2) {
+        return 'three';
+    } else {
+        return '';
+    }
 }
 ---
 <style>
     .hide {
         display: none;
+    }
+    .one td, .one th {
+        background-color: rgba(205, 92, 92, 0.3);
+    }
+
+    .two td, .two th {
+        background-color: rgba(205, 92, 92, 0.2);
+    }
+
+    .three td, .three th {
+        background-color: rgba(205, 92, 92, 0.1);
     }
 </style>
 
@@ -75,15 +107,15 @@ const findAverage = (total: number) => {
                       </thead>
                       <tbody>
                         
-                        { quick.proposals.map((proposal, index) => (
-                            <tr>
+                        { sortedProposals.map((proposal, index) => (
+                            <tr class={ getHighlighting(index) }>
                                 <th>{ index + 1}</th>
                                 <td>
                                     <h3>{ proposal.title }</h3>
                                     <p>{ proposal.description }</p>
                                 </td>
-                                <td>{ findAverage(proposal.id) }</td>
-                                <td>{ findTotal(proposal.id) }</td>
+                                <td><Icon name={ getAverageEmoji(proposal.total) }  width="48" /></td>
+                                <td>{ proposal.total }</td>
                             </tr>
                        ))}
                       </tbody>
