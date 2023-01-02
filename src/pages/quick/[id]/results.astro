@@ -41,7 +41,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
 
             <div class="tab-content hide">
                 <h2>{ t('quick.results') }</h2>
-                <h3 >{ t('quick.voters') } <span class="num-voters">({ quick.voters.length })</span>:</h3>
+                <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
                 <div class="flex justify-around flex-wrap">
                     { quick.voters.map((voter: any) => (
                         <div class="flex items-center p-2">
@@ -57,7 +57,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                     <table class="table w-full">
                       <!-- head -->
                       <thead>
-                        <tr>
+                        <tr class="table-row-one">
                           <td></td>
                           <th>{ t('quick.proposal') }</th>
                           <th >{ t('quick.averageScore') }</th>
@@ -68,6 +68,14 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                       </tbody>
                     </table>
                   </div>
+                  <div class="card">
+                    <h3>{ t('quick.exportData') }</h3>
+                    <div class="flex justify-around exports">
+                        <button class="export-markdown btn btn-ghost">Markdown</button>
+                        <button class="export-json btn btn-ghost">JSON</button>
+                        <button class="export-image btn btn-ghost">Image</button>
+                    </div>
+                </div>
                   
             </div>
             <div class="tab-content hide">
@@ -80,16 +88,9 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
 
                 </div>
             </div>
+
         </results-card>
-        <br/>
-        <div class="card">
-            <h3>{ t('quick.exportData') }</h3>
-            <div class="flex justify-around">
-                <button class="btn btn-ghost">Markdown</button>
-                <button class="btn btn-ghost">JSON</button>
-                <button class="btn btn-ghost">Image</button>
-            </div>
-        </div>
+       
     </div>
 </BaseLayout>
 <script>
@@ -99,8 +100,17 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
-    
-    
+    const save = (filename, data, type) => {
+        const blob = new Blob([data], {type});
+
+        const elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = filename;        
+        document.body.appendChild(elem);
+        elem.click();        
+        document.body.removeChild(elem);
+    }
+
 
     const getHighlighting = (className: string) => {
         if (className === "color-0") {
@@ -154,7 +164,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         
 
         updateTable() {
-            const selectedVoters = Array.from(this.voters).filter((vote: HTMLInputElement) => vote.checked)
+            const selectedVoters = this.getSelectedVoters()
+            
             const proposals = quick.proposals
             this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`
             proposals.forEach((proposal: any) => {
@@ -202,6 +213,42 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             })
 
         }
+
+        getMarkdownFile() {
+            const selectedVoters = this.getSelectedVoters()
+            let rtn = ''
+            rtn += `# ${ quick.title }\n`
+            rtn += `${ quick.description }\n\n`
+            rtn += this.querySelector('span.voter-label').innerHTML + ' '
+            rtn += this.querySelector('span.num-voters').innerHTML + ':\n'
+            selectedVoters.forEach(voter => {
+                const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
+                rtn += `${quick_voter.name} `
+            })
+            rtn += '\n\n'
+            const table_row_one = this.querySelector('tr.table-row-one')
+            rtn += ' |  '
+            table_row_one.querySelectorAll('th').forEach(row => {
+                rtn += ' | ' +  row.innerHTML
+            });
+            rtn += ' | \n'
+            rtn += ' | --- | --- | --- | --- | \n'
+            quick.proposals.forEach((proposal: any, index: number) => {
+                rtn += ` | ${index + 1 }   | ${ proposal.title } - ${ proposal.description}`
+                rtn += ` | ${this.getAverageScore(proposal.total, selectedVoters)}  | ${ proposal.total } | \n`
+                
+            })
+            rtn += '\n'
+            console.log(rtn)
+
+            save(`${quick.title}.md`, rtn, 'text/markdown')
+
+
+        }
+
+        getSelectedVoters() {
+            return Array.from(this.voters).filter((vote: HTMLInputElement) => vote.checked)
+        }
         constructor() {
             super()
             const tabs = this.querySelectorAll('a.tab')
@@ -223,13 +270,29 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
 
             this.voters.forEach((voter: HTMLInputElement) => {
                 voter.addEventListener('click', () => {
+                    
                     this.updateTable()
                 })
             });
 
+
             this.updateTable()
 
+                
+            const exportButtons = this.querySelector('div.exports').querySelectorAll('button')
+            exportButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    if (button.classList.contains("export-markdown")) {
+                        this.getMarkdownFile()
+                    }
+                    else if (button.classList.contains("export-json")) {
 
+                    }
+                    else if (button.classList.contains("export-image")) {
+
+                    }
+                })
+            })
         }
     }
     customElements.define('results-card', ResultsCard)
