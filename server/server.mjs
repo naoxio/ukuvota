@@ -51,7 +51,7 @@ app.post('/api/quick/process/:id/vote', async(req, res) => {
 
   // Check that the 'votes' property of the body is an array
   if (typeof body.votes === 'object' && body.votes instanceof Array) {
-    // Create a filtered array of votes, removing duplicates
+    // Create an array of votes
     const votes = body.votes
       .map(vote => ({ proposalId: vote.proposalId, vote: vote.vote }))
   

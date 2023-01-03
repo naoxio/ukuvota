@@ -16,6 +16,9 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
+
+const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'loving'];
+
 ---
 <style>
     .gray {
@@ -24,10 +27,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 </style>
 <BaseLayout>
     <div class="card bg-base-200 px-6 my-4 py-6">
-
         <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
             <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-    
         </InfoCard>
         <voting-list>
             <div class="proposal-list">
@@ -36,27 +37,15 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     <p></p>
                     <br/>
                     <div class="flex justify-between">
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="rage"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="angry"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="sad"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="" width="48" name="neutral"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="smiling"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="happy"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="loving"/>
-                        </button>
+                        {emojiNames.map((name) => (
+                          <button class="btn btn-ghost btn-circle">
+                            <Icon
+                              class={name === 'neutral' ? '' : 'gray'}
+                              width="48"
+                              name={name}
+                            />
+                          </button>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -98,7 +98,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
-    const save = (filename, data, type) => {
+
+    const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
 
         const elem = window.document.createElement('a');
@@ -126,9 +127,10 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         voters = this.querySelectorAll('input.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
-        getTotal(proposalId: string, selectedVoters) {
+        getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
                 const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
+                console.log(quick_voter, quick.voters, voter.id)
                 const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
                 if (matchingVote) {
                     let v = matchingVote.vote;
@@ -141,7 +143,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             }, 0);
         };
 
-        getAverageScore(total: number, voters) {
+        getAverageScore(total: number, voters: any) {
             if (voters.length > 0) {
                 let i = total / voters.length;
                 return Math.round(i * 100) / 100
@@ -149,7 +151,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             return 0
         }
 
-        getAverageEmoji(total: number, voters) {
+        getAverageEmoji(total: number, voters: any) {
             let i = this.getAverageScore(total, voters)
             if (i < 0)
                 i /= quick.weighting;

@@ -1,4 +1,6 @@
-test('Form submission works correctly', async (page) => {
+import { test, expect, type Page } from '@playwright/test';
+
+test('Form submission works correctly', async ({page}) => {
     await page.goto('http://localhost:3000');
   
     // fill out the form and submit it
@@ -8,7 +10,7 @@ test('Form submission works correctly', async (page) => {
   
     // check that the success alert is displayed
     await page.waitForSelector('#success-alert');
-    const alertText = await page.$eval('#success-alert', (e) => e.innerText);
+    const alertText = await page.$eval('#success-alert', (e) => e.innerHTML);
     expect(alertText).toBe('Process successfully created');
   });
   
