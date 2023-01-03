@@ -69,7 +69,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 </BaseLayout>
 
 <script>
-    import { IProposal } from 'interfaces'
+    import { IProposal } from '../../../../shared/interfaces/IProposal'
 
     import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
@@ -83,10 +83,10 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
         proposal_list = null
-        addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal: IProposal) {
+        addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal_node: HTMLDivElement) {
             buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', (event) => {
-                const svgs = proposal.querySelectorAll('svg');
+                const svgs = proposal_node.querySelectorAll('svg');
                 svgs.forEach((svg: SVGElement) => {
                     svg.classList.add('gray');
                 });
@@ -99,11 +99,11 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         submitVote = async () => {
             const votesMap = new Map();
             const proposals = this.proposal_list.querySelectorAll('div.proposal')
-            Array.from(proposals).forEach((proposal: IProposal) => {
-                const svgs = proposal.querySelectorAll('svg')
+            Array.from(proposals).forEach((proposal_node: HTMLDivElement) => {
+                const svgs = proposal_node.querySelectorAll('svg')
                 for (const [i, svg] of svgs.entries()) {
                 if (!svg.classList.contains('gray')) {
-                    votesMap.set(proposal.id, i - 3);
+                    votesMap.set(proposal_node.id, i - 3);
                 }
                 };
             });
@@ -128,7 +128,6 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             }
             else {
                 addAlert(this.alertList, this.alerts[1].cloneNode(true))
-
             }
         };
         addProposal(proposal: IProposal) {

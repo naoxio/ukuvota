@@ -8,6 +8,13 @@ interface Props {
 }
 const { timeleft, label, fromtime } = Astro.props;
 
+const timeUnits = [
+  { id: 'days', label: t('time.days') },
+  { id: 'hours', label: t('time.hours') },
+  { id: 'minutes', label: t('time.minutes') },
+  { id: 'seconds', label: t('time.seconds') },
+];
+
 ---
 <style>
     .visible {
@@ -20,22 +27,12 @@ const { timeleft, label, fromtime } = Astro.props;
 <quick-counter data-timeleft={timeleft} data-fromtime={fromtime} class="flex flex-col justify-center items-center w-60">
     <h3>{ label }</h3>
     <div class="flex justify-center items-center">
-        <div id="days" class="hidden">
+        { timeUnits.map(timeUnit => (
+        <div id={timeUnit.id} class="hidden">
             <span></span>
-            { t('time.days') }&nbsp;
+            {timeUnit.label}&nbsp;
         </div>
-        <div id="hours" class="hidden">
-            <span></span>
-            { t('time.hours') }&nbsp;
-        </div>
-        <span id="minutes" class="hidden">
-            <span></span>
-            { t('time.minutes')}&nbsp;
-        </span>
-        <span id="seconds" class="hidden">
-            <span></span>
-            { t('time.seconds') }&nbsp;
-        </span>
+        ))}
     </div>
 </quick-counter>
 <script>
