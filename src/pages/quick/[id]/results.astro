@@ -16,8 +16,6 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 ---
 
-
-
 <BaseLayout>
 
     <style>
@@ -58,17 +56,17 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                     <br/>
                     <div class="overflow-x-auto">
                         <table class="table w-full">
-                        <!-- head -->
-                        <thead>
-                            <tr class="table-row-one">
-                            <td></td>
-                            <th>{ t('quick.proposal') }</th>
-                            <th class="whitespace-normal break-words">{ t('quick.averageScore') }</th>
-                            <th class="whitespace-normal break-words">{ t('quick.totalScore') }</th>
-                            </tr>
-                        </thead>
-                        <tbody class="proposal-list">
-                        </tbody>
+                            <!-- head -->
+                            <thead>
+                                <tr class="table-row-one">
+                                <td></td>
+                                <th>{ t('quick.proposal') }</th>
+                                <th class="whitespace-normal break-words">{ t('quick.averageScore') }</th>
+                                <th class="whitespace-normal break-words">{ t('quick.totalScore') }</th>
+                                </tr>
+                            </thead>
+                            <tbody class="proposal-list">
+                            </tbody>
                         </table>
                     </div>
                     <br/>
@@ -238,10 +236,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             rtn += `# ${title}\n`;
             rtn += `${description}\n\n`;
             rtn += `${processId}\n\n`;
-
             rtn += `${voterLabel} ${numVoters}:\n`;
             rtn += `${selectedVotersString}\n\n`;
-
             rtn += `|  | ${tableColumns} |\n`;
             rtn += `| -- | -- | -- | -- |\n`;
             rtn += `${proposals}\n`;

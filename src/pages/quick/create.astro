@@ -25,6 +25,9 @@ const proposals = [
         description: t("proposal.one.description"),
     },
 ];
+const searchParams = Astro.url.searchParams
+const strategy = Number(searchParams.get('strategy')) || 0;
+
 ---
 
 <BaseLayout>
@@ -58,8 +61,12 @@ const proposals = [
     </div>
     <br/>
     <AlertManager>
-      <Alert type="error" icon="warning" label={ t('alert.quick.error.topicQuestion') } />
-      <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.createProcess') } />
+      <Alert type="error" icon="warning">
+        { t('alert.quick.error.topicQuestion') }
+      </Alert>
+      <Alert type="success" icon="checkmark-outline">
+        { t('alert.quick.success.createProcess') } 
+      </Alert>
     </AlertManager>
     <br/>
     <div class="text-center">
@@ -82,11 +89,8 @@ const proposals = [
     alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
     findValues(inputs: NodeListOf<any>) {
       Array.from(inputs).forEach((input) => {
-        if(input.name) {
-          if (input.type === "checkbox")
-            this.form[input.name] = input.checked
-          else
-            this.form[input.name] = input.value
+        if (input.name) {
+          this.form[input.name] = (input.type === "checkbox") ? input.checked : input.value;
         }
       })
     }
@@ -113,7 +117,7 @@ const proposals = [
         else {
           addAlert(this.alertList, this.alerts[1].cloneNode(true))
 
-          this.form['strategy'] = 1
+          this.form['strategy'] = 0
           this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
           
           if (import.meta.env.DEV) {
