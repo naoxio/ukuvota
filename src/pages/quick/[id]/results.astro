@@ -4,9 +4,6 @@ import InfoCard from "organisms:QuickInfoCard";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
 import { t, changeLanguage } from "i18next";
-
-changeLanguage("en");
-
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
@@ -14,221 +11,273 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/proces
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
----
-<style>
-    .hide {
-        display: none;
-    }
-
-</style>
-
-<BaseLayout>
-    <div class="card bg-base-200 px-6 my-4 py-6">
-        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
-
-        </InfoCard>
-        <results-card class="card bg-base-100 p-4 m-2">
-            <div class="hide">
-                { emojis.map(emoji => (
-                    <Icon class="emoji" name={emoji} width="48" />
-                ))}
-            </div>
-            <div class="tabs flex flex-nowrap w-full justify-between">
-                <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
-                <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
-            </div>
-
-            <div class="tab-content hide">
-                <div class="screenshot-results">
-                    <h2>{ t('quick.results') }</h2>
-                    <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
-                    <div class="flex justify-around flex-wrap">
-                        { quick.voters.map((voter: any) => (
-                            <div id={voter.id} class="flex items-center p-2 voter">
-                                <input type="checkbox" checked class="checkbox checkbox-xs" />
-                                <span class="p-1 cursor-pointer select-none">
-                                    { voter.name }
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                    <br/>
-                    <div class="overflow-x-auto">
-                        <table class="table w-full">
-                        <!-- head -->
-                        <thead>
-                            <tr class="table-row-one">
-                            <td></td>
-                            <th>{ t('quick.proposal') }</th>
-                            <th class="whitespace-normal break-words">{ t('quick.averageScore') }</th>
-                            <th class="whitespace-normal break-words">{ t('quick.totalScore') }</th>
-                            </tr>
-                        </thead>
-                        <tbody class="proposal-list">
-                        </tbody>
-                        </table>
-                    </div>
-                    <br/>
-                </div>
-                  <div class="card">
-                    <h3>{ t('quick.exportData') }</h3>
-                    <div class="flex justify-around exports">
-                        <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
-                        <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
-                    </div>
-                </div>
-                  
-            </div>
-            <div class="tab-content hide">
-                <div>
-                    <br/>
-                    <br/>
-                    { t('wip')}
-                </div>
-            </div>
-        </results-card>
-    </div>
-</BaseLayout>
-<script>
-    import download from 'downloadjs'
-    import { toPng } from 'html-to-image';
-    import { quickTest } from "composables/quickTestData";
-    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
-    const isDev = processId === 'dev';
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
-    const data = isDev ? null : await res.json();
-    const quick = isDev ? quickTest() : JSON.parse(data.process)
-
-    const save = (filename: string, data: any, type: string): void => {
-        const blob = new Blob([data], {type});
-
-        const elem = window.document.createElement('a');
-        elem.href = window.URL.createObjectURL(blob);
-        elem.download = filename;        
-        document.body.appendChild(elem);
-        elem.click();        
-        document.body.removeChild(elem);
-    }
-
-    const getHighlighting = (className: string) => {
-        switch (className) {
-            case "color-0":
-                return "rgba(205, 92, 92, 0.3)";
-            case "color-1":
-                return "rgba(205, 92, 92, 0.2)";
-            case "color-2":
-                return "rgba(205, 92, 92, 0.1)";
-            default:
-                return "";
-        }
+-- -
+    <style>
+        .hide;
+{
+    display: none;
+}
+<>/style>
+    < BaseLayout >
+    <div>class {
     };
+"card bg-base-200 px-6 my-4 py-6" >
+    <InfoCard>title;
+{
+    quick.title;
+}
+description = { quick, : .description };
+weighting = { quick, : .weighting } >
+    <>/InfoCard>
+    < results - card;
+class {
+}
+"card bg-base-100 p-4 m-2" >
+    <div>class {
+    };
+"hide" >
+    { emojis, : .map(emoji => (<Icon>class {
+        }) = "emoji", name = { emoji }, width = "48" /  >
+        ) }
+    < /div>
+    < div;
+class {
+}
+"tabs flex flex-nowrap w-full justify-between" >
+    <a>class {
+    };
+"tab tab-bordered tab-active w-full h-12" > <Icon>width;
+"16";
+name = "face-cool" /  > <>/a> 
+    < a;
+class {
+}
+"tab tab-bordered w-full h-12" > <Icon>width;
+"16";
+name = "list" /  > <>/a> 
+    < /div>
+    < div;
+class {
+}
+"tab-content hide" >
+    <div>class {
+    };
+"screenshot-results" >
+    <h2>{ t(); } < /h2>
+    < h3 > <span>class {
+};
+"voter-label" > { t(); } < /span> <span class="num-voters">({ quick.voters.length })</span > ;
+<>/h3>
+    < div;
+class {
+}
+"flex justify-around flex-wrap" >
+    { quick, : .voters.map((voter: any) => (<div>id) = { voter, : .id }, class {
+        } = "flex items-center p-2 voter" >
+            <input>type, "checkbox", checked, class {
+        } = "checkbox checkbox-xs" /  >
+            <span>class {
+            }, "p-1 cursor-pointer select-none" >
+            { voter, : .name }
+            < /span>
+            < /div>) }
+    < /div>
+    < br /  >
+    <div>class {
+    };
+"overflow-x-auto" >
+    <table>class {
+    };
+"table w-full" >
+    <!>--head;
+-- >
+    <thead><tr>class {
+    };
+"table-row-one" >
+    <td><>/td>
+    < th > { t(); } < /th>
+    < th;
+class {
+}
+"whitespace-normal break-words" > { t(); } < /th>
+    < th;
+class {
+}
+"whitespace-normal break-words" > { t(); } < /th>
+    < /tr>
+    < /thead>
+    < tbody;
+class {
+}
+"proposal-list" >
+    <>/tbody>
+    < /table>
+    < /div>
+    < br /  >
+    <>/div>
+    < div;
+class {
+}
+"card" >
+    <h3>{ t(); } < /h3>
+    < div;
+class {
+}
+"flex justify-around exports" >
+    <button>class {
+    };
+"export-markdown btn btn-ghost" > <Icon>width;
+"28";
+name = "document-download" /  > <>/button>
+    < button;
+class {
+}
+"export-image btn btn-ghost" > <Icon>width;
+"28";
+name = "camera" /  > <>/button>
+    < /div>
+    < /div>
+    < /div>
+    < div;
+class {
+}
+"tab-content hide" >
+    <div><br>/>
+    < br /  >
+    { t(); }
+    < /div>
+    < /div>
+    < /results-card>
+    < /div>
+    < /BaseLayout><script>;
+import download from "downloadjs";
+import { toPng } from "html-to-image";
+import { quickTest } from "composables/quickTestData";
 
-    class ResultsCard extends HTMLElement {
-        voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
-        proposal_list = this.querySelector('tbody.proposal-list') 
-        emojis = this.querySelectorAll('svg.emoji')
-        getTotal(proposalId: string, selectedVoters: any) {
-            return selectedVoters.reduce((sum: number, voter: any) => {
-                const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
-                const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
-                if (matchingVote) {
-                    let v = matchingVote.vote;
-                    if (v < 0)
-                        v *= quick.weighting;
-                    return sum + v;
-                }
-            
-                return sum;
-            }, 0);
-        };
+changeLanguage("en");
 
-        getAverageScore(total: number, voters: any) {
-            if (voters.length > 0) {
-                let i = total / voters.length;
-                return Math.round(i * 100) / 100
+const processId = window.location.pathname.split("/quick/")[1].split("/")[0];
+const isDev = processId === "dev";
+const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+const data = isDev ? null : await res.json();
+const quick = isDev ? quickTest() : JSON.parse(data.process);
+const save = (filename: string, data: any, type: string): void => {
+    const blob = new Blob([data], { type });
+    const elem = window.document.createElement("a");
+    elem.href = window.URL.createObjectURL(blob);
+    elem.download = filename;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
+};
+const getHighlighting = (className: string) => {
+    switch (className) {
+        case "color-0":
+            return "rgba(205, 92, 92, 0.3)";
+        case "color-1":
+            return "rgba(205, 92, 92, 0.2)";
+        case "color-2":
+            return "rgba(205, 92, 92, 0.1)";
+        default:
+            return "";
+    }
+};
+class ResultsCard extends HTMLElement {
+    voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll("div.voter");
+    proposal_list = this.querySelector("tbody.proposal-list");
+    emojis = this.querySelectorAll("svg.emoji");
+    getTotal(proposalId: string, selectedVoters: any) {
+        return selectedVoters.reduce((sum: number, voter: any) => {
+            const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id);
+            const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
+            if (matchingVote) {
+                let v = matchingVote.vote;
+                if (v < 0)
+                    v *= quick.weighting;
+                return sum + v;
             }
-            return 0
+            return sum;
+        }, 0);
+    }
+    ;
+    getAverageScore(total: number, voters: any) {
+        if (voters.length > 0) {
+            let i = total / voters.length;
+            return Math.round(i * 100) / 100;
         }
-
-        getAverageEmoji(total: number, voters: any) {
-            let i = this.getAverageScore(total, voters)
-            if (i < 0)
-                i /= quick.weighting;
-            i = Math.round(i)
-            return this.emojis[i + 3];
-        };
-        
-        updateTable() {
-            const selectedVoters = this.getSelectedVoters();
-            const proposals = quick.proposals;
-            this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`;
-            proposals.forEach((proposal: any) => {
-                proposal["total"] = this.getTotal(proposal.id, selectedVoters);
+        return 0;
+    }
+    getAverageEmoji(total: number, voters: any) {
+        let i = this.getAverageScore(total, voters);
+        if (i < 0)
+            i /= quick.weighting;
+        i = Math.round(i);
+        return this.emojis[i + 3];
+    }
+    ;
+    updateTable() {
+        const selectedVoters = this.getSelectedVoters();
+        const proposals = quick.proposals;
+        this.querySelector("span.num-voters").innerHTML = `(${selectedVoters.length})`;
+        proposals.forEach((proposal: any) => {
+            proposal["total"] = this.getTotal(proposal.id, selectedVoters);
+        });
+        const sortedProposals = proposals.sort((a, b) => {
+            return b.total - a.total;
+        });
+        this.proposal_list.innerHTML = "";
+        let rank = 0;
+        let prevProposal = null;
+        sortedProposals.forEach((proposal: any, index: number) => {
+            if (prevProposal) {
+                rank += prevProposal.total === proposal.total ? 0 : 1;
+            }
+            prevProposal = proposal;
+            this.proposal_list.appendChild(this.createRow(rank, index, proposal, selectedVoters));
+        });
+        const items = this.proposal_list.querySelectorAll("tr");
+        items.forEach((item, index) => {
+            const rows = item.querySelectorAll("td");
+            rows.forEach((row) => {
+                row.style.backgroundColor = getHighlighting(item.className);
             });
-            const sortedProposals = proposals.sort((a, b) => {
-                return b.total - a.total;
-            });
-            this.proposal_list.innerHTML = '';
-
-            let rank = 0;
-            let prevProposal = null;
-            sortedProposals.forEach((proposal: any, index: number) => {
-                if (prevProposal) {
-                    rank += prevProposal.total === proposal.total ? 0 : 1;
-                }
-                prevProposal = proposal;
-                this.proposal_list.appendChild(this.createRow(rank, index, proposal, selectedVoters));
-            });
-
-            const items = this.proposal_list.querySelectorAll('tr');
-            items.forEach((item, index) => {
-                const rows = item.querySelectorAll('td');
-                rows.forEach((row) => {
-                    row.style.backgroundColor = getHighlighting(item.className);
-                });
-            });
-        }
-
-        createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
-            const row = document.createElement('tr');
-            row.className = 'color-' + rank;
-            row.innerHTML = `
+        });
+    }
+    createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
+        const row = document.createElement("tr");
+        row.className = "color-" + rank;
+        row.innerHTML = `
                 <td>${index + 1}</td>
                 <td class="whitespace-normal break-words">
                     <h3>${proposal.title}</h3>
                     <p>${proposal.description}</p>
                 </td>
                 <td align="center">
-                    <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
-                   
-            row.querySelector('div.emoji-container').insertAdjacentElement('beforeend', this.getAverageEmoji(proposal.total, selectedVoters));
-            row.innerHTML += `</div>
+                    <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`;
+        row.querySelector("div.emoji-container").insertAdjacentElement("beforeend", this.getAverageEmoji(proposal.total, selectedVoters));
+        row.innerHTML += `</div>
                 </td>
                 <td align="center">${proposal.total}</td>
             `;
-            return row;
-
-        }
-
-
-        getMarkdownFile() {
-            const selectedVoters = this.getSelectedVoters();
-            const title = quick.title;
-            const processId = quick.id;
-            const description = quick.description;
-            const voterLabel = this.querySelector('span.voter-label').innerHTML;
-            const numVoters = this.querySelector('span.num-voters').innerHTML;
-            const selectedVotersString = selectedVoters.map((voter: any) => {
-                const quickVoter = quick.voters.find((vote: any) => vote.id === voter.id);
-                return `${quickVoter.name} `;
-            }).join('');
-            const tableRowOne = this.querySelector('tr.table-row-one');
-            const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
-            const proposals = quick.proposals.map((proposal: any, index: number) => {
-                const averageScore = this.getAverageScore(proposal.total, selectedVoters);
-                return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
-            }).join('\n');
-            const rtn = `
+        return row;
+    }
+    getMarkdownFile() {
+        const selectedVoters = this.getSelectedVoters();
+        const title = quick.title;
+        const description = quick.description;
+        const voterLabel = this.querySelector("span.voter-label").innerHTML;
+        const numVoters = this.querySelector("span.num-voters").innerHTML;
+        const selectedVotersString = selectedVoters.map((voter: any) => {
+            const quickVoter = quick.voters.find((vote: any) => vote.id === voter.id);
+            return `${quickVoter.name} `;
+        }).join("");
+        const tableRowOne = this.querySelector("tr.table-row-one");
+        const tableColumns = Array.from(tableRowOne.querySelectorAll("th")).map((row: any) => row.innerHTML).join(" | ");
+        const proposals = quick.proposals.map((proposal: any, index: number) => {
+            const averageScore = this.getAverageScore(proposal.total, selectedVoters);
+            return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
+        }).join("\n");
+        const rtn = `
 # ${title}
 ${description}
 ${processId}
@@ -237,7 +286,10 @@ ${voterLabel} ${numVoters}:
 ${selectedVotersString}
 
 |  | ${tableColumns} |
-| --- | --- | --- | --- |
+| --- | --- | --- | `;
+    }
+}
+--- |
 ${proposals}
 `;
             save(`${title}.md`, rtn, 'text/markdown');

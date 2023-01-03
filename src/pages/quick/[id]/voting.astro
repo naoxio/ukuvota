@@ -16,9 +16,7 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
-
-const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'loving'];
-
+const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 ---
 <style>
     .gray {
@@ -58,13 +56,21 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
                 </button>
             </div>
             <AlertManager>
-                <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.submitVote') } />
+                <Alert type="success" icon="checkmark-outline">
+                    { t('alert.quick.success.submitVote') }
+                    <span class="name"></span>
+                </Alert>
+                <Alert type="error" icon="checkmark-outline">
+                    { t('alert.quick.error.emptyName') }
+                </Alert>
             </AlertManager>
         </voting-list>
     </div>
 </BaseLayout>
 
 <script>
+    import { IProposal } from 'interfaces'
+
     import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
@@ -77,26 +83,62 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
         proposal_list = null
-        addProposal(prop_data: any) {
-            const proposal = this.proposal_html.cloneNode(true)
-            proposal.id = prop_data.id
-            proposal.querySelector('h3').innerHTML = prop_data.title
-            proposal.querySelector('p').innerHTML = prop_data.description
-            const buttons = proposal.querySelectorAll('button')
+        addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal: IProposal) {
             buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', (event) => {
-                    const svgs = proposal.querySelectorAll('svg');
-                    svgs.forEach((svg: SVGElement) => {
-                        svg.classList.add('gray');
-                    });
+                const svgs = proposal.querySelectorAll('svg');
+                svgs.forEach((svg: SVGElement) => {
+                    svg.classList.add('gray');
+                });
 
-                    const svg = button.querySelector('svg');
+                const svg = button.querySelector('svg');
+                svg.classList.remove('gray');
+                });
+            });
+        }
+        submitVote = async () => {
+            const votesMap = new Map();
+            const proposals = this.proposal_list.querySelectorAll('div.proposal')
+            Array.from(proposals).forEach((proposal: IProposal) => {
+                const svgs = proposal.querySelectorAll('svg')
+                for (const [i, svg] of svgs.entries()) {
+                if (!svg.classList.contains('gray')) {
+                    votesMap.set(proposal.id, i - 3);
+                }
+                };
+            });
+            const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+            const vote = {
+                name: senderName.value,
+                votes
+            }
+            if (!isDev) {
+                const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(vote)
+                });
+                const json = await res.json();
+            }
+            if (senderName.value !== "") {
+                this.alerts[0].querySelector('span.name').innerHTML = senderName.value
+                addAlert(this.alertList, this.alerts[0].cloneNode(true))
+                senderName.value = ''  
+            }
+            else {
+                addAlert(this.alertList, this.alerts[1].cloneNode(true))
 
-                    svg.classList.remove('gray');
-                })
-            })
-
-            this.proposal_list.appendChild(proposal)
+            }
+        };
+        addProposal(proposal: IProposal) {
+            const proposal_node = this.proposal_html.cloneNode(true)
+            proposal_node.id = proposal.id
+            proposal_node.querySelector('h3').innerHTML = proposal.title
+            proposal_node.querySelector('p').innerHTML = proposal.description
+            const buttons = proposal_node.querySelectorAll('button')
+            this.addButtonListeners(buttons, proposal_node);
+            this.proposal_list.appendChild(proposal_node)
         }
         constructor() {
             super()
@@ -104,38 +146,12 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
             this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
             this.proposal_list.innerHTML = ""
 
-            quick.proposals.forEach((prop_data: any) => {
-                this.addProposal(prop_data)
+            quick.proposals.forEach((proposal: IProposal) => {
+                this.addProposal(proposal)
             });
 
             const submit = this.querySelector('button#submit-vote')
-            submit.addEventListener('click', async() => {
-                const votesMap = new Map();
-                const proposals = this.proposal_list.querySelectorAll('div.proposal')
-                Array.from(proposals).forEach((proposal: any) => {
-                    const svgs = proposal.querySelectorAll('svg')
-                    for (const [i, svg] of svgs.entries()) {
-                        if (!svg.classList.contains('gray')) {
-                            votesMap.set(proposal.id, i - 3);
-                        }
-                    };
-                });
-                const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
-                const senderName: HTMLInputElement = this.querySelector('input#sender-name')
-                const vote = {
-                    name: senderName.value,
-                    votes
-                }
-                if (!isDev) {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
-                        method: "POST",
-                        headers: {'Content-Type':'application/json'},
-                        body: JSON.stringify(vote)
-                    });
-                    const json = await res.json();
-                }
-                addAlert(this.alertList, this.alerts[0].cloneNode(true))
-            })
+            submit.addEventListener('click', this.submitVote)
         }
     }
     customElements.define('voting-list', VotingList)

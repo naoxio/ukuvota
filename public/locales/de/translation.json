@@ -100,11 +100,12 @@
     "quick": {
       "success": {
         "createProcess": "Prozess startet...",
-        "submitVote": "Wahl eingereicht"
+        "submitVote": "Wahl eingereicht für: "
 
       },
       "error": {
-        "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu"
+        "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
+        "emptyName": "Bitte fügen Sie einen Namen hinzu"
       } 
     }
   }

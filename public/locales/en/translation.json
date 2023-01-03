@@ -99,10 +99,11 @@
     "quick": {
       "success": {
         "createProcess": "Process starting...",
-        "submitVote": "Vote submitted"
+        "submitVote": "Vote submitted for: "
       },
       "error": {
-        "topicQuestion": "Please add a Topic Question"
+        "topicQuestion": "Please add a Topic Question",
+        "emptyName": "Please add a name"
       } 
     }
   }

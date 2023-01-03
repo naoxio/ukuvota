@@ -4,15 +4,14 @@ import { Icon } from "astro-icon";
 interface Props {
     type: string
     icon: string
-    label: string
 }
-const { type, icon, label } = Astro.props;
+const { type, icon } = Astro.props;
 
 const classList = `alert w-80  shadow-lg m-2 alert-${type}`
 ---
 <div class={classList} style="display: none">
     <div>
         <Icon width="32" name={icon} />
-        <span>{ label }</span>
+        <span><slot/></span>
     </div>
 </div>

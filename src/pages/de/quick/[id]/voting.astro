@@ -16,6 +16,7 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
+const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 ---
 <style>
     .gray {
@@ -24,10 +25,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 </style>
 <BaseLayout>
     <div class="card bg-base-200 px-6 my-4 py-6">
-
         <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
             <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-    
         </InfoCard>
         <voting-list>
             <div class="proposal-list">
@@ -36,27 +35,15 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     <p></p>
                     <br/>
                     <div class="flex justify-between">
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="rage"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="angry"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" name="sad"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="" width="48" name="neutral"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="smiling"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="happy"/>
-                        </button>
-                        <button class="btn btn-ghost btn-circle">
-                            <Icon class="gray" width="48" name="loving"/>
-                        </button>
+                        {emojiNames.map((name) => (
+                          <button class="btn btn-ghost btn-circle">
+                            <Icon
+                              class={name === 'neutral' ? '' : 'gray'}
+                              width="48"
+                              name={name}
+                            />
+                          </button>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -69,13 +56,18 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                 </button>
             </div>
             <AlertManager>
-                <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.submitVote') } />
+                <Alert type="success" icon="checkmark-outline">
+                    { t('alert.quick.success.submitVote') }&nbsp;
+                    <span class="name"></span>
+                </Alert>
             </AlertManager>
         </voting-list>
     </div>
 </BaseLayout>
 
 <script>
+    import { IProposal } from 'interfaces'
+
     import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
     const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
@@ -88,26 +80,56 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
         proposal_list = null
-        addProposal(data: any) {
-            const proposal = this.proposal_html.cloneNode(true)
-            proposal.id = data.id
-            proposal.querySelector('h3').innerHTML = data.title
-            proposal.querySelector('p').innerHTML = data.description
-            const buttons = proposal.querySelectorAll('button')
+        addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal: IProposal) {
             buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', (event) => {
-                    const svgs = proposal.querySelectorAll('svg');
-                    svgs.forEach((svg: SVGElement) => {
-                        svg.classList.add('gray');
-                    });
+                const svgs = proposal.querySelectorAll('svg');
+                svgs.forEach((svg: SVGElement) => {
+                    svg.classList.add('gray');
+                });
 
-                    const svg = button.querySelector('svg');
-
-                    svg.classList.remove('gray');
-                })
-            })
-
-            this.proposal_list.appendChild(proposal)
+                const svg = button.querySelector('svg');
+                svg.classList.remove('gray');
+                });
+            });
+        }
+        submitVote = async () => {
+            const votesMap = new Map();
+            const proposals = this.proposal_list.querySelectorAll('div.proposal')
+            Array.from(proposals).forEach((proposal: IProposal) => {
+                const svgs = proposal.querySelectorAll('svg')
+                for (const [i, svg] of svgs.entries()) {
+                if (!svg.classList.contains('gray')) {
+                    votesMap.set(proposal.id, i - 3);
+                }
+                };
+            });
+            const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+            const vote = {
+                name: senderName.value,
+                votes
+            }
+            if (!isDev) {
+                const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(vote)
+                });
+                const json = await res.json();
+            }
+            this.alerts[0].querySelector('span.name').innerHTML = senderName.value
+            addAlert(this.alertList, this.alerts[0].cloneNode(true))
+            senderName.value = ''  
+        };
+        addProposal(proposal: IProposal) {
+            const proposal_node = this.proposal_html.cloneNode(true)
+            proposal_node.id = proposal.id
+            proposal_node.querySelector('h3').innerHTML = proposal.title
+            proposal_node.querySelector('p').innerHTML = proposal.description
+            const buttons = proposal_node.querySelectorAll('button')
+            this.addButtonListeners(buttons, proposal_node);
+            this.proposal_list.appendChild(proposal_node)
         }
         constructor() {
             super()
@@ -115,38 +137,12 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
             this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
             this.proposal_list.innerHTML = ""
 
-            quick.proposals.forEach((data: any) => {
-                this.addProposal(data)
+            quick.proposals.forEach((proposal: IProposal) => {
+                this.addProposal(proposal)
             });
 
             const submit = this.querySelector('button#submit-vote')
-            submit.addEventListener('click', async() => {
-                const votesMap = new Map();
-                const proposals = this.proposal_list.querySelectorAll('div.proposal')
-                Array.from(proposals).forEach((proposal: any) => {
-                    const svgs = proposal.querySelectorAll('svg')
-                    for (const [i, svg] of svgs.entries()) {
-                        if (!svg.classList.contains('gray')) {
-                            votesMap.set(proposal.id, i - 3);
-                        }
-                    };
-                });
-                const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
-                const senderName: HTMLInputElement = this.querySelector('input#sender-name')
-                const vote = {
-                    name: senderName.value,
-                    votes
-                }
-                if (!isDev) {
-                    const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
-                        method: "POST",
-                        headers: {'Content-Type':'application/json'},
-                        body: JSON.stringify(vote)
-                    });
-                    const json = await res.json();
-                }
-                addAlert(this.alertList, this.alerts[0].cloneNode(true))
-            })
+            submit.addEventListener('click', this.submitVote)
         }
     }
     customElements.define('voting-list', VotingList)
@@ -154,7 +150,6 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
     const checkTime = () => {
         const time =  +new Date(quick.votingEnd) - +new Date()
         if (time <= 0)
-
             window.location.href = `${window.location.origin}/quick/${processId}/results`
         else
             setTimeout(checkTime, time)
