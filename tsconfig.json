@@ -18,7 +18,8 @@
       "atoms:*": ["components/atoms/*.astro"],
       "molecules:*": ["components/molecules/*.astro"],
       "organisms:*": ["components/organisms/*.astro"],
-      "templates:*": ["components/templates/*.astro"]
+      "templates:*": ["components/templates/*.astro"],
+      "interfaces": ["../shared/interfaces"]
     },
   },
   "include": ["src/**/*.astro"],

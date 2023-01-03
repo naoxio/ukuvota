@@ -214,6 +214,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         getMarkdownFile() {
             const selectedVoters = this.getSelectedVoters();
             const title = quick.title;
+            const processId = quick.id;
             const description = quick.description;
             const voterLabel = this.querySelector('span.voter-label').innerHTML;
             const numVoters = this.querySelector('span.num-voters').innerHTML;
@@ -230,6 +231,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             const rtn = `
 # ${title}
 ${description}
+${processId}
 
 ${voterLabel} ${numVoters}:
 ${selectedVotersString}

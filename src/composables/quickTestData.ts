@@ -1,10 +1,7 @@
-interface Proposal {
-    id: string
-    title: string
-    description: string
-}
+import { IProposal } from '../../shared/interfaces/IProposal'
+import { IVoter } from '../../shared/interfaces/IVoter'
 
-const proposals: Proposal[] = [
+const proposals: IProposal[] = [
     {
         id: '12804f77-64be-a566-17c2-9e134e824f41c9c9',
         title: 'Pepperoni and mushroom',
@@ -32,15 +29,6 @@ const proposals: Proposal[] = [
     }
 ]
 
-interface Vote {
-    proposalId: string;
-    vote: number;
-}
-interface Voter {
-    id: string
-    name: string
-    votes: Vote[]
-}
 
 const voterNames = ['Kim', 'Elon', 'Billy', 'Doug', 'Phillip', 'Julia'];
 const voterIds = [
@@ -51,14 +39,14 @@ const voterIds = [
     '96b28f92-5c7e-41fe-9eb0-25c12a973f13',
     'd56224b7-4ce2-4450-a49c-5c7e50b3cf45',
 ]
-const voters: Voter[] = [];
+const voters: IVoter[] = [];
 
 voterNames.forEach((voterName: string, i: number) => {
     const voter = {
         id: voterIds[i],
         name: voterName,
-        votes: [] as Vote[]
-    };
+        votes: []
+    } as IVoter;
     proposals.forEach((proposal) => {
         voter.votes.push({
             proposalId: proposal.id,
