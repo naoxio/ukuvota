@@ -60,8 +60,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                             <tr class="table-row-one">
                             <td></td>
                             <th>{ t('quick.proposal') }</th>
-                            <th>{ t('quick.averageScore') }</th>
-                            <th>{ t('quick.totalScore') }</th>
+                            <th class="whitespace-normal break-words">{ t('quick.averageScore') }</th>
+                            <th class="whitespace-normal break-words">{ t('quick.totalScore') }</th>
                             </tr>
                         </thead>
                         <tbody class="proposal-list">
@@ -193,7 +193,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             row.className = 'color-' + rank;
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>
+                <td class="whitespace-normal break-words">
                     <h3>${proposal.title}</h3>
                     <p>${proposal.description}</p>
                 </td>
