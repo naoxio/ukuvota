@@ -60,7 +60,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                             <tr class="table-row-one">
                             <td></td>
                             <th>{ t('quick.proposal') }</th>
-                            <th >{ t('quick.averageScore') }</th>
+                            <th>{ t('quick.averageScore') }</th>
                             <th>{ t('quick.totalScore') }</th>
                             </tr>
                         </thead>
@@ -73,8 +73,8 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                   <div class="card">
                     <h3>{ t('quick.exportData') }</h3>
                     <div class="flex justify-around exports">
-                        <button class="export-markdown btn btn-ghost"><Icon width="32" name="document-download"/></button>
-                        <button class="export-image btn btn-ghost"><Icon width="32" name="camera" /></button>
+                        <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
+                        <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
                     </div>
                 </div>
                   
@@ -86,10 +86,7 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                     { t('wip')}
                 </div>
             </div>
-
-
         </results-card>
-       
     </div>
 </BaseLayout>
 <script>
@@ -112,24 +109,19 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
         document.body.removeChild(elem);
     }
 
-    
-
     const getHighlighting = (className: string) => {
-        if (className === "color-0") {
-            return "rgba(205, 92, 92, 0.3)";
-        }
-        else if (className === "color-1") {
-            return "rgba(205, 92, 92, 0.2)";
-        }
-        else if (className === "color-2") {
-            return "rgba(205, 92, 92, 0.1)";
-        }
-        else {
-            return "";
+        switch (className) {
+            case "color-0":
+                return "rgba(205, 92, 92, 0.3)";
+            case "color-1":
+                return "rgba(205, 92, 92, 0.2)";
+            case "color-2":
+                return "rgba(205, 92, 92, 0.1)";
+            default:
+                return "";
         }
     };
 
-   
     class ResultsCard extends HTMLElement {
         voters = this.querySelectorAll('input.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
@@ -165,137 +157,131 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
             return this.emojis[i + 3];
         };
         
-
         updateTable() {
-            const selectedVoters = this.getSelectedVoters()
-            
-            const proposals = quick.proposals
-            this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`
+            const selectedVoters = this.getSelectedVoters();
+            const proposals = quick.proposals;
+            this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`;
             proposals.forEach((proposal: any) => {
                 proposal["total"] = this.getTotal(proposal.id, selectedVoters);
             });
             const sortedProposals = proposals.sort((a, b) => {
                 return b.total - a.total;
             });
-            this.proposal_list.innerHTML = ''
+            this.proposal_list.innerHTML = '';
 
-            let rank = 0
-            let prevProposal = null
+            let rank = 0;
+            let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
-                if (prevProposal)
-                    rank += prevProposal.total === proposal.total ? 0 : 1
-                prevProposal = proposal
-                let row = document.createElement('tr')
-                row.className = 'color-' + rank
-                row.innerHTML += `
-                    <td>${index + 1}</td>
-                    <td>
-                        <h3>${ proposal.title }</h3>
-                        <p>${ proposal.description }</p>
-                    </td>
-                    <td align="center">
-                        <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${ this.getAverageScore(proposal.total, selectedVoters) }>`
+                if (prevProposal) {
+                    rank += prevProposal.total === proposal.total ? 0 : 1;
+                }
+                prevProposal = proposal;
+                this.proposal_list.appendChild(this.createRow(rank, index, proposal, selectedVoters));
+            });
 
-                row.querySelector('div.emoji-container').appendChild(this.getAverageEmoji(proposal.total, selectedVoters))
-
-                row.innerHTML += `
-                        </div>
-                    </td>
-                    <td align="center">${ proposal.total }</td>
-                `
-
-                this.proposal_list.appendChild(row)
-            })
-
-            const items = this.proposal_list.querySelectorAll('tr')
+            const items = this.proposal_list.querySelectorAll('tr');
             items.forEach((item, index) => {
-                const rows = item.querySelectorAll('td')
+                const rows = item.querySelectorAll('td');
                 rows.forEach((row) => {
                     row.style.backgroundColor = getHighlighting(item.className);
-                })
-            })
+                });
+            });
+        }
+
+        createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
+            const row = document.createElement('tr');
+            row.className = 'color-' + rank;
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>
+                    <h3>${proposal.title}</h3>
+                    <p>${proposal.description}</p>
+                </td>
+                <td align="center">
+                    <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
+                   
+            row.querySelector('div.emoji-container').insertAdjacentElement('beforeend', this.getAverageEmoji(proposal.total, selectedVoters));
+            row.innerHTML += `</div>
+                </td>
+                <td align="center">${proposal.total}</td>
+            `;
+            return row;
 
         }
 
+
         getMarkdownFile() {
-            const selectedVoters = this.getSelectedVoters()
-            let rtn = ''
-            rtn += `# ${ quick.title }\n`
-            rtn += `${ quick.description }\n\n`
-            rtn += this.querySelector('span.voter-label').innerHTML + ' '
-            rtn += this.querySelector('span.num-voters').innerHTML + ':\n'
-            selectedVoters.forEach(voter => {
-                const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
-                rtn += `${quick_voter.name} `
-            })
-            rtn += '\n\n'
-            const table_row_one = this.querySelector('tr.table-row-one')
-            rtn += ' |  '
-            table_row_one.querySelectorAll('th').forEach(row => {
-                rtn += ' | ' +  row.innerHTML
-            });
-            rtn += ' | \n'
-            rtn += ' | --- | --- | --- | --- | \n'
-            quick.proposals.forEach((proposal: any, index: number) => {
-                rtn += ` | ${index + 1 }   | ${ proposal.title } - ${ proposal.description}`
-                rtn += ` | ${this.getAverageScore(proposal.total, selectedVoters)}  | ${ proposal.total } | \n`
-                
-            })
-            rtn += '\n'
-            console.log(rtn)
+            const selectedVoters = this.getSelectedVoters();
+            const title = quick.title;
+            const description = quick.description;
+            const voterLabel = this.querySelector('span.voter-label').innerHTML;
+            const numVoters = this.querySelector('span.num-voters').innerHTML;
+            const selectedVotersString = selectedVoters.map((voter: any) => {
+                const quickVoter = quick.voters.find((vote: any) => vote.id === voter.id);
+                return `${quickVoter.name} `;
+            }).join('');
+            const tableRowOne = this.querySelector('tr.table-row-one');
+            const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
+            const proposals = quick.proposals.map((proposal: any, index: number) => {
+                const averageScore = this.getAverageScore(proposal.total, selectedVoters);
+                return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
+            }).join('\n');
+            const rtn = `
+# ${title}
+${description}
 
-            save(`${quick.title}.md`, rtn, 'text/markdown')
+${voterLabel} ${numVoters}:
+${selectedVotersString}
 
-
+|  | ${tableColumns} |
+| --- | --- | --- | --- |
+${proposals}
+`;
+            save(`${title}.md`, rtn, 'text/markdown');
         }
 
         getSelectedVoters() {
             return Array.from(this.voters).filter((vote: HTMLInputElement) => vote.checked)
         }
         constructor() {
-            super()
-            const tabs = this.querySelectorAll('a.tab')
-            const contents = this.querySelectorAll('div.tab-content')
-            for (const [i, tab] of tabs.entries()) {
+            super();
+            const tabs = this.querySelectorAll('a.tab');
+            const contents = this.querySelectorAll('div.tab-content');
+            for (let i = 0; i < tabs.length; i++) {
+                const tab = tabs[i];
                 tab.addEventListener('click', () => {
-                    contents.forEach(content => content.classList.add('hide'))
-                    tabs.forEach(tab => tab.classList.remove('tab-active'))
-                    tab.classList.add('tab-active')
-                    contents[i].classList.remove('hide')
-                })
-
-                if (tab.classList.contains('tab-active')) {
-                    contents[i].classList.remove('hide')
-                } else {
-                    contents[i].classList.add('hide')
-                }
+                    this.showTab(tabs, contents, i);
+                });
             }
+            this.showTab(tabs, contents, 0);
 
             this.voters.forEach((voter: HTMLInputElement) => {
                 voter.addEventListener('click', () => {
-                    
-                    this.updateTable()
-                })
+                    this.updateTable();
+                });
             });
 
+            this.updateTable();
 
-            this.updateTable()
-
-                
-            const exportButtons = this.querySelector('div.exports').querySelectorAll('button')
-            exportButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    if (button.classList.contains("export-markdown")) {
-                        this.getMarkdownFile()
-                    }
-                    else if (button.classList.contains("export-image")) {
-                        toPng(this.querySelector('div.screenshot-results') as HTMLElement).then((dataUrl) => {
-                            download(dataUrl, quick.title + '.png')
-                        })
-                    }
-                })
-            })
+            const exportMarkdownButton = this.querySelector('.export-markdown');
+            const exportImageButton = this.querySelector('.export-image');
+            exportMarkdownButton.addEventListener('click', () => {
+                this.getMarkdownFile();
+            });
+            exportImageButton.addEventListener('click', () => {
+                toPng(this.querySelector('div.screenshot-results') as HTMLElement).then((dataUrl) => {
+                    download(dataUrl, quick.title + '.png');
+                });
+            });
         }
+
+        showTab(tabs: NodeListOf<Element>, contents: NodeListOf<Element>, index: number) {
+            contents.forEach((content) => content.classList.add('hide'));
+            tabs.forEach((tab) => tab.classList.remove('tab-active'));
+            tabs[index].classList.add('tab-active');
+            contents[index].classList.remove('hide');
+        }
+
     }
     customElements.define('results-card', ResultsCard)
 </script>
