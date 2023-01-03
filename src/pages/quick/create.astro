@@ -7,6 +7,8 @@ import WeightingInfo from "molecules:WeightingInfo";
 import Alert from "molecules:Alert";
 import AlertManager from "organisms:AlertManager";
 import DefaultProposalInfo from "molecules:DefaultProposalInfo";
+import { Icon } from "astro-icon";
+
 
 changeLanguage("en");
 
@@ -33,7 +35,7 @@ const strategy = Number(searchParams.get('strategy')) || 0;
 <BaseLayout>
 
   <h1>{ t('quick.title')  }</h1>
-  <quick-form data-proposals={JSON.stringify(proposals)}>
+  <quick-form data-proposals={JSON.stringify(proposals)} data-strategy={strategy}>
     <p>{ t('quick.topic') }</p>
     <input name="topicQuestion" class="input input-bordered w-full" value={topicQuestion} type="text">
     <br>
@@ -50,7 +52,10 @@ const strategy = Number(searchParams.get('strategy')) || 0;
       <WeightingInfo />
     </span>
     <br>
-    <TimeSelector/>
+    <TimeSelector strategy={strategy}/>
+    { strategy === 1 &&  
+    <h2>{ t('quick.proposals') }</h2>
+    }
     <div class="flex justify-around align-center items-center">
       <div class="flex justify-center items-center">
         <input name="defaultProposals" type="checkbox" checked={defaultProposals} class="checkbox" />
@@ -59,6 +64,24 @@ const strategy = Number(searchParams.get('strategy')) || 0;
         <DefaultProposalInfo />
       </div>
     </div>
+    { strategy === 1 &&  
+    <div class="proposals">
+      <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+          <div class="edit flex justify-between items-center">
+              <div class="content flex flex-col w-full">
+                  <b>{ t('quick.topic') }</b>
+                  <input type="text" class="input input-bordered input-sm my-2"/>
+                  <label>{ t('quick.description') }</label>
+                  <input type="text" class="input input-bordered input-sm my-2"/>
+              </div>
+          </div>
+      </div>
+    </div>
+    <button id="add-proposal" class="btn p-2" >
+        <Icon width="32" name="add"/> add proposal
+    </button>
+    }
+
     <br/>
     <AlertManager>
       <Alert type="error" icon="warning">
@@ -116,20 +139,24 @@ const strategy = Number(searchParams.get('strategy')) || 0;
         }
         else {
           addAlert(this.alertList, this.alerts[1].cloneNode(true))
-
-          this.form['strategy'] = 0
+          this.form['strategy'] = this.dataset.strategy
           this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
-          
+          let res: any, json: any;
           if (import.meta.env.DEV) {
             window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/dev/proposals`
           }
           else {
-            const res = await fetch(`${location.origin}/api/quick/process`, {
-              method: "POST",
-              headers: {'Content-Type':'application/json'},
-              body: JSON.stringify(this.form)
-            });
-            const json = await res.json();
+            try {
+              res = await fetch(`${location.origin}/api/quick/process`, {
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(this.form)
+              });
+              json = await res.json();
+            } catch (error) {
+              console.error(error);
+              return;
+            }
             window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
           }
         }

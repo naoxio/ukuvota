@@ -10,13 +10,6 @@
     "toggle_langs": "Sprachen ändern",
     "start_quick": "Starten Sie den schnellen Prozess"
   },
-  "intro": {
-    "desc": "Vite Startvorlage mit Vorlieben",
-    "dynamic-route": "Demo einer dynamischen Route",
-    "hi": "Hi, {name}!",
-    "aka": "Auch bekannt als",
-    "whats-your-name": "Wie heißt du?"
-  },
   "not-found": "Nicht gefunden",
   "quick": {
     "title": "Schneller Prozess",
@@ -25,9 +18,11 @@
     "description": "Beschreibung",
     "weighting": "Negative Punktegewichtung",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
     "switchCalendar": "Zum Kalender-Auswähler wechseln",
     "switchSlider": "Wechsel zum Schieberegler",
     "proposal": "Vorschlag",
+    "proposals": "Vorschläge",
     "averageScore": "Durchschnittliche Punktzahl",
     "totalScore": "Gesamtpunktzahl",
     "results": "Ergebnisse",

@@ -1,4 +1,8 @@
 ---
+interface Props {
+    strategy: number
+}
+const { strategy } = Astro.props;
 import { t } from "i18next";
 import { localizePath } from "astro-i18next";
 const { slideSelector = true } = Astro.props;
@@ -16,7 +20,11 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
 
 </style>
 <time-selector data-message={slideSelector}>
+    { strategy === 0 ? 
     <h2>{ t('quick.timeLeftHeading') }</h2>
+    :
+    <h2>{ t('quick.timeLeftVotingHeading') }</h2>
+    }
     <button class="btn" id="timeSelector">
 
         <span class={ slideSelector ? 'slider show' : 'slider hide'}>
@@ -36,6 +44,7 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
         </a>
     </div>
     <div class={ !slideSelector ? 'calendar show' : 'calendar hide'}>
+        { strategy === 0 &&
         <div class="p-4 m-4">
             <h2>
               { t('quick.proposalTime') }
@@ -55,8 +64,9 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
                 <label for="proposalDays">{proposalTimeLeft.days}</label>
             </div>
             <input name="proposalDays" type="range" min="0" max="90" value={proposalTimeLeft.days} class="range" />
-          </div>
-          <div class="p-4 m-4">
+        </div>
+        }
+        <div class="p-4 m-4">
             <h2>
                 { t('quick.votingTime') }
             </h2>
@@ -75,7 +85,7 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 }
                 <label for="votingDays">{votingTimeLeft.days}</label>
             </div>
             <input name="votingDays" type="range" min="0" max="90" value={votingTimeLeft.days} class="range" />
-          </div>
+        </div>
     </div>
 </time-selector>
 <script>

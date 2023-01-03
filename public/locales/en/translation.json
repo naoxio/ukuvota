@@ -10,13 +10,6 @@
     "toggle_langs": "Change languages",
     "start_quick": "Start quick process"
   },
-  "intro": {
-    "desc": "Opinionated Vite Starter Template",
-    "dynamic-route": "Demo of dynamic route",
-    "hi": "Hi, {name}!",
-    "aka": "Also known as",
-    "whats-your-name": "What's your name?"
-  },
   "not-found": "Not found",
   "quick": {
     "title": "Quick Process",
@@ -25,9 +18,11 @@
     "description": "Description",
     "weighting": "Negative Score Weighting",
     "timeLeftHeading": "Select the time for proposals and voting",
+    "timeLeftVotingHeading": "Select the time for voting",
     "switchCalendar": "Switch to calendar selector",
     "switchSlider": "Switch to slide selector",
     "proposal": "Proposal",
+    "proposals": "Proposals",
     "averageScore": "Average Score",
     "totalScore": "Total Score",
     "results": "Results",
