@@ -77,11 +77,11 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
         proposal_list = null
-        addProposal(data: any) {
+        addProposal(prop_data: any) {
             const proposal = this.proposal_html.cloneNode(true)
-            proposal.id = data.id
-            proposal.querySelector('h3').innerHTML = data.title
-            proposal.querySelector('p').innerHTML = data.description
+            proposal.id = prop_data.id
+            proposal.querySelector('h3').innerHTML = prop_data.title
+            proposal.querySelector('p').innerHTML = prop_data.description
             const buttons = proposal.querySelectorAll('button')
             buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', (event) => {
@@ -104,8 +104,8 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
             this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
             this.proposal_list.innerHTML = ""
 
-            quick.proposals.forEach((data: any) => {
-                this.addProposal(data)
+            quick.proposals.forEach((prop_data: any) => {
+                this.addProposal(prop_data)
             });
 
             const submit = this.querySelector('button#submit-vote')
@@ -143,7 +143,6 @@ const emojiNames = ['rage', 'angry', 'sad', 'neutral', 'smiling', 'happy', 'lovi
     const checkTime = () => {
         const time =  +new Date(quick.votingEnd) - +new Date()
         if (time <= 0)
-
             window.location.href = `${window.location.origin}/quick/${processId}/results`
         else
             setTimeout(checkTime, time)

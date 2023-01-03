@@ -44,9 +44,9 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
                     <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
                     <div class="flex justify-around flex-wrap">
                         { quick.voters.map((voter: any) => (
-                            <div class="flex items-center p-2">
-                                <input id={voter.id} type="checkbox" checked class="voter checkbox checkbox-xs" />
-                                <span class="m-1">
+                            <div id={voter.id} class="flex items-center p-2 voter">
+                                <input type="checkbox" checked class="checkbox checkbox-xs" />
+                                <span class="p-1 cursor-pointer select-none">
                                     { voter.name }
                                 </span>
                             </div>
@@ -124,13 +124,12 @@ const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"]
     };
 
     class ResultsCard extends HTMLElement {
-        voters = this.querySelectorAll('input.voter')
+        voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
                 const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
-                console.log(quick_voter, quick.voters, voter.id)
                 const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
                 if (matchingVote) {
                     let v = matchingVote.vote;
@@ -243,7 +242,7 @@ ${proposals}
         }
 
         getSelectedVoters() {
-            return Array.from(this.voters).filter((vote: HTMLInputElement) => vote.checked)
+            return Array.from(this.voter_list).filter((div: HTMLDivElement) => div.querySelector('input').checked)
         }
         constructor() {
             super();
@@ -257,8 +256,13 @@ ${proposals}
             }
             this.showTab(tabs, contents, 0);
 
-            this.voters.forEach((voter: HTMLInputElement) => {
-                voter.addEventListener('click', () => {
+            this.voter_list.forEach((div: HTMLDivElement) => {
+                const input =div.querySelector('input')
+                input.addEventListener('click', () => {
+                    this.updateTable();
+                });
+                div.querySelector('span').addEventListener('click', () => {
+                    input.checked = !input.checked
                     this.updateTable();
                 });
             });
@@ -271,7 +275,9 @@ ${proposals}
                 this.getMarkdownFile();
             });
             exportImageButton.addEventListener('click', () => {
-                toPng(this.querySelector('div.screenshot-results') as HTMLElement).then((dataUrl) => {
+                const theme = localStorage.getItem("theme");
+
+                toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
                     download(dataUrl, quick.title + '.png');
                 });
             });
