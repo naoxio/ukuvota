@@ -64,7 +64,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
-    const ws = new WebSocket(`ws://${window.location.host}`);
+    const ws = new WebSocket(`wss://${window.location.host}`);
 
     class ProposalList extends HTMLElement {
         proposal_html = null
