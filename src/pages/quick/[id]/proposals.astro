@@ -115,6 +115,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                         proposalId
                     }))
                 })
+
             })
             const save_button = edit.querySelector('button')
             save_button.addEventListener('click', () => {
@@ -133,9 +134,10 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                         description: inputs[1].value,
                         processId,
                         proposalId,
-                        forced: true,
                     }))         
                 }
+                this.updateProposalView(proposal, data.title, data.description)
+
             })
             this.proposals.appendChild(proposal)
         }

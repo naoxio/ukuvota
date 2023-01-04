@@ -104,7 +104,11 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 for (const [i, svg] of svgs.entries()) {
                 if (!svg.classList.contains('gray')) {
                     votesMap.set(proposal_node.id, i - 3);
+                    svg.classList.add('gray');
                 }
+                if (i - 3 == 0)
+                    svg.classList.remove('gray');
+                
                 };
             });
             const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
