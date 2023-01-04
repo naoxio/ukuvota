@@ -12,15 +12,18 @@ html, body {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 }
-
+nav {
+    min-width: 600px;
+}
 
 main {
     display: flex;
     flex-direction: column;
-    padding: 2rem 4rem;
+    padding: 2rem;
     width: 100%;
     max-width: 800px;
     margin: auto;
+    min-width: 600px;
 }
 
 .link, .link:hover, .btn, .btn:hover  {
