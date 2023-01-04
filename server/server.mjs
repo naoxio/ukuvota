@@ -247,11 +247,13 @@ wss.on('connection', async (ws, req) => {
           proposal.title = data.title;
           proposal.description = data.description;
         
-          // Perform updates to the database and send messages to all users
+          // Perform updates to the database and send messages to all other users, except for the one making the update
+          const filteredUsers = data.forced ? users : users.filter(user => user.id !== userId);
+
           const updates = [
             db.put(processId, JSON.stringify(process)),
             sendToAllUsers(
-              users,
+              filteredUsers,
               {
                 method: data.method,
                 title: data.title,
@@ -270,7 +272,6 @@ wss.on('connection', async (ws, req) => {
 
   // When the WebSocket connection is closed
   ws.on('close', function () {
-    console.log('Closing connection')
     // Get all processes associated with the user
     let processes = user_map.get(userId)
     // Remove the user from the user map
