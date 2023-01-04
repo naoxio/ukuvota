@@ -14,6 +14,10 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/proces
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+
+if (!('voters' in quick)) {
+    quick['voters'] = []
+}
 ---
 
 <BaseLayout>
