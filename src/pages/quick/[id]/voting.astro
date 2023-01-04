@@ -22,6 +22,18 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     .gray {
         filter: grayscale(100%);
     }
+    .icon {
+        width: 48px;
+    }
+    @media screen and (max-width: 600px) {
+    .icon {
+        width: 32px;
+    }
+    .emoji-btn {
+        flex-shrink: unset;
+    }
+  }
+  
 </style>
 <BaseLayout>
     <div class="card bg-base-200 px-6 my-4 py-6">
@@ -36,10 +48,9 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                     <br/>
                     <div class="flex justify-between">
                         {emojiNames.map((name) => (
-                          <button class="btn btn-ghost btn-circle">
+                          <button class="btn btn-ghost btn-circle emoji-btn">
                             <Icon
-                              class={name === 'neutral' ? '' : 'gray'}
-                              width="48"
+                              class={'icon ' + (name === 'neutral' ? '' : 'gray')}
                               name={name}
                             />
                           </button>
