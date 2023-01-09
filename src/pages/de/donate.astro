@@ -1,12 +1,12 @@
 ---
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "templates:BaseLayout";
+import BaseLayout from "templates/BaseLayout.astro";
 
 changeLanguage("de");
 ---
 
 <BaseLayout>
-    <h1>{ t('nav.donate') }</h1>
+    <h1>{ t('buttons.donate') }</h1>
     <ul>
         <li>
             <a class="link link-primary" href="https://en.liberapay.com/ukuvota">Liberapay</a>

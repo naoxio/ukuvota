@@ -16,7 +16,7 @@ const menu = [
     label: 'home',
   },
   {
-    path: '/quick',
+    path: '/quick/create',
     icon: 'flash',
     label: 'quick',
   },
@@ -72,7 +72,7 @@ const selected = (item: any) => {
       <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
         <span class="flex items-center"> 
           <Icon width="22" name={item.icon}/>
-          <p class="label pl-1">{t('nav.' + item.label)}</p>
+          <p class="label pl-1">{t('buttons.' + item.label)}</p>
         </span>
       </a>
     </>

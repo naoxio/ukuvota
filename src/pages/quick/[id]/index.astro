@@ -1,6 +1,6 @@
 ---
 import { changeLanguage } from "i18next";
-import BaseLayout from "templates:BaseLayout";
+import BaseLayout from "templates/BaseLayout.astro";
 import { quickTest } from "composables/quickTestData";
 
 changeLanguage("en");
@@ -15,13 +15,13 @@ const proposalTime = +new Date(quick.proposalEnd) - +new Date();
 const votingTime = +new Date(quick.votingEnd) - +new Date();
 switch (true) {
     case !quick:
-        return Astro.redirect("/quick");
+        return Astro.redirect("/quick/creat");
     case proposalTime > 0:
-        return Astro.redirect(`${url.origin}/api/quick/${processId}/proposals`);
+        return Astro.redirect(`${url.origin}/quick/${processId}/proposals`);
     case votingTime > 0:
-        return Astro.redirect(`${url.origin}/api/quick/${processId}/voting`);
+        return Astro.redirect(`${url.origin}/quick/${processId}/voting`);
     default:
-        return Astro.redirect(`${url.origin}/api/quick/${processId}/results`);
+        return Astro.redirect(`${url.origin}/quick/${processId}/results`);
 }
 ---
 

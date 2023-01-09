@@ -1,24 +1,13 @@
 ---
 import { t, changeLanguage } from "i18next";
 import { localizePath } from "astro-i18next";
-import BaseLayout from "templates:BaseLayout";
-import ContentDoc from "atoms:ContentDoc";
+import BaseLayout from "templates/BaseLayout.astro";
+import ContentDoc from "atoms/ContentDoc";
 
 changeLanguage("en");
+
+return Astro.redirect(localizePath("/quick/create"));
 ---
 <BaseLayout>
-    <h1>Select a strategy for your Quick Process</h1>
-    <a class="card bg-base-200 my-4" href={localizePath("/quick/create")}>
-        <div class="card-body">
-            <h2>{ t('quick.strategy.full') }</h2>
-            <ContentDoc file_name="QuickFullStrategy"/>
-        </div>
-    </a>
-    <a class="card bg-base-200 my-4" href={localizePath("/donate")}>
-        <div class="card-body">
-            <h2>{ t('quick.strategy.voting') }</h2>
-            <ContentDoc file_name="QuickVotingStrategy"/>
-            { t('wip') }
-        </div>
-    </a>
+
 </BaseLayout>

@@ -1,14 +1,15 @@
 {
-  "nav": {
+  "buttons": {
     "about": "Über",
-    "back": "Zurück",
     "go": "Los",
     "home": "Startseite",
     "quick": "Schnell",
     "donate": "Spenden",
     "toggle_dark": "Dunkelmodus umschalten",
     "toggle_langs": "Sprachen ändern",
-    "start_quick": "Starten Sie den schnellen Prozess"
+    "start_quick": "Starten Sie den schnellen Prozess",
+    "continue": "Weiter",
+    "back": "Zurück"
   },
   "not-found": "Nicht gefunden",
   "quick": {
@@ -19,8 +20,10 @@
     "weighting": "Negative Punktegewichtung",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
     "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
-    "switchCalendar": "Zum Kalender-Auswähler wechseln",
-    "switchSlider": "Wechsel zum Schieberegler",
+    "timeSelector": {
+      "calendar": "Kalenderselektor verwenden",
+      "slider": "Schieberegler verwenden"
+    },
     "proposal": "Vorschlag",
     "proposals": "Vorschläge",
     "averageScore": "Durchschnittliche Punktzahl",
@@ -48,7 +51,12 @@
     "qrcode": "Qr-Code",
     "voterName": "Ihr Name oder dauerhafter Alias",
     "voters": "WählerInnen",
-    "exportData": "Daten exportieren"
+    "exportData": "Daten exportieren",
+    "phases": {
+      "select": "Phasen auswählen",
+      "full": "Vorschlags- und Abstimmungsphase",
+      "voting": "Nur die Abstimmungsphase"
+    }
   },
   "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
   "layouts": {

@@ -1,6 +1,6 @@
 ---
-import BaseLayout from "templates:BaseLayout";
-import InfoCard from "organisms:QuickInfoCard";
+import BaseLayout from "templates/BaseLayout.astro";
+import QuickInfo from "organisms/QuickInfo";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
 import { t, changeLanguage } from "i18next";
@@ -14,9 +14,8 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/proces
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-
-if (!('voters' in quick)) {
-    quick['voters'] = []
+if (!("voters" in quick)) {
+    quick["voters"] = [];
 }
 ---
 
@@ -29,9 +28,9 @@ if (!('voters' in quick)) {
 
     </style>
     <div class="card bg-base-200 px-6 my-4 py-6">
-        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
 
-        </InfoCard>
+        </QuickInfo>
         <results-card>
             <div class="hide">
                 { emojis.map(emoji => (

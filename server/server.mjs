@@ -111,7 +111,6 @@ app.post('/api/quick/process', async(req, res) => {
         description: body.topicDescription,
         proposalEnd: new Date(proposalEnd).toISOString(),
         votingEnd: new Date(votingEnd).toISOString(),
-        strategy: body.strategy,
         weighting: body.weighting,
         proposals,
       };

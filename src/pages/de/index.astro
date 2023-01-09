@@ -1,8 +1,8 @@
 ---
-import BaseLayout from "templates:BaseLayout";
+import BaseLayout from "templates/BaseLayout.astro";
 import { localizePath } from "astro-i18next";
 import { t, changeLanguage } from "i18next";
-import ContentDoc from "atoms:ContentDoc";
+import ContentDoc from "atoms/ContentDoc.astro";
 import logo from "../../assets/logo.png";
 
 changeLanguage("de");
@@ -33,7 +33,7 @@ changeLanguage("de");
 	<ContentDoc file_name="Introduction"/>
 
 	<div class="text-center">
-		<a href={localizePath("/quick")} class="btn btn-primary btn-md">{ t('nav.start_quick') }</a>  
+		<a href={localizePath("/quick/create")} class="btn btn-primary btn-md">{ t('buttons.start_quick') }</a>  
 	</div>
 </BaseLayout>
 <script>

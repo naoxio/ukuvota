@@ -1,19 +1,17 @@
 ---
-import BaseLayout from "templates:BaseLayout";
-import TimeSelector from "molecules:TimeSelector";
-import { weightingOptions } from "composables/weightingOptions";
+import BaseLayout from "templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
-import WeightingInfo from "molecules:WeightingInfo";
-import Alert from "molecules:Alert";
-import AlertManager from "organisms:AlertManager";
-import DefaultProposalInfo from "molecules:DefaultProposalInfo";
+import Alert from "molecules/Alert.astro";
+import AlertManager from "organisms/AlertManager.astro";
+import { Icon } from "astro-icon";
+import QuickInfo from "organisms/QuickInfo.astro";
+import Modal from "atoms/Modal.astro";
+import ContentDoc from "atoms/ContentDoc.astro";
+import QuickTopic from "organisms/QuickTopic.vue";
+import QuickTimeSelector from "organisms/QuickTimeSelector.vue";
 
 changeLanguage("de");
 
-const weightOptions = weightingOptions();
-const topicDescription = "";
-const topicQuestion = "";
-const weighting = weightOptions[2].value;
 const defaultProposals = "";
 const proposals = [
     {
@@ -25,74 +23,130 @@ const proposals = [
         description: t("proposal.one.description"),
     },
 ];
+const mode = 0;
+const slideSelector = true;
+const proposalTimeLeft = { minutes: 10, hours: 0, days: 0 };
+const votingTimeLeft = { minutes: 10, hours: 0, days: 0 };
 ---
+<style is:inline>
+  .show {
+      display: block;
+  }
+  .hide {
+      display: none;
+  }
+</style>
+<AlertManager>
+  <Alert type="error" icon="warning">
+    { t('alert.quick.error.topicQuestion') }
+  </Alert>
+  <Alert type="success" icon="checkmark-outline">
+    { t('alert.quick.success.createProcess') } 
+  </Alert>
+</AlertManager>
 
 <BaseLayout>
-
   <h1>{ t('quick.title')  }</h1>
-  <quick-form data-proposals={JSON.stringify(proposals)}>
-    <p>{ t('quick.topic') }</p>
-    <input name="topicQuestion" class="input input-bordered w-full" value={topicQuestion} type="text">
-    <br>
-    <p>{ t('quick.description') }</p>
-    <textarea name="topicDescription" class="textarea textarea-bordered w-full" value={topicDescription} />
-    <br><br>
-    <span>{ t('quick.weighting') }</span>
-    <span class="flex justify-center items-center">
-      <select name="weighting" class="select" value={weighting}>
-        { weightOptions.map((weight) => 
-          <option selected={weighting === weight.value} value={weight.value}>{ weight.label }</option>
-        )}
-      </select>
-      <WeightingInfo />
-    </span>
-    <br>
-    <TimeSelector/>
-    <div class="flex justify-around align-center items-center">
-      <div class="flex justify-center items-center">
-        <input name="defaultProposals" type="checkbox" checked={defaultProposals} class="checkbox" />
+  <quick-form data-proposals={JSON.stringify(proposals)} >
+      <QuickTopic client:only />
+      <QuickTimeSelector client:only/>
+      <div class="any-phase-item">
+        
+        <div class="voting-phase hide">
+          <h2>{ t('quick.proposals') }</h2>
+        </div>
+        <div class="flex justify-around align-center items-center">
+          <div class="flex justify-center items-center">
+            <input name="defaultProposals" type="checkbox" checked={defaultProposals} class="checkbox" />
 
-        <span>&nbsp;{ t('quick.addDefaultProposals') }</span>
-        <DefaultProposalInfo />
+            <span>&nbsp;{ t('quick.addDefaultProposals') }</span>
+            <Modal id="defaultProposalInfo">
+              <h3>{ t('quick.defaultProposals') }</h3>
+              <ContentDoc file_name="DefaultProposals"/>
+            </Modal>
+          </div>
+        </div>
+        <div class="voting-phase hide">
+          <div class="proposals">
+            <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                <div class="edit flex justify-between items-center">
+                    <div class="content flex flex-col w-full">
+                      <b>{ t('quick.topic') }</b>
+                      <input type="text" class="input input-bordered input-sm my-2"/>
+                      <label>{ t('quick.description') }</label>
+                      <input type="text" class="input input-bordered input-sm my-2"/>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <button id="add-proposal" class="btn p-2" >
+              <Icon width="32" name="add"/> add proposal
+          </button>
+        </div>
+        <br/>
+        <br/>
+        <div class="text-center">
+          <button id="submit" type="submit" class="btn btn-primary">
+            { t('create') }
+          </button>
+        </div>
       </div>
     </div>
-    <br/>
-    <AlertManager>
-      <Alert type="error" icon="warning" label={ t('alert.quick.error.topicQuestion') } />
-      <Alert type="success" icon="checkmark-outline" label={ t('alert.quick.success.createProcess') } />
-    </AlertManager>
-    <br/>
-    <div class="text-center">
-      <button id="submit" type="submit" class="btn btn-primary">
-        { t('create') }
-      </button>
-    </div>
-    
-    <br/>
-
   </quick-form>
 </BaseLayout>
 
 <script>
   import { addAlert } from 'composables/addAlert'
 
+  const alertManager = document.querySelector('div.alert-manager')
+  const alertList = alertManager.querySelector('div.alert-list')
+  const alerts = alertManager.querySelectorAll('div.alert')
+
+  const changePhaseMode = (phase) => {
+    switch(phase) {
+      case "full-phase":
+        console.log('full')
+        break
+      case "voting-phase":
+        console.log('voting')
+        break
+    }
+  }
+
+  class PhaseSelector extends HTMLElement {
+    constructor() {
+      super()
+      const items = this.querySelectorAll('div')
+      items.forEach((item) => {
+        const input = item.querySelector('input')
+        input.addEventListener('change' , () => {
+          changePhaseMode(item.id)
+        })
+        item.querySelector('label').addEventListener('click', () => {
+          changePhaseMode(item.id)
+          input.checked = true
+        })
+      })
+    }
+  }
+
+  customElements.define('phase-selector', PhaseSelector)
+
   class QuickForm extends HTMLElement {
     form = {}
-    alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
-    alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
     findValues(inputs: NodeListOf<any>) {
       Array.from(inputs).forEach((input) => {
-        if(input.name) {
-          if (input.type === "checkbox")
-            this.form[input.name] = input.checked
-          else
-            this.form[input.name] = input.value
+        if (input.name) {
+          this.form[input.name] = (input.type === "checkbox") ? input.checked : input.value;
         }
       })
     }
 
+
     constructor() {
       super()
+    
+
       const buttons = this.querySelectorAll('button')
       const inputs = this.querySelectorAll('input')
       const textareas = this.querySelectorAll('textarea')
@@ -100,7 +154,7 @@ const proposals = [
 
       const proposals = JSON.parse(this.dataset.proposals)
       const button = Array.from(buttons).find(btn => btn.id === 'submit')
-      
+
       button.addEventListener('click', async() => {
         this.form = {}
         this.findValues(inputs)
@@ -108,24 +162,27 @@ const proposals = [
         this.findValues(selectors)
         const lang = document.documentElement.lang
         if (this.form['topicQuestion'] === '') {
-          addAlert(this.alertList, this.alerts[0].cloneNode(true))
+          addAlert(alertList, alerts[0].cloneNode(true))
         }
         else {
-          addAlert(this.alertList, this.alerts[1].cloneNode(true))
-
-          this.form['strategy'] = 1
+          addAlert(alertList, alerts[1].cloneNode(true))
           this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
-          
+          let res: any, json: any;
           if (import.meta.env.DEV) {
             window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/dev/proposals`
           }
           else {
-            const res = await fetch(`${location.origin}/api/quick/process`, {
-              method: "POST",
-              headers: {'Content-Type':'application/json'},
-              body: JSON.stringify(this.form)
-            });
-            const json = await res.json();
+            try {
+              res = await fetch(`${location.origin}/api/quick/process`, {
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(this.form)
+              });
+              json = await res.json();
+            } catch (error) {
+              console.error(error);
+              return;
+            }
             window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
           }
         }
@@ -133,5 +190,42 @@ const proposals = [
     }
   }
   customElements.define('quick-form', QuickForm)
+
+  
+  class TimeSelector extends HTMLElement {
+        hideOrShow(className: string, val: boolean) {
+            const list = this.getElementsByClassName(className)
+            for (let i = 0; i < list.length; i++) {
+                const slider = list[i]
+                slider.className = val ? 'show '  : 'hide '
+                slider.className += className
+            }
+        }
+        updateDOM(val) {
+            this.hideOrShow('slider', val)
+            this.hideOrShow('calendar', !val)
+        }
+        constructor() {
+            super()
+            let message = Boolean(this.dataset.message);
+            const button = this.querySelector('button')
+            const inputs = this.querySelectorAll('input')
+            const labels = this.querySelectorAll('label')
+            for (let i = 0; i < inputs.length; i++) {
+                const input = inputs[i]
+                const label = labels[i]
+                input.addEventListener('input', () => {
+                    label.innerHTML = input.value
+                })
+            }
+
+            this.updateDOM(message)
+            button.addEventListener('click', () => {
+                message = !message
+                this.updateDOM(message)
+            })
+        }
+    }
+    customElements.define('time-selector', TimeSelector)
 
 </script>

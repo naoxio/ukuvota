@@ -1,9 +1,9 @@
 ---
 import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "templates:BaseLayout";
-import Countdown from "molecules:Countdown";
-import InfoCard from "organisms:QuickInfoCard";
+import BaseLayout from "templates/BaseLayout.astro";
+import Countdown from "molecules/Countdown";
+import QuickInfo from "organisms/QuickInfo";
 import { quickTest } from "composables/quickTestData";
 
 changeLanguage("en");
@@ -18,10 +18,10 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 
 <BaseLayout>
     <div class="card bg-base-200 px-4 my-4 py-6">
-        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
             <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
             <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-        </InfoCard>
+        </QuickInfo>
         <proposal-list>
             <div class="proposals">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">

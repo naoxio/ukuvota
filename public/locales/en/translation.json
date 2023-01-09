@@ -1,14 +1,15 @@
 {
-  "nav": {
+  "buttons": {
     "about": "About",
-    "back": "Back",
     "go": "GO",
     "home": "Home",
     "quick": "Quick",
     "donate": "Donate",
     "toggle_dark": "Toggle dark mode",
     "toggle_langs": "Change languages",
-    "start_quick": "Start quick process"
+    "start_quick": "Start quick process",
+    "continue": "Continue",
+    "back": "Back"
   },
   "not-found": "Not found",
   "quick": {
@@ -19,8 +20,10 @@
     "weighting": "Negative Score Weighting",
     "timeLeftHeading": "Select the time for proposals and voting",
     "timeLeftVotingHeading": "Select the time for voting",
-    "switchCalendar": "Switch to calendar selector",
-    "switchSlider": "Switch to slide selector",
+    "timeSelector": {
+      "calendar": "Use Calendar selector",
+      "slider": "Use Slide selector"
+    },
     "proposal": "Proposal",
     "proposals": "Proposals",
     "averageScore": "Average Score",
@@ -48,7 +51,12 @@
     "qrcode": "Qr-Code",
     "voterName": "Your name or persistent alias",
     "voters": "Voters",
-    "exportData": "Export Data"
+    "exportData": "Export Data",
+    "phases": {
+      "select": "Select phases",
+      "full": "Proposal + Voting Phase",
+      "voting": "Voting Phase only"
+    }
   },
   "wip": "Not yet implemented, please consider donating to help support this project!",
   "layouts": {

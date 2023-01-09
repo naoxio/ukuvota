@@ -1,12 +1,12 @@
 ---
 import { t, changeLanguage } from "i18next";
-import Countdown from "molecules:Countdown";
-import BaseLayout from "templates:BaseLayout";
-import InfoCard from "organisms:QuickInfoCard";
+import Countdown from "molecules/Countdown";
+import BaseLayout from "templates/BaseLayout.astro";
+import QuickInfo from "organisms/QuickInfo";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
-import Alert from "molecules:Alert";
-import AlertManager from "organisms:AlertManager";
+import Alert from "molecules/Alert";
+import AlertManager from "organisms/AlertManager";
 
 changeLanguage("en");
 
@@ -37,9 +37,9 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 </style>
 <BaseLayout>
     <div class="card bg-base-200 px-6 my-4 py-6">
-        <InfoCard title={quick.title} description={quick.description} weighting={quick.weighting}>
+        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
             <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-        </InfoCard>
+        </QuickInfo>
         <voting-list>
             <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
