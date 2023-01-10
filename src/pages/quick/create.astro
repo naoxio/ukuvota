@@ -7,8 +7,9 @@ import { Icon } from "astro-icon";
 import QuickInfo from "organisms/QuickInfo.astro";
 import Modal from "atoms/Modal.astro";
 import ContentDoc from "atoms/ContentDoc.astro";
-import QuickTopic from "organisms/QuickTopic.vue";
+import QuickCreateTopic from "organisms/QuickCreateTopic.vue";
 import QuickTimeSelector from "organisms/QuickTimeSelector.vue";
+import QuickCreateProposals from "organisms/QuickCreateProposals.vue";
 
 changeLanguage("en");
 
@@ -48,42 +49,12 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 };
 <BaseLayout>
   <h1>{ t('quick.title')  }</h1>
   <quick-form data-proposals={JSON.stringify(proposals)} >
-      <QuickTopic client:only />
+      <QuickCreateTopic client:only="vue" />
       <hr/>
-      <QuickTimeSelector client:only/>
-      <div class="any-phase-item">
-        
-        <div class="voting-phase hide">
-          <h2>{ t('quick.proposals') }</h2>
-        </div>
-        <div class="flex justify-around align-center items-center">
-          <div class="flex justify-center items-center">
-            <input name="defaultProposals" type="checkbox" checked={defaultProposals} class="checkbox" />
-
-            <span>&nbsp;{ t('quick.addDefaultProposals') }</span>
-            <Modal id="defaultProposalInfo">
-              <h3>{ t('quick.defaultProposals') }</h3>
-              <ContentDoc file_name="DefaultProposals"/>
-            </Modal>
-          </div>
-        </div>
-        <div class="voting-phase hide">
-          <div class="proposals">
-            <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-                <div class="edit flex justify-between items-center">
-                    <div class="content flex flex-col w-full">
-                      <b>{ t('quick.topic') }</b>
-                      <input type="text" class="input input-bordered input-sm my-2"/>
-                      <label>{ t('quick.description') }</label>
-                      <input type="text" class="input input-bordered input-sm my-2"/>
-                    </div>
-                </div>
-            </div>
-          </div>
-          <button id="add-proposal" class="btn p-2" >
-              <Icon width="32" name="add"/> add proposal
-          </button>
-        </div>
+      <QuickTimeSelector client:only="vue"/>
+      <QuickCreateProposals client:only="vue"/>
+      
+      
         <br/>
         <br/>
         <div class="text-center">
@@ -103,35 +74,6 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 };
   const alertList = alertManager.querySelector('div.alert-list')
   const alerts = alertManager.querySelectorAll('div.alert')
 
-  const changePhaseMode = (phase) => {
-    switch(phase) {
-      case "full-phase":
-        console.log('full')
-        break
-      case "voting-phase":
-        console.log('voting')
-        break
-    }
-  }
-
-  class PhaseSelector extends HTMLElement {
-    constructor() {
-      super()
-      const items = this.querySelectorAll('div')
-      items.forEach((item) => {
-        const input = item.querySelector('input')
-        input.addEventListener('change' , () => {
-          changePhaseMode(item.id)
-        })
-        item.querySelector('label').addEventListener('click', () => {
-          changePhaseMode(item.id)
-          input.checked = true
-        })
-      })
-    }
-  }
-
-  customElements.define('phase-selector', PhaseSelector)
 
   class QuickForm extends HTMLElement {
     form = {}
@@ -191,42 +133,5 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 };
     }
   }
   customElements.define('quick-form', QuickForm)
-
-  
-  class TimeSelector extends HTMLElement {
-        hideOrShow(className: string, val: boolean) {
-            const list = this.getElementsByClassName(className)
-            for (let i = 0; i < list.length; i++) {
-                const slider = list[i]
-                slider.className = val ? 'show '  : 'hide '
-                slider.className += className
-            }
-        }
-        updateDOM(val) {
-            this.hideOrShow('slider', val)
-            this.hideOrShow('calendar', !val)
-        }
-        constructor() {
-            super()
-            let message = Boolean(this.dataset.message);
-            const button = this.querySelector('button')
-            const inputs = this.querySelectorAll('input')
-            const labels = this.querySelectorAll('label')
-            for (let i = 0; i < inputs.length; i++) {
-                const input = inputs[i]
-                const label = labels[i]
-                input.addEventListener('input', () => {
-                    label.innerHTML = input.value
-                })
-            }
-
-            this.updateDOM(message)
-            button.addEventListener('click', () => {
-                message = !message
-                this.updateDOM(message)
-            })
-        }
-    }
-    customElements.define('time-selector', TimeSelector)
 
 </script>

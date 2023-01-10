@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon'
 import i18next, { t } from "i18next";
 import { localizePath } from "astro-i18next";
+import ThemeSelector from 'molecules/ThemeSelector.vue'
 
 const supportedLanguages = i18next.languages;
 const currentLanguage = i18next.language;
@@ -77,36 +78,27 @@ const selected = (item: any) => {
       </a>
     </>
   ))}
-    <span class="flex-grow" />
+  <span class="flex-grow" />
 
-    <select class="select select-xs mx-2" onchange="location = this.value">
-      {
-        supportedLanguages.map((supportedLanguage: string) => {
-          let value = localizePath(pathname, supportedLanguage);
+  <select class="select select-xs mx-2" onchange="location = this.value">
+    {
+      supportedLanguages.map((supportedLanguage: string) => {
+        let value = localizePath(pathname, supportedLanguage);
 
-          return (
-          <option selected={supportedLanguage === currentLanguage} value={value}>{ supportedLanguage }</option>
+        return (
+        <option selected={supportedLanguage === currentLanguage} value={value}>{ supportedLanguage }</option>
 
-          )
-        }
-      )}
-    </select>
-
-    <button id="themeSelector" class="btn btn-ghost btn-sm">
+        )
+      }
+    )}
+  </select>
+  <div>
+    <ThemeSelector client:only="vue">
       <Icon class="sun" width="22" name="sun"/>
       <Icon class="moon" width="22" name="moon" />
-    </button>
-  </nav>
-<script>
-  const themeSelector = document.getElementById('themeSelector')
-  themeSelector.addEventListener('click', () => {
-    let theme = window.localStorage.getItem("theme")
-    theme = theme === 'dark' ? 'light' : 'dark'
-    document.documentElement.dataset.theme = theme
-    document.documentElement.className = theme
+    </ThemeSelector>
+  </div>
+</nav>
 
-    window.localStorage.setItem("theme", theme)
-  })  
-</script>
 
 
