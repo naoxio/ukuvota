@@ -13,14 +13,17 @@ const $defaultProposals = useStore(defaultProposals);
         <hr class="mt-4"/>
         <h2 class="pt-2">{{ t('quick.proposals') }}</h2>
     </div>
-    <div class="flex justify-center items-center">
-        <input name="defaultProposals" type="checkbox" :checked="$defaultProposals" class="checkbox" />
+    <div v-if="$quickPhases === Phases.Full">
 
-        <span>&nbsp;{{ t('quick.addDefaultProposals') }}</span>
-        <!--Modal id="defaultProposalInfo">
-            <h3>{{ t('quick.defaultProposals') }}</h3>
-            <ContentDoc file_name="DefaultProposals"/>
-        </Modal-->
+        <div class="flex justify-center items-center">
+            <input name="defaultProposals" type="checkbox" :checked="$defaultProposals" class="checkbox" />
+
+            <span>&nbsp;{{ t('quick.addDefaultProposals') }}</span>
+            <!--Modal id="defaultProposalInfo">
+                <h3>{{ t('quick.defaultProposals') }}</h3>
+                <ContentDoc file_name="DefaultProposals"/>
+            </Modal-->
+        </div>
     </div>
     <div class="flex justify-around align-center items-center">
        
