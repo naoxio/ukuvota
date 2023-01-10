@@ -13,13 +13,13 @@ const $slideSelector = useStore(slideSelector)
 
 const proposalTimeLeft = ref({
         minutes: 15,
-        hours: 0,
-        days: 0
+        hours: 2,
+        days: 1
 })
 const votingTimeLeft = ref({
-        minutes: 30,
-        hours: 0,
-        days: 0
+        minutes: 15,
+        hours: 2,
+        days: 1
 })
 
 const $quickPhases = useStore(quickPhases);

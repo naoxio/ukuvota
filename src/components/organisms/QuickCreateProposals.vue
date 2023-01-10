@@ -10,7 +10,8 @@ const $defaultProposals = useStore(defaultProposals);
 <template>
 
     <div v-if="$quickPhases === Phases.Voting">
-        <h2>{{ t('quick.proposals') }}</h2>
+        <hr class="mt-4"/>
+        <h2 class="pt-2">{{ t('quick.proposals') }}</h2>
     </div>
     <div class="flex justify-center items-center">
         <input name="defaultProposals" type="checkbox" :checked="$defaultProposals" class="checkbox" />
@@ -36,7 +37,10 @@ const $defaultProposals = useStore(defaultProposals);
             </div>
         </div>
     </div>
-    <button id="add-proposal" class="btn p-2" >
-        add proposal
-    </button>
-</template>
+    <div v-if="$quickPhases === Phases.Voting">
+
+        <button id="add-proposal" class="btn p-2" >
+            add proposal
+        </button>
+    </div>
+</template> 

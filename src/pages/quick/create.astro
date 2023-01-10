@@ -5,7 +5,7 @@ import Alert from "molecules/Alert.astro";
 import AlertManager from "organisms/AlertManager.astro";
 import { Icon } from "astro-icon";
 import QuickInfo from "organisms/QuickInfo.astro";
-import Modal from "atoms/Modal.astro";
+import Modal from "molecules/Modal.astro";
 import ContentDoc from "atoms/ContentDoc.astro";
 import QuickCreateTopic from "organisms/QuickCreateTopic.vue";
 import QuickTimeSelector from "organisms/QuickTimeSelector.vue";
@@ -49,20 +49,16 @@ const votingTimeLeft = { minutes: 10, hours: 0, days: 0 };
 <BaseLayout>
   <h1>{ t('quick.title')  }</h1>
   <quick-form data-proposals={JSON.stringify(proposals)} >
-      <QuickCreateTopic client:only="vue" />
-      <hr/>
-      <QuickTimeSelector client:only="vue"/>
-      <QuickCreateProposals client:only="vue"/>
-      
-      
-        <br/>
-        <br/>
-        <div class="text-center">
-          <button id="submit" type="submit" class="btn btn-primary">
-            { t('create') }
-          </button>
-        </div>
-      </div>
+    <QuickCreateTopic client:only="vue" />
+    <hr/>
+    <QuickTimeSelector client:only="vue"/>
+    <QuickCreateProposals client:only="vue"/>
+    <br/>
+    <br/>
+    <div class="text-center">
+      <button id="submit" type="submit" class="btn btn-primary">
+        { t('create') }
+      </button>
     </div>
   </quick-form>
 </BaseLayout>
