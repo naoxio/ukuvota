@@ -1,15 +1,15 @@
 ---
-import BaseLayout from "templates/BaseLayout.astro";
+import BaseLayout from "@templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
-import Alert from "molecules/Alert.astro";
-import AlertManager from "organisms/AlertManager.astro";
+import Alert from "@molecules/Alert.astro";
+import AlertManager from "@organisms/AlertManager.astro";
 import { Icon } from "astro-icon";
-import QuickInfo from "organisms/QuickInfo.astro";
-import Modal from "molecules/Modal.astro";
-import ContentDoc from "atoms/ContentDoc.astro";
-import QuickCreateTopic from "organisms/QuickCreateTopic.vue";
-import QuickTimeSelector from "organisms/QuickTimeSelector.vue";
-import QuickCreateProposals from "organisms/QuickCreateProposals.vue";
+import QuickInfo from "@organisms/QuickInfo.astro";
+import Modal from "@molecules/Modal.astro";
+import ContentDoc from "@atoms/ContentDoc.astro";
+import QuickCreateTopic from "@organisms/QuickCreateTopic.vue";
+import QuickTimeSelector from "@organisms/QuickTimeSelector.vue";
+import QuickCreateProposals from "@organisms/QuickCreateProposals.vue";
 
 changeLanguage("en");
 

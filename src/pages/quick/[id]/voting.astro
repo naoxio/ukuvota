@@ -1,12 +1,12 @@
 ---
-import { t, changeLanguage } from "i18next";
-import Countdown from "molecules/Countdown";
+import Alert from "molecules/Alert.astro";
+import Countdown from "molecules/Countdown.astro";
 import BaseLayout from "templates/BaseLayout.astro";
-import QuickInfo from "organisms/QuickInfo";
+import QuickInfo from "organisms/QuickInfo.astro";
+import AlertManager from "organisms/AlertManager.astro";
+import { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
 import { quickTest } from "composables/quickTestData";
-import Alert from "molecules/Alert";
-import AlertManager from "organisms/AlertManager";
 
 changeLanguage("en");
 

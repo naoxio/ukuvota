@@ -1,12 +1,13 @@
 ---
-import BaseLayout from "templates/BaseLayout.astro";
+import BaseLayout from "@templates/BaseLayout.astro";
 import { localizePath } from "astro-i18next";
 import { t, changeLanguage } from "i18next";
-import ContentDoc from "atoms/ContentDoc.astro";
+import ContentDoc from "@atoms/ContentDoc.astro";
 import logo from "../../assets/logo.png";
 
 changeLanguage("de");
 ---
+
 <style>
 @keyframes rotate {
   from {

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import IconBar from '~icons/main/information'
 
 const props = defineProps({
   id: String
