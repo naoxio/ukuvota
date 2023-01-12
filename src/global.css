@@ -4,26 +4,22 @@
 html, body {
     scroll: smooth;
     width: 100%;
+    min-width: 450px;
+    max-width: 900px;
     height: 100vh;
-    margin: 0;
-    padding: 0;
+    padding: 1rem;
     font-smoothing: grayscale;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-    min-width: 450px;
-
-}
-
-main {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-    width: 100%;
-    max-width: 800px;
     margin: auto;
 }
 
+main {
+    padding: 2rem;
+}
 .link, .link:hover, .btn, .btn:hover  {
     text-decoration: none;
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import TimeSlider from '../molecules/TimeSlider.vue'
+import TimeSlider from '../atoms/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
 import { quickPhases, Phases, slideSelector } from '../../stores/quickStore';
 import { theme } from '../../stores/userStore'
@@ -35,7 +35,7 @@ const proposalDatetime = +new Date() + 20000
 </script>
 <template>
     <div class="py-2">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center flex-wrap">
             <h2 v-if="$quickPhases === Phases.Full">{{ t('quick.timeLeftHeading') }}</h2>
             <h2 v-if="$quickPhases === Phases.Voting">{{ t('quick.timeLeftVotingHeading') }}</h2>
             <select class="select select-bordered mx-2" @change="slideSelector.set(!$slideSelector)">

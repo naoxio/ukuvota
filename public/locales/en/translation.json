@@ -1,4 +1,5 @@
 {
+  "tagline": "Finding the best solution",
   "buttons": {
     "about": "About",
     "go": "GO",
@@ -11,7 +12,9 @@
     "continue": "Continue",
     "back": "Back"
   },
+  "startProcess": "Start a process",
   "not-found": "Not found",
+  "addProposal": "Add proposal",
   "quick": {
     "title": "Quick Process",
     "topic": "Topic Question",

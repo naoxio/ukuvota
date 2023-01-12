@@ -2,8 +2,8 @@
 import i18next from "i18next";
 import { HeadHrefLangs } from "astro-i18next/components";
 
+import Header from "organisms/Header.astro";
 import Footer from "organisms/Footer.astro";
-import Navigation from "organisms/Navigation.astro";
 
 import "../../global.css"
 const {title, description} = Astro.props;
@@ -22,8 +22,9 @@ const {title, description} = Astro.props;
 
   </head>
   <body>
-    <Navigation/>
-    <main>
+    <Header/>
+    <br/>
+    <main class="card bg-base-200 shadow-xl">
         <slot />
     </main>
     <br/>

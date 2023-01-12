@@ -1,0 +1,44 @@
+---
+import Navigation from "organisms/Navigation.astro";
+import logo from "assets/logo.png";
+import { t } from "i18next";
+
+---
+<style>
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to { 
+            transform: rotate(360deg);
+        }
+	}
+
+	#logo.trippy {
+		animation: rotate 0.5s infinite linear;
+
+	}
+</style>
+
+<div class="text-center">
+    <div class="pt-4 flex justify-center">
+        <img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo}>
+    </div>
+    <h1>Ukuvota</h1>
+    <h2>{ t('tagline') }</h2>
+    <Navigation/>
+</div>
+
+<script>
+    const pathname = window.location.pathname
+    const logo: HTMLImageElement = document.querySelector('#logo')
+    logo.addEventListener('click', () => {
+        if (pathname === '') {
+            if (logo.classList.contains('trippy'))
+                logo.classList.remove('trippy')
+            else
+                logo.classList.add('trippy')
+        }
+    })
+
+</script>

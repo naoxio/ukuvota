@@ -1,50 +1,120 @@
 ---
 import BaseLayout from "templates/BaseLayout.astro";
-import { localizePath } from "astro-i18next";
 import { t, changeLanguage } from "i18next";
-import ContentDoc from "atoms/ContentDoc.astro";
-import logo from "../assets/logo.png";
+import Alert from "molecules/Alert.astro";
+import AlertManager from "organisms/AlertManager.astro";
+import CreateProcess from "organisms/CreateProcess.vue";
 
 changeLanguage("en");
+
+const proposals = [
+    {
+        title: t("proposal.zero.title"),
+        description: t("proposal.zero.description"),
+    },
+    {
+        title: t("proposal.one.title"),
+        description: t("proposal.one.description"),
+    },
+];
 ---
-
-<style>
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to { 
-    transform: rotate(360deg);
-  }
-}
-
-#logo.trippy {
-    animation: rotate 0.5s infinite linear;
-
-}
-
+<style is:inline>
+	.show {
+		display: block;
+	}
+	.hide {
+		display: none;
+	}
 </style>
-<BaseLayout title="Ukuvota" >
-	<div class="text-center">
-		<div class="pt-4 flex justify-center">
-			<img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo}>
+
+
+<BaseLayout>
+  <h2>{ t('startProcess') }</h2>
+
+	<quick-form data-proposals={JSON.stringify(proposals)}>
+		<CreateProcess client:load />
+		<br/>
+		<br/>
+		<div class="text-center">
+      <button id="submit" type="submit" class="btn btn-primary">
+        { t('create') }
+      </button>
 		</div>
-		<h1>Ukuvota</h1>
-	</div>
-	<ContentDoc file_name="Introduction"/>
-
-	<div class="text-center">
-		<a href={localizePath("/quick/create")} class="btn btn-primary btn-md">{ t('buttons.start_quick') }</a>  
-	</div>
+  	</quick-form>
 </BaseLayout>
-<script>
 
-const logo: HTMLImageElement = document.querySelector('#logo')
-logo.addEventListener('click', () => {
-	if (logo.classList.contains('trippy'))
-		logo.classList.remove('trippy')
-	else
-		logo.classList.add('trippy')
-})
+<AlertManager>
+  <Alert type="error" icon="warning">
+    { t('alert.quick.error.topicQuestion') }
+  </Alert>
+  <Alert type="success" icon="checkmark-outline">
+    { t('alert.quick.success.createProcess') } 
+  </Alert>
+</AlertManager>
+<script>
+  import { addAlert } from 'composables/addAlert'
+
+  const alertManager = document.querySelector('div.alert-manager')
+  const alertList = alertManager.querySelector('div.alert-list')
+  const alerts = alertManager.querySelectorAll('div.alert')
+
+
+  class QuickForm extends HTMLElement {
+    form = {}
+    findValues(inputs: NodeListOf<any>) {
+      Array.from(inputs).forEach((input) => {
+        if (input.name) {
+          this.form[input.name] = (input.type === "checkbox") ? input.checked : input.value;
+        }
+      })
+    }
+
+
+    constructor() {
+      super()
+    
+      const buttons = this.querySelectorAll('button')
+      const inputs = this.querySelectorAll('input')
+      const textareas = this.querySelectorAll('textarea')
+      const selectors = this.querySelectorAll('select')
+
+      const proposals = JSON.parse(this.dataset.proposals)
+      const button = Array.from(buttons).find(btn => btn.id === 'submit')
+
+      button.addEventListener('click', async() => {
+        this.form = {}
+        this.findValues(inputs)
+        this.findValues(textareas)
+        this.findValues(selectors)
+        const lang = document.documentElement.lang
+        if (this.form['topicQuestion'] === '') {
+          addAlert(alertList, alerts[0].cloneNode(true))
+        }
+        else {
+          addAlert(alertList, alerts[1].cloneNode(true))
+          this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
+          let res: any, json: any;
+          if (import.meta.env.DEV) {
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/dev/proposals`
+          }
+          else {
+            try {
+              res = await fetch(`${location.origin}/api/quick/process`, {
+                method: "POST",
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(this.form)
+              });
+              json = await res.json();
+            } catch (error) {
+              console.error(error);
+              return;
+            }
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
+          }
+        }
+      })
+    }
+  }
+  customElements.define('quick-form', QuickForm)
 
 </script>

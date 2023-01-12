@@ -1,4 +1,5 @@
 {
+  "tagline": "Die beste Lösung finden",
   "buttons": {
     "about": "Über",
     "go": "Los",
@@ -11,7 +12,9 @@
     "continue": "Weiter",
     "back": "Zurück"
   },
+  "startProcess": "Einen Prozess starten",
   "not-found": "Nicht gefunden",
+  "addProposal": "Vorschlag hinzufügen",
   "quick": {
     "title": "Schneller Prozess",
     "topic": "Thema Frage",
