@@ -64,7 +64,7 @@ const $defaultProposals = useStore(defaultProposals);
     
       <div v-if="$quickPhases === Phases.Voting" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
           <div class="flex flex-col w-full ">
-              <b>{{ t('quick.topic') }}</b>
+              <b>{{ t('quick.proposal') }}</b>
               <input type="text" class="input input-bordered input-sm my-2 w-full"/>
               <label>{{ t('quick.description') }}</label>
               <input type="text" class="input input-bordered input-sm my-2 w-full"/>
