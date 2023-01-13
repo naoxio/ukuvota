@@ -62,20 +62,16 @@ const $defaultProposals = useStore(defaultProposals);
   </div>
   <div class="flex justify-around align-center items-center">
     
-      <div v-if="$quickPhases === Phases.Voting">
-          <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-              <div class="edit flex justify-between items-center">
-                  <div class="content flex flex-col w-full">
-                      <b>{{ t('quick.topic') }}</b>
-                      <input type="text" class="input input-bordered input-sm my-2"/>
-                      <label>{{ t('quick.description') }}</label>
-                      <input type="text" class="input input-bordered input-sm my-2"/>
-                  </div>
-              </div>
+      <div v-if="$quickPhases === Phases.Voting" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
+          <div class="flex flex-col w-full ">
+              <b>{{ t('quick.topic') }}</b>
+              <input type="text" class="input input-bordered input-sm my-2 w-full"/>
+              <label>{{ t('quick.description') }}</label>
+              <input type="text" class="input input-bordered input-sm my-2 w-full"/>
           </div>
       </div>
   </div>
-  <div v-if="$quickPhases === Phases.Voting">
+  <div v-if="$quickPhases === Phases.Voting" align="center">
 
       <button id="add-proposal" class="btn p-2" >
           {{ t('addProposal') }}
