@@ -3,25 +3,25 @@ import { changeLanguage } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
 import { quickTest } from "composables/quickTestData";
 
-changeLanguage("en");
+changeLanguage("de");
 
 const { url } = Astro;
 const processId = Astro.params.id;
 const isDev = processId === "dev";
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const proposalTime = +new Date(quick.proposalEnd) - +new Date();
 const votingTime = +new Date(quick.votingEnd) - +new Date();
 switch (true) {
     case !quick:
-        return Astro.redirect("/quick/creat");
+        return Astro.redirect("/");
     case proposalTime > 0:
-        return Astro.redirect(`${url.origin}/quick/${processId}/proposals`);
+        return Astro.redirect(`${url.origin}/process/${processId}/proposals`);
     case votingTime > 0:
-        return Astro.redirect(`${url.origin}/quick/${processId}/voting`);
+        return Astro.redirect(`${url.origin}/process/${processId}/voting`);
     default:
-        return Astro.redirect(`${url.origin}/quick/${processId}/results`);
+        return Astro.redirect(`${url.origin}/process/${processId}/results`);
 }
 ---
 

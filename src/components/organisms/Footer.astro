@@ -5,7 +5,7 @@ import { getAssets } from "composables/getAssets"
 
 const icons = getAssets(await Astro.glob('../../assets/icons/*.png'));
 const getIcon = (name: string) => {
-    return icons.find(icon => icon.name === name).src
+    return icons.find(icon => icon.name === name)?.src
 }
 const menu = [
     {

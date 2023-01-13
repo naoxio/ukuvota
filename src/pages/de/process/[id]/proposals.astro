@@ -3,7 +3,7 @@ import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
 import Countdown from "molecules/Countdown.astro";
-import QuickInfo from "organisms/QuickInfo.astro";
+import ProcessInfo from "organisms/ProcessInfo.astro";
 import { quickTest } from "composables/quickTestData";
 
 changeLanguage("de");
@@ -18,10 +18,10 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 
 <BaseLayout>
     <div class="card bg-base-200 px-4 my-4 py-6">
-        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
-            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-        </QuickInfo>
+        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.proposalEndTime') || '' } timeleft={ quick.proposalEnd } />
+            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') || '' } timeleft={ quick.votingEnd }/>
+        </ProcessInfo>
         <proposal-list>
             <div class="proposals">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
@@ -35,7 +35,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     </div>
                     <div class="edit flex justify-between items-center" style="display: none;">
                         <div class="content flex flex-col w-full">
-                            <b>{ t('quick.topic') }</b>
+                            <b>{ t('quick.proposal') }</b>
                             <input type="text" class="input input-bordered input-sm my-2"/>
                             <label>{ t('quick.description') }</label>
                             <input type="text" class="input input-bordered input-sm my-2"/>
@@ -105,7 +105,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
             inputs[1].value = data.description
             const proposalId = data.id
 
-            inputs.forEach(input => {
+            inputs.forEach((input: HTMLInputElement) => {
                 input.addEventListener('input', () => {
                     ws.send(JSON.stringify({
                         method: 'updateProposal',
@@ -179,7 +179,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                 }))
             };
 
-            quick.proposals.forEach(proposal => {
+            quick.proposals.forEach((proposal: any) => {
                 this.addProposal(proposal)
             });
 

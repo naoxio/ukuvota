@@ -5,7 +5,7 @@ import { quickPhases, Phases, slideSelector } from 'stores/quickStore';
 import { theme } from 'stores/userStore'
 
 import { t } from 'i18next';
-import { ref, computed} from 'vue'
+import { ref } from 'vue'
 
 const $theme = useStore(theme)
 const $slideSelector = useStore(slideSelector)

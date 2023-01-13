@@ -95,11 +95,11 @@ const proposals = [
           this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
           let res: any, json: any;
           if (import.meta.env.DEV) {
-            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/dev/proposals`
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }dev/proposals`
           }
           else {
             try {
-              res = await fetch(`${location.origin}/api/quick/process`, {
+              res = await fetch(`${location.origin}/api/process`, {
                 method: "POST",
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify(this.form)
@@ -109,7 +109,7 @@ const proposals = [
               console.error(error);
               return;
             }
-            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }quick/${json.id}/proposals`
+            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }${json.id}/proposals`
           }
         }
       })

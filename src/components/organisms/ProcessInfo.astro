@@ -1,0 +1,76 @@
+---
+import { Icon } from 'astro-icon'
+import { t } from 'i18next';
+
+import weightingOptions from "composables/weightingOptions";
+import Modal from 'molecules/Modal.astro';
+import QRCode from 'atoms/QRCode.astro'
+import ContentDoc from "atoms/ContentDoc.astro"
+
+
+const { url } = Astro;
+
+interface Props {
+    title?: string,
+    description?: string,
+    weighting?: string,
+    shareable?: boolean
+}
+
+const { title, description, weighting, shareable = true } = Astro.props;
+
+const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
+
+---
+
+<div class="flex flex-col pb-3">
+    <h1>{ title }</h1>
+    <p>{ description }</p>
+    <div id="infoCard" class="flex flex-wrap items-center justify-center">
+        <slot/>
+        <div class="flex flex-col justify-center items-center w-60">
+            <h3>{ t('quick.weighting') }</h3>
+            <div class="flex items-center">
+                {weight}
+                <Modal id="weightingInfo">
+                    <h3>{ t('quick.weighting') }</h3>
+                    <ContentDoc file_name="NegativeScoreWeighting"/>
+                </Modal>
+            </div>
+        </div>
+    </div>
+    { shareable && 
+    <div class="w-full pr-2">
+        <p>{ t('quick.shareableUrl') }</p>
+        <div class="flex items-center">
+
+            <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
+
+            <Modal id="shareableQrCode">
+                <h3>{ t('quick.qrcode') }</h3>
+                <div class="flex justify-center">
+                    <QRCode text="Astro.url.href" />
+                </div>
+            </Modal>
+
+        </div>
+    </div>
+    }
+
+              
+                          
+</div>
+
+
+<script>
+const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
+if (shareableUrl) {
+    shareableUrl.addEventListener('click', () => {
+        shareableUrl.focus()
+        shareableUrl.select()
+        shareableUrl.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(shareableUrl.value);
+    })
+}
+
+</script>

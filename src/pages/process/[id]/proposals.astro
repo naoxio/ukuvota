@@ -3,7 +3,7 @@ import { Icon } from "astro-icon";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
 import Countdown from "molecules/Countdown.astro";
-import QuickInfo from "organisms/QuickInfo.astro";
+import ProcessInfo from "organisms/ProcessInfo.astro";
 import { quickTest } from "composables/quickTestData";
 
 changeLanguage("en");
@@ -11,17 +11,17 @@ changeLanguage("en");
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 ---
 
 <BaseLayout>
     <div class="card bg-base-200 px-4 my-4 py-6">
-        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.proposalEndTime') } timeleft={ quick.proposalEnd } />
-            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') } timeleft={ quick.votingEnd }/>
-        </QuickInfo>
+        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.proposalEndTime') || '' } timeleft={ quick.proposalEnd } />
+            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') || '' } timeleft={ quick.votingEnd }/>
+        </ProcessInfo>
         <proposal-list>
             <div class="proposals">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
@@ -58,10 +58,10 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 <script>
     import { quickTest } from "composables/quickTestData";
 
-    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
+    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
 
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
     const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
@@ -105,7 +105,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
             inputs[1].value = data.description
             const proposalId = data.id
 
-            inputs.forEach(input => {
+            inputs.forEach((input: HTMLInputElement) => {
                 input.addEventListener('input', () => {
                     ws.send(JSON.stringify({
                         method: 'updateProposal',
@@ -179,7 +179,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                 }))
             };
 
-            quick.proposals.forEach(proposal => {
+            quick.proposals.forEach((proposal: any) => {
                 this.addProposal(proposal)
             });
 
@@ -198,7 +198,7 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
     const checkTime = () => {
         const time =  +new Date(quick.proposalEnd) - +new Date()
         if (time <= 0)
-            window.location.href = `${window.location.origin}/quick/${processId}/voting`
+            window.location.href = `${window.location.origin}/process/${processId}/voting`
         else
             setTimeout(checkTime, 1000)
     }

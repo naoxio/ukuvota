@@ -32,7 +32,7 @@ app.use(ssrHandler);
 // use the json middleware to parse request bodies as json
 app.use(express.json())
 
-app.get('/api/quick/process/:id', async(req, res) => {
+app.get('/api/process/:id', async(req, res) => {
   // Get the process ID from the URL parameters
   const processId = req.params.id;
   // Get the process object from the database
@@ -41,7 +41,7 @@ app.get('/api/quick/process/:id', async(req, res) => {
   res.json({ process });
 });
 
-app.post('/api/quick/process/:id/vote', async(req, res) => {
+app.post('/api/process/:id/vote', async(req, res) => {
   // Get the process ID from the URL parameters
   const processId = req.params.id;
   // Get the process object from the database
@@ -85,7 +85,7 @@ app.post('/api/quick/process/:id/vote', async(req, res) => {
   }
 });
 
-app.post('/api/quick/process', async(req, res) => {
+app.post('/api/process', async(req, res) => {
   // Get the request body
   const body = req.body;
 

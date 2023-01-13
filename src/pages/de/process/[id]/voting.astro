@@ -2,7 +2,7 @@
 import Alert from "molecules/Alert.astro";
 import Countdown from "molecules/Countdown.astro";
 import BaseLayout from "templates/BaseLayout.astro";
-import QuickInfo from "organisms/QuickInfo.astro";
+import ProcessInfo from "organisms/ProcessInfo.astro";
 import AlertManager from "organisms/AlertManager.astro";
 import { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
@@ -36,10 +36,10 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
   
 </style>
 <BaseLayout>
-    <div class="card bg-base-200 px-6 my-4 py-6">
-        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-        </QuickInfo>
+    <div class="card bg-base-200">
+        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.votingEndTime') || ''} timeleft={ quick.votingEnd } />
+        </ProcessInfo>
         <voting-list>
             <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">

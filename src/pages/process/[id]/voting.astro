@@ -2,7 +2,7 @@
 import Alert from "molecules/Alert.astro";
 import Countdown from "molecules/Countdown.astro";
 import BaseLayout from "templates/BaseLayout.astro";
-import QuickInfo from "organisms/QuickInfo.astro";
+import ProcessInfo from "organisms/ProcessInfo.astro";
 import AlertManager from "organisms/AlertManager.astro";
 import { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
@@ -13,7 +13,7 @@ changeLanguage("en");
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/quick/process/${processId}`, { method: "GET" });
+const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const quick = isDev ? quickTest() : JSON.parse(data.process);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
@@ -36,10 +36,10 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
   
 </style>
 <BaseLayout>
-    <div class="card bg-base-200 px-6 my-4 py-6">
-        <QuickInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.votingEndTime') } timeleft={ quick.votingEnd } />
-        </QuickInfo>
+    <div class="card bg-base-200">
+        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
+            <Countdown label={ t('quick.votingEndTime') || ''} timeleft={ quick.votingEnd } />
+        </ProcessInfo>
         <voting-list>
             <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
@@ -84,9 +84,9 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 
     import { addAlert } from 'composables/addAlert'
     import { quickTest } from "composables/quickTestData";
-    const processId = window.location.pathname.split('/quick/')[1].split('/')[0]
+    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/quick/process/${processId}`, { method: "GET" });
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
     const quick = isDev ? quickTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
@@ -129,7 +129,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 votes
             }
             if (!isDev) {
-                const res = await fetch(`${location.origin}/api/quick/process/${processId}/vote`, {
+                const res = await fetch(`${location.origin}/api/process/${processId}/vote`, {
                 method: "POST",
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify(vote)
@@ -173,7 +173,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     const checkTime = () => {
         const time =  +new Date(quick.votingEnd) - +new Date()
         if (time <= 0)
-            window.location.href = `${window.location.origin}/quick/${processId}/results`
+            window.location.href = `${window.location.origin}/process/${processId}/results`
         else
             setTimeout(checkTime, time)
     }
