@@ -15,7 +15,7 @@ import { t } from "i18next";
 	}
 
 	#logo.trippy {
-		animation: rotate 0.5s infinite linear;
+		animation: rotate 1s infinite linear;
 
 	}
 </style>
@@ -30,14 +30,19 @@ import { t } from "i18next";
 </div>
 
 <script>
+    const lang = document.getElementsByTagName('html')[0].getAttribute('lang')
     const pathname = window.location.pathname
-    const logo: HTMLImageElement = document.querySelector('#logo')
+    const logo: any = document.querySelector('img#logo')
     logo.addEventListener('click', () => {
-        if (pathname === '') {
+        console.log(pathname)
+        if (pathname === '/' || pathname === `/${lang}/`) {
             if (logo.classList.contains('trippy'))
                 logo.classList.remove('trippy')
             else
                 logo.classList.add('trippy')
+        }
+        else {
+            location.href = lang === 'en' ? '/' : '/' + lang
         }
     })
 

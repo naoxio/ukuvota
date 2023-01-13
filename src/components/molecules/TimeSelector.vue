@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import TimeSlider from '../atoms/TimeSlider.vue'
+import TimeSlider from 'atoms/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
-import { quickPhases, Phases, slideSelector } from '../../stores/quickStore';
-import { theme } from '../../stores/userStore'
+import { quickPhases, Phases, slideSelector } from 'stores/quickStore';
+import { theme } from 'stores/userStore'
 
 import { t } from 'i18next';
 import { ref, computed} from 'vue'
