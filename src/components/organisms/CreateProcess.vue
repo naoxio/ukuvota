@@ -8,6 +8,11 @@ import { useStore } from '@nanostores/vue';
 
 const $process = useStore(process)
 
+const toggleDefaultProposals = (ev: any) => {
+    process.setKey('defaultProposals', ev.target.checked)
+}
+
+console.log($process.value.defaultProposals)
 </script>
 
 <template>
@@ -43,9 +48,9 @@ const $process = useStore(process)
   <div v-if="$process.phases === 'full'">
 
       <div class="flex justify-center items-center">
-          <input name="defaultProposals" type="checkbox" :checked="$process.defaultProposals" class="checkbox" />
+          <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals === 'true'" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
 
-          <span>&nbsp;{{ t('quick.addDefaultProposals') }}</span>
+          <label for="default-proposals" class="cursor-pointer">&nbsp;{{ t('quick.addDefaultProposals') }}</label>
           <!--Modal id="defaultProposalInfo">
               <h3>{{ t('quick.defaultProposals') }}</h3>
               <ContentDoc file_name="DefaultProposals"/>

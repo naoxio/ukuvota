@@ -3,9 +3,8 @@ import TimeSlider from 'molecules/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
 import { theme } from 'stores/userStore'
-import { VueDatePicker } from '@vuepic/vue-datepicker';
 import { t } from 'i18next';
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 const $theme = useStore(theme)
 
@@ -31,7 +30,6 @@ const $process = useStore(process)
 const toggleTimeSelector = () => {
     const newValue = $process.value.timeSelector === 'slider' ? 'calendar' : 'slider';
     process.setKey('timeSelector', newValue)
-
 }
 </script>
 <template>
