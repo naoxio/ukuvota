@@ -31,10 +31,9 @@
     return ((days * 24 + hours) * 60 + minutes) * 60 * 1000
   }
 
-const changeTime = (ev) => {
+const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
   const val = Number(ev.target.value)
   const timeLeft = $process.value[props.keyValue];
-  console.log(props.keyValue as keyof Process)
 
   let days = convertToTime('days', timeLeft)
   let hours = convertToTime('hours', timeLeft)

@@ -7,12 +7,8 @@ import { t } from 'i18next';
 
 const $theme = useStore(theme)
 
-let date = new Date();
-let isoString = date.toISOString();
-
-let today = isoString.slice(0, isoString.length - 8);
-console.log(date.toLocaleString('en-US', {timeZone: 'Asia/Bangkok'}));
-const proposalDatetime = +new Date() + 20000
+let proposalDate = [new Date(), new Date()];
+let votingDate = [proposalDate[1], new Date()];
 
 const $process = useStore(process)
 const toggleTimeSelector = () => {
@@ -44,11 +40,11 @@ const toggleTimeSelector = () => {
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
                 <h3>{{ t('quick.proposalTime')}}</h3>
-                <Datepicker v-model="date" :dark="$theme === 'dark'"></Datepicker>
+                <Datepicker v-model="proposalDate" :dark="$theme === 'dark'" range fixed-start :clearable="false" inline text-input inline-with-input auto-apply></Datepicker>
             </div>
             <br/>
             <h3>{{ t('quick.votingTime')}}</h3>
-            <Datepicker v-model="date" :dark="$theme === 'dark'"></Datepicker>
+            <Datepicker v-model="votingDate" :dark="$theme === 'dark'" range fixed-start :clearable="false" inline text-input inline-with-input auto-apply></Datepicker>
             <br/>
         </div>
     </div>
