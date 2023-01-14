@@ -1,15 +1,13 @@
 <script lang="ts" setup>
-import TimeSlider from 'atoms/TimeSlider.vue'
+import TimeSlider from 'molecules/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
-import { quickPhases, Phases, slideSelector } from 'stores/quickStore';
+import { process } from 'stores/processStore';
 import { theme } from 'stores/userStore'
-
+import { VueDatePicker } from '@vuepic/vue-datepicker';
 import { t } from 'i18next';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const $theme = useStore(theme)
-const $slideSelector = useStore(slideSelector)
-
 
 const proposalTimeLeft = ref({
         minutes: 15,
@@ -22,8 +20,6 @@ const votingTimeLeft = ref({
         days: 2
 })
 
-const $quickPhases = useStore(quickPhases);
-
 let date = new Date();
 let isoString = date.toISOString();
 
@@ -31,21 +27,26 @@ let today = isoString.slice(0, isoString.length - 8);
 console.log(date.toLocaleString('en-US', {timeZone: 'Asia/Bangkok'}));
 const proposalDatetime = +new Date() + 20000
 
+const $process = useStore(process)
+const toggleTimeSelector = () => {
+    const newValue = $process.value.timeSelector === 'slider' ? 'calendar' : 'slider';
+    process.setKey('timeSelector', newValue)
 
+}
 </script>
 <template>
     <div class="py-2">
         <div class="flex justify-between items-center flex-wrap">
-            <h2 v-if="$quickPhases === Phases.Full">{{ t('quick.timeLeftHeading') }}</h2>
-            <h2 v-if="$quickPhases === Phases.Voting">{{ t('quick.timeLeftVotingHeading') }}</h2>
-            <select class="select select-bordered mx-2" @change="slideSelector.set(!$slideSelector)">
-                <option selected :value="$slideSelector">{{ t('quick.timeSelector.slider') }} </option>
-                <option :value="$slideSelector">{{ t('quick.timeSelector.calendar') }}</option>
+            <h2 v-if="$process.phases === 'full'">{{ t('quick.timeLeftHeading') }}</h2>
+            <h2 v-if="$process.phases === 'voting'">{{ t('quick.timeLeftVotingHeading') }}</h2>
+            <select class="select select-bordered mx-2" @change="toggleTimeSelector">
+                <option :selected="$process.timeSelector === 'slider'" :value="$process.timeSelector">{{ t('quick.timeSelector.slider') }} </option>
+                <option :selected="$process.timeSelector === 'calendar'" :value="$process.timeSelector">{{ t('quick.timeSelector.calendar') }}</option>
             </select>
         </div>
-        <div v-if="$slideSelector" class="slider">
+        <div v-if="$process.timeSelector === 'slider'" class="slider">
             <TimeSlider
-                v-if="$quickPhases === Phases.Full"
+                v-if="$process.phases === 'full'"
                 :title="t('quick.proposalTime')"
                 :timeLeft="proposalTimeLeft"
             />
@@ -54,9 +55,8 @@ const proposalDatetime = +new Date() + 20000
             :timeLeft="votingTimeLeft"
                 />
         </div>
-        <div v-else class="calendar">
-            <br/>
-            <div v-if="$quickPhases === Phases.Full">
+        <div v-if="$process.timeSelector === 'calendar'" class="calendar">
+            <div v-if="$process.phases === 'full'">
                 <h3>{{ t('quick.proposalTime')}}</h3>
                 <Datepicker v-model="date" :dark="$theme === 'dark'"></Datepicker>
             </div>

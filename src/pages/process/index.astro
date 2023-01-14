@@ -1,12 +1,8 @@
 ---
 import { changeLanguage } from "i18next";
 import { localizePath } from "astro-i18next";
-import BaseLayout from "templates/BaseLayout.astro";
 
 changeLanguage("en");
 
 return Astro.redirect(localizePath("/"));
 ---
-<BaseLayout>
-
-</BaseLayout>

@@ -34,7 +34,6 @@ import { t } from "i18next";
     const pathname = window.location.pathname
     const logo: any = document.querySelector('img#logo')
     logo.addEventListener('click', () => {
-        console.log(pathname)
         if (pathname === '/' || pathname === `/${lang}/`) {
             if (logo.classList.contains('trippy'))
                 logo.classList.remove('trippy')
