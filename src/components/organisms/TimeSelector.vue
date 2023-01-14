@@ -4,20 +4,8 @@ import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
 import { theme } from 'stores/userStore'
 import { t } from 'i18next';
-import { ref } from 'vue'
 
 const $theme = useStore(theme)
-
-const proposalTimeLeft = ref({
-        minutes: 15,
-        hours: 0,
-        days: 2
-})
-const votingTimeLeft = ref({
-        minutes: 15,
-        hours: 0,
-        days: 2
-})
 
 let date = new Date();
 let isoString = date.toISOString();
@@ -46,11 +34,11 @@ const toggleTimeSelector = () => {
             <TimeSlider
                 v-if="$process.phases === 'full'"
                 :title="t('quick.proposalTime')"
-                :timeLeft="proposalTimeLeft"
+                keyValue="proposalTime"
             />
             <TimeSlider
-            :title="t('quick.votingTime')"
-            :timeLeft="votingTimeLeft"
+                :title="t('quick.votingTime')"
+                keyValue="votingTime"
                 />
         </div>
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">

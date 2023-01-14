@@ -32,7 +32,7 @@ const proposals = [
   <h2>{ t('startProcess') }</h2>
 
 	<quick-form data-proposals={JSON.stringify(proposals)}>
-		<CreateProcess client:load />
+		<CreateProcess client:only />
 		<br/>
 		<br/>
 		<div class="text-center">
