@@ -6,7 +6,7 @@ import { process } from '../../stores/processStore';
 const $weighting = process.get().weighting
 </script>
 <template>
-    <span>{{ t('quick.weighting') }}</span>
+    <span>{{ t('process.weighting') }}</span>
     <span class="flex justify-center items-center">
         <select name="weighting" class="select mx-2 select-bordered mt-2" :value="$weighting" @change="(e: any) => process.setKey('weighting', e.target.value)">
           <option v-for="weight in weightingOptions" :value="weight.value">

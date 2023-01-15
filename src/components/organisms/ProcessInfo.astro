@@ -29,11 +29,11 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     <div id="infoCard" class="flex flex-wrap items-center justify-center">
         <slot/>
         <div class="flex flex-col justify-center items-center w-60">
-            <h3>{ t('quick.weighting') }</h3>
+            <h3>{ t('process.weighting') }</h3>
             <div class="flex items-center">
                 {weight}
                 <Modal id="weightingInfo">
-                    <h3>{ t('quick.weighting') }</h3>
+                    <h3>{ t('process.weighting') }</h3>
                     <ContentDoc file_name="NegativeScoreWeighting"/>
                 </Modal>
             </div>
@@ -41,13 +41,13 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     </div>
     { shareable && 
     <div class="w-full pr-2">
-        <p>{ t('quick.shareableUrl') }</p>
+        <p>{ t('process.shareableUrl') }</p>
         <div class="flex items-center">
 
             <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
 
             <Modal id="shareableQrCode">
-                <h3>{ t('quick.qrcode') }</h3>
+                <h3>{ t('process.qrcode') }</h3>
                 <div class="flex justify-center">
                     <QRCode text="Astro.url.href" />
                 </div>

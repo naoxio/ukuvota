@@ -2,50 +2,53 @@
 import TimeSlider from 'molecules/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
-import { theme } from 'stores/userStore'
 import { t } from 'i18next';
+import { ref } from 'vue'
+import DatetimePicker from 'molecules/DatetimePicker.vue'
 
-const $theme = useStore(theme)
 
-let proposalDate = [new Date(), new Date()];
-let votingDate = [proposalDate[1], new Date()];
 
 const $process = useStore(process)
 const toggleTimeSelector = () => {
     const newValue = $process.value.timeSelector === 'slider' ? 'calendar' : 'slider';
     process.setKey('timeSelector', newValue)
 }
+
 </script>
 <template>
     <div class="py-2">
         <div class="flex justify-between items-center flex-wrap">
-            <h2 v-if="$process.phases === 'full'">{{ t('quick.timeLeftHeading') }}</h2>
-            <h2 v-if="$process.phases === 'voting'">{{ t('quick.timeLeftVotingHeading') }}</h2>
+            <h2 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h2>
+            <h2 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h2>
             <select class="select select-bordered mx-2" @change="toggleTimeSelector">
-                <option :selected="$process.timeSelector === 'slider'" :value="$process.timeSelector">{{ t('quick.timeSelector.slider') }} </option>
-                <option :selected="$process.timeSelector === 'calendar'" :value="$process.timeSelector">{{ t('quick.timeSelector.calendar') }}</option>
+                <option :selected="$process.timeSelector === 'slider'" :value="$process.timeSelector">{{ t('process.timeSelector.slider') }} </option>
+                <option :selected="$process.timeSelector === 'calendar'" :value="$process.timeSelector">{{ t('process.timeSelector.calendar') }}</option>
             </select>
         </div>
         <div v-if="$process.timeSelector === 'slider'" class="slider">
             <TimeSlider
                 v-if="$process.phases === 'full'"
-                :title="t('quick.proposalTime')"
+                :title="t('process.proposalTime')"
                 keyValue="proposalTime"
             />
             <TimeSlider
-                :title="t('quick.votingTime')"
+                :title="t('process.votingTime')"
                 keyValue="votingTime"
                 />
         </div>
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
-                <h3>{{ t('quick.proposalTime')}}</h3>
-                <Datepicker v-model="proposalDate" :dark="$theme === 'dark'" range fixed-start :clearable="false" inline text-input inline-with-input auto-apply></Datepicker>
+                <h3>{{ t('process.proposalTimeRange')}}</h3>
+               <DatetimePicker/>
             </div>
             <br/>
-            <h3>{{ t('quick.votingTime')}}</h3>
-            <Datepicker v-model="votingDate" :dark="$theme === 'dark'" range fixed-start :clearable="false" inline text-input inline-with-input auto-apply></Datepicker>
+            <h3>{{ t('process.votingTimeRange')}}</h3>
+            <DatetimePicker/>
+
             <br/>
         </div>
     </div>
 </template>  
+
+<style>
+</style>

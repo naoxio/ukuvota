@@ -43,8 +43,8 @@ if (!("voters" in quick)) {
 
             <div class="tab-content hide">
                 <div class="screenshot-results">
-                    <h2>{ t('quick.results') }</h2>
-                    <h3><span class="voter-label">{ t('quick.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
+                    <h2>{ t('process.results') }</h2>
+                    <h3><span class="voter-label">{ t('process.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
                     <div class="flex justify-around flex-wrap">
                         { quick.voters.map((voter: any) => (
                             <div id={voter.id} class="flex items-center p-2 voter">
@@ -62,9 +62,9 @@ if (!("voters" in quick)) {
                             <thead>
                                 <tr class="table-row-one">
                                 <td></td>
-                                <th>{ t('quick.proposal') }</th>
-                                <th class="whitespace-normal break-words">{ t('quick.averageScore') }</th>
-                                <th class="whitespace-normal break-words">{ t('quick.totalScore') }</th>
+                                <th>{ t('process.proposal') }</th>
+                                <th class="whitespace-normal break-words">{ t('process.averageScore') }</th>
+                                <th class="whitespace-normal break-words">{ t('process.totalScore') }</th>
                                 </tr>
                             </thead>
                             <tbody class="proposal-list">
@@ -74,7 +74,7 @@ if (!("voters" in quick)) {
                     <br/>
                 </div>
                   <div class="card">
-                    <h3>{ t('quick.exportData') }</h3>
+                    <h3>{ t('process.exportData') }</h3>
                     <div class="flex justify-around exports">
                         <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
                         <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>

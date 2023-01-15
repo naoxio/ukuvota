@@ -38,7 +38,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 <BaseLayout>
     <div class="card bg-base-200">
         <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.votingEndTime') || ''} timeleft={ quick.votingEnd } />
+            <Countdown label={ t('process.votingEndTime') || ''} timeleft={ quick.votingEnd } />
         </ProcessInfo>
         <voting-list>
             <div class="proposal-list">
@@ -59,11 +59,11 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 </div>
             </div>
             <br/>   
-            <p>{ t('quick.voterName') }</p>
+            <p>{ t('process.voterName') }</p>
             <div class="text-center flex items-center">
                 <input id="sender-name" type="text" class="input w-full m-2"/>
                 <button id="submit-vote" class="btn btn-primary p-2" >
-                    {t('quick.submitVote')}
+                    {t('process.submitVote')}
                 </button>
             </div>
             <AlertManager>

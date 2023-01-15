@@ -12,10 +12,9 @@
     "continue": "Weiter",
     "back": "Zurück"
   },
-  "startProcess": "Einen Prozess starten",
   "not-found": "Nicht gefunden",
-  "addProposal": "Vorschlag hinzufügen",
-  "quick": {
+  "process": {
+    "startProcess": "Einen Prozess starten",
     "title": "Schneller Prozess",
     "topic": "Thema Frage",
     "topicRule": "Bitte geben Sie Ihre Themenfrage ein",
@@ -29,11 +28,14 @@
     },
     "proposal": "Vorschlag",
     "proposals": "Vorschläge",
+    "addProposal": "Vorschlag hinzufügen",
     "averageScore": "Durchschnittliche Punktzahl",
     "totalScore": "Gesamtpunktzahl",
     "results": "Ergebnisse",
     "proposalTime": "Vorschlagzeit",
+    "proposalTimeRange": "Wählen Sie aus, wann die Vorschlagsphase beginnen und enden soll",
     "votingTime": "Abstimmungszeit",
+    "votingTimeRange": "Wählen Sie aus, wann die Abstimmungsphase beginnen und enden soll",
     "proposalEndTime": "Vorschlagsammlung endet in",
     "votingEndTime": "Abstimmung endet in",
     "votingLastFor": "Abstimmung dauert",

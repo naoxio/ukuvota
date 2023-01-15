@@ -19,8 +19,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 <BaseLayout>
     <div class="card bg-base-200 px-4 my-4 py-6">
         <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('quick.proposalEndTime') || '' } timeleft={ quick.proposalEnd } />
-            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('quick.votingLastFor') || '' } timeleft={ quick.votingEnd }/>
+            <Countdown label={ t('process.proposalEndTime') || '' } timeleft={ quick.proposalEnd } />
+            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('process.votingLastFor') || '' } timeleft={ quick.votingEnd }/>
         </ProcessInfo>
         <proposal-list>
             <div class="proposals">
@@ -35,9 +35,9 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
                     </div>
                     <div class="edit flex justify-between items-center" style="display: none;">
                         <div class="content flex flex-col w-full">
-                            <b>{ t('quick.proposal') }</b>
+                            <b>{ t('process.proposal') }</b>
                             <input type="text" class="input input-bordered input-sm my-2"/>
-                            <label>{ t('quick.description') }</label>
+                            <label>{ t('process.description') }</label>
                             <input type="text" class="input input-bordered input-sm my-2"/>
                         </div>
                         <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
