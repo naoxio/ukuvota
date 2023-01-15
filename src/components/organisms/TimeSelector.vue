@@ -3,10 +3,7 @@ import TimeSlider from 'molecules/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
 import { t } from 'i18next';
-import { ref } from 'vue'
 import DatetimePicker from 'molecules/DatetimePicker.vue'
-
-
 
 const $process = useStore(process)
 const toggleTimeSelector = () => {
@@ -14,6 +11,7 @@ const toggleTimeSelector = () => {
     process.setKey('timeSelector', newValue)
 }
 
+const testDate = [new Date().toISOString(), new Date().toISOString()]
 </script>
 <template>
     <div class="py-2">
@@ -36,14 +34,15 @@ const toggleTimeSelector = () => {
                 keyValue="votingTime"
                 />
         </div>
+
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
                 <h3>{{ t('process.proposalTimeRange')}}</h3>
-               <DatetimePicker/>
+               <DatetimePicker keyValue="proposal" />
             </div>
             <br/>
             <h3>{{ t('process.votingTimeRange')}}</h3>
-            <DatetimePicker/>
+            <DatetimePicker keyValue="voting" />
 
             <br/>
         </div>

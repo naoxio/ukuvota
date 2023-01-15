@@ -46,10 +46,8 @@ console.log($process.value.defaultProposals)
     <h2 class="pt-2">{{ t('process.proposals') }}</h2>
   </div>
   <div v-if="$process.phases === 'full'">
-
       <div class="flex justify-center items-center">
           <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals === 'true'" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
-
           <label for="default-proposals" class="cursor-pointer">&nbsp;{{ t('process.addDefaultProposals') }}</label>
           <!--Modal id="defaultProposalInfo">
               <h3>{{ t('process.defaultProposals') }}</h3>
@@ -58,7 +56,6 @@ console.log($process.value.defaultProposals)
       </div>
   </div>
   <div class="flex justify-around align-center items-center">
-    
       <div v-if="$process.phases === 'voting'" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
           <div class="flex flex-col w-full ">
               <b>{{ t('process.proposal') }}</b>
@@ -69,7 +66,6 @@ console.log($process.value.defaultProposals)
       </div>
   </div>
   <div v-if="$process.phases === 'voting'" align="center">
-
       <button id="add-proposal" class="btn p-2" >
           {{ t('process.addProposal') }}
       </button>
