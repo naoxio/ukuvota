@@ -9,8 +9,8 @@ export type Process = {
     timeSelector: 'slider' | 'calendar'
     proposalTime: number
     votingTime: number
-    proposolStart: number
-    proposolEnd: number
+    proposalStart: number
+    proposalEnd: number
     proposalDateMin: string
     votingStart: number
     votingEnd: number
@@ -21,6 +21,14 @@ const getMilliseconds = (days: number, hours: number, minutes: number) => {
     return ((days * 24 + hours) * 60 + minutes) * 60 * 1000
 }
   
+
+const defaultDuration = 277800000
+const proposalStart = +new Date()
+const proposalEnd = proposalStart + defaultDuration
+const proposalDateMin = new Date().toISOString()
+const votingStart = proposalEnd
+const votingEnd = votingStart + defaultDuration
+const votingDateMin = new Date(proposalEnd).toISOString()
 export const process = persistentMap<Process>('process:', {
     title: '',
     description: '',
@@ -30,12 +38,8 @@ export const process = persistentMap<Process>('process:', {
     timeSelector: 'calendar',
     proposalTime: getMilliseconds(3, 5, 15),
     votingTime: getMilliseconds(3, 5, 15),
-    proposolStart: +new Date(),
-    proposolEnd: +new Date(),
-    proposalDateMin: new Date().toISOString(),
-    votingStart: +new Date(),
-    votingEnd: +new Date(),
-    votingDateMin: new Date().toISOString(),
+    proposalStart, proposalEnd, proposalDateMin,
+    votingStart, votingEnd, votingDateMin,
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,
