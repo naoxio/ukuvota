@@ -5,6 +5,8 @@ import { process } from '../../stores/processStore';
 import TimeSelector from "organisms/TimeSelector.vue"
 import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
+import Modal from "molecules/Modal.vue";
+import ContentDoc from "atoms/ContentDoc.vue"
 
 const $process = useStore(process)
 
@@ -49,10 +51,10 @@ console.log($process.value.defaultProposals)
       <div class="flex justify-center items-center">
           <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals === 'true'" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
           <label for="default-proposals" class="cursor-pointer">&nbsp;{{ t('process.addDefaultProposals') }}</label>
-          <!--Modal id="defaultProposalInfo">
+          <Modal id="defaultProposalInfo">
               <h3>{{ t('process.defaultProposals') }}</h3>
               <ContentDoc file_name="DefaultProposals"/>
-          </Modal-->
+          </Modal>
       </div>
   </div>
   <div class="flex justify-around align-center items-center">

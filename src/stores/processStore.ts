@@ -1,4 +1,5 @@
 import { persistentMap } from '@nanostores/persistent'
+import { onMount } from 'nanostores'
 
 export type Process = {
     title: string
@@ -9,12 +10,12 @@ export type Process = {
     timeSelector: 'slider' | 'calendar'
     proposalTime: number
     votingTime: number
-    proposalStart: number
-    proposalEnd: number
-    proposalDateMin: string
-    votingStart: number
-    votingEnd: number
-    votingDateMin: string
+    phase1Start: number
+    phase1End: number
+    phase1DateMin: string
+    phase2Start: number
+    phase2End: number
+    phase2DateMin: string
 }
 
 const getMilliseconds = (days: number, hours: number, minutes: number) => {
@@ -23,12 +24,12 @@ const getMilliseconds = (days: number, hours: number, minutes: number) => {
   
 
 const defaultDuration = 277800000
-const proposalStart = +new Date()
-const proposalEnd = proposalStart + defaultDuration
-const proposalDateMin = new Date().toISOString()
-const votingStart = proposalEnd
-const votingEnd = votingStart + defaultDuration
-const votingDateMin = new Date(proposalEnd).toISOString()
+const phase1Start = +new Date()
+const phase1End = phase1Start + defaultDuration
+const phase1DateMin = new Date().toISOString()
+const phase2Start = phase1Start
+const phase2End = phase2Start + defaultDuration
+const phase2DateMin = new Date(phase1End).toISOString()
 export const process = persistentMap<Process>('process:', {
     title: '',
     description: '',
@@ -38,10 +39,12 @@ export const process = persistentMap<Process>('process:', {
     timeSelector: 'calendar',
     proposalTime: getMilliseconds(3, 5, 15),
     votingTime: getMilliseconds(3, 5, 15),
-    proposalStart, proposalEnd, proposalDateMin,
-    votingStart, votingEnd, votingDateMin,
+    phase1Start, phase1End, phase1DateMin,
+    phase2Start, phase2End, phase2DateMin,
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,
     listen: false,
 })
+
+

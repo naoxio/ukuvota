@@ -1,24 +1,34 @@
 <script lang="ts" setup>
+import Icon from 'atoms/Icon.vue';
+import { boolean, string } from 'zod';
 
 const props = defineProps({
-  id: String
+  id: {
+    type: String,
+    required: true
+  },
 })
 
-
 </script>
+
 <template>
-  <IconBar></IconBar>
-  <label for={id} class="btn btn-ghost btn-sm btn-circle">
-    <Icon width="22" icon="/icons/information.svg"/>
+  <label :for="id" class="btn btn-ghost btn-sm btn-circle">
+    <Suspense>
+      <Icon name="information"/>    
+    </Suspense>
   </label>
 
-  <input type="checkbox" id={id} class="modal-toggle" />
+  <input type="checkbox" :id="id" class="modal-toggle" />
   <div class="modal">
     <div class="modal-box">
-      <label for={id} class="btn btn-sm btn-circle absolute right-2 top-2">
-        <Icon width="22" icon="close"/>
+      <label :for="id" class="btn btn-sm btn-circle absolute right-2 top-2">
+        <Suspense>
+          <Icon name="close" invert/>    
+        </Suspense>
       </label>
-      <slot/>
+      <Suspense>
+        <slot/>
+      </Suspense>
     </div>
   </div>
 </template>

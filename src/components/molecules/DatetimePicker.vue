@@ -19,14 +19,14 @@
         console.log(start, end)
         process.setKey(props.keyValue + 'Start' as keyof Process, start)
         process.setKey(props.keyValue + 'End' as keyof Process, end)
-        if (props.keyValue === 'proposal') {
-            process.setKey('votingDateMin', new Date(end).toISOString())
-            const votingStart = $process.value.votingStart
-            const votingEnd = $process.value.votingEnd
-            if (votingStart < end) {
-                const diff = votingEnd - votingStart
-                process.setKey('votingStart', end)
-                process.setKey('votingEnd', end + diff)
+        if (props.keyValue === 'phase1') {
+            process.setKey('phase2DateMin', new Date(end).toISOString())
+            const phase2Start = $process.value.phase2Start
+            const phase2End = $process.value.phase2End
+            if (phase2Start < end) {
+                const diff = phase2End - phase2Start
+                process.setKey('phase2Start', end)
+                process.setKey('phase2End', end + diff)
             }
         }
     }

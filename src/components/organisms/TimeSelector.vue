@@ -11,7 +11,6 @@ const toggleTimeSelector = () => {
     process.setKey('timeSelector', newValue)
 }
 
-const testDate = [new Date().toISOString(), new Date().toISOString()]
 </script>
 <template>
     <div class="py-2">
@@ -38,16 +37,18 @@ const testDate = [new Date().toISOString(), new Date().toISOString()]
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
                 <h3>{{ t('process.proposalTimeRange')}}</h3>
-               <DatetimePicker keyValue="proposal" />
+                <DatetimePicker keyValue="phase1" />
+            </div>
+            <h3>{{ t('process.votingTimeRange')}}</h3>
+            <div v-if="$process.phases === 'full'">
+                <DatetimePicker keyValue="phase2" />
+            </div>
+            <div v-else>
+                <DatetimePicker keyValue="phase1" />
             </div>
             <br/>
-            <h3>{{ t('process.votingTimeRange')}}</h3>
-            <DatetimePicker keyValue="voting" />
 
             <br/>
         </div>
     </div>
 </template>  
-
-<style>
-</style>
