@@ -17,19 +17,10 @@
         let start = +new Date(datetimes[0])
         let end = +new Date(datetimes[1])
         if (end < start) {
-            let temp = start
-            start = end
-            end = temp
+            [start, end] = [end, start]
         }
-        if (props.keyValue === 'proposal') {
-            process.setKey('votingDateMin', new Date(end).toLocaleDateString())
-            const votingDateRange = $process.value.votingDateRange
-            const duration = votingDateRange[1] - votingDateRange[0]
-            const gap = votingDateRange[0] - $process.value.proposalDateRange[1]
-
-            process.setKey('votingDateRange', [end + gap, end + gap + duration])
-            process.setKey('votingDuration', duration)
-        }
+        const v_start = (props.keyValue === 'voting') ? start : $process.value.votingDateRange[0]
+        process.setKey("proposalVotingGap", v_start - $process.value.proposalDateRange[1])
         process.setKey(props.keyValue + 'Duration' as keyof Process, end - start)
         process.setKey(props.keyValue + 'DateRange' as keyof Process, [start, end])
     }
