@@ -22,27 +22,26 @@
     "weighting": "Negative Score Weighting",
     "timeLeftHeading": "Select the time for proposals and voting",
     "timeLeftVotingHeading": "Select the time for voting",
-    "timeSelector": {
-      "calendar": "Use Calendar selector",
-      "slider": "Use Slide selector"
-    },
     "proposal": "Proposal",
     "proposals": "Proposals",
     "addProposal": "Add proposal",
-
     "averageScore": "Average Score",
     "totalScore": "Total Score",
     "results": "Results",
-    "proposalPhase": "Proposal Phase",
-    "proposalPhaseStartAt": "Proposal phase starts at",
-    "proposalTimeRange": "Select when to start and end the proposal phase",
-    "proposalEndTime": "Proposal phase ends in",
-    "votingPhase": "Voting Phase",
-    "votingPhaseStartAt": "Voting phase starts at",
-    "votingPhaseStartAfter": "Voting phase starts right after the proposal phase",
-    "votingTimeRange": "Select when to start and end the voting phase",
-    "votingEndTime": "Voting ends in",
-    "votingLastFor": "Voting will last for",
+    "proposalPhase": {
+      "title": "Proposal Phase",
+      "startAt": "Proposal phase starts at",
+      "timeRange": "Select when to start and end the proposal phase",
+      "endTime": "Proposal phase ends in"
+    },
+    "votingPhase": {
+      "title": "Voting Phase",
+      "startAt": "Voting phase starts at",
+      "startAfter": "Voting phase starts right after the proposal phase",
+      "timeRange": "Select when to start and end the voting phase",
+      "endTime": "Voting ends in",
+      "lastFor": "Voting will last for"
+    },
     "addDefaultProposals": "Add default proposals",
     "defaultProposals": "Default proposals",
     "maxProposals": "Maximum amount of proposals",

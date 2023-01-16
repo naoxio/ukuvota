@@ -22,26 +22,27 @@
     "weighting": "Negative Punktegewichtung",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
     "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
-    "timeSelector": {
-      "calendar": "Kalenderselektor verwenden",
-      "slider": "Schieberegler verwenden"
-    },
     "proposal": "Vorschlag",
     "proposals": "Vorschläge",
     "addProposal": "Vorschlag hinzufügen",
     "averageScore": "Durchschnittliche Punktzahl",
     "totalScore": "Gesamtpunktzahl",
     "results": "Ergebnisse",
-    "proposalPhase": "Vorschlagsphase",
-    "proposalPhaseStartAt": "Vorschlagsphase beginnt",
-    "proposalTimeRange": "Wählen Sie aus, wann die Vorschlagsphase starten und enden soll",
-    "proposalEndTime": "Vorschlagsphase endet in",
-    "votingPhase": "Abstimmungsphase",
-    "votingPhaseStartAt": "Abstimmungsphase beginnt",
-    "votingPhaseStartAfter": "Abstimmungsphase beginnt direkt nach der Vorschlagsphase",
-    "votingTimeRange": "Wählen Sie aus, wann die Abstimmungsphase starten und enden soll",
-    "votingEndTime": "Abstimmung endet in",
-    "votingLastFor": "Abstimmung dauert",
+
+    "proposalPhase": {
+      "title": "Vorschlagsphase",
+      "startAt": "Vorschlagsphase beginnt",
+      "timeRange": "Wählen Sie aus, wann die Vorschlagsphase starten und enden soll",
+      "endTime": "Vorschlagsphase endet in"
+    },
+    "votingPhase": {
+      "title": "Abstimmungsphase",
+      "startAt": "Abstimmungsphase beginnt",
+      "startAfter": "Abstimmungsphase beginnt direkt nach der Vorschlagsphase",
+      "timeRange": "Wählen Sie aus, wann die Abstimmungsphase starten und enden soll",
+      "endTime": "Abstimmung endet in",
+      "lastFor": "Abstimmung dauert"
+    },
     "addDefaultProposals": "Standardvorschläge hinzufügen",
     "defaultPropoqsals": "Standardvorschläge",
     "maxProposals": "Maximale Anzahl von Vorschlägen",

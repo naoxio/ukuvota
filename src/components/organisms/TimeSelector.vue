@@ -22,14 +22,14 @@ const isActiveTab = (keyValue: string, selector: string) => {
         </div>
 
         <div v-if="$process.phases === 'full'">
-            <h2>{{ t('process.proposalPhase') }}</h2>
+            <h2>{{ t('process.proposalPhase.title') }}</h2>
             <div class="tabs" @click="(ev) => changeSelector(ev, 'proposal')">
                 <a name="slider" class="tab tab-bordered" :class="isActiveTab('proposal', 'slider')" >Slider</a> 
                 <a name="calendar" class="tab tab-bordered" :class="isActiveTab('proposal', 'calendar')">Calendar</a> 
             </div>
             <div v-if="$process.proposalSelector === 'slider'" >
                 <span>
-                    <h3>{{ t('process.proposalPhaseStartAt') }}</h3>
+                    <h3>{{ t('process.proposalPhase.startAt') }}</h3>
                     <p>{{ new Date($process.proposalDateRange[0]) }}</p>
                 </span>
                 
@@ -38,7 +38,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
                 />
             </div>
             <div v-if="$process.proposalSelector === 'calendar'">
-                <h3>{{ t('process.proposalTimeRange')}}</h3>
+                <h3>{{ t('process.proposal.timeRange')}}</h3>
                 <DatetimePicker keyValue="proposal" />
             </div>
         </div>
@@ -50,7 +50,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
             </div>
             <div v-if="$process.votingSelector === 'slider'" >
                 <span>
-                    <h3>{{ t('process.votingPhaseStartAt') }}</h3>
+                    <h3>{{ t('process.votingPhase.startAt') }}</h3>
                     <p>{{ new Date($process.votingDateRange[0]) }}</p>
                 </span>
                 <TimeSlider
@@ -59,7 +59,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
             </div>
             <div v-if="$process.votingSelector === 'calendar'">
 
-                <h3>{{ t('process.votingTimeRange')}}</h3>
+                <h3>{{ t('process.votingPhase.timeRange')}}</h3>
                 <DatetimePicker keyValue="voting" />
             </div>
 
