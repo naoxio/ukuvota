@@ -19,7 +19,6 @@ export type Process = {
 const getMilliseconds = (days: number, hours: number, minutes: number) => {
     return ((days * 24 + hours) * 60 + minutes) * 60 * 1000
 }
-  
 
 const defaultDuration = getMilliseconds(3, 5, 15)
 const proposalDateRange = [+new Date(), +new Date() + defaultDuration]
@@ -43,21 +42,40 @@ export const process = persistentMap<Process>('process:', {
     listen: false,
 })
 
-const updateDateRange = (keyValue: string, duration: number) => {
-    const range = process.get()[keyValue + 'DateRange']
-    console.log(keyValue, range)
-
+const updateDateRange = (value: Process, keyValue: string, duration: number) => {
+    const range = value[keyValue + 'DateRange']
     process.setKey(keyValue + "DateRange" as keyof Process, [range[0], range[0] + duration])
 
 } 
 
 process.subscribe((value, changed) => {
+    let [start, end] = [0, 0]
     switch (changed) {
+        case 'phases':
+            switch(value[changed]) {
+                case 'full':
+                    start = value.proposalDateRange[1]
+                    end = start + value.votingDuration
+                    process.setKey("votingDateRange", [start, end])
+                    break
+                case 'voting':
+                    start = +new Date(value.proposalDateMin)
+                    end = start + value.votingDuration
+                    process.setKey("votingDateMin", start.toLocaleString())
+
+                    process.setKey("votingDateRange", [start, end])
+                    break
+            }
+            break
         case 'proposalDuration':
-            updateDateRange('proposal', value[changed])
+            updateDateRange(value, 'proposal', value[changed])
+            start = value.proposalDateRange[1]
+            end = start + value.votingDuration
+            process.setKey("votingDateRange", [start, end])
+
             break
         case 'votingDuration':
-            updateDateRange('voting', value[changed])
+            updateDateRange(value, 'voting', value[changed])
             break
     }
 })

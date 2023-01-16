@@ -5,10 +5,6 @@
   import { process, Process } from 'stores/processStore';
 
   const props = defineProps({
-      title: {
-          type: String,
-          required: true
-      },
       keyValue: {
           type: String,
           required: true
@@ -58,7 +54,6 @@ const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
 
 <template>
     <div>
-      <h3>{{ title }}</h3>
       <div class="flex items-center">
         <p>{{ t('time.minutes') }}: &nbsp;</p>
         <label for="minutes">{{ convertToTime('minutes', $process[keyValue]) }}</label>

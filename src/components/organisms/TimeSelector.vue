@@ -23,26 +23,40 @@ const toggleTimeSelector = () => {
             </select>
         </div>
         <div v-if="$process.timeSelector === 'slider'" class="slider">
-            <TimeSlider
-                v-if="$process.phases === 'full'"
-                :title="t('process.proposalTime')"
-                keyValue="proposalDuration"
-            />
-            <TimeSlider
-                :title="t('process.votingTime')"
-                keyValue="votingDuration"
+            <div v-if="$process.phases === 'full'">
+                <h2>{{ t('process.proposalPhase') }}</h2>
+                <span>
+                    <h3>{{ t('process.proposalPhaseStartAt') }}</h3>
+                    <p>{{ new Date($process.proposalDateRange[0]) }}</p>
+                </span>
+                
+                <TimeSlider
+                    keyValue="proposalDuration"
                 />
+            </div>
+            <div>
+                <h2>{{ t('process.votingPhase') }}</h2>
+                <span>
+                    <h3>{{ t('process.votingPhaseStartAt') }}</h3>
+                    <p>{{ new Date($process.votingDateRange[0]) }}</p>
+                </span>
+                <TimeSlider
+                    keyValue="votingDuration"
+                    />
+            </div>
         </div>
 
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
+                <h2>{{ t('process.proposalPhase') }}</h2>
                 <h3>{{ t('process.proposalTimeRange')}}</h3>
                 <DatetimePicker keyValue="proposal" />
             </div>
-            <h3>{{ t('process.votingTimeRange')}}</h3>
-            <DatetimePicker keyValue="voting" />
-            <br/>
-
+            <div>
+                <h2>{{ t('process.votingPhase') }}</h2>
+                <h3>{{ t('process.votingTimeRange')}}</h3>
+                <DatetimePicker keyValue="voting" />
+            </div>
             <br/>
         </div>
     </div>
