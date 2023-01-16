@@ -26,26 +26,21 @@ const toggleTimeSelector = () => {
             <TimeSlider
                 v-if="$process.phases === 'full'"
                 :title="t('process.proposalTime')"
-                keyValue="proposalTime"
+                keyValue="proposalDuration"
             />
             <TimeSlider
                 :title="t('process.votingTime')"
-                keyValue="votingTime"
+                keyValue="votingDuration"
                 />
         </div>
 
         <div v-if="$process.timeSelector === 'calendar'" class="calendar">
             <div v-if="$process.phases === 'full'">
                 <h3>{{ t('process.proposalTimeRange')}}</h3>
-                <DatetimePicker keyValue="phase1" />
+                <DatetimePicker keyValue="proposal" />
             </div>
             <h3>{{ t('process.votingTimeRange')}}</h3>
-            <div v-if="$process.phases === 'full'">
-                <DatetimePicker keyValue="phase2" />
-            </div>
-            <div v-else>
-                <DatetimePicker keyValue="phase1" />
-            </div>
+            <DatetimePicker keyValue="voting" />
             <br/>
 
             <br/>

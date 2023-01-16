@@ -1,5 +1,4 @@
 import { persistentMap } from '@nanostores/persistent'
-import { onMount } from 'nanostores'
 
 export type Process = {
     title: string
@@ -8,14 +7,13 @@ export type Process = {
     phases: 'full' | 'voting'
     defaultProposals: 'true' | 'false'
     timeSelector: 'slider' | 'calendar'
-    proposalTime: number
-    votingTime: number
-    phase1Start: number
-    phase1End: number
-    phase1DateMin: string
-    phase2Start: number
-    phase2End: number
-    phase2DateMin: string
+    proposalDateRange: number[]
+    proposalDateMin: string
+    proposalDuration: number
+    votingDateRange: number[]
+    votingDateMin: string
+    votingDuration: number
+
 }
 
 const getMilliseconds = (days: number, hours: number, minutes: number) => {
@@ -23,13 +21,11 @@ const getMilliseconds = (days: number, hours: number, minutes: number) => {
 }
   
 
-const defaultDuration = 277800000
-const phase1Start = +new Date()
-const phase1End = phase1Start + defaultDuration
-const phase1DateMin = new Date().toISOString()
-const phase2Start = phase1Start
-const phase2End = phase2Start + defaultDuration
-const phase2DateMin = new Date(phase1End).toISOString()
+const defaultDuration = getMilliseconds(3, 5, 15)
+const proposalDateRange = [+new Date(), +new Date() + defaultDuration]
+const proposalDateMin = new Date().toLocaleDateString()
+const votingDateRange = [proposalDateRange[1], proposalDateRange[1] + defaultDuration]
+const votingDateMin = new Date(proposalDateRange[1]).toLocaleDateString()
 export const process = persistentMap<Process>('process:', {
     title: '',
     description: '',
@@ -37,14 +33,32 @@ export const process = persistentMap<Process>('process:', {
     phases: 'full',
     defaultProposals: 'true',
     timeSelector: 'calendar',
-    proposalTime: getMilliseconds(3, 5, 15),
-    votingTime: getMilliseconds(3, 5, 15),
-    phase1Start, phase1End, phase1DateMin,
-    phase2Start, phase2End, phase2DateMin,
+    proposalDuration: defaultDuration,
+    votingDuration: defaultDuration,
+    proposalDateRange, proposalDateMin,
+    votingDateRange, votingDateMin,
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,
     listen: false,
 })
 
+const updateDateRange = (keyValue: string, duration: number) => {
+    const range = process.get()[keyValue + 'DateRange']
+    console.log(keyValue, range)
+
+    process.setKey(keyValue + "DateRange" as keyof Process, [range[0], range[0] + duration])
+
+} 
+
+process.subscribe((value, changed) => {
+    switch (changed) {
+        case 'proposalDuration':
+            updateDateRange('proposal', value[changed])
+            break
+        case 'votingDuration':
+            updateDateRange('voting', value[changed])
+            break
+    }
+})
 

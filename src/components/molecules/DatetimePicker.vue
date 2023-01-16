@@ -14,22 +14,27 @@
     const $theme = useStore(theme)
 
     const changeDatetime = async(datetimes: string[]) => {
-        const start = +new Date(datetimes[0])
-        const end = +new Date(datetimes[1])
-        console.log(start, end)
-        process.setKey(props.keyValue + 'Start' as keyof Process, start)
-        process.setKey(props.keyValue + 'End' as keyof Process, end)
-        if (props.keyValue === 'phase1') {
-            process.setKey('phase2DateMin', new Date(end).toISOString())
-            const phase2Start = $process.value.phase2Start
-            const phase2End = $process.value.phase2End
-            if (phase2Start < end) {
-                const diff = phase2End - phase2Start
-                process.setKey('phase2Start', end)
-                process.setKey('phase2End', end + diff)
-            }
+        let start = +new Date(datetimes[0])
+        let end = +new Date(datetimes[1])
+        if (end < start) {
+            let temp = start
+            start = end
+            end = temp
         }
+        if (props.keyValue === 'proposal') {
+            process.setKey('votingDateMin', new Date(end).toLocaleDateString())
+            const votingDateRange = $process.value.votingDateRange
+            const duration = votingDateRange[1] - votingDateRange[0]
+            const gap = votingDateRange[0] - $process.value.proposalDateRange[1]
+
+            process.setKey('votingDateRange', [end + gap, end + gap + duration])
+            process.setKey('votingDuration', duration)
+        }
+        process.setKey(props.keyValue + 'Duration' as keyof Process, end - start)
+        process.setKey(props.keyValue + 'DateRange' as keyof Process, [start, end])
     }
+
+  
 </script>
 
 <template>
@@ -37,7 +42,7 @@
         <Datepicker
         class="w-full"
         :min-date="$process[props.keyValue + 'DateMin']"
-        :modelValue="[$process[props.keyValue + 'Start'],$process[props.keyValue + 'End']]"
+        :modelValue="$process[props.keyValue + 'DateRange']"
         @update:modelValue="changeDatetime"
         :dark="$theme === 'dark'"
         :clearable="false"
