@@ -5,12 +5,6 @@ const config: AstroI18nextConfig = {
   defaultLocale: "en",
   locales: ["en", "de"],
   load: ["server", "client"],
-  i18nextServer: {
-    debug: true,
-  },
-  i18nextClient: {
-    debug: true,
-  },
 };
 
 export default config;

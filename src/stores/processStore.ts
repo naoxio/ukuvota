@@ -1,4 +1,5 @@
 import { persistentMap } from '@nanostores/persistent'
+import { onMount } from 'nanostores'
 
 export type Process = {
     title: string
@@ -48,6 +49,31 @@ const updateDateRange = (value: Process, keyValue: string, duration: number) => 
 
 } 
 
+const updateDateMin = (keyValue: string) => {
+    if (process.get().timeSelector === 'slider') {
+        if (+new Date(process.get()[keyValue + 'DateMin']) < +new Date()) {
+            process.setKey(keyValue + 'DateMin' as keyof Process, new Date().toLocaleDateString())
+            
+        }
+        const range = process.get()[keyValue + 'DateRange']
+        if (range && range[0] < +new Date()) {
+            process.setKey(keyValue + 'DateRange' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
+        }
+    }
+}
+onMount(process, () => {
+    updateDateMin('proposal')
+    updateDateMin('voting')
+    const updating = setInterval(() => {
+        updateDateMin('proposal')
+        updateDateMin('voting')  
+        console.log('updating')  
+    }, 1000)
+    return () => {
+      clearInterval(updating)
+    }
+})
+
 process.subscribe((value, changed) => {
     let [start, end] = [0, 0]
     switch (changed) {
@@ -79,4 +105,3 @@ process.subscribe((value, changed) => {
             break
     }
 })
-
