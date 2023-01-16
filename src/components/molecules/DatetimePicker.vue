@@ -49,6 +49,8 @@
 <style>
     .datetime-picker div {
         width: 100% ;
+        max-width: 420px;
+        margin: auto;
         border-radius: 0;
     }
 </style>
