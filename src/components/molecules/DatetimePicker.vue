@@ -49,7 +49,15 @@
     }
     .dp__theme_light {
         --dp-primary-color:indianred;
-        --dp-disabled-color: #eee;
+        --dp-disabled-color: #ccc;
+        --dp-background-color: #f6f0f6;
+        --dp-secondary-color: #666;
+        --dp-hover-color: #ddd;
+
+
+
+
+
     }
     .dp__cell_disabled {
         color: var(--dp-disabled-color);
@@ -59,6 +67,7 @@
         width: 100% ;
         max-width: 340px;
         margin: auto;
+        border-radius: 0;
     }
     
     .dp__overlay_container>.dp__overlay_row {

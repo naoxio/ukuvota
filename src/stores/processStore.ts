@@ -89,7 +89,7 @@ process.subscribe((value, changed) => {
                 case 'voting':
                     start = +new Date(value.proposalDateMin)
                     end = start + value.votingDuration
-                    process.setKey("votingDateMin", new Date(start).toLocaleString())
+                    process.setKey("votingDateMin", new Date().toLocaleString())
                     process.setKey("votingDateRange", [start, end])
                     break
             }

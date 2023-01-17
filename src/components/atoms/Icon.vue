@@ -10,6 +10,10 @@ const props = defineProps({
   invert: {
     type: Boolean,
     required: false
+  },
+  width: {
+    type: String,
+    required: false
   }
 })
 const icon = await import(`../../icons/${props.name}.svg`);
@@ -22,5 +26,5 @@ const $theme = useStore(theme)
 }
 </style>
 <template>
-    <img :class="{'dark': ($theme === 'dark') !== invert }" :src="icon.default"/>
+    <img :width="width" :class="{'dark': ($theme === 'dark') !== invert }" :src="icon.default"/>
 </template>

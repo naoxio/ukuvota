@@ -4,6 +4,7 @@ import { useStore } from '@nanostores/vue';
 import { process, Process } from 'stores/processStore';
 import { t } from 'i18next';
 import DatetimePicker from 'molecules/DatetimePicker.vue'
+import Icon from 'atoms/Icon.vue'
 import { format} from 'date-fns'
 const $process = useStore(process)
 const changeSelector = (ev, keyValue: string) => {    
