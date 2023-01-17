@@ -54,16 +54,14 @@
     .dp__cell_disabled {
         color: var(--dp-disabled-color);
     }
-    .db__input_wrap {
-        width: 100%;
 
-    }
-    .datetime-picker div{
-        margin: auto;
-    }
-    .datetime-picker div[role="textbox"]  {
+    .datetime-picker div  {
         width: 100% ;
         max-width: 340px;
         margin: auto;
+    }
+    
+    .dp__overlay_container>.dp__overlay_row {
+        max-width: 70px;
     }
 </style>
