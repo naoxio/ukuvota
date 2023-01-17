@@ -83,6 +83,7 @@ process.subscribe((value, changed) => {
                     start = value.proposalDateRange[1]
                     end = start + value.votingDuration
                     const gap = value.proposalVotingGap
+                    process.setKey("votingDateMin", new Date(start).toLocaleString())
                     process.setKey("votingDateRange", [start + gap, end + gap])
                     break
                 case 'voting':
