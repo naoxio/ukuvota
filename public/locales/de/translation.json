@@ -28,7 +28,6 @@
     "averageScore": "Durchschnittliche Punktzahl",
     "totalScore": "Gesamtpunktzahl",
     "results": "Ergebnisse",
-
     "proposalPhase": {
       "title": "Vorschlagsphase",
       "startAt": "Vorschlagsphase beginnt",
@@ -67,7 +66,7 @@
       "voting": "Nur die Abstimmungsphase"
     }
   },
-  "wip": "Noch nicht implementiert, bitte spenden Sie, um dieses Projekt zu unterstützen!",
+  "wip": "Noch nicht implementiert",
   "layouts": {
     "title": "Ukuvota"
   },

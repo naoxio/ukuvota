@@ -31,7 +31,6 @@
 <template>
     <div class="datetime-picker">
         <Datepicker
-        class="w-full"
         :min-date="$process[props.keyValue + 'DateMin']"
         :modelValue="$process[props.keyValue + 'DateRange']"
         @update:modelValue="changeDatetime"
@@ -43,10 +42,28 @@
 </template>
 
 <style>
-    .datetime-picker div {
-        width: 100% ;
-        max-width: 420px;
+    .dp__theme_dark {
+        --dp-primary-color:indianred;
+        --dp-disabled-color: #333;
+
+    }
+    .dp__theme_light {
+        --dp-primary-color:indianred;
+        --dp-disabled-color: #eee;
+    }
+    .dp__cell_disabled {
+        color: var(--dp-disabled-color);
+    }
+    .db__input_wrap {
+        width: 100%;
+
+    }
+    .datetime-picker div{
         margin: auto;
-        border-radius: 0;
+    }
+    .datetime-picker div[role="textbox"]  {
+        width: 100% ;
+        max-width: 340px;
+        margin: auto;
     }
 </style>
