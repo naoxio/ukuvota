@@ -16,13 +16,11 @@
     const changeDatetime = async(datetimes: string[]) => {
         let start = +new Date(datetimes[0])
         let end = +new Date(datetimes[1])
-        if (end < start) {
-            [start, end] = [end, start]
-        }
-        const v_start = (props.keyValue === 'voting') ? start : $process.value.votingDateRange[0]
-        process.setKey("proposalVotingGap", v_start - $process.value.proposalDateRange[1])
+        if (end < start) [start, end] = [end, start]        
+        const v_start = (props.keyValue === 'voting') ? start : $process.value.votingDates[0]
+        process.setKey("proposalVotingGap", v_start - $process.value.proposalDates[1])
         process.setKey(props.keyValue + 'Duration' as keyof Process, end - start)
-        process.setKey(props.keyValue + 'DateRange' as keyof Process, [start, end])
+        process.setKey(props.keyValue + 'Dates' as keyof Process, [start, end])
     }
 
   
@@ -32,7 +30,7 @@
     <div class="datetime-picker">
         <Datepicker
         :min-date="$process[props.keyValue + 'DateMin']"
-        :modelValue="$process[props.keyValue + 'DateRange']"
+        :modelValue="$process[props.keyValue + 'Dates']"
         @update:modelValue="changeDatetime"
         :dark="$theme === 'dark'"
         :clearable="false"
@@ -44,8 +42,7 @@
 <style>
     .dp__theme_dark {
         --dp-primary-color:indianred;
-        --dp-disabled-color: #333;
-
+        --dp-disabled-color: #444;
     }
     .dp__theme_light {
         --dp-primary-color:indianred;
@@ -53,11 +50,6 @@
         --dp-background-color: #f6f0f6;
         --dp-secondary-color: #666;
         --dp-hover-color: #ddd;
-
-
-
-
-
     }
     .dp__cell_disabled {
         color: var(--dp-disabled-color);

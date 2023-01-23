@@ -4,11 +4,11 @@ import { useStore } from '@nanostores/vue';
 import { process, Process } from 'stores/processStore';
 import { t } from 'i18next';
 import DatetimePicker from 'molecules/DatetimePicker.vue'
-import Icon from 'atoms/Icon.vue'
 import { format} from 'date-fns'
 const $process = useStore(process)
-const changeSelector = (ev, keyValue: string) => {    
-    process.setKey(keyValue + 'Selector' as keyof Process, ev.target.name)
+const changeSelector = (ev, keyValue: string) => {
+    if (ev.target.name)    
+        process.setKey(keyValue + 'Selector' as keyof Process, ev.target.name)
 }
 
 const isActiveTab = (keyValue: string, selector: string) => {
@@ -31,7 +31,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
             <div v-if="$process.proposalSelector === 'slider'" >
                 <span>
                     <h3>{{ t('process.proposalPhase.startAt') }}</h3>
-                    <p>{{ format(new Date($process.proposalDateRange[0]), 'E MMM d y hh:mm zzzz') }}</p>
+                    <p>{{ format(new Date($process.proposalDates[0]), 'E MMM d y hh:mm zzzz') }}</p>
                 </span>
                 
                 <TimeSlider
@@ -52,7 +52,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
             <div v-if="$process.votingSelector === 'slider'" >
                 <span>
                     <h3>{{ t('process.votingPhase.startAt') }}</h3>
-                    <p>{{ format(new Date($process.votingDateRange[0]), 'E MMM d y hh:mm zzzz') }}</p>
+                    <p>{{ format(new Date($process.votingDates[0]), 'E MMM d y hh:mm zzzz') }}</p>
                 </span>
                 <TimeSlider
                     keyValue="votingDuration"

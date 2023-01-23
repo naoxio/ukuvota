@@ -9,11 +9,11 @@ export type Process = {
     defaultProposals: 'true' | 'false'
     proposalSelector: 'slider' | 'calendar'
     votingSelector: 'slider' | 'calendar'
-    proposalDateRange: number[]
+    proposalDates: number[]
     proposalDateMin: string
     proposalDuration: number
     proposalVotingGap: number
-    votingDateRange: number[]
+    votingDates: number[]
     votingDateMin: string
     votingDuration: number
 
@@ -24,10 +24,10 @@ const getMilliseconds = (days: number, hours: number, minutes: number) => {
 }
 
 const defaultDuration = getMilliseconds(3, 5, 15)
-const proposalDateRange = [+new Date(), +new Date() + defaultDuration]
+const proposalDates = [+new Date(), +new Date() + defaultDuration]
 const proposalDateMin = new Date().toLocaleString()
-const votingDateRange = [proposalDateRange[1], proposalDateRange[1] + defaultDuration]
-const votingDateMin = new Date(proposalDateRange[1]).toLocaleString()
+const votingDates = [proposalDates[1], proposalDates[1] + defaultDuration]
+const votingDateMin = new Date(proposalDates[1]).toLocaleString()
 export const process = persistentMap<Process>('process:', {
     title: '',
     description: '',
@@ -39,25 +39,25 @@ export const process = persistentMap<Process>('process:', {
     proposalDuration: defaultDuration,
     votingDuration: defaultDuration,
     proposalVotingGap: 0,
-    proposalDateRange, proposalDateMin,
-    votingDateRange, votingDateMin,
+    proposalDates, proposalDateMin,
+    votingDates, votingDateMin,
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,
     listen: false,
 })
 
-const updateDateRange = (value: Process, keyValue: string, duration: number) => {
-    const range = value[keyValue + 'DateRange']
-    process.setKey(keyValue + "DateRange" as keyof Process, [range[0], range[0] + duration])
+const updateDates = (value: Process, keyValue: string, duration: number) => {
+    const range = value[keyValue + 'Dates']
+    process.setKey(keyValue + "Dates" as keyof Process, [range[0], range[0] + duration])
 } 
 
 const updateDateMin = (keyValue: string) => {
     if (+new Date(process.get()[keyValue + 'DateMin']) < +new Date())
         process.setKey(keyValue + 'DateMin' as keyof Process, new Date().toLocaleString())
-    const range = process.get()[keyValue + 'DateRange']
+    const range = process.get()[keyValue + 'Dates']
     if (range && range[0] < +new Date())
-        process.setKey(keyValue + 'DateRange' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
+        process.setKey(keyValue + 'Dates' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
 }
 onMount(process, () => {
     updateDateMin('proposal')
@@ -80,34 +80,37 @@ process.subscribe((value, changed) => {
         case 'phases':
             switch(value[changed]) {
                 case 'full':
-                    start = value.proposalDateRange[1]
+                    start = value.proposalDates[1]
+                    if (start < +new Date()) start = +new Date()
                     end = start + value.votingDuration
                     const gap = value.proposalVotingGap
                     process.setKey("votingDateMin", new Date(start).toLocaleString())
-                    process.setKey("votingDateRange", [start + gap, end + gap])
+                    process.setKey("votingDates", [start, end + gap])
                     break
                 case 'voting':
                     start = +new Date(value.proposalDateMin)
+                    if (start < +new Date()) start = +new Date()
                     end = start + value.votingDuration
                     process.setKey("votingDateMin", new Date().toLocaleString())
-                    process.setKey("votingDateRange", [start, end])
+
+                    process.setKey("votingDates", [start, end])
                     break
             }
             break
-        case 'proposalDateRange':
+        case 'proposalDates':
             [start, end] = value[changed]
             process.setKey('votingDateMin', new Date(end).toLocaleString())
             const gap = value.proposalVotingGap
-            process.setKey('votingDateRange', [end + gap, end + gap + value.votingDuration])
+            process.setKey('votingDates', [end + gap, end + gap + value.votingDuration])
             break
         case 'proposalDuration':
-            updateDateRange(value, 'proposal', value[changed])
-            start = value.proposalDateRange[1]
+            updateDates(value, 'proposal', value[changed])
+            start = value.proposalDates[1]
             end = start + value.votingDuration
-            process.setKey("votingDateRange", [start, end])
+            process.setKey("votingDates", [start, end])
             break
         case 'votingDuration':
-            updateDateRange(value, 'voting', value[changed])
+            updateDates(value, 'voting', value[changed])
             break
     }
 })

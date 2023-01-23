@@ -9,35 +9,23 @@ import { WebSocketServer } from 'ws';
 // helper function that calculates a timestamp based on the given minutes, hours, and days
 const getTimestamp = (minutes, hours, days) => {
   let rtn = 0
-  // convert minutes to milliseconds and add to result
   rtn += parseInt(minutes) * 60 * 1000
-  // convert hours to milliseconds and add to result
   rtn += parseInt(hours) * 3600 * 1000
-  // convert days to milliseconds and add to result
   rtn += parseInt(days) * 24 * 3600 * 1000
   return rtn
 }
 
-// create an express app
 const app = express();
-// create a map to store process data
 const process_map = new Map();
-// create a map to store user data
 const user_map = new Map();
 
-// use the static middleware to serve static files from the dist/client/ directory
 app.use(express.static('dist/client/'));
-// use the ssrHandler middleware to handle server-side rendering
 app.use(ssrHandler);
-// use the json middleware to parse request bodies as json
 app.use(express.json())
 
 app.get('/api/process/:id', async(req, res) => {
-  // Get the process ID from the URL parameters
   const processId = req.params.id;
-  // Get the process object from the database
   const process = await db.get(processId);
-  // Send the process object in the response
   res.json({ process });
 });
 
@@ -93,9 +81,7 @@ app.post('/api/process', async(req, res) => {
   if (typeof body.topicQuestion === 'string' && typeof body.topicDescription === 'string') {
     // Generate a unique ID for the process
     const uuid = crypto.randomUUID();
-    // Calculate the proposal end and voting end timestamps
-    const proposalEnd = +new Date() + getTimestamp(body.proposalMinutes, body.proposalHours, body.proposalDays);
-    const votingEnd = proposalEnd + getTimestamp(body.votingMinutes, body.votingHours, body.votingDays);
+
     // Check that the 'proposals' property of the body is an array
     if (typeof body.proposals === 'object' && body.proposals instanceof Array) {
       // Create an array of proposal objects from the body
@@ -109,8 +95,8 @@ app.post('/api/process', async(req, res) => {
       const process = {
         title: body.topicQuestion,
         description: body.topicDescription,
-        proposalEnd: new Date(proposalEnd).toISOString(),
-        votingEnd: new Date(votingEnd).toISOString(),
+        proposalDates: body.proposalDates,
+        votingDates: body.votingDates,
         weighting: body.weighting,
         proposals,
       };

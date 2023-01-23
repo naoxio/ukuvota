@@ -14,7 +14,30 @@ const toggleDefaultProposals = (ev: any) => {
     process.setKey('defaultProposals', ev.target.checked)
 }
 
-console.log($process.value.defaultProposals)
+const proposals = [
+    {
+        title: t("proposal.zero.title"),
+        description: t("proposal.zero.description"),
+    },
+    {
+        title: t("proposal.one.title"),
+        description: t("proposal.one.description"),
+    },
+];
+
+const createProcess = () => {
+  const body = {
+    topicQuestion: $process.value.title,
+    topicDescription: $process.value.description,
+    proposalDates: $process.value.proposalDates,
+    votingDates: $process.value.votingDates,
+    weighting: $process.value.weighting,    
+    proposals: []
+  }
+  if ($process.value.defaultProposals) {
+    body.proposals = proposals
+  }
+}
 </script>
 
 <template>
@@ -57,19 +80,35 @@ console.log($process.value.defaultProposals)
           </Modal>
       </div>
   </div>
-  <div class="flex justify-around align-center items-center">
-      <div v-if="$process.phases === 'voting'" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
-          <div class="flex flex-col w-full ">
-              <b>{{ t('process.proposal') }}</b>
-              <input type="text" class="input input-bordered input-sm my-2 w-full"/>
-              <label>{{ t('process.description') }}</label>
-              <input type="text" class="input input-bordered input-sm my-2 w-full"/>
-          </div>
-      </div>
+  <div v-if="$process.phases === 'voting'">
+    {{ t('wip') }}
+    <!--div class="flex justify-around align-center items-center">
+        <div class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
+            <div class="flex flex-col w-full ">
+                <b>{{ t('process.proposal') }}</b>
+                <input type="text" class="input input-bordered input-sm my-2 w-full"/>
+                <label>{{ t('process.description') }}</label>
+                <input type="text" class="input input-bordered input-sm my-2 w-full"/>
+            </div>
+
+        </div>
+    </div>
+    <div align="center">
+        <button id="add-proposal" class="btn p-2" >
+            {{ t('process.addProposal') }}
+        </button>
+    </div-->
   </div>
-  <div v-if="$process.phases === 'voting'" align="center">
-      <button id="add-proposal" class="btn p-2" >
-          {{ t('process.addProposal') }}
-      </button>
+  <br/>
+  <br/>
+  <div class="text-center">
+    <button type="submit" :class="{'btn-disabled': $process.phases === 'voting'}" class="btn btn-primary" @click="createProcess">
+      <div v-if="$process.phases === 'voting'">
+        {{ t('wip') }}
+      </div>
+      <div v-else>
+        {{ t('create') }}
+      </div>
+    </button>
   </div>
 </template>

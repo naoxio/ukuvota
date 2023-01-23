@@ -7,40 +7,10 @@ import CreateProcess from "organisms/CreateProcess.vue";
 
 changeLanguage("en");
 
-const proposals = [
-    {
-        title: t("proposal.zero.title"),
-        description: t("proposal.zero.description"),
-    },
-    {
-        title: t("proposal.one.title"),
-        description: t("proposal.one.description"),
-    },
-];
 ---
-<style is:inline>
-	.show {
-		display: block;
-	}
-	.hide {
-		display: none;
-	}
-</style>
-
-
 <BaseLayout>
   <h2>{ t('process.startProcess') }</h2>
-
-	<quick-form data-proposals={JSON.stringify(proposals)}>
-		<CreateProcess client:only />
-		<br/>
-		<br/>
-		<div class="text-center">
-      <button id="submit" type="submit" class="btn btn-primary">
-        { t('create') }
-      </button>
-		</div>
-  	</quick-form>
+  <CreateProcess client:only />
 </BaseLayout>
 
 <AlertManager>
@@ -68,7 +38,6 @@ const proposals = [
         }
       })
     }
-
 
     constructor() {
       super()
