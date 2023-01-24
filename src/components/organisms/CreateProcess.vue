@@ -7,6 +7,9 @@ import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
 import Modal from "molecules/Modal.vue";
 import ContentDoc from "atoms/ContentDoc.vue"
+import AlertManager from 'molecules/AlertManager.vue';
+import Alert from 'molecules/Alert.vue'
+import { ref, nextTick, onMounted } from 'vue'
 
 const $process = useStore(process)
 
@@ -25,26 +28,48 @@ const proposals = [
     },
 ];
 
+const topicQuestion = ref(null)
+const errorTopicAlert = ref(false)
+const successProcessAlert = ref(false)
 const createProcess = () => {
+  const title = $process.value.title
+  if (typeof title === 'string' && title.trim().length === 0) {
+    errorTopicAlert.value = !errorTopicAlert.value
+    nextTick()
+
+    window.scrollTo(0,300)
+
+    return
+  }
   const body = {
     topicQuestion: $process.value.title,
     topicDescription: $process.value.description,
     proposalDates: $process.value.proposalDates,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
-    proposals: []
+    proposals: $process.value.defaultProposals ?  proposals : []
   }
-  if ($process.value.defaultProposals) {
-    body.proposals = proposals
-  }
+
 }
+onMounted(() => {
+  nextTick()
+})
+
 </script>
 
 <template>
+  <AlertManager>
+    <Alert :trigger="errorTopicAlert" error icon="warning">
+      {{ t('alert.quick.error.topicQuestion') }}
+    </Alert>
+    <Alert :trigger="successProcessAlert" success icon="checkmark-outline">
+      {{ t('alert.quick.success.createProcess') }} 
+    </Alert>
+  </AlertManager>
   <div class="pb-6">
     <div>
       <p>{{ t('process.topic') }}</p>
-      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
+      <input ref="topicQuestion" name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
       <textarea name="topicDescription" class="textarea textarea-bordered w-full" :value="$process.description" @input="(e: any) => process.setKey('description', e.target.value)" />

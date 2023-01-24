@@ -1,8 +1,6 @@
 ---
 import BaseLayout from "templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
-import Alert from "molecules/Alert.astro";
-import AlertManager from "molecules/AlertManager.astro";
 import CreateProcess from "organisms/CreateProcess.vue";
 
 changeLanguage("en");
@@ -13,21 +11,7 @@ changeLanguage("en");
   <CreateProcess client:only />
 </BaseLayout>
 
-<AlertManager>
-  <Alert type="error" icon="warning">
-    { t('alert.quick.error.topicQuestion') }
-  </Alert>
-  <Alert type="success" icon="checkmark-outline">
-    { t('alert.quick.success.createProcess') } 
-  </Alert>
-</AlertManager>
 <script>
-  import { addAlert } from 'composables/addAlert'
-
-  const alertManager = document.querySelector('div.alert-manager')
-  const alertList = alertManager.querySelector('div.alert-list')
-  const alerts = alertManager.querySelectorAll('div.alert')
-
 
   class QuickForm extends HTMLElement {
     form = {}
@@ -56,31 +40,27 @@ changeLanguage("en");
         this.findValues(textareas)
         this.findValues(selectors)
         const lang = document.documentElement.lang
-        if (this.form['topicQuestion'] === '') {
-          addAlert(alertList, alerts[0].cloneNode(true))
+        //addAlert(alertList, alerts[1].cloneNode(true))
+        this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
+        let res: any, json: any;
+        if (import.meta.env.DEV) {
+          window.location.href = `/${lang !== 'en' ? lang + '/' : '' }process/dev/proposals`
         }
         else {
-          addAlert(alertList, alerts[1].cloneNode(true))
-          this.form['proposals'] = this.form['defaultProposals'] ? proposals : [] 
-          let res: any, json: any;
-          if (import.meta.env.DEV) {
-            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }process/dev/proposals`
+          try {
+            res = await fetch(`${location.origin}/api/process`, {
+              method: "POST",
+              headers: {'Content-Type':'application/json'},
+              body: JSON.stringify(this.form)
+            });
+            json = await res.json();
+          } catch (error) {
+            console.error(error);
+            return;
           }
-          else {
-            try {
-              res = await fetch(`${location.origin}/api/process`, {
-                method: "POST",
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(this.form)
-              });
-              json = await res.json();
-            } catch (error) {
-              console.error(error);
-              return;
-            }
-            window.location.href = `/${lang !== 'en' ? lang + '/' : '' }process/${json.id}/proposals`
-          }
+          window.location.href = `/${lang !== 'en' ? lang + '/' : '' }process/${json.id}/proposals`
         }
+        
       })
     }
   }
