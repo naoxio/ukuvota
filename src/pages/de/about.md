@@ -1,5 +1,5 @@
 ---
-layout: templates/BaseLayout
+layout: templates/BaseLayout.astro
 ---
 _v0.9 | 2018-03-xx | 2000 words | [Doug Webb](https://douginamug.gitlab.io/)_
 

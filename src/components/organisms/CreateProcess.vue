@@ -65,6 +65,10 @@ const createProcess = async() => {
       console.error(error);
       return;
     }
+    
+    process.setKey('title', '')
+    process.setKey('description', '')
+
     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}/proposals`
   }
 }
