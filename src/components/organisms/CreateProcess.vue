@@ -107,8 +107,7 @@ const createProcess = async() => {
     </div>
   </div>
   <hr/>
-  <TimeSelector />
-
+  <slot/>
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
     <h2 class="pt-2">{{ t('process.proposals') }}</h2>

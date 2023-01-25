@@ -2,10 +2,13 @@
 import BaseLayout from "templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
 import CreateProcess from "organisms/CreateProcess.vue";
+import TimeSelector from "organisms/TimeSelector.vue";
 
 changeLanguage("en");
 ---
 <BaseLayout>
   <h2>{ t('process.startProcess') }</h2>
-  <CreateProcess client:only />
+  <CreateProcess client:load>
+    <TimeSelector client:only />
+  </CreateProcess>
 </BaseLayout>
