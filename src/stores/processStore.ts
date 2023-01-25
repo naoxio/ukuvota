@@ -6,9 +6,8 @@ export type Process = {
     description: string
     weighting: string
     phases: 'full' | 'voting'
-    defaultProposals: 'true' | 'false'
-    proposalSelector: 'slider' | 'calendar'
-    votingSelector: 'slider' | 'calendar'
+    defaultProposals: boolean
+    slideSelector: boolean
     proposalDates: number[]
     proposalDateMin: string
     proposalDuration: number
@@ -33,9 +32,8 @@ export const process = persistentMap<Process>('process:', {
     description: '',
     weighting: '3',
     phases: 'full',
-    defaultProposals: 'true',
-    proposalSelector: 'slider',
-    votingSelector: 'slider',
+    defaultProposals: true,
+    slideSelector: true,
     proposalDuration: defaultDuration,
     votingDuration: defaultDuration,
     proposalVotingGap: 0,
@@ -63,10 +61,10 @@ onMount(process, () => {
     updateDateMin('proposal')
     updateDateMin('voting')
     const updating = setInterval(() => {
-        if (process.get().votingSelector === 'slider')
+        if (process.get().slideSelector) {
             updateDateMin('voting')  
-        if (process.get().proposalSelector === 'slider')
             updateDateMin('proposal')
+        }
     }, 1000)
     return () => {
       clearInterval(updating)
@@ -97,11 +95,9 @@ process.subscribe((value, changed) => {
             break
         case 'proposalDates':
             [start, end] = value[changed]
-            if (new Date(end).toLocaleString() !== process.get().votingDateMin) {
-                process.setKey('votingDateMin', new Date(end).toLocaleString())
-                const gap = value.proposalVotingGap
-                process.setKey('votingDates', [end + gap, end + gap + value.votingDuration])
-            }
+            process.setKey('votingDateMin', new Date(end).toLocaleString())
+            const gap = value.proposalVotingGap
+            process.setKey('votingDates', [end + gap, end + gap + value.votingDuration])
             break
         case 'proposalDuration':
             updateDates(value, 'proposal', value[changed])

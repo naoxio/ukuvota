@@ -107,7 +107,7 @@ const createProcess = async() => {
     </div>
   </div>
   <hr/>
-  <TimeSelector/>
+  <TimeSelector />
 
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
@@ -115,7 +115,7 @@ const createProcess = async() => {
   </div>
   <div v-if="$process.phases === 'full'">
       <div class="flex justify-center items-center">
-          <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals === 'true'" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
+          <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
           <label for="default-proposals" class="cursor-pointer">&nbsp;{{ t('process.addDefaultProposals') }}</label>
           <Modal id="defaultProposalInfo">
               <h3>{{ t('process.defaultProposals') }}</h3>
