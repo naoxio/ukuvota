@@ -22,8 +22,6 @@
         process.setKey(props.keyValue + 'Duration' as keyof Process, end - start)
         process.setKey(props.keyValue + 'Dates' as keyof Process, [start, end])
     }
-
-  
 </script>
 
 <template>

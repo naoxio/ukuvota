@@ -58,7 +58,6 @@ const isActiveTab = (selector: string) => {
                     />
             </div>
             <div v-if="$process.votingSelector === 'calendar'">
-
                 <h3>{{ t('process.votingPhase.timeRange')}}</h3>
                 <DatetimePicker keyValue="voting" />
             </div>
