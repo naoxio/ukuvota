@@ -6,13 +6,15 @@ import { t } from 'i18next';
 import DatetimePicker from 'molecules/DatetimePicker.vue'
 import { format} from 'date-fns'
 const $process = useStore(process)
-const changeSelector = (ev, keyValue: string) => {
-    if (ev.target.name)    
-        process.setKey(keyValue + 'Selector' as keyof Process, ev.target.name)
+const changeSelector = (ev) => {
+    if (ev.target.name) {
+        process.setKey('votingSelector', ev.target.name)
+        process.setKey('proposalSelector', ev.target.name)
+    }
 }
 
-const isActiveTab = (keyValue: string, selector: string) => {
-    return $process.value[keyValue + 'Selector' as keyof Process] === selector ? "tab-active" : ""
+const isActiveTab = (selector: string) => {
+    return $process.value.proposalSelector === selector ? "tab-active" : ""
 }
 </script>
 <template>
@@ -21,13 +23,13 @@ const isActiveTab = (keyValue: string, selector: string) => {
             <h2 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h2>
             <h2 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h2>
         </div>
-
+        <div class="tabs" @click="(ev) => changeSelector(ev)">
+            <a name="slider" class="tab tab-bordered" :class="isActiveTab('slider')">Slider</a> 
+            <a name="calendar" class="tab tab-bordered" :class="isActiveTab('calendar')">Calendar</a> 
+        </div>
         <div v-if="$process.phases === 'full'">
             <h2>{{ t('process.proposalPhase.title') }}</h2>
-            <div class="tabs" @click="(ev) => changeSelector(ev, 'proposal')">
-                <a name="slider" class="tab tab-bordered" :class="isActiveTab('proposal', 'slider')" >Slider</a> 
-                <a name="calendar" class="tab tab-bordered" :class="isActiveTab('proposal', 'calendar')">Calendar</a> 
-            </div>
+
             <div v-if="$process.proposalSelector === 'slider'" >
                 <span>
                     <h3>{{ t('process.proposalPhase.startAt') }}</h3>
@@ -45,10 +47,7 @@ const isActiveTab = (keyValue: string, selector: string) => {
         </div>
         <div>
             <h2>{{ t('process.votingPhase.title') }}</h2>
-            <div class="tabs" @click="(ev) => changeSelector(ev, 'voting')">
-                <a name="slider" class="tab tab-bordered" :class="isActiveTab('voting', 'slider')">Slider</a> 
-                <a name="calendar" class="tab tab-bordered" :class="isActiveTab('voting', 'calendar')">Calendar</a> 
-            </div>
+
             <div v-if="$process.votingSelector === 'slider'" >
                 <span>
                     <h3>{{ t('process.votingPhase.startAt') }}</h3>

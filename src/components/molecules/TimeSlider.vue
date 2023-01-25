@@ -1,4 +1,3 @@
-  
 <script lang="ts" setup>
   import { t } from 'i18next'
   import { useStore } from '@nanostores/vue';

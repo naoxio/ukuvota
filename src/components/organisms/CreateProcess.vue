@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { t } from 'i18next';
+import i18next, { t } from 'i18next';
 import { process } from '../../stores/processStore';
 
 import TimeSelector from "organisms/TimeSelector.vue"
@@ -28,10 +28,11 @@ const proposals = [
     },
 ];
 
+const lang = i18next.language
 const topicQuestion = ref(null)
 const errorTopicAlert = ref(false)
 const successProcessAlert = ref(false)
-const createProcess = () => {
+const createProcess = async() => {
   const title = $process.value.title
   if (typeof title === 'string' && title.trim().length === 0) {
     errorTopicAlert.value = !errorTopicAlert.value
@@ -49,11 +50,24 @@ const createProcess = () => {
     weighting: $process.value.weighting,    
     proposals: $process.value.defaultProposals ?  proposals : []
   }
+  let res: any, json: any;
 
+  if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev/proposals`
+  else {
+    try {
+      res = await fetch(`${location.origin}/api/process`, {
+        method: "POST",
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
+      json = await res.json();
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+    window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}/proposals`
+  }
 }
-onMounted(() => {
-  nextTick()
-})
 
 </script>
 

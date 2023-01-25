@@ -26,7 +26,7 @@ watchEffect(() => {
 
 </script>
 <template>
-    <div v-if="visible" class="alert w-80 shadow-lg m-2" :class="{ 'alert-error': error, 'alert-success': success}" >
+    <div v-if="visible" class="alert w-80 shadow-lg m-2 cursor-pointer" @click="visible = false" :class="{ 'alert-error': error, 'alert-success': success}" >
         <div>
             <Suspense>
                 <Icon width="32" :name="icon" />

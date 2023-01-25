@@ -67,7 +67,6 @@ onMount(process, () => {
             updateDateMin('voting')  
         if (process.get().proposalSelector === 'slider')
             updateDateMin('proposal')
-
     }, 1000)
     return () => {
       clearInterval(updating)
@@ -92,16 +91,17 @@ process.subscribe((value, changed) => {
                     if (start < +new Date()) start = +new Date()
                     end = start + value.votingDuration
                     process.setKey("votingDateMin", new Date().toLocaleString())
-
                     process.setKey("votingDates", [start, end])
                     break
             }
             break
         case 'proposalDates':
             [start, end] = value[changed]
-            process.setKey('votingDateMin', new Date(end).toLocaleString())
-            const gap = value.proposalVotingGap
-            process.setKey('votingDates', [end + gap, end + gap + value.votingDuration])
+            if (new Date(end).toLocaleString() !== process.get().votingDateMin) {
+                process.setKey('votingDateMin', new Date(end).toLocaleString())
+                const gap = value.proposalVotingGap
+                process.setKey('votingDates', [end + gap, end + gap + value.votingDuration])
+            }
             break
         case 'proposalDuration':
             updateDates(value, 'proposal', value[changed])
