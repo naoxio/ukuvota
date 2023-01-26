@@ -42,3 +42,19 @@ ul {
 li {
     display: list-item;
 }
+
+
+.dp__theme_dark {
+    --dp-primary-color: indianred !important;
+    --dp-disabled-color: #444 !important;
+}
+.dp__theme_light {
+    --dp-primary-color: indianred !important;
+    --dp-disabled-color: #ccc !important;
+    --dp-background-color: #f6f0f6 !important;
+    --dp-secondary-color: #666 !important;
+    --dp-hover-color: #ddd !important;
+}
+.dp__cell_disabled {
+    color: var(--dp-disabled-color) !important;
+}

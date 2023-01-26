@@ -38,21 +38,6 @@
 </template>
 
 <style>
-    .dp__theme_dark {
-        --dp-primary-color:indianred;
-        --dp-disabled-color: #444;
-    }
-    .dp__theme_light {
-        --dp-primary-color:indianred;
-        --dp-disabled-color: #ccc;
-        --dp-background-color: #f6f0f6;
-        --dp-secondary-color: #666;
-        --dp-hover-color: #ddd;
-    }
-    .dp__cell_disabled {
-        color: var(--dp-disabled-color);
-    }
-
     .datetime-picker div  {
         width: 100% ;
         max-width: 340px;
