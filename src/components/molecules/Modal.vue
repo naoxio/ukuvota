@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Icon from 'atoms/Icon.vue';
-import { boolean, string } from 'zod';
 
 const props = defineProps({
   id: {

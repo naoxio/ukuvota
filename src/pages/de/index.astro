@@ -5,7 +5,25 @@ import CreateProcess from "organisms/CreateProcess.vue";
 
 changeLanguage("de");
 ---
+
 <BaseLayout>
   <h2>{ t('process.startProcess') }</h2>
-  <CreateProcess client:only />
+  <process-form>
+    <CreateProcess client:only="vue"/>
+  </process-form>
 </BaseLayout>
+
+<script>
+  import { loadingLogo } from 'composables/loadingLogo'
+  class ProcessForm extends HTMLElement {
+    constructor() {
+      super()
+      const component = this.querySelector('astro-island')
+      if (component.innerHTML === "") {
+        component.innerHTML = loadingLogo()
+      }
+    }
+}
+  customElements.define('process-form', ProcessForm)
+
+</script>

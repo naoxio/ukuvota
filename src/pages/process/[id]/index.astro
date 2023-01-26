@@ -11,11 +11,10 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const process = isDev ? quickTest() : JSON.parse(data.process);
-const proposalPhaseStart = process.proposalDateRange[0]
-const proposalPhaseEnd = process.proposalDateRange[1]
-
-const votingPhaseStart = process.votingDateRange[0]
-const votingPhaseEnd = process.votingDateRange[1]
+const proposalPhaseStart = process.proposalDates[0];
+const proposalPhaseEnd = process.proposalDates[1];
+const votingPhaseStart = process.votingDates[0];
+const votingPhaseEnd = process.votingDates[1];
 switch (true) {
     case !process:
         return Astro.redirect("/");

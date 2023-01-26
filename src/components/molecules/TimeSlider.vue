@@ -4,13 +4,15 @@
   import { process, Process } from 'stores/processStore';
 
   const props = defineProps({
-      keyValue: {
+      phase: {
           type: String,
           required: true
       }
   })
 
   const $process = useStore(process)
+
+  const keyValue = `${props.phase}Duraton`
 
   const convertToTime = (unit: string, milliseconds: number) => {
     switch (unit) {
@@ -28,7 +30,7 @@
 
 const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
   const val = Number(ev.target.value)
-  const timeLeft = $process.value[props.keyValue];
+  const timeLeft = $process.value[`${props.phase}Duration`];
 
   let days = convertToTime('days', timeLeft)
   let hours = convertToTime('hours', timeLeft)
@@ -45,7 +47,7 @@ const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
       break
   }
   const ms = getMilliseconds(days, hours, minutes)
-  process.setKey(props.keyValue as keyof Process, ms)
+  process.setKey(keyValue as keyof Process, ms)
 }
 
 </script>

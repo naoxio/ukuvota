@@ -19,8 +19,8 @@ const quick = isDev ? quickTest() : JSON.parse(data.process);
 <BaseLayout>
     <div class="card bg-base-200 px-4 my-4 py-6">
         <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('process.proposalPhase.endTime') || '' } timeleft={ quick.proposalEnd } />
-            <Countdown fromtime={new Date(quick.proposalEnd).getTime()} label={ t('process.votingPhase.lastFor') || '' } timeleft={ quick.votingEnd }/>
+            <Countdown label={ t('process.proposalPhase.endTime') || '' } timeleft={ quick.proposalDates[0] } />
+            <Countdown fromtime={new Date(quick.proposalDates[1]).getTime()} label={ t('process.votingPhase.lastFor') || '' } timeleft={ quick.votingEnd }/>
         </ProcessInfo>
         <proposal-list>
             <div class="proposals">

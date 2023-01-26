@@ -12,6 +12,9 @@
     "continue": "Continue",
     "back": "Back"
   },
+  "loading": "Loading",
+  "calendar": "Calendar",
+  "slider": "Slider",
   "not-found": "Not found",
   "process": {
     "startProcess": "Start a process",

@@ -10,22 +10,24 @@ const processId = Astro.params.id;
 const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
-const quick = isDev ? quickTest() : JSON.parse(data.process);
-const proposalTime = +new Date(quick.proposalEnd) - +new Date();
-const votingTime = +new Date(quick.votingEnd) - +new Date();
+const process = isDev ? quickTest() : JSON.parse(data.process);
+const proposalPhaseStart = process.proposalDates[0];
+const proposalPhaseEnd = process.proposalDates[1];
+const votingPhaseStart = process.votingDates[0];
+const votingPhaseEnd = process.votingDates[1];
 switch (true) {
-    case !quick:
+    case !process:
         return Astro.redirect("/");
-    case proposalTime > 0:
+    case proposalPhaseStart > +new Date() && proposalPhaseEnd < +new Date():
         return Astro.redirect(`${url.origin}/process/${processId}/proposals`);
-    case votingTime > 0:
+    case votingPhaseStart > +new Date() && votingPhaseEnd < +new Date():
         return Astro.redirect(`${url.origin}/process/${processId}/voting`);
-    default:
+    case +new Date() > votingPhaseEnd:
         return Astro.redirect(`${url.origin}/process/${processId}/results`);
 }
 ---
 
 <BaseLayout>
-
+    
 </BaseLayout>
 

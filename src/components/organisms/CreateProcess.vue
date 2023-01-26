@@ -2,14 +2,15 @@
 import i18next, { t } from 'i18next';
 import { process } from '../../stores/processStore';
 
-import TimeSelector from "organisms/TimeSelector.vue"
 import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
 import Modal from "molecules/Modal.vue";
 import ContentDoc from "atoms/ContentDoc.vue"
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
-import { ref, nextTick, onMounted } from 'vue'
+import TimeSelector from "molecules/TimeSelector.vue";
+
+import { ref, nextTick } from 'vue'
 
 const $process = useStore(process)
 
@@ -73,6 +74,13 @@ const createProcess = async() => {
   }
 }
 
+
+
+const changeSelector = (ev) => {
+    if (ev.target.name) {
+        process.setKey('slideSelector', ev.target.name === 'slider')
+    }
+}
 </script>
 
 <template>
@@ -107,7 +115,20 @@ const createProcess = async() => {
     </div>
   </div>
   <hr/>
-  <slot/>
+
+  <div class="py-2">
+    <div class="flex justify-between items-center flex-wrap">
+        <h2 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h2>
+        <h2 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h2>
+    </div>
+
+    <div class="tabs" @click="(ev) => changeSelector(ev)">
+      <a name="slider" class="tab tab-bordered" :class="{ 'tab-active' : $process.slideSelector }">{{ t('slider') }}</a> 
+      <a name="calendar" class="tab tab-bordered" :class="{ 'tab-active' : !$process.slideSelector }">{{ t('calendar') }}</a> 
+    </div>
+    <TimeSelector phase="proposal"/>
+    <TimeSelector phase="voting"/>
+  </div>
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
     <h2 class="pt-2">{{ t('process.proposals') }}</h2>
