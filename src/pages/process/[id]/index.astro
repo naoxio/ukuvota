@@ -1,7 +1,10 @@
 ---
-import { changeLanguage } from "i18next";
+import { changeLanguage, t } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
 import { quickTest } from "composables/quickTestData";
+import ProcessInfo from "organisms/ProcessInfo.astro"
+import Countdown from "molecules/Countdown.astro";
+import { format } from 'date-fns'
 
 changeLanguage("en");
 
@@ -11,23 +14,52 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const process = isDev ? quickTest() : JSON.parse(data.process);
-const proposalPhaseStart = process.proposalDates[0];
-const proposalPhaseEnd = process.proposalDates[1];
-const votingPhaseStart = process.votingDates[0];
-const votingPhaseEnd = process.votingDates[1];
+const proposalStart = process.proposalDates[0];
+const proposalEnd = process.proposalDates[1];
+const votingStart = process.votingDates[0];
+const votingEnd = process.votingDates[1];
+
 switch (true) {
     case !process:
         return Astro.redirect("/");
-    case proposalPhaseStart > +new Date() && proposalPhaseEnd < +new Date():
+    case proposalStart > +new Date() && proposalEnd < +new Date():
         return Astro.redirect(`${url.origin}/process/${processId}/proposals`);
-    case votingPhaseStart > +new Date() && votingPhaseEnd < +new Date():
+    case votingStart > +new Date() && votingEnd < +new Date():
         return Astro.redirect(`${url.origin}/process/${processId}/voting`);
-    case +new Date() > votingPhaseEnd:
+    case +new Date() > votingEnd:
         return Astro.redirect(`${url.origin}/process/${processId}/results`);
 }
+console.log(proposalStart > +new Date())
 ---
 
 <BaseLayout>
+    <ProcessInfo 
+        title={process.title}
+        description={process.description}
+        weighting={process.weighting}
+        shareable={true}
+        >
+        { +new Date() < proposalStart &&
+            <div>
+                <h3>proposal phase will start at</h3>
+                <p>{  format(new Date(proposalStart), 'E MMM d y hh:mm zzzz')}</p>
+            </div>
+        }
+        { +new Date() < proposalEnd &&
+            <Countdown start={proposalStart} label='proposal phase will last for at' end={ proposalEnd }/>
+        }
+        { +new Date() < votingStart &&
+            <div>
+                <h3>voting phase will start at</h3>
+                <p>{  format(new Date(votingStart), 'E MMM d y hh:mm zzzz')}</p>
+            </div>
+
+        }
+        { +new Date() < votingEnd &&
+            <Countdown start={votingStart} label='voting phase will last for at' end={ votingEnd }/>
+        }
+
+    </ProcessInfo>
     
 </BaseLayout>
 

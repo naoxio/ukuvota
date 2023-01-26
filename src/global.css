@@ -43,7 +43,6 @@ li {
     display: list-item;
 }
 
-
 .dp__theme_dark {
     --dp-primary-color: indianred !important;
     --dp-disabled-color: #444 !important;

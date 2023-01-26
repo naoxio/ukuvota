@@ -2,11 +2,12 @@
 import { t } from "i18next";
 
 interface Props {
-    timeleft: String,
     label?: String,
-    fromtime?: Number,
+    start: Number,
+    end: Number,
+
 }
-const { timeleft, label, fromtime } = Astro.props;
+const { label, start, end } = Astro.props;
 
 const timeUnits = [
   { id: 'days', label: t('time.days') },
@@ -24,7 +25,7 @@ const timeUnits = [
         display: none
     }
 </style>
-<quick-counter data-timeleft={timeleft} data-fromtime={fromtime} class="flex flex-col justify-center items-center w-60">
+<quick-counter data-start={start} data-end={end} class="flex flex-col justify-center items-center w-60">
     <h3>{ label }</h3>
     <div class="flex justify-center items-center">
         { timeUnits.map(timeUnit => (
@@ -37,22 +38,19 @@ const timeUnits = [
 </quick-counter>
 <script>
     class QuickCounter extends HTMLElement {
-        updateTime = false
-        timeleft = 0
-        fromtime =  null
 
         constructor() {
             super()
+            const start = Number(this.dataset.start);
+            const end = Number(this.dataset.end);
             const el_days = this.querySelector('#days')
             const el_hours = this.querySelector('#hours')
             const el_minutes = this.querySelector('#minutes')
             const el_seconds = this.querySelector('#seconds')
-            this.fromtime = this.dataset.fromtime;
-            this.timeleft = +new Date(this.dataset.timeleft);
-            let updateTime = this.fromtime ? false : true
+            let updateTime = +new Date() > start
             const countdown = () => {
-                let timestamp = this.fromtime ? this.fromtime : +new Date()
-                let time = (this.timeleft - timestamp) / 1000
+                let timestamp = start ? start : +new Date()
+                let time = (end - timestamp) / 1000
                 time = Math.abs(time)
                 let seconds = time % 60
                 time = (time - seconds) / 60
@@ -68,6 +66,7 @@ const timeUnits = [
                 minutes = Math.floor(minutes)
                 seconds = Math.floor(seconds)
 
+                console.log(days)
                 el_days.className = days > 0 ? 'visible' : 'hidden'
                 el_hours.className = hours > 0 ? 'visible' : 'hidden'
                 el_minutes.className = minutes > 0 ? 'visible' : 'hidden'
