@@ -31,7 +31,8 @@ const menu = [
 
 const selected = (item: any) => {
   const pathname = Astro.url.pathname
-  if (pathname.includes(item.path) && item.path !== '/' || item.path === pathname)
+  
+  if (pathname.includes(item.path) && item.path !== '/' || (item.path === pathname || item.path + i18next.language === pathname))
     return 'selected'
   else
     return ''
@@ -54,7 +55,7 @@ const selected = (item: any) => {
   .selected {
     color:indianred !important;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 400px) {
     .label {
       display: none;
     }
