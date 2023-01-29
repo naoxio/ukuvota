@@ -1,3 +1,5 @@
+import logo from "assets/logo.png";
+
 export function loadingLogo() {
     return `
 <style>
@@ -16,6 +18,6 @@ export function loadingLogo() {
   }
 </style>
 <center> 
-  <img src="/src/assets/logo.png" class="loading" width="64px" />
+  <img src="${logo}" class="loading" width="64px" />
 </center>`
 }
