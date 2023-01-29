@@ -83,9 +83,9 @@ if (pathname !== url.pathname)
 
 <script>
     import { IProposal } from '../../../../shared/interfaces/IProposal'
-
     import { addAlert } from 'composables/addAlert'
     import { processTest } from "composables/processTestData";
+    
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
