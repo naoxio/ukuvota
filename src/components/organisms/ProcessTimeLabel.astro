@@ -14,16 +14,16 @@ const { phase, dates} = Astro.props;
 ---
 
 <div class="flex flex-col">
-    { +new Date() < dates[0] &&
-        <FlexLabel title={ t(`phases.${phase}.startAt`) }>{  format(new Date(dates[0]), 'E MMM d y hh:mm zzzz')}</FlexLabel>
+    { 
+        +new Date() < dates[0] ? (
+            <>
+                <FlexLabel title={ t(`phases.${phase}.startAt`) }>{  format(new Date(dates[0]), 'E MMM d y hh:mm zzzz')}</FlexLabel>
+                <Countdown dates={dates} tillStart={true} />
+                <Countdown dates={dates} label={ t(`phases.${phase}.lastFor`) } />
+            </>
+        ) : +new Date() < dates[1] ? (
+            <Countdown dates={dates} label={ t(`phases.${phase}.EndIn`) } />
+        ) : null
     }
-    { +new Date() < dates[0] &&
-        <Countdown dates={dates} tillStart={true} />
-    }
-    { +new Date() < dates[0] &&
-        <Countdown dates={dates} label={ t(`phases.${phase}.lastFor`) } />
-    }
-    { +new Date() > dates[0] && +new Date() < dates[1] &&
-        <Countdown dates={dates} label={ t(`phases.${phase}.EndIn`) } />
-    }
+
 </div>

@@ -10,8 +10,12 @@ const currentLanguage = i18next.language;
 
 const { pathname } = Astro.url;
 
-
-const menu = [
+interface MenuItem {
+  path: string
+  icon: string
+  label: String
+}
+const menu: MenuItem[] = [
   {
     path: '/',
     icon: 'campsite',
@@ -29,13 +33,23 @@ const menu = [
   }
 ]
 
-const selected = (item: any) => {
-  const pathname = Astro.url.pathname
-  
-  if (pathname.includes(item.path) && item.path !== '/' || (item.path === pathname || item.path + i18next.language === pathname))
-    return 'selected'
-  else
-    return ''
+
+const selected = (item: MenuItem) => {
+  const pathname = Astro.url.pathname;
+
+  if (pathname.includes(item.path) && item.path !== '/') {
+    return 'selected';
+  }
+
+  if (item.path === pathname) {
+    return 'selected';
+  }
+
+  if (item.path + i18next.language === pathname) {
+    return 'selected';
+  }
+
+  return '';
 }
 
 ---
