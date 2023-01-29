@@ -10,6 +10,33 @@ const currentLanguage = i18next.language;
 
 const { pathname } = Astro.url;
 
+
+const menu = [
+  {
+    path: '/',
+    icon: 'campsite',
+    label: 'home',
+  },
+  {
+    path: '/about',
+    icon: 'book',
+    label: 'about',
+  },
+  {
+    path: '/donate',
+    icon: 'favorite',
+    label: 'donate',
+  }
+]
+
+const selected = (item: any) => {
+  const pathname = Astro.url.pathname
+  if (pathname.includes(item.path) && item.path !== '/' || item.path === pathname)
+    return 'selected'
+  else
+    return ''
+}
+
 ---
 <style is:inline>
   .sun { display: none; }
@@ -18,14 +45,37 @@ const { pathname } = Astro.url;
   :global(.dark) .sun { display: block; }
   :global(.dark) .moon { display: none; }
 
+  .btn-link {
+    color: inherit;
+  }
+  .btn-link:hover{
+    color: indianred;
+  }
+  .selected {
+    color:indianred !important;
+  }
+  @media screen and (max-width: 600px) {
+    .label {
+      display: none;
+    }
+  }
+  
 </style>
 
 <div class="flex flex-col">
   <div class="flex justify-center items-center">
-    <div>{ t('buttons.home') }</div> 
-    <div>{ t('buttons.about') }</div> 
-    <div>{ t('buttons.donate') }</div> 
+    { menu.map((item) => (
+      <>
+        <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
+          <span class="flex items-center"> 
+            <Icon width="22" name={item.icon}/>
+            <p class="label pl-1">{t('buttons.' + item.label)}</p>
+          </span>
+        </a>
+      </>
+    ))}
   </div>
+  <br/>
   <div class="flex justify-center items-center">
     <select class="select select-xs mx-2" onchange="location = this.value">
       {
