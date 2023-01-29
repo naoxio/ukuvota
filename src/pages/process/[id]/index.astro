@@ -1,10 +1,9 @@
 ---
-import { changeLanguage, t } from "i18next";
+import i18next, { changeLanguage, t } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
-import { quickTest } from "composables/quickTestData";
-import ProcessInfo from "organisms/ProcessInfo.astro"
-import Countdown from "molecules/Countdown.astro";
-import { format } from 'date-fns'
+import { processTest } from "composables/processTestData";
+import ProcessInfo from "organisms/ProcessInfo.astro";
+import { getProcessUrl } from "composables/getProcessUrl";
 
 changeLanguage("en");
 
@@ -13,23 +12,10 @@ const processId = Astro.params.id;
 const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
-const process = isDev ? quickTest() : JSON.parse(data.process);
-const proposalStart = process.proposalDates[0];
-const proposalEnd = process.proposalDates[1];
-const votingStart = process.votingDates[0];
-const votingEnd = process.votingDates[1];
-
-switch (true) {
-    case !process:
-        return Astro.redirect("/");
-    case proposalStart > +new Date() && proposalEnd < +new Date():
-        return Astro.redirect(`${url.origin}/process/${processId}/proposals`);
-    case votingStart > +new Date() && votingEnd < +new Date():
-        return Astro.redirect(`${url.origin}/process/${processId}/voting`);
-    case +new Date() > votingEnd:
-        return Astro.redirect(`${url.origin}/process/${processId}/results`);
-}
-console.log(proposalStart > +new Date())
+const process = isDev ? processTest() : JSON.parse(data.process);
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`)
 ---
 
 <BaseLayout>
@@ -38,28 +24,35 @@ console.log(proposalStart > +new Date())
         description={process.description}
         weighting={process.weighting}
         shareable={true}
-        >
-        { +new Date() < proposalStart &&
-            <div>
-                <h3>proposal phase will start at</h3>
-                <p>{  format(new Date(proposalStart), 'E MMM d y hh:mm zzzz')}</p>
-            </div>
-        }
-        { +new Date() < proposalEnd &&
-            <Countdown start={proposalStart} label='proposal phase will last for at' end={ proposalEnd }/>
-        }
-        { +new Date() < votingStart &&
-            <div>
-                <h3>voting phase will start at</h3>
-                <p>{  format(new Date(votingStart), 'E MMM d y hh:mm zzzz')}</p>
-            </div>
-
-        }
-        { +new Date() < votingEnd &&
-            <Countdown start={votingStart} label='voting phase will last for at' end={ votingEnd }/>
-        }
-
-    </ProcessInfo>
-    
+        proposalDates={process.proposalDates}
+        votingDates={process.votingDates}
+        />
 </BaseLayout>
 
+
+
+<script>
+    import { processTest } from "composables/processTestData";
+
+    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+    const isDev = processId === 'dev';
+
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const process = isDev ? processTest() : JSON.parse(data.process)
+    
+    const proposalStart = process.proposalDates[0]
+    const votingStart = process.votingDates[0]
+
+    const redirectToPage = (startTime, pageName) => {
+        if (+new Date() < startTime) {
+            const time = startTime - +new Date();
+            setTimeout(() => {
+                window.location.href = `${location.origin}/process/${processId}/${pageName}`;
+            }, time);
+        }
+    }
+    redirectToPage(proposalStart, 'proposals')
+    redirectToPage(votingStart, 'voting')
+
+</script>

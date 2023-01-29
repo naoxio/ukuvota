@@ -2,7 +2,7 @@
 import BaseLayout from "templates/BaseLayout.astro";
 import ProcessInfo from "organisms/ProcessInfo.astro";
 import { Icon } from "astro-icon";
-import { quickTest } from "composables/quickTestData";
+import { processTest } from "composables/processTestData";
 import { t, changeLanguage } from "i18next";
 
 changeLanguage("de");
@@ -12,23 +12,20 @@ const { url } = Astro;
 const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
-const quick = isDev ? quickTest() : JSON.parse(data.process);
+const process = isDev ? processTest() : JSON.parse(data.process);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-if (!("voters" in quick)) {
-    quick["voters"] = [];
+if (!("voters" in process)) {
+    process["voters"] = [];
 }
 ---
-
+<style>
+    .hide {
+        display: none;
+    }
+</style>
 <BaseLayout>
-
-    <style>
-        .hide {
-            display: none;
-        }
-
-    </style>
     <div class="card bg-base-200 px-6 my-4 py-6">
-        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}/>
+        <ProcessInfo title={process.title} description={process.description} weighting={process.weighting}/>
 
         <results-card>
             <div class="hide">
@@ -44,9 +41,9 @@ if (!("voters" in quick)) {
             <div class="tab-content hide">
                 <div class="screenshot-results">
                     <h2>{ t('process.results') }</h2>
-                    <h3><span class="voter-label">{ t('process.voters') }</span> <span class="num-voters">({ quick.voters.length })</span>:</h3>
+                    <h3><span class="voter-label">{ t('process.voters') }</span> <span class="num-voters">({ process.voters.length })</span>:</h3>
                     <div class="flex justify-around flex-wrap">
-                        { quick.voters.map((voter: any) => (
+                        { process.voters.map((voter: any) => (
                             <div id={voter.id} class="flex items-center p-2 voter">
                                 <input type="checkbox" checked class="checkbox checkbox-xs" />
                                 <span class="p-1 cursor-pointer select-none">
@@ -96,12 +93,12 @@ if (!("voters" in quick)) {
 <script>
     import download from 'downloadjs'
     import { toPng } from 'html-to-image';
-    import { quickTest } from "composables/quickTestData";
+    import { processTest } from "composables/processTestData";
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
-    const quick = isDev ? quickTest() : JSON.parse(data.process)
+    const process = isDev ? processTest() : JSON.parse(data.process)
 
     const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
@@ -133,12 +130,12 @@ if (!("voters" in quick)) {
         emojis = this.querySelectorAll('svg.emoji')
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
-                const quick_voter = quick.voters.find((vote: any) => vote.id === voter.id)
-                const matchingVote = quick_voter.votes.find((vote: any) => vote.proposalId === proposalId);
+                const process_voter = process.voters.find((vote: any) => vote.id === voter.id)
+                const matchingVote = process_voter.votes.find((vote: any) => vote.proposalId === proposalId);
                 if (matchingVote) {
                     let v = matchingVote.vote;
                     if (v < 0)
-                        v *= quick.weighting;
+                        v *= process.weighting;
                     return sum + v;
                 }
             
@@ -157,14 +154,14 @@ if (!("voters" in quick)) {
         getAverageEmoji(total: number, voters: any) {
             let i = this.getAverageScore(total, voters)
             if (i < 0)
-                i /= quick.weighting;
+                i /= process.weighting;
             i = Math.round(i)
             return this.emojis[i + 3];
         };
         
         updateTable() {
             const selectedVoters = this.getSelectedVoters();
-            const proposals = quick.proposals;
+            const proposals = process.proposals;
             this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`;
             proposals.forEach((proposal: any) => {
                 proposal["total"] = this.getTotal(proposal.id, selectedVoters);
@@ -217,18 +214,18 @@ if (!("voters" in quick)) {
 
         getMarkdownFile() {
             const selectedVoters = this.getSelectedVoters();
-            const title = quick.title;
-            const processId = quick.id;
-            const description = quick.description;
+            const title = process.title;
+            const processId = process.id;
+            const description = process.description;
             const voterLabel = this.querySelector('span.voter-label').innerHTML;
             const numVoters = this.querySelector('span.num-voters').innerHTML;
             const selectedVotersString = selectedVoters.map((voter: any) => {
-                const quickVoter = quick.voters.find((vote: any) => vote.id === voter.id);
-                return `${quickVoter.name} `;
+                const processVoter = process.voters.find((vote: any) => vote.id === voter.id);
+                return `${processVoter.name} `;
             }).join('');
             const tableRowOne = this.querySelector('tr.table-row-one');
             const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
-            const proposals = quick.proposals.map((proposal: any, index: number) => {
+            const proposals = process.proposals.map((proposal: any, index: number) => {
                 const averageScore = this.getAverageScore(proposal.total, selectedVoters);
                 return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
             }).join('\n');
@@ -284,7 +281,7 @@ if (!("voters" in quick)) {
                 const theme = localStorage.getItem("theme");
 
                 toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
-                    download(dataUrl, quick.title + '.png');
+                    download(dataUrl, process.title + '.png');
                 });
             });
         }

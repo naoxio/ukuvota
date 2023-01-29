@@ -53,7 +53,7 @@ const createProcess = async() => {
   }
   let res: any, json: any;
 
-  if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev/proposals`
+  if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev`
   else {
     try {
       res = await fetch(`${location.origin}/api/process`, {
@@ -70,11 +70,9 @@ const createProcess = async() => {
     process.setKey('title', '')
     process.setKey('description', '')
 
-    window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}/proposals`
+    window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}`
   }
 }
-
-
 
 const changeSelector = (ev) => {
     if (ev.target.name) {

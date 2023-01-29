@@ -1,11 +1,11 @@
 import { IProposal } from "./IProposal";
 import { IVoter } from "./IVoter";
 
-export interface IQuick {
+export interface IProcess {
   title: string;
   description: string;
-  proposalEnd: string;
-  votingEnd: string;
+  proposalDates: number[];
+  votingDates: number[];
   strategy: string;
   weighting: string;
   proposals: IProposal[];

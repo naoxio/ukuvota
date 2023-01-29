@@ -16,6 +16,6 @@ export function loadingLogo() {
   }
 </style>
 <center> 
-  <img src="/src/assets/logo.png" class="loading" width="128px" />
+  <img src="/src/assets/logo.png" class="loading" width="64px" />
 </center>`
 }

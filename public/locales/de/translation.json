@@ -1,4 +1,17 @@
 {
+  "phases": {
+    "startIn": "in",
+    "proposal": {
+      "startAt": "Die Vorschlagsphase beginnt am",
+      "lastFor": "Die Vorschlagsphase dauert",
+      "EndIn": "Die Vorschlagsphase endet in"
+    },
+    "voting": {
+      "startAt": "Die Abstimmungsphase beginnt am",
+      "lastFor": "Die Abstimmungsphase dauert",
+      "EndIn": "Die Abstimmungsphase endet in"
+    }
+  },
   "tagline": "Die beste Lösung finden",
   "buttons": {
     "about": "Über",

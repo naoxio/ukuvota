@@ -1,13 +1,13 @@
 ---
 import { t } from "i18next";
+import FlexLabel from "atoms/FlexLabel.astro"
 
 interface Props {
-    label?: String,
-    start: Number,
-    end: Number,
-
+    label?: string,
+    dates: number[],
+    tillStart?: boolean,
 }
-const { label, start, end } = Astro.props;
+const { label, dates, tillStart } = Astro.props;
 
 const timeUnits = [
   { id: 'days', label: t('time.days') },
@@ -25,32 +25,35 @@ const timeUnits = [
         display: none
     }
 </style>
-<quick-counter data-start={start} data-end={end} class="flex flex-col justify-center items-center w-60">
-    <h3>{ label }</h3>
-    <div class="flex justify-center items-center">
+<quick-counter data-dates={dates} data-till={tillStart}>
+    <FlexLabel title={ label }>
         { timeUnits.map(timeUnit => (
         <div id={timeUnit.id} class="hidden">
             <span></span>
             {timeUnit.label}&nbsp;
         </div>
         ))}
-    </div>
+    </FlexLabel>
 </quick-counter>
 <script>
-    class QuickCounter extends HTMLElement {
 
+    class QuickCounter extends HTMLElement {
+        hide() {
+            this.innerHTML = ''
+        }
         constructor() {
             super()
-            const start = Number(this.dataset.start);
-            const end = Number(this.dataset.end);
+            const dates = this.dataset.dates.split(',').map((x) => parseInt(x));
+            const tillStart = this.dataset.till === ''
             const el_days = this.querySelector('#days')
             const el_hours = this.querySelector('#hours')
             const el_minutes = this.querySelector('#minutes')
             const el_seconds = this.querySelector('#seconds')
-            let updateTime = +new Date() > start
+            let updateTime = !tillStart && dates[0] < +new Date()
             const countdown = () => {
-                let timestamp = start ? start : +new Date()
-                let time = (end - timestamp) / 1000
+                if (tillStart && dates[0] < +new Date() + 1000) { this.hide(); return }
+                let time = tillStart ? (+new Date() - dates[0]) / 1000 : updateTime ? (dates[1] - +new Date()) / 1000 : (dates[1] - dates[0]) / 1000
+                if (!tillStart && time <= 1) { this.hide(); return }
                 time = Math.abs(time)
                 let seconds = time % 60
                 time = (time - seconds) / 60
@@ -66,7 +69,6 @@ const timeUnits = [
                 minutes = Math.floor(minutes)
                 seconds = Math.floor(seconds)
 
-                console.log(days)
                 el_days.className = days > 0 ? 'visible' : 'hidden'
                 el_hours.className = hours > 0 ? 'visible' : 'hidden'
                 el_minutes.className = minutes > 0 ? 'visible' : 'hidden'
@@ -76,8 +78,8 @@ const timeUnits = [
                 el_hours.querySelector('span').innerHTML = String(hours)
                 el_minutes.querySelector('span').innerHTML = String(minutes)
                 el_seconds.querySelector('span').innerHTML = String(seconds)
-                if (updateTime)
-                    setTimeout(countdown, 1000)
+
+                if (updateTime || tillStart) setTimeout(countdown, 1000)
             }
             setTimeout(countdown, 1000)
         

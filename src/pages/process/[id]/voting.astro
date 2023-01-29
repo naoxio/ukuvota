@@ -1,12 +1,13 @@
 ---
 import Alert from "molecules/Alert.astro";
-import Countdown from "molecules/Countdown.astro";
 import BaseLayout from "templates/BaseLayout.astro";
 import ProcessInfo from "organisms/ProcessInfo.astro";
 import AlertManager from "molecules/AlertManager.astro";
-import { t, changeLanguage } from "i18next";
+import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
-import { quickTest } from "composables/quickTestData";
+import { processTest } from "composables/processTestData";
+import { getProcessUrl } from "composables/getProcessUrl";
+
 
 changeLanguage("en");
 
@@ -15,8 +16,11 @@ const { url } = Astro;
 const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
-const quick = isDev ? quickTest() : JSON.parse(data.process);
+const process = isDev ? processTest() : JSON.parse(data.process);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`)
 ---
 <style>
     .gray {
@@ -37,9 +41,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 </style>
 <BaseLayout>
     <div class="card bg-base-200">
-        <ProcessInfo title={quick.title} description={quick.description} weighting={quick.weighting}>
-            <Countdown label={ t('process.votingEndTime') || ''} timeleft={ quick.votingEnd } />
-        </ProcessInfo>
+        <ProcessInfo title={process.title} description={process.description} weighting={process.weighting} votingDates={process.votingDates} />
         <voting-list>
             <div class="proposal-list">
                 <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
@@ -83,12 +85,12 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     import { IProposal } from '../../../../shared/interfaces/IProposal'
 
     import { addAlert } from 'composables/addAlert'
-    import { quickTest } from "composables/quickTestData";
+    import { processTest } from "composables/processTestData";
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
     const data = isDev ? null : await res.json();
-    const quick = isDev ? quickTest() : JSON.parse(data.process)
+    const process = isDev ? processTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
         alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
@@ -160,7 +162,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
             this.proposal_list.innerHTML = ""
 
-            quick.proposals.forEach((proposal: IProposal) => {
+            process.proposals.forEach((proposal: IProposal) => {
                 this.addProposal(proposal)
             });
 
@@ -171,8 +173,8 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     customElements.define('voting-list', VotingList)
 
     const checkTime = () => {
-        const time =  +new Date(quick.votingEnd) - +new Date()
-        if (time <= 0)
+        const time = process.votingDates[1] - +new Date()
+        if (time < 0)
             window.location.href = `${window.location.origin}/process/${processId}/results`
         else
             setTimeout(checkTime, time)

@@ -1,12 +1,12 @@
 ---
-import { Icon } from 'astro-icon'
 import { t } from 'i18next';
 
 import weightingOptions from "composables/weightingOptions";
 import Modal from 'molecules/Modal.astro';
 import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
-
+import FlexLabel from 'atoms/FlexLabel.astro';
+import ProcessTimeLabel from 'organisms/ProcessTimeLabel.astro';
 
 const { url } = Astro;
 
@@ -14,10 +14,13 @@ interface Props {
     title?: string,
     description?: string,
     weighting?: string,
-    shareable?: boolean
+    shareable?: boolean,
+    proposalDates?: number[],
+    votingDates?: number[]
 }
 
-const { title, description, weighting, shareable = true } = Astro.props;
+const { title, description, weighting, shareable = true, proposalDates, votingDates} = Astro.props;
+
 
 const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
@@ -26,17 +29,21 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 <div class="flex flex-col pb-3">
     <h1>{ title }</h1>
     <p>{ description }</p>
-    <div id="infoCard" class="flex flex-wrap items-center justify-center">
-        <slot/>
-        <div class="flex flex-col justify-center items-center w-60">
-            <h3>{ t('process.weighting') }</h3>
-            <div class="flex items-center">
-                {weight}
-                <Modal id="weightingInfo">
-                    <h3>{ t('process.weighting') }</h3>
-                    <ContentDoc file_name="NegativeScoreWeighting"/>
-                </Modal>
-            </div>
+    <div id="infoCard">
+        <div class="flex flex-wrap items-center justify-center">
+            { proposalDates && <ProcessTimeLabel phase="proposal" dates={proposalDates}/> }
+            { votingDates && <ProcessTimeLabel phase="voting" dates={votingDates}/> }
+        </div>
+        <div class="flex flex-wrap items-center justify-center">
+            <FlexLabel title={ t('process.weighting') }>
+                <div class="flex items-center">
+                    {weight}
+                    <Modal id="weightingInfo">
+                        <h3>{ t('process.weighting') }</h3>
+                        <ContentDoc file_name="NegativeScoreWeighting"/>
+                    </Modal>
+                </div>
+            </FlexLabel>
         </div>
     </div>
     { shareable && 
@@ -60,14 +67,13 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 
 <script>
-const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
-if (shareableUrl) {
-    shareableUrl.addEventListener('click', () => {
-        shareableUrl.focus()
-        shareableUrl.select()
-        shareableUrl.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(shareableUrl.value);
-    })
-}
-
+    const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
+    if (shareableUrl) {
+        shareableUrl.addEventListener('click', () => {
+            shareableUrl.focus()
+            shareableUrl.select()
+            shareableUrl.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(shareableUrl.value);
+        })
+    }
 </script>

@@ -1,7 +1,9 @@
 ---
-import { changeLanguage } from "i18next";
+import i18next, { changeLanguage, t } from "i18next";
 import BaseLayout from "templates/BaseLayout.astro";
-import { quickTest } from "composables/quickTestData";
+import { processTest } from "composables/processTestData";
+import ProcessInfo from "organisms/ProcessInfo.astro";
+import { getProcessUrl } from "composables/getProcessUrl";
 
 changeLanguage("de");
 
@@ -10,24 +12,51 @@ const processId = Astro.params.id;
 const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
-const process = isDev ? quickTest() : JSON.parse(data.process);
-const proposalPhaseStart = process.proposalDates[0];
-const proposalPhaseEnd = process.proposalDates[1];
-const votingPhaseStart = process.votingDates[0];
-const votingPhaseEnd = process.votingDates[1];
-switch (true) {
-    case !process:
-        return Astro.redirect("/");
-    case proposalPhaseStart > +new Date() && proposalPhaseEnd < +new Date():
-        return Astro.redirect(`${url.origin}/process/${processId}/proposals`);
-    case votingPhaseStart > +new Date() && votingPhaseEnd < +new Date():
-        return Astro.redirect(`${url.origin}/process/${processId}/voting`);
-    case +new Date() > votingPhaseEnd:
-        return Astro.redirect(`${url.origin}/process/${processId}/results`);
-}
+const process = isDev ? processTest() : JSON.parse(data.process);
+const purl = getProcessUrl(process, processId);
+console.log(url.pathname);
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${purl}`;
+console.log(pathname === url.pathname);
+console.log(`${url.origin}${pathname});
+console.log(purl);
+`);
 ---
 
 <BaseLayout>
-    
+    <ProcessInfo 
+        title={process.title}
+        description={process.description}
+        weighting={process.weighting}
+        shareable={true}
+        proposalDates={process.proposalDates}
+        votingDates={process.votingDates}
+        />
 </BaseLayout>
 
+
+
+<script>
+    import { processTest } from "composables/processTestData";
+
+    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+    const isDev = processId === 'dev';
+
+    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
+    const data = isDev ? null : await res.json();
+    const process = isDev ? processTest() : JSON.parse(data.process)
+    
+    const proposalStart = process.proposalDates[0]
+    const votingStart = process.votingDates[0]
+
+    const redirectToPage = (startTime, pageName) => {
+        if (+new Date() < startTime) {
+            const time = startTime - +new Date();
+            setTimeout(() => {
+                window.location.href = `${location.origin}/process/${processId}/${pageName}`;
+            }, time);
+        }
+    }
+    redirectToPage(proposalStart, 'proposals')
+    redirectToPage(votingStart, 'voting')
+
+</script>
