@@ -1,9 +1,9 @@
 ---
 import { Icon } from "astro-icon";
-import { t, changeLanguage } from "i18next";
-import BaseLayout from "templates/BaseLayout.astro";
-import ProcessInfo from "organisms/ProcessInfo.astro";
+import i18next, { t, changeLanguage } from "i18next";
+import ProcessLayout from "templates/ProcessLayout.astro";
 import { processTest } from "composables/processTestData";
+import { getProcessUrl } from "composables/getProcessUrl";
 
 changeLanguage("de");
 
@@ -13,49 +13,43 @@ const isDev = processId === "dev";
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
 const data = isDev ? null : await res.json();
 const process = isDev ? processTest() : JSON.parse(data.process);
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`);
 ---
 
-<BaseLayout>
-    <div class="card bg-base-200 px-4 my-4 py-6">
-        <ProcessInfo
-            title={process.title}
-            description={process.description}
-            weighting={process.weighting}
-            proposalDates={process.proposalDates}
-            votingDates={process.votingDates}
-            />
-        <proposal-list>
-            <div class="proposals">
-                <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
-                    <div class="view flex justify-between items-center">
-                        <div class="flex flex-col">
-            
-                        </div>
-                        <button class="btn btn-circle btn-ghost p-2 btn-md">
-                            <Icon name="edit"/>
-                        </button>
+<ProcessLayout process={process}>
+    <proposal-list>
+        <div class="proposals">
+            <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
+                <div class="view flex justify-between items-center">
+                    <div class="flex flex-col">
+        
                     </div>
-                    <div class="edit flex justify-between items-center" style="display: none;">
-                        <div class="content flex flex-col w-full">
-                            <b>{ t('process.proposal') }</b>
-                            <input type="text" class="input input-bordered input-sm my-2"/>
-                            <label>{ t('process.description') }</label>
-                            <input type="text" class="input input-bordered input-sm my-2"/>
-                        </div>
-                        <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
-                            <Icon name="save"/>
-                        </button>
+                    <button class="btn btn-circle btn-ghost p-2 btn-md">
+                        <Icon name="edit"/>
+                    </button>
+                </div>
+                <div class="edit flex justify-between items-center" style="display: none;">
+                    <div class="content flex flex-col w-full">
+                        <b>{ t('process.proposal') }</b>
+                        <input type="text" class="input input-bordered input-sm my-2"/>
+                        <label>{ t('process.description') }</label>
+                        <input type="text" class="input input-bordered input-sm my-2"/>
                     </div>
+                    <button class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+                        <Icon name="save"/>
+                    </button>
                 </div>
             </div>
-            <div class="text-center mt-2">
-                <button id="add-proposal" class="btn btn-circle p-2" >
-                    <Icon name="add"/>
-                </button>
-            </div>
-        </proposal-list> 
-    </div>
-</BaseLayout>
+        </div>
+        <div class="text-center mt-2">
+            <button id="add-proposal" class="btn btn-circle p-2" >
+                <Icon name="add"/>
+            </button>
+        </div>
+    </proposal-list> 
+</ProcessLayout>
 
 <script>
     import { processTest } from "composables/processTestData";
@@ -198,7 +192,7 @@ const process = isDev ? processTest() : JSON.parse(data.process);
 
 
     const checkTime = () => {
-        const time =  +new Date(process.proposalDates[1]) - +new Date()
+        const time =  process.proposalDates[1] - +new Date()
         if (time <= 0)
             window.location.href = `${window.location.origin}/process/${processId}/voting`
         else

@@ -1,0 +1,24 @@
+---
+import BaseLayout from 'templates/BaseLayout.astro'
+import ProcessInfo from 'organisms/ProcessInfo.astro'
+import { IProcess } from '../../../shared/interfaces/IProcess'
+
+interface Props {
+    process: IProcess,
+}
+
+
+const {process} = Astro.props;
+
+---
+
+<BaseLayout>
+    <ProcessInfo
+        title={process.title}
+        description={process.description}
+        weighting={process.weighting}
+        proposalDates={process.proposalDates}
+        votingDates={process.votingDates}
+        />
+    <slot/>
+</BaseLayout>

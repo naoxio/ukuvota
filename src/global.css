@@ -21,6 +21,12 @@ html, body {
 main {
     padding: 2rem;
 }
+a {
+    color: indianred;
+}
+a:hover {
+    color: #b63838;
+}
 .link, .link:hover, .btn, .btn:hover  {
     text-decoration: none;
 }

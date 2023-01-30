@@ -12,23 +12,19 @@ const { pathname } = Astro.url;
 
 interface MenuItem {
   path: string
-  icon: string
   label: String
 }
 const menu: MenuItem[] = [
   {
     path: '/',
-    icon: 'campsite',
     label: 'home',
   },
   {
     path: '/about',
-    icon: 'book',
     label: 'about',
   },
   {
     path: '/donate',
-    icon: 'favorite',
     label: 'donate',
   }
 ]
@@ -83,7 +79,6 @@ const selected = (item: MenuItem) => {
       <>
         <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
           <span class="flex items-center"> 
-            <Icon width="22" name={item.icon}/>
             <p class="label pl-1">{t('buttons.' + item.label)}</p>
           </span>
         </a>
