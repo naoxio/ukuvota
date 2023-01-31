@@ -18,7 +18,6 @@ import { t } from "i18next";
 
 <script>
     const lang = document.getElementsByTagName('html')[0].getAttribute('lang')
-    const pathname = window.location.pathname
     const logo: any = document.querySelector('img#logo')
     logo.addEventListener('click', () => {
         location.href = lang === 'en' ? '/' : '/' + lang

@@ -32,11 +32,9 @@ const selected = (item: MenuItem) => {
   if (pathname.includes(item.path) && item.path !== '/') {
     return 'selected';
   }
-
   if (item.path === pathname) {
     return 'selected';
   }
-
   if (item.path + i18next.language === pathname) {
     return 'selected';
   }

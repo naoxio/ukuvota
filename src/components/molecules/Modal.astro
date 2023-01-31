@@ -1,15 +1,16 @@
 ---
 interface Props {
     id: string
+    icon?: string
 
 }
-const { id } = Astro.props;
+const { id, icon = "information" } = Astro.props;
 
 import { Icon } from 'astro-icon'
 
 ---
 <label for={id} class="btn btn-ghost btn-sm btn-circle">
-  <Icon width="22" name="information"/>
+  <Icon width="22" name={icon}/>
 </label>
 
 <input type="checkbox" id={id} class="modal-toggle" />

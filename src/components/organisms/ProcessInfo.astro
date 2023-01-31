@@ -29,22 +29,20 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 <div class="flex flex-col pb-3">
     <h1>{ title }</h1>
     <p>{ description }</p>
+    <div class="flex justify-end items-center">
+        { t('process.weighting') }
+        {weight}
+        <Modal id="weightingInfo">
+            <h3>{ t('process.weighting') }</h3>
+            <ContentDoc file_name="NegativeScoreWeighting"/>
+        </Modal>
+    </div>
     <div id="infoCard">
         <div class="flex flex-wrap items-center justify-center">
             { proposalDates && <ProcessTimeLabel phase="proposal" dates={proposalDates}/> }
             { votingDates && <ProcessTimeLabel phase="voting" dates={votingDates}/> }
         </div>
-        <div class="flex flex-wrap items-center justify-center">
-            <FlexLabel title={ t('process.weighting') }>
-                <div class="flex items-center">
-                    {weight}
-                    <Modal id="weightingInfo">
-                        <h3>{ t('process.weighting') }</h3>
-                        <ContentDoc file_name="NegativeScoreWeighting"/>
-                    </Modal>
-                </div>
-            </FlexLabel>
-        </div>
+        
     </div>
     { shareable && 
     <div class="w-full pr-2">
@@ -53,7 +51,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
             <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
 
-            <Modal id="shareableQrCode">
+            <Modal id="shareableQrCode" icon="qr-code">
                 <h3>{ t('process.qrcode') }</h3>
                 <div class="flex justify-center">
                     <QRCode text="Astro.url.href" />
