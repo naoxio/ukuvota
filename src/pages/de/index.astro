@@ -2,12 +2,17 @@
 import BaseLayout from "templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
 import CreateProcess from "organisms/CreateProcess.vue";
+import ContentDoc from "atoms/ContentDoc.astro";
 
 changeLanguage("de");
 ---
 
 <BaseLayout>
-  <h2>{ t('process.startProcess') }</h2>
+  <div>
+    <h2>{ t('process.startProcess') }</h2>
+
+    <ContentDoc file_name="Introduction"/>
+  </div>
   <process-form>
     <CreateProcess client:only="vue"/>
   </process-form>
