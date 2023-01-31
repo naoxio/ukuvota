@@ -84,20 +84,6 @@ declare module 'astro:content' {
   collection: "de",
   data: any
 },
-"QuickFullStrategy.md": {
-  id: "QuickFullStrategy.md",
-  slug: "quickfullstrategy",
-  body: string,
-  collection: "de",
-  data: any
-},
-"QuickVotingStrategy.md": {
-  id: "QuickVotingStrategy.md",
-  slug: "quickvotingstrategy",
-  body: string,
-  collection: "de",
-  data: any
-},
 },
 "en": {
 "DefaultProposals.md": {
@@ -117,20 +103,6 @@ declare module 'astro:content' {
 "NegativeScoreWeighting.md": {
   id: "NegativeScoreWeighting.md",
   slug: "negativescoreweighting",
-  body: string,
-  collection: "en",
-  data: any
-},
-"QuickFullStrategy.md": {
-  id: "QuickFullStrategy.md",
-  slug: "quickfullstrategy",
-  body: string,
-  collection: "en",
-  data: any
-},
-"QuickVotingStrategy.md": {
-  id: "QuickVotingStrategy.md",
-  slug: "quickvotingstrategy",
   body: string,
   collection: "en",
   data: any

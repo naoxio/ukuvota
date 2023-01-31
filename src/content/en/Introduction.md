@@ -1,10 +1,7 @@
+Welcome to the app for collaborative problem solving! With our app, you can create a process to collectively answer a question.
 
-Ukuvota uses a cooperative and scalable process to help individuals reach collective decisions. The core process is <a href="https://electionscience.org/library/score-voting/" target="_blank">score voting</a> with additional features to make it more cooperative:
+The process consists of two phases: a collection phase and a voting phase. In the collection phase, everyone can add a proposal for the solution to the topic question. This phase is designed to gather as many ideas as possible for the solution.
 
-- **To "keep things the way they are" is always an option, never the default.** Framing this option as a default position introduces a significant conservative bias — listing it as an option removes this bias and keeps a collective evolutionary.
+After the collection phase, the voting phase begins. In this phase, everyone can vote on each proposal using emojis ranging from -3 to +3. The emojis represent the level of support for each proposal, where -3 is strongly against and +3 is strongly in favor. Negative votes can also be multiplied by a negative weight factor, which you can select when creating the process. This factor allows you to adjust the impact of negative votes to better suit your specific needs.
 
-- **To "look for other options" is always an option.** If none of the other current options are good enough, people are able to choose to look for better ones — this ensures that there is always an acceptable option for everyone.
-
-- **Every participant can express how much they support or oppose each option.** Limiting people to choose their favorite or list their preference prevents them from fully expressing their opinions — scoring clarifies opinions and makes it much more likely to identify the best decision.
-
-- **Acceptance (non-opposition) is the main determinant for the best decision.** A decision with little opposition reduces the likelihood of conflict, monitoring or sanctioning — it is also important that some people actively support the decision to ensure it actually happens.
+To get started, simply create a new process and select the topic question, collection phase duration, voting phase duration, and negative weight factor. You and your collaborators will then be able to add proposals and vote on them to arrive at a solution together.

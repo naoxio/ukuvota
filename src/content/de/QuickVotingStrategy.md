@@ -1,1 +1,0 @@
-Ähnlich wie bei der vollständigen Strategie, mit dem Unterschied, dass es keine Vorschlagsphase gibt, sondern alle Vorschläge, über die abgestimmt werden soll, sollen in der Erstellungsphase hinzugefügt werden.
