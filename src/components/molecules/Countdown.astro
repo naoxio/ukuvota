@@ -3,11 +3,11 @@ import { t } from "i18next";
 import FlexLabel from "atoms/FlexLabel.astro"
 
 interface Props {
-    label?: string,
     dates: number[],
     tillStart?: boolean,
+    type?: String
 }
-const { label, dates, tillStart } = Astro.props;
+const { dates, tillStart, type } = Astro.props;
 
 const timeUnits = [
   { id: 'days', label: t('time.days') },
@@ -15,25 +15,29 @@ const timeUnits = [
   { id: 'minutes', label: t('time.minutes') },
   { id: 'seconds', label: t('time.seconds') },
 ];
+let classList = ''
 
+switch (type) {
+    case 'warning':
+        classList = 'link-warning'
+        break
+}
 ---
 <style>
     .visible {
-        display: block
+        display: block;
     }
     .hidden {
-        display: none
+        display: none;
     }
 </style>
-<quick-counter data-dates={dates} data-till={tillStart}>
-    <FlexLabel title={ label }>
-        { timeUnits.map(timeUnit => (
-        <div id={timeUnit.id} class="hidden">
-            <span></span>
-            {timeUnit.label}&nbsp;
-        </div>
-        ))}
-    </FlexLabel>
+<quick-counter data-dates={dates} data-till={tillStart} class={classList}>
+    { timeUnits.map(timeUnit => (
+    <span id={timeUnit.id} class="hidden">
+        <span></span>
+        {timeUnit.label}&nbsp;
+    </span>
+    ))}
 </quick-counter>
 <script>
 
