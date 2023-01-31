@@ -12,7 +12,7 @@
 
   const $process = useStore(process)
 
-  const keyValue = `${props.phase}Duraton`
+  const keyValue = `${props.phase}Duration`
 
   const convertToTime = (unit: string, milliseconds: number) => {
     switch (unit) {
