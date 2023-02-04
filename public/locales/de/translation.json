@@ -1,12 +1,12 @@
 {
   "phases": {
+    "startAt": "Startet am:",
+    "endsAt": "Endet am:",
     "proposal": {
-      "title": "Vorschlagsphase",
-      "startAt": "Vorschlagsphase startet am"
+      "title": "Vorschlagsphase"
     },
     "voting": {
-      "title": "Abstimmungsphase",
-      "startAt": "Abstimmungsphase startet am"
+      "title": "Abstimmungsphase"
     }
   },
   "remainingTime": "verbleibende Zeit",
@@ -44,15 +44,11 @@
     "results": "Ergebnisse",
     "proposalPhase": {
       "title": "Vorschlagsphase",
-      "startAt": "Vorschlagsphase beginnt",
-      "timeRange": "Wählen Sie aus, wann die Vorschlagsphase starten und enden soll",
       "endTime": "Vorschlagsphase endet in"
     },
     "votingPhase": {
       "title": "Abstimmungsphase",
-      "startAt": "Abstimmungsphase beginnt",
       "startAfter": "Abstimmungsphase beginnt direkt nach der Vorschlagsphase",
-      "timeRange": "Wählen Sie aus, wann die Abstimmungsphase starten und enden soll",
       "endTime": "Abstimmung endet in",
       "lastFor": "Abstimmung dauert"
     },

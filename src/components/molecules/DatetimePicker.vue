@@ -4,6 +4,10 @@
     import { theme } from 'stores/userStore'
 
     const props = defineProps({
+        index: {
+            type: Number,
+            required: true
+        },
         phase: {
             type: String,
             required: true
@@ -13,9 +17,9 @@
     const $process = useStore(process)
     const $theme = useStore(theme)
 
-    const changeDatetime = async(datetimes: string[]) => {
-        let start = +new Date(datetimes[0])
-        let end = +new Date(datetimes[1])
+    const changeDatetime = async(datetime: string) => {
+        let start = props.index === 0 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][0]
+        let end = props.index === 1 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][1]
         if (end < start) [start, end] = [end, start]        
         const v_start = (props.phase === 'voting') ? start : $process.value.votingDates[0]
         process.setKey("proposalVotingGap", v_start - $process.value.proposalDates[1])
@@ -27,13 +31,13 @@
 <template>
     <div class="datetime-picker">
         <Datepicker
-        :min-date="$process[props.phase + 'DateMin']"
-        :modelValue="$process[props.phase + 'Dates']"
+        :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : $process[props.phase + 'Dates'][0]"
+        :modelValue="$process[props.phase + 'Dates'][props.index]"
         @update:modelValue="changeDatetime"
         :dark="$theme === 'dark'"
         :clearable="false"
-        range prevent-min-max-navigation auto-apply
-        inline text-input inline-with-input/>
+        prevent-min-max-navigation auto-apply
+        text-input />
     </div>
 </template>
 

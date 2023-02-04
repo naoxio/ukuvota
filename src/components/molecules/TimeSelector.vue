@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import TimeSlider from 'molecules/TimeSlider.vue'
 import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
 import DatetimePicker from 'molecules/DatetimePicker.vue';
+import DatetimeSlider from 'molecules/DatetimeSlider.vue'
 
 import { t } from 'i18next';
 import { format} from 'date-fns'
@@ -17,17 +17,18 @@ const props = defineProps({
 </script>
 <template>
     <div v-if="$process.phases === 'full' || phase === 'voting'">
-        <h2>{{ t(`process.${phase}Phase.title`) }}</h2>
-        <div v-if="$process.slideSelector" >
-            <span>
-                <h3>{{ t(`process.${phase}Phase.startAt`) }}</h3>
-                <p>{{ format(new Date($process[`${phase}Dates`][0]), 'E MMM d y hh:mm zzzz') }}</p>
-            </span>
-            <TimeSlider :phase="phase"/>
-        </div>
-        <div v-else>
-            <h3>{{ t(`process.${phase}Phase.timeRange`)}}</h3>
-            <DatetimePicker :phase="phase"/>
-        </div>
+        <h2>{{ t(`phases.${phase}.title`) }}</h2>
+        <span class="flex justify-between items-center">
+            <h3>{{ t(`phases.startAt`) }}</h3>
+            <DatetimePicker :phase="phase" :index="0"/>
+            <p/>
+
+        </span>
+        <DatetimeSlider :phase="phase"/>
+        <span class="flex justify-between items-center">
+            <h3>{{ t(`phases.endsAt`) }}</h3>
+            <DatetimePicker :phase="phase" :index="1"/>
+            <p/>
+        </span>
     </div>
 </template>  
