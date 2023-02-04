@@ -7,7 +7,6 @@ export type Process = {
     weighting: string
     phases: 'full' | 'voting'
     defaultProposals: boolean
-    slideSelector: boolean
     proposalDates: number[]
     proposalDateMin: string
     proposalDuration: number
@@ -33,7 +32,6 @@ export const process = persistentMap<Process>('process:', {
     weighting: '3',
     phases: 'full',
     defaultProposals: true,
-    slideSelector: true,
     proposalDuration: defaultDuration,
     votingDuration: defaultDuration,
     proposalVotingGap: 0,
@@ -61,10 +59,9 @@ onMount(process, () => {
     updateDateMin('proposal')
     updateDateMin('voting')
     const updating = setInterval(() => {
-        if (process.get().slideSelector) {
-            updateDateMin('voting')  
+/*            updateDateMin('voting')  
             updateDateMin('proposal')
-        }
+    */
     }, 1000)
     return () => {
       clearInterval(updating)

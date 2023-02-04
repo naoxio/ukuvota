@@ -74,11 +74,6 @@ const createProcess = async() => {
   }
 }
 
-const changeSelector = (ev) => {
-    if (ev.target.name) {
-        process.setKey('slideSelector', ev.target.name === 'slider')
-    }
-}
 </script>
 
 <template>
@@ -120,10 +115,6 @@ const changeSelector = (ev) => {
         <h2 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h2>
     </div>
 
-    <div class="tabs" @click="(ev) => changeSelector(ev)">
-      <a name="slider" class="tab tab-bordered" :class="{ 'tab-active' : $process.slideSelector }">{{ t('slider') }}</a> 
-      <a name="calendar" class="tab tab-bordered" :class="{ 'tab-active' : !$process.slideSelector }">{{ t('calendar') }}</a> 
-    </div>
     <TimeSelector phase="proposal"/>
     <TimeSelector phase="voting"/>
   </div>
