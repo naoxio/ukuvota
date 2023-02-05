@@ -48,20 +48,21 @@ const updateDates = (value: Process, keyValue: string, duration: number) => {
     process.setKey(keyValue + "Dates" as keyof Process, [range[0], range[0] + duration])
 } 
 
-const updateDateMin = (keyValue: string) => {
-    if (+new Date(process.get()[keyValue + 'DateMin']) < +new Date())
+const updateDateMin = (process, keyValue: string) => {
+    const min = +new Date(process.get()[keyValue + 'DateMin' as keyof Process])
+    if (min < +new Date())
         process.setKey(keyValue + 'DateMin' as keyof Process, new Date().toLocaleString())
     const range = process.get()[keyValue + 'Dates']
+    console.log(range)
     if (range && range[0] < +new Date())
         process.setKey(keyValue + 'Dates' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
 }
 onMount(process, () => {
-    updateDateMin('proposal')
-    updateDateMin('voting')
     const updating = setInterval(() => {
-/*            updateDateMin('voting')  
-            updateDateMin('proposal')
-    */
+
+        updateDateMin(process, 'voting')  
+        updateDateMin(process, 'proposal')
+    
     }, 1000)
     return () => {
       clearInterval(updating)
