@@ -1,7 +1,8 @@
 {
   "phases": {
-    "startAt": "Startet am:",
-    "endsAt": "Endet am:",
+    "startAt": "Startet am",
+    "endsAt": "Endet am",
+    "lastFor": "Dauer",
     "proposal": {
       "title": "Vorschlagsphase"
     },

@@ -19,14 +19,14 @@ const props = defineProps({
     <div v-if="$process.phases === 'full' || phase === 'voting'">
         <h2>{{ t(`phases.${phase}.title`) }}</h2>
         <span class="flex justify-between items-center">
-            <h3>{{ t(`phases.startAt`) }}</h3>
+            <h3>{{ t(`phases.startAt`) }}:</h3>
             <DatetimePicker :phase="phase" :index="0"/>
             <p/>
 
         </span>
         <DatetimeSlider :phase="phase"/>
         <span class="flex justify-between items-center">
-            <h3>{{ t(`phases.endsAt`) }}</h3>
+            <h3>{{ t(`phases.endsAt`) }}:</h3>
             <DatetimePicker :phase="phase" :index="1"/>
             <p/>
         </span>

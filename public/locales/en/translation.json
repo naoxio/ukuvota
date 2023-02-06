@@ -1,7 +1,8 @@
 {
   "phases": {
-    "startAt": "Starts at:",
-    "endsAt": "Ends at:",
+    "startAt": "Starts at",
+    "endsAt": "Ends at",
+    "lastFor": "Lasts for",
     "proposal": {
       "title": "Proposal Phase"
     },
