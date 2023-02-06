@@ -18,9 +18,11 @@
     const $theme = useStore(theme)
 
     const changeDatetime = async(datetime: string) => {
+        console.log('change date: ', props.phase, datetime)
         let start = props.index === 0 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][0]
         let end = props.index === 1 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][1]
-        if (end < start) [start, end] = [end, start]        
+        if (end < start) end = start + $process.value[props.phase + 'Duration']
+        
         const v_start = (props.phase === 'voting') ? start : $process.value.votingDates[0]
         process.setKey("proposalVotingGap", v_start - $process.value.proposalDates[1])
         process.setKey(props.phase + 'Duration' as keyof Process, end - start)
@@ -31,25 +33,17 @@
 <template>
     <div class="datetime-picker">
         <Datepicker
-        :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : $process[props.phase + 'Dates'][0]"
+        :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
         :modelValue="$process[props.phase + 'Dates'][props.index]"
         @update:modelValue="changeDatetime"
         :dark="$theme === 'dark'"
         :clearable="false"
-        prevent-min-max-navigation auto-apply
+        prevent-min-max-navigation
         text-input />
     </div>
 </template>
 
 <style>
-    .datetime-picker div  {
-        width: 100% ;
-        max-width: 340px;
-        margin: auto;
-        border-radius: 0;
-    }
+
     
-    .dp__overlay_container>.dp__overlay_row {
-        max-width: 70px;
-    }
 </style>

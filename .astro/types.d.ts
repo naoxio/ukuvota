@@ -70,6 +70,13 @@ declare module 'astro:content' {
   collection: "de",
   data: any
 },
+"Donate.md": {
+  id: "Donate.md",
+  slug: "donate",
+  body: string,
+  collection: "de",
+  data: any
+},
 "Introduction.md": {
   id: "Introduction.md",
   slug: "introduction",
@@ -89,6 +96,13 @@ declare module 'astro:content' {
 "DefaultProposals.md": {
   id: "DefaultProposals.md",
   slug: "defaultproposals",
+  body: string,
+  collection: "en",
+  data: any
+},
+"Donate.md": {
+  id: "Donate.md",
+  slug: "donate",
   body: string,
   collection: "en",
   data: any

@@ -53,7 +53,6 @@ const updateDateMin = (process, keyValue: string) => {
     if (min < +new Date())
         process.setKey(keyValue + 'DateMin' as keyof Process, new Date().toLocaleString())
     const range = process.get()[keyValue + 'Dates']
-    console.log(range)
     if (range && range[0] < +new Date())
         process.setKey(keyValue + 'Dates' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
 }
