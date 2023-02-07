@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { enUS, de } from 'date-fns/locale'
+import { enUS, de } from 'date-fns/locale/index'
 import i18next from 'i18next'
 
 const locales = {enUS, de}
