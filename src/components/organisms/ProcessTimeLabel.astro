@@ -1,6 +1,6 @@
 ---
 import { t } from 'i18next'
-import { format } from 'date-fns'
+import format from 'composables/format'
 import Countdown from "molecules/Countdown.astro";
 
 interface Props {
@@ -19,8 +19,8 @@ const { phase, dates} = Astro.props;
             <span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
             <br/>
             <div>
-                <span>{ t(`phases.startAt`) }:&nbsp;</span>
-                <span class="link-success">{  format(new Date(dates[0]), 'E MMM d y hh:mm zzzz')}</span>
+                <span>{ t(`phases.start`) }:&nbsp;</span>
+                <span class="link-success">{  format(new Date(dates[0]), 'PPPPpppp')}</span>
                 <br/>
                 <span>{ t(`phases.lastFor`) }:&nbsp;</span>
                 <Countdown type="success" dates={dates} />
