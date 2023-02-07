@@ -31,16 +31,16 @@
 </script>
 
 <template>
-    <div class="datetime-picker">
-        <Datepicker
-        :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
-        :modelValue="$process[props.phase + 'Dates'][props.index]"
-        @update:modelValue="changeDatetime"
-        :dark="$theme === 'dark'"
-        :clearable="false"
-        prevent-min-max-navigation
-        text-input />
-    </div>
+    <Datepicker
+    @open="process.setKey(props.phase + 'Open' as keyof Process, true)"
+    @closed="process.setKey(props.phase + 'Open' as keyof Process, false)"
+    :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
+    :modelValue="$process[props.phase + 'Dates'][props.index]"
+    @update:modelValue="changeDatetime"
+    :dark="$theme === 'dark'"
+    :clearable="false"
+    prevent-min-max-navigation
+    text-input />
 </template>
 
 <style>

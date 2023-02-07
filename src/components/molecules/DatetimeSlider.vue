@@ -56,17 +56,17 @@ const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
 <template>
     <div>
       <div class="flex items-center">
-        <p>{{ t('time.minutes') }}: &nbsp;</p>
+        <p>{{ t('time.minute_other') }}: &nbsp;</p>
         <label for="minutes">{{ convertToTime('minutes', $process[keyValue]) }}</label>
       </div>
       <input name="minutes" type="range" min="1" max="59" :value="convertToTime('minutes', $process[keyValue])" @input="changeTime" class="range" />
       <div class="flex items-center">
-        <p>{{ t('time.hours') }}: &nbsp;</p>
+        <p>{{ t('time.hour_other') }}: &nbsp;</p>
         <label for="hours">{{ convertToTime('hours', $process[keyValue]) }}</label>
       </div>
       <input name="hours" type="range" min="0" max="23" :value="convertToTime('hours', $process[keyValue])" @input="changeTime" class="range" />
       <div class="flex items-center">
-        <p>{{ t('time.days') }}: &nbsp;</p>
+        <p>{{ t('time.day_other') }}: &nbsp;</p>
         <label for="days">{{ convertToTime('days', $process[keyValue]) }}</label>
       </div>
       <input name="days" type="range" min="0" max="90" :value="convertToTime('days', $process[keyValue])" @input="changeTime" class="range" />

@@ -5,7 +5,7 @@ import DatetimePicker from 'molecules/DatetimePicker.vue';
 import DatetimeSlider from 'molecules/DatetimeSlider.vue'
 
 import { t } from 'i18next';
-import { format} from 'date-fns'
+
 const $process = useStore(process)
 const props = defineProps({
   phase: {

@@ -1,6 +1,7 @@
 {
   "phases": {
     "start": "Starts",
+    "startAt": "Start at",
     "endsAt": "Ends at",
     "lastFor": "Lasts for",
     "proposal": {
@@ -108,10 +109,14 @@
     }
   },
   "time": {
-    "seconds": "Seconds",
-    "minutes": "Minutes",
-    "hours": "Hours",
-    "days": "Days"
+    "second_one": "Second",
+    "second_other": "Seconds",
+    "minute_one": "Minute",
+    "minute_other": "Minutes",
+    "hour_one": "Hour",
+    "hour_other": "Hours",
+    "day_one": "Day",
+    "day_other": "Days"
   },
   "redirect": {
     "legacy": "Redirecting to legacy version..."
