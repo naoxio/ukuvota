@@ -1,98 +1,68 @@
 
-<script>
-import { t } from "i18next";
+<script lang="ts" setup>
+  import { t } from "i18next";
+  import { ref } from 'vue'
 
-export default {
-  props: {
+  const props = defineProps({
     dates: {
-      type: Array,
+      type: Number[2],
       required: true
-    },
-    tillStart: {
-      type: Boolean,
-      default: false
     },
     type: {
       type: String,
       default: ""
     }
-  },
-  data() {
-    return {
-      timeUnits: [
-        { id: "days", label: t("time.days") },
-        { id: "hours", label: t("time.hours") },
-        { id: "minutes", label: t("time.minutes") },
-        { id: "seconds", label: t("time.seconds") }
-      ],
-      classList: "",
-      time: {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      }
+  })
+
+  const time = ref({
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0
+  })
+
+  const hide = () => {
+    time.value = {
+      day: 0,
+      hour: 0,
+      minute: 0,
+      second: 0
     };
-  },
-  mounted() {
-    switch (this.type) {
-      case "warning":
-        this.classList = "link-warning";
-        break;
-      case "success":
-        this.classList = "link-success";
-        break;
-    }
-    this.countdown();
-  },
-  methods: {
-    countdown() {
-      if (this.tillStart && this.dates[0] < +new Date() + 1000) {
-        this.hide();
-        return;
-      }
-      let time = this.tillStart
-        ? (+new Date() - this.dates[0]) / 1000
-        : this.dates[0] < +new Date()
-        ? (this.dates[1] - +new Date()) / 1000
-        : (this.dates[1] - this.dates[0]) / 1000;
-      if (!this.tillStart && time <= 1) {
-        this.hide();
-        return;
-      }
-      time = Math.abs(time);
-      let seconds = time % 60;
-      time = (time - seconds) / 60;
-      let minutes = time % 60;
-      time = (time - minutes) / 60;
-      let hours = time % 24;
-      time = (time - hours) / 24;
-      let days = time;
-      // round numbers
-
-      this.time.days = Math.floor(days);
-      this.time.hours = Math.floor(hours);
-      this.time.minutes = Math.floor(minutes);
-      this.time.seconds = Math.floor(seconds);
-
-      if (this.tillStart || this.dates[0] < +new Date()) setTimeout(this.countdown, 1000);
-    },
-    hide() {
-      this.time = {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      };
-    }
   }
-};
+
+  const countdown = () => {
+
+    let ts = props.dates[0] < +new Date()
+      ? (props.dates[1] - +new Date()) / 1000
+      : (props.dates[1] - props.dates[0]) / 1000;
+
+    ts = Math.abs(ts);
+    let seconds = ts % 60;
+    ts = (ts - seconds) / 60;
+    let minutes = ts % 60;
+    ts = (ts- minutes) / 60;
+    let hours = ts % 24;
+    ts = (ts - hours) / 24;
+    let days = ts;
+    // round numbers
+
+    time.value.day = Math.floor(days);
+    time.value.hour = Math.floor(hours);
+    time.value.minute = Math.floor(minutes);
+    time.value.second = Math.floor(seconds);
+
+    if (props.dates[0] < +new Date()) setTimeout(countdown, 1000);
+
+  }
+
+
+  countdown()
+
 </script>
 <template>
-    <div :class="classList">
-      <span v-for="timeUnit in timeUnits" :id="timeUnit.id" class="hidden">
-        <span>{{ time[timeUnit.id] }}</span>
-        {{ timeUnit.label }}&nbsp;
+    <span :class="{ 'link-warning' : type === 'warning', 'link-alert': type === 'alert', 'link-success': type === 'success' }">
+      <span v-for="[k, v] in Object.entries(time)" :id="k">
+        <span v-if="v !== 0 && (k !== 'second' || time.day <= 0 && time.hour <= 0)">{{ t(`time.${k}`, {count: v}) }}&nbsp;</span>
       </span>
-    </div>
+    </span>
   </template>

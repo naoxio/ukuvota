@@ -12,27 +12,21 @@ const { phase, dates} = Astro.props;
 
 ---
 
+<span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
 
 { 
     +new Date() < dates[0] ? (
-        <>
-            <span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
-            <br/>
-            <div>
-                <span>{ t(`phases.start`) }:&nbsp;</span>
-                <span class="link-success">{  format(new Date(dates[0]), 'PPPPpppp')}</span>
-                <br/>
-                <span>{ t(`phases.lastFor`) }:&nbsp;</span>
-                <Countdown type="success" dates={dates} />
-            </div>
-        </>
+        <br/>
+        <span>{ t(`phases.start`) }:&nbsp;</span>
+        <span class="link-success">{  format(new Date(dates[0]), 'PPPPpppp')}</span>
+        <br/>
+        <span>{ t(`phases.lastFor`) }:&nbsp;</span>
+        <Countdown type="success" dates={dates} client:only/>
     ) : +new Date() < dates[1] ? (
-        <div class="flex flex-wrap">
-            <span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
-
-            <Countdown dates={dates} type="warning" />
-            <span>({ t('remainingTime') })</span>
-        </div>
-    ) : null
+        <br/>
+        <Countdown dates={dates} type="warning" client:only/>
+        <span>({ t('remainingTime') })</span>
+    ) : <span class="text-info">{ t('done') }</span>
 }
+<br/>
 

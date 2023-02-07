@@ -109,14 +109,14 @@
     }
   },
   "time": {
-    "second_one": "Second",
-    "second_other": "Seconds",
-    "minute_one": "Minute",
-    "minute_other": "Minutes",
-    "hour_one": "Hour",
-    "hour_other": "Hours",
-    "day_one": "Day",
-    "day_other": "Days"
+    "second_one": "{{ count }} Second",
+    "second_other": "{{ count }} Seconds",
+    "minute_one": "{{ count }} Minute",
+    "minute_other": "{{ count }} Minutes",
+    "hour_one": "{{ count }} Hour",
+    "hour_other": "{{ count }} Hours",
+    "day_one": "{{ count }} Day",
+    "day_other": "{{ count }} Days"
   },
   "redirect": {
     "legacy": "Redirecting to legacy version..."
