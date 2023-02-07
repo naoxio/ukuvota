@@ -9,7 +9,7 @@ export function getProcessUrl(process: IProcess, processId: string) {
             return `/process/${processId}/proposals`
         case +new Date() >= process.votingDates[0] && +new Date() < process.votingDates[1]:
             return `/process/${processId}/voting`
-        case +new Date() > process.votingDates[1]:
+        case +new Date() >= process.votingDates[1]:
             return `/process/${processId}/results`
         default:
             return `/process/${processId}`

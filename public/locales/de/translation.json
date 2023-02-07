@@ -110,14 +110,14 @@
   },
 
   "time": {
-    "second_one": "Sekunde",
-    "second_other": "Sekunden",
-    "minute_one": "Minute",
-    "minute_other": "Minuten",
-    "hour_one": "Stunde",
-    "hour_other": "Stunden",
-    "day_one": "Tag",
-    "day_other": "Tage"
+    "seconds_one": "Sekunde",
+    "seconds_other": "Sekunden",
+    "minutes_one": "Minute",
+    "minutes_other": "Minuten",
+    "hours_one": "Stunde",
+    "hours_other": "Stunden",
+    "days_one": "Tag",
+    "days_other": "Tage"
   },
   "redirect": {
     "legacy": "Weiterleitung zur alten Version..."

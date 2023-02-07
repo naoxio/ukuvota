@@ -59,7 +59,7 @@ voterNames.forEach((voterName: string, i: number) => {
 export function processTest() {
     return {
         proposalDates: [+new Date(), +new Date()],
-        votingDates: [+new Date() + 300000, +new Date() + 500000],
+        votingDates: [+new Date(), +new Date()],
         weighting: '3',
         title: 'What pizza toppings should we order for our office party?',
         description: 'We are planning an office party and would like to order pizza for everyone. We are trying to decide on the toppings and would like some ideas. Please suggest your favorite toppings and any unique combinations you think would be delicious!',

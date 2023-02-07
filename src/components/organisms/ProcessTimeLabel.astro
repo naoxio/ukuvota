@@ -23,9 +23,8 @@ const { phase, dates} = Astro.props;
         <span>{ t(`phases.lastFor`) }:&nbsp;</span>
         <Countdown type="success" dates={dates} client:only/>
     ) : +new Date() < dates[1] ? (
-        <br/>
         <Countdown dates={dates} type="warning" client:only/>
-        <span>({ t('remainingTime') })</span>
+        <span>&nbsp;({ t('remainingTime') })</span>
     ) : <span class="text-info">{ t('done') }</span>
 }
 <br/>

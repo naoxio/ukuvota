@@ -41,6 +41,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
         { proposalDates && <ProcessTimeLabel phase="proposal" dates={proposalDates}/> }
         <br/>
         { votingDates && <ProcessTimeLabel phase="voting" dates={votingDates}/> }
+        <br/>
     </div>
     { shareable && 
     <div class="w-full pr-2">
