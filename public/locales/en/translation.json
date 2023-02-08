@@ -1,5 +1,7 @@
 {
   "duration": "Duration",
+  "select": "select",
+  "cancel": "cancel",
   "phases": {
     "start": "Starts",
     "startAt": "Start at",

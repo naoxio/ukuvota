@@ -54,7 +54,6 @@
     const value = Number(ev.target.value)
     process.setKey(`${props.phase}LogSlider` as keyof Process, value)
     let duration = roundDuration(logslider(value) * 1000 * 60)
-    console.log(duration)
     process.setKey(`${props.phase}Duration` as keyof Process, duration)
   }
 </script>

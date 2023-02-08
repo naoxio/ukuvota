@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+    import { t } from 'i18next'
     import { useStore } from '@nanostores/vue';
     import { process, Process } from 'stores/processStore';
     import { theme } from 'stores/userStore'
-
+    import getDateLocale from 'composables/getDateLocale'
     const props = defineProps({
         index: {
             type: Number,
@@ -18,16 +19,17 @@
     const $theme = useStore(theme)
 
     const changeDatetime = async(datetime: string) => {
-        console.log('change date: ', props.phase, datetime)
         let start = props.index === 0 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][0]
         let end = props.index === 1 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][1]
         if (end < start) end = start + $process.value[props.phase + 'Duration']
         
         const v_start = (props.phase === 'voting') ? start : $process.value.votingDates[0]
-        process.setKey("proposalVotingGap", v_start - $process.value.proposalDates[1])
+        const gap = v_start - $process.value.proposalDates[1]
+        process.setKey("proposalVotingGap", gap < 0 ? 0 : gap)
         process.setKey(props.phase + 'Duration' as keyof Process, end - start)
         process.setKey(props.phase + 'Dates' as keyof Process, [start, end])
     }
+    console.log(getDateLocale())
 </script>
 
 <template>
@@ -39,8 +41,10 @@
     @update:modelValue="changeDatetime"
     :dark="$theme === 'dark'"
     :clearable="false"
+    :format-locale="getDateLocale()"
     prevent-min-max-navigation
-    text-input />
+    text-input 
+    :cancelText="t('cancel')" :selectText="t('select')"/>
 </template>
 
 <style>

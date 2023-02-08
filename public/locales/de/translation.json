@@ -1,5 +1,7 @@
 {
   "duration": "Dauer",
+  "select": "auswählen",
+  "cancel": "abbrechen",
   "phases": {
     "start": "Startet",
     "startAt": "Startet am",
