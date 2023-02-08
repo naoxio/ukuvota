@@ -5,7 +5,6 @@ import weightingOptions from "composables/weightingOptions";
 import Modal from 'molecules/Modal.astro';
 import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
-import FlexLabel from 'atoms/FlexLabel.astro';
 import ProcessTimeLabel from 'organisms/ProcessTimeLabel.astro';
 
 const { url } = Astro;
@@ -49,12 +48,13 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
         <div class="flex items-center">
 
             <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
-
+            &nbsp; &nbsp;
             <Modal id="shareableQrCode" icon="qr-code">
                 <h3>{ t('process.qrcode') }</h3>
                 <div class="flex justify-center">
                     <QRCode text="Astro.url.href" />
                 </div>
+                <br/>
             </Modal>
 
         </div>

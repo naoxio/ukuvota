@@ -43,7 +43,7 @@
 
 </script>
 <template>
-    <span v-if="targetDate > currentDate" :class="{ 'link-warning' : type === 'warning', 'link-alert': type === 'alert', 'link-success': type === 'success' }">
+    <span v-if="targetDate > currentDate" :class="{ 'link-warning' : (type === 'warning' && (targetDate - currentDate) > 300000), 'text-error': (type === 'warning' && (targetDate - currentDate) <= 300000), 'link-success': type === 'success' }">
       {{ fmtDuration(targetDate, currentDate, units) }}
     </span>
     <span v-else class="text-info">{{ t('done') }}</span>

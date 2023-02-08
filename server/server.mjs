@@ -29,6 +29,12 @@ app.get('/api/process/:id', async(req, res) => {
   res.json({ process });
 });
 
+app.get('/api/process/:id/voters', async(req, res) => {
+  const processId = req.params.id;
+  const process = JSON.parse(await db.get(processId));
+  res.json(process.voters);
+});
+
 app.post('/api/process/:id/vote', async(req, res) => {
   // Get the process ID from the URL parameters
   const processId = req.params.id;
