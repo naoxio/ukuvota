@@ -1,6 +1,6 @@
 ---
 import { t } from 'i18next'
-import format from 'composables/format'
+import { fmt } from 'composables/dateHelpers'
 import Countdown from "molecules/Countdown.vue";
 
 interface Props {
@@ -18,7 +18,7 @@ const { phase, dates} = Astro.props;
     +new Date() < dates[0] ? (
         <br/>
         <span>{ t(`phases.start`) }:&nbsp;</span>
-        <span class="link-success">{  format(new Date(dates[0]), 'PPPPpppp')}</span>
+        <span class="link-success">{  fmt(new Date(dates[0]), 'PPPPpppp')}</span>
         <br/>
         <span>{ t(`phases.lastFor`) }:&nbsp;</span>
         <Countdown type="success" dates={dates} client:only/>

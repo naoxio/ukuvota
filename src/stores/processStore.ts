@@ -11,11 +11,13 @@ export type Process = {
     proposalDateMin: string
     proposalDuration: number
     proposalVotingGap: number
+    proposalLogSlider: number
     proposalOpen: boolean
     votingDates: number[]
     votingDateMin: string
     votingDuration: number
     votingOpen: boolean
+    votingLogSlider: number
 
 }
 
@@ -36,11 +38,13 @@ export const process = persistentMap<Process>('process:', {
     defaultProposals: true,
     proposalDuration: defaultDuration,
     proposalOpen: false,
+    proposalLogSlider: 1,
     votingDuration: defaultDuration,
     votingOpen: false,
     proposalVotingGap: 0,
     proposalDates, proposalDateMin,
     votingDates, votingDateMin,
+    votingLogSlider: 1
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,

@@ -1,4 +1,5 @@
 {
+  "duration": "Duration",
   "phases": {
     "start": "Starts",
     "startAt": "Start at",
@@ -107,16 +108,6 @@
       "title": "Repeat process",
       "description": "Repeat the process and look for other options."
     }
-  },
-  "time": {
-    "seconds_one": "{{ count }} Second",
-    "seconds_other": "{{ count }} Seconds",
-    "minutes_one": "{{ count }} Minute",
-    "minutes_other": "{{ count }} Minutes",
-    "hours_one": "{{ count }} Hour",
-    "hours_other": "{{ count }} Hours",
-    "days_one": "{{ count }} Day",
-    "days_other": "{{ count }} Days"
   },
   "redirect": {
     "legacy": "Redirecting to legacy version..."

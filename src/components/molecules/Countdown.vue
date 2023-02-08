@@ -1,8 +1,8 @@
 
 <script lang="ts" setup>
   import { t } from 'i18next'
-  import { ref } from 'vue'
-  import formatDistanceStrict from 'composables/formatDistanceStrict'
+  import { ref, computed } from 'vue'
+  import { fmtDuration } from 'composables/dateHelpers'
 
   const props = defineProps({
     dates: {
@@ -33,13 +33,18 @@
 
   }
 
+  const timeUnits = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
 
   countdown()
+  const units = computed(() => {
+    const diff = targetDate.value - currentDate.value
+    return diff > 86400000 ? timeUnits.filter((v) => v !== 'seconds' && v !== 'minutes' && v !== 'hours') : diff > 3600000 ? timeUnits.filter((v) => v !== 'seconds') : timeUnits
+  })
 
 </script>
 <template>
     <span v-if="targetDate > currentDate" :class="{ 'link-warning' : type === 'warning', 'link-alert': type === 'alert', 'link-success': type === 'success' }">
-      {{ formatDistanceStrict(targetDate, currentDate) }}
+      {{ fmtDuration(targetDate, currentDate, units) }}
     </span>
     <span v-else class="text-info">{{ t('done') }}</span>
   </template>

@@ -2,6 +2,8 @@
   import { t } from 'i18next'
   import { useStore } from '@nanostores/vue';
   import { process, Process } from 'stores/processStore';
+  import { ref } from 'vue'
+  import { fmtDuration } from 'composables/dateHelpers'
 
   const props = defineProps({
       phase: {
@@ -11,64 +13,35 @@
   })
 
   const $process = useStore(process)
+  const pos = ref(1)
 
-  const keyValue = `${props.phase}Duration`
+  const logslider = (position) => {
+    // position will be between 0 and 100
+    const minp = 1;
+    const maxp = 1000;
 
-  const convertToTime = (unit: string, milliseconds: number) => {
-    switch (unit) {
-      case 'days':
-        return Math.floor(milliseconds / 86400000)
-      case 'hours':
-        return Math.floor(milliseconds / 3600000) % 24
-      case 'minutes':
-        return Math.floor(milliseconds / 60000) % 60
-    }
+    // The result should be between 100 an 10000000
+    const minv = Math.log(1);
+    const maxv = Math.log(525601);
+
+    // calculate adjustment factor
+    const scale = (maxv-minv) / (maxp-minp);
+
+    return Math.floor(Math.exp(minv + scale*(position-minp)));
   }
-  const getMilliseconds = (days: number, hours: number, minutes: number) => {
-    return ((days * 24 + hours) * 60 + minutes) * 60 * 1000
+
+  const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
+    const value = Number(ev.target.value)
+    process.setKey(`${props.phase}LogSlider` as keyof Process, value)
+    console.log(value)
+    process.setKey(`${props.phase}Duration` as keyof Process, logslider(value) * 1000 * 60)
   }
-
-const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
-  const val = Number(ev.target.value)
-  const timeLeft = $process.value[`${props.phase}Duration`];
-
-  let days = convertToTime('days', timeLeft)
-  let hours = convertToTime('hours', timeLeft)
-  let minutes = convertToTime('minutes', timeLeft)
-  switch (ev.target.name) {
-    case 'days':
-      days = val
-      break
-    case 'hours':
-      hours = val
-      break
-    case 'minutes':
-      minutes = val
-      break
-  }
-  const ms = getMilliseconds(days, hours, minutes)
-  process.setKey(keyValue as keyof Process, ms)
-}
-
 </script>
   
 
-<template>
-    <div>
-      <div class="flex items-center">
-        <p>{{ t('time.minute_other') }}: &nbsp;</p>
-        <label for="minutes">{{ convertToTime('minutes', $process[keyValue]) }}</label>
-      </div>
-      <input name="minutes" type="range" min="1" max="59" :value="convertToTime('minutes', $process[keyValue])" @input="changeTime" class="range" />
-      <div class="flex items-center">
-        <p>{{ t('time.hour_other') }}: &nbsp;</p>
-        <label for="hours">{{ convertToTime('hours', $process[keyValue]) }}</label>
-      </div>
-      <input name="hours" type="range" min="0" max="23" :value="convertToTime('hours', $process[keyValue])" @input="changeTime" class="range" />
-      <div class="flex items-center">
-        <p>{{ t('time.day_other') }}: &nbsp;</p>
-        <label for="days">{{ convertToTime('days', $process[keyValue]) }}</label>
-      </div>
-      <input name="days" type="range" min="0" max="90" :value="convertToTime('days', $process[keyValue])" @input="changeTime" class="range" />
-    </div>
+<template>      
+    <span>{{ t('duration') }}:&nbsp;</span>
+    <span class="text-success">{{ fmtDuration(+new Date() + $process[`${props.phase}Duration`], +new Date()) }}</span>
+    <br/>
+    <input intervals="" type="range" min="1" max="1000" :value="$process[`${props.phase}LogSlider` as keyof Process]" @input="changeTime" class="range" />
   </template>
