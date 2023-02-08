@@ -2,7 +2,6 @@
   import { t } from 'i18next'
   import { useStore } from '@nanostores/vue';
   import { process, Process } from 'stores/processStore';
-  import { ref } from 'vue'
   import { fmtDuration } from 'composables/dateHelpers'
 
   const props = defineProps({
@@ -13,7 +12,28 @@
   })
 
   const $process = useStore(process)
-  const pos = ref(1)
+  const roundDuration = (duration: number): number => {
+    const year = 31557600000;
+    const month = 2629800000;
+    const day = 86400000;
+    const hour = 3600000;
+    const minute = 60000;
+    const second = 1000;
+
+    if (duration >= year) {
+      return Math.round(duration / month) * month;
+    } else if (duration >= month) {
+      return Math.round(duration / day) * day;
+    } else if (duration >= day) {
+      return Math.round(duration / hour) * hour;
+    } else if (duration >= hour) {
+      return Math.round(duration / minute) * minute;
+    } else if (duration >= minute) {
+      return Math.round(duration / second) * second;
+    } else {
+      return duration;
+    }
+  }
 
   const logslider = (position) => {
     // position will be between 0 and 100
@@ -33,8 +53,9 @@
   const changeTime = (ev: InputEvent & { target: HTMLInputElement}) => {
     const value = Number(ev.target.value)
     process.setKey(`${props.phase}LogSlider` as keyof Process, value)
-    console.log(value)
-    process.setKey(`${props.phase}Duration` as keyof Process, logslider(value) * 1000 * 60)
+    let duration = roundDuration(logslider(value) * 1000 * 60)
+    console.log(duration)
+    process.setKey(`${props.phase}Duration` as keyof Process, duration)
   }
 </script>
   
