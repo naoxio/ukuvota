@@ -72,7 +72,7 @@ onMount(process, () => {
     const updating = setInterval(() => {
         if (!process.get().votingOpen)
             updateDateMin(process, 'voting') 
-        if (!process.get().proposalOpen && !process.get().votingOpen)
+        if (process.get().phases === 'full' && !process.get().proposalOpen && !process.get().votingOpen)
             updateDateMin(process, 'proposal')
     
     }, 1000)

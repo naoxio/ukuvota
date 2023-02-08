@@ -19,17 +19,14 @@
     const $theme = useStore(theme)
 
     const changeDatetime = async(datetime: string) => {
-        console.log(datetime, props.phase)
         let start = props.index === 0 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][0]
         let end = props.index === 1 ? +new Date(datetime) : $process.value[props.phase + 'Dates'][1]
         if (end < start) end = start + $process.value[props.phase + 'Duration']
         
         const v_start = (props.phase === 'voting') ? start : $process.value.votingDates[0]
         const gap = v_start - $process.value.proposalDates[1]
-        console.log('here')
-        if (props.phase === 'voting' && start <= $process.value["proposalDates"][1]) start = $process.value["proposalDates"][1]
+        if ($process.value.phases === 'full' && props.phase === 'voting' && start <= $process.value["proposalDates"][1]) start = $process.value["proposalDates"][1]
 
-        console.log('not here', $process.value["proposalDates"][1], start)
         process.setKey("proposalVotingGap", gap < 0 ? 0 : gap)
 
         process.setKey(props.phase + 'Duration' as keyof Process, end - start)
