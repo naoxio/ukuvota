@@ -1,6 +1,11 @@
 import { persistentMap } from '@nanostores/persistent'
 import { onMount } from 'nanostores'
+import logslider from 'composables/logslider';
 
+type Proposal = {
+    title: string,
+    description: string
+}
 export type Process = {
     title: string
     description: string
@@ -18,14 +23,12 @@ export type Process = {
     votingDuration: number
     votingOpen: boolean
     votingLogSlider: number
-
+    proposals: Proposal[]
 }
 
-const getMilliseconds = (days: number, hours: number, minutes: number) => {
-    return ((days * 24 + hours) * 60 + minutes) * 60 * 1000
-}
+const defaultSliderValue = 401
+const defaultDuration = logslider(defaultSliderValue)
 
-const defaultDuration = getMilliseconds(3, 5, 15)
 const proposalDates = [+new Date(), +new Date() + defaultDuration]
 const proposalDateMin = new Date().toLocaleString()
 const votingDates = [proposalDates[1], proposalDates[1] + defaultDuration]
@@ -38,13 +41,14 @@ export const process = persistentMap<Process>('process:', {
     defaultProposals: true,
     proposalDuration: defaultDuration,
     proposalOpen: false,
-    proposalLogSlider: 1,
+    proposalLogSlider: defaultSliderValue,
     votingDuration: defaultDuration,
     votingOpen: false,
     proposalVotingGap: 0,
     proposalDates, proposalDateMin,
     votingDates, votingDateMin,
-    votingLogSlider: 1
+    votingLogSlider: defaultSliderValue,
+    proposals: []
 }, {
     encode: JSON.stringify,
     decode: JSON.parse,

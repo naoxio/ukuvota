@@ -9,6 +9,7 @@ module.exports = {
 		themes: [
 			{
 				light: {
+					...require("daisyui/src/colors/themes")["[data-theme=business]"],
 					"primary": "indianred",
 					"secondary": "#DC8D8D",
 					"accent": "#D77D7D",
@@ -21,6 +22,7 @@ module.exports = {
 					"error": "#E23636",
 				},
 				dark: {
+					...require("daisyui/src/colors/themes")["[data-theme=business]"],
 					"primary": "indianred",
 					"secondary": "#DC8D8D",
 					"accent": "#D77D7D",

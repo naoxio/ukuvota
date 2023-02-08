@@ -11,14 +11,14 @@ import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
 
 import { ref, nextTick } from 'vue'
-
+import Icon from 'atoms/Icon.vue';
 const $process = useStore(process)
 
 const toggleDefaultProposals = (ev: any) => {
     process.setKey('defaultProposals', ev.target.checked)
 }
 
-const proposals = [
+const template_default_proposals = [
     {
         title: t("proposal.zero.title"),
         description: t("proposal.zero.description"),
@@ -43,16 +43,17 @@ const createProcess = async() => {
       block: 'start'
     });
     
-
     return
   }
+  const proposals = $process.value.phases === 'full' ? $process.value.defaultProposals ? template_default_proposals : [] : JSON.parse( JSON.stringify($process.value.proposals))
+
   const body = {
     topicQuestion: $process.value.title,
     topicDescription: $process.value.description,
     proposalDates: $process.value.proposalDates,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
-    proposals: $process.value.defaultProposals ?  proposals : []
+    proposals
   }
   let res: any, json: any;
 
@@ -73,10 +74,34 @@ const createProcess = async() => {
     process.setKey('title', '')
     process.setKey('description', '')
 
+    
     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}`
   }
 }
 
+const addProposal = () => {
+  const proposals = JSON.parse( JSON.stringify($process.value.proposals))
+  proposals.push({
+    title: '',
+    description: ''
+  })
+  process.setKey("proposals", proposals)
+}
+
+const updateProposal = (ev, i: number, key: string) => {
+  const val = ev.target.value
+  const proposals = JSON.parse( JSON.stringify($process.value.proposals))
+  const proposal = proposals[i]
+  proposal[key] = val
+  process.setKey("proposals", proposals)
+
+}
+const deletePropsal = (i: number) => {
+  const proposals = JSON.parse( JSON.stringify($process.value.proposals))
+  proposals.splice(i, 1)
+  process.setKey("proposals", proposals)
+
+}
 </script>
 
 <template>
@@ -137,34 +162,34 @@ const createProcess = async() => {
       </div>
   </div>
   <div v-if="$process.phases === 'voting'">
-    {{ t('wip') }}
-    <!--div class="flex justify-around align-center items-center">
-        <div class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
+    <div class="flex flex-col justify-around align-center items-center">
+        <div v-for="[i, proposal] in Object.entries($process.proposals)" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
+          <div class="flex items-center">
             <div class="flex flex-col w-full ">
                 <b>{{ t('process.proposal') }}</b>
-                <input type="text" class="input input-bordered input-sm my-2 w-full"/>
+                <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
-                <input type="text" class="input input-bordered input-sm my-2 w-full"/>
+                <input @input="(ev) => updateProposal(ev, Number(i), 'description')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.description"/>
             </div>
+          
+            <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+              <Suspense>
+                <Icon name="trash-can"/>
+              </Suspense>
+            </button>
+          </div>
 
         </div>
     </div>
-    <div align="center">
-        <button id="add-proposal" class="btn p-2" >
-            {{ t('process.addProposal') }}
-        </button>
-    </div-->
+    <button @click="addProposal" class="btn p-2" >
+        {{ t('process.addProposal') }}
+    </button>
   </div>
   <br/>
   <br/>
   <div class="text-center">
-    <button type="submit" :class="{'btn-disabled': $process.phases === 'voting'}" class="btn btn-primary" @click="createProcess">
-      <div v-if="$process.phases === 'voting'">
-        {{ t('wip') }}
-      </div>
-      <div v-else>
-        {{ t('create') }}
-      </div>
+    <button type="submit" class="btn btn-primary" @click="createProcess">
+      {{ t('create') }}
     </button>
   </div>
 </template>
