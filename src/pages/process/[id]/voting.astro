@@ -143,6 +143,7 @@ if (pathname !== url.pathname)
             }
         };
         addProposal(proposal: IProposal) {
+            if (proposal.title === '' && proposal.description === '') return
             const proposal_node = this.proposal_html.cloneNode(true)
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title

@@ -30,7 +30,6 @@ const proposals = [
 ];
 
 const lang = i18next.language
-const topicQuestion = ref(null)
 const scrollTopicQuestion = ref(null)
 const errorTopicAlert = ref(false)
 const successProcessAlert = ref(false)
@@ -93,7 +92,7 @@ const createProcess = async() => {
   <div class="pb-6">
     <div>
       <p>{{ t('process.topic') }}</p>
-      <input ref="topicQuestion" name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
+      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
       <textarea name="topicDescription" class="textarea textarea-bordered w-full" :value="$process.description" @input="(e: any) => process.setKey('description', e.target.value)" />

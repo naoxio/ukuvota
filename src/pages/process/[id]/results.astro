@@ -173,10 +173,13 @@ if (pathname !== url.pathname)
             let rank = 0;
             let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
+                if (proposal.title === '' && proposal.description === '') return
+
                 if (prevProposal) {
                     rank += prevProposal.total === proposal.total ? 0 : 1;
                 }
                 prevProposal = proposal;
+            
                 this.proposal_list.appendChild(this.createRow(rank, index, proposal, selectedVoters));
             });
 
@@ -225,6 +228,7 @@ if (pathname !== url.pathname)
             const tableRowOne = this.querySelector('tr.table-row-one');
             const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
             const proposals = process.proposals.map((proposal: any, index: number) => {
+                if (proposal.title === '' && proposal.description === '') return
                 const averageScore = this.getAverageScore(proposal.total, selectedVoters);
                 return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
             }).join('\n');

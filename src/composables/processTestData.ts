@@ -26,6 +26,11 @@ const proposals: IProposal[] = [
         id: '2e1b5019-32eb-25ca-2c88-7240fd91612742ae',
         title: 'Build your own',
         description: 'This proposal suggests allowing each person to choose their own toppings for their individual pizza.'
+    },
+    {
+        id: '1',
+        title: '',
+        description: ''
     }
 ]
 
@@ -58,8 +63,8 @@ voterNames.forEach((voterName: string, i: number) => {
 
 export function processTest() {
     return {
-        proposalDates: [+new Date(), +new Date() + 1000000],
-        votingDates: [+new Date() + 100000000, +new Date() + 2000000000],
+        proposalDates: [+new Date(), +new Date()],
+        votingDates: [+new Date() + 10000000, +new Date() + 20000000],
         weighting: '3',
         title: 'What pizza toppings should we order for our office party?',
         description: 'We are planning an office party and would like to order pizza for everyone. We are trying to decide on the toppings and would like some ideas. Please suggest your favorite toppings and any unique combinations you think would be delicious!',
