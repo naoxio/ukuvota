@@ -20,18 +20,19 @@
     const minute = 60000;
     const second = 1000;
 
-    if (duration >= year) {
-      return Math.round(duration / month) * month;
-    } else if (duration >= month) {
-      return Math.round(duration / day) * day;
-    } else if (duration >= day) {
-      return Math.round(duration / hour) * hour;
-    } else if (duration >= hour) {
-      return Math.round(duration / minute) * minute;
-    } else if (duration >= minute) {
-      return Math.round(duration / second) * second;
-    } else {
-      return duration;
+    switch (true) {
+      case (duration >= year):
+        return Math.round(duration / month) * month;
+      case (duration >= month):
+        return Math.round(duration / day) * day;
+      case (duration >= day):
+        return Math.round(duration / hour) * hour;
+      case (duration >= hour):
+        return Math.round(duration / minute) * minute;
+      case (duration >= minute):
+        return Math.round(duration / second) * second;
+      default:
+        return duration;
     }
   }
 

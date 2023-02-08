@@ -15,14 +15,6 @@
     }
   })
 
-  const time = ref({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  })
-
-
   const targetDate = ref(props.dates[1])
   const currentDate = ref(+new Date())
   const countdown = () => {
@@ -43,8 +35,8 @@
 
 </script>
 <template>
-    <span v-if="targetDate > currentDate" :class="{ 'link-warning' : (type === 'warning' && (targetDate - currentDate) > 300000), 'text-error': (type === 'warning' && (targetDate - currentDate) <= 300000), 'link-success': type === 'success' }">
-      {{ fmtDuration(targetDate, currentDate, units) }}
-    </span>
-    <span v-else class="text-info">{{ t('done') }}</span>
-  </template>
+  <span v-if="targetDate > currentDate" :class="{ 'link-warning' : (type === 'warning' && (targetDate - currentDate) > 300000), 'text-error': (type === 'warning' && (targetDate - currentDate) <= 300000), 'link-success': type === 'success' }">
+    {{ fmtDuration(targetDate, currentDate, units) }}
+  </span>
+  <span v-else class="text-info">{{ t('done') }}</span>
+</template>
