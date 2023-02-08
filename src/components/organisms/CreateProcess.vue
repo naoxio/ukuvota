@@ -31,6 +31,7 @@ const proposals = [
 
 const lang = i18next.language
 const topicQuestion = ref(null)
+const scrollTopicQuestion = ref(null)
 const errorTopicAlert = ref(false)
 const successProcessAlert = ref(false)
 const createProcess = async() => {
@@ -38,8 +39,11 @@ const createProcess = async() => {
   if (typeof title === 'string' && title.trim().length === 0) {
     errorTopicAlert.value = !errorTopicAlert.value
     nextTick()
-
-    window.scrollTo(0,300)
+    scrollTopicQuestion.value.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+    
 
     return
   }
@@ -85,6 +89,7 @@ const createProcess = async() => {
       {{ t('alert.quick.success.createProcess') }} 
     </Alert>
   </AlertManager>
+  <div ref="scrollTopicQuestion"/>
   <div class="pb-6">
     <div>
       <p>{{ t('process.topic') }}</p>
