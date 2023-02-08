@@ -13,7 +13,8 @@ const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${pr
 const data = isDev ? null : await res.json();
 const process = isDev ? processTest() : JSON.parse(data.process);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
-if (pathname !== url.pathname) return Astro.redirect(`${url.origin}${pathname}`);
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`);
 ---
 
 <ProcessLayout process={process}>

@@ -17,7 +17,23 @@ if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
 ---
 
-<ProcessLayout process={process}/>
+<ProcessLayout process={process}>
+    { +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
+    <div>
+        <h2>{ t('process.proposals') }</h2>
+        { process.proposals.map((proposal: any) => (
+            <>
+                <div>
+                    <h3>{ proposal.title }</h3>
+                    <p>{ proposal.description }</p>    
+                </div>
+                <br/>
+            </>
+        ))}
+    </div>
+    }
+
+</ProcessLayout>
 
 
 

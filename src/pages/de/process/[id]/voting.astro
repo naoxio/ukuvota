@@ -39,6 +39,10 @@ if (pathname !== url.pathname)
 </style>
 <ProcessLayout process={process}>
     <voting-list>
+        <span class='flex justify-end'>
+            <span>{ t('process.voters') }:&nbsp;</span>
+            <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
+        </span>
         <div class="proposal-list">
             <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
                 <h3></h3>
@@ -87,6 +91,7 @@ if (pathname !== url.pathname)
     const data = isDev ? null : await res.json();
     const process = isDev ? processTest() : JSON.parse(data.process)
     class VotingList extends HTMLElement {
+        voteCounter = this.querySelector('span.no-voters')
         alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
         alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
         proposal_html = null
@@ -125,24 +130,30 @@ if (pathname !== url.pathname)
                 name: senderName.value,
                 votes
             }
-            if (!isDev) {
-                const res = await fetch(`${location.origin}/api/process/${processId}/vote`, {
-                method: "POST",
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(vote)
-                });
-                const json = await res.json();
-            }
             if (senderName.value !== "") {
                 this.alerts[0].querySelector('span.name').innerHTML = senderName.value
                 addAlert(this.alertList, this.alerts[0].cloneNode(true))
                 senderName.value = ''  
+
+                if (!isDev) {
+                    const res = await fetch(`${location.origin}/api/process/${processId}/vote`, {
+                    method: "POST",
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify(vote)
+                    });
+                    const json = await res.json();
+
+                    const res_v = await fetch(`${location.origin}/api/process/${processId}/voters`)
+                    const json_v = await res_v.json();
+                    this.voteCounter.innerHTML = json_v.length
+                }
             }
             else {
                 addAlert(this.alertList, this.alerts[1].cloneNode(true))
             }
         };
         addProposal(proposal: IProposal) {
+            if (proposal.title === '' && proposal.description === '') return
             const proposal_node = this.proposal_html.cloneNode(true)
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title
@@ -153,6 +164,7 @@ if (pathname !== url.pathname)
         }
         constructor() {
             super()
+
             this.proposal_list = this.querySelector('div.proposal-list')
             this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
             this.proposal_list.innerHTML = ""
