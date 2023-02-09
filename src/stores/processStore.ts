@@ -17,11 +17,11 @@ export type Process = {
     proposalDuration: number
     proposalVotingGap: number
     proposalLogSlider: number
-    proposalOpen: boolean
+    proposalOpen: 0 | 1 | 2
     votingDates: number[]
     votingDateMin: string
     votingDuration: number
-    votingOpen: boolean
+    votingOpen: 0 | 1 | 2
     votingLogSlider: number
     proposals: Proposal[]
 }
@@ -40,10 +40,10 @@ export const process = persistentMap<Process>('process:', {
     phases: 'full',
     defaultProposals: true,
     proposalDuration: defaultDuration,
-    proposalOpen: false,
+    proposalOpen: 0,
     proposalLogSlider: defaultSliderValue,
     votingDuration: defaultDuration,
-    votingOpen: false,
+    votingOpen: 0,
     proposalVotingGap: 0,
     proposalDates, proposalDateMin,
     votingDates, votingDateMin,
@@ -69,6 +69,7 @@ const updateDateMin = (process, keyValue: string) => {
         process.setKey(keyValue + 'Dates' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
 }
 onMount(process, () => {
+    process.setKey('proposalOpen', 0); process.setKey('votingOpen', 0);
     const updating = setInterval(() => {
         if (!process.get().votingOpen)
             updateDateMin(process, 'voting') 

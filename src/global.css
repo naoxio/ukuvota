@@ -52,6 +52,7 @@ li {
 .dp__theme_dark {
     --dp-primary-color: indianred !important;
     --dp-disabled-color: #444 !important;
+    --dp-success-color: #61D161 !important;
 }
 .dp__theme_light {
     --dp-primary-color: indianred !important;
@@ -59,7 +60,12 @@ li {
     --dp-background-color: #f6f0f6 !important;
     --dp-secondary-color: #666 !important;
     --dp-hover-color: #ddd !important;
+    --dp-success-color:  #439243 !important;
 }
 .dp__cell_disabled {
     color: var(--dp-disabled-color) !important;
+}
+
+.dp__arrow_top {
+    display: none;
 }

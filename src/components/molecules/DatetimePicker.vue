@@ -36,8 +36,8 @@
 
 <template>
     <Datepicker
-    @open="process.setKey(props.phase + 'Open' as keyof Process, true)"
-    @closed="process.setKey(props.phase + 'Open' as keyof Process, false)"
+    @open="process.setKey(props.phase + 'Open' as keyof Process, props.index + 1)"
+    @closed="process.setKey(props.phase + 'Open' as keyof Process, 0)"
     :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
     :modelValue="$process[props.phase + 'Dates'][props.index]"
     @update:modelValue="changeDatetime"
@@ -45,11 +45,8 @@
     :clearable="false"
     :format-locale="getDateLocale()"
     prevent-min-max-navigation
-    text-input 
+    text-input
+    :teleport="`#cal-${props.phase}-${props.index}`"
     :cancelText="t('cancel')" :selectText="t('select')"/>
+  
 </template>
-
-<style>
-
-    
-</style>
