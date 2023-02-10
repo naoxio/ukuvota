@@ -57,12 +57,12 @@ if (pathname !== url.pathname)
                 <label tabindex="0" class="btn m-1">{ t('addProposalTemplate') }</label>
                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                   <li><a class="template-proposal flex flex-col">
-                    <b>{ t('proposal.zero.title') }</b>
-                    <p>{ t('proposal.zero.description') }</p>
+                    <b class="title">{ t('proposal.zero.title') }</b>
+                    <p class="description">{ t('proposal.zero.description') }</p>
                   </a></li>
                   <li><a class="template-proposal flex flex-col">
-                    <b>{ t('proposal.one.title') }</b>
-                    <p>{ t('proposal.one.description') }</p>
+                    <b class="title">{ t('proposal.one.title') }</b>
+                    <p class="description">{ t('proposal.one.description') }</p>
                   </a></li>
                 </ul>
               </div>
@@ -229,8 +229,8 @@ if (pathname !== url.pathname)
 
             this.template_proposals.forEach((template) => {
                 template.addEventListener('click', async() => {
-                    const title = template.querySelector('.title')
-                    const description = template.querySelector('.description')
+                    const title = template.querySelector('.title').innerHTML
+                    const description = template.querySelector('.description').innerHTML
                     ws.send(JSON.stringify({
                         method: 'addProposal',
                         title, description,
