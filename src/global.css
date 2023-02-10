@@ -16,6 +16,7 @@ html, body {
     flex-direction: column;
     margin: auto;
     scroll-behavior: smooth;
+    font-size: 18px;
 }
 
 main {

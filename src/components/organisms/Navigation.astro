@@ -59,50 +59,38 @@ const selected = (item: MenuItem) => {
   .selected {
     color:indianred !important;
   }
-  @media screen and (max-width: 400px) {
-    .label {
-      display: none;
-    }
-  }
-  
 </style>
 
-<div class="flex flex-col">
-  <div class="flex justify-center items-center">
-    { menu.map((item) => (
-      <>
-        <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
-          <span class="flex items-center"> 
-            <p class="label pl-1">{t('buttons.' + item.label)}</p>
-          </span>
-        </a>
-      </>
-    ))}
-  </div>
-  <br/>
-  <div class="flex justify-center items-center">
-    <select class="select select-xs mx-2" onchange="location = this.value">
-      {
-        supportedLanguages.map((supportedLanguage: string) => {
-          const value = localizePath(pathname, supportedLanguage);
-          const nativeName = ISO6991.getNativeName(supportedLanguage);
+<div class="flex justify-center items-center">
+  { menu.map((item) => (
+    <>
+      <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
+          {t('buttons.' + item.label)}
+      </a>
+    </>
+  ))}
+  <select class="select select-xs mx-2" onchange="location = this.value">
+    {
+      supportedLanguages.map((supportedLanguage: string) => {
+        const value = localizePath(pathname, supportedLanguage);
+        const nativeName = ISO6991.getNativeName(supportedLanguage);
 
-          return (
-          <option selected={supportedLanguage === currentLanguage} value={value}>{ nativeName }</option>
+        return (
+        <option selected={supportedLanguage === currentLanguage} value={value}>{ nativeName }</option>
 
-          )
-        }
-      )}
-    </select>
+        )
+      }
+    )}
+  </select>
 
-    <div>
-      <ThemeSelector client:only="vue">
-        <Icon class="sun" width="22" name="sun"/>
-        <Icon class="moon" width="22" name="moon" />
-      </ThemeSelector>
-    </div>
+  <div>
+    <ThemeSelector client:only="vue">
+      <Icon class="sun" width="22" name="sun"/>
+      <Icon class="moon" width="22" name="moon" />
+    </ThemeSelector>
   </div>
 </div>
+
 
 
 
