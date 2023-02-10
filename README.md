@@ -1,17 +1,22 @@
-# Astro + Fastify + Fly.io Starter
+# Ukuvota
 
-This is a minimal example with streaming support. 
+Ukuvota is a powerful voting tool designed to make sophisticated decision making easy and accessible to everyone.
 
-First, install the [Fly.io CLI](https://fly.io/docs/hands-on/install-flyctl/)
+## Getting Started
 
-Then launch it with:
+To get started with Ukuvota, simply visit ukuvota.world and start a new process. You can share the link with others and start making decisions together.
 
-```shell
-flyctl launch
-```
+## Development Environment
 
-Walk through the guide and congrats!
+To set up a development environment for Ukuvota, follow these steps:
 
-## Fastify routes
+1. Clone the repository: `git clone https://github.com/waotzi/ukuvota.git`
+2. Install the dependencies: `npm install`
+3. Start the development server: `npm run dev`
 
-You can use `api/index.js` to define any Fastify routes or plugins. This is a useful way to extend your server with Fastify's ecosystem of add-ons.
+With these steps, you will have Ukuvota running on your local machine, and you can start making changes and contributing to the project.
+
+## Support
+
+If you need any help or support, please open an issue in the Github repository, or reach out to us using telegram, twitter or on the fediverse.
+
