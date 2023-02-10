@@ -14,6 +14,17 @@
       "title": "Voting Phase"
     }
   },
+  "alert": {
+    "success": {
+      "createProcess": "Process starting...",
+      "submitVote": "Vote submitted for: "
+    },
+    "error": {
+      "topicQuestion": "Please add a Topic Question",
+      "emptyName": "Please add a name",
+      "proposalsMissing": "Missing proposals, you need at least 2 proposals"
+    } 
+  },
   "remainingTime": "remaining time",
   "tagline": "Finding the best solution",
   "buttons": {
@@ -114,17 +125,5 @@
   "redirect": {
     "legacy": "Redirecting to legacy version..."
   },
-  "pleaseInput": "Please input",
-  "alert": {
-    "quick": {
-      "success": {
-        "createProcess": "Process starting...",
-        "submitVote": "Vote submitted for: "
-      },
-      "error": {
-        "topicQuestion": "Please add a Topic Question",
-        "emptyName": "Please add a name"
-      } 
-    }
-  }
+  "pleaseInput": "Please input"
 }

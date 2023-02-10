@@ -9,6 +9,7 @@ import ContentDoc from "atoms/ContentDoc.vue"
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
+import { IProposal } from '../../../shared/interfaces/IProposal';
 
 import { ref, nextTick } from 'vue'
 import Icon from 'atoms/Icon.vue';
@@ -32,7 +33,12 @@ const template_default_proposals = [
 const lang = i18next.language
 const scrollTopicQuestion = ref(null)
 const errorTopicAlert = ref(false)
+const errorProposalsAlert = ref(false)
 const successProcessAlert = ref(false)
+
+const checkProposalValues = (proposals: IProposal[]) => {
+  return proposals.every(proposal => proposal.title !== '' || proposal.description !== '');
+}
 const createProcess = async() => {
   const title = $process.value.title
   if (typeof title === 'string' && title.trim().length === 0) {
@@ -46,11 +52,16 @@ const createProcess = async() => {
     return
   }
   const proposals = $process.value.phases === 'full' ? $process.value.defaultProposals ? template_default_proposals : [] : JSON.parse( JSON.stringify($process.value.proposals))
+  if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
+    errorProposalsAlert.value = !errorProposalsAlert.value
+
+    return
+  }
 
   const body = {
     topicQuestion: $process.value.title,
     topicDescription: $process.value.description,
-    proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : [+new Date(), +new Date()],
+    proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : [-1, -1],
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
     proposals
@@ -73,8 +84,8 @@ const createProcess = async() => {
     
     process.setKey('title', '')
     process.setKey('description', '')
+    process.setKey('proposals', [])
 
-    
     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}`
   }
 }
@@ -107,10 +118,13 @@ const deletePropsal = (i: number) => {
 <template>
   <AlertManager>
     <Alert :trigger="errorTopicAlert" error icon="warning">
-      {{ t('alert.quick.error.topicQuestion') }}
+      {{ t('alert.error.topicQuestion') }}
     </Alert>
     <Alert :trigger="successProcessAlert" success icon="checkmark-outline">
-      {{ t('alert.quick.success.createProcess') }} 
+      {{ t('alert.success.createProcess') }} 
+    </Alert>
+    <Alert :trigger="errorProposalsAlert" error icon="warning">
+      {{ t('alert.error.proposalsMissing') }}
     </Alert>
   </AlertManager>
   <div ref="scrollTopicQuestion"/>
@@ -181,6 +195,7 @@ const deletePropsal = (i: number) => {
 
         </div>
     </div>
+    <br/>
     <button @click="addProposal" class="btn p-2" >
         {{ t('process.addProposal') }}
     </button>

@@ -12,7 +12,7 @@ const { phase, dates} = Astro.props;
 
 ---
 
-<process-info data-start={dates[0]}>
+<process-time-label data-start={dates[0]}>
 
     <span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
 
@@ -31,12 +31,12 @@ const { phase, dates} = Astro.props;
     }
     <br/>
 
-</process-info>
+</process-time-label>
 
 <script>
     import { fmt } from 'composables/dateHelpers'
 
-    class ProcessInfo extends HTMLElement {
+    class ProcessTimeLabel extends HTMLElement {
         constructor() {
             super()
             const startDate = this.querySelector('span#start-date')
@@ -45,6 +45,6 @@ const { phase, dates} = Astro.props;
 
         }
     }
-    customElements.define('process-info', ProcessInfo)
+    customElements.define('process-time-label', ProcessTimeLabel)
 
 </script>

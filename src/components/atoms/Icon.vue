@@ -21,9 +21,9 @@ const icon = await import(`../../icons/${props.name}.svg`);
 const $theme = useStore(theme)
 </script>
 <style scoped>
-.dark {
-  filter: invert(100%);
-}
+  .dark {
+    filter: invert(100%);
+  }
 </style>
 <template>
     <img :width="width" :class="{'dark': ($theme === 'dark') !== invert }" :src="icon.default"/>

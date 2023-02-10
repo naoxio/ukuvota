@@ -14,6 +14,18 @@
       "title": "Abstimmungsphase"
     }
   },
+  "alert": {
+    "success": {
+      "createProcess": "Prozess startet...",
+      "submitVote": "Wahl eingereicht für: "
+
+    },
+    "error": {
+      "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
+      "emptyName": "Bitte fügen Sie einen Namen hinzu",
+      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge."
+    } 
+  },
   "remainingTime": "verbleibende Zeit",
   "tagline": "Die beste Lösung finden",
   "buttons": {
@@ -114,18 +126,5 @@
   "redirect": {
     "legacy": "Weiterleitung zur alten Version..."
   },
-  "pleaseInput": "Bitte eintragen",
-  "alert": {
-    "quick": {
-      "success": {
-        "createProcess": "Prozess startet...",
-        "submitVote": "Wahl eingereicht für: "
-
-      },
-      "error": {
-        "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
-        "emptyName": "Bitte fügen Sie einen Namen hinzu"
-      } 
-    }
-  }
+  "pleaseInput": "Bitte eintragen"
 }

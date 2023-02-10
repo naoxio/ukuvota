@@ -6,6 +6,7 @@ import Modal from 'molecules/Modal.astro';
 import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
 import ProcessTimeLabel from 'organisms/ProcessTimeLabel.astro';
+import Icon from 'astro-icon'
 
 const { url } = Astro;
 
@@ -25,7 +26,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 ---
 
-<div class="flex flex-col pb-3">
+<process-info class="flex flex-col pb-3" data-title={title} data-description={description}>
     <h1>{ title }</h1>
     <p>{ description }</p>
     <div class="flex justify-end items-center">
@@ -37,7 +38,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
         </Modal>
     </div>
     <div>
-        { proposalDates && <ProcessTimeLabel phase="proposal" dates={proposalDates}/> }
+        { proposalDates && proposalDates[0] > 0 && <ProcessTimeLabel phase="proposal" dates={proposalDates}/> }
         <br/>
         { votingDates && <ProcessTimeLabel phase="voting" dates={votingDates}/> }
         <br/>
@@ -56,11 +57,13 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
                 </div>
                 <br/>
             </Modal>
+            <button class="btn btn-sm btn-ghost btn-circle btn right-2 top-2 share-button"><Icon name="share"/></button>
+
 
         </div>
     </div>
     }                          
-</div>
+</process-info>
 
 
 <script>
@@ -73,4 +76,23 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
             navigator.clipboard.writeText(shareableUrl.value);
         })
     }
+
+    class ProcessInfo extends HTMLElement {
+        constructor() {
+            super()
+               this.querySelector('.share-button').addEventListener('click', function() {
+                if(navigator.share) {
+                    navigator.share({
+                        title: this.dataset.title,
+                        text: this.dataset.description,
+                        url: window.location.href
+                    })
+                }
+            });
+        }
+        
+    }
+    customElements.define('process-info', ProcessInfo)
+
+ 
 </script>
