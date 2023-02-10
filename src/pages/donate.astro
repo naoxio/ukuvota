@@ -6,7 +6,7 @@ import ContentDoc from "atoms/ContentDoc.astro";
 changeLanguage("en");
 ---
 
-<BaseLayout>
+<BaseLayout title={t('buttons.donate')} description={t('description')}>
     <h1>{ t('buttons.donate') }</h1>
     <ContentDoc file_name="Donate"/>
 

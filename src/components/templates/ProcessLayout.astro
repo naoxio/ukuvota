@@ -12,7 +12,7 @@ const {process} = Astro.props;
 
 ---
 
-<BaseLayout>
+<BaseLayout title={process.title} description={process.description}>
     <ProcessInfo
         title={process.title}
         description={process.description}
