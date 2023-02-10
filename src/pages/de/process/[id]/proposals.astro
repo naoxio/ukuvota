@@ -36,7 +36,7 @@ if (pathname !== url.pathname)
                         <b>{ t('process.proposal') }</b>
                         <input type="text" class="input input-bordered input-sm my-2"/>
                         <label>{ t('process.description') }</label>
-                        <input type="text" class="input input-bordered input-sm my-2"/>
+                        <textarea class="textarea textarea-bordered textarea-sm my-2"/>
                     </div>
                     <div class="flex flex-col">
                         <button name="save" class="btn btn-circle btn-ghost p-2 m-2 btn-md">
@@ -95,7 +95,10 @@ if (pathname !== url.pathname)
         }
         updateProposalEdit(proposal, title: string, description: string) {
             const edit_content = proposal.querySelector('div.edit').querySelector('div')
-            const inputs = edit_content.querySelectorAll('input')
+            const inputs = [
+                edit_content.querySelector("input"),
+                edit_content.querySelector("textarea")
+            ];
             inputs[0].value = title
             inputs[1].value = description
         }
@@ -135,7 +138,10 @@ if (pathname !== url.pathname)
             })
 
             const edit_content = edit.querySelector('div')
-            const inputs = edit_content.querySelectorAll('input')
+            const inputs = [
+                edit_content.querySelector("input"),
+                edit_content.querySelector("textarea")
+            ];
             inputs.forEach((input) => {
                 input.addEventListener("keyup", ({key}) => {
                     if (key === "Enter") {

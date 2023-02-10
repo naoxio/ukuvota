@@ -7,11 +7,8 @@ import ContentDoc from "atoms/ContentDoc.astro";
 changeLanguage("de");
 ---
 
-<BaseLayout>
-  <div>
-    <h2>{ t('process.startProcess') }</h2>
-    <ContentDoc file_name="Introduction"/>
-  </div>
+<BaseLayout title={t('buttons.home')} description={t('description')}>
+  <ContentDoc file_name="Introduction"/>
   <process-form>
     <CreateProcess client:only="vue"/>
   </process-form>
