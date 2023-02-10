@@ -167,7 +167,7 @@ const proposalTemplates = ref(0)
                 <b>{{ t('process.proposal') }}</b>
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
-                <input @input="(ev) => updateProposal(ev, Number(i), 'description')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.description"/>
+                <textarea @input="(ev) => updateProposal(ev, Number(i), 'description')" class="textarea textarea-bordered textarea-sm my-2 w-full" :value="proposal.description"/>
             </div>
           
             <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">
