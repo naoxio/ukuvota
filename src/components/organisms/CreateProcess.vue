@@ -159,22 +159,7 @@ const proposalTemplates = ref(0)
   </div>
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
-    <span class="flex items-center justify-between">
-      <h2>{{ t('process.proposals') }}</h2>
-      <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{{ t('addProposalTemplate') }}</label>
-        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a @click="addProposal(0)" class="flex flex-col">
-            <b>{{ t('proposal.zero.title') }}</b>
-            <p>{{ t('proposal.zero.description') }}</p>
-          </a></li>
-          <li><a @click="addProposal(1)" class="flex flex-col">
-            <b>{{ t('proposal.one.title') }}</b>
-            <p>{{ t('proposal.one.description') }}</p>
-          </a></li>
-        </ul>
-      </div>
-    </span>
+    <h2>{{ t('process.proposals') }}</h2>     
     <div class="flex flex-col justify-around align-center items-center">
         <div v-for="[i, proposal] in Object.entries($process.proposals)" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
           <div class="flex items-center">
@@ -195,9 +180,24 @@ const proposalTemplates = ref(0)
         </div>
     </div>
     <br/>
-    <button @click="addProposal()" class="btn p-2" >
-        {{ t('process.addProposal') }}
-    </button>
+    <span class="flex items-center justify-between">
+      <button @click="addProposal()" class="btn p-2" >
+          {{ t('process.addProposal') }}
+      </button>
+      <div class="dropdown">
+        <label tabindex="0" class="btn m-1">{{ t('addProposalTemplate') }}</label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+          <li><a @click="addProposal(0)" class="flex flex-col">
+            <b>{{ t('proposal.zero.title') }}</b>
+            <p>{{ t('proposal.zero.description') }}</p>
+          </a></li>
+          <li><a @click="addProposal(1)" class="flex flex-col">
+            <b>{{ t('proposal.one.title') }}</b>
+            <p>{{ t('proposal.one.description') }}</p>
+          </a></li>
+        </ul>
+      </div>
+    </span>
   </div>
   <br/>
   <br/>
