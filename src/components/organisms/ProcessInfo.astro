@@ -21,7 +21,6 @@ interface Props {
 
 const { title, description, weighting, shareable = true, proposalDates, votingDates} = Astro.props;
 
-
 const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 ---
@@ -31,7 +30,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     <p>{ description }</p>
     <div class="flex justify-end items-center">
         { t('process.weighting') }
-        {weight}
+        {weight}&nbsp;
         <Modal id="weightingInfo">
             <h3>{ t('process.weighting') }</h3>
             <ContentDoc file_name="NegativeScoreWeighting"/>

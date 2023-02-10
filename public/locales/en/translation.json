@@ -1,4 +1,5 @@
 {
+  "addProposalTemplate": "Add proposal by template",
   "duration": "Duration",
   "select": "select",
   "cancel": "cancel",
@@ -68,18 +69,10 @@
       "endTime": "Voting ends in",
       "lastFor": "Voting will last for"
     },
-    "addDefaultProposals": "Add default proposals",
-    "defaultProposals": "Default proposals",
     "maxProposals": "Maximum amount of proposals",
     "amountProposals": "Amount of proposals",
     "limitProposals": "Limit amount of proposals",
     "starting": "Process starting...",
-    "emptyProposal": "Empty proposal",
-    "strategy": {
-      "title": "Select a strategy for your Quick Process",
-      "full": "Full Strategy",
-      "voting": "Voting Strategy"
-    },
     "submitVote": "Submit Vote",
     "shareableUrl": "Shareable link",
     "qrcode": "Qr-Code",
@@ -96,7 +89,6 @@
   "layouts": {
     "title": "Ukuvota"
   },
-  "TBD": "TBD",
   "pages": {
     "title": {
       "top": "Ukuvota"
@@ -124,6 +116,5 @@
   },
   "redirect": {
     "legacy": "Redirecting to legacy version..."
-  },
-  "pleaseInput": "Please input"
+  }
 }

@@ -4,8 +4,6 @@ import { process } from '../../stores/processStore';
 
 import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
-import Modal from "molecules/Modal.vue";
-import ContentDoc from "atoms/ContentDoc.vue"
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
@@ -15,11 +13,7 @@ import { ref, nextTick } from 'vue'
 import Icon from 'atoms/Icon.vue';
 const $process = useStore(process)
 
-const toggleDefaultProposals = (ev: any) => {
-    process.setKey('defaultProposals', ev.target.checked)
-}
-
-const template_default_proposals = [
+const defaultProposals = [
     {
         title: t("proposal.zero.title"),
         description: t("proposal.zero.description"),
@@ -51,7 +45,7 @@ const createProcess = async() => {
     
     return
   }
-  const proposals = $process.value.phases === 'full' ? $process.value.defaultProposals ? template_default_proposals : [] : JSON.parse( JSON.stringify($process.value.proposals))
+  const proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
   if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
     errorProposalsAlert.value = !errorProposalsAlert.value
 
@@ -90,9 +84,10 @@ const createProcess = async() => {
   }
 }
 
-const addProposal = () => {
+const addProposal = (template: number = null) => {
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
-  proposals.push({
+  proposals.push(
+    template !== null ? defaultProposals[template] : {
     title: '',
     description: ''
   })
@@ -105,14 +100,15 @@ const updateProposal = (ev, i: number, key: string) => {
   const proposal = proposals[i]
   proposal[key] = val
   process.setKey("proposals", proposals)
-
 }
+
 const deletePropsal = (i: number) => {
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
   proposals.splice(i, 1)
   process.setKey("proposals", proposals)
-
 }
+const proposalTemplates = ref(0)
+
 </script>
 
 <template>
@@ -163,23 +159,26 @@ const deletePropsal = (i: number) => {
   </div>
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
-    <h2 class="pt-2">{{ t('process.proposals') }}</h2>
-  </div>
-  <div v-if="$process.phases === 'full'">
-      <div class="flex justify-center items-center">
-          <input id="default-proposals" name="default-proposals" type="checkbox" :checked="$process.defaultProposals" :value="$process.defaultProposals" @input="toggleDefaultProposals" class="checkbox" />
-          <label for="default-proposals" class="cursor-pointer">&nbsp;{{ t('process.addDefaultProposals') }}</label>
-          <Modal id="defaultProposalInfo">
-              <h3>{{ t('process.defaultProposals') }}</h3>
-              <ContentDoc file_name="DefaultProposals"/>
-          </Modal>
+    <span class="flex items-center justify-between">
+      <h2>{{ t('process.proposals') }}</h2>
+      <div class="dropdown">
+        <label tabindex="0" class="btn m-1">{{ t('addProposalTemplate') }}</label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+          <li><a @click="addProposal(0)" class="flex flex-col">
+            <b>{{ t('proposal.zero.title') }}</b>
+            <p>{{ t('proposal.zero.description') }}</p>
+          </a></li>
+          <li><a @click="addProposal(1)" class="flex flex-col">
+            <b>{{ t('proposal.one.title') }}</b>
+            <p>{{ t('proposal.one.description') }}</p>
+          </a></li>
+        </ul>
       </div>
-  </div>
-  <div v-if="$process.phases === 'voting'">
+    </span>
     <div class="flex flex-col justify-around align-center items-center">
         <div v-for="[i, proposal] in Object.entries($process.proposals)" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
           <div class="flex items-center">
-            <div class="flex flex-col w-full ">
+            <div class="flex flex-col w-full">
                 <b>{{ t('process.proposal') }}</b>
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
@@ -196,7 +195,7 @@ const deletePropsal = (i: number) => {
         </div>
     </div>
     <br/>
-    <button @click="addProposal" class="btn p-2" >
+    <button @click="addProposal()" class="btn p-2" >
         {{ t('process.addProposal') }}
     </button>
   </div>

@@ -1,4 +1,5 @@
 {
+  "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
   "duration": "Dauer",
   "select": "auswählen",
   "cancel": "abbrechen",
@@ -69,18 +70,10 @@
       "endTime": "Abstimmung endet in",
       "lastFor": "Abstimmung dauert"
     },
-    "addDefaultProposals": "Standardvorschläge hinzufügen",
-    "defaultPropoqsals": "Standardvorschläge",
     "maxProposals": "Maximale Anzahl von Vorschlägen",
     "amountProposals": "Anzahl von Vorschlägen",
     "limitProposals": "Anzahl von Vorschlägen begrenzen",
     "starting": "Prozess beginnt...",
-    "emptyProposal": "Vorschlagstitel fehlt",
-    "strategy": {
-      "title": "Wählen Sie eine Strategie für Ihren schnellen Prozess",
-      "full": "Vollständige Strategie",
-      "voting": "Abstimmungsstrategie"
-    },
     "submitVote": "Wahl abschicken",
     "shareableUrl": "Teilbarer Link",
     "qrcode": "Qr-Code",
@@ -97,7 +90,6 @@
   "layouts": {
     "title": "Ukuvota"
   },
-  "TBD": "TBD",
   "pages": {
     "title": {
       "top": "Ukuvota"
@@ -125,6 +117,5 @@
   },
   "redirect": {
     "legacy": "Weiterleitung zur alten Version..."
-  },
-  "pleaseInput": "Bitte eintragen"
+  }
 }

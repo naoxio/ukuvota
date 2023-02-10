@@ -177,8 +177,8 @@ wss.on('connection', async (ws, req) => {
           // Create the new proposal object
           const proposal = {
             id: proposalId,
-            title: '',
-            description: '',
+            title: data.title ? data.title : '',
+            description: data.description ? data.description : '',
             createdAt: +new Date(),
           };
           // Add the new proposal to the process
