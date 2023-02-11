@@ -4,6 +4,8 @@ import { Icon } from "astro-icon";
 import { processTest } from "composables/processTestData";
 import i18next, { t, changeLanguage } from "i18next";
 import { getProcessUrl } from "composables/getProcessUrl";
+import AlertManager from "molecules/AlertManager.astro";
+import Alert from "molecules/Alert.astro";
 
 changeLanguage("en");
 
@@ -40,8 +42,15 @@ if (pathname !== url.pathname)
 
         <div class="tab-content hide">
             <div class="screenshot-results">
-                <h2>{ t('process.results') }</h2>
-                <h3><span class="voter-label">{ t('process.voters') }</span> <span class="num-voters">({ process.voters.length })</span>:</h3>
+                <span class="flex justify-between items-center">
+                    <h2>{ t('process.results') }</h2>
+                
+                    <button class='repeat-button btn btn-sm'>{ t('repeatProcess') }</button>
+                </span>
+                
+                <h3><span class="voter-label">{ t('process.voters') }</span>
+                    <span class="num-voters">({ process.voters.length })</span>:
+                </h3>
                 <div class="flex justify-around flex-wrap">
                     { process.voters.map((voter: any) => (
                         <div id={voter.id} class="flex items-center p-2 voter">
@@ -86,13 +95,27 @@ if (pathname !== url.pathname)
                 { t('wip')}
             </div>
         </div>
+        <AlertManager>
+            <Alert type="success" icon="checkmark-outline">
+                { t('alert.success.repeatProcess') }
+            </Alert>
+            <Alert type="error" icon="checkmark-outline">
+                { t('alert.error.missingProposals') }
+            </Alert>
+        </AlertManager>
     </results-card>
 </ProcessLayout>
 
+
+
 <script>
     import download from 'downloadjs'
+    import { IProposal } from '../../../../shared/interfaces/IProposal'
     import { toPng } from 'html-to-image';
     import { processTest } from "composables/processTestData";
+    import { process as storeProcess } from 'stores/processStore'
+    import { addAlert } from 'composables/addAlert'
+
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
     const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
@@ -127,6 +150,9 @@ if (pathname !== url.pathname)
         voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
+        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
+        alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
+       
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
                 const process_voter = process.voters.find((vote: any) => vote.id === voter.id)
@@ -184,7 +210,7 @@ if (pathname !== url.pathname)
             });
 
             const items = this.proposal_list.querySelectorAll('tr');
-            items.forEach((item, index) => {
+            items.forEach((item) => {
                 const rows = item.querySelectorAll('td');
                 rows.forEach((row) => {
                     row.style.backgroundColor = getHighlighting(item.className);
@@ -196,19 +222,28 @@ if (pathname !== url.pathname)
             const row = document.createElement('tr');
             row.className = 'color-' + rank;
             row.innerHTML = `
-                <td>${index + 1}</td>
+                <td class='select-for-repeat cursor-pointer'>
+                        <input id="${proposal.id}" type="checkbox" class="checkbox checkbox-xs" />
+                    </span>
+                </td>
                 <td class="whitespace-normal break-words">
                     <h3>${proposal.title}</h3>
                     <p>${proposal.description}</p>
                 </td>
                 <td align="center">
                     <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
-                   
             row.querySelector('div.emoji-container').insertAdjacentElement('beforeend', this.getAverageEmoji(proposal.total, selectedVoters));
             row.innerHTML += `</div>
                 </td>
                 <td align="center">${proposal.total}</td>
             `;
+
+            const repeat = row.querySelector('td.select-for-repeat')
+            repeat.addEventListener('click', (ev) => {
+                if ('tagName' in ev.target && ev.target.tagName === 'INPUT') return
+                const input = repeat.querySelector('input')
+                input.checked = !input.checked
+            })
             return row;
 
         }
@@ -287,6 +322,29 @@ if (pathname !== url.pathname)
                     download(dataUrl, process.title + '.png');
                 });
             });
+
+            const repeatButton = this.querySelector('button.repeat-button')
+            repeatButton.addEventListener('click', () => {
+                const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: HTMLInputElement) => input.checked);
+                if (items.length > 1) {
+                    addAlert(this.alertList, this.alerts[0].cloneNode(true))
+
+                    storeProcess.setKey('title', process.title)
+                    storeProcess.setKey('description', process.title)
+                    storeProcess.setKey('weighting', process.weighting)
+                    storeProcess.setKey('phases', 'voting')
+                    const proposals = process.proposals.filter((proposal: IProposal) => 
+                       items.some((item) => item.id === proposal.id)
+                    );
+                    storeProcess.setKey('proposals', proposals)
+                    window.location.href = `${window.location.origin}/`
+
+                }
+                else {
+                    addAlert(this.alertList, this.alerts[1].cloneNode(true))
+                }
+            })
+            
         }
 
         showTab(tabs: NodeListOf<Element>, contents: NodeListOf<Element>, index: number) {

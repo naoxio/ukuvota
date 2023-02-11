@@ -18,13 +18,14 @@
   "alert": {
     "success": {
       "createProcess": "Prozess startet...",
-      "submitVote": "Wahl eingereicht für: "
-
+      "submitVote": "Wahl eingereicht für: ",
+      "repeatProcess": "Wiederhole den Prozess mit der Auswahl..."
     },
     "error": {
       "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
       "emptyName": "Bitte fügen Sie einen Namen hinzu",
-      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge."
+      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
+      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen."
     } 
   },
   "remainingTime": "verbleibende Zeit",
@@ -118,5 +119,6 @@
   "redirect": {
     "legacy": "Weiterleitung zur alten Version..."
   },
+  "repeatProcess":"Prozess wiederholen",
   "description": "Ukuvota - Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung."
 }

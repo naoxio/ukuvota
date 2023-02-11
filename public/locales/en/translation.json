@@ -18,12 +18,14 @@
   "alert": {
     "success": {
       "createProcess": "Process starting...",
-      "submitVote": "Vote submitted for: "
+      "submitVote": "Vote submitted for: ",
+      "repeatProcess": "Repeat process with selection..."
     },
     "error": {
       "topicQuestion": "Please add a Topic Question",
       "emptyName": "Please add a name",
-      "proposalsMissing": "Missing proposals, you need at least 2 proposals"
+      "proposalsMissing": "Missing proposals, you need at least 2 proposals",
+      "missingProposals": "Missing proposals, you need to select at least 2 proposals"
     } 
   },
   "remainingTime": "remaining time",
@@ -117,5 +119,6 @@
   "redirect": {
     "legacy": "Redirecting to legacy version..."
   },
+  "repeatProcess":"Repeat process",
   "description": "Ukuvota is a powerful decision making tool that helps people make informed choices in a collaborative and organized manner. "
 }
