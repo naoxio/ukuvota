@@ -55,7 +55,7 @@ const createProcess = async() => {
   const body = {
     topicQuestion: $process.value.title,
     topicDescription: $process.value.description,
-    proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : [-1, -1],
+    proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
     proposals

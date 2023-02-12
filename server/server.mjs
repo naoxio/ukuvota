@@ -79,10 +79,12 @@ app.post('/api/process/:id/vote', async(req, res) => {
   }
 });
 const updateDates = (dates) => {
+  if (dates === -1) return
+  
   const duration = dates[1] - dates[0];
   duration = Math.max(duration, 60000);
   
-  if (dates[0] !== -1 && dates[0] < +new Date()) {
+  if (dates[0] < +new Date()) {
     dates[0] = +new Date();
   }
 
