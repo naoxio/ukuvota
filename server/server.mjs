@@ -6,15 +6,6 @@ import { handler as ssrHandler } from '../dist/server/entry.mjs';
 import db from './db.mjs'
 import { WebSocketServer } from 'ws';
 
-// helper function that calculates a timestamp based on the given minutes, hours, and days
-const getTimestamp = (minutes, hours, days) => {
-  let rtn = 0
-  rtn += parseInt(minutes) * 60 * 1000
-  rtn += parseInt(hours) * 3600 * 1000
-  rtn += parseInt(days) * 24 * 3600 * 1000
-  return rtn
-}
-
 const app = express();
 const process_map = new Map();
 const user_map = new Map();
@@ -79,7 +70,7 @@ app.post('/api/process/:id/vote', async(req, res) => {
   }
 });
 const updateDates = (dates) => {
-  if (dates === -1) return
+  if (dates === -1) return [-1, -1];
 
   let duration = dates[1] - dates[0];
   duration = Math.max(duration, 60000);
