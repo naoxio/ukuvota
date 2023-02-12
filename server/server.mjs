@@ -78,6 +78,14 @@ app.post('/api/process/:id/vote', async(req, res) => {
     res.status(400).send('Invalid votes property');
   }
 });
+const updateDates = (dates) => {
+  if (dates[0] !== -1 && dates[0] < +new Date()) {
+    const duration = dates[1] - dates[0];
+    dates[0] = +new Date();
+    dates[1] = dates[0] + duration;
+  }
+  return dates;
+}
 
 app.post('/api/process', async(req, res) => {
   // Get the request body
@@ -97,12 +105,13 @@ app.post('/api/process', async(req, res) => {
         description: proposal.description,
         createdAt: +new Date(),
       }));
+
       // Create the process object
       const process = {
         title: body.topicQuestion,
         description: body.topicDescription,
-        proposalDates: body.proposalDates,
-        votingDates: body.votingDates,
+        proposalDates: updateDates(body.proposalDates),
+        votingDates: updateDates(body.votingDates),
         weighting: body.weighting,
         proposals,
       };
