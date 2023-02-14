@@ -24,7 +24,6 @@ const props = defineProps({
             <p/>
         </span>
         <div class="calendar" :id="`cal-${props.phase}-0`" :class="{'open': $process[props.phase + 'Open'] === 1 }"/>
-        <DatetimeSlider :phase="phase"/>
         <span class="flex justify-between items-center">
             <h3>{{ t(`phases.endsAt`) }}:</h3>
 
@@ -32,6 +31,7 @@ const props = defineProps({
             <p/>
         </span>
         <div class="calendar" :id="`cal-${props.phase}-1`"  :class="{'open': $process[props.phase + 'Open'] === 2 }"/>
+        <DatetimeSlider :phase="phase"/>
 
     </div>
 </template>  
