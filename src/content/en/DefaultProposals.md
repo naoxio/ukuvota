@@ -1,3 +1,0 @@
-- **To "keep things the way they are" is always an option, never the default.** Framing this option as a default position introduces a significant conservative bias — listing it as an option removes this bias and keeps a collective evolutionary.
-
-- **To "look for other options" is always an option.** If none of the other current options are good enough, people are able to choose to look for better ones — this ensures that there is always an acceptable option for everyone.
