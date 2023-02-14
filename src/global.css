@@ -70,3 +70,7 @@ li {
 .dp__arrow_top {
     display: none;
 }
+
+hr {
+    border-top: 2px solid gray;
+}

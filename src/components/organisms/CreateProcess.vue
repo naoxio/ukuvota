@@ -154,6 +154,7 @@ const deletePropsal = (i: number) => {
     </div>
 
     <TimeSelector phase="proposal"/>
+    <p></p><hr/>
     <TimeSelector phase="voting"/>
   </div>
   <div v-if="$process.phases === 'voting'">
