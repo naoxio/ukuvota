@@ -149,8 +149,8 @@ const deletePropsal = (i: number) => {
 
   <div class="py-2">
     <div class="flex justify-between items-center flex-wrap">
-        <h2 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h2>
-        <h2 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h2>
+        <h1 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h1>
+        <h1 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h1>
     </div>
 
     <TimeSelector phase="proposal"/>
