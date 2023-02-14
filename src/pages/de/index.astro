@@ -7,14 +7,46 @@ import ContentDoc from "atoms/ContentDoc.astro";
 changeLanguage("de");
 ---
 
+<style >
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: var(text-red);
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+}
+</style>
+
 <BaseLayout title={t('buttons.home')} description={t('description')}>
-  <ContentDoc file_name="Introduction"/>
   <process-form>
+    { t('intro') }
+    <div class="content">
+      <ContentDoc file_name="Introduction"/>
+    </div>
+  
+    <button type="button" class="collapsible btn btn-ghost">{t('showMore')}</button>
+  
     <CreateProcess client:only="vue"/>
   </process-form>
 </BaseLayout>
 
 <script>
+  import { t } from 'i18next'
   import { loadingLogo } from 'composables/loadingLogo'
   class ProcessForm extends HTMLElement {
     constructor() {
@@ -23,8 +55,22 @@ changeLanguage("de");
       if (component.innerHTML === "") {
         component.innerHTML = loadingLogo()
       }
+
+      const collapsible = this.querySelector('.collapsible')
+      const content = this.querySelector('.content')
+      collapsible.addEventListener("click", function() {
+        this.classList.toggle("active");
+        if (content.style.display === "block") {
+          content.style.display = "none";
+          collapsible.innerHTML = t('showMore')
+        } else {
+          content.style.display = "block";
+          collapsible.innerHTML = t('showLess')
+
+        }
+    });
     }
 }
-  customElements.define('process-form', ProcessForm)
+customElements.define('process-form', ProcessForm)
 
 </script>
