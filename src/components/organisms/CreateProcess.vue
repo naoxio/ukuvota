@@ -107,7 +107,6 @@ const deletePropsal = (i: number) => {
   proposals.splice(i, 1)
   process.setKey("proposals", proposals)
 }
-const proposalTemplates = ref(0)
 
 </script>
 

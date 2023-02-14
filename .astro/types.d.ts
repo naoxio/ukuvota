@@ -63,13 +63,6 @@ declare module 'astro:content' {
 
 	const entryMap: {
 		"de": {
-"DefaultProposals.md": {
-  id: "DefaultProposals.md",
-  slug: "defaultproposals",
-  body: string,
-  collection: "de",
-  data: any
-},
 "Donate.md": {
   id: "Donate.md",
   slug: "donate",
@@ -93,13 +86,6 @@ declare module 'astro:content' {
 },
 },
 "en": {
-"DefaultProposals.md": {
-  id: "DefaultProposals.md",
-  slug: "defaultproposals",
-  body: string,
-  collection: "en",
-  data: any
-},
 "Donate.md": {
   id: "Donate.md",
   slug: "donate",

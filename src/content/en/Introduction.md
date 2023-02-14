@@ -1,5 +1,3 @@
-Welcome to the app for collaborative problem solving! With our app, you can create a process to collectively answer a question.
-
 The process consists of two phases: a collection phase and a voting phase. In the collection phase, everyone can add a proposal for the solution to the topic question. This phase is designed to gather as many ideas as possible for the solution.
 
 After the collection phase, the voting phase begins. In this phase, everyone can vote on each proposal using emojis ranging from -3 to +3. The emojis represent the level of support for each proposal, where -3 is strongly against and +3 is strongly in favor. Negative votes can also be multiplied by a negative weight factor, which you can select when creating the process. This factor allows you to adjust the impact of negative votes to better suit your specific needs.
