@@ -1,5 +1,3 @@
-Willkommen bei der App für kollaboratives Problemlösung! Mit unserer App können Sie einen Prozess erstellen, um gemeinsam eine Frage zu beantworten.
-
 Der Prozess besteht aus zwei Phasen: einer Vorschlagsphase und einer Abstimmungsphase. In der Vorschlagsphase kann jeder einen Vorschlag zur Lösung der Themenfrage hinzufügen. Diese Phase ist darauf ausgelegt, so viele Ideen wie möglich für die Lösung zu sammeln.
 
 Nach der Vorschlagsphase beginnt die Abstimmungsphase. In dieser Phase kann jeder über jeden Vorschlag mit Emojis von -3 bis +3 abstimmen. Die Emojis repräsentieren das Unterstützungsniveau für jeden Vorschlag, wobei -3 stark dagegen und +3 stark dafür ist. Negative Stimmen können auch mit einem negativen Gewichtungsfaktor multipliziert werden, den Sie bei der Erstellung des Prozesses auswählen können. Dieser Faktor ermöglicht es Ihnen, den Einfluss negativer Stimmen an Ihre spezifischen Bedürfnisse anzupassen.
