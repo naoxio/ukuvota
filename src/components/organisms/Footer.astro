@@ -24,6 +24,7 @@ const menu = [
     {
         href: 'https://floss.social/@ukuvota',
         icon: 'mastodon',
+        rel: 'me',
         light: true,
     },
     {
@@ -71,7 +72,7 @@ const menu = [
     <div class="icon">
         {menu.map((item) => (
         <>
-            <a href={item.href} target="_blank">
+            <a href={item.href} target="_blank" rel={item.rel}>
                 <img width="32" src={ getIcon(item.icon) } />
             </a>
         </>
