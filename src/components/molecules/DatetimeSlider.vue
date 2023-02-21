@@ -28,5 +28,6 @@
     <span>{{ t('duration') }}:&nbsp;</span>
     <span class="text-success">{{ fmtDuration(+new Date() + $process[`${props.phase}Duration`], +new Date()) }}</span>
     <br/>
-    <input intervals="" type="range" min="1" max="1000" :value="$process[`${props.phase}LogSlider` as keyof Process]" @input="changeTime" class="range" />
+    <input type="range" min="1" max="184" :value="$process[`${props.phase}LogSlider` as keyof Process]" @input="changeTime" class="range" />
+
   </template>

@@ -25,7 +25,7 @@ export type Process = {
     proposals: Proposal[]
 }
 
-const defaultSliderValue = 401
+const defaultSliderValue = 20
 const defaultDuration = logslider(defaultSliderValue)
 
 const proposalDates = [+new Date(), +new Date() + defaultDuration]
@@ -66,7 +66,17 @@ const updateDateMin = (process, keyValue: string) => {
     if (range && range[0] < +new Date())
         process.setKey(keyValue + 'Dates' as keyof Process, [+new Date(), +new Date() + process.get()[keyValue + 'Duration']])
 }
+const sliderMax = 184
 onMount(process, () => {
+    if (process.get().votingLogSlider > sliderMax) {
+        process.setKey("votingLogSlider", sliderMax)
+        process.setKey("votingDuration", logslider(sliderMax))
+    }
+    if (process.get().proposalLogSlider > sliderMax) {
+        process.setKey("proposalLogSlider", sliderMax)
+        process.setKey("proposalDuration", logslider(sliderMax))
+    }
+
     process.setKey('proposalOpen', 0); process.setKey('votingOpen', 0);
     const updating = setInterval(() => {
         if (!process.get().votingOpen)
