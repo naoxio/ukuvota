@@ -22,7 +22,6 @@ const roundDuration = (duration: number): number => {
 
 
 const sliderToDuration = (value) => {
-  console.log(value)
   if (value <= 10) {
     return value * 1000 * 60
   } else if (value <= 35) {

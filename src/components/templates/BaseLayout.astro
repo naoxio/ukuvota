@@ -1,9 +1,11 @@
 ---
-import i18next from "i18next";
+import i18next, { t } from "i18next";
 import { HeadHrefLangs } from "astro-i18next/components";
 
 import Header from "organisms/Header.astro";
 import Footer from "organisms/Footer.astro";
+import Modal from "molecules/Modal.astro";
+import Icon from "astro-icon"
 
 import "../../global.css"
 const {title, description} = Astro.props;
@@ -28,6 +30,28 @@ const {title, description} = Astro.props;
         <slot />
     </main>
     <br/>
+
+
+
+    <input type="checkbox" id="legacyRedirect" class="modal-toggle" />
+    <label for="legacyRedirect" class="modal">
+      <label class="modal-box relative">
+        <h3 class="text-lg font-bold">{ t('redirect.legacy.title') }</h3>
+        <p>{ t('redirect.legacy.content') }</p>
+        <div class="text-right">
+          <button  class='btn btn-sm'>
+            <label for="legacyRedirect">
+              { t('cancel') }
+            </label>
+          </button> 
+          <button class='btn btn-sm btn-primary' onclick="window.location.href = `https://legacy.ukuvota.world/${hash}`">
+            { t('confirm') }
+          </button>
+        </div>
+      </label>
+    </label>
+    
+
     <Footer/>
   </body>
 </html>
@@ -49,8 +73,9 @@ const {title, description} = Astro.props;
 
   const hash = window.location.hash
   
-  if (hash.includes('#/app/'))
-    window.location.href = `https://legacy.ukuvota.world/${hash}`
-
+  if (hash.includes('#/app/')) {
+    const redirect = document.getElementById("legacyRedirect")
+    redirect.checked = true
+  }
 
 </script>

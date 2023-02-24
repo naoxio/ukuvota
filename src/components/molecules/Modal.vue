@@ -18,8 +18,8 @@ const props = defineProps({
   </label>
 
   <input type="checkbox" :id="id" class="modal-toggle" />
-  <div class="modal">
-    <div class="modal-box">
+  <label :for="id" class="modal">
+    <label class="modal-box">
       <label :for="id" class="btn btn-sm btn-circle absolute right-2 top-2">
         <Suspense>
           <Icon name="close" invert/>    
@@ -28,6 +28,6 @@ const props = defineProps({
       <Suspense>
         <slot/>
       </Suspense>
-    </div>
-  </div>
+    </label>
+  </label>
 </template>

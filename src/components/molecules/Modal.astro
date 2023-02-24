@@ -19,11 +19,11 @@ import { Icon } from 'astro-icon'
 }
 
 <input type="checkbox" id={id} class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box">
+<label for={id} class="modal">
+  <label class="modal-box">
     <label for={id} class="btn btn-sm btn-circle absolute right-2 top-2">
       <Icon width="22" name="close"/>
     </label>
     <slot/>
-  </div>
-</div>
+  </label>
+</label>
