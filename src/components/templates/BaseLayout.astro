@@ -52,7 +52,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
         <slot />
     </main>
     <br/>
-    <input type="checkbox" id="legacyRedirect" class="modal-toggle" />
+    <!--input type="checkbox" id="legacyRedirect" class="modal-toggle" />
     <label for="legacyRedirect" class="modal">
       <label class="modal-box relative">
         <h3 class="text-lg font-bold">{ t('redirect.legacy.title') }</h3>
@@ -63,12 +63,12 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
               { t('cancel') }
             </label>
           </button> 
-          <button class='btn btn-sm btn-primary' onclick="window.location.href = `https://legacy.ukuvota.world/${hash}`">
+          <button class='btn btn-sm btn-primary' onclick="">
             { t('confirm') }
           </button>
         </div>
       </label>
-    </label>
+    </label-->
     
 
     <Footer/>
@@ -93,8 +93,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
   const hash = window.location.hash
   
   if (hash.includes('#/app/')) {
-    const redirect = document.getElementById("legacyRedirect")
-    redirect.checked = true
+    window.location.href = `https://legacy.ukuvota.world/${hash}`
   }
 
 </script>
