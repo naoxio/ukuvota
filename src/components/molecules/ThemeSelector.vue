@@ -1,9 +1,8 @@
 
 <script lang="ts" setup>
-import { useStore } from '@nanostores/vue';
 import { theme as userTheme } from '../../stores/userStore'
 
-userTheme.set(window.localStorage.getItem("theme") || 'dark')
+userTheme.set(window.localStorage.getItem("theme") || 'light')
 
 const toggleTheme = () => {
   let theme = window.localStorage.getItem("theme")  
