@@ -6,6 +6,7 @@ import { handler as ssrHandler } from '../build/server/entry.mjs';
 import db from './db.mjs'
 import { WebSocketServer } from 'ws';
 
+const port = process.env.PORT ? process.env.PORT : 3600
 const app = express();
 const process_map = new Map();
 const user_map = new Map();
@@ -286,6 +287,6 @@ wss.on('connection', async (ws, req) => {
   });
 });
 
-server.listen(8080, function () {
-  console.log('Listening on http://localhost:8080');
+server.listen(port, function () {
+  console.log(`Listening on http://localhost:${port}`);
 });
