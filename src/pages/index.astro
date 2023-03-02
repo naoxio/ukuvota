@@ -43,6 +43,7 @@ changeLanguage("en");
   
     <CreateProcess client:only="vue"/>
   </process-form>
+   <p> is it working</p>
 </BaseLayout>
 
 <script>
@@ -57,7 +58,7 @@ changeLanguage("en");
       }
 
       const collapsible = this.querySelector('.collapsible')
-      const content = this.querySelector('.content')
+      const content = this.querySelector<HTMLElement>('.content') 
       collapsible.addEventListener("click", function() {
         this.classList.toggle("active");
         if (content.style.display === "block") {

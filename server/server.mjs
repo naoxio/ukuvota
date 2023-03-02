@@ -2,7 +2,7 @@
 import express from 'express';
 import http from 'http';
 import crypto from 'crypto';
-import { handler as ssrHandler } from '../build/server/entry.mjs';
+import { handler as ssrHandler } from '../dist/server/entry.mjs';
 import db from './db.mjs'
 import { WebSocketServer } from 'ws';
 
@@ -11,7 +11,7 @@ const app = express();
 const process_map = new Map();
 const user_map = new Map();
 
-app.use(express.static('build/client/'));
+app.use(express.static('dist/client/'));
 app.use(ssrHandler);
 app.use(express.json())
 
