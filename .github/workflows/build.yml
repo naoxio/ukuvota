@@ -31,7 +31,7 @@ jobs:
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
       run: |
         payload=$(echo '{"artifact_url": "'"$ARTIFACT_URL"'", "repository": {"name": "'"$REPO_NAME"'"} }')
-        signature=$(echo -n "$payload" | openssl sha1 -hmac "${WEBHOOK_SECRET}" | awk '{print "sha1="${WEBHOOK_SECRET}}')
+        signature=$(echo -n "$payload" | openssl sha1 -hmac "${WEBHOOK_SECRET}" | awk '{print "sha1=" $2}')
         curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
           -H "X-Hub-Signature: $signature" \
