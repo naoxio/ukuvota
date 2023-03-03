@@ -24,3 +24,10 @@ jobs:
         name: build-artifact
         path: dist
 
+    - name: Trigger Ansible playbook
+      uses: peter-evans/webhook@v2
+      with:
+        url: https://webhooks.alphion.xyz/hooks/ansible-playbook
+        method: POST
+        contentType: 'application/json'
+        payload: '{"extra_vars": {"artifact_url": "${{ steps.build.outputs.artifacts.artifact.url }}"}}'
