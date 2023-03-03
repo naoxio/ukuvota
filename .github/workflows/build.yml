@@ -23,6 +23,11 @@ jobs:
       with:
         name: build-artifact
         path: dist
+    - name: Debug secret
+      env:
+        MY_SECRET: ${{ secrets.MY_SECRET }}
+      run: |
+        echo "The value of MY_SECRET is $MY_SECRET"
 
     - name: Send webhook
       env:
@@ -34,6 +39,6 @@ jobs:
         payload='{"artifact_url": "'"$ARTIFACT_URL"'", "repository": {"name": "'"$REPO_NAME"'"} }'
         curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
-          -H "X-Hub-Signature: ${WEBHOOK_SECRET}" \
+          -H "X-Hub-Secret: ${WEBHOOK_SECRET}" \
           -d "$payload"
         
