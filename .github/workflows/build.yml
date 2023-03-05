@@ -34,7 +34,10 @@ jobs:
       with:
         name: build-artifact
         path: dist
-
+    
+    - name: Wait for 2 minutes
+      run: sleep 120
+    
     - name: Send webhook
       env:
         REPO_NAME: ${{ github.event.repository.name }}
