@@ -30,6 +30,7 @@ jobs:
     - name: Archive build artifact
       id: get-url
       uses: actions/upload-artifact@v2
+
       with:
         name: build-artifact
         path: dist
@@ -41,7 +42,7 @@ jobs:
     - name: Send webhook
       env:
         ARTIFACT_URL: ${{ steps.get-url.outputs.artifact-url }}
-        REPO_NAME: ${{ basename github.repository }}
+        REPO_NAME: ${{ github.event.repository.name }}
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
 
       run: |
