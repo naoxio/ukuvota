@@ -37,9 +37,10 @@ jobs:
       env:
         REPO_NAME: ${{ github.event.repository.name }}
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+        REF: "refs/heads/main"
       run: |
-        payload='{"repository": {"name": "'"$REPO_NAME"'"}}'
-        signature=$(python -c "import hashlib, hmac; print('sha1=' + hmac.new('${WEBHOOK_SECRET}'.encode(), '${payload}'.encode(), hashlib.sha1).hexdigest())")
+        payload="{\"repository\": {\"name\": \"$REPO_NAME\"}, \"ref\": \"$REF\"}"
+        signature=$(printf "%s" "$payload" | openssl dgst -sha1 -hmac "${WEBHOOK_SECRET}" | sed 's/^.*= //')
 
         curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
