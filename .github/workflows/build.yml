@@ -35,8 +35,8 @@ jobs:
         name: build-artifact
         path: dist
     
-    - name: Wait for 2 minutes
-      run: sleep 120
+    - name: Wait for 1 minute
+      run: sleep 60
     
     - name: Send webhook
       env:
