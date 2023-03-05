@@ -12,31 +12,31 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^5.0.0",
-    "@astrojs/tailwind": "^3.0.0",
-    "@astrojs/vue": "^2.0.0",
+    "@astrojs/node": "^5.0.4",
+    "@astrojs/tailwind": "^3.0.1",
+    "@astrojs/vue": "^2.0.1",
     "@nanostores/persistent": "^0.7.0",
-    "@nanostores/vue": "^0.6.1",
-    "@vuepic/vue-datepicker": "^3.6.4",
-    "astro": "^2.0.1",
-    "astro-i18next": "^1.0.0-beta.17",
+    "@nanostores/vue": "^0.7.0",
+    "@vuepic/vue-datepicker": "^4.2.0",
+    "astro": "^2.0.17",
+    "astro-i18next": "^1.0.0-beta.19",
     "astro-icon": "^0.8.0",
-    "body-parser": "^1.20.1",
-    "daisyui": "^2.46.0",
+    "body-parser": "^1.20.2",
+    "daisyui": "^2.51.3",
     "date-fns": "^2.29.3",
     "downloadjs": "^1.4.7",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "html-to-image": "^1.11.4",
+    "html-to-image": "^1.11.11",
     "i18next-vue": "^2.1.1",
     "level": "^8.0.0",
     "multer": "^1.4.5-lts.1",
-    "nanostores": "^0.7.1",
+    "nanostores": "^0.7.4",
     "qrcode": "^1.5.1",
-    "tailwindcss": "^3.2.4",
-    "ws": "^8.11.0"
+    "tailwindcss": "^3.2.7",
+    "ws": "^8.12.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.29.1"
+    "@playwright/test": "^1.31.2"
   }
 }
