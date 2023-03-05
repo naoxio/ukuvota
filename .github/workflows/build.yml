@@ -12,8 +12,19 @@ jobs:
       run:
         working-directory: /var/www/ukuvota.world
     steps:
+    - name: Create working directory
+      run: mkdir -p /var/www/ukuvota.world
+
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm install
