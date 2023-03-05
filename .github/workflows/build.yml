@@ -33,26 +33,16 @@ jobs:
         name: build-artifact
         path: dist
 
-    - name: Get artifact URL
-      id: download-artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: build-artifact
-
-
     - name: Send webhook
       env:
-        ARTIFACT_URL: ${{ steps.download-artifact.outputs.artifacts.build-artifact }}
         REPO_NAME: ${{ github.event.repository.name }}
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
-
       run: |
-        echo "ARTIFACT_URL=$ARTIFACT_URL"
-        echo "REPO_NAME=$REPO_NAME"
-        echo "WBEHOOK_SECRET=$WEBHOOK_SECRET"
-        payload='{"artifact_url": "'"$ARTIFACT_URL"'", "repository": {"name": "'"$REPO_NAME"'"} }'
+        payload='{"repository": {"name": "'"$REPO_NAME"'"}}'
+        signature=$(printf "%s" "$payload" | openssl dgst -sha1 -hmac "${WEBHOOK_SECRET}" | sed 's/^.*= //')
+
         curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
-          -H "X-Hub-Secret: ${WEBHOOK_SECRET}" \
+          -H "X-Hub-Signature: sha1=${signature}" \
           -d "$payload"
         
