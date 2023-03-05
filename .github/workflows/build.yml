@@ -39,7 +39,7 @@ jobs:
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
       run: |
         payload='{"repository": {"name": "'"$REPO_NAME"'"}}'
-        signature=$(printf "%s" "$payload" | openssl dgst -sha1 -hmac "${WEBHOOK_SECRET}" | sed 's/^.*= //')
+        signature=$(python -c "import hashlib, hmac; print('sha1=' + hmac.new('${WEBHOOK_SECRET}'.encode(), '${payload}'.encode(), hashlib.sha1).hexdigest())")
 
         curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
