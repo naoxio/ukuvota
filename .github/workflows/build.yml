@@ -37,12 +37,12 @@ jobs:
       id: download-artifact
       uses: actions/download-artifact@v2
       with:
-        name: my-artifact-name
+        name: build-artifact
 
 
     - name: Send webhook
       env:
-        ARTIFACT_URL: ${{ steps.download-artifact.outputs.artifacts.my-artifact-name }}
+        ARTIFACT_URL: ${{ steps.download-artifact.outputs.artifacts.build-artifact }}
         REPO_NAME: ${{ github.event.repository.name }}
         WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
 
