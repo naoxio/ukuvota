@@ -22,11 +22,6 @@ const menu = [
         light: true,
     },
     {
-        href: 'https://liberapay.com/ukuvota',
-        icon: 'liberapay',
-        light: true,
-    },
-    {
         href: 'https://github.com/waotzi/ukuvota',
         icon: 'github',
     },
@@ -62,7 +57,7 @@ const menu = [
     <div class="icon">
         {menu.map((item) => (
         <>
-            <a href={item.href} target="_blank" rel={item.rel}>
+            <a href={item.href} target="_blank" rel={item.icon}>
                 <img width="32" src={ getIcon(item.icon) } />
             </a>
         </>
