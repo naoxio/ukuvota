@@ -47,7 +47,7 @@ jobs:
         payload="{\"repository\": {\"name\": \"$REPO_NAME\"}, \"ref\": \"$REF\"}"
         signature=$(printf "%s" "$payload" | openssl dgst -sha1 -hmac "${WEBHOOK_SECRET}" | sed 's/^.*= //')
 
-        curl -X POST https://webhooks.alphion.xyz/hooks/ansible-playbook \
+        curl -X POST https://webhooks.waotzi.org/hooks/ansible-playbook \
           -H 'Content-Type: application/json' \
           -H "X-Hub-Signature: sha1=${signature}" \
           -d "$payload"
