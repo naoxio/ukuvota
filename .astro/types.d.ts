@@ -1,7 +1,35 @@
 declare module 'astro:content' {
+	interface Render {
+		'.md': Promise<{
+			Content: import('astro').MarkdownInstance<{}>['Content'];
+			headings: import('astro').MarkdownHeading[];
+			remarkPluginFrontmatter: Record<string, any>;
+		}>;
+	}
+}
+
+declare module 'astro:content' {
 	export { z } from 'astro/zod';
 	export type CollectionEntry<C extends keyof typeof entryMap> =
-		(typeof entryMap)[C][keyof (typeof entryMap)[C]] & Render;
+		(typeof entryMap)[C][keyof (typeof entryMap)[C]];
+
+	// This needs to be in sync with ImageMetadata
+	export const image: () => import('astro/zod').ZodObject<{
+		src: import('astro/zod').ZodString;
+		width: import('astro/zod').ZodNumber;
+		height: import('astro/zod').ZodNumber;
+		format: import('astro/zod').ZodUnion<
+			[
+				import('astro/zod').ZodLiteral<'png'>,
+				import('astro/zod').ZodLiteral<'jpg'>,
+				import('astro/zod').ZodLiteral<'jpeg'>,
+				import('astro/zod').ZodLiteral<'tiff'>,
+				import('astro/zod').ZodLiteral<'webp'>,
+				import('astro/zod').ZodLiteral<'gif'>,
+				import('astro/zod').ZodLiteral<'svg'>
+			]
+		>;
+	}>;
 
 	type BaseSchemaWithoutEffects =
 		| import('astro/zod').AnyZodObject
@@ -57,14 +85,6 @@ declare module 'astro:content' {
 		Required<ContentConfig['collections'][C]>['schema']
 	>;
 
-	type Render = {
-		render(): Promise<{
-			Content: import('astro').MarkdownInstance<{}>['Content'];
-			headings: import('astro').MarkdownHeading[];
-			remarkPluginFrontmatter: Record<string, any>;
-		}>;
-	};
-
 	const entryMap: {
 		"de": {
 "Donate.md": {
@@ -73,21 +93,21 @@ declare module 'astro:content' {
   body: string,
   collection: "de",
   data: any
-},
+} & { render(): Render[".md"] },
 "Introduction.md": {
   id: "Introduction.md",
   slug: "introduction",
   body: string,
   collection: "de",
   data: any
-},
+} & { render(): Render[".md"] },
 "NegativeScoreWeighting.md": {
   id: "NegativeScoreWeighting.md",
   slug: "negativescoreweighting",
   body: string,
   collection: "de",
   data: any
-},
+} & { render(): Render[".md"] },
 },
 "en": {
 "Donate.md": {
@@ -96,21 +116,21 @@ declare module 'astro:content' {
   body: string,
   collection: "en",
   data: any
-},
+} & { render(): Render[".md"] },
 "Introduction.md": {
   id: "Introduction.md",
   slug: "introduction",
   body: string,
   collection: "en",
   data: any
-},
+} & { render(): Render[".md"] },
 "NegativeScoreWeighting.md": {
   id: "NegativeScoreWeighting.md",
   slug: "negativescoreweighting",
   body: string,
   collection: "en",
   data: any
-},
+} & { render(): Render[".md"] },
 },
 
 	};

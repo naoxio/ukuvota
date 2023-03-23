@@ -5,7 +5,7 @@ const proposals: IProposal[] = [
     {
         id: '12804f77-64be-a566-17c2-9e134e824f41c9c9',
         title: 'Pepperoni and mushroom',
-        description: 'This proposal suggests ordering a pizza with pepperoni and mushroom toppings.'
+        description: 'https://google.com This proposal suggests ordering a pizza with pepperoni and mushroom toppings.'
     },
     {
         id: '249831b2-da46-bc40-dbef-61034d77ef4dddaf',
@@ -58,8 +58,8 @@ voterNames.forEach((voterName: string, i: number) => {
 
 export function processTest() {
     return {
-        proposalDates: [+new Date(), +new Date()],
-        votingDates: [+new Date(), +new Date() + 4000000],
+        proposalDates: [+new Date(), +new Date() + 200000],
+        votingDates: [+new Date() + 200000, +new Date() + 4000000],
         weighting: '3',
         title: 'What pizza toppings should we order for our office party?',
         description: 'We are planning an office party and would like to order pizza for everyone. We are trying to decide on the toppings and would like some ideas. Please suggest your favorite toppings and any unique combinations you think would be delicious!',
