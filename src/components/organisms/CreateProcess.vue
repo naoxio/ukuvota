@@ -14,7 +14,7 @@ import Icon from 'atoms/Icon.vue';
 
 import { options } from 'composables/quillEditor'
 
-import { quillEditor } from 'vue3-quill'
+import { QuillEditor, Delta } from '@vueup/vue-quill'
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
@@ -28,7 +28,7 @@ const defaultProposals = [
     },
     {
         title: t("proposal.one.title"),
-        description: t("proposal.one.description"),
+        description: `<p>t("proposal.one.description")</p>`,
     },
 ];
 
@@ -60,10 +60,12 @@ const createProcess = async() => {
     return
   }
 
+  const description = ref({})
+
   // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
-    topicDescription: $process.value.description,
+    topicDescription: description,
     proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
@@ -71,6 +73,7 @@ const createProcess = async() => {
   }
   
   let res: any, json: any;
+  console.log(body.topicDescription)
 
   if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev`
   else {
@@ -89,7 +92,7 @@ const createProcess = async() => {
     process.setKey('title', '')
     process.setKey('description', '')
     process.setKey('proposals', [])
-
+  
     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}`
   }
 }
@@ -105,10 +108,10 @@ const addProposal = (template: number = null) => {
 }
 
 const updateProposal = (ev, i: number, key: string) => {
-  const val = ev.target.value
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
   const proposal = proposals[i]
-  proposal[key] = val
+  proposal[key] = key === 'description' ? ev : ev.target.value
+  console.log('key', proposal[key])
   process.setKey("proposals", proposals)
 }
 
@@ -136,10 +139,10 @@ const deletePropsal = (i: number) => {
   <div class="pb-6">
     <div>
       <p>{{ t('process.topic') }}</p>
-      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
+      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title"  @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <quillEditor class="w-full" :value="$process.description" :options="options" @input="(e: any) => process.setKey('description', e.target.value)" />
+      <QuillEditor class="w-full" :options="options"  :content="new Delta($process.description)" @update:content="(content: Delta) => process.setKey('description', content)"/>
 
       <br><br>
       <WeightSelector/>
@@ -181,7 +184,7 @@ const deletePropsal = (i: number) => {
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
 
-                <quillEditor class="w-full" :options="options" :value="proposal.description" @input="(e: any) => updateProposal(e, Number(i), 'description')" />
+                <QuillEditor class="w-full" :content="new Delta(proposal.description)" :options="options" @update:content="(delta: Delta) => updateProposal(delta, Number(i), 'description')"/>
             </div>
           
             <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">

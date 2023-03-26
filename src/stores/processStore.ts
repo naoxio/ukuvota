@@ -1,14 +1,15 @@
 import { persistentMap } from '@nanostores/persistent'
 import { onMount } from 'nanostores'
 import logslider from 'composables/logslider';
+import { Delta } from 'quill'
 
 type Proposal = {
     title: string,
-    description: string
+    description: Delta
 }
 export type Process = {
     title: string
-    description: string
+    description: Delta
     weighting: string
     phases: 'full' | 'voting'
     proposalDates: number[]
@@ -34,7 +35,7 @@ const votingDates = [proposalDates[1], proposalDates[1] + defaultDuration]
 const votingDateMin = new Date(proposalDates[1]).toLocaleString()
 export const process = persistentMap<Process>('process:', {
     title: '',
-    description: '',
+    description: {},
     weighting: '3',
     phases: 'full',
     proposalDuration: defaultDuration,
@@ -92,6 +93,7 @@ onMount(process, () => {
 
 
 process.subscribe((value, changed) => {
+    console.log("CHANGE", value, changed)
     let [start, end] = [0, 0]
     switch (changed) {
         case 'phases':
