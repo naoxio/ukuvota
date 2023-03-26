@@ -41,7 +41,7 @@ const successProcessAlert = ref(false)
 
 // Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
-  return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== undefined);
+  return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
 }
 
 const description = ref()
@@ -66,8 +66,7 @@ const createProcess = async() => {
   let proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
   if ($process.value.phases === 'voting') {
     for (let i = 0; i < proposals.length; i++) {
-      const proposal = proposals[i];
-      proposals[i] = quillGetHTML(proposal.description)
+      proposals[i].description = quillGetHTML(proposals[i].description)
     }
 
     if(proposals.length < 2 || !checkProposalValues(proposals)) {
@@ -76,7 +75,7 @@ const createProcess = async() => {
     }
 
   }
-
+  console.log(proposals)
   // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
@@ -92,7 +91,7 @@ const createProcess = async() => {
   if (import.meta.env.DEV) return
   else {
     try {
-    res = await fetch(`${location.origin}/api/process`, {
+      res = await fetch(`${location.origin}/api/process`, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -100,7 +99,7 @@ const createProcess = async() => {
 
       if (res.status === 413) {
         errorPayloadSize.value = true;
-        console.error('Payload size is too large.');
+        console.error('Payload size isoo large.');
         return;
       }
 
