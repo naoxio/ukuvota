@@ -4,10 +4,11 @@ import { t, changeLanguage } from "i18next";
 import CreateProcess from "organisms/CreateProcess.vue";
 import ContentDoc from "atoms/ContentDoc.astro";
 
+// Change the default language to English.
 changeLanguage("en");
 ---
 
-<style >
+<style>
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
   cursor: pointer;
@@ -34,14 +35,14 @@ changeLanguage("en");
 
 <BaseLayout title={t('buttons.home')} description={t('description')}>
   <process-form>
-    { t('intro') }
     <div class="content">
+      { t('intro') }
       <ContentDoc file_name="Introduction"/>
     </div>
   
     <button type="button" class="collapsible btn btn-ghost">{t('showMore')}</button>
   
-    <CreateProcess client:only="vue"/>
+    <CreateProcess client:only="vue" />
   </process-form>
 </BaseLayout>
 
@@ -51,12 +52,12 @@ changeLanguage("en");
   class ProcessForm extends HTMLElement {
     constructor() {
       super()
-      const component = this.querySelector('astro-island')
+      const component = this.querySelector<HTMLElement>('astro-island')
       if (component.innerHTML === "") {
         component.innerHTML = loadingLogo()
       }
 
-      const collapsible = this.querySelector('.collapsible')
+      const collapsible = this.querySelector<HTMLElement>('.collapsible')
       const content = this.querySelector<HTMLElement>('.content') 
       collapsible.addEventListener("click", function() {
         this.classList.toggle("active");
@@ -66,7 +67,6 @@ changeLanguage("en");
         } else {
           content.style.display = "block";
           collapsible.innerHTML = t('showLess')
-
         }
     });
     }
