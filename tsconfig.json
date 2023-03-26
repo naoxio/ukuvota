@@ -23,7 +23,7 @@
       "molecules/*": ["components/molecules/*"],
       "organisms/*": ["components/organisms/*"],
       "templates/*": ["components/templates/*"],
-      "interfaces": ["../shared/interfaces"]
+      "interfaces/*": ["shared/interfaces/*"]
     },
   },
   "include": ["src/**/*"],

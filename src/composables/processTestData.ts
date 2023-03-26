@@ -1,5 +1,5 @@
-import { IProposal } from '../../shared/interfaces/IProposal'
-import { IVoter } from '../../shared/interfaces/IVoter'
+import { IProposal } from 'interfaces/IProposal'
+import { IVoter } from 'interfaces/IVoter'
 
 const proposals: IProposal[] = [
     {

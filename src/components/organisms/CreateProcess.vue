@@ -1,26 +1,34 @@
 <script lang="ts" setup>
 import i18next, { t } from 'i18next';
-import { process } from '../../stores/processStore';
+import { process } from 'stores/processStore';
 
 import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
-import { IProposal } from '../../../shared/interfaces/IProposal';
+import { IProposal } from 'interfaces/IProposal';
 
 import { ref, nextTick } from 'vue'
 import Icon from 'atoms/Icon.vue';
+
+import { options } from 'composables/quillEditor'
+
+import { QuillEditor, Delta, Quill } from '@vueup/vue-quill'
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+
 const $process = useStore(process)
 
+// Initialize variables
 const defaultProposals = [
     {
         title: t("proposal.zero.title"),
-        description: t("proposal.zero.description"),
+        description: new Delta().insert(t("proposal.zero.description")),
     },
     {
         title: t("proposal.one.title"),
-        description: t("proposal.one.description"),
+        description: new Delta().insert(t("proposal.one.description")),
     },
 ];
 
@@ -28,48 +36,73 @@ const lang = i18next.language
 const scrollTopicQuestion = ref(null)
 const errorTopicAlert = ref(false)
 const errorProposalsAlert = ref(false)
+const errorPayloadSize = ref(false)
 const successProcessAlert = ref(false)
 
+// Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
-  return proposals.every(proposal => proposal.title !== '' || proposal.description !== '');
+  return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
 }
+
+const description = ref()
+
+function quillGetHTML(inputDelta: Delta) {
+    var tempCont = document.createElement("div");
+    (new Quill(tempCont)).setContents(inputDelta);
+    return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
+}
+
+// Create process
 const createProcess = async() => {
   const title = $process.value.title
-  if (typeof title === 'string' && title.trim().length === 0) {
-    errorTopicAlert.value = !errorTopicAlert.value
-    nextTick()
-    scrollTopicQuestion.value.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-    
-    return
+  const trimmedTitle = typeof title === 'string' && title.trim();
+  
+  if (!trimmedTitle) {
+    errorTopicAlert.value = !errorTopicAlert.value;
+    nextTick(() => scrollTopicQuestion.value.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    return;
   }
-  const proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
-  if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
-    errorProposalsAlert.value = !errorProposalsAlert.value
+  
+  let proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
+  if ($process.value.phases === 'voting') {
+    for (let i = 0; i < proposals.length; i++) {
+      proposals[i].description = quillGetHTML(proposals[i].description)
+    }
 
-    return
+    if(proposals.length < 2 || !checkProposalValues(proposals)) {
+      errorProposalsAlert.value = !errorProposalsAlert.value
+      return
+    }
+
   }
-
+  console.log(proposals)
+  // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
-    topicDescription: $process.value.description,
+    topicDescription: description.value.getHTML(),
     proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
     proposals
   }
+
   let res: any, json: any;
 
-  if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev`
+  if (import.meta.env.DEV) return
   else {
     try {
       res = await fetch(`${location.origin}/api/process`, {
         method: "POST",
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+
+      if (res.status === 413) {
+        errorPayloadSize.value = true;
+        console.error('Payload size isoo large.');
+        return;
+      }
+
       json = await res.json();
     } catch (error) {
       console.error(error);
@@ -79,7 +112,7 @@ const createProcess = async() => {
     process.setKey('title', '')
     process.setKey('description', '')
     process.setKey('proposals', [])
-
+  
     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${json.id}`
   }
 }
@@ -95,10 +128,9 @@ const addProposal = (template: number = null) => {
 }
 
 const updateProposal = (ev, i: number, key: string) => {
-  const val = ev.target.value
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
   const proposal = proposals[i]
-  proposal[key] = val
+  proposal[key] = key === 'description' ? ev : ev.target.value
   process.setKey("proposals", proposals)
 }
 
@@ -121,15 +153,19 @@ const deletePropsal = (i: number) => {
     <Alert :trigger="errorProposalsAlert" error icon="warning">
       {{ t('alert.error.proposalsMissing') }}
     </Alert>
+    <Alert :trigger="errorPayloadSize" error icon="warning">
+      {{ t('alert.error.payloadSizeTooLarge') }}
+    </Alert>
   </AlertManager>
   <div ref="scrollTopicQuestion"/>
   <div class="pb-6">
     <div>
       <p>{{ t('process.topic') }}</p>
-      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
+      <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title"  @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <textarea name="topicDescription" class="textarea textarea-bordered w-full" :value="$process.description" @input="(e: any) => process.setKey('description', e.target.value)" />
+      <QuillEditor ref="description" class="w-full" :options="options"  :content="new Delta($process.description)" @update:content="(content: Delta) => process.setKey('description', content)"/>
+
       <br><br>
       <WeightSelector/>
     </div>
@@ -169,7 +205,8 @@ const deletePropsal = (i: number) => {
                 <b>{{ t('process.proposal') }}</b>
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
-                <textarea @input="(ev) => updateProposal(ev, Number(i), 'description')" class="textarea textarea-bordered textarea-sm my-2 w-full" :value="proposal.description"/>
+
+                <QuillEditor class="w-full" :content="new Delta(proposal.description)" :options="options" @update:content="(delta: Delta) => updateProposal(delta, Number(i), 'description')"/>
             </div>
           
             <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">

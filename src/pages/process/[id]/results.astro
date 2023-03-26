@@ -110,7 +110,7 @@ if (pathname !== url.pathname)
 
 <script>
     import download from 'downloadjs'
-    import { IProposal } from '../../../../shared/interfaces/IProposal'
+    import { IProposal } from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
     import { processTest } from "composables/processTestData";
     import { process as storeProcess } from 'stores/processStore'
@@ -330,7 +330,7 @@ if (pathname !== url.pathname)
                     addAlert(this.alertList, this.alerts[0].cloneNode(true))
 
                     storeProcess.setKey('title', process.title)
-                    storeProcess.setKey('description', process.title)
+                    storeProcess.setKey('description', process.description)
                     storeProcess.setKey('weighting', process.weighting)
                     storeProcess.setKey('phases', 'voting')
                     const proposals = process.proposals.filter((proposal: IProposal) => 

@@ -6,6 +6,7 @@ import { handler as ssrHandler } from '../dist/server/entry.mjs';
 import db from './db.mjs'
 import { WebSocketServer } from 'ws';
 
+
 const port = process.env.PORT ? process.env.PORT : 3600
 const app = express();
 const process_map = new Map();
@@ -13,7 +14,11 @@ const user_map = new Map();
 
 app.use(express.static('dist/client/'));
 app.use(ssrHandler);
-app.use(express.json())
+app.use(express.json({limit: '2mb'}));
+app.use(express.urlencoded({limit: '2mb'}));
+
+const MAX_PAYLOAD_SIZE = 2 * 1024 * 1024; // 2mb in bytes
+
 
 app.get('/api/process/:id', async(req, res) => {
   const processId = req.params.id;
@@ -86,11 +91,17 @@ const updateDates = (dates) => {
 }
 
 app.post('/api/process', async(req, res) => {
+  const contentLength = parseInt(req.headers['content-length']);
+  if (contentLength > MAX_PAYLOAD_SIZE) {
+    res.status(413).send('Payload too large');
+    return;
+  }
+
   // Get the request body
   const body = req.body;
 
   // Check that the 'topicQuestion' and 'topicDescription' properties of the body are strings
-  if (typeof body.topicQuestion === 'string' && typeof body.topicDescription === 'string') {
+  if (typeof body.topicQuestion === 'string' && (typeof body.topicDescription === 'object' || typeof body.topicDescription === 'string')) {
     // Generate a unique ID for the process
     const uuid = crypto.randomUUID();
 
@@ -140,6 +151,9 @@ const server = http.createServer(app);
 // Create a WebSocket server
 const wss = new WebSocketServer({ server });
 
+
+
+
 // Handle a new WebSocket connection
 wss.on('connection', async (ws, req) => {
   // Generate a unique ID for the user
@@ -148,6 +162,12 @@ wss.on('connection', async (ws, req) => {
   user_map.set(userId, []);
   // Handle incoming messages from the user
   ws.on('message', async(message) => {
+    if (message.binary && message.binary.length > MAX_PAYLOAD_SIZE) {
+      const errorMessage = JSON.stringify({ error: 'Payload too large' });
+    ws.send(errorMessage);
+      return;
+    }
+      
     // Parse the message data
     let data = JSON.parse(message);
     // Get the ID of the process
