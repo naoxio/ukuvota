@@ -15,7 +15,7 @@ export const options = {
     modules: {
       toolbar: toolbarOptions,
     },
-    placeholder: 'Compose an epic...',
+    placeholder: '',
     theme: 'snow',
 };
 

@@ -139,7 +139,7 @@ const deletePropsal = (i: number) => {
       <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <quillEditor class="w-full" :value="$process.description" :options="options" @input="(e: any) => process.setKey('description', e)" />
+      <quillEditor class="w-full" :value="$process.description" :options="options" @input="(e: any) => process.setKey('description', e.target.value)" />
 
       <br><br>
       <WeightSelector/>
@@ -181,7 +181,7 @@ const deletePropsal = (i: number) => {
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
 
-                <quillEditor class="w-full" :value="proposal.description" @input="(e: any) => updateProposal(e, Number(i), 'description')" />
+                <quillEditor class="w-full" :options="options" :value="proposal.description" @input="(e: any) => updateProposal(e, Number(i), 'description')" />
             </div>
           
             <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">
