@@ -1,4 +1,4 @@
-import { IProcess } from '../../shared/interfaces/IProcess'
+import { IProcess } from 'interfaces/IProcess'
 
 export function getProcessUrl(process: IProcess, processId: string) {
 

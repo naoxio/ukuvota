@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import i18next, { t } from 'i18next';
-import { process } from '../../stores/processStore';
+import { process } from 'stores/processStore';
 
 import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
-import { IProposal } from '../../../shared/interfaces/IProposal';
+import { IProposal } from 'interfaces/IProposal';
 
 import { ref, nextTick } from 'vue'
 import Icon from 'atoms/Icon.vue';
@@ -35,16 +35,14 @@ const checkProposalValues = (proposals: IProposal[]) => {
 }
 const createProcess = async() => {
   const title = $process.value.title
-  if (typeof title === 'string' && title.trim().length === 0) {
-    errorTopicAlert.value = !errorTopicAlert.value
-    nextTick()
-    scrollTopicQuestion.value.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-    
-    return
+  const trimmedTitle = typeof title === 'string' && title.trim();
+  
+  if (!trimmedTitle) {
+    errorTopicAlert.value = !errorTopicAlert.value;
+    nextTick(() => scrollTopicQuestion.value.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    return;
   }
+  
   const proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
   if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
     errorProposalsAlert.value = !errorProposalsAlert.value

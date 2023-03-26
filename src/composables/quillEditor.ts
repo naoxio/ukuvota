@@ -18,7 +18,7 @@ const options = {
     theme: 'snow',
 };
 
-export function createQuill(element: string) {
-    return new Quill(element, options);
+export function createQuill(id: string) {
+    return new Quill(id, options);
 }
 
