@@ -29,7 +29,8 @@
       "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
       "emptyName": "Bitte fügen Sie einen Namen hinzu",
       "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
-      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen."
+      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
+      "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts"
     } 
   },
   "remainingTime": "verbleibende Zeit",

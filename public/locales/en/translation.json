@@ -29,7 +29,8 @@
       "topicQuestion": "Please add a Topic Question",
       "emptyName": "Please add a name",
       "proposalsMissing": "Missing proposals, you need at least 2 proposals",
-      "missingProposals": "Missing proposals, you need to select at least 2 proposals"
+      "missingProposals": "Missing proposals, you need to select at least 2 proposals",
+      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content"
     } 
   },
   "remainingTime": "remaining time",

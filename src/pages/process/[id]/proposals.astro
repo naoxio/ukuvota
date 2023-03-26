@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon";
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
 import { processTest } from "composables/processTestData";
@@ -17,7 +16,6 @@ const data = isDev ? null : await res.json();
 const process = isDev ? processTest() : JSON.parse(data.process);
 
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
-
 if (pathname !== url.pathname)
     return Astro.redirect
 ---
@@ -31,14 +29,9 @@ if (pathname !== url.pathname)
             <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
                 <div class="view flex justify-between items-center cursor-pointer">
                     <div class="content flex flex-col w-full">
-                        <div class="flex flex-col">
-            
-                        </div>
+                        <div class="flex flex-col"/>
                         <div class="flex">
-                 
-                            <button name="edit" class="btn btn-primary  btn-sm mx-2">
-                                { t('edit') }
-                            </button>
+                            <button name="edit" class="btn btn-primary  btn-sm mx-2">{ t('edit') }</button>
                         </div>
                     </div>
                 </div>
@@ -103,7 +96,6 @@ if (pathname !== url.pathname)
         
         updateProposalView(proposal: any, title: string, description: string) {
             const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
-            console.log("hello", view_content)
             view_content.innerHTML = `
                 <h3>${title}</h3>
                 <p>${description}</p>`

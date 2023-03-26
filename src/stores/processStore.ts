@@ -59,7 +59,7 @@ const updateDates = (value: Process, keyValue: string, duration: number) => {
     process.setKey(keyValue + "Dates" as keyof Process, [range[0], range[0] + duration])
 } 
 
-const updateDateMin = (process, keyValue: string) => {
+const updateDateMin = (process: any, keyValue: string) => {
     const min = +new Date(process.get()[keyValue + 'DateMin' as keyof Process])
     if (min < +new Date())
         process.setKey(keyValue + 'DateMin' as keyof Process, new Date().toLocaleString())
@@ -93,7 +93,6 @@ onMount(process, () => {
 
 
 process.subscribe((value, changed) => {
-    console.log("CHANGE", value, changed)
     let [start, end] = [0, 0]
     switch (changed) {
         case 'phases':

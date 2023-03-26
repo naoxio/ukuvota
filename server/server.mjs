@@ -14,7 +14,7 @@ const user_map = new Map();
 
 app.use(express.static('dist/client/'));
 app.use(ssrHandler);
-pp.use(express.json({limit: '2mb'}));
+app.use(express.json({limit: '2mb'}));
 app.use(express.urlencoded({limit: '2mb'}));
 
 const MAX_PAYLOAD_SIZE = 2 * 1024 * 1024; // 2mb in bytes

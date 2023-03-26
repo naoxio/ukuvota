@@ -14,7 +14,7 @@ import Icon from 'atoms/Icon.vue';
 
 import { options } from 'composables/quillEditor'
 
-import { QuillEditor, Delta } from '@vueup/vue-quill'
+import { QuillEditor, Delta, Quill } from '@vueup/vue-quill'
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
@@ -24,11 +24,11 @@ const $process = useStore(process)
 const defaultProposals = [
     {
         title: t("proposal.zero.title"),
-        description: t("proposal.zero.description"),
+        description: new Delta().insert(t("proposal.zero.description")),
     },
     {
         title: t("proposal.one.title"),
-        description: `<p>t("proposal.one.description")</p>`,
+        description: new Delta().insert(t("proposal.one.description")),
     },
 ];
 
@@ -36,11 +36,20 @@ const lang = i18next.language
 const scrollTopicQuestion = ref(null)
 const errorTopicAlert = ref(false)
 const errorProposalsAlert = ref(false)
+const errorPayloadSize = ref(false)
 const successProcessAlert = ref(false)
 
 // Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
-  return proposals.every(proposal => proposal.title !== '' || proposal.description !== '');
+  return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== undefined);
+}
+
+const description = ref()
+
+function quillGetHTML(inputDelta: Delta) {
+    var tempCont = document.createElement("div");
+    (new Quill(tempCont)).setContents(inputDelta);
+    return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
 }
 
 // Create process
@@ -54,35 +63,47 @@ const createProcess = async() => {
     return;
   }
   
-  const proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
-  if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
-    errorProposalsAlert.value = !errorProposalsAlert.value
-    return
-  }
+  let proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
+  if ($process.value.phases === 'voting') {
+    for (let i = 0; i < proposals.length; i++) {
+      const proposal = proposals[i];
+      proposals[i] = quillGetHTML(proposal.description)
+    }
 
-  const description = ref({})
+    if(proposals.length < 2 || !checkProposalValues(proposals)) {
+      errorProposalsAlert.value = !errorProposalsAlert.value
+      return
+    }
+
+  }
 
   // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
-    topicDescription: description,
+    topicDescription: description.value.getHTML(),
     proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
     votingDates: $process.value.votingDates,
     weighting: $process.value.weighting,    
     proposals
   }
-  
-  let res: any, json: any;
-  console.log(body.topicDescription)
 
-  if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev`
+  let res: any, json: any;
+
+  if (import.meta.env.DEV) return
   else {
     try {
-      res = await fetch(`${location.origin}/api/process`, {
+    res = await fetch(`${location.origin}/api/process`, {
         method: "POST",
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+
+      if (res.status === 413) {
+        errorPayloadSize.value = true;
+        console.error('Payload size is too large.');
+        return;
+      }
+
       json = await res.json();
     } catch (error) {
       console.error(error);
@@ -111,7 +132,6 @@ const updateProposal = (ev, i: number, key: string) => {
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
   const proposal = proposals[i]
   proposal[key] = key === 'description' ? ev : ev.target.value
-  console.log('key', proposal[key])
   process.setKey("proposals", proposals)
 }
 
@@ -134,6 +154,9 @@ const deletePropsal = (i: number) => {
     <Alert :trigger="errorProposalsAlert" error icon="warning">
       {{ t('alert.error.proposalsMissing') }}
     </Alert>
+    <Alert :trigger="errorPayloadSize" error icon="warning">
+      {{ t('alert.error.payloadSizeTooLarge') }}
+    </Alert>
   </AlertManager>
   <div ref="scrollTopicQuestion"/>
   <div class="pb-6">
@@ -142,7 +165,7 @@ const deletePropsal = (i: number) => {
       <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title"  @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <QuillEditor class="w-full" :options="options"  :content="new Delta($process.description)" @update:content="(content: Delta) => process.setKey('description', content)"/>
+      <QuillEditor ref="description" class="w-full" :options="options"  :content="new Delta($process.description)" @update:content="(content: Delta) => process.setKey('description', content)"/>
 
       <br><br>
       <WeightSelector/>
