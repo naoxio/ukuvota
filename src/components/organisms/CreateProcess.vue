@@ -11,8 +11,16 @@ import { IProposal } from 'interfaces/IProposal';
 
 import { ref, nextTick } from 'vue'
 import Icon from 'atoms/Icon.vue';
+
+import { options } from 'composables/quillEditor'
+
+import { quillEditor } from 'vue3-quill'
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+
 const $process = useStore(process)
 
+// Initialize variables
 const defaultProposals = [
     {
         title: t("proposal.zero.title"),
@@ -30,9 +38,12 @@ const errorTopicAlert = ref(false)
 const errorProposalsAlert = ref(false)
 const successProcessAlert = ref(false)
 
+// Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
   return proposals.every(proposal => proposal.title !== '' || proposal.description !== '');
 }
+
+// Create process
 const createProcess = async() => {
   const title = $process.value.title
   const trimmedTitle = typeof title === 'string' && title.trim();
@@ -46,10 +57,10 @@ const createProcess = async() => {
   const proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
   if ($process.value.phases === 'voting' && (proposals.length < 2 || !checkProposalValues(proposals))) {
     errorProposalsAlert.value = !errorProposalsAlert.value
-
     return
   }
 
+  // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
     topicDescription: $process.value.description,
@@ -58,6 +69,7 @@ const createProcess = async() => {
     weighting: $process.value.weighting,    
     proposals
   }
+  
   let res: any, json: any;
 
   if (import.meta.env.DEV) window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/dev`
@@ -127,7 +139,8 @@ const deletePropsal = (i: number) => {
       <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title" @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <textarea name="topicDescription" class="textarea textarea-bordered w-full" :value="$process.description" @input="(e: any) => process.setKey('description', e.target.value)" />
+      <quillEditor class="w-full" :value="$process.description" :options="options" @input="(e: any) => process.setKey('description', e)" />
+
       <br><br>
       <WeightSelector/>
     </div>
@@ -167,7 +180,8 @@ const deletePropsal = (i: number) => {
                 <b>{{ t('process.proposal') }}</b>
                 <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
-                <textarea @input="(ev) => updateProposal(ev, Number(i), 'description')" class="textarea textarea-bordered textarea-sm my-2 w-full" :value="proposal.description"/>
+
+                <quillEditor class="w-full" :value="proposal.description" @input="(e: any) => updateProposal(e, Number(i), 'description')" />
             </div>
           
             <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">

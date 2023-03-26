@@ -9,7 +9,8 @@ const toolbarOptions = [
     [{ 'direction': 'rtl' }],                         // text direction
 
 ];
-const options = {
+
+export const options = {
     debug: 'info',
     modules: {
       toolbar: toolbarOptions,
