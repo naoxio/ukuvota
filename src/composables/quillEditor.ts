@@ -5,7 +5,6 @@ const toolbarOptions = [
     ['blockquote', 'code-block'],
     ['link', 'image'],
     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
     [{ 'direction': 'rtl' }],                         // text direction
 
 ];
