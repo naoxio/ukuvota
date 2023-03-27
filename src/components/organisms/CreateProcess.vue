@@ -14,6 +14,7 @@ import AlertManager from 'molecules/AlertManager.vue';
 import AddProposals from 'molecules/AddProposals.vue';
 import PhaseSelector from 'molecules/PhaseSelector.vue';
 import TimeSelector from "molecules/TimeSelector.vue";
+import WeightSelector from "molecules/WeightSelector.vue";
 import QuillEditor from 'molecules/QuillEditor.vue';
 import EditProposalList from 'organisms/EditProposalList.vue';
 
