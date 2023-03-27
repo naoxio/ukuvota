@@ -3,7 +3,7 @@ import i18next, { t } from 'i18next';
 import { process } from 'stores/processStore';
 import { useStore } from '@nanostores/vue';
 import { IProposal } from 'interfaces/IProposal';
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick } from 'vue'
 import { Delta, Quill } from '@vueup/vue-quill'
 
 import AlertManager from 'molecules/AlertManager.vue';
@@ -20,7 +20,6 @@ const errorTopicAlert = ref(false)
 const errorProposalsAlert = ref(false)
 const errorPayloadSize = ref(false)
 const successProcessAlert = ref(false)
-const isWrapping = ref(false)
 
 // Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
@@ -114,18 +113,6 @@ const deletePropsal = (i: number) => {
 }
 
 
-const checkIsWrapping = () => {
-  isWrapping.value = window.innerWidth <= 767;
-};
-
-onMounted(() => {
-  checkIsWrapping();
-  window.addEventListener('resize', checkIsWrapping);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkIsWrapping);
-});
 </script>
 
 <template>
