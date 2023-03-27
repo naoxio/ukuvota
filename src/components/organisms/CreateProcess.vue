@@ -1,117 +1,102 @@
 <script lang="ts" setup>
 
-  import { ref, nextTick } from 'vue';
-  import { Delta, Quill } from '@vueup/vue-quill';
-  import { useStore } from '@nanostores/vue';
+import { ref, nextTick } from 'vue';
+import { Delta, Quill } from '@vueup/vue-quill';
+import { useStore } from '@nanostores/vue';
 
-  import i18next, { t } from 'i18next';
+import i18next, { t } from 'i18next';
 
-  import { process } from 'stores/processStore';
-  import { IProposal } from 'interfaces/IProposal';
+import { process } from 'stores/processStore';
+import { IProposal } from 'interfaces/IProposal';
 
-  import Alert from 'molecules/Alert.vue';
-  import AlertManager from 'molecules/AlertManager.vue';
-  import AddProposals from 'molecules/AddProposals.vue';
-  import PhaseSelector from 'molecules/PhaseSelector.vue';
-  import TimeSelector from "molecules/TimeSelector.vue";
-  import QuillEditor from 'molecules/QuillEditor.vue';
-  import EditProposalList from 'organisms/EditProposalList.vue';
+import Alert from 'molecules/Alert.vue';
+import AlertManager from 'molecules/AlertManager.vue';
+import AddProposals from 'molecules/AddProposals.vue';
+import PhaseSelector from 'molecules/PhaseSelector.vue';
+import TimeSelector from "molecules/TimeSelector.vue";
+import QuillEditor from 'molecules/QuillEditor.vue';
+import EditProposalList from 'organisms/EditProposalList.vue';
 
 
-  const $process = useStore(process)
+const $process = useStore(process)
 
-  const lang = i18next.language
-  const scrollTopicQuestion = ref(null)
-  const errorTopicAlert = ref(false)
-  const errorProposalsAlert = ref(false)
-  const errorPayloadSize = ref(false)
-  const successProcessAlert = ref(false)
+const lang = i18next.language
+const scrollTopicQuestion = ref(null)
+const errorTopicAlert = ref(false)
+const errorProposalsAlert = ref(false)
+const errorPayloadSize = ref(false)
+const successProcessAlert = ref(false)
 
-  // Check if all proposals have a title and description
-  const checkProposalValues = (proposals: IProposal[]) => {
-    return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
+// Check if all proposals have a title and description
+const checkProposalValues = (proposals: IProposal[]) => {
+  return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
+}
+
+function quillGetHTML(inputDelta: Delta) {
+    var tempCont = document.createElement("div");
+    (new Quill(tempCont)).setContents(inputDelta);
+    return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
+}
+
+// Create process
+const createProcess = async() => {
+  const title = $process.value.title.trim();
+
+  if (!title) {
+    errorTopicAlert.value = !errorTopicAlert.value;
+    nextTick(() => scrollTopicQuestion.value.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    return;
   }
-
-  const description = ref()
-
-  function quillGetHTML(inputDelta: Delta) {
-      var tempCont = document.createElement("div");
-      (new Quill(tempCont)).setContents(inputDelta);
-      return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
-  }
-
-  // Create process
-  const createProcess = async() => {
-    const title = $process.value.title.trim();
   
-    if (!title) {
-      errorTopicAlert.value = !errorTopicAlert.value;
-      nextTick(() => scrollTopicQuestion.value.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-      return;
-    }
-    
-    let proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
+  let proposals = $process.value.phases === 'full' ? [] : JSON.parse( JSON.stringify($process.value.proposals))
 
-    if ($process.value.phases === 'voting') {
-      for (let i = 0; i < proposals.length; i++) {
-        proposals[i].description = quillGetHTML(proposals[i].description)
-      }
-
-      if(proposals.length < 2 || !checkProposalValues(proposals)) {
-        errorProposalsAlert.value = !errorProposalsAlert.value
-        return
-      }
-    }
-    
-    // Prepare request body
-    const body = {
-      topicQuestion: $process.value.title,
-      topicDescription: description.value.getHTML(),
-      proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
-      votingDates: $process.value.votingDates,
-      weighting: $process.value.weighting,    
-      proposals
+  if ($process.value.phases === 'voting') {
+    for (let i = 0; i < proposals.length; i++) {
+      proposals[i].description = quillGetHTML(proposals[i].description)
     }
 
-    if (import.meta.env.DEV) return
-    else {
-      try {
-        const response = await fetch(`${location.origin}/api/process`, {
-          method: "POST",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-        });
-
-        if (response.status === 413) {
-          errorPayloadSize.value = true;
-          console.error('Payload size is too large.');
-          return;
-        }
-
-        const processId = (await response.json()).id;
-        process.setKey('title', '');
-        process.setKey('description', new Delta());
-        process.setKey('proposals', []);
-              
-        window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
-      } catch (error) {
-        console.error(error);
-      }
+    if(proposals.length < 2 || !checkProposalValues(proposals)) {
+      errorProposalsAlert.value = !errorProposalsAlert.value
+      return
     }
   }
-
-  const updateProposal = (ev, i: number, key: string) => {
-    const proposals = JSON.parse( JSON.stringify($process.value.proposals))
-    const proposal = proposals[i]
-    proposal[key] = ev.target.value
-    process.setKey("proposals", proposals)
+  
+  // Prepare request body
+  const body = {
+    topicQuestion: $process.value.title,
+    topicDescription: quillGetHTML($process.value.description),
+    proposalDates: $process.value.phases === 'full' ? $process.value.proposalDates : -1,
+    votingDates: $process.value.votingDates,
+    weighting: $process.value.weighting,    
+    proposals
   }
 
-  const deletePropsal = (i: number) => {
-    const proposals = JSON.parse( JSON.stringify($process.value.proposals))
-    proposals.splice(i, 1)
-    process.setKey("proposals", proposals)
+  if (import.meta.env.DEV) return
+  else {
+    try {
+      const response = await fetch(`${location.origin}/api/process`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (response.status === 413) {
+        errorPayloadSize.value = true;
+        console.error('Payload size is too large.');
+        return;
+      }
+
+      const processId = (await response.json()).id;
+      process.setKey('title', '');
+      process.setKey('description', new Delta());
+      process.setKey('proposals', []);
+            
+      window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
+    } catch (error) {
+      console.error(error);
+    }
   }
+}
 </script>
 
 <template>

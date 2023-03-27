@@ -9,18 +9,20 @@ import QuillEditor from 'molecules/QuillEditor.vue';
 
 const $process = useStore(process);
 
-const updateProposal = (event: Event, index: number, key: string) => {
-  const value = (event.target as HTMLInputElement).value;
-  const proposals = [...$process.value.proposals];
-  proposals[index][key] = value;
-  process.setKey('proposals', proposals);
-};
 
-const deleteProposal = (index: number) => {
-  const proposals = [...$process.value.proposals];
-  proposals.splice(index, 1);
-  process.setKey('proposals', proposals);
-};
+const updateProposal = (ev, i: number, key: string) => {
+    const proposals = JSON.parse( JSON.stringify($process.value.proposals))
+    const proposal = proposals[i]
+    proposal[key] = ev.target.value
+    process.setKey("proposals", proposals)
+}
+
+const deleteProposal = (i: number) => {
+    const proposals = JSON.parse( JSON.stringify($process.value.proposals))
+    proposals.splice(i, 1)
+    process.setKey("proposals", proposals)
+}
+
 </script>
 
 <template>
