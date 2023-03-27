@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { t } from 'i18next';
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useStore } from '@nanostores/vue';
 import { process } from 'stores/processStore';
 import { Delta } from '@vueup/vue-quill'

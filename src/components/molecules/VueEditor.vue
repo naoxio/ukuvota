@@ -2,9 +2,9 @@
 import { QuillEditor, Delta } from '@vueup/vue-quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
-import { defineEmits, defineProps, watchEffect, computed} from 'vue';
+import { watchEffect, computed} from 'vue';
 import { options } from 'composables/quillEditor';
-import { process, Process } from 'stores/processStore';
+import { process } from 'stores/processStore';
 import { theme } from 'stores/userStore';
 import { useStore } from '@nanostores/vue';
 
