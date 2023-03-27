@@ -14,7 +14,8 @@
   import AddProposals from 'molecules/AddProposals.vue';
   import PhaseSelector from 'molecules/PhaseSelector.vue';
   import TimeSelector from "molecules/TimeSelector.vue";
-  import VueEditor from 'molecules/VueEditor.vue';
+  import QuillEditor from 'molecules/QuillEditor.vue';
+  import EditProposalList from 'organisms/EditProposalList.vue';
 
 
   const $process = useStore(process)
@@ -135,8 +136,7 @@
       <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title"  @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <VueEditor />
-
+      <QuillEditor />
       <br><br>
       <WeightSelector/>
     </div>
@@ -144,13 +144,11 @@
     <PhaseSelector/>
   </div>
   <hr/>
-
   <div class="py-2">
     <div class="flex justify-between items-center flex-wrap">
         <h1 v-if="$process.phases === 'full'">{{ t('process.timeLeftHeading') }}</h1>
         <h1 v-if="$process.phases === 'voting'">{{ t('process.timeLeftVotingHeading') }}</h1>
     </div>
-
     <TimeSelector phase="proposal"/>
     <span  v-if="$process.phases === 'full'">
       <p></p><hr/>
@@ -160,27 +158,7 @@
   <div v-if="$process.phases === 'voting'">
     <hr class="mt-4"/>
     <h2>{{ t('process.proposals') }}</h2>     
-    <div class="flex flex-col justify-around align-center items-center">
-        <div v-for="[i, proposal] in Object.entries($process.proposals)" class="proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full">
-          <div class="flex items-center">
-            <div class="flex flex-col w-full">
-                <b>{{ t('process.proposal') }}</b>
-                <input @input="(ev: Event) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
-                <label>{{ t('process.description') }}</label>
-                <VueEditor :index="Number(i)" />
-            </div>
-          </div>
-          <div class="flex justify-center w-full pt-2">
-            <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-ghost text-error btn-xs">
-              <Suspense>
-                {{ t('delete') }}
-              </Suspense>
-            </button>
-
-          </div>
-        </div>
-    </div>
-    <br/>
+    <EditProposalList/>
     <AddProposals/>
   </div>
   <br/>

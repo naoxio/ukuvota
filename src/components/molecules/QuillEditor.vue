@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const updateContent = (content: Delta) => {
-  if (props.index) {
+  if (props.index !== undefined) {
     const proposals = process.get().proposals
     proposals[props.index].description = content
     process.setKey("proposals", proposals)
@@ -30,7 +30,7 @@ const updateContent = (content: Delta) => {
   }
 };
 
-const content = computed(() => props.index
+const content = computed(() => (props.index !== undefined)
   ? process.get().proposals[props.index].description
   : process.get().description);
 
