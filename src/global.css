@@ -4,7 +4,7 @@
 html, body {
     scroll: smooth;
     width: 100%;
-    min-width: 450px;
+    min-width: 480px;
     max-width: 900px;
     height: 100vh;
     padding: 1rem;
@@ -77,4 +77,8 @@ hr {
 
 .ql-hidden {
     display: none !important;
+}
+
+.ql-toolbar, .ql-container {
+    border-color: hsl(var(--bc) / var(--tw-border-opacity));
 }

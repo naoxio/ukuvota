@@ -9,11 +9,12 @@ import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
 import { IProposal } from 'interfaces/IProposal';
 
-import { ref, nextTick } from 'vue'
-import Icon from 'atoms/Icon.vue';
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+
 
 import { options } from 'composables/quillEditor'
 
+import VueEditor from 'molecules/VueEditor.vue';
 import { QuillEditor, Delta, Quill } from '@vueup/vue-quill'
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
@@ -38,6 +39,7 @@ const errorTopicAlert = ref(false)
 const errorProposalsAlert = ref(false)
 const errorPayloadSize = ref(false)
 const successProcessAlert = ref(false)
+const isWrapping = ref(false)
 
 // Check if all proposals have a title and description
 const checkProposalValues = (proposals: IProposal[]) => {
@@ -75,7 +77,6 @@ const createProcess = async() => {
     }
 
   }
-  console.log(proposals)
   // Prepare request body
   const body = {
     topicQuestion: $process.value.title,
@@ -140,6 +141,19 @@ const deletePropsal = (i: number) => {
   process.setKey("proposals", proposals)
 }
 
+
+const checkIsWrapping = () => {
+  isWrapping.value = window.innerWidth <= 767;
+};
+
+onMounted(() => {
+  checkIsWrapping();
+  window.addEventListener('resize', checkIsWrapping);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkIsWrapping);
+});
 </script>
 
 <template>
@@ -164,7 +178,7 @@ const deletePropsal = (i: number) => {
       <input name="topicQuestion" class="input input-bordered w-full" :value="$process.title"  @input="(e: any) => process.setKey('title', e.target.value)" type="text">
       <br>
       <p>{{ t('process.description') }}</p>
-      <QuillEditor ref="description" class="w-full" :options="options"  :content="new Delta($process.description)" @update:content="(content: Delta) => process.setKey('description', content)"/>
+      <VueEditor />
 
       <br><br>
       <WeightSelector/>
@@ -203,26 +217,25 @@ const deletePropsal = (i: number) => {
           <div class="flex items-center">
             <div class="flex flex-col w-full">
                 <b>{{ t('process.proposal') }}</b>
-                <input @input="(ev) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
+                <input @input="(ev: Event) => updateProposal(ev, Number(i), 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
                 <label>{{ t('process.description') }}</label>
-
-                <QuillEditor class="w-full" :content="new Delta(proposal.description)" :options="options" @update:content="(delta: Delta) => updateProposal(delta, Number(i), 'description')"/>
+                <VueEditor :index="Number(i)" />
             </div>
-          
-            <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-circle btn-ghost p-2 m-2 btn-md">
+          </div>
+          <div class="flex justify-center w-full pt-2">
+            <button name="delete" @click="deletePropsal(Number(i))" class="btn btn-ghost text-error btn-xs">
               <Suspense>
-                <Icon name="trash-can"/>
+                {{ t('delete') }}
               </Suspense>
             </button>
-          </div>
 
+          </div>
         </div>
     </div>
     <br/>
-    <span class="flex items-center justify-between">
-      <button @click="addProposal()" class="btn p-2" >
-          {{ t('process.addProposal') }}
-      </button>
+    <span class="flex items-center flex-wrap" 
+          :class="{'justify-between': !isWrapping, 'justify-center': isWrapping}">    
+      <button @click="addProposal()" class="btn p-2">{{ t('process.addProposal') }}</button>
       <div class="dropdown">
         <label tabindex="0" class="btn m-1">{{ t('addProposalTemplate') }}</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
