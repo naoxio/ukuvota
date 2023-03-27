@@ -1,37 +1,18 @@
 <script lang="ts" setup>
 import i18next, { t } from 'i18next';
 import { process } from 'stores/processStore';
-
-import WeightSelector from "molecules/WeightSelector.vue"
 import { useStore } from '@nanostores/vue';
+import { IProposal } from 'interfaces/IProposal';
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { Delta, Quill } from '@vueup/vue-quill'
+
 import AlertManager from 'molecules/AlertManager.vue';
 import Alert from 'molecules/Alert.vue'
 import TimeSelector from "molecules/TimeSelector.vue";
-import { IProposal } from 'interfaces/IProposal';
-
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-
-
-import { options } from 'composables/quillEditor'
-
+import AddProposals from 'molecules/AddProposals.vue'
 import VueEditor from 'molecules/VueEditor.vue';
-import { QuillEditor, Delta, Quill } from '@vueup/vue-quill'
-import 'quill/dist/quill.core.css';
-import 'quill/dist/quill.snow.css';
 
 const $process = useStore(process)
-
-// Initialize variables
-const defaultProposals = [
-    {
-        title: t("proposal.zero.title"),
-        description: new Delta().insert(t("proposal.zero.description")),
-    },
-    {
-        title: t("proposal.one.title"),
-        description: new Delta().insert(t("proposal.one.description")),
-    },
-];
 
 const lang = i18next.language
 const scrollTopicQuestion = ref(null)
@@ -118,20 +99,11 @@ const createProcess = async() => {
   }
 }
 
-const addProposal = (template: number = null) => {
-  const proposals = JSON.parse( JSON.stringify($process.value.proposals))
-  proposals.push(
-    template !== null ? defaultProposals[template] : {
-    title: '',
-    description: ''
-  })
-  process.setKey("proposals", proposals)
-}
 
 const updateProposal = (ev, i: number, key: string) => {
   const proposals = JSON.parse( JSON.stringify($process.value.proposals))
   const proposal = proposals[i]
-  proposal[key] = key === 'description' ? ev : ev.target.value
+  proposal[key] = ev.target.value
   process.setKey("proposals", proposals)
 }
 
@@ -233,23 +205,7 @@ onUnmounted(() => {
         </div>
     </div>
     <br/>
-    <span class="flex items-center flex-wrap" 
-          :class="{'justify-between': !isWrapping, 'justify-center': isWrapping}">    
-      <button @click="addProposal()" class="btn p-2">{{ t('process.addProposal') }}</button>
-      <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{{ t('addProposalTemplate') }}</label>
-        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-          <li><a @click="addProposal(0)" class="flex flex-col">
-            <b>{{ t('proposal.zero.title') }}</b>
-            <p>{{ t('proposal.zero.description') }}</p>
-          </a></li>
-          <li><a @click="addProposal(1)" class="flex flex-col">
-            <b>{{ t('proposal.one.title') }}</b>
-            <p>{{ t('proposal.one.description') }}</p>
-          </a></li>
-        </ul>
-      </div>
-    </span>
+    <AddProposals/>
   </div>
   <br/>
   <br/>
