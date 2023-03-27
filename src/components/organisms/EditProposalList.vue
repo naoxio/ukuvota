@@ -31,7 +31,6 @@ const deleteProposal = (index: number) => {
             <b>{{ t('process.proposal') }}</b>
             <input @input="updateProposal($event, index, 'title')" type="text" class="input input-bordered input-sm my-2 w-full" :value="proposal.title"/>
             <label>{{ t('process.description') }}</label>
-            {{  index }}
             <QuillEditor :index="index" />
           </div>
         </div>
