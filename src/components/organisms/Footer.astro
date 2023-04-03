@@ -1,41 +1,63 @@
 ---
-import { t } from "i18next"
+// Import required functions and assets
+import { t } from "i18next";
 import { localizePath } from "astro-i18next";
-import { getAssets } from "composables/getAssets"
+import { getAssets } from "composables/getAssets";
 
-const icons = getAssets(await Astro.glob('../../assets/icons/*.png'));
-const getIcon = (name: string) => {
-    return icons.find(icon => icon.name === name)?.src
-}
+
+// Define the menu items and their corresponding icons
 const menu = [
-    {
-        href: 'mailto:support@ukuvota.world',
-        icon: 'email',
-    },
-    {
-        href: 'https://twitter.com/ukuvota',
-        icon: 'twitter',
-    },
-    {
-        href: 'https://taobox.pub/@ukuvota',
-        icon: 'saopbox',
-    },
-    {
-        icon: 'telegram',
-        href: 'https://t.me/Ukuvota',
-        light: true,
-    },
-    {
-        href: 'https://github.com/waotzi/ukuvota',
-        icon: 'github',
-    },
-]
+  { href: "mailto:support@ukuvota.world", icon: "email" },
+  { href: "https://twitter.com/ukuvota", icon: "twitter" },
+  { href: "https://taobox.pub/@ukuvota", icon: "soapbox" },
+  { href: "https://t.me/Ukuvota", icon: "telegram" },
+  { href: "https://github.com/waotzi/ukuvota", icon: "github" },
+];
 
+// Load icons into the 'icons' object
+const icons = getAssets(await Astro.glob("../../assets/icons/*.png"));
 
+// Define getIcon function to return the icon source by name
+const getIcon = (name: string) => {
+    if (name === "soapbox" && icons.find(icon => icon.name === name)?.src === undefined)
+        return icons.find(icon => icon.name === "AdMR0JMIsq4KAryJAPybBLQQAejv5Rug538fFtNy2gAAAABJRU5ErkJggg==")?.src;
+    return icons.find(icon => icon.name === name)?.src;
+};
 ---
+
+<!-- Render the footer with menu items and links -->
+<footer>
+    <div class="icon">
+      {menu.map((item) => (
+        <>
+          <a href={item.href} target="_blank" rel={item.icon}>
+            <img width="32" src={getIcon(item.icon)} />
+          </a>
+        </>
+      ))}
+    </div>
+    <div class="links">
+      <span>
+        {t("footer.powered")}
+        <a class="link link-primary" href="https://astro.build/">astro</a>.
+      </span>&nbsp;
+      <span>
+        {t("footer.supported")}
+        <a class="link link-primary" href={localizePath("/donate")}>
+          {t("footer.donations")}.
+        </a>
+      </span>&nbsp;
+      <span>
+        {t("footer.maintained")}
+        <a class="link link-primary" href="https://waotzi.org">waotzi</a>.
+      </span>
+    </div>
+  </footer>
+  
 
 
 <style>
+    /* Define styles for footer and its elements */
     footer {
         display: flex;
         flex-direction: column;
@@ -43,43 +65,20 @@ const menu = [
         justify-content: flex-end;
         width: 100%;
     }
+
     .icon {
         display: flex;
     }
+
     .icon a {
         padding: 0.5rem;
     }
+
     .links {
         display: flex;
         flex-wrap: wrap;
         word-break: break-all;
         justify-content: center;
     }
+
 </style>
-    
-<footer>
-    <div class="icon">
-        {menu.map((item) => (
-        <>
-            <a href={item.href} target="_blank" rel={item.icon}>
-                <img width="32" src={ getIcon(item.icon) } />
-            </a>
-        </>
-        ))}
-    </div>
-    <div class="links">
-        <span>{ t('footer.powered') }
-            <a class="link link-primary" href="https://astro.build/">astro</a>.
-        </span>&nbsp;
-        <span>
-            { t('footer.supported') }
-            <a class="link link-primary" href={localizePath('/donate')}>
-                { t('footer.donations') }.
-            </a>
-        </span>&nbsp;
-        <span>
-            { t('footer.maintained') }
-            <a class="link link-primary" href="https://waotzi.org">waotzi</a>.
-        </span>
-    </div>
-</footer>
