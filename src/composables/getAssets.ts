@@ -5,7 +5,6 @@ interface Icon {
 export function getAssets(globs: any[]) {
     const assets: Icon[] = []
     globs.forEach(glob => {
-        console.log(glob)
         assets.push({
             name: glob.default.split('/').pop().split('.').shift(),
             src: glob.default

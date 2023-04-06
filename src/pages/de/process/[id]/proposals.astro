@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon";
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
 import { processTest } from "composables/processTestData";
@@ -10,12 +9,20 @@ changeLanguage("de");
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
+let data;
+let process;
+// Fetch data from the API
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
+if (!isDev && res.status === 404) {
+    return Astro.redirect("/");
+}
+else {
+    data = isDev ? null : await res.json();
+    process = isDev ? processTest() : JSON.parse(data.process);
+}
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
+    return Astro.redirect;
 ---
 
 <ProcessLayout process={process}>
@@ -26,19 +33,20 @@ if (pathname !== url.pathname)
         <div class="proposals">
             <div class="proposal bg-base-100 card shadow-xl py-2 px-4 my-4">
                 <div class="view flex justify-between items-center cursor-pointer">
-                    <div class="flex flex-col">
-        
+                    <div class="content flex flex-col w-full">
+                        <div class="flex flex-col"/>
+                        <div class="flex">
+                            <button name="edit" class="btn btn-primary  btn-sm mx-2">{ t('edit') }</button>
+                        </div>
                     </div>
-                    <button class="btn btn-circle btn-ghost p-2 btn-md">
-                        <Icon name="edit"/>
-                    </button>
                 </div>
-                <div class="edit flex justify-between items-center " style="display: none;">
+                <div class="edit flex justify-between items-center" style="display: none;">
                     <div class="content flex flex-col w-full">
                         <b>{ t('process.proposal') }</b>
                         <input type="text" class="input input-bordered input-sm my-2"/>
                         <label>{ t('process.description') }</label>
-                        <textarea class="textarea textarea-bordered textarea-sm my-2"/>
+                        <div id="-1" class="quill"/>
+                        <br/>
                         <div class="flex">
                             <button name="save" class="btn btn-primary btn-sm mx-2">
                                 { t('save') }
@@ -73,26 +81,9 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-    import Quill from 'quill'
+    import IProposal from "interfaces/IProposal"
     import { processTest } from "composables/processTestData";
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-        [{ 'direction': 'rtl' }],                         // text direction
-
-    ];
-    const options = {
-        debug: 'info',
-        modules: {
-            toolbar: toolbarOptions
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow'
-    };
-    const editor = new Quill('#editor', options);  // First matching element will be used
+    import { createQuill } from "composables/quillEditor";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -107,24 +98,26 @@ if (pathname !== url.pathname)
         proposal_html = null
         proposals = null
         template_proposals = this.querySelectorAll('.template-proposal')
-
-        updateProposalView(proposal, title: string, description: string) {
-            const view_content = proposal.querySelector('div.view').querySelector('div')
+        
+        updateProposalView(proposal: any, title: string, description: string) {
+            const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
             view_content.innerHTML = `
                 <h3>${title}</h3>
                 <p>${description}</p>`
         }
-        updateProposalEdit(proposal, title: string, description: string) {
+        
+        updateProposalEdit(proposal: any, title: string, description: string) {
             const edit_content = proposal.querySelector('div.edit').querySelector('div')
             const inputs = [
                 edit_content.querySelector("input"),
-                edit_content.querySelector("textarea")
+                edit_content.querySelector(".quill")
             ];
             inputs[0].value = title
-            inputs[1].value = description
+            inputs[1].innerHTML = description
         }
-        updateProposal(inputs, proposal) {
-            if (inputs[0].value === '' && inputs[1].value === '') {
+        
+        updateProposal(inputs: any[], proposal: IProposal) {
+            if (inputs[0].value === '' && inputs[1].innerHTML === '') {
                 ws.send(JSON.stringify({
                     method: 'removeProposal',
                     proposalId: proposal.id,
@@ -134,66 +127,67 @@ if (pathname !== url.pathname)
                 ws.send(JSON.stringify({
                     method: 'updateProposal',
                     title: inputs[0].value,
-                    description: inputs[1].value,
+                    description: inputs[1].innerHTML,
                     proposalId: proposal.id,
                     processId
                 }));
             }
-            this.updateProposalView(proposal, inputs[0].value, inputs[1].value);
+            this.updateProposalView(proposal, inputs[0].value, inputs[1].innerHTML);
         }
 
-        addProposal(data, editing: boolean = false) {
-            const proposal = this.proposal_html.cloneNode(true)
-            proposal.id = data.id
-            const view = proposal.querySelector('div.view')
-            const edit = proposal.querySelector('div.edit')
+        addProposal(data: IProposal, editing: boolean = false) {
+            // Clone proposal HTML element and set its ID to data ID
+            const proposal = this.proposal_html.cloneNode(true);
+            proposal.id = data.id;
+            
+            // Get view and edit element inside proposal element and update view with new proposal data
+            const view = proposal.querySelector('div.view');
+            const edit = proposal.querySelector('div.edit');
             this.updateProposalView(proposal, data.title, data.description)
+            
+            // If editing is true, hide view, show edit
             if (editing) {
-                view.style.display = 'none'
-                edit.style.display = 'flex'
+              view.style.display = 'none'
+              edit.style.display = 'flex'
             }
-
+            
+            // Add event listener to view so that it becomes hidden when clicked and edit view becomes visible
             view.addEventListener('click', () => {
-                view.style.display = 'none'
-                edit.style.display = 'flex'
+              view.style.display = 'none'
+              edit.style.display = 'flex'
             })
-
+            
+            // Get input elements within edit content element and add keyup event listener
             const edit_content = edit.querySelector('div')
             const inputs = [
-                edit_content.querySelector("input"),
-                edit_content.querySelector("textarea")
+              edit_content.querySelector('input'),
+              edit_content.querySelector('.quill')
             ];
-            inputs.forEach((input) => {
-                input.addEventListener("keyup", ({key}) => {
-                    if (key === "Enter") {
-                        view.style.display = 'flex';
-                        edit.style.display = 'none';
-                        this.updateProposal(inputs, proposal)
-                    }
-                })
-            })
+              
             inputs[0].value = data.title
-            inputs[1].value = data.description
             const proposalId = data.id
+            
+            const descriptionId = `quill-${proposalId}`; // Unique ID for the Quill editor
+            inputs[1].id = descriptionId;
+            inputs[1].innerHTML = data.description
+ 
 
-            inputs.forEach((input: HTMLInputElement) => {
-                input.addEventListener('input', () => {
-                    ws.send(JSON.stringify({
-                        method: 'updateProposal',
-                        title: inputs[0].value,
-                        description: inputs[1].value,
-                        processId,
-                        proposalId
-                    }))
-                })
-
+            inputs[0].addEventListener('input', () => {
+                ws.send(JSON.stringify({
+                    method: 'updateProposal',
+                    title: inputs[0].value,
+                    description: inputs[1].innerHTML,
+                    processId,
+                    proposalId
+                }))
             })
+
             const save_buttons = edit.querySelectorAll('button')
-            save_buttons.forEach((btn) => {
+            save_buttons.forEach((btn: HTMLButtonElement) => {
                 btn.addEventListener('click', () => {
                     if (btn.name === 'delete') {
                         inputs[0].value = ''
-                        inputs[1].value = ''
+                        inputs[1].innerHTML = ''
                     }
 
                     view.style.display = 'flex';
@@ -203,68 +197,83 @@ if (pathname !== url.pathname)
                 })
             })
             this.proposals.appendChild(proposal)
+
+            // Create a Quill editor for the description field
+        
+
+            const quill = createQuill('#' + descriptionId);
         }
         constructor() {
-            super()
-            this.proposals = this.querySelector('div.proposals')
-            this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true)
-            this.proposals.innerHTML = ""
-            
+            super();
+
+            // Find the proposals container and clone a proposal template.
+            this.proposals = this.querySelector('div.proposals');
+            this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
+            this.proposals.innerHTML = "";
+
+            // Listen for WebSocket events.
             ws.onmessage = (event) => {
-                let data = JSON.parse(event.data)
+                const data = JSON.parse(event.data);
                 if ('method' in data) {
                     if (data.method === 'addProposal') {
-                        this.addProposal(data.proposal, data.proposal.title ? false : data.edit)
+                        // Add a new proposal.
+                        this.addProposal(data.proposal, data.proposal.title ? false : data.edit);
                     } else if (data.method === 'removeProposal') {
+                        // Remove a proposal.
                         for (const child of this.proposals.children) {
                             if (child.id === data.proposalId) {
-                                this.proposals.removeChild(child)
-                                break
+                                this.proposals.removeChild(child);
+                                break;
                             }
                         }
-                    }
-                    else if (data.method === 'updateProposal') {
+                    } else if (data.method === 'updateProposal') {
+                        // Update a proposal.
                         for (const child of this.proposals.children) {
                             if (child.id === data.proposalId) {
-                                this.updateProposalView(child, data.title, data.description)
-                                this.updateProposalEdit(child, data.title, data.description)
-                                break
+                                this.updateProposalView(child, data.title, data.description);
+                                this.updateProposalEdit(child, data.title, data.description);
+                                break;
                             }
                         }
                     }
                 }
             };
+
             ws.onopen = (event) => {
+                // Set the process ID when the WebSocket connection is opened.
                 ws.send(JSON.stringify({
                     method: 'setProcess',
                     processId
-                }))
+                }));
             };
 
+            // Add existing proposals to the UI.
             process.proposals.forEach((proposal: any) => {
-                this.addProposal(proposal)
+                this.addProposal(proposal);
             });
 
-            const addButton = this.querySelector('button#add-proposal')
+            // Listen for the "Add Proposal" button click event.
+            const addButton = this.querySelector('button#add-proposal');
             addButton.addEventListener('click', async() => {
                 ws.send(JSON.stringify({
                     method: 'addProposal',
                     processId
-                }))                
-            })
+                }));
+            });
 
-
+            // Listen for the proposal template click events.
             this.template_proposals.forEach((template) => {
                 template.addEventListener('click', async() => {
-                    const title = template.querySelector('.title').innerHTML
-                    const description = template.querySelector('.description').innerHTML
+                    const title = template.querySelector('.title').innerHTML;
+                    const description = template.querySelector('.description').innerHTML;
                     ws.send(JSON.stringify({
                         method: 'addProposal',
-                        title, description,
+                        title,
+                        description,
                         processId
-                    }))     
-                })
-            })
+                    }));
+                });
+            });
         }
     }
     customElements.define('proposal-list', ProposalList)

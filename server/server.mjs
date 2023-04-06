@@ -20,17 +20,55 @@ app.use(express.urlencoded({limit: '2mb'}));
 const MAX_PAYLOAD_SIZE = 2 * 1024 * 1024; // 2mb in bytes
 
 
-app.get('/api/process/:id', async(req, res) => {
-  const processId = req.params.id;
-  const process = await db.get(processId);
-  res.json({ process });
+// Add the getAll route
+app.get('/api/getAll', async (req, res) => {
+  const data = [];
+
+  const iterator = db.iterator();
+
+  function processEntry() {
+    iterator.next((err, key, value) => {
+      if (err) {
+        console.error('Error while reading from LevelDB:', err);
+        res.status(500).send('Error while reading from LevelDB');
+        return;
+      }
+
+      if (!key && !value) {
+        res.json(data);
+        return;
+      }
+
+      data.push({ key: key.toString(), value: JSON.parse(value.toString()) });
+      processEntry();
+    });
+  }
+
+  processEntry();
 });
 
-app.get('/api/process/:id/voters', async(req, res) => {
+app.get('/api/process/:id', async (req, res) => {
+  const processId = req.params.id;
+  const process = await db.get(processId);
+
+  if (!process) {
+    res.status(404).json({ error: 'Process not found.' });
+  } else {
+    res.json({ process });
+  }
+});
+
+app.get('/api/process/:id/voters', async (req, res) => {
   const processId = req.params.id;
   const process = JSON.parse(await db.get(processId));
-  res.json(process.voters);
+
+  if (!process) {
+    res.status(404).json({ error: 'Process not found.' });
+  } else {
+    res.json(process.voters);
+  }
 });
+
 
 app.post('/api/process/:id/vote', async(req, res) => {
   // Get the process ID from the URL parameters
@@ -75,6 +113,7 @@ app.post('/api/process/:id/vote', async(req, res) => {
     res.status(400).send('Invalid votes property');
   }
 });
+
 const updateDates = (dates) => {
   if (dates === -1) return [-1, -1];
 

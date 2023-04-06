@@ -1,6 +1,6 @@
 ---
 import { t } from 'i18next'
-import Countdown from "molecules/Countdown.vue";
+import Countdown from "molecules/Countdown.astro";
 
 interface Props {
     phase: string,
@@ -22,9 +22,9 @@ const { phase, dates} = Astro.props;
             <span id="start-date" class="link-success"></span>
             <br/>
             <span>{ t(`phases.lastFor`) }:&nbsp;</span>
-            <Countdown type="success" dates={dates} client:only/>
+            <Countdown type="success" dates={dates} />
         ) : +new Date() < dates[1] ? (
-            <Countdown dates={dates} type="warning" client:only/>
+            <Countdown dates={dates} type="warning" />
             <span>&nbsp;({ t('remainingTime') })</span>
         ) : <span class="text-info">{ t('done') }</span>
     }

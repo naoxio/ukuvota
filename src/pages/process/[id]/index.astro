@@ -9,9 +9,16 @@ changeLanguage("en");
 const { url } = Astro;
 const processId = Astro.params.id;
 const isDev = processId === "dev";
+let data;
+let process;
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
+if (!isDev && res.status === 404) {
+    return Astro.redirect("/");
+}
+else {
+    data = isDev ? null : await res.json();
+    process = isDev ? processTest() : JSON.parse(data.process);
+}
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);

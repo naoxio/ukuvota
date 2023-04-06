@@ -9,15 +9,20 @@ changeLanguage("en");
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
-
+let data;
+let process;
 // Fetch data from the API
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
-
+if (!isDev && res.status === 404) {
+    return Astro.redirect("/");
+}
+else {
+    data = isDev ? null : await res.json();
+    process = isDev ? processTest() : JSON.parse(data.process);
+}
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect
+    return Astro.redirect;
 ---
 
 <ProcessLayout process={process}>
@@ -76,7 +81,7 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-    import { IProposal } from "interfaces/IProposal"
+    import IProposal from "interfaces/IProposal"
     import { processTest } from "composables/processTestData";
     import { createQuill } from "composables/quillEditor";
 

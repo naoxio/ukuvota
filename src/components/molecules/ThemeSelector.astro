@@ -1,0 +1,33 @@
+---
+---
+
+<theme-selector>
+  <button class="btn btn-ghost btn-sm">
+    <slot/>
+  </button>
+</theme-selector>
+
+<script>
+  import { theme as userTheme } from '../../stores/userStore'
+  userTheme.set(window.localStorage.getItem("theme") || 'light')
+
+  class ThemeSelector extends HTMLElement {
+    toggleTheme () {
+      let theme = window.localStorage.getItem("theme")  
+      theme = theme === 'dark' ? 'light' : 'dark'
+      document.documentElement.dataset.theme = theme
+      document.documentElement.className = theme
+
+      window.localStorage.setItem("theme", theme)
+      userTheme.set(theme)
+    }
+    constructor() {
+      super()
+      this.querySelector('button').addEventListener('click', this.toggleTheme)
+      
+    }
+  }
+
+  customElements.define('theme-selector', ThemeSelector)
+
+</script>

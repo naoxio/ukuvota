@@ -1,0 +1,55 @@
+---
+import { t } from 'i18next'
+import { process, Process } from 'stores/processStore';
+import { fmtDuration } from 'composables/dateHelpers'
+
+interface Props {
+    phase: string
+}
+
+const { phase } = Astro.props;
+
+const $process = process.get()
+
+---  
+
+<datetime-slider data-phase={phase}> 
+    <span>{ t('duration') }:&nbsp;</span>
+    <span id="duration" class="text-success">{ fmtDuration(+new Date() + $process[`${phase}Duration`], +new Date()) }</span>
+    <br/>
+    <input type="range" min="1" max="184" value={ $process[`${phase}LogSlider` as keyof Process] } class="range" />
+
+</datetime-slider>
+
+<script>
+  import { process, Process } from 'stores/processStore';
+  import { fmtDuration } from 'composables/dateHelpers';
+  import logslider from 'composables/logslider';
+  const $process = process.get()
+  
+  class DatetimeSlider extends HTMLElement {
+    phase = null
+    durationElement = null
+    changeTime(ev: InputEvent & { target: HTMLInputElement}) {
+
+      const value = Number(ev.target.value)
+      process.setKey(`${this.phase}LogSlider` as keyof Process, value)
+      let duration = logslider(value)
+      process.setKey(`${this.phase}Duration` as keyof Process, duration)
+      this.durationElement.innerHTML = fmtDuration(+new Date() + duration, +new Date())
+    }
+    constructor() {
+      super()
+      this.phase = this.dataset.phase
+      const input = this.querySelector('input')
+      this.durationElement = this.querySelector('#duration')
+
+      input.addEventListener('input', (ev) => this.changeTime(ev))
+      input.value  =$process[`${this.phase}LogSlider` as keyof Process]
+      this.durationElement.innerHTML = fmtDuration(+new Date() + $process[`${this.phase}Duration`], +new Date())
+
+    }
+  }
+  customElements.define('datetime-slider', DatetimeSlider)
+
+</script>

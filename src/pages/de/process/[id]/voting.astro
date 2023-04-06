@@ -1,5 +1,5 @@
 ---
-import Alert from "molecules/Alert.astro";
+import Alert from "atoms/Alert.astro";
 import ProcessLayout from "templates/ProcessLayout.astro";
 import AlertManager from "molecules/AlertManager.astro";
 import i18next, { t, changeLanguage } from "i18next";
@@ -12,9 +12,16 @@ changeLanguage("de");
 const processId = Astro.params.id;
 const { url } = Astro;
 const isDev = processId === "dev";
+let data;
+let process;
 const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
+if (!isDev && res.status === 404) {
+    return Astro.redirect("/");
+}
+else {
+    data = isDev ? null : await res.json();
+    process = isDev ? processTest() : JSON.parse(data.process);
+}
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
@@ -81,7 +88,7 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-    import { IProposal } from 'interfaces/IProposal'
+    import IProposal from 'interfaces/IProposal'
     import { addAlert } from 'composables/addAlert'
     import { processTest } from "composables/processTestData";
     

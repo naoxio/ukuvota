@@ -1,5 +1,5 @@
 ---
-import i18next, { t } from "i18next";
+import i18next from "i18next";
 import { HeadHrefLangs } from "astro-i18next/components";
 import logo from "assets/logo_bg.png";
 import Header from "organisms/Header.astro";
@@ -9,8 +9,11 @@ import "../../global.css"
 
 const {title, description} = Astro.props;
 
-const url = Astro.url.href
+const { url } = Astro;
+
+const href = Astro.url.href
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
+
 ---
 
 <html lang={i18next.language} data-theme="light">
@@ -35,7 +38,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta property="og:title" content={display_title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={logo} />
-    <meta property="og:url" content={url} />
+    <meta property="og:url" content={href} />
     <meta property="og:type" content="website" />
 
     <!-- Twitter Card -->
@@ -60,8 +63,6 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 </html>
 
 <script is:inline>
-
-
   const theme = (() => {
     if (typeof localStorage !== "undefined" && localStorage.getItem("theme"))
       return localStorage.getItem("theme");

@@ -7,6 +7,7 @@
   "select": "auswählen",
   "confirm": "Bestätigen",
   "cancel": "abbrechen",
+  "done": "fertig",
   "phases": {
     "start": "Startet",
     "startAt": "Startet am",
