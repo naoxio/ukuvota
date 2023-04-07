@@ -15,26 +15,12 @@ const $process = process.get();
 ---
 
 
-<AlertManager>
-    <Alert type="error" icon="warning">
-        { t('alert.error.topicQuestion') }
-    </Alert>
-    <Alert type="success" icon="checkmark-outline">
-        { t('alert.success.createProcess') }
-    </Alert>
-    <Alert type="error" icon="warning">
-        { t('alert.error.proposalsMissing') }
-    </Alert>
-    <Alert type="error" icon="warning">
-        { t('alert.error.payloadSizeTooLarge') }
-    </Alert>
-</AlertManager>
 <create-process>
     <div id="scrollTopicQuestion" />
     <div class="pb-6">
         <div>
             <p>{ t('process.topic') }</p>
-            <input name="topicQuestion" class="input input-bordered w-full" value={  $process.title }  oninput="(e: any) => process.setKey('title', e.target.value)" type="text"/>
+            <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" value={  $process.title }  type="text"/>
             <br/>
             <p>{ t('process.description') }</p>
             <div id="description"/>
@@ -74,6 +60,21 @@ const $process = process.get();
             { t('create') }
         </button>
     </div>
+
+    <AlertManager>
+        <Alert type="error" icon="warning" error>
+            { t('alert.error.topicQuestion') }
+        </Alert>
+        <Alert type="success" icon="checkmark-outline" success>
+            { t('alert.success.createProcess') }
+        </Alert>
+        <Alert type="error" icon="warning" error>
+            { t('alert.error.proposalsMissing') }
+        </Alert>
+        <Alert type="error" icon="warning" error>
+            { t('alert.error.payloadSizeTooLarge') }
+        </Alert>
+    </AlertManager>
 </create-process>
 
 <script>
@@ -82,25 +83,25 @@ const $process = process.get();
     import { Delta, Quill } from 'quill';
     import IProposal from 'interfaces/IProposal'
     import { createQuill } from "composables/quillEditor";
+    import { addAlert } from 'composables/addAlert'
 
     const lang = i18next.language;
-    const quillGetHTML = (inputDelta: Delta) => {
-        var tempCont = document.createElement("div");
-        (new Quill(tempCont)).setContents(inputDelta);
-        return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
-    }
 
     class CreateProcess extends HTMLElement {
-        scrollTopicQuestion = null
-        errorTopicAlert = false
-        errorProposalsAlert = false
-        errorPayloadSize = false
-        successProcessAlert = false
+        scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
+        quillDescription = null
+        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
+        alerts = this.querySelector('div.alert-manager').querySelectorAll('alert-element')
+       
         constructor() {
             super()
             this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
-            const quill = createQuill('#description');
-            quill.setContents(process.get().description)
+            this.quillDescription = createQuill('#description');
+            this.quillDescription.setContents(process.get().description)
+            this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
+            const title =this.querySelector('#topicQuestion')
+            title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
+            title.value = process.get().title
 
         }
         // Check if all proposals have a title and description
@@ -112,11 +113,9 @@ const $process = process.get();
             // Create process
         createProcess = async() => {
             const title = process.get().title.trim();
-
             if (!title) {
-                this.errorTopicAlert = !this.errorTopicAlert;
                 this.scrollTopicQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' })
-
+                addAlert(this.alertList, this.alerts[0].cloneNode(true))
                 return;
             }
 
@@ -124,11 +123,11 @@ const $process = process.get();
 
             if (process.get().phases === 'voting') {
                 for (let i = 0; i < proposals.length; i++) {
-                    proposals[i].description = quillGetHTML(proposals[i].description)
+                    proposals[i].description = proposals[i].description
                 }
 
                 if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
-                    this.errorProposalsAlert = !this.errorProposalsAlert
+                    addAlert(this.alertList, this.alerts[2].cloneNode(true))
                     return
                 }
             }
@@ -136,7 +135,7 @@ const $process = process.get();
             // Prepare request body
             const body = {
                 topicQuestion: process.get().title,
-                topicDescription: quillGetHTML(process.get().description),
+                topicDescription: this.quillDescription.getContents(),
                 proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
                 votingDates: process.get().votingDates,
                 weighting: process.get().weighting,    
@@ -153,8 +152,7 @@ const $process = process.get();
                     });
 
                     if (response.status === 413) {
-                        this.errorPayloadSize = true;
-                        console.error('Payload size is too large.');
+                        addAlert(this.alertList, this.alerts[3].cloneNode(true))
                         return;
                     }
 
@@ -162,7 +160,8 @@ const $process = process.get();
                     process.setKey('title', '');
                     process.setKey('description', new Delta());
                     process.setKey('proposals', []);
-                            
+                    addAlert(this.alertList, this.alerts[1].cloneNode(true))
+
                     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
                 } catch (error) {
                     console.error(error);

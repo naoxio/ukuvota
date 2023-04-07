@@ -6,6 +6,8 @@ import Header from "organisms/Header.astro";
 import Footer from "organisms/Footer.astro";
 
 import "../../global.css"
+import 'assets/quill.core.css';
+import 'assets/quill.snow.css';
 
 const {title, description} = Astro.props;
 
@@ -25,7 +27,6 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="keywords" content="ukuvota, voting, democracy, consens, collaborative" />
     <meta name="author" content="Waotzi" />
     <link rel="icon" type="image/png" href="/favicon.png">
-    <link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.snow.css">
 
     <title>{display_title}</title>
     <meta name="generator" content={Astro.generator} />

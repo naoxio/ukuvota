@@ -2,16 +2,64 @@
 import { Icon } from "astro-icon";
 
 interface Props {
-    type: string
+    error: boolean
+    success: boolean
     icon: string
+    trigger: boolean
 }
-const { type, icon } = Astro.props;
 
-const classList = `alert w-80  shadow-lg m-2 alert-${type}`
+const { error, success, icon, trigger } = Astro.props;
+const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : ''}`;
+const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 ---
-<div class={classList} style="display: none">
+
+<alert-element id={showAlertId} class={classList} style="display: none">
     <div>
         <Icon width="32" name={icon} />
         <span><slot/></span>
     </div>
-</div>
+</alert-element>
+
+<script>
+  class AlertElement extends HTMLElement {
+    prevTrigger = false;
+    visible = false;
+
+    constructor() {
+      super();
+
+      this.addEventListener('click', () => {
+        this.visible = false;
+        this.updateDisplay();
+      });
+    }
+
+    connectedCallback() {
+      this.updateDisplay();
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (name === 'data-trigger') {
+        if (this.prevTrigger === (newValue === 'true')) return;
+        this.prevTrigger = newValue === 'true';
+        if (!this.visible) {
+          this.visible = true;
+          setTimeout(() => {
+            this.visible = false;
+            this.updateDisplay();
+          }, 4000);
+        }
+      }
+    }
+
+    updateDisplay() {
+      this.style.display = this.visible ? 'block' : 'none';
+    }
+
+    static get observedAttributes() {
+      return ['data-trigger'];
+    }
+  }
+
+  customElements.define('alert-element', AlertElement);
+</script>

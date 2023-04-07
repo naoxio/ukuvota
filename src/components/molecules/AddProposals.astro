@@ -65,20 +65,19 @@ const $process = process.get()
       }
     }
 
-    init() {
-      this.checkIsWrapping();
-      window.addEventListener('resize', this.checkIsWrapping(this));
-    }
-
+ 
     destroy() {
-      window.removeEventListener('resize', this.checkIsWrapping(this));
+      window.removeEventListener('resize', this.checkIsWrapping.bind(this));
     }
 
     constructor() {
       super();
-      this.init();
       this.querySelector('#add-button').addEventListener('click', () => addProposal());
       this.addEventListenersToDropdownOptions();
+
+      this.checkIsWrapping();
+      window.addEventListener('resize', this.checkIsWrapping.bind(this));
+
 
     }
 

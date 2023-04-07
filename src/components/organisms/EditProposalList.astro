@@ -5,10 +5,18 @@
   import { t } from 'i18next'
   import { createQuill } from "composables/quillEditor";
   import { process } from 'stores/processStore';
+  import isValidDelta from 'composables/isValidDelta'
+  import { Quill } from 'quill'
 
 
   class ProposalList extends HTMLElement {
     proposals = [];
+    updateProposalDescription(i: number, quill: Quill) {
+      const proposal = this.proposals[i];
+      proposal.description = quill.getContents();
+      
+      process.setKey("proposals", this.proposals);
+    }
 
     updateProposal(ev, i: number) {
       const proposal = this.proposals[i];
@@ -52,7 +60,8 @@
         this.appendChild(proposalElement);
 
         const quill = createQuill(`#description-${index}`)
-        quill.setContents(proposal.description)
+        quill.setContents(isValidDelta(proposal.description) ? proposal.description : { ops: [] });
+        quill.on('text-change', (delta, oldContents) => this.updateProposalDescription(index, quill))
 
 
       });
@@ -63,9 +72,7 @@
 
       process.subscribe(() => {
         const $process = process.get();
-        console.log($process.proposals)
         if (JSON.stringify(this.proposals) !== JSON.stringify($process.proposals)) {
-          console.log('somtihng changed')
           this.proposals = JSON.parse(JSON.stringify($process.proposals));
           this.updateProposals();
         }
