@@ -33,19 +33,16 @@ const $process = process.get();
     </div>
     <hr/>
     <div class="py-2">
-        <div class="flex justify-between items-center flex-wrap">
-            { $process.phases === 'full' && <h1>{ t('process.timeLeftHeading') }</h1> }
-            { $process.phases === 'voting' && <h1>{ t('process.timeLeftVotingHeading') }</h1> }
-        </div>
-        <TimeSelector phase="proposal"/>
-        <span>
+        <div id="timeselectHeading" class="flex justify-between items-center flex-wrap"/>
+        <div class="fullOnly">
+            <TimeSelector phase="proposal"/>
             <p></p>
             <hr/>
-        </span>
+        </div>
     
         <TimeSelector phase="voting"/>
     </div>
-    <div>
+    <div class="voteOnly">
         <hr class="mt-4"/>
         <h2>{ t('process.proposals') }</h2>    
 
@@ -92,9 +89,36 @@ const $process = process.get();
         quillDescription = null
         alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
         alerts = this.querySelector('div.alert-manager').querySelectorAll('alert-element')
-       
+        phases = process.get().phases
+        
+        updatePhasesView() {
+            const fullOnlyElements = this.querySelectorAll('.fullOnly');
+            const voteOnlyElements = this.querySelectorAll('.voteOnly');
+            const isVotingPhase = this.phases === 'voting';
+
+            voteOnlyElements.forEach(element => {
+                element.style.display = isVotingPhase ? 'block' : 'none';
+            });
+
+            fullOnlyElements.forEach(element => {
+                element.style.display = isVotingPhase ? 'none' : 'block';
+            });
+
+            this.querySelector('#timeselectHeading').innerHTML = (isVotingPhase ? `<h1>${t('process.timeLeftVotingHeading')}</h1>` :  `<h1>${t('process.timeLeftHeading')}</h1>`);
+
+        }
         constructor() {
             super()
+            process.subscribe(() => {
+                const $process = process.get();
+                if (JSON.stringify(this.phases) !== JSON.stringify($process.phases)) {
+                this.phases = JSON.parse(JSON.stringify($process.phases));
+                this.updatePhasesView();
+                }
+            });
+
+            this.updatePhasesView()
+
             this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
             this.quillDescription = createQuill('#description');
             this.quillDescription.setContents(process.get().description)
