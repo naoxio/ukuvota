@@ -8,13 +8,12 @@ import AlertManager from 'molecules/AlertManager.astro';
 import WeightSelector from 'molecules/WeightSelector.astro';
 import PhaseSelector from 'molecules/PhaseSelector.astro';
 import TimeSelector from 'organisms/TimeSelector.astro';
-import QuillEditor from 'molecules/QuillEditor.vue';
-import AddProposals from 'molecules/AddProposals.vue';
-import EditProposalList from 'organisms/EditProposalList.vue';
+import AddProposals from 'molecules/AddProposals.astro';
+import EditProposalList from 'organisms/EditProposalList.astro';
 
 const $process = process.get();
-
 ---
+
 
 <AlertManager>
     <Alert type="error" icon="warning">
@@ -38,7 +37,8 @@ const $process = process.get();
             <input name="topicQuestion" class="input input-bordered w-full" value={  $process.title }  oninput="(e: any) => process.setKey('title', e.target.value)" type="text"/>
             <br/>
             <p>{ t('process.description') }</p>
-            <QuillEditor client:only="vue"/>
+            <div id="description"/>
+            <br>
 
             <WeightSelector/>
         </div>
@@ -63,8 +63,8 @@ const $process = process.get();
         <hr class="mt-4"/>
         <h2>{ t('process.proposals') }</h2>    
 
-        <EditProposalList client:only="vue"/>
-        <AddProposals client:only="vue"/>
+        <EditProposalList />
+        <AddProposals />
     </div>
    
     <br/>
@@ -81,8 +81,15 @@ const $process = process.get();
     import { process } from 'stores/processStore';
     import { Delta, Quill } from 'quill';
     import IProposal from 'interfaces/IProposal'
+    import { createQuill } from "composables/quillEditor";
 
-    const lang = i18next.language
+    const lang = i18next.language;
+    const quillGetHTML = (inputDelta: Delta) => {
+        var tempCont = document.createElement("div");
+        (new Quill(tempCont)).setContents(inputDelta);
+        return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
+    }
+
     class CreateProcess extends HTMLElement {
         scrollTopicQuestion = null
         errorTopicAlert = false
@@ -92,17 +99,16 @@ const $process = process.get();
         constructor() {
             super()
             this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
+            const quill = createQuill('#description');
+            quill.setContents(process.get().description)
+
         }
         // Check if all proposals have a title and description
         checkProposalValues(proposals: IProposal[]) {
             return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
         }
 
-        quillGetHTML(inputDelta: Delta) {
-            var tempCont = document.createElement("div");
-            (new Quill(tempCont)).setContents(inputDelta);
-            return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
-        }
+
             // Create process
         createProcess = async() => {
             const title = process.get().title.trim();
@@ -118,7 +124,7 @@ const $process = process.get();
 
             if (process.get().phases === 'voting') {
                 for (let i = 0; i < proposals.length; i++) {
-                    proposals[i].description = this.quillGetHTML(proposals[i].description)
+                    proposals[i].description = quillGetHTML(proposals[i].description)
                 }
 
                 if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
@@ -130,7 +136,7 @@ const $process = process.get();
             // Prepare request body
             const body = {
                 topicQuestion: process.get().title,
-                topicDescription: this.quillGetHTML(process.get().description),
+                topicDescription: quillGetHTML(process.get().description),
                 proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
                 votingDates: process.get().votingDates,
                 weighting: process.get().weighting,    

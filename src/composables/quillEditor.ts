@@ -10,7 +10,7 @@ const toolbarOptions = [
 ];
 
 export const options = {
-    debug: 'info',
+    debug: false,
     modules: {
       toolbar: toolbarOptions,
     },
