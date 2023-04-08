@@ -5,7 +5,7 @@ import { process } from 'stores/processStore';
 
 import BaseLayout from "templates/BaseLayout.astro";
 import Alert from 'atoms/Alert.astro';
-import AlertManager from 'molecules/AlertManager.astro';
+import AlertList from 'molecules/AlertList.astro';
 import WeightSelector from 'molecules/WeightSelector.astro';
 import PhaseSelector from 'molecules/PhaseSelector.astro';
 import TimeSelector from 'organisms/TimeSelector.astro';
@@ -70,12 +70,12 @@ changeLanguage("en");
               { t('create') }
           </button>
       </div>
-      <AlertManager>
+      <AlertList>
           <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
           <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
           <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
           <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
-      </AlertManager>
+      </AlertList>
     </create-process>
   </process-form>
 </BaseLayout>
@@ -85,8 +85,8 @@ changeLanguage("en");
     import i18next, { t } from 'i18next';
     import { process } from 'stores/processStore';
     import IProposal from 'interfaces/IProposal'
-    import createQuill from "composables/quillEditor";
-    import { addAlert } from 'composables/addAlert'
+    import createQuill from "composables/createQuill";
+    import addAlert from 'composables/addAlert'
     import isValidDelta from 'composables/isValidDelta'
 
     const lang = i18next.language;
@@ -104,8 +104,8 @@ changeLanguage("en");
     class CreateProcess extends HTMLElement {
         scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
         quillDescription = null
-        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
-        alerts = this.querySelector('div.alert-manager').querySelectorAll('alert-element')
+        alertList = this.querySelector('div.alert-list')
+        alerts = this.querySelectorAll('alert-element')
         phases = process.get().phases
         
         updatePhasesView() {
@@ -150,14 +150,12 @@ changeLanguage("en");
             return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
         }
 
-
         // Create process
         createProcess = async() => {
             const title = process.get().title.trim();
-            console.log('title', title)
             if (!title) {
                 this.scrollTopicQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                addAlert(this.alertList, this.alerts[0].cloneNode(true))
+                addAlert(this.alertList, this.alerts[0])
                 return;
             }
 
@@ -169,7 +167,7 @@ changeLanguage("en");
                 }
 
                 if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
-                    addAlert(this.alertList, this.alerts[2].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[2])
                     return
                 }
             }
@@ -195,7 +193,7 @@ changeLanguage("en");
                     });
 
                     if (response.status === 413) {
-                        addAlert(this.alertList, this.alerts[3].cloneNode(true))
+                        addAlert(this.alertList, this.alerts[3])
                         return;
                     }
 
@@ -203,7 +201,7 @@ changeLanguage("en");
                     process.setKey('title', '');
                     process.setKey('description', { ops: [] });
                     process.setKey('proposals', []);
-                    addAlert(this.alertList, this.alerts[1].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[1])
 
                     window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
                 } catch (error) {

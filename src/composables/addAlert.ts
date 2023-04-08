@@ -1,8 +1,8 @@
-export  function addAlert (list: Element, alert: any) {
-    alert.visible = true
-
-    list.appendChild(alert)
-    setTimeout(() => {
-      list.removeChild(alert)
-    }, 3000)
-  }
+export default function addAlert (list: Element, alert: any) {
+  const a = alert.cloneNode(true)
+  a.visible = true
+  list.appendChild(a)
+  setTimeout(() => {
+    list.removeChild(a)
+  }, 3000)
+}

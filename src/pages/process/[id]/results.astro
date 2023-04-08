@@ -3,7 +3,7 @@ import ProcessLayout from "templates/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import i18next, { t, changeLanguage } from "i18next";
 import getProcessUrl from "composables/getProcessUrl";
-import AlertManager from "molecules/AlertManager.astro";
+import AlertList from "molecules/AlertList.astro";
 import Alert from "atoms/Alert.astro";
 import fetchProcessData from "composables/fetchProcessData";
 
@@ -94,14 +94,14 @@ if (!("voters" in process)) {
                 { t('wip')}
             </div>
         </div>
-        <AlertManager>
+        <AlertList>
             <Alert icon="checkmark-outline" success>
                 { t('alert.success.repeatProcess') }
             </Alert>
             <Alert icon="checkmark-outline" error>
                 { t('alert.error.missingProposals') }
             </Alert>
-        </AlertManager>
+        </AlertList>
     </results-card>
 </ProcessLayout>
 
@@ -113,7 +113,7 @@ if (!("voters" in process)) {
     import { toPng } from 'html-to-image';
     import processTest from "composables/processTestData";
     import { process as storeProcess } from 'stores/processStore'
-    import { addAlert } from 'composables/addAlert'
+    import addAlert from 'composables/addAlert'
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -149,8 +149,8 @@ if (!("voters" in process)) {
         voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
-        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
-        alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
+        alertList = this.querySelector('div.alert-list')
+        alerts = this.querySelectorAll('alert-element')
        
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
@@ -326,7 +326,7 @@ if (!("voters" in process)) {
             repeatButton.addEventListener('click', () => {
                 const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: HTMLInputElement) => input.checked);
                 if (items.length > 1) {
-                    addAlert(this.alertList, this.alerts[0].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[0])
 
                     storeProcess.setKey('title', process.title)
                     storeProcess.setKey('description', process.description)
@@ -340,7 +340,7 @@ if (!("voters" in process)) {
 
                 }
                 else {
-                    addAlert(this.alertList, this.alerts[1].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[1])
                 }
             })
             

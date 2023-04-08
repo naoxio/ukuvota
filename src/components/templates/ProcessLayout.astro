@@ -7,15 +7,14 @@ interface Props {
     process: IProcess,
 }
 
-
 const {process} = Astro.props;
 
 ---
 
-<BaseLayout title={process.title} description={process.description}>
+<BaseLayout title={process.title}>
     <ProcessInfo
         title={process.title}
-        description={process.description}
+        description={JSON.stringify(process.description)}
         weighting={process.weighting}
         proposalDates={process.proposalDates}
         votingDates={process.votingDates}
