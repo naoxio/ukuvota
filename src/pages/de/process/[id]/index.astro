@@ -3,6 +3,7 @@ import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
 import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
+import fetchProcessData from "composables/fetchProcessData"
 
 changeLanguage("de");
 
@@ -11,6 +12,7 @@ const processId = Astro.params.id;
 const process = fetchProcessData(processId, url);
 if (process === null)
     return Astro.redirect("/");
+
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
