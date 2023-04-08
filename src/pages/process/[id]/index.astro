@@ -1,24 +1,16 @@
 ---
 import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
-import { processTest } from "composables/processTestData";
+import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
 
 changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const isDev = processId === "dev";
-let data;
-let process;
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-if (!isDev && res.status === 404) {
+const process = fetchProcessData(processId, url);
+if (process === null)
     return Astro.redirect("/");
-}
-else {
-    data = isDev ? null : await res.json();
-    process = isDev ? processTest() : JSON.parse(data.process);
-}
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -45,7 +37,7 @@ if (pathname !== url.pathname)
 
 
 <script>
-    import { processTest } from "composables/processTestData";
+    import processTest from "composables/processTestData";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';

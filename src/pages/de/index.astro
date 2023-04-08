@@ -60,19 +60,8 @@ changeLanguage("de");
         component.innerHTML = loadingLogo()
       }
 
-      const collapsible = this.querySelector<HTMLElement>('.collapsible')
       const content = this.querySelector<HTMLElement>('.content') 
-      collapsible.addEventListener("click", function() {
-        this.classList.toggle("active");
-        if (content.style.display === "block") {
-          content.style.display = "none";
-          collapsible.innerHTML = t('showMore')
-        } else {
-          content.style.display = "block";
-          collapsible.innerHTML = t('showLess')
-        }
-    });
-    }
+      }
 }
 customElements.define('process-form', ProcessForm)
 

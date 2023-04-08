@@ -4,23 +4,21 @@ import ProcessLayout from "templates/ProcessLayout.astro";
 import AlertManager from "molecules/AlertManager.astro";
 import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
-import fetchProcessData from "composables/fetchProcessData";
+import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
 
 changeLanguage("de");
 
 const processId = Astro.params.id;
 const { url } = Astro;
-
-const process = fetchProcessData(processId, url)
+const processId = Astro.params.id;
+const process = fetchProcessData(processId, url);
 if (process === null)
     return Astro.redirect("/");
-
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
-
 ---
 <style>
     .gray {
@@ -85,7 +83,7 @@ if (pathname !== url.pathname)
 <script>
     import IProposal from 'interfaces/IProposal'
     import { addAlert } from 'composables/addAlert'
-    import { processTest } from "composables/processTestData";
+    import processTest from "composables/processTestData";
     
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
