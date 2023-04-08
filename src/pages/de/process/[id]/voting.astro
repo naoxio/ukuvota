@@ -12,7 +12,7 @@ changeLanguage("de");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = fetchProcessData(processId, url);
+const process = await fetchProcessData(processId, url);
 if (process === null)
     return Astro.redirect("/");
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];

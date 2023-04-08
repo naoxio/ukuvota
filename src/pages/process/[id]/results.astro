@@ -12,16 +12,18 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = fetchProcessData(processId, url);
+const process = await fetchProcessData(processId, url);
 if (process === null)
     return Astro.redirect("/");
+
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`);
+
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 if (!("voters" in process)) {
     process["voters"] = [];
 }
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
-if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
 ---
 <style>
     .hide {
