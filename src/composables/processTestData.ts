@@ -1,5 +1,5 @@
-import { IProposal } from 'interfaces/IProposal'
-import { IVoter } from 'interfaces/IVoter'
+import IProposal from 'interfaces/IProposal'
+import IVoter from 'interfaces/IVoter'
 
 const proposals: IProposal[] = [
     {
@@ -56,7 +56,7 @@ voterNames.forEach((voterName: string, i: number) => {
     voters.push(voter);
 })   
 
-export function processTest() {
+export default function processTest() {
     return {
         proposalDates: [+new Date(), +new Date() + 200000],
         votingDates: [+new Date() + 200000, +new Date() + 4000000],

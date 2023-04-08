@@ -1,7 +1,7 @@
-import { IProposal } from "./IProposal";
-import { IVoter } from "./IVoter";
+import IProposal from "./IProposal";
+import IVoter from "./IVoter";
 
-export interface IProcess {
+export default interface IProcess {
   title: string;
   description: string;
   proposalDates: number[];

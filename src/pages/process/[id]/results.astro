@@ -3,7 +3,7 @@ import ProcessLayout from "templates/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import { processTest } from "composables/processTestData";
 import i18next, { t, changeLanguage } from "i18next";
-import { getProcessUrl } from "composables/getProcessUrl";
+import getProcessUrl from "composables/getProcessUrl";
 import AlertManager from "molecules/AlertManager.astro";
 import Alert from "atoms/Alert.astro";
 
@@ -117,7 +117,7 @@ if (pathname !== url.pathname)
 
 <script>
     import download from 'downloadjs'
-    import { IProposal } from 'interfaces/IProposal'
+    import IProposal from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
     import { processTest } from "composables/processTestData";
     import { process as storeProcess } from 'stores/processStore'
