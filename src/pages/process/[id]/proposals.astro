@@ -33,7 +33,7 @@ if (pathname !== url.pathname)
                         <b>{ t('process.proposal') }</b>
                         <input type="text" class="input input-bordered input-sm my-2"/>
                         <label>{ t('process.description') }</label>
-                        <div id="-1" class="quill"/>
+                        <div class="quill"/>
                         <br/>
                         <div class="flex">
                             <button name="save" class="btn btn-primary btn-sm mx-2">
@@ -71,7 +71,8 @@ if (pathname !== url.pathname)
 <script>
     import IProposal from "interfaces/IProposal"
     import processTest from "composables/processTestData";
-    import { createQuill } from "composables/quillEditor";
+    import createQuill from "composables/quillEditor";
+    import { Quill, Delta } from "quill"
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -86,22 +87,23 @@ if (pathname !== url.pathname)
         proposal_html = null
         proposals = null
         template_proposals = this.querySelectorAll('.template-proposal')
-        
-        updateProposalView(proposal: any, title: string, description: string) {
+        descriptionQuills = {}
+        updateProposalView(proposal: any, title: string, description: string ) {
             const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
             view_content.innerHTML = `
                 <h3>${title}</h3>
                 <p>${description}</p>`
         }
         
-        updateProposalEdit(proposal: any, title: string, description: string) {
+        updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
             const edit_content = proposal.querySelector('div.edit').querySelector('div')
             const inputs = [
                 edit_content.querySelector("input"),
-                edit_content.querySelector(".quill")
+                edit_content.querySelector(".quill"),
             ];
             inputs[0].value = title
-            inputs[1].innerHTML = description
+            this.descriptionQuills[inputs[1].id].setContents(typeof description === "string" ? { ops: [{ insert: description }] } : description);
+            return inputs[1]
         }
         
         updateProposal(inputs: any[], proposal: IProposal) {
@@ -120,7 +122,9 @@ if (pathname !== url.pathname)
                     processId
                 }));
             }
-            this.updateProposalView(proposal, inputs[0].value, inputs[1].innerHTML);
+            const html_description = inputs[1].querySelector('.ql-editor').innerHTML
+
+            this.updateProposalView(proposal, inputs[0].value, html_description);
         }
 
         addProposal(data: IProposal, editing: boolean = false) {
@@ -131,7 +135,6 @@ if (pathname !== url.pathname)
             // Get view and edit element inside proposal element and update view with new proposal data
             const view = proposal.querySelector('div.view');
             const edit = proposal.querySelector('div.edit');
-            this.updateProposalView(proposal, data.title, data.description)
             
             // If editing is true, hide view, show edit
             if (editing) {
@@ -156,20 +159,9 @@ if (pathname !== url.pathname)
             const proposalId = data.id
             
             const descriptionId = `quill-${proposalId}`; // Unique ID for the Quill editor
-            inputs[1].id = descriptionId;
-            inputs[1].innerHTML = data.description
- 
+            inputs[1].id = descriptionId; 
 
-            inputs[0].addEventListener('input', () => {
-                ws.send(JSON.stringify({
-                    method: 'updateProposal',
-                    title: inputs[0].value,
-                    description: inputs[1].innerHTML,
-                    processId,
-                    proposalId
-                }))
-            })
-
+      
             const save_buttons = edit.querySelectorAll('button')
             save_buttons.forEach((btn: HTMLButtonElement) => {
                 btn.addEventListener('click', () => {
@@ -189,6 +181,23 @@ if (pathname !== url.pathname)
             // Create a Quill editor for the description field
         
             const quill = createQuill('#' + descriptionId);
+            console.log(quill)
+
+            quill.setContents(typeof data.description === "string" ? { ops: [{ insert: data.description }] } : data.description);
+            const html_description = inputs[1].querySelector('.ql-editor').innerHTML
+            this.updateProposalView(proposal, data.title, html_description)
+            this.descriptionQuills[descriptionId] = quill
+
+            inputs[0].addEventListener('input', () => {
+                ws.send(JSON.stringify({
+                    method: 'updateProposal',
+                    title: inputs[0].value,
+                    description: quill.getContents(),
+                    processId,
+                    proposalId
+                }))
+            })
+
         }
         constructor() {
             super();
@@ -217,8 +226,9 @@ if (pathname !== url.pathname)
                         // Update a proposal.
                         for (const child of this.proposals.children) {
                             if (child.id === data.proposalId) {
-                                this.updateProposalView(child, data.title, data.description);
-                                this.updateProposalEdit(child, data.title, data.description);
+                                const description_input = this.updateProposalEdit(child, data.title, data.description);
+                                const html_description = description_input.querySelector('.ql-editor').innerHTML
+                                this.updateProposalView(child, data.title, html_description);
                                 break;
                             }
                         }
