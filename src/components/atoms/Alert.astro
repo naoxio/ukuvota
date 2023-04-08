@@ -12,7 +12,7 @@ const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-erro
 const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
-<alert-element id={showAlertId} class={classList} style="display: none">
+<alert-element id={showAlertId} class={classList} style="display: none;    pointer-events: auto;">
     <div>
         <Icon width="32" name={icon} />
         <span><slot/></span>
@@ -35,20 +35,6 @@ const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 
     connectedCallback() {
       this.updateDisplay();
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-      if (name === 'data-trigger') {
-        if (this.prevTrigger === (newValue === 'true')) return;
-        this.prevTrigger = newValue === 'true';
-        if (!this.visible) {
-          this.visible = true;
-          setTimeout(() => {
-            this.visible = false;
-            this.updateDisplay();
-          }, 4000);
-        }
-      }
     }
 
     updateDisplay() {

@@ -12,9 +12,8 @@ const {title, description} = Astro.props;
 
 const { url } = Astro;
 
-const href = Astro.url.href
+const href = url.href
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
-
 ---
 
 <html lang={i18next.language} data-theme="light">
@@ -49,7 +48,9 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 
 
     <!-- Plausible analytics -->
+    { url.hostname !== 'localhost' &&
     <script defer data-api="/api/event" data-domain="ukuvota.world" src="/js/script.js"></script>
+    }
   </head>
   <body>
     <Header/>

@@ -65,7 +65,6 @@ const { processId } = Astro.props;
         this.classList.remove('justify-center');
       }
     }
-
  
     destroy() {
       window.removeEventListener('resize', this.checkIsWrapping.bind(this));
@@ -75,7 +74,6 @@ const { processId } = Astro.props;
       super();
       this.processId = this.dataset.process;
       const addButton = this.querySelector('#add-button');
-
       const dropdownItems = this.querySelectorAll('.dropdown-content li a');
 
       if (this.processId) {
@@ -83,26 +81,26 @@ const { processId } = Astro.props;
         const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
         // Listen for the "Add Proposal" button click event.
-          addButton.addEventListener('click', async() => {
-              ws.send(JSON.stringify({
-                  method: 'addProposal',
-                  processId: this.processId
-              }));
-          });
+        addButton.addEventListener('click', async() => {
+            ws.send(JSON.stringify({
+                method: 'addProposal',
+                processId: this.processId
+            }));
+        });
 
-          // Listen for the proposal template click events.
-          dropdownItems.forEach((item, index) => {
-              item.addEventListener('click', async() => {
-                  const title = item.querySelector('.title').innerHTML;
-                  const description = item.querySelector('.description').innerHTML;
-                  ws.send(JSON.stringify({
-                      method: 'addProposal',
-                      title,
-                      description,
-                      processId: this.processId
-                  }));
-              });
-          });
+        // Listen for the proposal template click events.
+        dropdownItems.forEach((item, index) => {
+            item.addEventListener('click', async() => {
+                const title = item.querySelector('.title').innerHTML;
+                const description = item.querySelector('.description').innerHTML;
+                ws.send(JSON.stringify({
+                    method: 'addProposal',
+                    title,
+                    description,
+                    processId: this.processId
+                }));
+            });
+        });
       }
       else {
         addButton.addEventListener('click', () => addProposal());
@@ -110,14 +108,10 @@ const { processId } = Astro.props;
         dropdownItems.forEach((item, index) => {
           item.addEventListener('click', () => addProposal(index));
         });
-
       }
-
 
       this.checkIsWrapping();
       window.addEventListener('resize', this.checkIsWrapping.bind(this));
-
-
     }
 
     disconnectedCallback() {

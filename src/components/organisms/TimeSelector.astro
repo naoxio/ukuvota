@@ -1,5 +1,6 @@
 ---
 import { process } from 'stores/processStore';
+/* @ts-ignore */
 import DatetimePicker from 'molecules/DatetimePicker.vue';
 import DatetimeSlider from 'molecules/DatetimeSlider.astro'
 import { t } from 'i18next';
@@ -9,10 +10,7 @@ interface Props {
 }
 
 const { phase } = Astro.props;
-
-
 const $process = process.get()
-
 ---
 
 <time-selector>
@@ -22,7 +20,9 @@ const $process = process.get()
     <DatetimePicker phase={phase} index={0} client:only="vue" />
     <h3>{ t(`phases.endsAt`) }:</h3>
     <DatetimePicker phase={phase} index={1} client:only="vue" />
+    <br/>
     <DatetimeSlider phase={phase} />
+    <br/>
   }
 </time-selector>  
 

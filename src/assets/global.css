@@ -88,11 +88,15 @@ hr {
   border-color: #444  !important;
 }
 .dark .ql-container {
-  background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+  background-color: hsl(var(--b1) / var(--tw-bg-opacity)) !important;
 }
 .ql-container {
-  background-color: #f6f0f6;
+  background-color: #f6f0f6 !important;
 }
-.dark .ql-stroke {
-  stroke: #d0d0d0;
+.dark button:not(:hover) .ql-stroke {
+    stroke: #d0d0d0 ;
+}
+
+.dark button:not(:hover) .ql-fill {
+    fill: #d0d0d0 ;
 }

@@ -2,7 +2,6 @@ import IProcess from 'interfaces/IProcess'
 
 
 export default function getProcessUrl(process: IProcess, processId: string): string {
-    console.log(!process)
     switch (true) {
         case !process:
             return "/";

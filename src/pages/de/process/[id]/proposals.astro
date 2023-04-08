@@ -183,8 +183,6 @@ if (pathname !== url.pathname)
             // Create a Quill editor for the description field
         
             const quill = createQuill('#' + descriptionId);
-            console.log(quill)
-
             quill.setContents(typeof data.description === "string" ? { ops: [{ insert: data.description }] } : data.description);
             const html_description = inputs[1].querySelector('.ql-editor').innerHTML
             this.updateProposalView(proposal, data.title, html_description)

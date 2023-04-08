@@ -51,11 +51,8 @@
         :cancelText="t('cancel')" :selectText="t('select')"/>
     </div>
 
-    <div class="calendar" :id="`cal-${props.phase}-${props.index}`"  :class="{'open': $process[props.phase + 'Open'] === props.index + 1 }"/>
-  
+    <div class="calendar" :id="`cal-${props.phase}-${props.index}`"  :class="{'open': $process[props.phase + 'Open'] === props.index + 1 }"/>  
 </template>
-
-
 
 <style>
 .size {
