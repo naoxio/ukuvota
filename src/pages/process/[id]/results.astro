@@ -6,7 +6,7 @@ import i18next, { t, changeLanguage } from "i18next";
 import getProcessUrl from "composables/getProcessUrl";
 import AlertManager from "molecules/AlertManager.astro";
 import Alert from "atoms/Alert.astro";
-import fetchProcessData from "composables/fetchProcessData"
+import fetchProcessData from "composables/fetchProcessData";
 
 changeLanguage("en");
 
@@ -15,11 +15,9 @@ const processId = Astro.params.id;
 const process = await fetchProcessData(processId, url);
 if (process === null)
     return Astro.redirect("/");
-
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
-
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 if (!("voters" in process)) {
     process["voters"] = [];
