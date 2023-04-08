@@ -19,45 +19,10 @@ const $process = process.get()
   { ($process.phases === 'full' || phase === 'voting') &&
     <h2>{ t(`phases.${phase}.title`) }</h2>
     <h3>{ t(`phases.startAt`) }:</h3>
-    <span class="flex justify-center items-center">
-        <DatetimePicker phase={phase} index={0} client:only="vue" />
-        <p/>
-    </span>
-    <div class="calendar" id={`cal-${phase}-0`} class={ $process[phase + 'Open'] === 1 ? 'open' : '' } />
+    <DatetimePicker phase={phase} index={0} client:only="vue" />
     <h3>{ t(`phases.endsAt`) }:</h3>
-    <span class="flex justify-center items-center">
-        <DatetimePicker phase={phase} index={1} client:only="vue" />
-        <p/>
-    </span>
-    <br/>
-    <div class="calendar" id={`cal-${phase}-1`}  class={ $process[phase + 'Open'] === 2 ? 'open' : '' } />
+    <DatetimePicker phase={phase} index={1} client:only="vue" />
     <DatetimeSlider phase={phase} />
   }
 </time-selector>  
 
-
-<style>
-.size {
-  height: 500px;
-}
-.calendar {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 0;
-    transition: all 1s ease-in-out;
-    overflow: hidden;
-
-}
-.calendar.open {
-  height: 400px;
-  transition: all 1s ease-in-out;
-
-}
-.calendar .dp__menu {
-    position: relative;
-    left: 0 !important;
-    top: 0 !important;
-    transform: none !important;
-}
-</style>

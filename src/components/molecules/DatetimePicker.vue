@@ -35,18 +35,48 @@
 </script>
 
 <template>
-    <Datepicker
-    @open="process.setKey(props.phase + 'Open' as keyof Process, props.index + 1)"
-    @closed="process.setKey(props.phase + 'Open' as keyof Process, 0)"
-    :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
-    :modelValue="$process[props.phase + 'Dates'][props.index]"
-    @update:modelValue="changeDatetime"
-    :dark="$theme === 'dark'"
-    :clearable="false"
-    :format-locale="getDateLocale()"
-    prevent-min-max-navigation
-    text-input
-    :teleport="`#cal-${props.phase}-${props.index}`"
-    :cancelText="t('cancel')" :selectText="t('select')"/>
+    <div class="flex justify-center items-center">
+        <Datepicker
+        @open="process.setKey(props.phase + 'Open' as keyof Process, props.index + 1)"
+        @closed="process.setKey(props.phase + 'Open' as keyof Process, 0)"
+        :min-date="props.index === 0 ? $process[props.phase + 'DateMin'] : new Date($process[props.phase + 'Dates'][0]).toLocaleString()"
+        :modelValue="$process[props.phase + 'Dates'][props.index]"
+        @update:modelValue="changeDatetime"
+        :dark="$theme === 'dark'"
+        :clearable="false"
+        :format-locale="getDateLocale()"
+        prevent-min-max-navigation
+        text-input
+        :teleport="`#cal-${props.phase}-${props.index}`"
+        :cancelText="t('cancel')" :selectText="t('select')"/>
+    </div>
+
+    <div class="calendar" :id="`cal-${props.phase}-${props.index}`"  :class="{'open': $process[props.phase + 'Open'] === props.index + 1 }"/>
   
 </template>
+
+
+
+<style>
+.size {
+  height: 500px;
+}
+.calendar {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 0;
+    transition: all 1s ease-in-out;
+    overflow: hidden;
+}
+.calendar.open {
+  height: 400px;
+  transition: all 1s ease-in-out;
+}
+.calendar .dp__menu {
+    position: relative;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+}
+</style>

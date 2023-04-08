@@ -18,16 +18,13 @@ const $process = process.get();
 <create-process>
     <div id="scrollTopicQuestion" />
     <div class="pb-6">
-        <div>
-            <p>{ t('process.topic') }</p>
-            <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" value={  $process.title }  type="text"/>
-            <br/>
-            <p>{ t('process.description') }</p>
-            <div id="description"/>
-            <br>
-
-            <WeightSelector/>
-        </div>
+        <p>{ t('process.topic') }</p>
+        <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" value={  $process.title }  type="text"/>
+        <br/>
+        <p>{ t('process.description') }</p>
+        <div id="description"/>
+        <br>
+        <WeightSelector/>
         <h2>{ t('process.phases.select') }</h2>
         <PhaseSelector/>
     </div>
@@ -39,38 +36,25 @@ const $process = process.get();
             <p></p>
             <hr/>
         </div>
-    
         <TimeSelector phase="voting"/>
     </div>
     <div class="voteOnly">
         <hr class="mt-4"/>
         <h2>{ t('process.proposals') }</h2>    
-
         <EditProposalList />
         <AddProposals />
     </div>
-   
-    <br/>
-    <br/>
+    <br/><br/>
     <div class="text-center">
         <button id="createProcessButton" type="submit" class="btn btn-primary">
             { t('create') }
         </button>
     </div>
-
     <AlertManager>
-        <Alert type="error" icon="warning" error>
-            { t('alert.error.topicQuestion') }
-        </Alert>
-        <Alert type="success" icon="checkmark-outline" success>
-            { t('alert.success.createProcess') }
-        </Alert>
-        <Alert type="error" icon="warning" error>
-            { t('alert.error.proposalsMissing') }
-        </Alert>
-        <Alert type="error" icon="warning" error>
-            { t('alert.error.payloadSizeTooLarge') }
-        </Alert>
+        <Alert type="error" icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+        <Alert type="success" icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+        <Alert type="error" icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+        <Alert type="error" icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
     </AlertManager>
 </create-process>
 
@@ -81,6 +65,7 @@ const $process = process.get();
     import IProposal from 'interfaces/IProposal'
     import { createQuill } from "composables/quillEditor";
     import { addAlert } from 'composables/addAlert'
+    import isValidDelta from 'composables/isValidDelta'
 
     const lang = i18next.language;
 
@@ -121,7 +106,7 @@ const $process = process.get();
 
             this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
             this.quillDescription = createQuill('#description');
-            this.quillDescription.setContents(process.get().description)
+            this.quillDescription.setContents(isValidDelta(process.get().description) ? process.get().description : { ops: [] })
             this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
             const title =this.querySelector('#topicQuestion')
             title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
@@ -166,6 +151,8 @@ const $process = process.get();
                 proposals
             }
 
+            console.log(body)
+
             if (import.meta.env.DEV) return
             else {
                 try {
@@ -182,7 +169,7 @@ const $process = process.get();
 
                     const processId = (await response.json()).id;
                     process.setKey('title', '');
-                    process.setKey('description', new Delta());
+                    process.setKey('description', { ops: [] });
                     process.setKey('proposals', []);
                     addAlert(this.alertList, this.alerts[1].cloneNode(true))
 
