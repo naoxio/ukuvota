@@ -9,7 +9,6 @@ import getProcessUrl from "composables/getProcessUrl";
 
 changeLanguage("en");
 
-const processId = Astro.params.id;
 const { url } = Astro;
 const processId = Astro.params.id;
 const process = fetchProcessData(processId, url);
@@ -19,9 +18,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
-
-console.log(process)
-
+console.log(process);
 ---
 <style>
     .gray {

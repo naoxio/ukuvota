@@ -6,7 +6,6 @@ import getProcessUrl from "composables/getProcessUrl";
 
 changeLanguage("de");
 
-const processId = Astro.params.id;
 const { url } = Astro;
 const processId = Astro.params.id;
 const process = fetchProcessData(processId, url);
@@ -15,11 +14,10 @@ if (process === null)
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect;
+console.log(process);
 ---
 
 <ProcessLayout process={process}>
-    <div id="editor"></div>
-
     <proposal-list>
         <h2>{ t('process.proposals') }</h2>
         <div class="proposals">
