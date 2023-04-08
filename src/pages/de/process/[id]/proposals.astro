@@ -1,7 +1,6 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
-import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
 import fetchProcessData from "composables/fetchProcessData";
 
@@ -107,6 +106,8 @@ if (pathname !== url.pathname)
         }
         
         updateProposal(inputs: any[], proposal: IProposal) {
+            const description_content = this.descriptionQuills[inputs[1].id].getContents()
+
             if (inputs[0].value === '' && inputs[1].innerHTML === '') {
                 ws.send(JSON.stringify({
                     method: 'removeProposal',
@@ -117,11 +118,12 @@ if (pathname !== url.pathname)
                 ws.send(JSON.stringify({
                     method: 'updateProposal',
                     title: inputs[0].value,
-                    description: inputs[1].innerHTML,
+                    description: description_content,
                     proposalId: proposal.id,
                     processId
                 }));
             }
+
             const html_description = inputs[1].querySelector('.ql-editor').innerHTML
 
             this.updateProposalView(proposal, inputs[0].value, html_description);

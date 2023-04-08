@@ -4,7 +4,6 @@ import ProcessLayout from "templates/ProcessLayout.astro";
 import AlertManager from "molecules/AlertManager.astro";
 import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
-import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
 import fetchProcessData from "composables/fetchProcessData";
 
@@ -67,11 +66,11 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             </button>
         </div>
         <AlertManager>
-            <Alert type="success" icon="checkmark-outline" success>
+            <Alert icon="checkmark-outline" success>
                 { t('alert.success.submitVote') }
                 <span class="name"></span>
             </Alert>
-            <Alert type="error" icon="checkmark-outline" error>
+            <Alert icon="checkmark-outline" error>
                 { t('alert.error.emptyName') }
             </Alert>
         </AlertManager>

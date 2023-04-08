@@ -2,13 +2,12 @@
 import { Icon } from "astro-icon";
 
 interface Props {
-    error: boolean
-    success: boolean
+    error?: boolean
+    success?: boolean
     icon: string
-    trigger: boolean
 }
 
-const { error, success, icon, trigger } = Astro.props;
+const { error, success, icon } = Astro.props;
 const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : ''}`;
 const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 ---

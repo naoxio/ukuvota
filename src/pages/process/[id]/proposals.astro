@@ -1,9 +1,9 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
-import processTest from "composables/processTestData";
 import getProcessUrl from "composables/getProcessUrl";
 import fetchProcessData from "composables/fetchProcessData";
+import AddProposals from "molecules/AddProposals.astro";
 
 changeLanguage("en");
 
@@ -47,24 +47,8 @@ if (pathname !== url.pathname)
                 </div>
             </div>
         </div>
-        <span class="flex items-center justify-between">
-            <button id="add-proposal" class="btn p-2" >
-                { t('process.addProposal') }
-            </button>
-            <div class="dropdown">
-                <label tabindex="0" class="btn m-1">{ t('addProposalTemplate') }</label>
-                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                  <li><a class="template-proposal flex flex-col">
-                    <b class="title">{ t('proposal.zero.title') }</b>
-                    <p class="description">{ t('proposal.zero.description') }</p>
-                  </a></li>
-                  <li><a class="template-proposal flex flex-col">
-                    <b class="title">{ t('proposal.one.title') }</b>
-                    <p class="description">{ t('proposal.one.description') }</p>
-                  </a></li>
-                </ul>
-              </div>
-        </span>
+        <AddProposals processId={processId}/>
+        
     </proposal-list> 
 </ProcessLayout>
 
@@ -86,7 +70,6 @@ if (pathname !== url.pathname)
     class ProposalList extends HTMLElement {
         proposal_html = null
         proposals = null
-        template_proposals = this.querySelectorAll('.template-proposal')
         descriptionQuills = {}
         updateProposalView(proposal: any, title: string, description: string ) {
             const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
@@ -107,6 +90,8 @@ if (pathname !== url.pathname)
         }
         
         updateProposal(inputs: any[], proposal: IProposal) {
+            const description_content = this.descriptionQuills[inputs[1].id].getContents()
+
             if (inputs[0].value === '' && inputs[1].innerHTML === '') {
                 ws.send(JSON.stringify({
                     method: 'removeProposal',
@@ -117,11 +102,12 @@ if (pathname !== url.pathname)
                 ws.send(JSON.stringify({
                     method: 'updateProposal',
                     title: inputs[0].value,
-                    description: inputs[1].innerHTML,
+                    description: description_content,
                     proposalId: proposal.id,
                     processId
                 }));
             }
+
             const html_description = inputs[1].querySelector('.ql-editor').innerHTML
 
             this.updateProposalView(proposal, inputs[0].value, html_description);
@@ -249,28 +235,6 @@ if (pathname !== url.pathname)
                 this.addProposal(proposal);
             });
 
-            // Listen for the "Add Proposal" button click event.
-            const addButton = this.querySelector('button#add-proposal');
-            addButton.addEventListener('click', async() => {
-                ws.send(JSON.stringify({
-                    method: 'addProposal',
-                    processId
-                }));
-            });
-
-            // Listen for the proposal template click events.
-            this.template_proposals.forEach((template) => {
-                template.addEventListener('click', async() => {
-                    const title = template.querySelector('.title').innerHTML;
-                    const description = template.querySelector('.description').innerHTML;
-                    ws.send(JSON.stringify({
-                        method: 'addProposal',
-                        title,
-                        description,
-                        processId
-                    }));
-                });
-            });
         }
     }
     customElements.define('proposal-list', ProposalList)

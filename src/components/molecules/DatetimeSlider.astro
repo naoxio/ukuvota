@@ -44,7 +44,7 @@ const $process = process.get()
       const input = this.querySelector('input')
       this.durationElement = this.querySelector('#duration')
 
-      input.addEventListener('input', (ev) => this.changeTime(ev))
+      input.addEventListener('input', (ev: InputEvent & { target: HTMLInputElement}) => this.changeTime(ev))
       input.value  =$process[`${this.phase}LogSlider` as keyof Process]
       this.durationElement.innerHTML = fmtDuration(+new Date() + $process[`${this.phase}Duration`], +new Date())
 

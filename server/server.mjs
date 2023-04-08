@@ -54,7 +54,6 @@ app.get('/api/process/:id', async (req, res) => {
   if (!process) {
     res.status(404).json({ error: 'Process not found.' });
   } else {
-    console.log(process)
     res.json({ process });
   }
 });

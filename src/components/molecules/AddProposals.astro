@@ -1,20 +1,22 @@
 ---
 import { t } from 'i18next';
-import { process } from 'stores/processStore';
 import dropdownOptions from 'composables/proposalTemplates'
-const $process = process.get()
 
+interface Props {
+    processId?: string
+}
 
+const { processId } = Astro.props;
 ---
 
 
-<add-proposal class="flex items-center flex-wrap">    
+<add-proposal class="flex items-center flex-wrap" data-process={processId}>    
   <button id="add-button" class="btn p-2">{ t('process.addProposal') }</button>
   <div class="dropdown">
     <label tabindex="0" class="btn m-1">{ t('addProposalTemplate') }</label>
     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box">
-      {dropdownOptions.map((option, index) => (
-        <li key={index}>
+      {dropdownOptions.map(option => (
+        <li>
           <a class="flex flex-col">
             <b>{option.title}</b>
             <p>{option.description.ops[0].insert}</p>
@@ -28,7 +30,6 @@ const $process = process.get()
 
 <script>
   import { process } from 'stores/processStore';
-  import { t } from 'i18next';
   import dropdownOptions from 'composables/proposalTemplates'
 
 
@@ -49,7 +50,7 @@ const $process = process.get()
 
   class AddProposal extends HTMLElement {
     isWrapping = false;
-
+    processId = null;
     checkIsWrapping() {
       this.isWrapping = window.innerWidth <= 767;
       this.updateClassList();
@@ -72,8 +73,46 @@ const $process = process.get()
 
     constructor() {
       super();
-      this.querySelector('#add-button').addEventListener('click', () => addProposal());
-      this.addEventListenersToDropdownOptions();
+      this.processId = this.dataset.process;
+      const addButton = this.querySelector('#add-button');
+
+      const dropdownItems = this.querySelectorAll('.dropdown-content li a');
+
+      if (this.processId) {
+        const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
+        const ws = new WebSocket(`${protocol}//${window.location.host}`);
+
+        // Listen for the "Add Proposal" button click event.
+          addButton.addEventListener('click', async() => {
+              ws.send(JSON.stringify({
+                  method: 'addProposal',
+                  processId: this.processId
+              }));
+          });
+
+          // Listen for the proposal template click events.
+          dropdownItems.forEach((item, index) => {
+              item.addEventListener('click', async() => {
+                  const title = item.querySelector('.title').innerHTML;
+                  const description = item.querySelector('.description').innerHTML;
+                  ws.send(JSON.stringify({
+                      method: 'addProposal',
+                      title,
+                      description,
+                      processId: this.processId
+                  }));
+              });
+          });
+      }
+      else {
+        addButton.addEventListener('click', () => addProposal());
+    
+        dropdownItems.forEach((item, index) => {
+          item.addEventListener('click', () => addProposal(index));
+        });
+
+      }
+
 
       this.checkIsWrapping();
       window.addEventListener('resize', this.checkIsWrapping.bind(this));
@@ -81,12 +120,6 @@ const $process = process.get()
 
     }
 
-    addEventListenersToDropdownOptions() {
-      const dropdownItems = this.querySelectorAll('.dropdown-content li a');
-      dropdownItems.forEach((item, index) => {
-        item.addEventListener('click', () => addProposal(index));
-      });
-    }
     disconnectedCallback() {
       this.destroy();
     }

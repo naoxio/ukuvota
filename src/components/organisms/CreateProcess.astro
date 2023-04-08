@@ -51,17 +51,16 @@ const $process = process.get();
         </button>
     </div>
     <AlertManager>
-        <Alert type="error" icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
-        <Alert type="success" icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
-        <Alert type="error" icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
-        <Alert type="error" icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+        <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+        <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+        <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+        <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
     </AlertManager>
 </create-process>
 
 <script>
     import i18next, { t } from 'i18next';
     import { process } from 'stores/processStore';
-    import { Delta, Quill } from 'quill';
     import IProposal from 'interfaces/IProposal'
     import createQuill from "composables/quillEditor";
     import { addAlert } from 'composables/addAlert'
@@ -81,11 +80,11 @@ const $process = process.get();
             const voteOnlyElements = this.querySelectorAll('.voteOnly');
             const isVotingPhase = this.phases === 'voting';
 
-            voteOnlyElements.forEach(element => {
+            voteOnlyElements.forEach((element: HTMLElement) => {
                 element.style.display = isVotingPhase ? 'block' : 'none';
             });
 
-            fullOnlyElements.forEach(element => {
+            fullOnlyElements.forEach((element: HTMLElement) => {
                 element.style.display = isVotingPhase ? 'none' : 'block';
             });
 
@@ -108,9 +107,9 @@ const $process = process.get();
             this.quillDescription = createQuill('#description');
             this.quillDescription.setContents(isValidDelta(process.get().description) ? process.get().description : { ops: [] })
             this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
-            const title =this.querySelector('#topicQuestion')
+            let title = this.querySelector('#topicQuestion')
             title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
-            title.value = process.get().title
+            title.innerHTML = process.get().title
 
         }
         // Check if all proposals have a title and description
@@ -119,7 +118,7 @@ const $process = process.get();
         }
 
 
-            // Create process
+        // Create process
         createProcess = async() => {
             const title = process.get().title.trim();
             if (!title) {
@@ -151,7 +150,6 @@ const $process = process.get();
                 proposals
             }
 
-            console.log(body)
 
             if (import.meta.env.DEV) return
             else {
