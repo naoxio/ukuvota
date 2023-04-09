@@ -42,7 +42,7 @@ const { processId } = Astro.props;
         ? dropdownOptions[template]
         : {
             title: '',
-            description: '',
+            description: {ops: [{"insert": ""}]},
           }
     );
     process.setKey('proposals', proposals);
