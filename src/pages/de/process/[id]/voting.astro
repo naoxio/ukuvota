@@ -25,14 +25,13 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         width: 48px;
     }
     @media screen and (max-width: 600px) {
-    .icon {
-        width: 32px;
+        .icon {
+            width: 32px;
+        }
+        .emoji-btn {
+            flex-shrink: unset;
+        }
     }
-    .emoji-btn {
-        flex-shrink: unset;
-    }
-  }
-  
 </style>
 <ProcessLayout process={process}>
     <voting-list>
@@ -172,6 +171,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 
             const submit = this.querySelector('button#submit-vote')
             submit.addEventListener('click', this.submitVote)
+            
         }
     }
     customElements.define('voting-list', VotingList)

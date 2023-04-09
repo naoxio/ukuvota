@@ -1,35 +1,22 @@
 ---
-import BaseLayout from "templates/BaseLayout.astro";
 import { t, changeLanguage } from "i18next";
-import CreateProcess from "organisms/CreateProcess.astro";
+import { process } from "stores/processStore";
+import BaseLayout from "templates/BaseLayout.astro";
+import Alert from "atoms/Alert.astro";
+import AlertList from "molecules/AlertList.astro";
+import WeightSelector from "molecules/WeightSelector.astro";
+import PhaseSelector from "molecules/PhaseSelector.astro";
+import TimeSelector from "organisms/TimeSelector.astro";
+import AddProposals from "molecules/AddProposals.astro";
+import EditProposalList from "organisms/EditProposalList.astro";
 import ContentDoc from "atoms/ContentDoc.astro";
 
 changeLanguage("de");
+
+const $process = process.get();
 ---
 
 <style>
-  /* Style the button that is used to open and close the collapsible content */
-  .collapsible {
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-  }
-
-  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-  .active, .collapsible:hover {
-    background-color: var(text-red);
-  }
-
-  /* Style the collapsible content. Note: hidden by default */
-  .content {
-    padding: 0 18px;
-    display: none;
-    overflow: hidden;
-  }
   summary {
 		text-align: center;
 		cursor: pointer;
@@ -45,23 +32,185 @@ changeLanguage("de");
       <ContentDoc file_name="Introduction" />
     </details>
 
-    <CreateProcess />
+        
+    <create-process>
+      <div id="scrollTopicQuestion" />
+      <div class="pb-6">
+          <p>{ t('process.topic') }</p>
+          <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
+          <br/>
+          <p>{ t('process.description') }</p>
+          <div id="description"/>
+          <br>
+          <WeightSelector/>
+          <h2>{ t('process.phases.select') }</h2>
+          <PhaseSelector/>
+      </div>
+      <hr/>
+      <div class="py-2">
+          <div id="timeselectHeading" class="flex justify-between items-center flex-wrap"/>
+          <div class="fullOnly">
+              <TimeSelector phase="proposal"/>
+              <p></p>
+              <hr/>
+          </div>
+          <TimeSelector phase="voting"/>
+      </div>
+      <div class="voteOnly">
+          <hr class="mt-4"/>
+          <h2>{ t('process.proposals') }</h2>    
+          <EditProposalList />
+          <AddProposals />
+      </div>
+      <br/><br/>
+      <div class="text-center">
+          <button id="createProcessButton" type="submit" class="btn btn-primary">
+              { t('create') }
+          </button>
+      </div>
+      <AlertList>
+          <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+          <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+          <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+          <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+      </AlertList>
+    </create-process>
   </process-form>
 </BaseLayout>
 
 <script>
-  import { loadingLogo } from 'composables/loadingLogo'
-  class ProcessForm extends HTMLElement {
-    constructor() {
-      super()
-      const component = this.querySelector<HTMLElement>('astro-island')
-      if (component.innerHTML === "") {
-        component.innerHTML = loadingLogo()
-      }
+    import { loadingLogo } from 'composables/loadingLogo'
+    import i18next, { t } from 'i18next';
+    import { process } from 'stores/processStore';
+    import IProposal from 'interfaces/IProposal'
+    import createQuill from "composables/createQuill";
+    import addAlert from 'composables/addAlert'
+    import isValidDelta from 'composables/isValidDelta'
 
-      const content = this.querySelector<HTMLElement>('.content') 
+    const lang = i18next.language;
+    class ProcessForm extends HTMLElement {
+      constructor() {
+        super()
+        const component = this.querySelector<HTMLElement>('astro-island')
+        if (component.innerHTML === "") {
+          component.innerHTML = loadingLogo()
+        }
       }
-}
-customElements.define('process-form', ProcessForm)
+    }
+    customElements.define('process-form', ProcessForm)
 
+    class CreateProcess extends HTMLElement {
+        scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
+        quillDescription = null
+        alertList = this.querySelector('div.alert-list')
+        alerts = this.querySelectorAll('alert-element')
+        phases = process.get().phases
+        
+        updatePhasesView() {
+            const fullOnlyElements = this.querySelectorAll('.fullOnly');
+            const voteOnlyElements = this.querySelectorAll('.voteOnly');
+            const isVotingPhase = this.phases === 'voting';
+
+            voteOnlyElements.forEach((element: HTMLElement) => {
+                element.style.display = isVotingPhase ? 'block' : 'none';
+            });
+
+            fullOnlyElements.forEach((element: HTMLElement) => {
+                element.style.display = isVotingPhase ? 'none' : 'block';
+            });
+
+            this.querySelector('#timeselectHeading').innerHTML = (isVotingPhase ? `<h1>${t('process.timeLeftVotingHeading')}</h1>` :  `<h1>${t('process.timeLeftHeading')}</h1>`);
+
+        }
+        constructor() {
+            super()
+            process.subscribe(() => {
+                const $process = process.get();
+                if (JSON.stringify(this.phases) !== JSON.stringify($process.phases)) {
+                this.phases = JSON.parse(JSON.stringify($process.phases));
+                this.updatePhasesView();
+                }
+            });
+
+            this.updatePhasesView()
+
+            this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
+            this.quillDescription = createQuill('#description');
+            this.quillDescription.setContents(isValidDelta(process.get().description) ? process.get().description : { ops: [] })
+            this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
+            let title = this.querySelector('#topicQuestion') as HTMLInputElement
+            title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
+            title.value = process.get().title
+
+        }
+        // Check if all proposals have a title and description
+        checkProposalValues(proposals: IProposal[]) {
+            return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
+        }
+
+        // Create process
+        createProcess = async() => {
+            const title = process.get().title.trim();
+            if (!title) {
+
+                const rect = this.scrollTopicQuestion.getBoundingClientRect();
+                const top = rect.top + window.pageYOffset - 100;
+                window.scrollTo({ top, behavior: 'smooth' });
+                addAlert(this.alertList, this.alerts[0])
+                return;
+            }
+
+            let proposals = process.get().phases === 'full' ? [] : JSON.parse( JSON.stringify(process.get().proposals))
+
+            if (process.get().phases === 'voting') {
+                for (let i = 0; i < proposals.length; i++) {
+                    proposals[i].description = proposals[i].description
+                }
+
+                if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
+                    addAlert(this.alertList, this.alerts[2])
+                    return
+                }
+            }
+
+            // Prepare request body
+            const body = {
+                topicQuestion: process.get().title,
+                topicDescription: this.quillDescription.getContents(),
+                proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
+                votingDates: process.get().votingDates,
+                weighting: process.get().weighting,    
+                proposals
+            }
+
+
+            if (import.meta.env.DEV) return
+            else {
+                try {
+                    const response = await fetch(`${location.origin}/api/process`, {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+
+                    if (response.status === 413) {
+                        addAlert(this.alertList, this.alerts[3])
+                        return;
+                    }
+
+                    const processId = (await response.json()).id;
+                    process.setKey('title', '');
+                    process.setKey('description', { ops: [] });
+                    process.setKey('proposals', []);
+                    addAlert(this.alertList, this.alerts[1])
+
+                    window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }    
+    }
+
+    customElements.define('create-process', CreateProcess)
 </script>

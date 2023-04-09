@@ -59,10 +59,10 @@ if (pathname !== url.pathname)
             <Alert icon="checkmark-outline" success>
                 { t('alert.success.websocketConnected') }
             </Alert>
-            <Alert icon="checkmark-outline">
-                { t('alert.warning.connectingToWebsocket') }
+            <Alert icon="warning" warning>
+                { t('alert.connecting.connectingToWebsocket') }
             </Alert>
-            <Alert icon="checkmark-outline" error>
+            <Alert icon="warning" error>
                 { t('alert.error.errorConnectingToWebsocket') }
             </Alert>
         </AlertList>
@@ -89,6 +89,7 @@ if (pathname !== url.pathname)
         proposal_html = null
         proposals = null
         descriptionQuills = {}
+        currentAlert = null
         
         alertList = this.querySelector('div.alert-list')
         alerts = this.querySelectorAll('alert-element')
@@ -207,19 +208,24 @@ if (pathname !== url.pathname)
         }
         constructor() {
             super();
-
+            
             if (ws.readyState === WebSocket.CONNECTING) {
-                addAlert(this.alertList, this.alerts[1])
-                console.log("WebSocket is in the connecting state.");
+                this.currentAlert = addAlert(this.alertList, this.alerts[1], -1)
             }
 
             ws.addEventListener('open', () => {
+                if (this.currentAlert) {
+                    this.alertList.removeChild(this.currentAlert)
+                }
                 addAlert(this.alertList, this.alerts[0])
 
                 console.log("WebSocket is successfully connected.");
             });
 
             ws.addEventListener('error', (error) => {
+                if (this.currentAlert) {
+                    this.alertList.removeChild(this.currentAlert)
+                }
                 addAlert(this.alertList, this.alerts[2])
 
                 console.log("Error connecting to WebSocket:", error);

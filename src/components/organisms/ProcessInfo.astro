@@ -84,19 +84,22 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     class ProcessInfo extends HTMLElement {
         constructor() {
             super()
+            const description = JSON.parse(this.dataset.description)
+            if (typeof description === "string")
+                this.querySelector('.topic-description').innerHTML = description
+            else {
                 const quill = createQuill('#temp')
-                quill.setContents(JSON.parse(this.dataset.description))
+                quill.setContents(description)
                 this.querySelector('.topic-description').innerHTML = this.querySelector('#temp').querySelector('.ql-editor').innerHTML
-                
-                this.querySelector('.share-button').addEventListener('click', function() {
+            }
+            this.querySelector('.share-button').addEventListener('click', function() {
                 if(navigator.share) {
                     navigator.share({
                         title: this.dataset.title,
-                        text: this.dataset.description,
                         url: window.location.href
                     })
                 }
-            });
+            })
         }
         
     }

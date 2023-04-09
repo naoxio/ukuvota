@@ -62,7 +62,7 @@ export default function processTest() {
         votingDates: [+new Date() + 200000, +new Date() + 4000000],
         weighting: '3',
         title: 'What pizza toppings should we order for our office party?',
-        description:  {"ops":[{"insert":"We are planning an office party and would like to order pizza for everyone. We are trying to decide on the toppings and would like some ideas. Please suggest your favorite toppings and any unique combinations you think would be delicious!"}]},
+        description: "We are planning an office party and would like to order pizza for everyone. We are trying to decide on the toppings and would like some ideas. Please suggest your favorite toppings and any unique combinations you think would be delicious!",
         proposals, voters,
     }
 }

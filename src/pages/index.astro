@@ -1,21 +1,19 @@
 ---
-import { t, changeLanguage } from 'i18next';
-
-import { process } from 'stores/processStore';
-
+import { t, changeLanguage } from "i18next";
+import { process } from "stores/processStore";
 import BaseLayout from "templates/BaseLayout.astro";
-import Alert from 'atoms/Alert.astro';
-import AlertList from 'molecules/AlertList.astro';
-import WeightSelector from 'molecules/WeightSelector.astro';
-import PhaseSelector from 'molecules/PhaseSelector.astro';
-import TimeSelector from 'organisms/TimeSelector.astro';
-import AddProposals from 'molecules/AddProposals.astro';
-import EditProposalList from 'organisms/EditProposalList.astro';
+import Alert from "atoms/Alert.astro";
+import AlertList from "molecules/AlertList.astro";
+import WeightSelector from "molecules/WeightSelector.astro";
+import PhaseSelector from "molecules/PhaseSelector.astro";
+import TimeSelector from "organisms/TimeSelector.astro";
+import AddProposals from "molecules/AddProposals.astro";
+import EditProposalList from "organisms/EditProposalList.astro";
 import ContentDoc from "atoms/ContentDoc.astro";
 
-const $process = process.get();
-
 changeLanguage("en");
+
+const $process = process.get();
 ---
 
 <style>
@@ -154,7 +152,10 @@ changeLanguage("en");
         createProcess = async() => {
             const title = process.get().title.trim();
             if (!title) {
-                this.scrollTopicQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+                const rect = this.scrollTopicQuestion.getBoundingClientRect();
+                const top = rect.top + window.pageYOffset - 100;
+                window.scrollTo({ top, behavior: 'smooth' });
                 addAlert(this.alertList, this.alerts[0])
                 return;
             }

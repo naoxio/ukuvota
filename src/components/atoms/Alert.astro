@@ -4,15 +4,16 @@ import { Icon } from "astro-icon";
 interface Props {
     error?: boolean
     success?: boolean
+    warning?: boolean
     icon: string
 }
 
-const { error, success, icon } = Astro.props;
-const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : ''}`;
+const { error, success, warning, icon } = Astro.props;
+const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : ''}`;
 const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
-<alert-element id={showAlertId} class={classList} style="display: none;    pointer-events: auto;">
+<alert-element id={showAlertId} class={classList} style="display: none; pointer-events: auto;">
     <div>
         <Icon width="32" name={icon} />
         <span><slot/></span>
@@ -21,7 +22,6 @@ const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 
 <script>
   class AlertElement extends HTMLElement {
-    prevTrigger = false;
     visible = false;
 
     constructor() {
@@ -33,9 +33,6 @@ const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
       });
     }
 
-    connectedCallback() {
-      this.updateDisplay();
-    }
 
     updateDisplay() {
       this.style.display = this.visible ? 'block' : 'none';
