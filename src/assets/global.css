@@ -82,3 +82,21 @@ hr {
 .ql-toolbar, .ql-container {
     border-color: hsl(var(--bc) / var(--tw-border-opacity));
 }
+
+
+.dark .ql-container, .dark .ql-toolbar  {
+  border-color: #444  !important;
+}
+.dark .ql-container {
+  background-color: hsl(var(--b1) / var(--tw-bg-opacity)) !important;
+}
+.ql-container {
+  background-color: #f6f0f6 !important;
+}
+.dark button:not(:hover) .ql-stroke {
+    stroke: #d0d0d0 ;
+}
+
+.dark button:not(:hover) .ql-fill {
+    fill: #d0d0d0 ;
+}

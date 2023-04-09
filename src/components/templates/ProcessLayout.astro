@@ -1,21 +1,23 @@
 ---
 import BaseLayout from 'templates/BaseLayout.astro'
 import ProcessInfo from 'organisms/ProcessInfo.astro'
-import { IProcess } from 'interfaces/IProcess'
+import IProcess from 'interfaces/IProcess'
 
 interface Props {
     process: IProcess,
 }
 
-
 const {process} = Astro.props;
 
 ---
 
-<BaseLayout title={process.title} description={process.description}>
+<BaseLayout title={process.title}>
+    <div style="display: none; opacity: 0;">
+        <div id="temp"  />
+    </div>
     <ProcessInfo
         title={process.title}
-        description={process.description}
+        description={JSON.stringify(process.description)}
         weighting={process.weighting}
         proposalDates={process.proposalDates}
         votingDates={process.votingDates}

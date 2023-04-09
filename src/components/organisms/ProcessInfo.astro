@@ -7,12 +7,13 @@ import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
 import ProcessTimeLabel from 'organisms/ProcessTimeLabel.astro';
 import Icon from 'astro-icon'
+import { Delta } from 'quill'
 
 const { url } = Astro;
 
 interface Props {
     title?: string,
-    description?: string,
+    description?: string | Delta,
     weighting?: string,
     shareable?: boolean,
     proposalDates?: number[],
@@ -66,6 +67,8 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 
 <script>
+    import getQuillHTML from 'composables/getQuillHTML'
+
     const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
     if (shareableUrl) {
         shareableUrl.addEventListener('click', () => {
@@ -79,16 +82,16 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     class ProcessInfo extends HTMLElement {
         constructor() {
             super()
-                this.querySelector('.topic-description').innerHTML = this.dataset.description
-                this.querySelector('.share-button').addEventListener('click', function() {
+            const description = JSON.parse(this.dataset.description)
+            this.querySelector('.topic-description').innerHTML = getQuillHTML(description)
+            this.querySelector('.share-button').addEventListener('click', function() {
                 if(navigator.share) {
                     navigator.share({
                         title: this.dataset.title,
-                        text: this.dataset.description,
                         url: window.location.href
                     })
                 }
-            });
+            })
         }
         
     }

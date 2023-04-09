@@ -1,0 +1,28 @@
+---
+import { process } from 'stores/processStore';
+/* @ts-ignore */
+import DatetimePicker from 'molecules/DatetimePicker.vue';
+import DatetimeSlider from 'molecules/DatetimeSlider.astro'
+import { t } from 'i18next';
+
+interface Props {
+    phase: string
+}
+
+const { phase } = Astro.props;
+const $process = process.get()
+---
+
+<time-selector>
+  { ($process.phases === 'full' || phase === 'voting') &&
+    <h2>{ t(`phases.${phase}.title`) }</h2>
+    <h3>{ t(`phases.startAt`) }:</h3>
+    <DatetimePicker phase={phase} index={0} client:only="vue" />
+    <h3>{ t(`phases.endsAt`) }:</h3>
+    <DatetimePicker phase={phase} index={1} client:only="vue" />
+    <br/>
+    <DatetimeSlider phase={phase} />
+    <br/>
+  }
+</time-selector>  
+

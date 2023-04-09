@@ -1,0 +1,83 @@
+
+<proposal-list class="flex flex-col justify-around align-center items-center"/>
+   
+<script>
+  import { t } from 'i18next'
+  import createQuill from "composables/createQuill";
+  import { process } from 'stores/processStore';
+  import updateQuill from 'composables/updateQuill'
+  import { Quill } from 'quill'
+
+
+  class ProposalList extends HTMLElement {
+    proposals = [];
+    updateProposalDescription(i: number, quill: Quill) {
+      const proposal = this.proposals[i];
+      proposal.description = quill.getContents();
+      
+      process.setKey("proposals", this.proposals);
+    }
+
+    updateProposal(ev, i: number) {
+      const proposal = this.proposals[i];
+      proposal.title = ev.target.value;
+
+      process.setKey("proposals", this.proposals);
+    
+    }
+
+    deleteProposal(i: number) {
+      this.proposals.splice(i, 1);
+      process.setKey("proposals", this.proposals);
+      this.updateProposals();
+    }
+
+    updateProposals() {
+      this.innerHTML = '';
+
+      this.proposals.forEach((proposal, index) => {
+        const proposalElement = document.createElement('div');
+        proposalElement.className = 'proposal bg-base-100 card shadow-xl py-4 px-4 my-2 w-full';
+        proposalElement.innerHTML = `
+          <div class="flex items-center flex-col">
+            <div class="flex flex-col w-full">
+              <b>${t('process.proposal')}</b>
+              <input id="title-${index}" type="text" class="input input-bordered input-sm my-2 w-full" value="${proposal.title}" />
+              <label>${t('process.description')}</label>
+              <div id="description-${index}" />
+            </div>
+          </div>
+          <div class="flex justify-center w-full pt-2">
+            <button class="delete btn btn-ghost text-error btn-xs">${t('delete')}</button>
+          </div>
+        `;
+
+        const titleInput = proposalElement.querySelector(`#title-${index}`);
+        titleInput.addEventListener('input', (ev) => this.updateProposal(ev, index));
+
+        const deleteButton = proposalElement.querySelector('button.delete');
+        deleteButton.addEventListener('click', () => this.deleteProposal(index));
+        this.appendChild(proposalElement);
+
+        let quill = createQuill(`#description-${index}`)
+        quill = updateQuill(quill, proposal.description)
+        quill.on('text-change', () => this.updateProposalDescription(index, quill))
+      });
+    }
+
+    constructor() {
+      super();
+
+      process.subscribe(() => {
+        const $process = process.get();
+        if (JSON.stringify(this.proposals) !== JSON.stringify($process.proposals)) {
+          this.proposals = JSON.parse(JSON.stringify($process.proposals));
+          this.updateProposals();
+        }
+      });
+    }
+  }
+
+  customElements.define('proposal-list', ProposalList);
+
+</script>

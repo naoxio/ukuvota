@@ -1,7 +1,7 @@
-import { IProcess } from 'interfaces/IProcess'
+import IProcess from 'interfaces/IProcess'
 
-export function getProcessUrl(process: IProcess, processId: string) {
 
+export default function getProcessUrl(process: IProcess, processId: string): string {
     switch (true) {
         case !process:
             return "/";
@@ -13,6 +13,5 @@ export function getProcessUrl(process: IProcess, processId: string) {
             return `/process/${processId}/results`
         default:
             return `/process/${processId}`
-
     }
 }

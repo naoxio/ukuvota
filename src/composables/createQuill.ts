@@ -10,7 +10,7 @@ const toolbarOptions = [
 ];
 
 export const options = {
-    debug: 'info',
+    debug: false,
     modules: {
       toolbar: toolbarOptions,
     },
@@ -18,7 +18,7 @@ export const options = {
     theme: 'snow',
 };
 
-export function createQuill(id: string) {
+export default function createQuill(id: string) {
     return new Quill(id, options);
 }
 

@@ -1,17 +1,14 @@
 ---
 import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
-import { processTest } from "composables/processTestData";
-import { getProcessUrl } from "composables/getProcessUrl";
+import getProcessUrl from "composables/getProcessUrl";
+import fetchProcessData from "composables/fetchProcessData";
 
 changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const isDev = processId === "dev";
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
+const process = await fetchProcessData(processId, url);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -21,15 +18,9 @@ if (pathname !== url.pathname)
     { +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
     <div>
         <h2>{ t('process.proposals') }</h2>
-        { process.proposals.map((proposal: any) => (
-            <>
-                <div>
-                    <h3>{ proposal.title }</h3>
-                    <p>{ proposal.description }</p>    
-                </div>
-                <br/>
-            </>
-        ))}
+        <proposal-list data-proposals={JSON.stringify(process.proposals)}>
+            <div class="proposals-container"></div>
+        </proposal-list>
     </div>
     }
 
@@ -38,7 +29,8 @@ if (pathname !== url.pathname)
 
 
 <script>
-    import { processTest } from "composables/processTestData";
+    import processTest from "composables/processTestData";
+    import getQuillHTML from "composables/getQuillHTML";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -50,7 +42,7 @@ if (pathname !== url.pathname)
     const proposalStart = process.proposalDates[0]
     const votingStart = process.votingDates[0]
 
-    const redirectToPage = (startTime, pageName) => {
+    const redirectToPage = (startTime: number, pageName: string) => {
         if (+new Date() < startTime) {
             const time = startTime - +new Date();
             setTimeout(() => {
@@ -60,5 +52,36 @@ if (pathname !== url.pathname)
     }
     redirectToPage(proposalStart, 'proposals')
     redirectToPage(votingStart, 'voting')
+
+    class ProposalList extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            this.render();
+        }
+
+        render() {
+            const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
+            const proposalsContainer = this.querySelector(".proposals-container");
+            
+            let proposalsHTML = '';
+
+            proposals.forEach((proposal: any) => {
+            proposalsHTML += `
+                <div>
+                <h3>${proposal.title}</h3>
+                <p>${getQuillHTML(proposal.description)}</p>
+                </div>
+                <br/>
+            `;
+            });
+
+            proposalsContainer.innerHTML = proposalsHTML;
+        }
+    }
+
+    customElements.define("proposal-list", ProposalList);
 
 </script>

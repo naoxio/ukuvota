@@ -1,0 +1,74 @@
+---
+import i18next, { t } from 'i18next'
+import { ref, computed } from 'vue'
+import { fmtDuration } from 'composables/dateHelpers'
+
+interface Props {
+    dates: Number[2]
+    type: string
+}
+
+const { dates, type } = Astro.props;
+---
+
+<countdown-view data-dates={dates} data-type={type} data-done={t('done')}>
+  <span id="count"></span>
+</countdown-view>
+
+<script>
+  import i18next, { t } from 'i18next'
+
+  import { fmtDuration } from 'composables/dateHelpers'
+  const timeUnits = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
+  
+  class Countdown extends HTMLElement {
+    count = null
+    dates = null
+    targetDate = null
+    currentDate = null
+    type = null
+
+    get filteredUnits() {
+      const diff = this.targetDate - this.currentDate;
+      return diff > 86400000
+        ? timeUnits.filter((v) => v !== 'seconds' && v !== 'minutes' && v !== 'hours')
+        : diff > 3600000
+        ? timeUnits.filter((v) => v !== 'seconds')
+        : timeUnits;
+    }
+    updateTime() {
+      this.currentDate = this.dates[0] < +new Date() ? +new Date() : this.dates[0];
+
+      if (this.targetDate > this.currentDate) {
+        const units = this.filteredUnits;
+        this.count.innerHTML = fmtDuration(this.targetDate, this.currentDate, units);
+        if (this.type === 'warning' && (this.targetDate - this.currentDate) > 300000) {
+          this.count.classList.add('link-warning');
+        } else if (this.type === 'warning' && (this.targetDate - this.currentDate) <= 300000) {
+          this.count.classList.add('text-error');
+        } else if (this.type === 'success') {
+          this.count.classList.add('link-success');
+        }
+
+        setTimeout(() => this.updateTime(), 1000);
+
+      } else {
+        this.count.classList = 'text-info';
+        this.count.innerHTML = this.dataset.done;
+      }
+
+    }
+    constructor() {
+      super()
+      this.type = this.dataset.type
+      this.dates = JSON.parse(`[${this.dataset.dates}]`)
+      this.count = this.querySelector('#count')
+      this.targetDate = this.dates[1]
+      this.currentDate = +new Date()
+
+      this.updateTime()
+    }
+  }
+  customElements.define('countdown-view', Countdown)
+
+</script>

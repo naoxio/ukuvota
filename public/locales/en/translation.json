@@ -7,6 +7,7 @@
   "select": "select",
   "confirm": "confirm",
   "cancel": "cancel",
+  "done": "done",
   "phases": {
     "start": "Starts",
     "startAt": "Start at",
@@ -23,14 +24,19 @@
     "success": {
       "createProcess": "Process starting...",
       "submitVote": "Vote submitted for: ",
-      "repeatProcess": "Repeat process with selection..."
+      "repeatProcess": "Repeat process with selection...",
+      "websocketConnected": "Successfully connected to WebSocket"
+    },
+    "connecting": {
+      "connectingToWebsocket": "Connecting to WebSocket..."
     },
     "error": {
       "topicQuestion": "Please add a Topic Question",
       "emptyName": "Please add a name",
       "proposalsMissing": "Missing proposals, you need at least 2 proposals",
       "missingProposals": "Missing proposals, you need to select at least 2 proposals",
-      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content"
+      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content",
+      "errorConnectingToWebsocket": "Error connecting to WebSocket"
     } 
   },
   "remainingTime": "remaining time",

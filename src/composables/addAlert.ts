@@ -1,7 +1,12 @@
-export  function addAlert (list: Element, alert: any) {
-    alert.style.display = "block"
-    list.appendChild(alert)
+export default function addAlert (list: Element, alert: any, timeout = 3000) {
+  const a = alert.cloneNode(true)
+  a.visible = true
+  a.style.display = "block"
+  list.appendChild(a)
+  if (timeout !== -1) {
     setTimeout(() => {
-      list.removeChild(alert)
-    }, 3000)
+      list.removeChild(a)
+    }, timeout)
   }
+  return a
+}

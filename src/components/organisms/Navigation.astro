@@ -2,7 +2,7 @@
 import { Icon } from 'astro-icon'
 import i18next, { t } from "i18next";
 import { localizePath } from "astro-i18next";
-import ThemeSelector from 'molecules/ThemeSelector.vue'
+import ThemeSelector from 'molecules/ThemeSelector.astro'
 import ISO6991 from "iso-639-1";
 
 const supportedLanguages = i18next.languages;
@@ -84,7 +84,7 @@ const selected = (item: MenuItem) => {
   </select>
 
   <div>
-    <ThemeSelector client:only="vue">
+    <ThemeSelector>
       <Icon class="sun" width="22" name="sun"/>
       <Icon class="moon" width="22" name="moon" />
     </ThemeSelector>

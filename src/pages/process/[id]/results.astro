@@ -1,27 +1,25 @@
 ---
 import ProcessLayout from "templates/ProcessLayout.astro";
 import { Icon } from "astro-icon";
-import { processTest } from "composables/processTestData";
 import i18next, { t, changeLanguage } from "i18next";
-import { getProcessUrl } from "composables/getProcessUrl";
-import AlertManager from "molecules/AlertManager.astro";
-import Alert from "molecules/Alert.astro";
+import getProcessUrl from "composables/getProcessUrl";
+import AlertList from "molecules/AlertList.astro";
+import Alert from "atoms/Alert.astro";
+import fetchProcessData from "composables/fetchProcessData";
 
 changeLanguage("en");
 
-const processId = Astro.params.id;
+
 const { url } = Astro;
-const isDev = processId === "dev";
-const res = isDev ? new Response() : await fetch(`${url.origin}/api/process/${processId}`, { method: "GET" });
-const data = isDev ? null : await res.json();
-const process = isDev ? processTest() : JSON.parse(data.process);
+const processId = Astro.params.id;
+const process = await fetchProcessData(processId, url);
+const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+if (pathname !== url.pathname)
+    return Astro.redirect(`${url.origin}${pathname}`);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 if (!("voters" in process)) {
     process["voters"] = [];
 }
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
-if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
 ---
 <style>
     .hide {
@@ -95,14 +93,14 @@ if (pathname !== url.pathname)
                 { t('wip')}
             </div>
         </div>
-        <AlertManager>
-            <Alert type="success" icon="checkmark-outline">
+        <AlertList>
+            <Alert icon="checkmark-outline" success>
                 { t('alert.success.repeatProcess') }
             </Alert>
-            <Alert type="error" icon="checkmark-outline">
+            <Alert icon="warning" error>
                 { t('alert.error.missingProposals') }
             </Alert>
-        </AlertManager>
+        </AlertList>
     </results-card>
 </ProcessLayout>
 
@@ -110,11 +108,12 @@ if (pathname !== url.pathname)
 
 <script>
     import download from 'downloadjs'
-    import { IProposal } from 'interfaces/IProposal'
+    import IProposal from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
-    import { processTest } from "composables/processTestData";
+    import processTest from "composables/processTestData";
     import { process as storeProcess } from 'stores/processStore'
-    import { addAlert } from 'composables/addAlert'
+    import addAlert from 'composables/addAlert'
+    import getQuillHTML from 'composables/getQuillHTML'
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -150,8 +149,8 @@ if (pathname !== url.pathname)
         voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
         proposal_list = this.querySelector('tbody.proposal-list') 
         emojis = this.querySelectorAll('svg.emoji')
-        alertList = this.querySelector('div.alert-manager').querySelector('div.alert-list')
-        alerts = this.querySelector('div.alert-manager').querySelectorAll('div.alert')
+        alertList = this.querySelector('div.alert-list')
+        alerts = this.querySelectorAll('alert-element')
        
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
@@ -199,7 +198,9 @@ if (pathname !== url.pathname)
             let rank = 0;
             let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
-                if (proposal.title === '' && proposal.description === '') return
+                const description = getQuillHTML(proposal.description)
+                console.log(description)
+                if (proposal.title === '' && description === '<p><br></p>') return
 
                 if (prevProposal) {
                     rank += prevProposal.total === proposal.total ? 0 : 1;
@@ -219,6 +220,8 @@ if (pathname !== url.pathname)
         }
 
         createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
+            const description = getQuillHTML(proposal.description)
+
             const row = document.createElement('tr');
             row.className = 'color-' + rank;
             row.innerHTML = `
@@ -228,7 +231,7 @@ if (pathname !== url.pathname)
                 </td>
                 <td class="whitespace-normal break-words">
                     <h3>${proposal.title}</h3>
-                    <p>${proposal.description}</p>
+                    <p>${description}</p>
                 </td>
                 <td align="center">
                     <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
@@ -253,7 +256,7 @@ if (pathname !== url.pathname)
             const selectedVoters = this.getSelectedVoters();
             const title = process.title;
             const processId = process.id;
-            const description = process.description;
+            const description = getQuillHTML(process.description);
             const voterLabel = this.querySelector('span.voter-label').innerHTML;
             const numVoters = this.querySelector('span.num-voters').innerHTML;
             const selectedVotersString = selectedVoters.map((voter: any) => {
@@ -265,7 +268,7 @@ if (pathname !== url.pathname)
             const proposals = process.proposals.map((proposal: any, index: number) => {
                 if (proposal.title === '' && proposal.description === '') return
                 const averageScore = this.getAverageScore(proposal.total, selectedVoters);
-                return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
+                return ` | ${index + 1} | ${proposal.title} - ${getQuillHTML(proposal.description)} | ${averageScore} | ${proposal.total} |`;
             }).join('\n');
             
             let rtn = '';
@@ -327,7 +330,7 @@ if (pathname !== url.pathname)
             repeatButton.addEventListener('click', () => {
                 const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: HTMLInputElement) => input.checked);
                 if (items.length > 1) {
-                    addAlert(this.alertList, this.alerts[0].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[0])
 
                     storeProcess.setKey('title', process.title)
                     storeProcess.setKey('description', process.description)
@@ -341,7 +344,7 @@ if (pathname !== url.pathname)
 
                 }
                 else {
-                    addAlert(this.alertList, this.alerts[1].cloneNode(true))
+                    addAlert(this.alertList, this.alerts[1])
                 }
             })
             
