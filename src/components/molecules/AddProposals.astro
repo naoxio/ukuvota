@@ -18,8 +18,8 @@ const { processId } = Astro.props;
       {dropdownOptions.map(option => (
         <li>
           <a class="flex flex-col">
-            <b>{option.title}</b>
-            <p>{option.description.ops[0].insert}</p>
+            <b class="title">{option.title}</b>
+            <p class="description">{option.description.ops[0].insert}</p>
           </a>
         </li>
       ))}
@@ -89,10 +89,12 @@ const { processId } = Astro.props;
         });
 
         // Listen for the proposal template click events.
-        dropdownItems.forEach((item, index) => {
+        dropdownItems.forEach(item => {
             item.addEventListener('click', async() => {
+
                 const title = item.querySelector('.title').innerHTML;
-                const description = item.querySelector('.description').innerHTML;
+                const description = { ops: [{"insert": item.querySelector('.description').innerHTML}]}
+              
                 ws.send(JSON.stringify({
                     method: 'addProposal',
                     title,

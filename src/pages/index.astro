@@ -85,7 +85,7 @@ const $process = process.get();
     import IProposal from 'interfaces/IProposal'
     import createQuill from "composables/createQuill";
     import addAlert from 'composables/addAlert'
-    import isValidDelta from 'composables/isValidDelta'
+    import updateQuill from 'composables/updateQuill'
 
     const lang = i18next.language;
     class ProcessForm extends HTMLElement {
@@ -136,7 +136,7 @@ const $process = process.get();
 
             this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
             this.quillDescription = createQuill('#description');
-            this.quillDescription.setContents(isValidDelta(process.get().description) ? process.get().description : { ops: [] })
+            this.quillDescription = updateQuill(this.quillDescription, process.get().description)
             this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
             let title = this.querySelector('#topicQuestion') as HTMLInputElement
             title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))

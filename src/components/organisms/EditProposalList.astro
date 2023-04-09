@@ -5,7 +5,7 @@
   import { t } from 'i18next'
   import createQuill from "composables/createQuill";
   import { process } from 'stores/processStore';
-  import isValidDelta from 'composables/isValidDelta'
+  import updateQuill from 'composables/updateQuill'
   import { Quill } from 'quill'
 
 
@@ -59,11 +59,9 @@
         deleteButton.addEventListener('click', () => this.deleteProposal(index));
         this.appendChild(proposalElement);
 
-        const quill = createQuill(`#description-${index}`)
-        quill.setContents(isValidDelta(proposal.description) ? proposal.description : { ops: [] });
-        quill.on('text-change', (delta, oldContents) => this.updateProposalDescription(index, quill))
-
-
+        let quill = createQuill(`#description-${index}`)
+        quill = updateQuill(quill, proposal.description)
+        quill.on('text-change', () => this.updateProposalDescription(index, quill))
       });
     }
 
