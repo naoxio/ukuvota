@@ -95,7 +95,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         proposal_list = null
         addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal_node: HTMLDivElement) {
             buttons.forEach((button: HTMLButtonElement) => {
-                button.addEventListener('click', (event) => {
+                button.addEventListener('click', () => {
                 const svgs = proposal_node.querySelectorAll('svg');
                 svgs.forEach((svg: SVGElement) => {
                     svg.classList.add('gray');

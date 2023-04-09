@@ -9,7 +9,6 @@ import fetchProcessData from "composables/fetchProcessData";
 
 changeLanguage("en");
 
-
 const { url } = Astro;
 const processId = Astro.params.id;
 const process = await fetchProcessData(processId, url);
@@ -199,7 +198,6 @@ if (!("voters" in process)) {
             let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
                 const description = getQuillHTML(proposal.description)
-                console.log(description)
                 if (proposal.title === '' && description === '<p><br></p>') return
 
                 if (prevProposal) {

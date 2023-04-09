@@ -12,8 +12,6 @@ changeLanguage("de");
 const { url } = Astro;
 const processId = Astro.params.id;
 const process = await fetchProcessData(processId, url);
-if (process === null)
-    return Astro.redirect("/");
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -98,7 +96,7 @@ if (!("voters" in process)) {
             <Alert icon="checkmark-outline" success>
                 { t('alert.success.repeatProcess') }
             </Alert>
-            <Alert icon="checkmark-outline" error>
+            <Alert icon="warning" error>
                 { t('alert.error.missingProposals') }
             </Alert>
         </AlertList>
@@ -200,8 +198,7 @@ if (!("voters" in process)) {
             let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
                 const description = getQuillHTML(proposal.description)
-                console.log(description)
-                if (proposal.title === '' && description) return
+                if (proposal.title === '' && description === '<p><br></p>') return
 
                 if (prevProposal) {
                     rank += prevProposal.total === proposal.total ? 0 : 1;
@@ -221,6 +218,8 @@ if (!("voters" in process)) {
         }
 
         createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
+            const description = getQuillHTML(proposal.description)
+
             const row = document.createElement('tr');
             row.className = 'color-' + rank;
             row.innerHTML = `
@@ -230,7 +229,7 @@ if (!("voters" in process)) {
                 </td>
                 <td class="whitespace-normal break-words">
                     <h3>${proposal.title}</h3>
-                    <p>${proposal.description}</p>
+                    <p>${description}</p>
                 </td>
                 <td align="center">
                     <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
@@ -255,7 +254,7 @@ if (!("voters" in process)) {
             const selectedVoters = this.getSelectedVoters();
             const title = process.title;
             const processId = process.id;
-            const description = process.description;
+            const description = getQuillHTML(process.description);
             const voterLabel = this.querySelector('span.voter-label').innerHTML;
             const numVoters = this.querySelector('span.num-voters').innerHTML;
             const selectedVotersString = selectedVoters.map((voter: any) => {
@@ -267,7 +266,7 @@ if (!("voters" in process)) {
             const proposals = process.proposals.map((proposal: any, index: number) => {
                 if (proposal.title === '' && proposal.description === '') return
                 const averageScore = this.getAverageScore(proposal.total, selectedVoters);
-                return ` | ${index + 1} | ${proposal.title} - ${proposal.description} | ${averageScore} | ${proposal.total} |`;
+                return ` | ${index + 1} | ${proposal.title} - ${getQuillHTML(proposal.description)} | ${averageScore} | ${proposal.total} |`;
             }).join('\n');
             
             let rtn = '';
