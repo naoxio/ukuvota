@@ -114,6 +114,7 @@ if (!("voters" in process)) {
     import processTest from "composables/processTestData";
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composables/addAlert'
+    import getQuillHTML from 'composables/getQuillHTML'
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -198,7 +199,9 @@ if (!("voters" in process)) {
             let rank = 0;
             let prevProposal = null;
             sortedProposals.forEach((proposal: any, index: number) => {
-                if (proposal.title === '' && proposal.description === '') return
+                const description = getQuillHTML(proposal.description)
+                console.log(description)
+                if (proposal.title === '' && description) return
 
                 if (prevProposal) {
                     rank += prevProposal.total === proposal.total ? 0 : 1;

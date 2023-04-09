@@ -80,6 +80,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     import IProposal from 'interfaces/IProposal'
     import addAlert from 'composables/addAlert'
     import processTest from "composables/processTestData";
+    import getQuillHTML from "composables/getQuillHTML";
     
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -94,7 +95,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         proposal_list = null
         addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal_node: HTMLDivElement) {
             buttons.forEach((button: HTMLButtonElement) => {
-                button.addEventListener('click', (event) => {
+                button.addEventListener('click', () => {
                 const svgs = proposal_node.querySelectorAll('svg');
                 svgs.forEach((svg: SVGElement) => {
                     svg.classList.add('gray');
@@ -153,7 +154,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             const proposal_node = this.proposal_html.cloneNode(true)
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title
-            proposal_node.querySelector('p').innerHTML = proposal.description
+            proposal_node.querySelector('p').innerHTML = getQuillHTML(proposal.description)
             const buttons = proposal_node.querySelectorAll('button')
             this.addButtonListeners(buttons, proposal_node);
             this.proposal_list.appendChild(proposal_node)
