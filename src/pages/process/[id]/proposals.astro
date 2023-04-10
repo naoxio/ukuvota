@@ -76,6 +76,7 @@ if (pathname !== url.pathname)
     import createQuill from "composables/createQuill";
     import updateQuill from "composables/updateQuill";
     import { Delta } from "quill"
+    import getQuillHTML from 'composables/getQuillHTML'
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const isDev = processId === 'dev';
@@ -95,11 +96,11 @@ if (pathname !== url.pathname)
         alertList = this.querySelector('div.alert-list')
         alerts = this.querySelectorAll('alert-element')
 
-        updateProposalView(proposal: any, title: string, description: string ) {
+        updateProposalView(proposal: any, title: string, description: Delta ) {
             const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
             view_content.innerHTML = `
                 <h3>${title}</h3>
-                <div>${description}</div>`
+                <div>${getQuillHTML(description)}</div>`
         }
         
         updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
@@ -116,12 +117,12 @@ if (pathname !== url.pathname)
         updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): void {
             const { titleInput, descriptionElement } = inputs;
             const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
+            const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
 
             const proposalId = proposal.id;
             const title = titleInput.value;
-            const htmlDescription = descriptionElement.querySelector('.ql-editor').innerHTML;
 
-            if (title === '' && htmlDescription === '') {
+            if (title === '' && isEmptyDescription) {
                 ws.send(JSON.stringify({
                     method: 'removeProposal',
                     proposalId,
@@ -137,7 +138,7 @@ if (pathname !== url.pathname)
                 }));
             }
 
-            this.updateProposalView(proposal, title, htmlDescription);
+            this.updateProposalView(proposal, title, descriptionContent);
         }
         addProposal(data: IProposal, editing: boolean = false): void {
             // Clone proposal HTML element and set its ID to data ID
@@ -191,9 +192,8 @@ if (pathname !== url.pathname)
             // Create a Quill editor for the description field
             let quill = createQuill('#' + descriptionId);
             quill = updateQuill(quill, data.description)
-            const htmlDescription = descriptionElement.querySelector('.ql-editor').innerHTML;
 
-            this.updateProposalView(proposal, data.title, htmlDescription);
+            this.updateProposalView(proposal, data.title, quill.getContents());
             this.descriptionQuills[descriptionId] = quill;
 
             titleInput.addEventListener('input', () => {
@@ -248,9 +248,8 @@ if (pathname !== url.pathname)
                         // Update a proposal.
                         for (const child of this.proposals.children) {
                             if (child.id === data.proposalId) {
-                                const description_input = this.updateProposalEdit(child, data.title, data.description);
-                                const html_description = description_input.querySelector('.ql-editor').innerHTML
-                                this.updateProposalView(child, data.title, html_description);
+                                this.updateProposalEdit(child, data.title, data.description);
+                                this.updateProposalView(child, data.title, data.description.getContents());
                                 break;
                             }
                         }

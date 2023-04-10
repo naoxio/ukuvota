@@ -47,7 +47,6 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     <div class="w-full pr-2">
         <p>{ t('process.shareableUrl') }</p>
         <div class="flex items-center">
-
             <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
             &nbsp; &nbsp;
             <Modal id="shareableQrCode" icon="qr-code">
