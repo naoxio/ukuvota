@@ -19,13 +19,15 @@ app.use(express.urlencoded({limit: '2mb'}));
 
 const MAX_PAYLOAD_SIZE = 2 * 1024 * 1024; // 2mb in bytes
 
-// Add the getAll route
-app.get('/api/process/:id', async (req, res) => {
+
+// Middleware function for checking if process exists
+const processExists = async(req, res, next) => {
   const processId = req.params.id;
- 
+
   try {
     const process = await db.get(processId);
-    res.json({ process });
+    req.process = process;
+    next();
   } catch (error) {
     if (error.code === 'LEVEL_NOT_FOUND') {
       res.status(404).json({ error: 'Process not found.' });
@@ -33,25 +35,39 @@ app.get('/api/process/:id', async (req, res) => {
       res.status(500).json({ error: 'An unexpected error occurred.' });
     }
   }
-});
+};
 
-app.get('/api/process/:id/voters', async (req, res) => {
-  const processId = req.params.id;
-  const process = JSON.parse(await db.get(processId));
-
-  if (!process) {
-    res.status(404).json({ error: 'Process not found.' });
-  } else {
-    res.json(process.voters);
+const putProcessIntoDatabase = async (processId, process) => {
+  try {
+    await db.put(processId, process);
+  } catch (error) {
+    throw error;
   }
+};
+
+const validatePayloadSize = (req, res, next) => {
+  const contentLength = parseInt(req.headers['content-length']);
+  if (contentLength > MAX_PAYLOAD_SIZE) {
+    res.status(413).send('Payload too large');
+    return;
+  }
+  next();
+};
+
+// Add the getAll route
+app.get('/api/process/:id', processExists, async (req, res) => {
+  res.json({ process: req.process });
+});
+// Add the getVoters route
+app.get('/api/process/:id/voters', processExists, async (req, res) => {
+  const process = req.process;
+  res.json(process.voters);
 });
 
 
-app.post('/api/process/:id/vote', async(req, res) => {
-  // Get the process ID from the URL parameters
-  const processId = req.params.id;
-  // Get the process object from the database
-  const process = JSON.parse(await db.get(processId));
+app.post('/api/process/:id/vote', processExists, async(req, res) => {
+  // Get the process object from the request
+  const process = req.process;
   // Get the request body
   const body = req.body;
 
@@ -78,7 +94,7 @@ app.post('/api/process/:id/vote', async(req, res) => {
       process.voters.push(vote);
 
       // Save the updated process object to the database
-      await db.put(processId, JSON.stringify(process));
+      await putProcessIntoDatabase(processId, JSON.stringify(process));
       // Send a successful response
       res.json({});
     } else {
@@ -106,13 +122,7 @@ const updateDates = (dates) => {
   return dates;
 }
 
-app.post('/api/process', async(req, res) => {
-  const contentLength = parseInt(req.headers['content-length']);
-  if (contentLength > MAX_PAYLOAD_SIZE) {
-    res.status(413).send('Payload too large');
-    return;
-  }
-
+app.post('/api/process', validatePayloadSize, async (req, res) => {
   // Get the request body
   const body = req.body;
 
@@ -141,7 +151,8 @@ app.post('/api/process', async(req, res) => {
         proposals,
       };
       // Save the process object to the database
-      await db.put(uuid, JSON.stringify(process));
+      await putProcessIntoDatabase(uuid, JSON.stringify(process)),
+
       // Send the process ID in the response
       res.json({ id: uuid });
     } else {
@@ -168,6 +179,31 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
 
+const validateProcessExists = async (processId) => {
+  try {
+    await db.get(processId);
+    return true;
+  } catch (error) {
+    if (error.code === 'LEVEL_NOT_FOUND') {
+      return false;
+    } else {
+      throw error;
+    }
+  }
+};
+
+const getProcess = async (processId) => {
+  try {
+    const process = JSON.parse(await db.get(processId));
+    return process;
+  } catch (error) {
+    if (error.code === 'LEVEL_NOT_FOUND') {
+      throw new Error('Process not found.');
+    } else {
+      throw error;
+    }
+  }
+};
 
 
 // Handle a new WebSocket connection
@@ -188,6 +224,10 @@ wss.on('connection', async (ws, req) => {
     let data = JSON.parse(message);
     // Get the ID of the process
     const processId = data.processId;
+    if (!await validateProcessExists(processId)) {
+      ws.close(1008, 'Invalid process ID');
+      return;
+    }
     // Get the list of users for the process
     const users = process_map.get(processId) || [];
     
@@ -216,7 +256,7 @@ wss.on('connection', async (ws, req) => {
           // Generate a unique ID for the new proposal
           const proposalId = crypto.randomUUID();
           // Get the process object from the database
-          const process = JSON.parse(await db.get(processId));
+          const process = await getProcess(processId)
           // Create the new proposal object
           const proposal = {
             id: proposalId,
@@ -229,7 +269,7 @@ wss.on('connection', async (ws, req) => {
           // Array of updates to be performed
           const updates = [
             // Save the updated process object to the database
-            db.put(processId, JSON.stringify(process)),
+            putProcessIntoDatabase(processId, JSON.stringify(process)),
             // Send a message to all users to update their proposals list
             users.forEach(user => {
               user.ws.send(JSON.stringify({
@@ -248,7 +288,7 @@ wss.on('connection', async (ws, req) => {
           // Get the ID of the proposal to remove
           const proposalId = data.proposalId;
           // Get the process data from the database
-          const process = JSON.parse(await db.get(processId));
+          const process = await getProcess(processId)
           // Filter out the proposal with the specified ID from the list of proposals
           process.proposals = process.proposals.filter(
             proposal => proposal.id !== proposalId
@@ -256,7 +296,7 @@ wss.on('connection', async (ws, req) => {
           
           // Perform updates to the database and send messages to all users
           const updates = [
-            db.put(processId, JSON.stringify(process)),
+            putProcessIntoDatabase(processId, JSON.stringify(process)),
             sendToAllUsers(users, {
               method: data.method,
               proposalId,
@@ -268,7 +308,7 @@ wss.on('connection', async (ws, req) => {
         }
         case 'updateProposal': {
           // Get the process data from the database
-          const process = JSON.parse(await db.get(processId));
+          const process = await getProcess(processId)
           // Get the ID of the proposal to update
           const proposalId = data.proposalId;
           // Find the index of the proposal with the specified ID in the process' list of proposals
@@ -285,7 +325,7 @@ wss.on('connection', async (ws, req) => {
           const filteredUsers = users.filter(user => user.id !== userId);
 
           const updates = [
-            db.put(processId, JSON.stringify(process)),
+            putProcessIntoDatabase(processId, JSON.stringify(process)),
             sendToAllUsers(
               filteredUsers,
               {
