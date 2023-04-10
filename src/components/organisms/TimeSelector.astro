@@ -10,19 +10,17 @@ interface Props {
 }
 
 const { phase } = Astro.props;
-const $process = process.get()
+const title = t(`phases.${phase}.title`)
 ---
 
-<time-selector>
-  { ($process.phases === 'full' || phase === 'voting') &&
-    <h2>{ t(`phases.${phase}.title`) }</h2>
-    <h3>{ t(`phases.startAt`) }:</h3>
-    <DatetimePicker phase={phase} index={0} client:only="vue" />
-    <h3>{ t(`phases.endsAt`) }:</h3>
-    <DatetimePicker phase={phase} index={1} client:only="vue" />
-    <br/>
-    <DatetimeSlider phase={phase} />
-    <br/>
-  }
-</time-selector>  
+<div>
+  <h2 class="title">{ title }</h2>
+  <h3>{ t(`phases.startAt`) }:</h3>
+  <DatetimePicker phase={phase} index={0} client:only="vue" />
+  <h3>{ t(`phases.endsAt`) }:</h3>
+  <DatetimePicker phase={phase} index={1} client:only="vue" />
+  <br/>
+  <DatetimeSlider phase={phase} />
+  <br/>
+</div>  
 

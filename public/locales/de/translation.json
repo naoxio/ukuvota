@@ -58,10 +58,7 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
-    "startProcess": "Einen Prozess starten",
-    "title": "Schneller Prozess",
     "topic": "Thema Frage",
-    "topicRule": "Bitte geben Sie Ihre Themenfrage ein",
     "description": "Beschreibung",
     "weighting": "Negative Punktegewichtung",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
@@ -72,16 +69,6 @@
     "averageScore": "Durchschnittliche Punktzahl",
     "totalScore": "Gesamtpunktzahl",
     "results": "Ergebnisse",
-    "proposalPhase": {
-      "title": "Vorschlagsphase",
-      "endTime": "Vorschlagsphase endet in"
-    },
-    "votingPhase": {
-      "title": "Abstimmungsphase",
-      "startAfter": "Abstimmungsphase beginnt direkt nach der Vorschlagsphase",
-      "endTime": "Abstimmung endet in",
-      "lastFor": "Abstimmung dauert"
-    },
     "maxProposals": "Maximale Anzahl von Vorschlägen",
     "amountProposals": "Anzahl von Vorschlägen",
     "limitProposals": "Anzahl von Vorschlägen begrenzen",

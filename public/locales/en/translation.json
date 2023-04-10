@@ -58,10 +58,7 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
-    "startProcess": "Start a process",
-    "title": "Quick Process",
     "topic": "Topic Question",
-    "topicRule": "Please input your Topic Question",
     "description": "Description",
     "weighting": "Negative Score Weighting",
     "timeLeftHeading": "Select the time for proposals and voting",
@@ -72,16 +69,6 @@
     "averageScore": "Average Score",
     "totalScore": "Total Score",
     "results": "Results",
-    "proposalPhase": {
-      "title": "Proposal Phase",
-      "endTime": "Proposal phase ends in"
-    },
-    "votingPhase": {
-      "title": "Voting Phase",
-      "startAfter": "Voting phase starts right after the proposal phase",
-      "endTime": "Voting ends in",
-      "lastFor": "Voting will last for"
-    },
     "maxProposals": "Maximum amount of proposals",
     "amountProposals": "Amount of proposals",
     "limitProposals": "Limit amount of proposals",

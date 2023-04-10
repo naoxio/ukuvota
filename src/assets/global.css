@@ -4,7 +4,7 @@
 html, body {
     scroll: smooth;
     width: 100%;
-    min-width: 480px;
+    min-width: 420px;
     max-width: 900px;
     height: 100vh;
     padding: 1rem;
