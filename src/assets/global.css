@@ -2,25 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 html, body {
-    scroll: smooth;
+    padding: 0;
+    margin: 0;
+}
+
+body {
     width: 100%;
-    min-width: 420px;
-    max-width: 900px;
     height: 100vh;
-    padding: 1rem;
-    font-smoothing: grayscale;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
     scroll-behavior: smooth;
     font-size: 18px;
+    margin: auto;
 }
 
+
 main {
+    max-width: 900px;
+    width: 100%;
     padding: 2rem;
+    scroll: smooth;
+    margin: auto;
+
 }
 a {
     color: indianred;
@@ -100,3 +104,5 @@ hr {
 .dark button:not(:hover) .ql-fill {
     fill: #d0d0d0 ;
 }
+  
+
