@@ -35,7 +35,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
       <!-- Open Graph -->
     <meta property="og:title" content={display_title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/logo_bg.png" />
+    <meta property="og:image" content={`${href}logo_bg.png`} />
     <meta property="og:url" content={href} />
     <meta property="og:type" content="website" />
 
@@ -43,7 +43,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={display_title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="/logo_bg.png" />
+    <meta name="twitter:image" content={`${href}logo_bg.png`} />
 
 
     <!-- Plausible analytics -->
