@@ -1,7 +1,6 @@
 ---
 import i18next from "i18next";
 import { HeadHrefLangs } from "astro-i18next/components";
-import logo from "assets/logo_bg.png";
 import Header from "organisms/Header.astro";
 import Footer from "organisms/Footer.astro";
 
@@ -36,7 +35,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
       <!-- Open Graph -->
     <meta property="og:title" content={display_title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={logo} />
+    <meta property="og:image" content="/logo_bg.png" />
     <meta property="og:url" content={href} />
     <meta property="og:type" content="website" />
 
@@ -44,7 +43,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={display_title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={logo} />
+    <meta name="twitter:image" content="/logo_bg.png" />
 
 
     <!-- Plausible analytics -->
