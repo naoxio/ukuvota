@@ -39,8 +39,5 @@
     "tailwindcss": "^3.2.7",
     "vue": "^3.2.47",
     "ws": "^8.12.1"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.31.2"
   }
 }
