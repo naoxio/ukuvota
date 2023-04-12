@@ -25,6 +25,8 @@ const processExists = async (req, res, next) => {
   const processId = req.params.id;
   try {
     req.process = await db.get(processId);
+    console.log(req.process)
+    console.log(req.process.voters[0].votes)
     next();
   } catch (error) {
     if (error.name === 'not_found') {
@@ -75,7 +77,6 @@ app.post('/api/process/:id/vote', processExists, async(req, res) => {
     // Create an array of votes
     const votes = body.votes
       .map(vote => ({ proposalId: vote.proposalId, vote: vote.vote }))
-  
     // Check that the 'name' property of the body is a string
     if (typeof body.name === 'string') {
       // Create a new vote object
@@ -95,7 +96,7 @@ app.post('/api/process/:id/vote', processExists, async(req, res) => {
       // Save the updated process object to the database
       await putProcessIntoDatabase(process);
       // Send a successful response
-      res.json({ id: uuid });
+      res.json();
     } else {
       // Handle invalid 'name' property
       res.status(400).send('Invalid name property');
