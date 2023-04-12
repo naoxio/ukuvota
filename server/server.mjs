@@ -25,8 +25,6 @@ const processExists = async (req, res, next) => {
   const processId = req.params.id;
   try {
     req.process = await db.get(processId);
-    console.log(req.process)
-    console.log(req.process.voters[0].votes)
     next();
   } catch (error) {
     if (error.name === 'not_found') {

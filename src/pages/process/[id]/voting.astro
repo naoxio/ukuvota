@@ -11,12 +11,10 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-console.log(processId)
 const process = await fetchProcessData(processId, url.origin);
 
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
-console.log(pathname)
-console.log(process)
+
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
