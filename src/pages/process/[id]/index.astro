@@ -8,7 +8,7 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url);
+const process = await fetchProcessData(processId, url.origin);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -29,15 +29,12 @@ if (pathname !== url.pathname)
 
 
 <script>
-    import processTest from "composables/processTestData";
+    import fetchProcessData from "composables/fetchProcessData";
     import getQuillHTML from "composables/getQuillHTML";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const isDev = processId === 'dev';
 
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
-    const data = isDev ? null : await res.json();
-    const process = isDev ? processTest() : JSON.parse(data.process)
+    const process = await fetchProcessData(processId, window.location.origin);
     
     const proposalStart = process.proposalDates[0]
     const votingStart = process.votingDates[0]

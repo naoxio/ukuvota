@@ -48,7 +48,14 @@ const $process = process.get();
       </div>
       <hr/>
       <div class="py-2">
-          <div id="timeselectHeading" class="flex justify-between items-center flex-wrap"/>
+          <div class="flex justify-between items-center flex-wrap">
+            <div class="fullOnly">
+                <h1>{t('process.timeLeftHeading')}</h1>
+            </div>
+            <div class="voteOnly">
+                <h1>{t('process.timeLeftVotingHeading')}</h1>
+            </div> 
+        </div>
           <div class="fullOnly">
               <TimeSelector phase="proposal"/>
               <p></p>
@@ -118,8 +125,6 @@ const $process = process.get();
             fullOnlyElements.forEach((element: HTMLElement) => {
                 element.style.display = isVotingPhase ? 'none' : 'block';
             });
-
-            this.querySelector('#timeselectHeading').innerHTML = (isVotingPhase ? `<h1>${t('process.timeLeftVotingHeading')}</h1>` :  `<h1>${t('process.timeLeftHeading')}</h1>`);
 
         }
         constructor() {
