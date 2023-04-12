@@ -21,15 +21,13 @@ const MAX_PAYLOAD_SIZE = 2 * 1024 * 1024; // 2mb in bytes
 
 
 // Middleware function for checking if process exists
-const processExists = async(req, res, next) => {
+const processExists = async (req, res, next) => {
   const processId = req.params.id;
-
   try {
-    const process = await db.get(processId);
-    req.process = process;
+    req.process = await db.get(processId);
     next();
   } catch (error) {
-    if (error.code === 'LEVEL_NOT_FOUND') {
+    if (error.name === 'not_found') {
       res.status(404).json({ error: 'Process not found.' });
     } else {
       res.status(500).json({ error: 'An unexpected error occurred.' });
@@ -37,9 +35,9 @@ const processExists = async(req, res, next) => {
   }
 };
 
-const putProcessIntoDatabase = async (processId, process) => {
+const putProcessIntoDatabase = async (process) => {
   try {
-    await db.put(processId, process);
+    await db.put(process);
   } catch (error) {
     throw error;
   }
@@ -56,8 +54,9 @@ const validatePayloadSize = (req, res, next) => {
 
 // Add the getAll route
 app.get('/api/process/:id', processExists, async (req, res) => {
-  res.json({ process: req.process });
+  res.send({ process: req.process });
 });
+
 // Add the getVoters route
 app.get('/api/process/:id/voters', processExists, async (req, res) => {
   const process = req.process;
@@ -67,7 +66,7 @@ app.get('/api/process/:id/voters', processExists, async (req, res) => {
 
 app.post('/api/process/:id/vote', processExists, async(req, res) => {
   // Get the process object from the request
-  const process = req.process;
+  const process = await req.process;
   // Get the request body
   const body = req.body;
 
@@ -76,7 +75,6 @@ app.post('/api/process/:id/vote', processExists, async(req, res) => {
     // Create an array of votes
     const votes = body.votes
       .map(vote => ({ proposalId: vote.proposalId, vote: vote.vote }))
-  
     // Check that the 'name' property of the body is a string
     if (typeof body.name === 'string') {
       // Create a new vote object
@@ -94,9 +92,9 @@ app.post('/api/process/:id/vote', processExists, async(req, res) => {
       process.voters.push(vote);
 
       // Save the updated process object to the database
-      await putProcessIntoDatabase(processId, JSON.stringify(process));
+      await putProcessIntoDatabase(process);
       // Send a successful response
-      res.json({});
+      res.json();
     } else {
       // Handle invalid 'name' property
       res.status(400).send('Invalid name property');
@@ -141,8 +139,10 @@ app.post('/api/process', validatePayloadSize, async (req, res) => {
         createdAt: +new Date(),
       }));
 
+
       // Create the process object
       const process = {
+        _id: uuid, // Use the uuid as the _id of the PouchDB document
         title: body.topicQuestion,
         description: body.topicDescription,
         proposalDates: updateDates(body.proposalDates),
@@ -150,8 +150,9 @@ app.post('/api/process', validatePayloadSize, async (req, res) => {
         weighting: body.weighting,
         proposals,
       };
+
       // Save the process object to the database
-      await putProcessIntoDatabase(uuid, JSON.stringify(process)),
+      await putProcessIntoDatabase(process);
 
       // Send the process ID in the response
       res.json({ id: uuid });
@@ -178,13 +179,12 @@ const server = http.createServer(app);
 // Create a WebSocket server
 const wss = new WebSocketServer({ server });
 
-
 const validateProcessExists = async (processId) => {
   try {
     await db.get(processId);
     return true;
   } catch (error) {
-    if (error.code === 'LEVEL_NOT_FOUND') {
+    if (error.name === 'not_found') {
       return false;
     } else {
       throw error;
@@ -194,17 +194,16 @@ const validateProcessExists = async (processId) => {
 
 const getProcess = async (processId) => {
   try {
-    const process = JSON.parse(await db.get(processId));
+    const process = await db.get(processId);
     return process;
   } catch (error) {
-    if (error.code === 'LEVEL_NOT_FOUND') {
+    if (error.name === 'not_found') {
       throw new Error('Process not found.');
     } else {
       throw error;
     }
   }
 };
-
 
 // Handle a new WebSocket connection
 wss.on('connection', async (ws, req) => {
@@ -216,7 +215,7 @@ wss.on('connection', async (ws, req) => {
   ws.on('message', async(message) => {
     if (message.binary && message.binary.length > MAX_PAYLOAD_SIZE) {
       const errorMessage = JSON.stringify({ error: 'Payload too large' });
-    ws.send(errorMessage);
+      ws.send(errorMessage);
       return;
     }
       
@@ -269,7 +268,7 @@ wss.on('connection', async (ws, req) => {
           // Array of updates to be performed
           const updates = [
             // Save the updated process object to the database
-            putProcessIntoDatabase(processId, JSON.stringify(process)),
+            await putProcessIntoDatabase(process),
             // Send a message to all users to update their proposals list
             users.forEach(user => {
               user.ws.send(JSON.stringify({
@@ -296,7 +295,7 @@ wss.on('connection', async (ws, req) => {
           
           // Perform updates to the database and send messages to all users
           const updates = [
-            putProcessIntoDatabase(processId, JSON.stringify(process)),
+            await putProcessIntoDatabase(process),
             sendToAllUsers(users, {
               method: data.method,
               proposalId,
@@ -325,7 +324,7 @@ wss.on('connection', async (ws, req) => {
           const filteredUsers = users.filter(user => user.id !== userId);
 
           const updates = [
-            putProcessIntoDatabase(processId, JSON.stringify(process)),
+            putProcessIntoDatabase(process),
             sendToAllUsers(
               filteredUsers,
               {

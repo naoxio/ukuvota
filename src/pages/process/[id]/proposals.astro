@@ -11,7 +11,7 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url);
+const process = await fetchProcessData(processId, url.origin);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -72,18 +72,15 @@ if (pathname !== url.pathname)
 <script>
     import addAlert from 'composables/addAlert'
     import IProposal from "interfaces/IProposal"
-    import processTest from "composables/processTestData";
     import createQuill from "composables/createQuill";
     import updateQuill from "composables/updateQuill";
     import { Delta } from "quill"
     import getQuillHTML from 'composables/getQuillHTML'
+    import fetchProcessData from "composables/fetchProcessData";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const isDev = processId === 'dev';
-
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
-    const data = isDev ? null : await res.json();
-    const process = isDev ? processTest() : JSON.parse(data.process)
+    const process = await fetchProcessData(processId, window.location.origin);
+    
     const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
     const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
@@ -232,6 +229,7 @@ if (pathname !== url.pathname)
             // Listen for WebSocket events.
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
+
                 if ('method' in data) {
                     if (data.method === 'addProposal') {
                         // Add a new proposal.

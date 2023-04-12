@@ -45,13 +45,6 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${href}social_logo.png`} />
 
-    <!-- Pinterest -->
-    <meta name="pinterest:site" content="@waotzi" />
-    <meta name="pinterest:description" content={description} />
-    <meta name="pinterest:creator" content="@waotzi" />
-    <meta name="pinterest:image" content={`${href}social_logo.png`}/>
-
-
     <!-- Plausible analytics -->
     { url.hostname !== 'localhost' &&
     <script defer data-api="/api/event" data-domain="ukuvota.world" src="/js/script.js"></script>
@@ -84,7 +77,10 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
   const hash = window.location.hash
   
   if (hash.includes('#/app/')) {
-    window.location.href = `https://legacy.ukuvota.world/${hash}`
+    const newHash = hash.replace('#/app/', '');
+    const cleanHash = newHash.split('/')[0]; // Get the part before the first '/' after the hash
+
+    window.location.href = `${location.origin}/process/${cleanHash}`
   }
 
 </script>

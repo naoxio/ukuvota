@@ -11,7 +11,7 @@ changeLanguage("de");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url);
+const process = await fetchProcessData(processId, url.origin);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
@@ -109,17 +109,14 @@ if (!("voters" in process)) {
     import download from 'downloadjs'
     import IProposal from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
-    import processTest from "composables/processTestData";
+    import fetchProcessData from "composables/fetchProcessData";
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composables/addAlert'
     import getQuillHTML from 'composables/getQuillHTML'
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const isDev = processId === 'dev';
-    const res = isDev ? new Response() : await fetch(`${location.origin}/api/process/${processId}`, { method: "GET" });
-    const data = isDev ? null : await res.json();
-    const process = isDev ? processTest() : JSON.parse(data.process)
-
+    const process = await fetchProcessData(processId, window.location.origin);
+    
     const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
 
