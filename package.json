@@ -9,7 +9,8 @@
     "build": "astro build",
     "server": "node server/server.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "cypress open"
   },
   "dependencies": {
     "@astrojs/node": "^5.0.4",
@@ -41,6 +42,6 @@
     "ws": "^8.12.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.31.2"
+    "cypress": "^12.9.0"
   }
 }

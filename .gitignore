@@ -21,6 +21,9 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# test related
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/cypress/e2e/2-advanced-examples
