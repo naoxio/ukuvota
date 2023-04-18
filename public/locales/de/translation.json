@@ -77,7 +77,8 @@
     "shareableUrl": "Teilbarer Link",
     "qrcode": "Qr-Code",
     "voterName": "Ihr Name oder dauerhafter Alias",
-    "voters": "WählerInnen",
+    "voters": "Wählende",
+    "voter": "Wählende",
     "exportData": "Daten exportieren",
     "phases": {
       "select": "Phasen auswählen",

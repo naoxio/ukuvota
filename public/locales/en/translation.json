@@ -78,6 +78,7 @@
     "qrcode": "Qr-Code",
     "voterName": "Your name or persistent alias",
     "voters": "Voters",
+    "voter": "Voter",
     "exportData": "Export Data",
     "phases": {
       "select": "Select phases",

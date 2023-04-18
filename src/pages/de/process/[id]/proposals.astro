@@ -228,7 +228,8 @@ if (pathname !== url.pathname)
 
             // Listen for WebSocket events.
             ws.onmessage = (event) => {
-                const data = event.data;
+                const data = JSON.parse(event.data);
+
                 if ('method' in data) {
                     if (data.method === 'addProposal') {
                         // Add a new proposal.

@@ -38,58 +38,65 @@ if (!("voters" in process)) {
         </div>
 
         <div class="tab-content hide">
-            <div class="screenshot-results">
-                <span class="flex justify-between items-center">
-                    <h2>{ t('process.results') }</h2>
-                
-                    <button class='repeat-button btn btn-sm'>{ t('repeatProcess') }</button>
-                </span>
-                
-                <h3><span class="voter-label">{ t('process.voters') }</span>
-                    <span class="num-voters">({ process.voters.length })</span>:
-                </h3>
-                <div class="flex justify-around flex-wrap">
-                    { process.voters.map((voter: any) => (
-                        <div id={voter.id} class="flex items-center p-2 voter">
-                            <input type="checkbox" checked class="checkbox checkbox-xs" />
-                            <span class="p-1 cursor-pointer select-none">
-                                { voter.name }
-                            </span>
-                        </div>
-                    ))}
-                </div>
-                <br/>
-                <div class="overflow-x-auto">
-                    <table class="table w-full">
-                        <!-- head -->
-                        <thead>
-                            <tr class="table-row-one">
-                            <td></td>
-                            <th>{ t('process.proposal') }</th>
+
+            <span class="flex justify-between items-center">
+                <h2>{ t('process.results') }</h2>
+                <button class='repeat-button btn btn-sm'>{ t('repeatProcess') }</button>
+            </span>
+            
+            <h3>
+                <span class="voter-label">{ t('process.voters') }</span>
+                <span class="num-voters">({ process.voters.length })</span>:
+            </h3>
+            <div class="flex justify-around flex-wrap">
+                { process.voters.map((voter: any) => (
+                    <div id={voter.id} class="flex items-center p-2 voter">
+                        <input type="checkbox" checked class="checkbox checkbox-xs" />
+                        <span class="p-1 cursor-pointer select-none">
+                            { voter.name }
+                        </span>
+                    </div>
+                ))}
+            </div>
+            <br/>
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <!-- head -->
+                    <thead>
+                        <tr class="table-row-one">
+                            <th></th>
+                            <th class="whitespace-normal break-words">{ t('process.proposal') }</th>
                             <th class="whitespace-normal break-words">{ t('process.averageScore') }</th>
                             <th class="whitespace-normal break-words">{ t('process.totalScore') }</th>
-                            </tr>
-                        </thead>
-                        <tbody class="proposal-list">
-                        </tbody>
-                    </table>
-                </div>
-                <br/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
-                <div class="card">
+            <br/>
+            <div class="card">
                 <h3>{ t('process.exportData') }</h3>
                 <div class="flex justify-around exports">
                     <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
                     <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
                 </div>
-            </div>
-                
+            </div> 
         </div>
         <div class="tab-content hide">
             <div>
                 <br/>
                 <br/>
-                { t('wip')}
+                <div class="overflow-x-auto">
+                    <table class="table w-full">
+                        <!-- head -->
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
             </div>
         </div>
         <AlertList>
@@ -113,6 +120,7 @@ if (!("voters" in process)) {
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composables/addAlert'
     import getQuillHTML from 'composables/getQuillHTML'
+    import { t } from "i18next";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcessData(processId, window.location.origin);
@@ -143,7 +151,8 @@ if (!("voters" in process)) {
 
     class ResultsCard extends HTMLElement {
         voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
-        proposal_list = this.querySelector('tbody.proposal-list') 
+        table_body = this.querySelectorAll('tbody') 
+        table_head = this.querySelectorAll('thead')                                                                                                                                                                                                                    
         emojis = this.querySelectorAll('svg.emoji')
         alertList = this.querySelector('div.alert-list')
         alerts = this.querySelectorAll('alert-element')
@@ -189,7 +198,16 @@ if (!("voters" in process)) {
             const sortedProposals = proposals.sort((a, b) => {
                 return b.total - a.total;
             });
-            this.proposal_list.innerHTML = '';
+            this.table_body[0].innerHTML = '';
+            this.table_body[1].innerHTML = '';
+            console.log(t('process.topic'))
+            let head_content = `<th>${t('process.voter')}</th>`
+            process.proposals.forEach(proposal => {
+                console.log(proposal)
+                head_content += `<th>${proposal.title}</th>\n`
+            });
+
+            this.table_head[1].innerHTML = head_content
 
             let rank = 0;
             let prevProposal = null;
@@ -202,10 +220,10 @@ if (!("voters" in process)) {
                 }
                 prevProposal = proposal;
             
-                this.proposal_list.appendChild(this.createRow(rank, index, proposal, selectedVoters));
+                this.table_body[0].appendChild(this.createRow(rank, index, proposal, selectedVoters));
             });
 
-            const items = this.proposal_list.querySelectorAll('tr');
+            const items = this.table_body[0].querySelectorAll('tr');
             items.forEach((item) => {
                 const rows = item.querySelectorAll('td');
                 rows.forEach((row) => {
@@ -293,7 +311,7 @@ if (!("voters" in process)) {
                     this.showTab(tabs, contents, i);
                 });
             }
-            this.showTab(tabs, contents, 0);
+            this.showTab(tabs, contents, 1);
 
             this.voter_list.forEach((div: HTMLDivElement) => {
                 const input =div.querySelector('input')
