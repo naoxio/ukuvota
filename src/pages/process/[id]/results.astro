@@ -209,12 +209,12 @@ if (!("voters" in process)) {
             process.voters.forEach(voters => {
                 body_content += `
                 <tr>
-                <td class='select-for-repeat cursor-pointer'>
+                <td>
                     <span>${voters.name}</span>
                 </td>\n`
                 process.proposals.forEach(proposal => {
-                    let vote = voters.votes.find(p => p.id = proposal.id).vote
-                    body_content += `<th>${vote}</th>\n`
+                    let vote = voters.votes.find(p => p.proposalId == proposal.id).vote
+                    body_content += `<th class="text-center">${vote}</th>\n`
                 });
                 body_content += '</tr>\n'
             })
