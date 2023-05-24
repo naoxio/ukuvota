@@ -1,6 +1,5 @@
 ---
 import { t, changeLanguage } from "i18next";
-import { process } from "stores/processStore";
 import BaseLayout from "templates/BaseLayout.astro";
 import Alert from "atoms/Alert.astro";
 import AlertList from "molecules/AlertList.astro";
@@ -22,65 +21,56 @@ changeLanguage("de");
 </style>
 
 <BaseLayout title={t('buttons.home')} description={t('description')}>
-  <process-form>
-    { t('intro') }
 
-    <details>
-      <summary>Read More</summary>
-      <ContentDoc file_name="Introduction" />
-    </details>
-
-        
     <create-process>
-      <div id="scrollTopicQuestion" />
-      <div class="pb-6">
-          <p>{ t('process.topic') }</p>
-          <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
-          <br/>
-          <p>{ t('process.description') }</p>
-          <div id="description"/>
-          <br>
-          <WeightSelector/>
-          <h2>{ t('process.phases.select') }</h2>
-          <PhaseSelector/>
-      </div>
-      <hr/>
-      <div class="py-2">
-          <div class="flex justify-between items-center flex-wrap">
-            <div class="fullOnly">
-                <h1>{t('process.timeLeftHeading')}</h1>
-            </div>
-            <div class="voteOnly">
-                <h1>{t('process.timeLeftVotingHeading')}</h1>
-            </div> 
+        <div id="scrollTopicQuestion" />
+        <div class="pb-6">
+            <p>{ t('process.topic') }</p>
+            <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
+            <br/>
+            <p>{ t('process.description') }</p>
+            <div id="description"/>
+            <br>
+            <WeightSelector/>
+            <h2>{ t('process.phases.select') }</h2>
+            <PhaseSelector/>
         </div>
-          <div class="fullOnly">
-              <TimeSelector phase="proposal"/>
-              <p></p>
-              <hr/>
-          </div>
-          <TimeSelector phase="voting"/>
-      </div>
-      <div class="voteOnly">
-          <hr class="mt-4"/>
-          <h2>{ t('process.proposals') }</h2>    
-          <EditProposalList />
-          <AddProposals />
-      </div>
-      <br/><br/>
-      <div class="text-center">
-          <button id="createProcessButton" type="submit" class="btn btn-primary">
-              { t('create') }
-          </button>
-      </div>
-      <AlertList>
-          <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
-          <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
-          <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
-          <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
-      </AlertList>
+        <hr/>
+        <div class="py-2">
+            <div class="flex justify-between items-center flex-wrap">
+                <div class="fullOnly">
+                    <h1>{t('process.timeLeftHeading')}</h1>
+                </div>
+                <div class="voteOnly">
+                    <h1>{t('process.timeLeftVotingHeading')}</h1>
+                </div> 
+            </div>
+            <div class="fullOnly">
+                <TimeSelector phase="proposal"/>
+                <p></p>
+                <hr/>
+            </div>
+            <TimeSelector phase="voting"/>
+        </div>
+        <div class="voteOnly">
+            <hr class="mt-4"/>
+            <h2>{ t('process.proposals') }</h2>    
+            <EditProposalList />
+            <AddProposals />
+        </div>
+        <br/><br/>
+        <div class="text-center">
+            <button id="createProcessButton" type="submit" class="btn btn-primary">
+                { t('create') }
+            </button>
+        </div>
+        <AlertList>
+            <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+            <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+            <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+            <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+        </AlertList>
     </create-process>
-  </process-form>
 </BaseLayout>
 
 <script>
@@ -93,16 +83,6 @@ changeLanguage("de");
     import updateQuill from 'composables/updateQuill'
 
     const lang = i18next.language;
-    class ProcessForm extends HTMLElement {
-      constructor() {
-        super()
-        const component = this.querySelector<HTMLElement>('astro-island')
-        if (component.innerHTML === "") {
-          component.innerHTML = loadingLogo()
-        }
-      }
-    }
-    customElements.define('process-form', ProcessForm)
 
     class CreateProcess extends HTMLElement {
         scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')

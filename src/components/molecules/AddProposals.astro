@@ -14,7 +14,7 @@ const { processId } = Astro.props;
   <button id="add-button" class="btn p-2">{ t('process.addProposal') }</button>
   <div class="dropdown">
     <label tabindex="0" class="btn m-1">{ t('addProposalTemplate') }</label>
-    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box">
+    <ul tabindex="0" class="dropdown-content menu p-2 shadow  rounded-box">
       {dropdownOptions.map(option => (
         <li>
           <a class="flex flex-col">

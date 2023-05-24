@@ -120,7 +120,7 @@ if (!("voters" in process)) {
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composables/addAlert'
     import getQuillHTML from 'composables/getQuillHTML'
-    import { t } from "i18next";
+    import i18next, { t } from "i18next";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcessData(processId, window.location.origin);
@@ -200,14 +200,29 @@ if (!("voters" in process)) {
             });
             this.table_body[0].innerHTML = '';
             this.table_body[1].innerHTML = '';
-            console.log(t('process.topic'))
-            let head_content = `<th>${t('process.voter')}</th>`
+
+            let head_content = `<th>${t('process.voter') || 'Voter'}</th>`
             process.proposals.forEach(proposal => {
-                console.log(proposal)
                 head_content += `<th>${proposal.title}</th>\n`
             });
+            let body_content = ''
+            process.voters.forEach(voters => {
+                body_content += `
+                <tr>
+                <td>
+                    <span>${voters.name}</span>
+                </td>\n`
+                process.proposals.forEach(proposal => {
+                    let vote = voters.votes.find(p => p.proposalId == proposal.id).vote
+                    body_content += `<th class="text-center">${vote}</th>\n`
+                });
+                body_content += '</tr>\n'
+            })
+       
+
 
             this.table_head[1].innerHTML = head_content
+            this.table_body[1].innerHTML = body_content
 
             let rank = 0;
             let prevProposal = null;
@@ -311,7 +326,7 @@ if (!("voters" in process)) {
                     this.showTab(tabs, contents, i);
                 });
             }
-            this.showTab(tabs, contents, 1);
+            this.showTab(tabs, contents, 0);
 
             this.voter_list.forEach((div: HTMLDivElement) => {
                 const input =div.querySelector('input')
