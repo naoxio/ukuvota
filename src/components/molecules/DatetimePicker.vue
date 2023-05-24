@@ -50,7 +50,7 @@
         :teleport="`#cal-${props.phase}-${props.index}`"
         :cancelText="t('cancel')" :selectText="t('select')"/>
     </div>
-
+    <br/>
     <div class="calendar" :id="`cal-${props.phase}-${props.index}`"  :class="{'open': $process[props.phase + 'Open'] === props.index + 1 }"/>  
 </template>
 

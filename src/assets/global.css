@@ -56,16 +56,45 @@ li {
 
 .dp__theme_dark {
     --dp-primary-color: indianred !important;
-    --dp-disabled-color: #444 !important;
+    --dp-disabled-color: #333 !important;
+    --dp-background-color: #525355 !important;
     --dp-success-color: #61D161 !important;
 }
 .dp__theme_light {
     --dp-primary-color: indianred !important;
     --dp-disabled-color: #ccc !important;
-    --dp-background-color: #f6f0f6 !important;
+    --dp-background-color: #f1f3f4 !important;
     --dp-secondary-color: #666 !important;
     --dp-hover-color: #ddd !important;
     --dp-success-color:  #439243 !important;
+}
+
+.dark .input, .dark .dp__input, .dark .ql-editor {
+    background-color: #525355 !important;
+    color: #fff !important;
+}
+.input, .dp__input, .ql-editor {
+    border: none !important;
+    border-radius: 8px !important;
+    background-color: #f1f3f4 !important;
+}
+.input:focus, .dp__input:focus, .ql-editor:focus {
+    border: none !important;
+    outline: none !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.14), inset -1px -1px 0 rgba(0,0,0,.07);
+    transition: box-shadow 250ms;
+    transition-duration: 250ms;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: box-shadow;
+}
+.ql-toolbar {
+    border-radius: 8px 8px 0 0 !important;
+}
+.ql-container, .ql-editor {
+    border-radius: 0 0 8px 8px !important;
 }
 .dp__cell_disabled {
     color: var(--dp-disabled-color) !important;

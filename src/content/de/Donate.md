@@ -13,4 +13,4 @@ Mit freundlichen Grüßen,
 Das Ukuvota-Team
 
 Alle Spendenmöglichkeiten können hier eingesehen werden: 
- - [Entwickler-Spendenlinks](https://waotzi.org/donate.html)
+ - [Entwickler-Spendenlinks](https://waotzi.org/donate)

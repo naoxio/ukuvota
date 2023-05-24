@@ -13,4 +13,4 @@ Sincerely,
 The Ukuvota Team
 
 All donation options can be viewed here:
- - [Developer donation links](https://waotzi.org/donate.html)
+ - [Developer donation links](https://waotzi.org/donate)
