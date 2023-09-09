@@ -1,6 +1,5 @@
 ---
 import i18next from "i18next";
-import { HeadHrefLangs } from "astro-i18next/components";
 import Header from "organisms/Header.astro";
 import Footer from "organisms/Footer.astro";
 
@@ -24,6 +23,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="keywords" content="ukuvota, voting, democracy, consensus, collaborative" />
     <meta name="author" content="NaoX" />
     <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="manifest" href="/manifest.json">
 
     <title>{display_title}</title>
     <meta name="generator" content={Astro.generator} />
@@ -43,17 +43,12 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:title" content={display_title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${href}social_logo.png`} />
-
-    <!-- Plausible analytics -->
-    { url.hostname !== 'localhost' &&
-    <script defer data-api="/api/event" data-domain="ukuvota.world" src="/js/script.js"></script>
-    }
   </head>
   <body>
     <Header/>
     <br/>
     <main>
-        <slot />
+      <slot />
     </main>
     <br/>
     <Footer/>
@@ -68,7 +63,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
       return "dark";
     return "light";
   })();
-  document.documentElement.dataset.theme=theme
+  document.documentElement.dataset.theme = theme
   document.documentElement.classList = theme
 
   window.localStorage.setItem("theme", theme);

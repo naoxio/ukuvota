@@ -12,20 +12,19 @@
     // Enable stricter transpilation for better output.
     "isolatedModules": true,
     "types": [
-      "astro/client",
-      "unplugin-icons/types/astro",
+      "astro/client"
     ],
     "jsx": "preserve",
     "paths": {
       "content/*": ["content/*"],
       "assets/*": ["assets/*"],
-      "composables/*": ["composables/*"],
+      "composable/*": ["composable/*"],
       "interfaces/*": ["interfaces/*"],
       "stores/*": ["stores/*"],
       "atoms/*": ["components/atoms/*"],
       "molecules/*": ["components/molecules/*"],
       "organisms/*": ["components/organisms/*"],
-      "templates/*": ["components/templates/*"],
+      "templates/*": ["components/templates/*"]
     },
   },
   "include": ["src/**/*"],

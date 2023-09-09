@@ -6,4 +6,3 @@ export default interface IProposal {
     description: string | Delta;
     createdAt?: number;
 }
-  

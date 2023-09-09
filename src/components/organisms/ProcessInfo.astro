@@ -1,7 +1,7 @@
 ---
 import { t } from 'i18next';
 
-import weightingOptions from "composables/weightingOptions";
+import weightingOptions from "composable/weightingOptions";
 import Modal from 'molecules/Modal.astro';
 import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
@@ -26,7 +26,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 ---
 
-<process-info class="flex flex-col pb-3" data-title={title} data-description={description}>
+<process-info  class="flex flex-col pb-3" data-title={title} data-description={description}>
     <h1>{ title }</h1>
     <p class="topic-description"></p>
     <div class="flex justify-end items-center">
@@ -66,7 +66,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
 
 
 <script>
-    import getQuillHTML from 'composables/getQuillHTML'
+    import getQuillHTML from 'composable/getQuillHTML'
 
     const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
     if (shareableUrl) {
@@ -97,4 +97,4 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     customElements.define('process-info', ProcessInfo)
 
  
-</script>
+</script>composable/weightingOptions

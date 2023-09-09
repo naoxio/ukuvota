@@ -8,7 +8,6 @@ import PhaseSelector from "molecules/PhaseSelector.astro";
 import TimeSelector from "organisms/TimeSelector.astro";
 import AddProposals from "molecules/AddProposals.astro";
 import EditProposalList from "organisms/EditProposalList.astro";
-import ContentDoc from "atoms/ContentDoc.astro";
 
 changeLanguage("de");
 ---
@@ -22,7 +21,7 @@ changeLanguage("de");
 
 <BaseLayout title={t('buttons.home')} description={t('description')}>
 
-    <create-process>
+    <create-process >
         <div id="scrollTopicQuestion" />
         <div class="pb-6">
             <p>{ t('process.topic') }</p>
@@ -74,13 +73,13 @@ changeLanguage("de");
 </BaseLayout>
 
 <script>
-    import { loadingLogo } from 'composables/loadingLogo'
+    import { loadingLogo } from 'composable/loadingLogo'
     import i18next, { t } from 'i18next';
     import { process } from 'stores/processStore';
     import IProposal from 'interfaces/IProposal'
-    import createQuill from "composables/createQuill";
-    import addAlert from 'composables/addAlert'
-    import updateQuill from 'composables/updateQuill'
+    import createQuill from "composable/createQuill";
+    import addAlert from 'composable/addAlert'
+    import updateQuill from 'composable/updateQuill'
 
     const lang = i18next.language;
 

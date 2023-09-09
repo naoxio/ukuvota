@@ -1,0 +1,96 @@
+---
+interface Props {
+    phase: string;
+    index: number;
+}
+
+const { phase, index } = Astro.props;
+---
+
+<div class="flex flex-col justify-center items-center">
+    <datetime-picker phase={phase} index={index}>
+        <input type="datetime-local" />
+    </datetime-picker>
+</div>
+
+<script>
+
+import { process } from 'stores/processStore';
+import type { Process } from 'stores/processStore';
+
+class DatetimePicker extends HTMLElement {
+    phase: string;
+    index: number;
+    dateInput: HTMLInputElement;
+
+    handleDateChange(datetime: any) {
+        const $process = process.get()
+
+        let start = this.index === 0 ? +new Date(datetime) : $process[`${this.phase}Dates`][0];
+        let end = this.index === 1 ? +new Date(datetime) : $process[`${this.phase}Dates`][1];
+
+        if (end < start) end = start + $process[`${this.phase}Duration`];
+
+        const v_start = (this.phase === 'voting') ? start : $process.votingDates[0];
+        const gap = v_start - $process.proposalDates[1];
+        
+        if ($process.phases === 'full' && this.phase === 'voting' && start <= $process["proposalDates"][1]) {
+            start = $process["proposalDates"][1];
+        }
+
+
+        process.setKey("proposalVotingGap", gap < 0 ? 0 : gap)
+
+        process.setKey(this.phase + 'Duration' as keyof Process, end - start)
+        process.setKey(this.phase + 'Dates' as keyof Process, [start, end])
+
+        console.log(`Start Time: ${new Date(start).toLocaleString()}`);
+        console.log(`End Time: ${new Date(end).toLocaleString()}`);
+
+        this.updateDisplay();
+    }
+
+    updateDisplay() {
+        const $process = process.get();
+
+        const phaseDates = $process[`${this.phase}Dates`];
+        if (Array.isArray(phaseDates) && phaseDates.length >= 2) {
+            if(this.index === 0) {
+                this.dateInput.value = new Date(phaseDates[0]).toISOString().slice(0,16);
+            } else {
+                this.dateInput.value = new Date(phaseDates[1]).toISOString().slice(0,16);
+            }
+        }
+
+        const proposalDates = $process["proposalDates"];
+        if(this.phase === 'voting' && this.index === 0 && Array.isArray(proposalDates) && proposalDates.length >= 2) {
+            this.dateInput.min = new Date(proposalDates[1]).toISOString().slice(0,16);
+        } else {
+            this.dateInput.min = new Date().toISOString().slice(0, 16);
+        }
+    }
+
+
+    connectedCallback() {
+        this.updateDisplay();
+    }
+
+    constructor() {
+        super();
+
+        this.phase = this.getAttribute('phase');
+        this.index = parseInt(this.getAttribute('index'));
+
+        this.dateInput = this.querySelector('input[type="datetime-local"]');
+
+        this.dateInput.addEventListener('change', (event) => {
+            const inputElement = event.target as HTMLInputElement;
+            this.handleDateChange(inputElement.value);
+        });
+
+        this.updateDisplay();
+    }
+}
+customElements.define('datetime-picker', DatetimePicker);
+
+</script>

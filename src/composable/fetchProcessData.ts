@@ -1,4 +1,4 @@
-import processTest from "composables/processTestData";
+import processTest from "composable/processTestData";
 
 export default async function fetchProcessData(processId: string, origin: string): Promise<any> {
     const isDev = processId === "dev";

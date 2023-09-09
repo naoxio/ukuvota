@@ -1,10 +1,8 @@
 ---
-import i18next, { t } from 'i18next'
-import { ref, computed } from 'vue'
-import { fmtDuration } from 'composables/dateHelpers'
+import { t } from 'i18next'
 
 interface Props {
-    dates: Number[2]
+    dates: [number | Date, number | Date]
     type: string
 }
 
@@ -16,9 +14,7 @@ const { dates, type } = Astro.props;
 </countdown-view>
 
 <script>
-  import i18next, { t } from 'i18next'
-
-  import { fmtDuration } from 'composables/dateHelpers'
+  import { fmtDuration } from 'composable/dateHelpers'
   const timeUnits = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
   
   class Countdown extends HTMLElement {

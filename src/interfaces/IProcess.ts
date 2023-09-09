@@ -1,5 +1,5 @@
-import IProposal from "./IProposal";
-import IVoter from "./IVoter";
+import type IProposal from "./IProposal";
+import type IVoter from "./IVoter";
 import { Delta } from 'quill'
 
 
