@@ -12,5 +12,6 @@ Sincerely,
 
 The Ukuvota Team
 
-All donation options can be viewed here:
- - [Developer donation links](https://waotzi.org/donate)
+Donations are managed by our parent Organization NaoX.
+ - [Coindrop](https://coindrop.to/naox)
+ - [Liberapay](https://liberapay.com/NaoX/)

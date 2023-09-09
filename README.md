@@ -10,13 +10,15 @@ To get started with Ukuvota, simply visit ukuvota.world and start a new process.
 
 To set up a development environment for Ukuvota, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/waotzi/ukuvota.git`
+1. Clone the repository: `git clone https://github.com/naoxio/ukuvota.git`
 2. Install the dependencies: `npm install`
 3. Start the development server: `npm run dev`
 
 With these steps, you will have Ukuvota running on your local machine, and you can start making changes and contributing to the project.
 
-## Support
+## Community
+We welcome any participates and you should feel welcome to share your ideas.
 
-If you need any help or support, please open an issue in the Github repository, or reach out to us using telegram, twitter or on the fediverse.
-
+- [Telegram](https://t.me/naoxio)
+- [Twitter](https://twitter.com/naox_io)
+- [Dicord](https://discord.gg/WWKtAJQtv5)
