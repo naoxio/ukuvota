@@ -209,6 +209,13 @@ declare module 'astro:content' {
   collection: "de";
   data: any
 } & { render(): Render[".md"] };
+"PrivacyPolicy.md": {
+	id: "PrivacyPolicy.md";
+  slug: "privacypolicy";
+  body: string;
+  collection: "de";
+  data: any
+} & { render(): Render[".md"] };
 };
 "en": {
 "Donate.md": {
@@ -228,6 +235,13 @@ declare module 'astro:content' {
 "NegativeScoreWeighting.md": {
 	id: "NegativeScoreWeighting.md";
   slug: "negativescoreweighting";
+  body: string;
+  collection: "en";
+  data: any
+} & { render(): Render[".md"] };
+"PrivacyPolicy.md": {
+	id: "PrivacyPolicy.md";
+  slug: "privacypolicy";
   body: string;
   collection: "en";
   data: any
