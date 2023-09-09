@@ -1,54 +1,7 @@
 declare module 'astro:content' {
-	interface Render {
-		'.md': Promise<{
-			Content: import('astro').MarkdownInstance<{}>['Content'];
-			headings: import('astro').MarkdownHeading[];
-			remarkPluginFrontmatter: Record<string, any>;
-		}>;
-	}
-}
-
-declare module 'astro:content' {
 	export { z } from 'astro/zod';
 	export type CollectionEntry<C extends keyof typeof entryMap> =
-		(typeof entryMap)[C][keyof (typeof entryMap)[C]];
-
-	// TODO: Remove this when having this fallback is no longer relevant. 2.3? 3.0? - erika, 2023-04-04
-	/**
-	 * @deprecated
-	 * `astro:content` no longer provide `image()`.
-	 *
-	 * Please use it through `schema`, like such:
-	 * ```ts
-	 * import { defineCollection, z } from "astro:content";
-	 *
-	 * defineCollection({
-	 *   schema: ({ image }) =>
-	 *     z.object({
-	 *       image: image(),
-	 *     }),
-	 * });
-	 * ```
-	 */
-	export const image: never;
-
-	// This needs to be in sync with ImageMetadata
-	type ImageFunction = () => import('astro/zod').ZodObject<{
-		src: import('astro/zod').ZodString;
-		width: import('astro/zod').ZodNumber;
-		height: import('astro/zod').ZodNumber;
-		format: import('astro/zod').ZodUnion<
-			[
-				import('astro/zod').ZodLiteral<'png'>,
-				import('astro/zod').ZodLiteral<'jpg'>,
-				import('astro/zod').ZodLiteral<'jpeg'>,
-				import('astro/zod').ZodLiteral<'tiff'>,
-				import('astro/zod').ZodLiteral<'webp'>,
-				import('astro/zod').ZodLiteral<'gif'>,
-				import('astro/zod').ZodLiteral<'svg'>
-			]
-		>;
-	}>;
+		(typeof entryMap)[C][keyof (typeof entryMap)[C]] & Render;
 
 	type BaseSchemaWithoutEffects =
 		| import('astro/zod').AnyZodObject
@@ -64,7 +17,7 @@ declare module 'astro:content' {
 		| import('astro/zod').ZodEffects<BaseSchemaWithoutEffects>;
 
 	type BaseCollectionConfig<S extends BaseSchema> = {
-		schema?: S | (({ image }: { image: ImageFunction }) => S);
+		schema?: S;
 		slug?: (entry: {
 			id: CollectionEntry<keyof typeof entryMap>['id'];
 			defaultSlug: string;
@@ -91,19 +44,22 @@ declare module 'astro:content' {
 	): E extends ValidEntrySlug<C>
 		? Promise<CollectionEntry<C>>
 		: Promise<CollectionEntry<C> | undefined>;
-	export function getCollection<C extends keyof typeof entryMap, E extends CollectionEntry<C>>(
-		collection: C,
-		filter?: (entry: CollectionEntry<C>) => entry is E
-	): Promise<E[]>;
 	export function getCollection<C extends keyof typeof entryMap>(
 		collection: C,
-		filter?: (entry: CollectionEntry<C>) => unknown
+		filter?: (data: CollectionEntry<C>) => boolean
 	): Promise<CollectionEntry<C>[]>;
 
-	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
 	type InferEntrySchema<C extends keyof typeof entryMap> = import('astro/zod').infer<
-		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
+		Required<ContentConfig['collections'][C]>['schema']
 	>;
+
+	type Render = {
+		render(): Promise<{
+			Content: import('astro').MarkdownInstance<{}>['Content'];
+			headings: import('astro').MarkdownHeading[];
+			remarkPluginFrontmatter: Record<string, any>;
+		}>;
+	};
 
 	const entryMap: {
 		"de": {
@@ -113,21 +69,21 @@ declare module 'astro:content' {
   body: string,
   collection: "de",
   data: any
-} & { render(): Render[".md"] },
+},
 "Introduction.md": {
   id: "Introduction.md",
   slug: "introduction",
   body: string,
   collection: "de",
   data: any
-} & { render(): Render[".md"] },
+},
 "NegativeScoreWeighting.md": {
   id: "NegativeScoreWeighting.md",
   slug: "negativescoreweighting",
   body: string,
   collection: "de",
   data: any
-} & { render(): Render[".md"] },
+},
 },
 "en": {
 "Donate.md": {
@@ -136,21 +92,21 @@ declare module 'astro:content' {
   body: string,
   collection: "en",
   data: any
-} & { render(): Render[".md"] },
+},
 "Introduction.md": {
   id: "Introduction.md",
   slug: "introduction",
   body: string,
   collection: "en",
   data: any
-} & { render(): Render[".md"] },
+},
 "NegativeScoreWeighting.md": {
   id: "NegativeScoreWeighting.md",
   slug: "negativescoreweighting",
   body: string,
   collection: "en",
   data: any
-} & { render(): Render[".md"] },
+},
 },
 
 	};
