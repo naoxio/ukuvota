@@ -18,8 +18,6 @@ const icons = getAssets(await Astro.glob("../../assets/icons/*.png"));
 
 // Define getIcon function to return the icon source by name
 const getIcon = (name: string) => {
-    if (name === "soapbox" && icons.find(icon => icon.name === name)?.src === undefined)
-        return icons.find(icon => icon.name === "AdMR0JMIsq4KAryJAPybBLQQAejv5Rug538fFtNy2gAAAABJRU5ErkJggg==")?.src;
     return icons.find(icon => icon.name === name)?.src;
 };
 ---
