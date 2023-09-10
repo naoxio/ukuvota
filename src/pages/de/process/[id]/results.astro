@@ -120,7 +120,8 @@ if (!("voters" in process)) {
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composable/addAlert'
     import getQuillHTML from 'composable/getQuillHTML'
-    import { t } from "i18next";
+    const translationsElement = document.getElementById('translations');
+    const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcessData(processId, window.location.origin);
@@ -195,32 +196,31 @@ if (!("voters" in process)) {
             proposals.forEach((proposal: any) => {
                 proposal["total"] = this.getTotal(proposal.id, selectedVoters);
             });
-            const sortedProposals = proposals.sort((a, b) => {
+            const sortedProposals = proposals.sort((a: any, b: any) => {
                 return b.total - a.total;
             });
             this.table_body[0].innerHTML = '';
             this.table_body[1].innerHTML = '';
 
-            let head_content = `<th>${t('process.voter') || 'Voter'}</th>`
+            let head_content = `<th>${t.process['voter']}</th>`
             process.proposals.forEach(proposal => {
                 head_content += `<th>${proposal.title}</th>\n`
             });
             let body_content = ''
-            process.voters.forEach(voters => {
+
+            process.voters.forEach((voters: any) => {
                 body_content += `
                 <tr>
                 <td>
                     <span>${voters.name}</span>
                 </td>\n`
                 process.proposals.forEach(proposal => {
-                    let vote = voters.votes.find(p => p.proposalId == proposal.id).vote
+                    let vote = voters.votes.find((p: any) => p.proposalId == proposal.id).vote
                     body_content += `<th class="text-center">${vote}</th>\n`
                 });
                 body_content += '</tr>\n'
-            })
+            });
        
-
-
             this.table_head[1].innerHTML = head_content
             this.table_body[1].innerHTML = body_content
 
