@@ -49,7 +49,6 @@ class DatetimePicker extends HTMLElement {
 
         this.updateDisplay();
     }
-
     updateDisplay() {
         const $process = process.get();
 
@@ -63,8 +62,10 @@ class DatetimePicker extends HTMLElement {
         }
 
         const proposalDates = $process["proposalDates"];
-        if(this.phase === 'voting' && this.index === 0 && Array.isArray(proposalDates) && proposalDates.length >= 2) {
+        if (this.phase === 'voting' && this.index === 0 && Array.isArray(proposalDates) && proposalDates.length >= 2) {
             this.dateInput.min = new Date(proposalDates[1]).toISOString().slice(0,16);
+        } else if (this.index === 1) {
+            this.dateInput.min = new Date(phaseDates[0]).toISOString().slice(0,16);
         } else {
             this.dateInput.min = new Date().toISOString().slice(0, 16);
         }
