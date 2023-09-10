@@ -2,8 +2,8 @@ import processTest from "composable/processTestData";
 
 export default async function fetchProcessData(processId: string, origin: string): Promise<any> {
     const isDev = processId === "dev";
-    let data;
-    let process;
+    let data: { process: any; };
+    let process: null;
     const res = isDev ? new Response() : await fetch(`${origin}/api/process/${processId}`, { method: "GET" });
     
     if (!isDev && res.status === 404) {

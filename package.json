@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "npm run build && node server/server.mjs",
     "build": "astro build",
     "server": "node server/server.mjs",

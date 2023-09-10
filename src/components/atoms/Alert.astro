@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { error, success, warning, icon } = Astro.props;
-const classList = `alert w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : ''}`;
+const classList = `alert w-96 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : ''}`;
 const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
 ---
 

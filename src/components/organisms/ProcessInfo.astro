@@ -7,7 +7,7 @@ import QRCode from 'atoms/QRCode.astro'
 import ContentDoc from "atoms/ContentDoc.astro"
 import ProcessTimeLabel from 'organisms/ProcessTimeLabel.astro';
 import Icon from 'astro-icon'
-import { Delta } from 'quill'
+import Delta from 'quill'
 
 const { url } = Astro;
 
@@ -30,7 +30,7 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     <h1>{ title }</h1>
     <p class="topic-description"></p>
     <div class="flex justify-end items-center">
-        { t('process.weighting') }
+        { t('process.weighting') }&nbsp;
         {weight}&nbsp;
         <Modal id="weightingInfo">
             <h3>{ t('process.weighting') }</h3>
@@ -95,6 +95,4 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
         
     }
     customElements.define('process-info', ProcessInfo)
-
- 
-</script>composable/weightingOptions
+</script>

@@ -181,6 +181,7 @@ class CreateProcess extends HTMLElement {
 
                 const processId = (await response.json()).id;
                 process.setKey('title', '');
+                /* @ts-ignore */
                 process.setKey('description', { ops: [] });
                 process.setKey('proposals', []);
                 addAlert(this.alertList, this.alerts[1])

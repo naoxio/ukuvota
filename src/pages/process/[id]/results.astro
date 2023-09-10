@@ -114,7 +114,7 @@ if (!("voters" in process)) {
 
 <script>
     import download from 'downloadjs'
-    import IProposal from 'interfaces/IProposal'
+    import type IProposal from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
     import fetchProcessData from "composable/fetchProcessData";
     import { process as storeProcess } from 'stores/processStore'
@@ -387,4 +387,4 @@ if (!("voters" in process)) {
 
     }
     customElements.define('results-card', ResultsCard)
-</script>composable/getProcessUrlcomposable/fetchProcessData
+</script>

@@ -72,7 +72,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
   
   if (hash.includes('#/app/')) {
     const newHash = hash.replace('#/app/', '');
-    const cleanHash = newHash.split('/')[0]; // Get the part before the first '/' after the hash
+    const cleanHash = newHash.split('/')[0];
 
     window.location.href = `${location.origin}/process/${cleanHash}`
   }

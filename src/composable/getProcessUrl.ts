@@ -1,4 +1,4 @@
-import IProcess from 'interfaces/IProcess'
+import type IProcess from 'interfaces/IProcess'
 
 
 export default function getProcessUrl(process: IProcess, processId: string): string {

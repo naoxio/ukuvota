@@ -1,4 +1,4 @@
-import { Delta } from 'quill';
+import Delta from 'quill';
 import createQuill from './createQuill';
 import updateQuill from './updateQuill';
 import DOMPurify from 'dompurify';
