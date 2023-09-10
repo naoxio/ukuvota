@@ -114,13 +114,11 @@ class ProposalList extends HTMLElement {
     updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): void {
         const { titleInput, descriptionElement } = inputs;
         const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
-        console.log(descriptionContent)
         const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
 
         const proposalId = proposal.id;
         const title = titleInput.value;
 
-        console.log(isEmptyDescription, title)
         if (title === '' && isEmptyDescription) {
             ws.send(JSON.stringify({
                 method: 'removeProposal',

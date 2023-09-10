@@ -7,7 +7,6 @@ import 'assets/quill.snow.css';
 import "assets/global.css"
 import { localizeUrl } from "astro-i18next";
 
-
 const supportedLanguages = i18next.languages;
 const {title, description, simpleHeader = false} = Astro.props;
 
@@ -15,6 +14,8 @@ const { url } = Astro;
 
 const href = url.href
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
+const translations = i18next.getResourceBundle(i18next.language, 'translation')
+
 ---
 
 <html lang={i18next.language} data-theme="light">
@@ -57,6 +58,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:image" content={`${href}social_logo.png`} />
   </head>
   <body>
+    <div id="translations" data-translations={JSON.stringify(translations)} style="display: none;"></div>
     <Header simpleHeader={simpleHeader}/>
     <br/>
     <main>
@@ -75,6 +77,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
       return "dark";
     return "light";
   })();
+
   document.documentElement.dataset.theme = theme
   document.documentElement.classList = theme
 
@@ -88,5 +91,4 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 
     window.location.href = `${location.origin}/process/${cleanHash}`
   }
-
 </script>

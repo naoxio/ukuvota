@@ -120,7 +120,7 @@ if (!("voters" in process)) {
     import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composable/addAlert'
     import getQuillHTML from 'composable/getQuillHTML'
-    import i18next, { t } from "i18next";
+    import { t } from "i18next";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcessData(processId, window.location.origin);

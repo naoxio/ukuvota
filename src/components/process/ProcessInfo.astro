@@ -83,7 +83,6 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
             super()
             const description = JSON.parse(this.dataset.description)
             const descriptionHTML = getQuillHTML(description);
-            console.log(description, descriptionHTML)
             const topicDescriptionElement = this.querySelector('.topic-description');
             
             if (descriptionHTML.trim() === "<p><br></p>") {

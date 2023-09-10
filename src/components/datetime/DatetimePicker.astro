@@ -44,9 +44,6 @@ class DatetimePicker extends HTMLElement {
         process.setKey(this.phase + 'Duration' as keyof Process, end - start)
         process.setKey(this.phase + 'Dates' as keyof Process, [start, end])
 
-        console.log(`Start Time: ${new Date(start).toLocaleString()}`);
-        console.log(`End Time: ${new Date(end).toLocaleString()}`);
-
         this.updateDisplay();
     }
     updateDisplay() {

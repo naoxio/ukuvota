@@ -1,12 +1,13 @@
 <proposal-list class="flex flex-col justify-around align-center items-center"/>
    
 <script>
-  import { t } from 'i18next'
   import createQuill from "composable/createQuill";
-  import { process } from 'stores/processStore';
   import updateQuill from 'composable/updateQuill'
+  import { process } from 'stores/processStore';
   import { Quill } from 'quill'
 
+  const translationsElement = document.getElementById('translations');
+  const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
   class ProposalList extends HTMLElement {
     proposals = [];
@@ -17,12 +18,11 @@
       process.setKey("proposals", this.proposals);
     }
 
-    updateProposal(ev, i: number) {
+    updateProposal(ev: any, i: number) {
       const proposal = this.proposals[i];
       proposal.title = ev.target.value;
 
       process.setKey("proposals", this.proposals);
-    
     }
 
     deleteProposal(i: number) {
@@ -40,14 +40,14 @@
         proposalElement.innerHTML = `
           <div class="flex items-center flex-col">
             <div class="flex flex-col w-full">
-              <b>${t('process.proposal')}</b>
+              <b>${t.process['proposal']}</b>
               <input id="title-${index}" type="text" class="input input-bordered input-sm my-2 w-full" value="${proposal.title}" />
-              <label>${t('process.description')}</label>
+              <label>${t.process['description']}</label>
               <div id="description-${index}" />
             </div>
           </div>
           <div class="flex justify-center w-full pt-2">
-            <button class="delete btn btn-ghost text-error btn-xs">${t('delete')}</button>
+            <button class="delete btn btn-ghost text-error btn-xs">${t.delete}</button>
           </div>
         `;
 
@@ -78,5 +78,4 @@
   }
 
   customElements.define('proposal-list', ProposalList);
-
 </script>

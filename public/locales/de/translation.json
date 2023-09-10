@@ -7,6 +7,7 @@
   "confirm": "Bestätigen",
   "cancel": "abbrechen",
   "done": "fertig",
+  "delete": "löschen",
   "phases": {
     "start": "Startet",
     "startAt": "Startet am",
