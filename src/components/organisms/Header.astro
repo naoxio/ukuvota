@@ -3,27 +3,47 @@ import Navigation from "organisms/Navigation.astro";
 import logo from "assets/logo.png";
 import { t } from "i18next";
 
-const {simpleHeader = false} = Astro.props;
+interface Props {
+    simpleHeader?: string
+}
 
+let {simpleHeader} = Astro.props;
+if (!simpleHeader) simpleHeader = "false"
 ---
 
-<div class="text-center">
-    { !simpleHeader &&
-        <div class="pt-12 flex justify-center">
-            <img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo.src}>
-        </div>
+<style>
+    .none {
+        display: none;
     }
+</style>
+
+<uku-header class="text-center" data-header={simpleHeader}>
+    <div id="logo-container" class="pt-12 flex justify-center none">
+        <img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo.src}>
+    </div>
     
     <a href="/"><h1>Ukuvota</h1></a>
     { !simpleHeader && <h2>{ t('tagline') }</h2>}
     <Navigation/>
-</div>
+</uku-header>
 
 <script>
-    const lang = document.getElementsByTagName('html')[0].getAttribute('lang')
-    const logo: any = document.querySelector('img#logo')
-    logo.addEventListener('click', () => {
-        location.href = lang === 'en' ? '/' : '/' + lang
-    })
+class UkuHeader extends HTMLElement {
+    connectedCallback() {
+        const lang = document.documentElement.getAttribute("lang");
+        const logo_container = this.querySelector('#logo-container');
+        const logo: any = this.querySelector('img#logo');
+
+        logo.addEventListener('click', () => {
+            location.href = lang === 'en' ? '/' : '/' + lang;
+        });
+
+        if (this.dataset.header === 'false') {
+            logo_container.classList.remove('none');
+        }
+    }
+}
+
+customElements.define('uku-header', UkuHeader);
 
 </script>

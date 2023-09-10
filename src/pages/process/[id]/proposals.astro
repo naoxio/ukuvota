@@ -97,7 +97,7 @@ class ProposalList extends HTMLElement {
         const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
         view_content.innerHTML = `
             <h3>${title}</h3>
-            <div>${getQuillHTML(description.getContents())}</div>`
+            <div>${getQuillHTML(description)}</div>`
     }
     
     updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {

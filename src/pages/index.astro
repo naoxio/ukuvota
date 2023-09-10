@@ -73,14 +73,13 @@ changeLanguage("en");
 </BaseLayout>
 
 <script>
-import i18next, { t } from 'i18next';
 import { process } from 'stores/processStore';
 import createQuill from "composable/createQuill";
 import addAlert from 'composable/addAlert'
 import updateQuill from 'composable/updateQuill'
 import type IProposal from 'interfaces/IProposal';
 
-const lang = i18next.language;
+const lang = document.documentElement.getAttribute("lang");
 
 class CreateProcess extends HTMLElement {
     scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
@@ -163,7 +162,6 @@ class CreateProcess extends HTMLElement {
             weighting: process.get().weighting,    
             proposals
         }
-
 
         if (import.meta.env.DEV) return
         else {

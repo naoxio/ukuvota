@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2023-09-10
+### Changed
+- Upgraded to Astro v3
+- Updated packages
+- Fixed logic
+### Removed
+- VueDatetime
+### Added
+- HTML5 datetime picker
+
 ## [0.3.0] - 2023-04-13
 ### Added
 - Migrated legacy Ukuvota data

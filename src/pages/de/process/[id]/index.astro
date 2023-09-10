@@ -14,11 +14,11 @@ if (pathname !== url.pathname)
     return Astro.redirect(`${url.origin}${pathname}`);
 ---
 
-<ProcessLayout process={process} >
+<ProcessLayout process={process}>
     { +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
     <div>
         <h2>{ t('process.proposals') }</h2>
-        <proposal-list data-proposals={JSON.stringify(process.proposals)}>
+        <proposal-list  data-proposals={JSON.stringify(process.proposals)}>
             <div class="proposals-container"></div>
         </proposal-list>
     </div>
@@ -81,4 +81,4 @@ if (pathname !== url.pathname)
 
     customElements.define("proposal-list", ProposalList);
 
-</script>composable/getProcessUrlcomposable/fetchProcessData
+</script>
