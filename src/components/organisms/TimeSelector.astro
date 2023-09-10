@@ -1,7 +1,5 @@
 ---
-import { process } from 'stores/processStore';
-/* @ts-ignore */
-import DatetimePicker from 'molecules/DatetimePicker.vue';
+import DatetimePicker from 'molecules/DatetimePicker.astro';
 import DatetimeSlider from 'molecules/DatetimeSlider.astro'
 import { t } from 'i18next';
 
@@ -16,9 +14,9 @@ const title = t(`phases.${phase}.title`)
 <div>
   <h2 class="title">{ title }</h2>
   <h3>{ t(`phases.startAt`) }:</h3>
-  <DatetimePicker phase={phase} index={0} client:only="vue" />
+  <DatetimePicker phase={phase} index={0} />
   <h3>{ t(`phases.endsAt`) }:</h3>
-  <DatetimePicker phase={phase} index={1} client:only="vue" />
+  <DatetimePicker phase={phase} index={1} />
   
   <DatetimeSlider phase={phase} />
   <br/>

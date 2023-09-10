@@ -1,8 +1,8 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "templates/ProcessLayout.astro";
-import getProcessUrl from "composables/getProcessUrl";
-import fetchProcessData from "composables/fetchProcessData";
+import getProcessUrl from "composable/getProcessUrl";
+import fetchProcessData from "composable/fetchProcessData";
 import AddProposals from "molecules/AddProposals.astro";
 import AlertList from "molecules/AlertList.astro";
 import Alert from "atoms/Alert.astro";
@@ -18,7 +18,7 @@ if (pathname !== url.pathname)
 ---
 
 <ProcessLayout process={process}>
-    <proposal-list>
+    <proposal-list >
         <h2>{ t('process.proposals') }</h2>
         <div class="proposals">
             <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
@@ -70,218 +70,218 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-    import addAlert from 'composables/addAlert'
-    import IProposal from "interfaces/IProposal"
-    import createQuill from "composables/createQuill";
-    import updateQuill from "composables/updateQuill";
-    import { Delta } from "quill"
-    import getQuillHTML from 'composables/getQuillHTML'
-    import fetchProcessData from "composables/fetchProcessData";
+import addAlert from 'composable/addAlert'
+import type IProposal from "interfaces/IProposal"
+import createQuill from "composable/createQuill";
+import updateQuill from "composable/updateQuill";
+import Delta from "quill"
+import getQuillHTML from 'composable/getQuillHTML'
+import fetchProcessData from "composable/fetchProcessData";
 
-    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcessData(processId, window.location.origin);
+const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+const process = await fetchProcessData(processId, window.location.origin);
+
+const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
+const ws = new WebSocket(`${protocol}//${window.location.host}`);
+
+class ProposalList extends HTMLElement {
+    proposal_html = null
+    proposals = null
+    descriptionQuills = {}
+    currentAlert = null
     
-    const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
-    const ws = new WebSocket(`${protocol}//${window.location.host}`);
+    alertList = this.querySelector('div.alert-list')
+    alerts = this.querySelectorAll('alert-element')
 
-    class ProposalList extends HTMLElement {
-        proposal_html = null
-        proposals = null
-        descriptionQuills = {}
-        currentAlert = null
-        
-        alertList = this.querySelector('div.alert-list')
-        alerts = this.querySelectorAll('alert-element')
+    updateProposalView(proposal: any, title: string, description: Delta ) {
+        const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
+        view_content.innerHTML = `
+            <h3>${title}</h3>
+            <div>${getQuillHTML(description.getContents())}</div>`
+    }
+    
+    updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
+        const edit_content = proposal.querySelector('div.edit').querySelector('div')
+        const inputs = [
+            edit_content.querySelector("input"),
+            edit_content.querySelector(".quill"),
+        ];
+        inputs[0].value = title
+        this.descriptionQuills[inputs[1].id] = updateQuill(this.descriptionQuills[inputs[1].id], description)
+        return inputs[1]
+    }
+    
+    updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): void {
+        const { titleInput, descriptionElement } = inputs;
+        const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
+        const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
 
-        updateProposalView(proposal: any, title: string, description: Delta ) {
-            const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
-            view_content.innerHTML = `
-                <h3>${title}</h3>
-                <div>${getQuillHTML(description)}</div>`
+        const proposalId = proposal.id;
+        const title = titleInput.value;
+
+        if (title === '' && isEmptyDescription) {
+            ws.send(JSON.stringify({
+                method: 'removeProposal',
+                proposalId,
+                processId
+            }));
+        } else {
+            ws.send(JSON.stringify({
+                method: 'updateProposal',
+                title,
+                description: descriptionContent,
+                proposalId,
+                processId
+            }));
         }
-        
-        updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
-            const edit_content = proposal.querySelector('div.edit').querySelector('div')
-            const inputs = [
-                edit_content.querySelector("input"),
-                edit_content.querySelector(".quill"),
-            ];
-            inputs[0].value = title
-            this.descriptionQuills[inputs[1].id] = updateQuill(this.descriptionQuills[inputs[1].id], description)
-            return inputs[1]
+
+        this.updateProposalView(proposal, title, descriptionContent);
+    }
+    addProposal(data: IProposal, editing: boolean = false): void {
+        // Clone proposal HTML element and set its ID to data ID
+        const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
+        proposal.id = data.id;
+
+        // Get view and edit element inside proposal element and update view with new proposal data
+        const view = proposal.querySelector('div.view') as HTMLElement;
+        const edit = proposal.querySelector('div.edit') as HTMLElement;
+
+        // If editing is true, hide view, show edit
+        if (editing) {
+            view.style.display = 'none';
+            edit.style.display = 'flex';
         }
-        
-        updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): void {
-            const { titleInput, descriptionElement } = inputs;
-            const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
-            const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
 
-            const proposalId = proposal.id;
-            const title = titleInput.value;
+        // Add event listener to view so that it becomes hidden when clicked and edit view becomes visible
+        view.addEventListener('click', () => {
+            view.style.display = 'none';
+            edit.style.display = 'flex';
+        });
 
-            if (title === '' && isEmptyDescription) {
-                ws.send(JSON.stringify({
-                    method: 'removeProposal',
-                    proposalId,
-                    processId
-                }));
-            } else {
-                ws.send(JSON.stringify({
-                    method: 'updateProposal',
-                    title,
-                    description: descriptionContent,
-                    proposalId,
-                    processId
-                }));
-            }
+        // Get input elements within edit content element
+        const editContent = edit.querySelector('div') as HTMLElement;
+        const titleInput = editContent.querySelector('input') as HTMLInputElement;
+        const descriptionElement = editContent.querySelector('.quill') as HTMLElement;
 
-            this.updateProposalView(proposal, title, descriptionContent);
-        }
-        addProposal(data: IProposal, editing: boolean = false): void {
-            // Clone proposal HTML element and set its ID to data ID
-            const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
-            proposal.id = data.id;
+        titleInput.value = data.title;
+        const proposalId = data.id;
 
-            // Get view and edit element inside proposal element and update view with new proposal data
-            const view = proposal.querySelector('div.view') as HTMLElement;
-            const edit = proposal.querySelector('div.edit') as HTMLElement;
+        const descriptionId = `quill-${proposalId}`; // Unique ID for the Quill editor
+        descriptionElement.id = descriptionId;
 
-            // If editing is true, hide view, show edit
-            if (editing) {
-                view.style.display = 'none';
-                edit.style.display = 'flex';
-            }
+        const saveButtons = Array.from(edit.querySelectorAll('button')) as HTMLButtonElement[];
+        saveButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (btn.name === 'delete') {
+                    titleInput.value = '';
+                    descriptionElement.innerHTML = '';
+                }
 
-            // Add event listener to view so that it becomes hidden when clicked and edit view becomes visible
-            view.addEventListener('click', () => {
-                view.style.display = 'none';
-                edit.style.display = 'flex';
-            });
+                view.style.display = 'flex';
+                edit.style.display = 'none';
 
-            // Get input elements within edit content element
-            const editContent = edit.querySelector('div') as HTMLElement;
-            const titleInput = editContent.querySelector('input') as HTMLInputElement;
-            const descriptionElement = editContent.querySelector('.quill') as HTMLElement;
-
-            titleInput.value = data.title;
-            const proposalId = data.id;
-
-            const descriptionId = `quill-${proposalId}`; // Unique ID for the Quill editor
-            descriptionElement.id = descriptionId;
-
-            const saveButtons = Array.from(edit.querySelectorAll('button')) as HTMLButtonElement[];
-            saveButtons.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    if (btn.name === 'delete') {
-                        titleInput.value = '';
-                        descriptionElement.innerHTML = '';
-                    }
-
-                    view.style.display = 'flex';
-                    edit.style.display = 'none';
-
-                    this.updateProposal({ titleInput, descriptionElement }, proposal);
-                });
-            });
-
-            this.proposals.appendChild(proposal);
-
-            // Create a Quill editor for the description field
-            let quill = createQuill('#' + descriptionId);
-            quill = updateQuill(quill, data.description)
-
-            this.updateProposalView(proposal, data.title, quill.getContents());
-            this.descriptionQuills[descriptionId] = quill;
-
-            titleInput.addEventListener('input', () => {
                 this.updateProposal({ titleInput, descriptionElement }, proposal);
             });
+        });
+
+        this.proposals.appendChild(proposal);
+
+        // Create a Quill editor for the description field
+        let quill = createQuill('#' + descriptionId);
+        quill = updateQuill(quill, data.description)
+
+        this.updateProposalView(proposal, data.title, quill);
+        this.descriptionQuills[descriptionId] = quill;
+
+        titleInput.addEventListener('input', () => {
+            this.updateProposal({ titleInput, descriptionElement }, proposal);
+        });
+    }
+
+
+    constructor() {
+        super();
+        
+        if (ws.readyState === WebSocket.CONNECTING) {
+            this.currentAlert = addAlert(this.alertList, this.alerts[1], -1)
         }
 
-
-        constructor() {
-            super();
-            
-            if (ws.readyState === WebSocket.CONNECTING) {
-                this.currentAlert = addAlert(this.alertList, this.alerts[1], -1)
+        ws.addEventListener('open', () => {
+            if (this.currentAlert) {
+                this.alertList.removeChild(this.currentAlert)
             }
+            addAlert(this.alertList, this.alerts[0])
+        });
 
-            ws.addEventListener('open', () => {
-                if (this.currentAlert) {
-                    this.alertList.removeChild(this.currentAlert)
-                }
-                addAlert(this.alertList, this.alerts[0])
-            });
-
-            ws.addEventListener('error', () => {
-                if (this.currentAlert) {
-                    this.alertList.removeChild(this.currentAlert)
-                }
-                addAlert(this.alertList, this.alerts[2])
-            });
+        ws.addEventListener('error', () => {
+            if (this.currentAlert) {
+                this.alertList.removeChild(this.currentAlert)
+            }
+            addAlert(this.alertList, this.alerts[2])
+        });
 
 
-            // Find the proposals container and clone a proposal template.
-            this.proposals = this.querySelector('div.proposals');
-            this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
-            this.proposals.innerHTML = "";
+        // Find the proposals container and clone a proposal template.
+        this.proposals = this.querySelector('div.proposals');
+        this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
+        this.proposals.innerHTML = "";
 
-            // Listen for WebSocket events.
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
+        // Listen for WebSocket events.
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
 
-                if ('method' in data) {
-                    if (data.method === 'addProposal') {
-                        // Add a new proposal.
-                        this.addProposal(data.proposal, data.proposal.title ? false : data.edit);
-                    } else if (data.method === 'removeProposal') {
-                        // Remove a proposal.
-                        for (const child of this.proposals.children) {
-                            if (child.id === data.proposalId) {
-                                this.proposals.removeChild(child);
-                                break;
-                            }
+            if ('method' in data) {
+                if (data.method === 'addProposal') {
+                    // Add a new proposal.
+                    this.addProposal(data.proposal, data.proposal.title ? false : data.edit);
+                } else if (data.method === 'removeProposal') {
+                    // Remove a proposal.
+                    for (const child of this.proposals.children) {
+                        if (child.id === data.proposalId) {
+                            this.proposals.removeChild(child);
+                            break;
                         }
-                    } else if (data.method === 'updateProposal') {
-                        // Update a proposal.
-                        for (const child of this.proposals.children) {
-                            if (child.id === data.proposalId) {
-                                this.updateProposalEdit(child, data.title, data.description);
-                                this.updateProposalView(child, data.title, data.description.getContents());
-                                break;
-                            }
+                    }
+                } else if (data.method === 'updateProposal') {
+                    // Update a proposal.
+                    for (const child of this.proposals.children) {
+                        if (child.id === data.proposalId) {
+                            this.updateProposalEdit(child, data.title, data.description);
+                            this.updateProposalView(child, data.title, data.description.getContents());
+                            break;
                         }
                     }
                 }
-            };
+            }
+        };
 
-            ws.onopen = (event) => {
-                // Set the process ID when the WebSocket connection is opened.
-                ws.send(JSON.stringify({
-                    method: 'setProcess',
-                    processId
-                }));
-            };
+        ws.onopen = (event) => {
+            // Set the process ID when the WebSocket connection is opened.
+            ws.send(JSON.stringify({
+                method: 'setProcess',
+                processId
+            }));
+        };
 
-            // Add existing proposals to the UI.
-            process.proposals.forEach((proposal: any) => {
-                this.addProposal(proposal);
-            });
+        // Add existing proposals to the UI.
+        process.proposals.forEach((proposal: any) => {
+            this.addProposal(proposal);
+        });
 
-        }
     }
-    customElements.define('proposal-list', ProposalList)
+}
+customElements.define('proposal-list', ProposalList)
 
 
-    const checkTime = () => {
-        const time =  process.proposalDates[1] - +new Date()
-        if (time <= 0)
-            window.location.href = `${window.location.origin}/process/${processId}/voting`
-        else
-            setTimeout(checkTime, time)
-    }
-    checkTime()
+const checkTime = () => {
+    const time =  process.proposalDates[1] - +new Date()
+    if (time <= 0)
+        window.location.href = `${window.location.origin}/process/${processId}/voting`
+    else
+        setTimeout(checkTime, time)
+}
+checkTime()
 
-        
+    
 
 </script>

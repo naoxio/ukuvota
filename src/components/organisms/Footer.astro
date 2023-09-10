@@ -2,7 +2,7 @@
 // Import required functions and assets
 import { t } from "i18next";
 import { localizePath } from "astro-i18next";
-import { getAssets } from "composables/getAssets";
+import { getAssets } from "composable/getAssets";
 
 
 // Define the menu items and their corresponding icons
@@ -22,7 +22,6 @@ const getIcon = (name: string) => {
 };
 ---
 
-<!-- Render the footer with menu items and links -->
 <footer>
     <div class="icon">
       {menu.map((item) => (
@@ -43,12 +42,9 @@ const getIcon = (name: string) => {
         <a class="link link-primary" href="/privacy-policy">Privacy Policy</a>
       </span>
     </div>
-  </footer>
+</footer>
   
-
-
 <style>
-  /* Define styles for footer and its elements */
   footer {
       display: flex;
       flex-direction: column;

@@ -1,16 +1,14 @@
 ---
-import weightingOptions from "composables/weightingOptions";
+import weightingOptions from "composable/weightingOptions";
 import { t } from 'i18next';
-import { process } from '../../stores/processStore';
 import Modal from 'molecules/Modal.astro'
 import ContentDoc from 'atoms/ContentDoc.astro'
-const $weighting = process.get().weighting
 ---
 
 <weight-selector>
   <span>{ t('process.weighting') }</span>
   <span class="flex justify-center items-center">
-    <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={$weighting}>
+    <select id="select" name="weighting" class="select mx-2 select-bordered mt-2">
       {weightingOptions.map(weight => (
         <option value={weight.value}>
           { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }

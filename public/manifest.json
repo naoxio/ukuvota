@@ -1,0 +1,21 @@
+{
+  "name": "Ukuvota",
+  "short_name": "Ukuvota",
+  "description": "A score voting tool for finding decisions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f3f4",
+  "theme_color": "#cd5c5c",
+  "icons": [
+    {
+      "src": "/metadata/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/metadata/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

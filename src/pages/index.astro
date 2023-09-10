@@ -8,7 +8,6 @@ import PhaseSelector from "molecules/PhaseSelector.astro";
 import TimeSelector from "organisms/TimeSelector.astro";
 import AddProposals from "molecules/AddProposals.astro";
 import EditProposalList from "organisms/EditProposalList.astro";
-import ContentDoc from "atoms/ContentDoc.astro";
 
 changeLanguage("en");
 ---
@@ -31,9 +30,9 @@ changeLanguage("en");
             <p>{ t('process.description') }</p>
             <div id="description"/>
             <br>
-            <WeightSelector/>
+            <WeightSelector />
             <h2>{ t('process.phases.select') }</h2>
-            <PhaseSelector/>
+            <PhaseSelector />
         </div>
         <hr/>
         <div class="py-2">
@@ -74,126 +73,126 @@ changeLanguage("en");
 </BaseLayout>
 
 <script>
-    import { loadingLogo } from 'composables/loadingLogo'
-    import i18next, { t } from 'i18next';
-    import { process } from 'stores/processStore';
-    import IProposal from 'interfaces/IProposal'
-    import createQuill from "composables/createQuill";
-    import addAlert from 'composables/addAlert'
-    import updateQuill from 'composables/updateQuill'
+import i18next, { t } from 'i18next';
+import { process } from 'stores/processStore';
+import createQuill from "composable/createQuill";
+import addAlert from 'composable/addAlert'
+import updateQuill from 'composable/updateQuill'
+import type IProposal from 'interfaces/IProposal';
 
-    const lang = i18next.language;
+const lang = i18next.language;
 
-    class CreateProcess extends HTMLElement {
-        scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
-        quillDescription = null
-        alertList = this.querySelector('div.alert-list')
-        alerts = this.querySelectorAll('alert-element')
-        phases = process.get().phases
-        
-        updatePhasesView() {
-            const fullOnlyElements = this.querySelectorAll('.fullOnly');
-            const voteOnlyElements = this.querySelectorAll('.voteOnly');
-            const isVotingPhase = this.phases === 'voting';
+class CreateProcess extends HTMLElement {
+    scrollTopicQuestion = this.querySelector('#scrollTopicQuestion')
+    quillDescription = null
+    alertList = this.querySelector('div.alert-list')
+    alerts = this.querySelectorAll('alert-element')
+    phases = process.get().phases
+    
+    updatePhasesView() {
+        const fullOnlyElements = this.querySelectorAll('.fullOnly');
+        const voteOnlyElements = this.querySelectorAll('.voteOnly');
+        const isVotingPhase = this.phases === 'voting';
 
-            voteOnlyElements.forEach((element: HTMLElement) => {
-                element.style.display = isVotingPhase ? 'block' : 'none';
-            });
+        voteOnlyElements.forEach((element: HTMLElement) => {
+            element.style.display = isVotingPhase ? 'block' : 'none';
+        });
 
-            fullOnlyElements.forEach((element: HTMLElement) => {
-                element.style.display = isVotingPhase ? 'none' : 'block';
-            });
+        fullOnlyElements.forEach((element: HTMLElement) => {
+            element.style.display = isVotingPhase ? 'none' : 'block';
+        });
 
-        }
-        constructor() {
-            super()
-            process.subscribe(() => {
-                const $process = process.get();
-                if (JSON.stringify(this.phases) !== JSON.stringify($process.phases)) {
-                this.phases = JSON.parse(JSON.stringify($process.phases));
-                this.updatePhasesView();
-                }
-            });
-
-            this.updatePhasesView()
-
-            this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
-            this.quillDescription = createQuill('#description');
-            this.quillDescription = updateQuill(this.quillDescription, process.get().description)
-            this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
-            let title = this.querySelector('#topicQuestion') as HTMLInputElement
-            title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
-            title.value = process.get().title
-
-        }
-        // Check if all proposals have a title and description
-        checkProposalValues(proposals: IProposal[]) {
-            return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
-        }
-
-        // Create process
-        createProcess = async() => {
-            const title = process.get().title.trim();
-            if (!title) {
-
-                const rect = this.scrollTopicQuestion.getBoundingClientRect();
-                const top = rect.top + window.pageYOffset - 100;
-                window.scrollTo({ top, behavior: 'smooth' });
-                addAlert(this.alertList, this.alerts[0])
-                return;
+    }
+    constructor() {
+        super()
+        process.subscribe(() => {
+            const $process = process.get();
+            if (JSON.stringify(this.phases) !== JSON.stringify($process.phases)) {
+            this.phases = JSON.parse(JSON.stringify($process.phases));
+            this.updatePhasesView();
             }
+        });
 
-            let proposals = process.get().phases === 'full' ? [] : JSON.parse( JSON.stringify(process.get().proposals))
+        this.updatePhasesView()
 
-            if (process.get().phases === 'voting') {
-                for (let i = 0; i < proposals.length; i++) {
-                    proposals[i].description = proposals[i].description
-                }
+        this.querySelector('#createProcessButton').addEventListener('click', () => this.createProcess())
+        this.quillDescription = createQuill('#description');
+        this.quillDescription = updateQuill(this.quillDescription, process.get().description)
+        this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()))
+        let title = this.querySelector('#topicQuestion') as HTMLInputElement
+        title.addEventListener('input', (e: any) => process.setKey('title', e.target.value))
+        title.value = process.get().title
 
-                if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
-                    addAlert(this.alertList, this.alerts[2])
-                    return
-                }
-            }
-
-            // Prepare request body
-            const body = {
-                topicQuestion: process.get().title,
-                topicDescription: this.quillDescription.getContents(),
-                proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
-                votingDates: process.get().votingDates,
-                weighting: process.get().weighting,    
-                proposals
-            }
-
-
-            if (import.meta.env.DEV) return
-            else {
-                try {
-                    const response = await fetch(`${location.origin}/api/process`, {
-                        method: "POST",
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(body)
-                    });
-
-                    if (response.status === 413) {
-                        addAlert(this.alertList, this.alerts[3])
-                        return;
-                    }
-
-                    const processId = (await response.json()).id;
-                    process.setKey('title', '');
-                    process.setKey('description', { ops: [] });
-                    process.setKey('proposals', []);
-                    addAlert(this.alertList, this.alerts[1])
-
-                    window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        }    
+    }
+    // Check if all proposals have a title and description
+    checkProposalValues(proposals: IProposal[]) {
+        return proposals.every((proposal: IProposal) => proposal.title !== '' || proposal.description !== '');
     }
 
-    customElements.define('create-process', CreateProcess)
+    // Create process
+    createProcess = async() => {
+        const title = process.get().title.trim();
+        if (!title) {
+
+            const rect = this.scrollTopicQuestion.getBoundingClientRect();
+            const top = rect.top + window.pageYOffset - 100;
+            window.scrollTo({ top, behavior: 'smooth' });
+            addAlert(this.alertList, this.alerts[0])
+            return;
+        }
+
+        let proposals = process.get().phases === 'full' ? [] : JSON.parse( JSON.stringify(process.get().proposals))
+
+        if (process.get().phases === 'voting') {
+            for (let i = 0; i < proposals.length; i++) {
+                proposals[i].description = proposals[i].description
+            }
+
+            if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
+                addAlert(this.alertList, this.alerts[2])
+                return
+            }
+        }
+
+        // Prepare request body
+        const body = {
+            topicQuestion: process.get().title,
+            topicDescription: this.quillDescription.getContents(),
+            proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
+            votingDates: process.get().votingDates,
+            weighting: process.get().weighting,    
+            proposals
+        }
+
+
+        if (import.meta.env.DEV) return
+        else {
+            try {
+                const response = await fetch(`${location.origin}/api/process`, {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (response.status === 413) {
+                    addAlert(this.alertList, this.alerts[3])
+                    return;
+                }
+
+                const processId = (await response.json()).id;
+                process.setKey('title', '');
+                /* @ts-ignore */
+                process.setKey('description', { ops: [] });
+                process.setKey('proposals', []);
+                addAlert(this.alertList, this.alerts[1])
+
+                window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }    
+}
+
+customElements.define('create-process', CreateProcess)
 </script>

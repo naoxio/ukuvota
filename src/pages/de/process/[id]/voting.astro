@@ -4,8 +4,8 @@ import ProcessLayout from "templates/ProcessLayout.astro";
 import AlertList from "molecules/AlertList.astro";
 import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
-import getProcessUrl from "composables/getProcessUrl";
-import fetchProcessData from "composables/fetchProcessData";
+import getProcessUrl from "composable/getProcessUrl";
+import fetchProcessData from "composable/fetchProcessData";
 
 changeLanguage("de");
 
@@ -34,7 +34,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     }
 </style>
 <ProcessLayout process={process}>
-    <voting-list>
+    <voting-list >
         <span class='flex justify-end'>
             <span>{ t('process.voters') }:&nbsp;</span>
             <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
@@ -78,9 +78,9 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 
 <script>
     import IProposal from 'interfaces/IProposal'
-    import addAlert from 'composables/addAlert'
-    import getQuillHTML from "composables/getQuillHTML";
-    import fetchProcessData from "composables/fetchProcessData";
+    import addAlert from 'composable/addAlert'
+    import getQuillHTML from "composable/getQuillHTML";
+    import fetchProcessData from "composable/fetchProcessData";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcessData(processId, window.location.origin);
@@ -180,4 +180,4 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             setTimeout(checkTime, time)
     }
     checkTime()
-</script>
+</script>composable/getProcessUrlcomposable/fetchProcessData
