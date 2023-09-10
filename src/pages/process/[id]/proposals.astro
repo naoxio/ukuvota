@@ -1,11 +1,11 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
-import ProcessLayout from "templates/ProcessLayout.astro";
+import ProcessLayout from "@/templates/ProcessLayout.astro";
 import getProcessUrl from "composable/getProcessUrl";
 import fetchProcessData from "composable/fetchProcessData";
-import AddProposals from "molecules/AddProposals.astro";
-import AlertList from "molecules/AlertList.astro";
-import Alert from "atoms/Alert.astro";
+import AddProposals from "@/proposals/AddProposals.astro";
+import AlertList from "@/ui/AlertList.astro";
+import Alert from "@/ui/Alert.astro";
 
 changeLanguage("en");
 

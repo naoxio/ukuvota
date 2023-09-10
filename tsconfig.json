@@ -21,10 +21,7 @@
       "composable/*": ["composable/*"],
       "interfaces/*": ["interfaces/*"],
       "stores/*": ["stores/*"],
-      "atoms/*": ["components/atoms/*"],
-      "molecules/*": ["components/molecules/*"],
-      "organisms/*": ["components/organisms/*"],
-      "templates/*": ["components/templates/*"]
+      "@/*": ["components/*"]
     },
   },
   "include": ["src/**/*"],
