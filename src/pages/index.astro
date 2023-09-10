@@ -134,7 +134,7 @@ class CreateProcess extends HTMLElement {
         if (!title) {
 
             const rect = this.scrollTopicQuestion.getBoundingClientRect();
-            const top = rect.top + window.pageYOffset - 100;
+            const top = rect.top + window.scrollY - 100;
             window.scrollTo({ top, behavior: 'smooth' });
             addAlert(this.alertList, this.alerts[0])
             return;
