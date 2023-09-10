@@ -6,7 +6,7 @@ import Footer from "organisms/Footer.astro";
 import 'assets/quill.snow.css';
 import "assets/global.css"
 
-const {title, description} = Astro.props;
+const {title, description, simpleHeader = false} = Astro.props;
 
 const { url } = Astro;
 
@@ -45,7 +45,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
     <meta name="twitter:image" content={`${href}social_logo.png`} />
   </head>
   <body>
-    <Header/>
+    <Header simpleHeader={simpleHeader}/>
     <br/>
     <main>
       <slot />
