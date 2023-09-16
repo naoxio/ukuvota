@@ -16,6 +16,14 @@ To set up a development environment for Ukuvota, follow these steps:
 
 With these steps, you will have Ukuvota running on your local machine, and you can start making changes and contributing to the project.
 
+## Quests 
+- [ ] Add indicator how many people are viewing and editing in the proposal view
+- [ ] Add indicator per proposal if being edited
+- [ ] Store data on ipfs
+- [ ] Move negative score weighting option as a visual for results page, simplify process creation
+- [ ] Make PWA work
+- [ ] Package as an apk for android
+
 ## Community
 We welcome any participates and you should feel welcome to share your ideas.
 
