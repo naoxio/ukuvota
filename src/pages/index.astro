@@ -183,8 +183,7 @@ class CreateProcess extends HTMLElement {
             process.setKey('proposals', []);
             addAlert(this.alertList, this.alerts[1])
             const href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`
-            console.log(href)
-            // window.location.href = href;
+            window.location.href = href;
         } catch (error) {
             console.error(error);
         }

@@ -12,11 +12,11 @@
     "test": "cypress open"
   },
   "dependencies": {
-    "@astrojs/node": "^6.0.0",
-    "@astrojs/tailwind": "^5.0.0",
+    "@astrojs/tailwind": "^5.0.1",
+    "@astrojs/vercel": "^5.0.2",
     "@nanostores/persistent": "^0.7.0",
     "@vercel/kv": "^0.2.3",
-    "astro": "^3.0.12",
+    "astro": "^3.2.3",
     "astro-i18next": "^1.0.0-beta.21",
     "astro-icon": "^0.8.0",
     "axios": "^1.5.1",
@@ -42,7 +42,7 @@
     "@flydotio/dockerfile": "^0.2.6",
     "@types/quill": "^2.0.11",
     "cypress": "^13.1.0",
-    "daisyui": "^3.7.3",
+    "daisyui": "^3.9.2",
     "unplugin-icons": "^0.17.0"
   }
 }

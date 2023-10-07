@@ -82,10 +82,10 @@ const { processId } = Astro.props;
 
         // Listen for the "Add Proposal" button click event.
         addButton.addEventListener('click', async() => {
-            ws.send(JSON.stringify({
+            /*ws.send(JSON.stringify({
                 method: 'addProposal',
                 processId: this.processId
-            }));
+            }));*/
         });
 
         // Listen for the proposal template click events.
@@ -95,12 +95,12 @@ const { processId } = Astro.props;
                 const title = item.querySelector('.title').innerHTML;
                 const description = { ops: [{"insert": item.querySelector('.description').innerHTML}]}
               
-                ws.send(JSON.stringify({
+                /*ws.send(JSON.stringify({
                     method: 'addProposal',
                     title,
                     description,
                     processId: this.processId
-                }));
+                }));*/
             });
         });
       }

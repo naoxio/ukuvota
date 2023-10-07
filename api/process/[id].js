@@ -1,11 +1,11 @@
-import { getProcessFromDatabase } from '../database';
+import { getProcessFromDatabase } from '../database.js';
 
 export default async function(req, res) {
    const processId = req.query.id;
-   console.log(processId)
    try {
       const process = await getProcessFromDatabase(processId);
-      
+      console.log('in server')
+      console.log(process)
       if (req.method === 'GET' && req.url.includes('/voters')) {
          res.json(process.voters);
       } else {

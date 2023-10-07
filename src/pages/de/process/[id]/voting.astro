@@ -5,13 +5,13 @@ import AlertList from "@/ui/AlertList.astro";
 import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
 import getProcessUrl from "composable/getProcessUrl";
-import fetchProcessData from "composable/fetchProcessData";
+import fetchProcess from "composable/fetchProcess";
 
 changeLanguage("de");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url.origin);
+const process = await fetchProcess(processId, url.origin);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -80,10 +80,10 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     import type IProposal from 'interfaces/IProposal'
     import addAlert from 'composable/addAlert'
     import getQuillHTML from "composable/getQuillHTML";
-    import fetchProcessData from "composable/fetchProcessData";
+    import fetchProcess from "composable/fetchProcess";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcessData(processId, window.location.origin);
+    const process = await fetchProcess(processId, window.location.origin);
 
     class VotingList extends HTMLElement {
         voteCounter = this.querySelector('span.no-voters')

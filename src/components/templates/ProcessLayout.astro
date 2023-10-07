@@ -11,16 +11,18 @@ const {process} = Astro.props;
 
 ---
 
-<BaseLayout title={process.title} simpleHeader={true}>
+<BaseLayout title={process ? process.title : null} simpleHeader={true}>
     <div style="display: none; opacity: 0;">
         <div id="temp"  />
     </div>
+    { process &&
     <ProcessInfo
         title={process.title}
-        description={JSON.stringify(process.description)}
+        description={process.description}
         weighting={process.weighting}
         proposalDates={process.proposalDates}
         votingDates={process.votingDates}
         />
+    }
     <slot/>
 </BaseLayout>
