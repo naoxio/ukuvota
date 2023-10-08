@@ -246,7 +246,7 @@ class ProposalList extends HTMLElement {
             for (const child of this.proposals.children) {
                 if (child.id === data.proposalId) {
                     this.updateProposalEdit(child, data.title, data.description);
-                    this.updateProposalView(child, data.title, data.description.getContents());
+                    this.updateProposalView(child, data.title, data.description);
                     break;
                 }
             }

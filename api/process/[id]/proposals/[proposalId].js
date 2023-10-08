@@ -5,8 +5,9 @@ export default async (req, res) => {
     if (req.method === 'PUT') {
         try {
             const process = await getProcessFromDatabase(req.query.id);
-            const { proposalId, title, description } = req.body;
-            
+            const { title, description } = req.body;
+            const proposalId = req.query.proposalId;
+
             const proposal = process.proposals.find(p => p.id === proposalId);
             if (!proposal) {
                 res.status(404).json({ error: 'Proposal not found.' });
