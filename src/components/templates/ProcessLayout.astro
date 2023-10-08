@@ -18,7 +18,7 @@ const {process} = Astro.props;
     { process &&
     <ProcessInfo
         title={process.title}
-        description={process.description}
+        description={JSON.stringify(process.description)}
         weighting={process.weighting}
         proposalDates={process.proposalDates}
         votingDates={process.votingDates}

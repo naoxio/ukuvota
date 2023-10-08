@@ -81,6 +81,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     import addAlert from 'composable/addAlert'
     import getQuillHTML from "composable/getQuillHTML";
     import fetchProcess from "composable/fetchProcess";
+    import axios from 'axios';
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcess(processId, window.location.origin);
@@ -106,42 +107,39 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         }
         submitVote = async () => {
             const votesMap = new Map();
-            const proposals = this.proposal_list.querySelectorAll('div.proposal')
+            const proposals = this.proposal_list.querySelectorAll('div.proposal');
             Array.from(proposals).forEach((proposal_node: HTMLDivElement) => {
-                const svgs = proposal_node.querySelectorAll('svg')
+                const svgs = proposal_node.querySelectorAll('svg');
                 for (const [i, svg] of svgs.entries()) {
-                if (!svg.classList.contains('gray')) {
-                    votesMap.set(proposal_node.id, i - 3);
-                    svg.classList.add('gray');
-                }
-                if (i - 3 == 0)
-                    svg.classList.remove('gray');
-                
+                    if (!svg.classList.contains('gray')) {
+                        votesMap.set(proposal_node.id, i - 3);
+                        svg.classList.add('gray');
+                    }
+                    if (i - 3 == 0)
+                        svg.classList.remove('gray');
                 };
             });
+
             const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
-            const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name');
             const vote = {
                 name: senderName.value,
                 votes
-            }
+            };
             if (senderName.value !== "") {
-                this.alerts[0].querySelector('span.name').innerHTML = senderName.value
-                addAlert(this.alertList, this.alerts[0])
-                senderName.value = ''  
+                this.alerts[0].querySelector('span.name').innerHTML = senderName.value;
+                addAlert(this.alertList, this.alerts[0]);
+                senderName.value = '';
 
-                const res = await fetch(`${location.origin}/api/process/${processId}/vote`, {
-                    method: "POST",
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify(vote)
-                });
-
-                const res_v = await fetch(`${location.origin}/api/process/${processId}/voters`)
-                const json_v = await res_v.json();
-                this.voteCounter.innerHTML = json_v.length
-            }
-            else {
-                addAlert(this.alertList, this.alerts[1])
+                try {
+                    await axios.post(`${location.origin}/api/process/${processId}/vote`, vote);
+                    const { data: voters } = await axios.get(`${location.origin}/api/process/${processId}/voters`);
+                    this.voteCounter.innerHTML = voters.length;
+                } catch (error) {
+                    console.error('Error submitting vote:', error);
+                }
+            } else {
+                addAlert(this.alertList, this.alerts[1]);
             }
         };
         addProposal(proposal: IProposal) {

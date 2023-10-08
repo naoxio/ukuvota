@@ -1,5 +1,16 @@
-import { putProcessIntoDatabase, getProcessFromDatabase } from '../database.js';
+import { putProcessIntoDatabase, getProcessFromDatabase } from '../../lib/database.js';
 import crypto from 'crypto';
+
+const updateDates = (dates) => {
+    if (dates === -1) return [-1, -1];
+    let duration = dates[1] - dates[0];
+    duration = Math.max(duration, 60000);
+    if (dates[0] < +new Date()) {
+        dates[0] = +new Date();
+    }
+    dates[1] = dates[0] + duration;
+    return dates;
+}
 
 export default async function(req, res) {
     // Handle GET request
@@ -11,7 +22,8 @@ export default async function(req, res) {
             if (error.message === 'Process not found') {
                 res.status(404).json({ error: 'Process not found.' });
             } else {
-                res.status(500).json({ error: 'An unexpected error occurred.' });
+                console.log(error)
+                res.status(500).json({ error: 'An unexpected error occurred' });
             }
         }
     }
@@ -56,6 +68,7 @@ export default async function(req, res) {
             await putProcessIntoDatabase(process);
             res.json({ id: uuid });
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Failed to save process.' });
         }
     }
@@ -64,15 +77,4 @@ export default async function(req, res) {
     else {
         res.status(405).send('Method not allowed.');
     }
-}
-
-const updateDates = (dates) => {
-    if (dates === -1) return [-1, -1];
-    let duration = dates[1] - dates[0];
-    duration = Math.max(duration, 60000);
-    if (dates[0] < +new Date()) {
-        dates[0] = +new Date();
-    }
-    dates[1] = dates[0] + duration;
-    return dates;
 }

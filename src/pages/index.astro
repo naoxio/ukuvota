@@ -68,6 +68,7 @@ changeLanguage("en");
             <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
             <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
             <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+            <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
         </AlertList>
     </create-process>
 </BaseLayout>
@@ -168,6 +169,8 @@ class CreateProcess extends HTMLElement {
 
         try {
             console.log("About to make the API request");
+            addAlert(this.alertList, this.alerts[4])
+
             const response = await axios.post(`/api/process`, body);
             console.log("API request made. Response:", response);
 

@@ -31,7 +31,7 @@ const { processId } = Astro.props;
 <script>
   import { process } from 'stores/processStore';
   import dropdownOptions from 'composable/proposalTemplates'
-
+  import axios from 'axios'
 
   const addProposal = (template = null) => {
     const $process = process.get();
@@ -51,6 +51,18 @@ const { processId } = Astro.props;
   class AddProposal extends HTMLElement {
     isWrapping = false;
     processId = null;
+
+    async addProposalViaAPI(title = '', description = { ops: [{"insert": ""}]}) {
+      try {
+        await axios.post(`/api/process/${this.processId}/proposals`, {
+          title,
+          description
+        });
+      } catch (error) {
+        console.error('Error adding proposal:', error);
+      }
+    }
+
     checkIsWrapping() {
       this.isWrapping = window.innerWidth <= 767;
       this.updateClassList();
@@ -77,30 +89,18 @@ const { processId } = Astro.props;
       const dropdownItems = this.querySelectorAll('.dropdown-content li a');
 
       if (this.processId) {
-        const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
-        const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
         // Listen for the "Add Proposal" button click event.
         addButton.addEventListener('click', async() => {
-            /*ws.send(JSON.stringify({
-                method: 'addProposal',
-                processId: this.processId
-            }));*/
+          this.addProposalViaAPI();
         });
 
         // Listen for the proposal template click events.
         dropdownItems.forEach(item => {
             item.addEventListener('click', async() => {
-
                 const title = item.querySelector('.title').innerHTML;
-                const description = { ops: [{"insert": item.querySelector('.description').innerHTML}]}
-              
-                /*ws.send(JSON.stringify({
-                    method: 'addProposal',
-                    title,
-                    description,
-                    processId: this.processId
-                }));*/
+                const description = { ops: [{"insert": item.querySelector('.description').innerHTML}]};
+                this.addProposalViaAPI(title, description);
             });
         });
       }

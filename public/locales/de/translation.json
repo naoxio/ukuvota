@@ -23,6 +23,7 @@
   "alert": {
     "success": {
       "createProcess": "Prozess startet...",
+      "creatingProcess": "Prozess wird erstellt...",
       "submitVote": "Wahl eingereicht für: ",
       "repeatProcess": "Wiederhole den Prozess mit der Auswahl...",
       "websocketConnected": "Erfolgreich mit WebSocket verbunden"

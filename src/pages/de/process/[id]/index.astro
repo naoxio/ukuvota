@@ -1,8 +1,8 @@
 ---
 import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "@/templates/ProcessLayout.astro";
-import getProcessUrl from "composable/getProcessUrl";
 import fetchProcess from "composable/fetchProcess";
+import getProcessUrl from "composable/getProcessUrl";
 
 changeLanguage("de");
 
@@ -11,14 +11,14 @@ const processId = Astro.params.id;
 const process = await fetchProcess(processId, url.origin);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect(`${pathname}`);
+    return Astro.redirect(pathname);
 ---
 
 <ProcessLayout process={process}>
-    { +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
+    { process && +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
     <div>
         <h2>{ t('process.proposals') }</h2>
-        <proposal-list  data-proposals={JSON.stringify(process.proposals)}>
+        <proposal-list  data-proposals={process.proposals}>
             <div class="proposals-container"></div>
         </proposal-list>
     </div>
@@ -26,46 +26,44 @@ if (pathname !== url.pathname)
 
 </ProcessLayout>
 
-
-
 <script>
-    import fetchProcess from "composable/fetchProcess";
-    import getQuillHTML from "composable/getQuillHTML";
+import getQuillHTML from "composable/getQuillHTML";
+import fetchProcess from "composable/fetchProcess"
 
-    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+const process = await fetchProcess(processId, window.location.origin);
+const proposalStart = process.proposalDates[0]
+const votingStart = process.votingDates[0]
 
-    const process = await fetchProcess(processId, window.location.origin);
-    
-    const proposalStart = process.proposalDates[0]
-    const votingStart = process.votingDates[0]
 
-    const redirectToPage = (startTime: number, pageName: string) => {
-        if (+new Date() < startTime) {
-            const time = startTime - +new Date();
-            setTimeout(() => {
-                window.location.href = `${location.origin}/process/${processId}/${pageName}`;
-            }, time);
-        }
+const redirectToPage = (startTime: number, pageName: string) => {
+    if (+new Date() < startTime) {
+        const time = startTime - +new Date();
+        setTimeout(() => {
+            window.location.href = `/process/${processId}/${pageName}`;
+        }, time);
     }
-    redirectToPage(proposalStart, 'proposals')
-    redirectToPage(votingStart, 'voting')
+}
+redirectToPage(proposalStart, 'proposals')
+redirectToPage(votingStart, 'voting')
 
-    class ProposalList extends HTMLElement {
-        constructor() {
-            super();
-        }
 
-        connectedCallback() {
-            this.render();
-        }
+class ProposalList extends HTMLElement {
+    constructor() {
+        super();
+    }
 
-        render() {
-            const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
-            const proposalsContainer = this.querySelector(".proposals-container");
-            
-            let proposalsHTML = '';
+    connectedCallback() {
+        this.render();
+    }
 
-            proposals.forEach((proposal: any) => {
+    render() {
+        const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
+        const proposalsContainer = this.querySelector(".proposals-container");
+        
+        let proposalsHTML = '';
+
+        proposals.forEach((proposal: any) => {
             proposalsHTML += `
                 <div>
                 <h3>${proposal.title}</h3>
@@ -73,12 +71,12 @@ if (pathname !== url.pathname)
                 </div>
                 <br/>
             `;
-            });
+        });
 
-            proposalsContainer.innerHTML = proposalsHTML;
-        }
+        proposalsContainer.innerHTML = proposalsHTML;
     }
+}
 
-    customElements.define("proposal-list", ProposalList);
+customElements.define("proposal-list", ProposalList);
 
 </script>

@@ -1,10 +1,11 @@
 ---
 import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "@/templates/ProcessLayout.astro";
-import fetchProcess from "composable/fetchProcess"
-import getProcessUrl from "composable/getProcessUrl"
+import fetchProcess from "composable/fetchProcess";
+import getProcessUrl from "composable/getProcessUrl";
 
 changeLanguage("en");
+
 const { url } = Astro;
 const processId = Astro.params.id;
 const process = await fetchProcess(processId, url.origin);
@@ -58,7 +59,6 @@ class ProposalList extends HTMLElement {
 
     render() {
         const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
-        console.log(proposals)
         const proposalsContainer = this.querySelector(".proposals-container");
         
         let proposalsHTML = '';

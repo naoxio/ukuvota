@@ -17,7 +17,7 @@ const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 const translations = i18next.getResourceBundle(i18next.language, 'translation')
 
 ---
-
+<!DOCTYPE html>
 <html lang={i18next.language} data-theme="light">
   <head>
     <meta charset="utf-8" />
@@ -26,6 +26,8 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
     <meta name="description" content={description} />
     <meta name="keywords" content="ukuvota, voting, democracy, consensus, collaborative" />
     <meta name="author" content="NaoX" />
+    <meta name="generator" content={Astro.generator} />
+
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="manifest" href="/manifest.json">
 

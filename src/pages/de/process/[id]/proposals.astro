@@ -77,12 +77,16 @@ import updateQuill from "composable/updateQuill";
 import Delta from "quill"
 import getQuillHTML from 'composable/getQuillHTML'
 import fetchProcess from "composable/fetchProcess";
+import axios from 'axios';
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('1683114', {
+  cluster: 'ap1'
+});
 
 const processId = window.location.pathname.split('/process/')[1].split('/')[0]
 const process = await fetchProcess(processId, window.location.origin);
 
-const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
-const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
 class ProposalList extends HTMLElement {
     proposal_html = null
@@ -92,6 +96,18 @@ class ProposalList extends HTMLElement {
     
     alertList = this.querySelector('div.alert-list')
     alerts = this.querySelectorAll('alert-element')
+
+    async updateProposalAPI(method, data) {
+        try {
+            const response = await axios.post(`/api/process/${processId}/${method}`, data);
+            if (response.status !== 200) {
+                throw new Error('API call failed');
+            }
+            return response.data;
+        } catch (error) {
+            console.error('Error updating proposal:', error);
+        }
+    }
 
     updateProposalView(proposal: any, title: string, description: Delta ) {
         const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
@@ -111,7 +127,7 @@ class ProposalList extends HTMLElement {
         return inputs[1]
     }
     
-    updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): void {
+    async updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): Promise<void> {
         const { titleInput, descriptionElement } = inputs;
         const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
         const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
@@ -120,23 +136,27 @@ class ProposalList extends HTMLElement {
         const title = titleInput.value;
 
         if (title === '' && isEmptyDescription) {
-            ws.send(JSON.stringify({
-                method: 'removeProposal',
-                proposalId,
-                processId
-            }));
+            try {
+                // Replace with an Axios call to delete the proposal
+                await axios.delete(`/api/process/${processId}/proposals/${proposalId}`);
+            } catch (error) {
+                console.error('Error deleting proposal:', error);
+            }
         } else {
-            ws.send(JSON.stringify({
-                method: 'updateProposal',
-                title,
-                description: descriptionContent,
-                proposalId,
-                processId
-            }));
+            try {
+                // Replace with an Axios call to update the proposal
+                await axios.put(`/api/process/${processId}/proposals/${proposalId}`, {
+                    title,
+                    description: descriptionContent
+                });
+            } catch (error) {
+                console.error('Error updating proposal:', error);
+            }
         }
 
         this.updateProposalView(proposal, title, descriptionContent);
     }
+
     addProposal(data: IProposal, editing: boolean = false): void {
         // Clone proposal HTML element and set its ID to data ID
         const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
@@ -205,72 +225,39 @@ class ProposalList extends HTMLElement {
     constructor() {
         super();
         
-        if (ws.readyState === WebSocket.CONNECTING) {
-            this.currentAlert = addAlert(this.alertList, this.alerts[1], -1)
-        }
-
-        ws.addEventListener('open', () => {
-            if (this.currentAlert) {
-                this.alertList.removeChild(this.currentAlert)
-            }
-            addAlert(this.alertList, this.alerts[0])
-        });
-
-        ws.addEventListener('error', () => {
-            if (this.currentAlert) {
-                this.alertList.removeChild(this.currentAlert)
-            }
-            addAlert(this.alertList, this.alerts[2])
-        });
-
-
         // Find the proposals container and clone a proposal template.
         this.proposals = this.querySelector('div.proposals');
         this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
         this.proposals.innerHTML = "";
-
-        // Listen for WebSocket events.
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-
-            if ('method' in data) {
-                if (data.method === 'addProposal') {
-                    // Add a new proposal.
-                    this.addProposal(data.proposal, data.proposal.title ? false : data.edit);
-                } else if (data.method === 'removeProposal') {
-                    // Remove a proposal.
-                    for (const child of this.proposals.children) {
-                        if (child.id === data.proposalId) {
-                            this.proposals.removeChild(child);
-                            break;
-                        }
-                    }
-                } else if (data.method === 'updateProposal') {
-                    // Update a proposal.
-                    for (const child of this.proposals.children) {
-                        if (child.id === data.proposalId) {
-                            this.updateProposalEdit(child, data.title, data.description);
-                            this.updateProposalView(child, data.title, data.description.getContents());
-                            break;
-                        }
-                    }
-                }
-            }
-        };
-
-        ws.onopen = (event) => {
-            // Set the process ID when the WebSocket connection is opened.
-            ws.send(JSON.stringify({
-                method: 'setProcess',
-                processId
-            }));
-        };
 
         // Add existing proposals to the UI.
         process.proposals.forEach((proposal: any) => {
             this.addProposal(proposal);
         });
 
+        pusher.subscribe(`process-${processId}`).bind('proposal-added', (data) => {
+            this.addProposal(data.proposal, !data.proposal.title);
+        });
+
+        pusher.bind('proposal-removed', (data) => {
+            for (const child of this.proposals.children) {
+                if (child.id === data.proposalId) {
+                    this.proposals.removeChild(child);
+                    break;
+                }
+            }
+        });
+
+
+        pusher.bind('proposal-updated', (data) => {
+            for (const child of this.proposals.children) {
+                if (child.id === data.proposalId) {
+                    this.updateProposalEdit(child, data.title, data.description);
+                    this.updateProposalView(child, data.title, data.description.getContents());
+                    break;
+                }
+            }
+        });
     }
 }
 customElements.define('proposal-list', ProposalList)

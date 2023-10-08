@@ -68,6 +68,7 @@ changeLanguage("de");
             <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
             <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
             <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+            <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
         </AlertList>
     </create-process>
 </BaseLayout>
@@ -78,6 +79,7 @@ import createQuill from "composable/createQuill";
 import addAlert from 'composable/addAlert'
 import updateQuill from 'composable/updateQuill'
 import type IProposal from 'interfaces/IProposal';
+import axios from "axios";
 
 const lang = document.documentElement.getAttribute("lang");
 
@@ -130,6 +132,8 @@ class CreateProcess extends HTMLElement {
 
     // Create process
     createProcess = async() => {
+        console.log("createProcess function called!");
+
         const title = process.get().title.trim();
         if (!title) {
 
@@ -163,31 +167,28 @@ class CreateProcess extends HTMLElement {
             proposals
         }
 
-        if (import.meta.env.DEV) return
-        else {
-            try {
-                const response = await fetch(`${location.origin}/api/process`, {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
+        try {
+            console.log("About to make the API request");
+            addAlert(this.alertList, this.alerts[4])
 
-                if (response.status === 413) {
-                    addAlert(this.alertList, this.alerts[3])
-                    return;
-                }
+            const response = await axios.post(`/api/process`, body);
+            console.log("API request made. Response:", response);
 
-                const processId = (await response.json()).id;
-                process.setKey('title', '');
-                /* @ts-ignore */
-                process.setKey('description', { ops: [] });
-                process.setKey('proposals', []);
-                addAlert(this.alertList, this.alerts[1])
-
-                window.location.href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`;
-            } catch (error) {
-                console.error(error);
+            if (response.status === 413) {
+                addAlert(this.alertList, this.alerts[3])
+                return;
             }
+
+            const processId = response.data.id;
+            process.setKey('title', '');
+            /* @ts-ignore */
+            process.setKey('description', { ops: [] });
+            process.setKey('proposals', []);
+            addAlert(this.alertList, this.alerts[1])
+            const href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`
+            window.location.href = href;
+        } catch (error) {
+            console.error(error);
         }
     }    
 }
