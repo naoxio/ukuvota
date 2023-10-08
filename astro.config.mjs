@@ -8,7 +8,11 @@ import vercel from '@astrojs/vercel/serverless';
 export default defineConfig({
   output: 'server',
   integrations: [astroI18next(), tailwind()],
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   vite: {
     plugins: [
       Icons({

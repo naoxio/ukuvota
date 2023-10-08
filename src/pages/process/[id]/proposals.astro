@@ -78,9 +78,9 @@ import Delta from "quill"
 import getQuillHTML from 'composable/getQuillHTML'
 import fetchProcess from "composable/fetchProcess";
 import axios from 'axios';
-import Pusher from 'pusher-js';
+import Pusher from 'pusher-js/with-encryption';
 
-const pusher = new Pusher('1683114', {
+const pusher = new Pusher('46272ed9caf3d816ce11', {
   cluster: 'ap1'
 });
 
