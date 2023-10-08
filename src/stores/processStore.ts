@@ -1,6 +1,6 @@
 import { persistentMap } from '@nanostores/persistent'
 import { onMount } from 'nanostores'
-import logslider from 'composable/logslider';
+import logslider from 'helpers/logslider';
 import Delta from 'quill'
 
 type Proposal = {

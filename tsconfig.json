@@ -20,6 +20,8 @@
       "assets/*": ["assets/*"],
       "composable/*": ["composable/*"],
       "interfaces/*": ["interfaces/*"],
+      "services/*": ["services/*"],
+      "helpers/*": ["helpers/*"],
       "stores/*": ["stores/*"],
       "@/*": ["components/*"]
     },

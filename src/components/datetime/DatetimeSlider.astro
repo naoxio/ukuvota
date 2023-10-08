@@ -2,7 +2,7 @@
 import { t } from 'i18next'
 import { process } from 'stores/processStore';
 import type { Process } from 'stores/processStore';
-import { fmtDuration } from 'composable/dateHelpers'
+import { fmtDuration } from 'helpers/dateHelpers'
 
 interface Props {
     phase: string
@@ -20,8 +20,8 @@ const { phase } = Astro.props;
 <script>
   import { process } from 'stores/processStore';
   import type { Process } from 'stores/processStore';
-  import { fmtDuration } from 'composable/dateHelpers';
-  import logslider from 'composable/logslider';
+  import { fmtDuration } from 'helpers/dateHelpers';
+  import logslider from 'helpers/logslider';
 
   
   class DatetimeSlider extends HTMLElement {

@@ -1,6 +1,6 @@
 ---
 import { t } from 'i18next';
-import dropdownOptions from 'composable/proposalTemplates'
+import dropdownOptions from 'helpers/proposalTemplates'
 
 interface Props {
     processId?: string
@@ -30,10 +30,10 @@ const { processId } = Astro.props;
 
 <script>
   import { process } from 'stores/processStore';
-  import dropdownOptions from 'composable/proposalTemplates'
-  import axios from 'axios'
+  import dropdownOptions from 'helpers/proposalTemplates'
+  import { addProposal } from 'services/api';
 
-  const addProposal = (template = null) => {
+  const addProposalTemplate = (template = null) => {
     const $process = process.get();
 
     const proposals = JSON.parse(JSON.stringify($process.proposals));
@@ -54,10 +54,7 @@ const { processId } = Astro.props;
 
     async addProposalViaAPI(title = '', description = { ops: [{"insert": ""}]}) {
       try {
-        await axios.post(`/api/process/${this.processId}/proposals`, {
-          title,
-          description
-        });
+        await addProposal(this.processId, { title, description });
       } catch (error) {
         console.error('Error adding proposal:', error);
       }
@@ -105,10 +102,10 @@ const { processId } = Astro.props;
         });
       }
       else {
-        addButton.addEventListener('click', () => addProposal());
+        addButton.addEventListener('click', () => addProposalTemplate());
     
         dropdownItems.forEach((item, index) => {
-          item.addEventListener('click', () => addProposal(index));
+          item.addEventListener('click', () => addProposalTemplate(index));
         });
       }
 

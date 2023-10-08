@@ -14,7 +14,7 @@ const { dates, type } = Astro.props;
 </countdown-view>
 
 <script>
-  import { fmtDuration } from 'composable/dateHelpers'
+  import { fmtDuration } from 'helpers/dateHelpers'
   const timeUnits = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
   
   class Countdown extends HTMLElement {

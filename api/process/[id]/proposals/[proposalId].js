@@ -27,12 +27,13 @@ export default async (req, res) => {
 
             res.status(200).json(proposal);
         } catch (error) {
-            console.log(error, 'inside proposalId')
-            res.status(500).json({ error: 'An unexpected error occurred.' });
+            res.status(500).json({ error: `An unexpected error occurred. ${JSON.stringify(error)}`  });
         }
     } else if (req.method === 'DELETE') {
       try {
             const process = await getProcessFromDatabase(req.query.id);
+            console.log('Fetched Process:', process);
+
             const proposalId = req.query.proposalId;
             console.log(proposalId)
 
@@ -52,8 +53,7 @@ export default async (req, res) => {
 
             res.status(200).json({ message: 'Proposal successfully deleted.' });
       } catch (error) {
-            console.log(error)
-            res.status(500).json({ error: `An unexpected error occurred. ${error}`  });
+            res.status(500).json({ error: `An unexpected error occurred. ${JSON.stringify(error)}`  });
       }
   } else {
       res.status(405).end();  // Method Not Allowed

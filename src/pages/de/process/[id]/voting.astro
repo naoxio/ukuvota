@@ -4,14 +4,14 @@ import ProcessLayout from "@/templates/ProcessLayout.astro";
 import AlertList from "@/ui/AlertList.astro";
 import i18next, { t, changeLanguage } from "i18next";
 import { Icon } from "astro-icon";
-import getProcessUrl from "composable/getProcessUrl";
-import fetchProcess from "composable/fetchProcess";
+import getProcessUrl from "helpers/getProcessUrl";
+import { fetchProcess } from "services/api";
 
 changeLanguage("de");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcess(processId, url.origin);
+const process = await fetchProcess(processId);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -79,12 +79,12 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 <script>
     import type IProposal from 'interfaces/IProposal'
     import addAlert from 'composable/addAlert'
-    import getQuillHTML from "composable/getQuillHTML";
-    import fetchProcess from "composable/fetchProcess";
-    import axios from 'axios';
+    import getQuillHTML from "helpers/getQuillHTML";
+    import { fetchProcess, submitVote, getVoters } from "services/api";
+    import { isProposalEmpty } from "helpers/proposalHelper";
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcess(processId, window.location.origin);
+    const process = await fetchProcess(processId);
 
     class VotingList extends HTMLElement {
         voteCounter = this.querySelector('span.no-voters')
@@ -132,8 +132,8 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 senderName.value = '';
 
                 try {
-                    await axios.post(`${location.origin}/api/process/${processId}/vote`, vote);
-                    const { data: voters } = await axios.get(`${location.origin}/api/process/${processId}/voters`);
+                    await submitVote(processId, vote);  // Using our new method
+                    const voters = await getVoters(processId);  // Using our new method
                     this.voteCounter.innerHTML = voters.length;
                 } catch (error) {
                     console.error('Error submitting vote:', error);
@@ -143,11 +143,12 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             }
         };
         addProposal(proposal: IProposal) {
-            if (proposal.title === '' && proposal.description === '') return
+            if (isProposalEmpty(proposal)) return
             const proposal_node = this.proposal_html.cloneNode(true)
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title
             proposal_node.querySelector('p').innerHTML = getQuillHTML(proposal.description)
+            console.log(proposal.title, proposal.description)
             const buttons = proposal_node.querySelectorAll('button')
             this.addButtonListeners(buttons, proposal_node);
             this.proposal_list.appendChild(proposal_node)

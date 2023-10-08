@@ -79,8 +79,7 @@ import createQuill from "composable/createQuill";
 import addAlert from 'composable/addAlert'
 import updateQuill from 'composable/updateQuill'
 import type IProposal from 'interfaces/IProposal';
-import axios from "axios";
-
+import { createNewProcess } from "services/api"; 
 const lang = document.documentElement.getAttribute("lang");
 
 class CreateProcess extends HTMLElement {
@@ -171,7 +170,7 @@ class CreateProcess extends HTMLElement {
             console.log("About to make the API request");
             addAlert(this.alertList, this.alerts[4])
 
-            const response = await axios.post(`/api/process`, body);
+            const response = await createNewProcess(body);
             console.log("API request made. Response:", response);
 
             if (response.status === 413) {
