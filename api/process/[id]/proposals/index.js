@@ -1,29 +1,32 @@
-import { getProcessFromDatabase, putProcessIntoDatabase } from '../../../../lib/database.js';
-import pusher from '../../../../lib/pusher.js'; 
 import crypto from 'crypto';
+import GUN from 'gun';
+
+const gun = GUN();
 
 export default async (req, res) => {
   if (req.method === 'POST') {
-      try {
-        const process = await getProcessFromDatabase(req.query.id);
+    try {
+        const { title, description } = req.body;
+        const proposalId = crypto.randomUUID();
+        const processId = req.query.id;
+
         const proposal = {
-            id: crypto.randomUUID(),
-            title: req.body.title || '',
-            description: req.body.description || '',
+            id: proposalId,
+            title: title || '',
+            description: description || '',
             createdAt: +new Date(),
         };
 
-        process.proposals.push(proposal);
-        await putProcessIntoDatabase(process);
-
-        // Trigger a pusher event
-        pusher.trigger(`process-${req.query.id}`, 'proposal-added', proposal);
-
-        res.status(200).json(proposal);
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'An unexpected error occurred.' });
-      }
+        gun.get(`process-${processId}`).get('proposals').get(proposalId).put(proposal, ack => {
+            if (ack.err) {
+                res.status(500).json({ error: `An unexpected error occurred. ${ack.err}` });
+                return;
+            }
+            res.status(200).json(proposal);
+        });
+    } catch (error) {
+        res.status(500).json({ error: `An unexpected error occurred. ${JSON.stringify(error)}` });
+    }
   } else {
     res.status(405).end();  // Method Not Allowed
   }

@@ -70,22 +70,22 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-import addAlert from 'composable/addAlert'
 import type IProposal from "interfaces/IProposal"
 import createQuill from "composable/createQuill";
 import updateQuill from "composable/updateQuill";
 import Delta from "quill"
 import getQuillHTML from 'helpers/getQuillHTML'
-import { fetchProcess, updateProposal, deleteProposal } from "services/api";
-import Pusher from 'pusher-js/with-encryption';
-
-const pusher = new Pusher('46272ed9caf3d816ce11', {
-  cluster: 'ap1'
-});
+import GUN from "gun";
 
 const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-const process = await fetchProcess(processId);
 
+const gun = GUN({ peers: ['http://localhost:8765/gun'] });
+const processNode = gun.get(`process-${processId}`);
+
+let process;
+gun.get(`process-${processId}`).on(data => {
+    process = data;
+});
 
 class ProposalList extends HTMLElement {
     proposal_html = null
@@ -96,13 +96,15 @@ class ProposalList extends HTMLElement {
     alertList = this.querySelector('div.alert-list')
     alerts = this.querySelectorAll('alert-element')
 
-    async updateProposalAPI(method, data) {
+    updateProposalAPI(method, data) {
+        const proposalNode = gun.get(`process-${processId}`).get('proposals').get(data.id);
         if (method === "delete") {
-            return await deleteProposal(processId, data.id);
+            proposalNode.put(null);
         } else if (method === "put") {
-            return await updateProposal(processId, data.id, data);
+            proposalNode.put(data);
         }
     }
+
     updateProposalView(proposal: any, title: string, description: Delta ) {
         const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
         view_content.innerHTML = `
@@ -131,13 +133,13 @@ class ProposalList extends HTMLElement {
 
         if (title === '' && isEmptyDescription) {
             try {
-                await this.updateProposalAPI('delete', { id: proposalId });
+                this.updateProposalAPI('delete', { id: proposalId });
             } catch (error) {
                 console.error('Error deleting proposal:', error);
             }
         } else {
             try {
-                await this.updateProposalAPI('put', {
+                this.updateProposalAPI('put', {
                     id: proposalId,
                     title,
                     description: descriptionContent
@@ -151,27 +153,22 @@ class ProposalList extends HTMLElement {
     }
 
     addProposal(data: IProposal, editing: boolean = false): void {
-        // Clone proposal HTML element and set its ID to data ID
         const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
         proposal.id = data.id;
 
-        // Get view and edit element inside proposal element and update view with new proposal data
         const view = proposal.querySelector('div.view') as HTMLElement;
         const edit = proposal.querySelector('div.edit') as HTMLElement;
 
-        // If editing is true, hide view, show edit
         if (editing) {
             view.style.display = 'none';
             edit.style.display = 'flex';
         }
 
-        // Add event listener to view so that it becomes hidden when clicked and edit view becomes visible
         view.addEventListener('click', () => {
             view.style.display = 'none';
             edit.style.display = 'flex';
         });
 
-        // Get input elements within edit content element
         const editContent = edit.querySelector('div') as HTMLElement;
         const titleInput = editContent.querySelector('input') as HTMLInputElement;
         const descriptionElement = editContent.querySelector('.quill') as HTMLElement;
@@ -179,7 +176,7 @@ class ProposalList extends HTMLElement {
         titleInput.value = data.title;
         const proposalId = data.id;
 
-        const descriptionId = `quill-${proposalId}`; // Unique ID for the Quill editor
+        const descriptionId = `quill-${proposalId}`;
         descriptionElement.id = descriptionId;
 
         const saveButtons = Array.from(edit.querySelectorAll('button')) as HTMLButtonElement[];
@@ -228,26 +225,22 @@ class ProposalList extends HTMLElement {
             this.addProposal(proposal);
         });
 
-        pusher.subscribe(`process-${processId}`).bind('proposal-added', (data) => {
-            this.addProposal(data.proposal, !data.proposal.title);
-        });
-
-        pusher.bind('proposal-removed', (data) => {
-            for (const child of this.proposals.children) {
-                if (child.id === data.proposalId) {
-                    this.proposals.removeChild(child);
-                    break;
+      // Listen for changes to the proposals data in GUN
+      processNode.get('proposals').map().on((proposal, proposalId) => {
+            if (proposal) {
+                const existingProposalElement = Array.from(this.proposals.children).find((child: any) => child.id === proposalId);
+                if (existingProposalElement) {
+                    this.updateProposalEdit(existingProposalElement, proposal.title, proposal.description);
+                    this.updateProposalView(existingProposalElement, proposal.title, proposal.description);
+                } else {
+                    this.addProposal({ ...proposal, id: proposalId });
                 }
-            }
-        });
-
-
-        pusher.bind('proposal-updated', (data) => {
-            for (const child of this.proposals.children) {
-                if (child.id === data.proposalId) {
-                    this.updateProposalEdit(child, data.title, data.description);
-                    this.updateProposalView(child, data.title, data.description.getContents());
-                    break;
+            } else {
+                for (const child of this.proposals.children) {
+                    if (child.id === proposalId) {
+                        this.proposals.removeChild(child);
+                        break;
+                    }
                 }
             }
         });

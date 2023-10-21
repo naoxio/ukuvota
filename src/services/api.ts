@@ -1,89 +1,83 @@
-import axios from 'axios';
+import GUN from "gun";
+import type IProcess from 'interfaces/IProcess'
+import type IVoter from 'interfaces/IVoter'
 
-let env;
-let vercelURL;
+const gun = GUN({ peers: ['http://localhost:8765/gun'] });
 
-// Check if process is available and use its values
-if (typeof process !== 'undefined' && process.env) {
-  env = process.env.NODE_ENV;
-  vercelURL = process.env.VERCEL_URL;
-} else {
-  // Default to development environment
-  env = 'development';
-  vercelURL = 'localhost:3000';
-}
-
-const apiClient = axios.create({
-  baseURL: `${env === 'production' ? 'https' : 'http'}://${vercelURL}`
-});
-
-
-export const fetchProcess = async (processId) => {
-  try {
-    const response = await apiClient.get(`/api/process/${processId}`);
-    return response.data.process;
-  } catch (error) {
-    console.error("Error fetching process:", error);
-    return null;
-  }
+export const fetchProcess = async (processId: string): Promise<IProcess> => {
+  return new Promise((resolve) => {
+    gun.get(`process-${processId}`).once((data) => {
+      resolve(data);
+    });
+  });
 };
 
-export const addProposal = async (processId, data) => {
-  try {
-    const response = await apiClient.post(`/api/process/${processId}/proposals`, data);
-    return response.data;
-  } catch (error) {
-    console.error("Error adding proposal:", error);
-    return null;
-  }
+export const addProposal = async (processId: string, data: any) => {
+  return new Promise((resolve) => {
+    const proposalsNode = gun.get(`process-${processId}`).get('proposals');
+    proposalsNode.set(data, (ack: any) => {
+      if (ack.err) {
+        console.error('Error adding proposal:', ack.err);
+        resolve(null);
+      } else {
+        proposalsNode.map().once((proposal) => {
+          resolve(proposal);
+        });
+      }
+    });
+  });
 };
 
-export const updateProposal = async (processId, proposalId, data) => {
-  try {
-    const response = await apiClient.put(`/api/process/${processId}/proposals/${proposalId}`, data);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating proposal:", error);
-    return null;
-  }
+export const updateProposal = async (processId: string, proposalId: string, data: any) => {
+  return new Promise((resolve) => {
+    const proposalNode = gun.get(`process-${processId}`).get('proposals').get(proposalId).put(data);
+    proposalNode.once((updatedProposal) => {
+      resolve(updatedProposal);
+    });
+  });
 };
 
-export const deleteProposal = async (processId, proposalId) => {
-  try {
-    const response = await apiClient.delete(`/api/process/${processId}/proposals/${proposalId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting proposal:", error);
-    return null;
-  }
+export const deleteProposal = async (processId: string, proposalId: string) => {
+  return new Promise((resolve) => {
+    const proposalNode = gun.get(`process-${processId}`).get('proposals').get(proposalId).put(null);
+    proposalNode.once((deletedProposal) => {
+      resolve(deletedProposal);
+    });
+  });
 };
 
-export const createNewProcess = async (body) => {
-  try {
-    const response = await apiClient.post('/api/process', body);
-    return response;
-  } catch (error) {
-    console.error("Error creating process:", error);
-    return null;
-  }
+export const createNewProcess = async (body: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    gun.get('process').set(body, (ack: any) => {
+      if (ack.err) {
+        console.error('Error creating process:', ack.err);
+        reject(ack.err);
+      } else {
+        resolve(body);
+      }
+    });
+  });
 };
 
-export const submitVote = async (processId, vote) => {
-  try {
-    const response = await apiClient.post(`/api/process/${processId}/vote`, vote);
-    return response.data;
-  } catch (error) {
-    console.error('Error submitting vote:', error);
-    return null;
-  }
+export const submitVote = async (processId: string, vote: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    gun.get(`process-${processId}`).get('votes').set(vote, (ack: any) => {
+      if (ack.err) {
+        console.error('Error submitting vote:', ack.err);
+        reject(ack.err);
+      } else {
+        // acknowledge successful write
+        resolve(vote);
+      }
+    });
+  });
 };
 
-export const getVoters = async (processId) => {
-  try {
-    const response = await apiClient.get(`/api/process/${processId}/voters`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching voters:', error);
-    return null;
-  }
+
+export const getVoters = async (processId): Promise<IVoter[]>  => {
+  return new Promise((resolve) => {
+    gun.get(`process-${processId}`).get('voters').once((voters) => {
+      resolve(voters);
+    });
+  });
 };

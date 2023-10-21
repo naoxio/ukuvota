@@ -1,4 +1,5 @@
 ---
+import type IProcess from "interfaces/IProcess";
 import ProcessLayout from "@/templates/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import i18next, { t, changeLanguage } from "i18next";
@@ -11,13 +12,13 @@ changeLanguage("en");
 
 const { url } = Astro;
 const processId = Astro.params.id;
-const process = await fetchProcess(processId);
+const process: IProcess = await fetchProcess(processId);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-if (!("voters" in process)) {
-    process["voters"] = [];
+if (process && !("voters" in process)) {
+    process.voters = [];
 }
 ---
 <style>
@@ -114,16 +115,18 @@ if (!("voters" in process)) {
 
 <script>
     import download from 'downloadjs'
+    import type IProcess from 'interfaces/IProcess'
     import type IProposal from 'interfaces/IProposal'
     import { toPng } from 'html-to-image';
-    import { fetchProcess } from "services/api";    import { process as storeProcess } from 'stores/processStore'
+    import { fetchProcess } from "services/api";   
+    import { process as storeProcess } from 'stores/processStore'
     import addAlert from 'composable/addAlert'
     import getQuillHTML from 'helpers/getQuillHTML'
     const translationsElement = document.getElementById('translations');
     const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcess(processId);
+    const process: IProcess = await fetchProcess(processId);
     
     const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
@@ -164,7 +167,7 @@ if (!("voters" in process)) {
                 if (matchingVote) {
                     let v = matchingVote.vote;
                     if (v < 0)
-                        v *= process.weighting;
+                        v *= Number(process.weighting);
                     return sum + v;
                 }
             
@@ -183,7 +186,7 @@ if (!("voters" in process)) {
         getAverageEmoji(total: number, voters: any) {
             let i = this.getAverageScore(total, voters)
             if (i < 0)
-                i /= process.weighting;
+                i /= Number(process.weighting);
             i = Math.round(i)
             return this.emojis[i + 3];
         };

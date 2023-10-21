@@ -2,30 +2,28 @@
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "allowJs": true,
-
-    // Enable top-level await, and other modern ESM features.
     "target": "ESNext",
     "module": "ESNext",
-    // Enable node-style module resolution, for things like npm package imports.
     "moduleResolution": "node",
-    "baseUrl": "src",
-    // Enable stricter transpilation for better output.
+    "baseUrl": ".",
     "isolatedModules": true,
     "types": [
       "astro/client"
     ],
     "jsx": "preserve",
     "paths": {
-      "content/*": ["content/*"],
-      "assets/*": ["assets/*"],
-      "composable/*": ["composable/*"],
-      "interfaces/*": ["interfaces/*"],
-      "services/*": ["services/*"],
-      "helpers/*": ["helpers/*"],
-      "stores/*": ["stores/*"],
-      "@/*": ["components/*"]
-    },
+      "content/*": ["src/content/*"],
+      "assets/*": ["src/assets/*"],
+      "composable/*": ["src/composable/*"],
+      "interfaces/*": ["src/interfaces/*"],
+      "services/*": ["src/services/*"],
+      "helpers/*": ["src/helpers/*"],
+      "stores/*": ["src/stores/*"],
+      "@/*": ["src/components/*"],
+      "api/*": ["api/*"],
+      "lib/*": ["lib/*"]
+    },    
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "api/**/*", "lib/**/*"],
   "exclude": ["dist"]
 }

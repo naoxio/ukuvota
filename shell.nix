@@ -5,6 +5,7 @@ in
 nixpkgs.mkShell {
   buildInputs = [
     nixpkgs.nodejs_18
+    nixpkgs.flyctl
   ];
 
   shellHook = ''
