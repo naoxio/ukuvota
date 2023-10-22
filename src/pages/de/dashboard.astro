@@ -4,16 +4,15 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
 
-changeLanguage("en");
+changeLanguage("de");
 ---
 
-<BaseLayout title={t('buttons.about')} description={t('description')}>
+<BaseLayout title={t('buttons.dashboard')} description={t('description')}>
     <div class="flex items-center flex-col">
       <img width="128" id="logo" alt="Ukuvota logo" src={logo.src} />
       <h1>Ukuvota</h1>
     </div>
 
-    <ContentDoc file_name="Introduction"/>
 </BaseLayout>
 
 <style>

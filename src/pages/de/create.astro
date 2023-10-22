@@ -1,11 +1,11 @@
 ---
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import ContentDoc from "@/ui/ContentDoc.astro";
+import CreateProcess from "@/process/CreateProcess.astro";
 
 changeLanguage("de");
 ---
 
 <BaseLayout title={t('buttons.home')} description={t('description')}>
-    <ContentDoc file_name="PrivacyPolicy"/>
+    <CreateProcess />
 </BaseLayout>

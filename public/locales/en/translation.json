@@ -45,6 +45,7 @@
   "remainingTime": "remaining time",
   "tagline": "Finding the best solution",
   "buttons": {
+    "dashboard": "dashboard",
     "about": "About",
     "go": "GO",
     "home": "Home",

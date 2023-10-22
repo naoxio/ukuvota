@@ -5,7 +5,7 @@ import Footer from "@/navigation/Footer.astro";
 
 import 'assets/quill.snow.css';
 import "assets/global.css"
-import { localizeUrl } from "astro-i18next";
+import { localizePath } from "astro-i18next";
 
 const supportedLanguages = i18next.languages;
 const {title, description, simpleHeader = false} = Astro.props;
@@ -40,7 +40,7 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
         <link
           rel="alternate"
           hreflang={supportedLanguage}
-          href={localizeUrl(href, supportedLanguage)}
+          href={localizePath(href, supportedLanguage)}
         />
       ))
     }

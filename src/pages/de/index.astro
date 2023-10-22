@@ -1,11 +1,18 @@
 ---
 import { t, changeLanguage } from "i18next";
+import { localizeUrl } from "astro-i18next";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import CreateProcess from "@/process/CreateProcess.astro";
+import { firstVisit } from "stores/userStore";
 
 changeLanguage("de");
+
+if (!firstVisit.get()) {
+    firstVisit.set(false);
+    return Astro.redirect(localizeUrl("/about"));
+}
+else {
+    return Astro.redirect(localizeUrl("/dashboard"));
+}
 ---
 
-<BaseLayout title={t('buttons.home')} description={t('description')}>
-    <CreateProcess />
-</BaseLayout>
+<BaseLayout title={t('buttons.home')} description={t('description')}/>
