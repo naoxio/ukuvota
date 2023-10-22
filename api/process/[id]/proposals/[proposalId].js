@@ -1,4 +1,4 @@
-import { getProcessFromDatabase, putProcessIntoDatabase } from 'lib/database.js';
+import { getProcessFromDatabase, putProcessIntoDatabase } from 'src/lib/database.js';
 import GUN from 'gun';
 
 const gun = GUN();

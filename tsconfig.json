@@ -19,11 +19,10 @@
       "services/*": ["src/services/*"],
       "helpers/*": ["src/helpers/*"],
       "stores/*": ["src/stores/*"],
-      "@/*": ["src/components/*"],
-      "api/*": ["api/*"],
-      "lib/*": ["lib/*"]
+      "lib/*": ["src/lib/*"],
+      "@/*": ["src/components/*"]
     },    
   },
-  "include": ["src/**/*", "api/**/*", "lib/**/*"],
+  "include": ["src/**/*", "api/**/*", "src/lib/**/*"],
   "exclude": ["dist"]
 }

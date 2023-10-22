@@ -6,7 +6,7 @@ const { file_name } = Astro.props;
 
 import i18next from "i18next";
 
-const content = await import(`../content/${i18next.language}/${file_name}.md`);
+const content = await import(`../../content/${i18next.language}/${file_name}.md`);
 ---
 
 <Fragment set:html={content.compiledContent()} />

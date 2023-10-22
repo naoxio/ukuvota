@@ -1,6 +1,6 @@
 // api/process/[id]/vote.js
 import crypto from 'crypto';
-import { getProcessFromDatabase, putProcessIntoDatabase } from '../../../lib/database.js';
+import { getProcessFromDatabase, putProcessIntoDatabase } from '../../../src/lib/database.js';
 
 export default async (req, res) => {
     if (req.method === 'POST') {

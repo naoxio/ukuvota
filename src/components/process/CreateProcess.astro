@@ -1,0 +1,197 @@
+---
+import { t, changeLanguage } from "i18next";
+import Alert from "@/ui/Alert.astro";
+import AlertList from "@/ui/AlertList.astro";
+import WeightSelector from "@/process/WeightSelector.astro";
+import PhaseSelector from "@/process/PhaseSelector.astro";
+import TimeSelector from "@/datetime/TimeSelector.astro";
+import AddProposals from "@/process/AddProposals.astro";
+import EditProposalList from "@/process/EditProposalList.astro";
+---
+
+<create-process>
+  <div id="scrollTopicQuestion" />
+  <div class="pb-6">
+      <p>{ t('process.topic') }</p>
+      <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
+      <br/>
+      <p>{ t('process.description') }</p>
+      <div id="description"/>
+      <br>
+      <WeightSelector />
+      <h2>{ t('process.phases.select') }</h2>
+      <PhaseSelector />
+  </div>
+  <hr/>
+  <div class="py-2">
+      <div class="flex justify-between items-center flex-wrap">
+          <div class="fullOnly">
+              <h1>{t('process.timeLeftHeading')}</h1>
+          </div>
+          <div class="voteOnly">
+              <h1>{t('process.timeLeftVotingHeading')}</h1>
+          </div> 
+      </div>
+      <div class="fullOnly">
+          <TimeSelector phase="proposal"/>
+          <p></p>
+          <hr/>
+      </div>
+      <TimeSelector phase="voting"/>
+  </div>
+  <div class="voteOnly">
+      <hr class="mt-4"/>
+      <h2>{ t('process.proposals') }</h2>    
+      <EditProposalList />
+      <AddProposals />
+  </div>
+  <br/><br/>
+  <div class="text-center">
+      <button id="createProcessButton" type="submit" class="btn btn-primary">
+          { t('create') }
+      </button>
+  </div>
+  <AlertList>
+      <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+      <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+      <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+      <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+      <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
+  </AlertList>
+</create-process>
+
+
+<script>
+  import { process } from 'stores/processStore';
+  import createQuill from "composable/createQuill";
+  import addAlert from 'composable/addAlert';
+  import updateQuill from 'composable/updateQuill';
+  import type IProposal from 'interfaces/IProposal';
+  import { createNewProcess } from "services/api"; 
+  const lang = document.documentElement.getAttribute("lang");
+  
+  class CreateProcess extends HTMLElement {
+      constructor() {
+          super();
+          this.scrollTopicQuestion = this.querySelector('#scrollTopicQuestion');
+          this.alertList = this.querySelector('div.alert-list');
+          this.alerts = this.querySelectorAll('alert-element');
+          this.phases = process.get().phases;
+  
+          this.subscribeToProcessStore();
+          this.initializeUIComponents();
+      }
+  
+      subscribeToProcessStore() {
+          process.subscribe(() => {
+              const currentPhases = JSON.stringify(this.phases);
+              const storePhases = JSON.stringify(process.get().phases);
+              if (currentPhases !== storePhases) {
+                  this.phases = JSON.parse(storePhases);
+                  this.updatePhasesView();
+              }
+          });
+      }
+  
+      initializeUIComponents() {
+          this.updatePhasesView();
+          
+          this.quillDescription = createQuill('#description');
+          this.quillDescription = updateQuill(this.quillDescription, process.get().description);
+          this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()));
+  
+          const title = this.querySelector('#topicQuestion') as HTMLInputElement;
+          title.addEventListener('input', this.handleTitleInput);
+          title.value = process.get().title;
+  
+          this.querySelector('#createProcessButton').addEventListener('click', this.createProcess.bind(this));
+      }
+  
+      handleTitleInput(e) {
+          process.setKey('title', e.target.value);
+      }
+  
+      updatePhasesView() {
+          const isVotingPhase = this.phases === 'voting';
+          this.toggleView('.fullOnly', !isVotingPhase);
+          this.toggleView('.voteOnly', isVotingPhase);
+      }
+  
+      toggleView(selector, show) {
+          const elements = this.querySelectorAll(selector);
+          elements.forEach((element: HTMLElement) => {
+              element.style.display = show ? 'block' : 'none';
+          });
+      }
+  
+      checkProposalValues(proposals) {
+          return proposals.every((proposal: IProposal) => proposal.title && proposal.description);
+      }
+  
+      // Create process
+      async createProcess() {
+          console.log("createProcess function called!");
+  
+          const title = process.get().title.trim();
+          if (!title) {
+  
+              const rect = this.scrollTopicQuestion.getBoundingClientRect();
+              const top = rect.top + window.scrollY - 100;
+              window.scrollTo({ top, behavior: 'smooth' });
+              addAlert(this.alertList, this.alerts[0])
+              return;
+          }
+  
+          let proposals = process.get().phases === 'full' ? [] : JSON.parse( JSON.stringify(process.get().proposals))
+  
+          if (process.get().phases === 'voting') {
+              for (let i = 0; i < proposals.length; i++) {
+                  proposals[i].description = proposals[i].description
+              }
+  
+              if(proposals.length < 2 || !this.checkProposalValues(proposals)) {
+                  addAlert(this.alertList, this.alerts[2])
+                  return
+              }
+          }
+  
+          // Prepare request body
+          const body = {
+              topicQuestion: process.get().title,
+              topicDescription: this.quillDescription.getContents(),
+              proposalDates: process.get().phases === 'full' ? process.get().proposalDates : -1,
+              votingDates: process.get().votingDates,
+              weighting: process.get().weighting,    
+              proposals
+          }
+  
+          try {
+              console.log("About to make the API request");
+              addAlert(this.alertList, this.alerts[4])
+  
+              const response = await createNewProcess(body);
+              console.log("API request made. Response:", response);
+  
+              if (response.status === 413) {
+                  addAlert(this.alertList, this.alerts[3])
+                  return;
+              }
+  
+              const processId = response.data.id;
+              process.setKey('title', '');
+              /* @ts-ignore */
+              process.setKey('description', { ops: [] });
+              process.setKey('proposals', []);
+              console.log(processId)
+              addAlert(this.alertList, this.alerts[1])
+              const href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`
+              window.location.href = href;
+          } catch (error) {
+              console.error(error);
+          }
+      }    
+  }
+  
+  customElements.define('create-process', CreateProcess)
+  </script>
+  

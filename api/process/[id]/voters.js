@@ -1,4 +1,4 @@
-import { getProcessFromDatabase } from '../../../lib/database.js';
+import { getProcessFromDatabase } from '../../../src/lib/database.js';
 
 export default async (req, res) => {
   if (req.method === 'GET') {

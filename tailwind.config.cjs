@@ -10,7 +10,7 @@ module.exports = {
 			{
 				light: {
 					...require("daisyui/src/theming/themes")["[data-theme=business]"],
-					"primary": "indianred",
+					"primary": "#9a2e2a",
 					"secondary": "#DC8D8D",
 					"accent": "#feefc3",
 					"neutral": "#111",
@@ -23,7 +23,7 @@ module.exports = {
 				},
 				dark: {
 					...require("daisyui/src/theming/themes")["[data-theme=business]"],
-					"primary": "indianred",
+					"primary": "#9a2e2a",
 					"secondary": "#DC8D8D",
 					"accent": "#41331c",
 					"neutral": "#eee",

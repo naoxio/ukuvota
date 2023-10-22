@@ -2,7 +2,7 @@ import astroI18next from "astro-i18next";
 import { defineConfig } from 'astro/config';
 import Icons from 'unplugin-icons/vite'
 import tailwind from "@astrojs/tailwind";
-import vercel from '@astrojs/vercel/serverless';
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({

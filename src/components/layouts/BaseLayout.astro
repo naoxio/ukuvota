@@ -1,7 +1,7 @@
 ---
 import i18next from "i18next";
-import Header from "@/nav/Header.astro";
-import Footer from "@/nav/Footer.astro";
+import Header from "@/navigation/Header.astro";
+import Footer from "@/navigation/Footer.astro";
 
 import 'assets/quill.snow.css';
 import "assets/global.css"
@@ -27,8 +27,6 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
     <meta name="keywords" content="ukuvota, voting, democracy, consensus, collaborative" />
     <meta name="author" content="NaoX" />
     <meta name="generator" content={Astro.generator} />
-
-    <link rel="manifest" href="/manifest.json">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/metadata/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/metadata/favicon-32x32.png">
