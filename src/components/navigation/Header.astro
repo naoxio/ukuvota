@@ -1,49 +1,111 @@
 ---
-import Navigation from "@/navigation/Navigation.astro";
 import logo from "assets/logo.png";
-import { t } from "i18next";
+import i18next, { t } from "i18next";
+import { localizePath } from "astro-i18next";
+import ISO6991 from "iso-639-1";
+import { Icon } from 'astro-icon';
+import ThemeSelector from '@/ui/ThemeSelector.astro';
 
-interface Props {
-    simpleHeader?: string
+const supportedLanguages = i18next.languages;
+const currentLanguage = i18next.language;
+const { pathname } = Astro.url;
+
+interface MenuItem {
+  path: string;
+  label: string;
 }
 
-let {simpleHeader} = Astro.props;
-if (!simpleHeader) simpleHeader = "false"
+const menu: MenuItem[] = [
+  { path: '/', label: 'home' },
+  { path: '/donate', label: 'donate' },
+];
+
+function isSelected(item: MenuItem): string {
+  const conditions = [
+    pathname.includes(item.path) && item.path !== '/',
+    item.path === pathname,
+    item.path + currentLanguage === pathname,
+  ];
+
+  return conditions.some(Boolean) ? 'selected' : '';
+}
 ---
 
-<style>
-    .none {
-        display: none;
-    }
-</style>
-
-<uku-header class="text-center" data-header={simpleHeader}>
-    <div id="logo-container" class="pt-12 flex justify-center none">
-        <img id="logo" class="flex justify-center cursor-pointer" alt="Ukuvota logo" width="128px" src={logo.src}>
+<header>
+    <div class="brand">
+        <img id="logo" alt="Ukuvota logo" src={logo.src} />
+        <a href="/"><h1>Ukuvota</h1></a>
     </div>
     
-    <a href="/"><h1>Ukuvota</h1></a>
-    { !simpleHeader && <h2>{ t('tagline') }</h2>}
-    <Navigation/>
-</uku-header>
+    <nav class="flex justify-center items-center">
+      {menu.map(item => (
+        <a class={'btn btn-link ' + isSelected(item)} href={localizePath(item.path)}>
+          {t('buttons.' + item.label)}
+        </a>
+      ))}
+
+      <select class="select select-xs mx-2" onchange="location = this.value">
+        {supportedLanguages.map(lang => (
+          <option 
+            selected={lang === currentLanguage} 
+            value={localizePath(pathname, lang)}>
+            {ISO6991.getNativeName(lang)}
+          </option>
+        ))}
+      </select>
+
+      <ThemeSelector>
+        <Icon class="icon-sun" width="22" name="sun" />
+        <Icon class="icon-moon" width="22" name="moon" />
+      </ThemeSelector>
+    </nav>
+</header>
 
 <script>
-class UkuHeader extends HTMLElement {
-    connectedCallback() {
-        const lang = document.documentElement.getAttribute("lang");
-        const logo_container = this.querySelector('#logo-container');
-        const logo: any = this.querySelector('img#logo');
-
-        logo.addEventListener('click', () => {
-            location.href = lang === 'en' ? '/' : '/' + lang;
-        });
-
-        if (this.dataset.header === 'false') {
-            logo_container.classList.remove('none');
-        }
-    }
-}
-
-customElements.define('uku-header', UkuHeader);
-
+document.getElementById('logo').addEventListener('click', function() {
+    const lang = document.documentElement.getAttribute("lang");
+    location.href = lang === 'en' ? '/' : '/' + lang;
+});
 </script>
+
+<style is:inline>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+    }
+
+    .brand img {
+        margin-right: 10px;
+        cursor: pointer;
+        width: 50px;
+    }
+
+    .brand h1 {
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+    nav {
+        display: flex;
+        gap: 15px;
+    }
+
+    .icon-sun { display: none; }
+    .icon-moon { display: block; }
+
+    :global(.dark) .icon-sun { display: block; }
+    :global(.dark) .icon-moon { display: none; }
+</style>

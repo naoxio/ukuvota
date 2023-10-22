@@ -14,57 +14,27 @@ interface MenuItem {
   path: string
   label: String
 }
+
 const menu: MenuItem[] = [
-  {
-    path: '/',
-    label: 'home',
-  },
-  {
-    path: '/donate',
-    label: 'donate',
-  }
-]
+  { path: '/', label: 'home' },
+  { path: '/donate', label: 'donate' },
+];
 
+function isSelected(item: MenuItem): string {
+  const conditions = [
+    pathname.includes(item.path) && item.path !== '/',
+    item.path === pathname,
+    item.path + currentLanguage === pathname,
+  ];
 
-const selected = (item: MenuItem) => {
-  const pathname = Astro.url.pathname;
-
-  if (pathname.includes(item.path) && item.path !== '/') {
-    return 'selected';
-  }
-  if (item.path === pathname) {
-    return 'selected';
-  }
-  if (item.path + i18next.language === pathname) {
-    return 'selected';
-  }
-
-  return '';
+  return conditions.some(Boolean) ? 'selected' : '';
 }
-
 ---
-<style is:inline>
-  .sun { display: none; }
-  .moon { display: block; }
-
-  :global(.dark) .sun { display: block; }
-  :global(.dark) .moon { display: none; }
-
-  .btn-link {
-    color: inherit;
-  }
-  .btn-link:hover{
-    color: indianred;
-  }
-  .selected {
-    color:indianred !important;
-  }
-</style>
 
 <div class="flex justify-center items-center">
   { menu.map((item) => (
     <>
-      <a class={'btn btn-link ' + selected(item)} href={localizePath(item.path)}>
+    <a class={'btn btn-link ' + isSelected(item)} href={localizePath(item.path)}>
           {t('buttons.' + item.label)}
       </a>
     </>
@@ -94,3 +64,20 @@ const selected = (item: MenuItem) => {
 
 
 
+<style is:inline>
+  .sun { display: none; }
+  .moon { display: block; }
+
+  :global(.dark) .sun { display: block; }
+  :global(.dark) .moon { display: none; }
+
+  .btn-link {
+    color: inherit;
+  }
+  .btn-link:hover{
+    color: indianred;
+  }
+  .selected {
+    color:indianred !important;
+  }
+</style>

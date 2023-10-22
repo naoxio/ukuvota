@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+    --base-100: #ffffff;
+    --base-100-dark: #202124;
     --link-color: #9a2e2a;
     --link-hover-color: #b63838;
     --input-bg-color-light: #f1f3f4;
@@ -22,6 +24,12 @@ body {
     scroll-behavior: smooth;
     font-size: 18px;
     margin: auto;
+}
+header {
+    background-color: var(--base-100);
+}
+.dark header {
+    background-color: var(--base-100-dark);
 }
 
 main {
