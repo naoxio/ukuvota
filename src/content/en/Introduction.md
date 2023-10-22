@@ -1,5 +1,8 @@
-The process consists of two phases: a collection phase and a voting phase. In the collection phase, everyone can add a proposal for the solution to the topic question. This phase is designed to gather as many ideas as possible for the solution.
+Ukuvota: Borrowed from the Zulu word for 'to vote', our web application streamlines the voting process.
 
-After the collection phase, the voting phase begins. In this phase, everyone can vote on each proposal using emojis ranging from -3 to +3. The emojis represent the level of support for each proposal, where -3 is strongly against and +3 is strongly in favor. Negative votes can also be multiplied by a negative weight factor, which you can select when creating the process. This factor allows you to adjust the impact of negative votes to better suit your specific needs.
+It unfolds in two phases:
 
-To get started, simply create a new process and select the topic question, collection phase duration, voting phase duration, and negative weight factor. You and your collaborators will then be able to add proposals and vote on them to arrive at a solution together.
+- Collection: Anyone can submit solution proposals to a given topic. We aim to pool a diverse set of ideas.
+- Voting: Proposals are then voted on using emojis from -3 (strongly against) to +3 (strongly in favor). A selectable negative weight factor can adjust the impact of downvotes, ensuring flexibility for your unique needs.
+
+Kick off by setting up a process, defining the topic, and choosing phase durations. Collaborate, propose, and vote to converge on the best solutions.

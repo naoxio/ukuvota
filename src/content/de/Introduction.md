@@ -1,5 +1,7 @@
-Der Prozess besteht aus zwei Phasen: einer Vorschlagsphase und einer Abstimmungsphase. In der Vorschlagsphase kann jeder einen Vorschlag zur Lösung der Themenfrage hinzufügen. Diese Phase ist darauf ausgelegt, so viele Ideen wie möglich für die Lösung zu sammeln.
+Ukuvota: Entlehnt vom Zulu-Wort für 'abstimmen', vereinfacht unsere Webanwendung den Abstimmungsprozess.
 
-Nach der Vorschlagsphase beginnt die Abstimmungsphase. In dieser Phase kann jeder über jeden Vorschlag mit Emojis von -3 bis +3 abstimmen. Die Emojis repräsentieren das Unterstützungsniveau für jeden Vorschlag, wobei -3 stark dagegen und +3 stark dafür ist. Negative Stimmen können auch mit einem negativen Gewichtungsfaktor multipliziert werden, den Sie bei der Erstellung des Prozesses auswählen können. Dieser Faktor ermöglicht es Ihnen, den Einfluss negativer Stimmen an Ihre spezifischen Bedürfnisse anzupassen.
+Er gliedert sich in zwei Phasen:
 
-Um loszulegen, erstellen Sie einfach einen neuen Prozess und wählen Sie die Themenfrage, die Dauer der Vorschlagsphase, die Dauer der Abstimmungsphase und den negativen Gewichtungsfaktor aus. Sie und Ihre Mitwirkenden können dann Vorschläge hinzufügen und darüber abstimmen, um gemeinsam eine Lösung zu finden.
+Sammlung: Jeder kann Lösungsvorschläge zu einem gegebenen Thema einreichen. Wir zielen darauf ab, eine vielfältige Auswahl an Ideen zu sammeln.
+Abstimmung: Anschließend wird über die Vorschläge mit Emojis von -3 (stark dagegen) bis +3 (stark dafür) abgestimmt. Ein wählbarer Negativgewichtungsfaktor kann die Auswirkung von Negativstimmen anpassen und bietet Flexibilität für Ihre speziellen Anforderungen.
+Beginnen Sie, indem Sie einen Prozess einrichten, das Thema festlegen und die Dauer der Phasen auswählen. Arbeiten Sie zusammen, machen Sie Vorschläge und stimmen Sie ab, um die besten Lösungen zu finden.

@@ -1,4 +1,6 @@
 {
+  "policy": "Privacy Policy",
+  "donate": "Donate",
   "showMore": "Show more",
   "showLess": "Show less",
   "addProposalTemplate": "Add proposal by template",
@@ -47,7 +49,6 @@
     "go": "GO",
     "home": "Home",
     "quick": "Quick",
-    "donate": "Donate",
     "toggle_dark": "Toggle dark mode",
     "toggle_langs": "Change languages",
     "start_quick": "Start quick process",

@@ -1,4 +1,6 @@
 {
+  "policy": "Datenschutzerklärung",
+  "donate": "Spenden",
   "showMore": "Zeige mehr",
   "showLess": "Zeige weniger",
   "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
@@ -47,7 +49,6 @@
     "go": "Los",
     "home": "Startseite",
     "quick": "Schnell",
-    "donate": "Spenden",
     "toggle_dark": "Dunkelmodus umschalten",
     "toggle_langs": "Sprachen ändern",
     "start_quick": "Starten Sie den schnellen Prozess",
