@@ -12,5 +12,6 @@ Mit freundlichen Grüßen,
 
 Das Ukuvota-Team
 
-Alle Spendenmöglichkeiten können hier eingesehen werden: 
- - [Entwickler-Spendenlinks](https://waotzi.org/donate)
+Spenden werden von unserer Mutterorganisation NaoX verwaltet.
+ - [Coindrop](https://coindrop.to/naox)
+ - [Liberapay](https://liberapay.com/NaoX/)
