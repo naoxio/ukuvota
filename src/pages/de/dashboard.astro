@@ -1,19 +1,53 @@
 ---
-import logo from "assets/logo.png";
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import ContentDoc from "@/ui/ContentDoc.astro";
+import BaseLayout from "layouts/BaseLayout.astro";
+import ProcessInfo from "@/process/ProcessInfo.astro";
+import { processes } from "stores/userStore";
+import { localizePath } from "astro-i18next";
 
 changeLanguage("de");
+
+const allProcesses = processes.get();
 ---
 
 <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
-    <div class="flex items-center flex-col">
-      <img width="128" id="logo" alt="Ukuvota logo" src={logo.src} />
-      <h1>Ukuvota</h1>
+  {allProcesses.length > 0 ? (
+    allProcesses.map(uuid => (
+      // Assuming ProcessInfo can handle just UUID, adjust as necessary
+      <ProcessInfo uuid={uuid} />
+    ))
+  ) : (
+    <div>
+      <div class="flex justify-center items-center flex-col">
+        <p>No processes found.</p>
+        <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup New Process</a>
+        <p>&nbsp;or&nbsp;</p>
+        <div class="flex ">
+          <input type="text" class="p-2" placeholder="Enter UUID" id="processUUID" />
+          <button class="btn p-2 btn-primary" id="addProcessButton">Add Process</button>
+        </div>
+      </div>
+
     </div>
 
+  )}
 </BaseLayout>
 
-<style>
-</style>
+<script>
+import { processes } from 'stores/userStore';
+
+function addProcessWithUUID(): void {
+    const uuidInput = document.getElementById("processUUID") as HTMLInputElement;
+    const uuid = uuidInput.value;
+
+    processes.update(currentUUIDs => {
+        if (currentUUIDs.includes(uuid)) return currentUUIDs; // Avoid adding duplicates
+        return [...currentUUIDs, uuid];
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById("addProcessButton");
+    addButton.addEventListener("click", addProcessWithUUID);
+});
+</script>

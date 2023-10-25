@@ -1,18 +1,18 @@
 ---
 import { t, changeLanguage } from "i18next";
-import { localizeUrl } from "astro-i18next";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import { localizePath } from "astro-i18next";
+import BaseLayout from "layouts/BaseLayout.astro";
 import { firstVisit } from "stores/userStore";
 
 changeLanguage("de");
 
+let url = localizePath("/dashboard");
 if (!firstVisit.get()) {
     firstVisit.set(false);
-    return Astro.redirect(localizeUrl("/about"));
+    url = localizePath("/about");
 }
-else {
-    return Astro.redirect(localizeUrl("/dashboard"));
-}
+console.log(url);
+return Astro.redirect(url);
 ---
 
 <BaseLayout title={t('buttons.home')} description={t('description')}/>

@@ -1,0 +1,20 @@
+
+---
+import { t, changeLanguage } from "i18next";
+import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
+
+changeLanguage("de");
+---
+
+<CreateProcessLayout displayNav={false} step={2} title={t('buttons.home')} description={t('description')}>
+  <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
+
+  <div class="text-center">
+    <button id="createProcessButton" type="submit" class="btn btn-primary">
+      { t('create') }
+    </button>
+  </div>
+</CreateProcessLayout>
+
+<script>
+</script>  

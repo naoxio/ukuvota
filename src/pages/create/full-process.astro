@@ -7,12 +7,10 @@ changeLanguage("en");
 ---
 
 <CreateProcessLayout step={3} title={t('buttons.home')} description={t('description')}>
-  <h2>{t('process.timeLeftHeading')}</h2>
+  <h2 class="flex justify-center mt-4">{t('process.timeLeftHeading')}</h2>
+
   <br/>
-  <TimeSelector phase="proposal"/>
-  <p></p>
-  <hr/>
-  
+  <TimeSelector phase="proposal"/>  
 </CreateProcessLayout>
 
 <script>

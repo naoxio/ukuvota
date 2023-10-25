@@ -1,20 +1,17 @@
 ---
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
-import PhaseSelector from "@/process/PhaseSelector.astro";
-import AddProposals from "@/process/AddProposals.astro";
-import EditProposalList from "@/process/EditProposalList.astro";
 
-changeLanguage("en");
+changeLanguage("de");
 ---
 
-<CreateProcessLayout step={3} title={t('buttons.home')} description={t('description')}>
-  <h2 class="flex justify-center mt-4">{t('process.timeLeftVotingHeading')}</h2>
+<CreateProcessLayout displayNav={false} step={2} title={t('buttons.home')} description={t('description')}>
+  <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
   <br/>
-  <TimeSelector phase="voting"/>
-  <h2>{ t('process.proposals') }</h2>    
-  <EditProposalList />
-  <AddProposals />
+  <div class="flex justify-around">
+    <a href="/create/full-process" class="btn btn-primary p-4">{ t('process.phases.full') }</a>
+    <a href="/create/voting-only" class="btn btn-primary p-4">{ t('process.phases.voting') }</a>
+  </div>
 </CreateProcessLayout>
 
 <script>

@@ -1,11 +1,12 @@
 ---
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "layouts/BaseLayout.astro";
-import ProcessInfo from '@/process/ProcessInfo.astro';
-import { processes } from 'stores/userStore';
+import ProcessInfo from "@/process/ProcessInfo.astro";
+import { processes } from "stores/userStore";
 import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
+
 const allProcesses = processes.get();
 ---
 
