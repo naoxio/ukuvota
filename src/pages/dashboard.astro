@@ -1,6 +1,6 @@
 ---
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import BaseLayout from "layouts/BaseLayout.astro";
 import ProcessInfo from '@/process/ProcessInfo.astro';
 import { processes } from 'stores/userStore';
 import { localizePath } from "astro-i18next";
@@ -17,8 +17,8 @@ const allProcesses = processes.get();
     ))
   ) : (
     <div>
-      <p>No processes found.</p>
       <div class="flex justify-center items-center flex-col">
+        <p>No processes found.</p>
         <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup New Process</a>
         <p>&nbsp;or&nbsp;</p>
         <div class="flex ">

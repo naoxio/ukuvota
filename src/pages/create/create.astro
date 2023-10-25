@@ -2,7 +2,7 @@
 import { t, changeLanguage } from "i18next";
 import Alert from "@/ui/Alert.astro";
 import AlertList from "@/ui/AlertList.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import BaseLayout from "layouts/BaseLayout.astro";
 import WeightSelector from "@/process/WeightSelector.astro";
 import PhaseSelector from "@/process/PhaseSelector.astro";
 import TimeSelector from "@/datetime/TimeSelector.astro";
@@ -13,60 +13,42 @@ changeLanguage("en");
 ---
 
 <BaseLayout title={t('buttons.home')} description={t('description')}>
-  <create-process>
-    <h1>Setup Process</h1>
-    <div id="scrollTopicQuestion" />
-    <div class="pb-6">
-      <p>{ t('process.topic') }</p>
-      <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
-      <br/>
-      <p>{ t('process.description') }</p>
-      <div id="description"/>
-      <br>
-      <WeightSelector />
-      <h2>{ t('process.phases.select') }</h2>
-      <br/>
-      <PhaseSelector />
-    </div>
-    <br/>
-    <hr/>
-    <br/>
-    <div class="py-2">
-      <div class="flex justify-between items-center flex-wrap">
-        <div class="fullOnly">
-          <h2>{t('process.timeLeftHeading')}</h2>
-        </div>
-        <div class="voteOnly">
-          <h2>{t('process.timeLeftVotingHeading')}</h2>
-        </div> 
-      </div>
+  
+  <div class="py-2">
+    <div class="flex justify-between items-center flex-wrap">
       <div class="fullOnly">
-        <TimeSelector phase="proposal"/>
-        <p></p>
-        <hr/>
+        <h2>{t('process.timeLeftHeading')}</h2>
       </div>
-      <TimeSelector phase="voting"/>
+      <div class="voteOnly">
+        <h2>{t('process.timeLeftVotingHeading')}</h2>
+      </div> 
     </div>
-    <div class="voteOnly">
-      <hr class="mt-4"/>
-      <h2>{ t('process.proposals') }</h2>    
-      <EditProposalList />
-      <AddProposals />
+    <div class="fullOnly">
+      <TimeSelector phase="proposal"/>
+      <p></p>
+      <hr/>
     </div>
-    <br/><br/>
-    <div class="text-center">
-      <button id="createProcessButton" type="submit" class="btn btn-primary">
-        { t('create') }
-      </button>
-    </div>
-    <AlertList>
-      <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
-      <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
-      <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
-      <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
-      <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
-    </AlertList>
-  </create-process>
+    <TimeSelector phase="voting"/>
+  </div>
+  <div class="voteOnly">
+    <hr class="mt-4"/>
+    <h2>{ t('process.proposals') }</h2>    
+    <EditProposalList />
+    <AddProposals />
+  </div>
+  <br/><br/>
+  <div class="text-center">
+    <button id="createProcessButton" type="submit" class="btn btn-primary">
+      { t('create') }
+    </button>
+  </div>
+  <AlertList>
+    <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
+    <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
+    <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
+    <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
+    <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
+  </AlertList>
 </BaseLayout>
 
     
@@ -110,11 +92,7 @@ changeLanguage("en");
 
     initializeUIComponents() {
       this.updatePhasesView();
-      
-      this.quillDescription = createQuill('#description');
-      this.quillDescription = updateQuill(this.quillDescription, process.get().description);
-      this.quillDescription.on('text-change', () => process.setKey('description', this.quillDescription.getContents()));
-
+    
       const title = this.querySelector('#topicQuestion') as HTMLInputElement;
       title.addEventListener('input', this.handleTitleInput);
       title.value = process.get().title;

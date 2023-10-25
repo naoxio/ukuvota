@@ -11,6 +11,7 @@ type Proposal = {
 export type Process = {
     title: string
     description: Delta
+    resistance: boolean
     weighting: string
     phases: 'full' | 'voting'
     proposalDates: number[]
@@ -38,8 +39,9 @@ export const process = persistentMap<Process>('process:', {
     title: '',
     /* @ts-ignore */
     description: {},
-    weighting: '3',
+    weighting: '1',
     phases: 'full',
+    resistance: false,
     proposalDuration: defaultDuration,
     proposalOpen: 0,
     proposalLogSlider: defaultSliderValue,

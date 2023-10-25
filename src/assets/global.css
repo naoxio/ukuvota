@@ -183,3 +183,24 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     filter: invert(0);
 }
+
+.bg-indianred {
+    background-color: var(--link-color);
+}
+
+.bg-indianred:hover {
+    background-color: var(--link-hover-color);
+}
+
+.text-indianared {
+    color: var(--link-color);
+}
+.text-indianred:hover {
+    background-color: var(--link-hover-color);
+}
+
+.disabled-select {
+    background-color: #E5E7EB; /* Gray from Tailwind's palette */
+    pointer-events: none;
+    cursor: not-allowed;
+}

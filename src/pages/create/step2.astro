@@ -1,0 +1,28 @@
+---
+import { t, changeLanguage } from "i18next";
+import Alert from "@/ui/Alert.astro";
+import AlertList from "@/ui/AlertList.astro";
+import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
+import PhaseSelector from "@/process/PhaseSelector.astro";
+import TimeSelector from "@/datetime/TimeSelector.astro";
+import AddProposals from "@/process/AddProposals.astro";
+import EditProposalList from "@/process/EditProposalList.astro";
+
+changeLanguage("en");
+---
+
+<CreateProcessLayout step={2} title={t('buttons.home')} description={t('description')}>
+    <h2>{ t('process.phases.select') }</h2>
+    <br/>
+    <PhaseSelector />
+</CreateProcessLayout>
+
+<script>
+  import { process } from 'stores/processStore';
+  import { createQuill, updateQuill } from "composable/quillUtils";
+
+  let description = createQuill('#description');
+  description = updateQuill(description, process.get().description);
+  description.on('text-change', () => process.setKey('description', description.getContents()));
+
+</script>

@@ -5,16 +5,15 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
+    "strict": true,
     "baseUrl": ".",
     "isolatedModules": true,
-    "types": [
-      "astro/client"
-    ],
     "jsx": "preserve",
     "paths": {
       "content/*": ["src/content/*"],
       "assets/*": ["src/assets/*"],
       "composable/*": ["src/composable/*"],
+      "layouts/*": ["src/layouts/*"],
       "interfaces/*": ["src/interfaces/*"],
       "services/*": ["src/services/*"],
       "helpers/*": ["src/helpers/*"],
