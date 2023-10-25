@@ -3,6 +3,7 @@ import logo from "assets/logo.png";
 import { t, changeLanguage } from "i18next";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
+import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
 ---
@@ -14,6 +15,9 @@ changeLanguage("en");
     </div>
 
     <ContentDoc file_name="Introduction"/>
+    <div class="flex justify-center">
+      <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup Process</a>
+    </div>
 </BaseLayout>
 
 <style>
