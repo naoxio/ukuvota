@@ -1,3 +1,4 @@
+/* @ts-ignore */
 import Quill, { Delta } from 'quill';
 
 const toolbarOptions = [

@@ -1,0 +1,30 @@
+---
+import { t, changeLanguage } from "i18next";
+import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
+import TimeSelector from "@/datetime/TimeSelector.astro";
+
+changeLanguage("en");
+---
+
+<CreateProcessLayout step={3} title={t('buttons.home')} description={t('description')}>
+  <h2>{t('process.timeLeftHeading')}</h2>
+  <br/>
+  <TimeSelector phase="proposal"/>
+  <p></p>
+  <hr/>
+  
+</CreateProcessLayout>
+
+<script>
+  import { process } from 'stores/processStore';
+  const $process = process.get();
+
+  const fullPhase = document.getElementById('full-phase') as HTMLInputElement;
+  fullPhase.addEventListener('click', () => process.setKey('phases', 'full'));
+  fullPhase.checked = $process.phases === 'full';
+  
+  const votingPhase = document.getElementById('voting-phase') as HTMLInputElement;
+  votingPhase.addEventListener('click', () => process.setKey('phases', 'voting'));
+  votingPhase.checked = $process.phases === 'voting';
+
+</script>  

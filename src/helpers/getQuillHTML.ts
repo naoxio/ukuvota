@@ -1,6 +1,5 @@
 import Delta from 'quill';
-import createQuill from '../composable/createQuill';
-import updateQuill from '../composable/updateQuill';
+import {createQuill, updateQuill} from 'composable/quillUtils';
 import DOMPurify from 'dompurify';
 
 export default function getQuillHTML(content: string | Delta): string {

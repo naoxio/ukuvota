@@ -1,0 +1,29 @@
+---
+import { t, changeLanguage } from "i18next";
+import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
+
+changeLanguage("en");
+---
+
+<CreateProcessLayout displayNav={false} step={2} title={t('buttons.home')} description={t('description')}>
+  <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
+  <br/>
+  <div class="flex justify-around">
+    <a href="/create/full-process" class="btn btn-primary p-4">{ t('process.phases.full') }</a>
+    <a href="/create/voting-only" class="btn btn-primary p-4">{ t('process.phases.voting') }</a>
+  </div>
+</CreateProcessLayout>
+
+<script>
+  import { process } from 'stores/processStore';
+  const $process = process.get();
+
+  const fullPhase = document.getElementById('full-phase') as HTMLInputElement;
+  fullPhase.addEventListener('click', () => process.setKey('phases', 'full'));
+  fullPhase.checked = $process.phases === 'full';
+  
+  const votingPhase = document.getElementById('voting-phase') as HTMLInputElement;
+  votingPhase.addEventListener('click', () => process.setKey('phases', 'voting'));
+  votingPhase.checked = $process.phases === 'voting';
+
+</script>  
