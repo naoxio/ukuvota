@@ -1,46 +1,40 @@
 ---
-import axios from 'axios';
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
 import weightingOptions from "helpers/weightingOptions";
 import Modal from "@/ui/Modal.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
+import { parseCookie } from 'helpers/cookieHelpers'
 
 changeLanguage("en");
 
-const VERCEL_URL = import.meta.env.VERCEL_URL;
 
-
-const response = await axios.get(`http://${VERCEL_URL}/api/get-store`);
-const processData = response.data;
-console.log(response)
-const { resistance = false, weighting = '', title = '', description = '' } = processData;
+const cookieHeader = Astro.request.headers.get('cookie');
+const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
+const { weighting = '', title = '', description = '' } = parsedCookies;
 ---
 
 <CreateProcessLayout step={1} title={t('buttons.home')} description={t('description')}>
-  <form action={`http://${VERCEL_URL}/api/update-store`} method="POST">
+  <form action='/api/process-store' method="POST">
+    <input type="hidden" name="step" value="1" />
     <div id="scrollTopicQuestion" />
     <p>{ t('process.topic') }</p>
-    <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text" value={title}/>
+    <input 
+      id="topicQuestion" 
+      name="topicQuestion" 
+      class="input input-bordered w-full" 
+      type="text" 
+      value={title} 
+      required 
+      title={t('alert.error.topicQuestion')}
+    />
     <br/>
     <p>{ t('process.description') }</p>
     <div id="description" />
     <textarea id="nojsdescription" name="description" class="textarea textarea-bordered w-full">{description}</textarea>
+
     <details class="text-center">
-      <summary class="cursor-pointer text-indianared mt-6 ">Show advanced options</summary>
-      <div class="flex justify-center flex-col mt-2 space-x-4">
-        <div class="flex justify-center items-center">
-          <h4>Only measure resistance</h4>
-          <label class="switch ml-2">
-              <input 
-                id="resistanceCheckbox" 
-                name="resistance" 
-                type="checkbox" 
-                checked={resistance} 
-              />
-              <span class="slider"></span>
-          </label>
-        </div>
+      <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary>
         <div class="flex justify-center items-center">
           <span>{ t('process.weighting') }</span>
           <span class="flex justify-center items-center">
@@ -72,6 +66,11 @@ const { resistance = false, weighting = '', title = '', description = '' } = pro
   import { createQuill, updateQuill } from "composable/quillUtils";
   const temp_des = document.getElementById('nojsdescription') as HTMLElement;
   temp_des.style.display = 'none';
-  createQuill('#description');
+  const quillEditor = createQuill('#description');
+
+  quillEditor.on('text-change', () => {
+      const quillContent = document.getElementById('nojsdescription') as HTMLTextAreaElement;
+      quillContent.value = quillEditor.root.innerHTML;
+  });
 
 </script>

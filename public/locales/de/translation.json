@@ -83,6 +83,7 @@
     "voters": "Wählende",
     "voter": "Wählende",
     "exportData": "Daten exportieren",
+    "advancedOptions": "Erweiterte Optionen anzeigen",
     "phases": {
       "select": "Phasen auswählen",
       "full": "Vorschlags- und Abstimmungsphase",

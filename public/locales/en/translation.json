@@ -83,6 +83,7 @@
     "voters": "Voters",
     "voter": "Voter",
     "exportData": "Export Data",
+    "advancedOptions": "Show Advanced Options",
     "phases": {
       "select": "Select phases",
       "full": "Proposal + Voting Phase",
