@@ -201,6 +201,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background-color: var(--link-hover-color);
 }
 
+.bg-lightred {
+    background-color: var(--link-hover-color);
+}
+.bg-lightred:hover {
+    background-color: var(--link-color);
+}
+
 .disabled-select {
     background-color: #E5E7EB; /* Gray from Tailwind's palette */
     pointer-events: none;

@@ -8,7 +8,6 @@ import { parseCookie } from 'helpers/cookieHelpers'
 
 changeLanguage("en");
 
-
 const cookieHeader = Astro.request.headers.get('cookie');
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
 const { weighting = '', title = '', description = '' } = parsedCookies;

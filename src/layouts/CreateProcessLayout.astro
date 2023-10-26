@@ -2,10 +2,8 @@
 import BaseLayout from 'layouts/BaseLayout.astro'
 import Alert from "@/ui/Alert.astro";
 import AlertList from "@/ui/AlertList.astro";
+import { parseCookie } from 'helpers/cookieHelpers'
 import { t } from "i18next";
-import { process } from 'stores/processStore';
-
-const $process = process.get();
 
 interface Props {
     title: string,
@@ -13,35 +11,34 @@ interface Props {
     step: number,
 }
 
-const { title, description, step} = Astro.props;
-console.log($process.phases)
+const { title, description, step } = Astro.props;
+
+const cookieHeader = Astro.request.headers.get('cookie');
+const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
+const { phases = '' } = parsedCookies;
+
+// Define the steps and their respective links outside the template.
+const steps = [
+  { stepNumber: 1, href: "/create" },
+  { stepNumber: 2, href: "/create/phases" },
+  { stepNumber: 3, href: phases === 'full' ? "/create/full-process" : "/create/voting-only" },
+  { stepNumber: 4, href: "/create/review" }
+];
 ---
 
 <BaseLayout title={title} description={description}>
   <h1>Setup Process</h1>
 
-  <!-- Step Indicator -->
   <div class="flex justify-center space-x-2">
-    <!-- Step 1 -->
-    <a href="/create">
-      <div class={`w-4 h-4 rounded-full ${step === 1 ? 'bg-indianred' : 'bg-gray-300'}`}></div>
-    </a>
-  
-    <!-- Step 2 -->
-    <a href="/create/phases">
-      <div class={`w-4 h-4 rounded-full ${step === 2 ? 'bg-indianred' : 'bg-gray-300'}`}></div>
-    </a>
-  
-    <!-- Step 3 -->
-    <a href={$process.phases === 'full' ? "/create/full-process" : "/create/voting-only"}>
-      <div class={`w-4 h-4 rounded-full ${step === 3 ? 'bg-indianred' : 'bg-gray-300'}`}></div>
-    </a>
-  
-    <!-- Step 4 -->
-    <a href="/create/review">
-      <div class={`w-4 h-4 rounded-full ${step === 4 ? 'bg-indianred' : 'bg-gray-300'}`}></div>
-    </a>
-  
+    {steps.map(({ stepNumber, href }) => (
+      <a href={href}>
+        <div class={`w-4 h-4 rounded-full ${
+          step === stepNumber ? 'bg-indianred' : 
+          step > stepNumber ? 'bg-lightred' : 
+          'bg-gray-300'
+        }`}></div>
+      </a>
+    ))}
   </div>
   <slot/>
 
