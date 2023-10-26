@@ -40,14 +40,14 @@ function addProcessWithUUID(): void {
     const uuidInput = document.getElementById("processUUID") as HTMLInputElement;
     const uuid = uuidInput.value;
 
-    processes.update(currentUUIDs => {
+    processes.update((currentUUIDs: any) => {
         if (currentUUIDs.includes(uuid)) return currentUUIDs; // Avoid adding duplicates
         return [...currentUUIDs, uuid];
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const addButton = document.getElementById("addProcessButton");
+    const addButton = document.getElementById("addProcessButton") as HTMLButtonElement;
     addButton.addEventListener("click", addProcessWithUUID);
 });
 </script>

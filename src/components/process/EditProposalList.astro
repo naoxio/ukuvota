@@ -1,25 +1,24 @@
 <proposal-list class="flex flex-col justify-around align-center items-center"/>
    
 <script>
-  import createQuill from "composable/createQuill";
-  import updateQuill from 'composable/updateQuill'
+  import {createQuill, updateQuill} from "composable/quillUtils";
   import { process } from 'stores/processStore';
   import { Quill } from 'quill'
 
-  const translationsElement = document.getElementById('translations');
+  const translationsElement = document.getElementById('translations') as HTMLElement;
   const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
   class ProposalList extends HTMLElement {
     proposals = [];
     updateProposalDescription(i: number, quill: Quill) {
-      const proposal = this.proposals[i];
+      const proposal: any = this.proposals[i];
       proposal.description = quill.getContents();
       
       process.setKey("proposals", this.proposals);
     }
 
     updateProposal(ev: any, i: number) {
-      const proposal = this.proposals[i];
+      const proposal: any = this.proposals[i];
       proposal.title = ev.target.value;
 
       process.setKey("proposals", this.proposals);
