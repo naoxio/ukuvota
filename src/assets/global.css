@@ -87,18 +87,18 @@ li {
 /* quill */
 
 
-.dark .input, .dark .dp__input, .dark .ql-editor {
+.dark .input, .dark .dp__input, .dark .ql-editor, .dark .textarea {
     background-color: var(--input-bg-color-dark);
     color: #fff;
 }
 
-.input, .dp__input, .ql-editor {
+.input, .dp__input, .ql-editor, .textarea {
     border: none;
     border-radius: 8px;
     background-color: var(--input-bg-color-light);
 }
 
-.input:focus, .dp__input:focus, .ql-editor:focus {
+.input:focus, .dp__input:focus, .ql-editor:focus, .textarea:focus {
     border: none;
     outline: none;
     background-color: #fff;

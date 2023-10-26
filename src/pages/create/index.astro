@@ -1,4 +1,5 @@
 ---
+import axios from 'axios';
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
 import weightingOptions from "helpers/weightingOptions";
@@ -6,31 +7,44 @@ import Modal from "@/ui/Modal.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
 
 changeLanguage("en");
+
+const VERCEL_URL = import.meta.env.VERCEL_URL;
+
+
+const response = await axios.get(`http://${VERCEL_URL}/api/get-store`);
+const processData = response.data;
+console.log(response)
+const { resistance = false, weighting = '', title = '', description = '' } = processData;
 ---
 
 <CreateProcessLayout step={1} title={t('buttons.home')} description={t('description')}>
-  <div id="scrollTopicQuestion" />
-  <p>{ t('process.topic') }</p>
-  <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
-  <br/>
-  <p>{ t('process.description') }</p>
-  <div id="description"/>
-
-  <details class="text-center">
-    <summary class="cursor-pointer text-indianared mt-6 ">Show advanced options</summary>
-
+  <form action={`http://${VERCEL_URL}/api/update-store`} method="POST">
+    <div id="scrollTopicQuestion" />
+    <p>{ t('process.topic') }</p>
+    <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text" value={title}/>
+    <br/>
+    <p>{ t('process.description') }</p>
+    <div id="description" />
+    <textarea id="nojsdescription" name="description" class="textarea textarea-bordered w-full">{description}</textarea>
+    <details class="text-center">
+      <summary class="cursor-pointer text-indianared mt-6 ">Show advanced options</summary>
       <div class="flex justify-center flex-col mt-2 space-x-4">
         <div class="flex justify-center items-center">
           <h4>Only measure resistance</h4>
           <label class="switch ml-2">
-            <input id="resistanceCheckbox" type="checkbox">
-            <span class="slider"></span>
+              <input 
+                id="resistanceCheckbox" 
+                name="resistance" 
+                type="checkbox" 
+                checked={resistance} 
+              />
+              <span class="slider"></span>
           </label>
         </div>
         <div class="flex justify-center items-center">
           <span>{ t('process.weighting') }</span>
           <span class="flex justify-center items-center">
-            <select id="select" name="weighting" class="select mx-2 select-bordered mt-2">
+            <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
               {weightingOptions.map(weight => (
                 <option value={weight.value}>
                   { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
@@ -38,40 +52,26 @@ changeLanguage("en");
               ))}
             </select>
             
-        
             <Modal id="weightingInfo">
               <h3>{ t('process.weighting') }</h3>
               <ContentDoc file_name="NegativeScoreWeighting"/>
             </Modal>
           </span>
         </div>
+      </div>
     </details>
-  </div>
-
+    <br/>
+    <div class="flex justify-center">
+      <input type="submit" class="btn btn-primary" value="Next">
+    </div>
+  </form>
 </CreateProcessLayout>
 
+
 <script>
-  import { process } from 'stores/processStore';
   import { createQuill, updateQuill } from "composable/quillUtils";
+  const temp_des = document.getElementById('nojsdescription') as HTMLElement;
+  temp_des.style.display = 'none';
+  createQuill('#description');
 
-  let description = createQuill('#description');
-  description = updateQuill(description, process.get().description);
-  description.on('text-change', () => process.setKey('description', description.getContents()));
-
-  const $weighting = process.get().weighting;
-  const selectElement = document.getElementById('select') as HTMLInputElement;
-  selectElement.value = $weighting;
-  selectElement.addEventListener('change', (e: any) => process.setKey('weighting', e.target.value));
-  
-  const resistanceCheckbox = document.getElementById('resistanceCheckbox') as HTMLElement;
-  resistanceCheckbox.addEventListener('change', function() {
-    process.setKey('resistance', this.checked);
-    if (this.checked) {
-      selectElement.disabled = true;
-      selectElement.classList.add('disabled-select');
-    } else {
-      selectElement.disabled = false;
-      selectElement.classList.remove('disabled-select');
-    }
-  });
 </script>
