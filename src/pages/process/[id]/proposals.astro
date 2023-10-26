@@ -71,8 +71,7 @@ if (pathname !== url.pathname)
 
 <script>
 import type IProposal from "interfaces/IProposal"
-import createQuill from "composable/createQuill";
-import updateQuill from "composable/updateQuill";
+import { createQuill, updateQuill } from "composable/quillUtils";
 import Delta from "quill"
 import getQuillHTML from 'helpers/getQuillHTML'
 import GUN from "gun";

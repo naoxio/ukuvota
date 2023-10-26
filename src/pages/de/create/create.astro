@@ -8,9 +8,7 @@ changeLanguage("de");
 <script>
   import { process } from 'stores/processStore';
   import { Delta } from 'quill'
-  import createQuill from "composable/createQuill";
   import addAlert from 'composable/addAlert';
-  import updateQuill from 'composable/updateQuill';
   import type IProposal from 'interfaces/IProposal';
   import { createNewProcess } from "services/api"; 
   const lang = document.documentElement.getAttribute("lang");
@@ -23,7 +21,6 @@ changeLanguage("de");
     phases: 'full' | 'voting'
     constructor() {
       super();
-      this.scrollTopicQuestion = this.querySelector('#scrollTopicQuestion');
       this.alertList = this.querySelector('div.alert-list');
       this.alerts = this.querySelectorAll('alert-element');
       this.phases = process.get().phases;
@@ -50,7 +47,8 @@ changeLanguage("de");
       title.addEventListener('input', this.handleTitleInput);
       title.value = process.get().title;
 
-      this.querySelector('#createProcessButton').addEventListener('click', this.createProcess.bind(this));
+      const createProcessButton = this.querySelector('#createProcessButton') as HTMLButtonElement;
+      createProcessButton.addEventListener('click', this.createProcess.bind(this));
     }
 
     handleTitleInput(e) {
