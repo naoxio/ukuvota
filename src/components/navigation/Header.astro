@@ -13,7 +13,8 @@ const { pathname } = Astro.url;
 ---
 
 <header>
-    <nav class="flex items-center">
+  <div class="navbar bg-base-100">
+    <div class="flex-1 items-center">
       <a href={localizePath('/', currentLanguage)}>
             <img width="48" id="logo" alt="Ukuvota logo" class="p-2" src={logo.src} />
       </href>
@@ -22,8 +23,8 @@ const { pathname } = Astro.url;
       <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
         {i18next.t('buttons.about')}
       </a>
-    </nav>
-    <div class="flex items-center">
+    </div>
+    <div class="flex-none items-center">
 
       <select class="select select-xs mx-2" onchange="location = this.value">
         {supportedLanguages.map(lang => (
@@ -40,26 +41,10 @@ const { pathname } = Astro.url;
         <Icon class="icon-moon" width="22" name="moon" />
       </ThemeSelector>
     </div>
+  </div>
 </header>
 
 <style is:inline>
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
-
-    nav {
-        display: flex;
-        gap: 15px;
-    }
 
     .icon-sun { display: none; }
     .icon-moon { display: block; }

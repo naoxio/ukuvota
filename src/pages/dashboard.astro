@@ -3,7 +3,6 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "layouts/BaseLayout.astro";
 import ProcessInfo from "@/process/ProcessInfo.astro";
 import { processes } from "stores/userStore";
-import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
 
@@ -12,42 +11,67 @@ const allProcesses = processes.get();
 
 <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
   {allProcesses.length > 0 ? (
-    allProcesses.map(uuid => (
-      // Assuming ProcessInfo can handle just UUID, adjust as necessary
-      <ProcessInfo uuid={uuid} />
-    ))
-  ) : (
     <div>
-      <div class="flex justify-center items-center flex-col">
-        <p>No processes found.</p>
-        <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup New Process</a>
-        <p>&nbsp;or&nbsp;</p>
-        <div class="flex ">
-          <input type="text" class="p-2" placeholder="Enter UUID" id="processUUID" />
-          <button class="btn p-2 btn-primary" id="addProcessButton">Add Process</button>
+      {allProcesses.map(uuid => (
+        <ProcessInfo key={uuid} />
+      ))}
+      <form action="/api/export" method="get">
+        <button class="btn-floating" id="exportButton" type="submit">
+          Export
+        </button>
+      </form>
+  </div>
+  ) : (
+    <div class="empty-state">
+      <p>{t('dashboard.noProcesses')}</p>
+      <p>{t('dashboard.beginProcess')}</p>
+      <div class="absolute right-5 bottom-20">
+        <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>
+          </svg>
+        </label>
+        <input type="checkbox" id="modalToggle" class="modal-toggle" />
+
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+            
+            <h3 class="font-bold text-lg">{t('dashboard.options')}</h3>
+            
+            <form action="/api/create-process" method="post">
+              <button type="submit" class="btn btn-ghost">
+                {t('dashboard.createNewProcess')}
+              </button>
+            </form>
+            
+            <form action="/api/add-by-uuid" method="post">
+              <input type="text" name="uuid" class="input input-bordered" required />
+              <button type="submit" class="btn btn-ghost">
+                {t('dashboard.addByUUID')}
+              </button>
+            </form>
+            
+            <form action="/api/import-csv" method="post" enctype="multipart/form-data">
+              <input type="file" name="file" accept=".csv" required />
+              <button type="submit" class="btn btn-ghost">
+                {t('dashboard.importCSV')}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-
+      <input type="file" class="hidden" id="fileInput" accept=".csv" />
     </div>
-
   )}
 </BaseLayout>
+<style>
+  .empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
 
-<script>
-import { processes } from 'stores/userStore';
-
-function addProcessWithUUID(): void {
-    const uuidInput = document.getElementById("processUUID") as HTMLInputElement;
-    const uuid = uuidInput.value;
-
-    processes.update((currentUUIDs: any) => {
-        if (currentUUIDs.includes(uuid)) return currentUUIDs; // Avoid adding duplicates
-        return [...currentUUIDs, uuid];
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const addButton = document.getElementById("addProcessButton") as HTMLButtonElement;
-    addButton.addEventListener("click", addProcessWithUUID);
-});
-</script>
+</style>

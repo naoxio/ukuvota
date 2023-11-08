@@ -1,4 +1,14 @@
 {
+
+  "dashboard": {
+    "noProcesses": "Currently, there are no processes to display.",
+    "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
+    "options": "What would you like to do?",
+    "createNewProcess": "Create New Process",
+    "addByUUID": "Add Process by UUID",
+    "importCSV": "Import Processes from CSV",
+    "export": "Export Processes"
+  },
   "policy": "Privacy Policy",
   "donate": "Donate",
   "showMore": "Show more",

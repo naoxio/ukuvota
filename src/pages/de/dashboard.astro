@@ -3,7 +3,6 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "layouts/BaseLayout.astro";
 import ProcessInfo from "@/process/ProcessInfo.astro";
 import { processes } from "stores/userStore";
-import { localizePath } from "astro-i18next";
 
 changeLanguage("de");
 
@@ -12,42 +11,90 @@ const allProcesses = processes.get();
 
 <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
   {allProcesses.length > 0 ? (
-    allProcesses.map(uuid => (
-      // Assuming ProcessInfo can handle just UUID, adjust as necessary
-      <ProcessInfo uuid={uuid} />
-    ))
-  ) : (
     <div>
-      <div class="flex justify-center items-center flex-col">
-        <p>No processes found.</p>
-        <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup New Process</a>
-        <p>&nbsp;or&nbsp;</p>
-        <div class="flex ">
-          <input type="text" class="p-2" placeholder="Enter UUID" id="processUUID" />
-          <button class="btn p-2 btn-primary" id="addProcessButton">Add Process</button>
-        </div>
-      </div>
-
+      {allProcesses.map(uuid => (
+        <ProcessInfo key={uuid} />
+      ))}
+      <button class="btn-floating" id="exportButton">Export</button>
     </div>
-
+  ) : (
+    <div class="empty-state">
+      <p>{t('dashboard.noProcesses')}</p>
+      <button class="btn btn-primary btn-circle absolute right-5 bottom-20" id="addProcessFab">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">             
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>             
+        </svg>
+      </button>
+    </div>
   )}
 </BaseLayout>
 
 <script>
-import { processes } from 'stores/userStore';
+import { processes, addProcess } from 'stores/userStore';
+import { saveAs } from 'file-saver';
+
+
+const addButton = document.getElementById("addProcessButton") as HTMLButtonElement;
+  addButton.addEventListener("click", addProcessWithUUID);
 
 function addProcessWithUUID(): void {
     const uuidInput = document.getElementById("processUUID") as HTMLInputElement;
     const uuid = uuidInput.value;
-
-    processes.update((currentUUIDs: any) => {
-        if (currentUUIDs.includes(uuid)) return currentUUIDs; // Avoid adding duplicates
-        return [...currentUUIDs, uuid];
-    });
+    addProcess(uuid);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const addButton = document.getElementById("addProcessButton") as HTMLButtonElement;
-    addButton.addEventListener("click", addProcessWithUUID);
+function importProcessesFromCSV(file: any) {
+  // Function to read the CSV file and extract UUIDs
+  // Update processes with the extracted UUIDs
+}
+const addFab = document.getElementById("addProcessFab") as HTMLButtonElement;
+addFab.addEventListener("click", () => {
+  // Logic to open modal or tooltip with options to add or create process
 });
+
+function exportProcessesToCSV() {
+  const uuids = processes.get();
+  const csvContent = "data:text/csv;charset=utf-8," + uuids.join("\n");
+  const encodedUri = encodeURI(csvContent);
+  saveAs(encodedUri, "processes.csv");
+}
+
+
+const exportButton = document.getElementById("exportButton") as HTMLButtonElement;
+exportButton.addEventListener("click", exportProcessesToCSV);
+
+// Add event listener for file input to handle CSV import
+const fileInput = document.getElementById("fileInput") as HTMLElement;
+fileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  importProcessesFromCSV(file);
+});
+
+
 </script>
+
+<style>
+  .empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn-floating {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    /* Add more styles for your FAB here */
+  }
+</style>
