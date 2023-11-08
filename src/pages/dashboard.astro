@@ -37,24 +37,26 @@ const allProcesses = processes.get();
           <div class="modal-box">
             <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
             
-            <h3 class="font-bold text-lg">{t('dashboard.options')}</h3>
-            
+            <h1 class="font-bold text-lg">{t('dashboard.options')}</h1>
+            <br/>
             <form action="/api/create-process" method="post">
-              <button type="submit" class="btn btn-ghost">
+              <button type="submit" class="btn btn-primary">
                 {t('dashboard.createNewProcess')}
               </button>
             </form>
+            <br/>
             
             <form action="/api/add-by-uuid" method="post">
               <input type="text" name="uuid" class="input input-bordered" required />
-              <button type="submit" class="btn btn-ghost">
+              <button type="submit" class="btn m-2">
                 {t('dashboard.addByUUID')}
               </button>
             </form>
+            <br/>
             
             <form action="/api/import-csv" method="post" enctype="multipart/form-data">
               <input type="file" name="file" accept=".csv" required />
-              <button type="submit" class="btn btn-ghost">
+              <button type="submit" class="btn m-2">
                 {t('dashboard.importCSV')}
               </button>
             </form>
