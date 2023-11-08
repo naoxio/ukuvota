@@ -45,7 +45,7 @@
   "remainingTime": "verbleibende Zeit",
   "tagline": "Die beste Lösung finden",
   "buttons": {
-    "dashboard": "dashboard",
+    "dashboard": "Dashboard",
     "about": "Über",
     "go": "Los",
     "home": "Startseite",
@@ -61,6 +61,7 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
+    "setup": "Prozesseinrichtung",
     "topic": "Thema Frage",
     "description": "Beschreibung",
     "weighting": "Negative Punktegewichtung",

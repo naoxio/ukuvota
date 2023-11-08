@@ -1,29 +1,40 @@
 ---
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
+import { parseCookie } from "helpers/cookieHelpers";
 
 changeLanguage("de");
+
+const cookieHeader = Astro.request.headers.get("cookie");
+const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
+const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
-<CreateProcessLayout displayNav={false} step={2} title={t('buttons.home')} description={t('description')}>
+<CreateProcessLayout step={2} title={t('buttons.home')} description={t('description')}>
   <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
   <br/>
   <div class="flex justify-around">
-    <a href="/create/full-process" class="btn btn-primary p-4">{ t('process.phases.full') }</a>
-    <a href="/create/voting-only" class="btn btn-primary p-4">{ t('process.phases.voting') }</a>
+    <button id="full-phase" class="btn btn-primary p-4">{ t('process.phases.full') }</button>
+    <button id="voting-phase" class="btn btn-primary p-4">{ t('process.phases.voting') }</button>
   </div>
 </CreateProcessLayout>
 
 <script>
+  
   import { process } from 'stores/processStore';
   const $process = process.get();
 
-  const fullPhase = document.getElementById('full-phase') as HTMLInputElement;
-  fullPhase.addEventListener('click', () => process.setKey('phases', 'full'));
-  fullPhase.checked = $process.phases === 'full';
+  const fullPhase = document.getElementById('full-phase') as HTMLButtonElement;
+  fullPhase.addEventListener('click', () => {
+    process.setKey('phases', 'full');
+    //window.location.href = '/create/full-process';
+  });
   
-  const votingPhase = document.getElementById('voting-phase') as HTMLInputElement;
-  votingPhase.addEventListener('click', () => process.setKey('phases', 'voting'));
-  votingPhase.checked = $process.phases === 'voting';
+  const votingPhase = document.getElementById('voting-phase') as HTMLButtonElement;
+  votingPhase.addEventListener('click', () => {
+    process.setKey('phases', 'voting');
+    console.log(process.get().phases)
+    //window.location.href = '/create/voting-only';
+  });
 
-</script>  
+  </script>

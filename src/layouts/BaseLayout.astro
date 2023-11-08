@@ -1,7 +1,6 @@
 ---
 import i18next from "i18next";
 import Header from "@/navigation/Header.astro";
-import Footer from "@/navigation/Footer.astro";
 
 import 'assets/quill.snow.css';
 import "assets/global.css"
@@ -68,7 +67,6 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
       <slot />
     </main>
     <br/>
-    <Footer/>
   </body>
 </html>
 

@@ -1,13 +1,13 @@
 ---
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
-import { parseCookie } from 'helpers/cookieHelpers'
+import { parseCookie } from "helpers/cookieHelpers";
 
 changeLanguage("en");
 
-const cookieHeader = Astro.request.headers.get('cookie');
+const cookieHeader = Astro.request.headers.get("cookie");
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { weighting = '', title = '', description = '' } = parsedCookies;
+const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
 <CreateProcessLayout step={2} title={t('buttons.home')} description={t('description')}>

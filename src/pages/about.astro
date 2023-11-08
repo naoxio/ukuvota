@@ -4,6 +4,7 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "layouts/BaseLayout.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
 import { localizePath } from "astro-i18next";
+import Footer from "@/navigation/Footer.astro";
 
 changeLanguage("en");
 ---
@@ -15,10 +16,10 @@ changeLanguage("en");
     </div>
 
     <ContentDoc file_name="Introduction"/>
+    <br/>
     <div class="flex justify-center">
-      <a href={localizePath('/create')} class="btn p-2 btn-primary">Setup Process</a>
+      <a href={localizePath('/create')} class="btn p-2 btn-primary">{t('process.setup')}</a>
     </div>
+    <br/><br/>
+    <Footer/>
 </BaseLayout>
-
-<style>
-</style>

@@ -4,13 +4,13 @@ import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
 import weightingOptions from "helpers/weightingOptions";
 import Modal from "@/ui/Modal.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
-import { parseCookie } from 'helpers/cookieHelpers'
+import { parseCookie } from "helpers/cookieHelpers";
 
 changeLanguage("en");
 
-const cookieHeader = Astro.request.headers.get('cookie');
+const cookieHeader = Astro.request.headers.get("cookie");
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { weighting = '', title = '', description = '' } = parsedCookies;
+const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
 <CreateProcessLayout step={1} title={t('buttons.home')} description={t('description')}>

@@ -10,39 +10,20 @@ const supportedLanguages = i18next.languages;
 const currentLanguage = i18next.language;
 const { pathname } = Astro.url;
 
-interface MenuItem {
-  path: string;
-  label: string;
-}
-
-const menu: MenuItem[] = [
-  { path: '/dashboard', label: 'dashboard' },
-  { path: '/about', label: 'about' },
-];
-
-function isSelected(item: MenuItem): string {
-  const conditions = [
-    pathname.includes(item.path) && item.path !== '/',
-    item.path === pathname,
-    item.path + currentLanguage === pathname,
-  ];
-
-  return conditions.some(Boolean) ? 'selected' : '';
-}
 ---
 
 <header>
-    <div class="brand">
-        <img id="logo" alt="Ukuvota logo" src={logo.src} />
-        <a href="/"><h1>Ukuvota</h1></a>
-    </div>
+    <nav class="flex items-center">
+      <a href={localizePath('/', currentLanguage)}>
+            <img width="48" id="logo" alt="Ukuvota logo" class="p-2" src={logo.src} />
+      </href>
+
     
-    <nav class="flex justify-center items-center">
-      {menu.map(item => (
-        <a class={'btn btn-link ' + isSelected(item)} href={localizePath(item.path)}>
-          {t('buttons.' + item.label)}
-        </a>
-      ))}
+      <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
+        {i18next.t('buttons.about')}
+      </a>
+    </nav>
+    <div class="flex items-center">
 
       <select class="select select-xs mx-2" onchange="location = this.value">
         {supportedLanguages.map(lang => (
@@ -58,15 +39,8 @@ function isSelected(item: MenuItem): string {
         <Icon class="icon-sun" width="22" name="sun" />
         <Icon class="icon-moon" width="22" name="moon" />
       </ThemeSelector>
-    </nav>
+    </div>
 </header>
-
-<script>
-document.getElementById('logo').addEventListener('click', function() {
-    const lang = document.documentElement.getAttribute("lang");
-    location.href = lang === 'en' ? '/' : '/' + lang;
-});
-</script>
 
 <style is:inline>
     header {
@@ -80,22 +54,6 @@ document.getElementById('logo').addEventListener('click', function() {
         right: 0;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         z-index: 1000;
-    }
-
-    .brand {
-        display: flex;
-        align-items: center;
-    }
-
-    .brand img {
-        margin-right: 10px;
-        cursor: pointer;
-        width: 50px;
-    }
-
-    .brand h1 {
-        margin: 0;
-        font-size: 1.5em;
     }
 
     nav {

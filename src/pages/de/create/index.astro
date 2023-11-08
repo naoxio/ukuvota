@@ -4,33 +4,40 @@ import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
 import weightingOptions from "helpers/weightingOptions";
 import Modal from "@/ui/Modal.astro";
 import ContentDoc from "@/ui/ContentDoc.astro";
+import { parseCookie } from "helpers/cookieHelpers";
 
 changeLanguage("de");
+
+const cookieHeader = Astro.request.headers.get("cookie");
+const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
+const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
 <CreateProcessLayout step={1} title={t('buttons.home')} description={t('description')}>
-  <div id="scrollTopicQuestion" />
-  <p>{ t('process.topic') }</p>
-  <input id="topicQuestion" name="topicQuestion" class="input input-bordered w-full" type="text"/>
-  <br/>
-  <p>{ t('process.description') }</p>
-  <div id="description"/>
+  <form action='/api/process-store' method="POST">
+    <input type="hidden" name="step" value="1" />
+    <div id="scrollTopicQuestion" />
+    <p>{ t('process.topic') }</p>
+    <input 
+      id="topicQuestion" 
+      name="topicQuestion" 
+      class="input input-bordered w-full" 
+      type="text" 
+      value={title} 
+      required 
+      title={t('alert.error.topicQuestion')}
+    />
+    <br/>
+    <p>{ t('process.description') }</p>
+    <div id="description" />
+    <textarea id="nojsdescription" name="description" class="textarea textarea-bordered w-full">{description}</textarea>
 
-  <details class="text-center">
-    <summary class="cursor-pointer text-indianared mt-6 ">Show advanced options</summary>
-
-      <div class="flex justify-center flex-col mt-2 space-x-4">
-        <div class="flex justify-center items-center">
-          <h4>Only measure resistance</h4>
-          <label class="switch ml-2">
-            <input id="resistanceCheckbox" type="checkbox">
-            <span class="slider"></span>
-          </label>
-        </div>
+    <details class="text-center">
+      <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary>
         <div class="flex justify-center items-center">
           <span>{ t('process.weighting') }</span>
           <span class="flex justify-center items-center">
-            <select id="select" name="weighting" class="select mx-2 select-bordered mt-2">
+            <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
               {weightingOptions.map(weight => (
                 <option value={weight.value}>
                   { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
@@ -38,40 +45,31 @@ changeLanguage("de");
               ))}
             </select>
             
-        
             <Modal id="weightingInfo">
               <h3>{ t('process.weighting') }</h3>
               <ContentDoc file_name="NegativeScoreWeighting"/>
             </Modal>
           </span>
         </div>
+      </div>
     </details>
-  </div>
-
+    <br/>
+    <div class="flex justify-center">
+      <input type="submit" class="btn btn-primary" value="Next">
+    </div>
+  </form>
 </CreateProcessLayout>
 
+
 <script>
-  import { process } from 'stores/processStore';
   import { createQuill, updateQuill } from "composable/quillUtils";
+  const temp_des = document.getElementById('nojsdescription') as HTMLElement;
+  temp_des.style.display = 'none';
+  const quillEditor = createQuill('#description');
 
-  let description = createQuill('#description');
-  description = updateQuill(description, process.get().description);
-  description.on('text-change', () => process.setKey('description', description.getContents()));
-
-  const $weighting = process.get().weighting;
-  const selectElement = document.getElementById('select') as HTMLInputElement;
-  selectElement.value = $weighting;
-  selectElement.addEventListener('change', (e: any) => process.setKey('weighting', e.target.value));
-  
-  const resistanceCheckbox = document.getElementById('resistanceCheckbox') as HTMLElement;
-  resistanceCheckbox.addEventListener('change', function() {
-    process.setKey('resistance', this.checked);
-    if (this.checked) {
-      selectElement.disabled = true;
-      selectElement.classList.add('disabled-select');
-    } else {
-      selectElement.disabled = false;
-      selectElement.classList.remove('disabled-select');
-    }
+  quillEditor.on('text-change', () => {
+      const quillContent = document.getElementById('nojsdescription') as HTMLTextAreaElement;
+      quillContent.value = quillEditor.root.innerHTML;
   });
+
 </script>

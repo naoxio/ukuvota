@@ -45,7 +45,7 @@
   "remainingTime": "remaining time",
   "tagline": "Finding the best solution",
   "buttons": {
-    "dashboard": "dashboard",
+    "dashboard": "Dashboard",
     "about": "About",
     "go": "GO",
     "home": "Home",
@@ -61,6 +61,7 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
+    "setup": "Setup Process",
     "topic": "Topic Question",
     "description": "Description",
     "weighting": "Negative Score Weighting",
