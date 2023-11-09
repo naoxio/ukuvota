@@ -1,6 +1,8 @@
 {
   "setup": {
-    "process": "Setup Process"
+    "process": "Setup Process",
+    "selectTimeForVoting": "Select the time for voting",
+    "proposals": "Add proposals"
   },
   "dashboard": {
     "noProcesses": "Currently, there are no processes to display.",

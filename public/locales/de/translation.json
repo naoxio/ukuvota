@@ -1,6 +1,8 @@
 {
   "setup": {
-    "process": "Process Erstellen"
+    "process": "Process Erstellen",
+    "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
+    "proposals": "Vorschläge hinzufügen"
   },
   "dashboard": {
     "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
