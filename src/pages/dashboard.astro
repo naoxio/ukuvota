@@ -3,6 +3,7 @@ import { t, changeLanguage } from "i18next";
 import BaseLayout from "layouts/BaseLayout.astro";
 import ProcessInfo from "@/process/ProcessInfo.astro";
 import { processes } from "stores/userStore";
+import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
 
@@ -13,7 +14,7 @@ const allProcesses = processes.get();
   {allProcesses.length > 0 ? (
     <div>
       {allProcesses.map(uuid => (
-        <ProcessInfo key={uuid} />
+        <ProcessInfo uuid={uuid} />
       ))}
       <form action="/api/export" method="get">
         <button class="btn-floating" id="exportButton" type="submit">
@@ -39,11 +40,9 @@ const allProcesses = processes.get();
             
             <h1 class="font-bold text-lg">{t('dashboard.options')}</h1>
             <br/>
-            <form action="/api/create-process" method="post">
-              <button type="submit" class="btn btn-primary">
-                {t('dashboard.createNewProcess')}
-              </button>
-            </form>
+            <a href={localizePath('/create')} class="btn btn-primary">
+              {t('dashboard.createNewProcess')}
+            </a>
             <br/>
             
             <form action="/api/add-by-uuid" method="post">

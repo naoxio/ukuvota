@@ -1,5 +1,7 @@
 {
-
+  "setup": {
+    "process": "Setup Process"
+  },
   "dashboard": {
     "noProcesses": "Currently, there are no processes to display.",
     "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
@@ -11,8 +13,6 @@
   },
   "policy": "Privacy Policy",
   "donate": "Donate",
-  "showMore": "Show more",
-  "showLess": "Show less",
   "addProposalTemplate": "Add proposal by template",
   "duration": "Duration",
   "select": "select",
@@ -101,26 +101,7 @@
       "voting": "Voting Phase only"
     }
   },
-  "wip": "Not yet implemented",
-  "layouts": {
-    "title": "Ukuvota"
-  },
-  "pages": {
-    "title": {
-      "top": "Ukuvota"
-    }
-  },
-  "captchaCode": "Captcha code",
   "create": "Create",
-  "footer": {
-    "powered": "powered by",
-    "hosted": "hostedy by",
-    "supported": "supported with",
-    "donations": "donations",
-    "managed": "managed by",
-    "maintained": "maintained by"
-  },
-  "noRightsReserved": "no rights reserved",
   "proposal": {
     "zero": {
       "title": "Status quo",

@@ -13,7 +13,7 @@ const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
 const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
-<CreateProcessLayout step={1} title={t('buttons.home')} description={t('description')}>
+<CreateProcessLayout step={1}>
   <form action='/api/process-store' method="POST">
     <input type="hidden" name="step" value="1" />
     <div id="scrollTopicQuestion" />

@@ -197,15 +197,14 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .text-indianared {
     color: var(--link-color);
 }
-.text-indianred:hover {
+
+.text-indianred:hover,
+.bg-linkwhite:hover {
     background-color: var(--link-hover-color);
 }
 
-.bg-lightred {
-    background-color: var(--link-hover-color);
-}
-.bg-lightred:hover {
-    background-color: var(--link-color);
+.bg-linkwhite {
+    background-color: white;
 }
 
 .disabled-select {

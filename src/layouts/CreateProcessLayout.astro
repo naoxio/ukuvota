@@ -6,37 +6,36 @@ import { parseCookie } from 'helpers/cookieHelpers'
 import { t } from "i18next";
 
 interface Props {
-    title: string,
-    description: string,
     step: number,
 }
 
-const { title, description, step } = Astro.props;
+const { step } = Astro.props;
 
 const cookieHeader = Astro.request.headers.get('cookie');
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { phases = '' } = parsedCookies;
+const { phases = '', title = '' } = parsedCookies;
 
+console.log(`hi: ${phases}`)
 // Define the steps and their respective links outside the template.
 const steps = [
   { stepNumber: 1, href: "/create" },
-  { stepNumber: 2, href: "/create/phases" },
-  { stepNumber: 3, href: phases === 'full' ? "/create/full-process" : "/create/voting-only" },
-  { stepNumber: 4, href: "/create/review" }
+  { stepNumber: 2, href: "/create/phases", disabled: !title },
+  { stepNumber: 3, href: phases === 'full' ? "/create/full-process" : "/create/voting-only", disabled: (!title && !phases) },
+  { stepNumber: 4, href: "/create/review", disabled: (!title && !phases) }
 ];
 ---
 
-<BaseLayout title={title} description={description}>
-  <h1>Setup Process</h1>
+<BaseLayout title={ t('setup.process')} description={t('description')}>
+  <h1>{ t('setup.process') }</h1>
 
   <div class="flex justify-center space-x-2">
-    {steps.map(({ stepNumber, href }) => (
-      <a href={href}>
+    {steps.map(({ stepNumber, href, disabled }) => (
+      <a href={href} class={disabled ? 'pointer-events-none' : ''}>
         <div class={`w-4 h-4 rounded-full ${
           step === stepNumber ? 'bg-indianred' : 
-          step > stepNumber ? 'bg-lightred' : 
+          step > stepNumber ? 'bg-linkwhite' : 
           'bg-gray-300'
-        }`}></div>
+        } ${disabled ? 'bg-gray-500' : ''}`}></div>
       </a>
     ))}
   </div>

@@ -7,7 +7,7 @@ import getProcessUrl from "helpers/getProcessUrl";
 changeLanguage("en");
 
 const { url } = Astro;
-const processId = Astro.params.id;
+const processId = Astro.params.id as string;
 const process = await fetchProcess(processId);
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)

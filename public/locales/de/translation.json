@@ -1,4 +1,7 @@
 {
+  "setup": {
+    "process": "Process Erstellen"
+  },
   "dashboard": {
     "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
     "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
@@ -10,8 +13,6 @@
   },
   "policy": "Datenschutzerklärung",
   "donate": "Spenden",
-  "showMore": "Zeige mehr",
-  "showLess": "Zeige weniger",
   "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
   "duration": "Dauer",
   "select": "auswählen",
@@ -100,26 +101,7 @@
       "voting": "Nur die Abstimmungsphase"
     }
   },
-  "wip": "Noch nicht implementiert",
-  "layouts": {
-    "title": "Ukuvota"
-  },
-  "pages": {
-    "title": {
-      "top": "Ukuvota"
-    }
-  },
-  "captchaCode": "Captcha-Code",
   "create": "Erstellen",
-  "footer": {
-    "powered": "betrieben von",
-    "hosted": "gehostet bei",
-    "supported": "unterstützt mit",
-    "donations": "Spenden",
-    "managed": "geleitet von",
-    "maintained": "gewartet von"
-  },
-  "noRightsReserved": "keine Rechte vorbehalten",
   "proposal": {
     "zero": {
       "title": "Aktueller Stand",
