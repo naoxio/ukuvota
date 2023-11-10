@@ -4,6 +4,8 @@ import Alert from "@/ui/Alert.astro";
 import AlertList from "@/ui/AlertList.astro";
 import { parseCookie } from 'helpers/cookieHelpers'
 import { t } from "i18next";
+import { parse } from 'cookie';
+
 
 interface Props {
     step: number,
@@ -22,6 +24,11 @@ const steps = [
   { stepNumber: 3, href: phases === 'full' ? "/create/full-process" : "/create/voting-only", disabled: (!title && !phases) },
   { stepNumber: 4, href: "/create/review", disabled: (!title && !phases) }
 ];
+
+
+const cookies = parse(Astro.request.headers.get('cookie') || '');
+let theme = cookies.theme || 'light';
+
 ---
 
 <BaseLayout title={ t('setup.process')} description={t('description')}>
@@ -30,22 +37,12 @@ const steps = [
     {steps.map(({ stepNumber, href, disabled }) => (
       <a href={href} class={disabled ? 'pointer-events-none' : ''}>
         <div class={`w-4 h-4 rounded-full ${
-          step === stepNumber ? 'bg-indianred' : 
-          step > stepNumber ? 'bg-linkwhite' : 
+          step === stepNumber ? 'bg-indianred ring ring-red-300' : 
+          step > stepNumber ? 'bg-indianred' : 
           'bg-gray-300'
         } ${disabled ? 'bg-gray-500' : ''}`}></div>
       </a>
     ))}
   </div>
   <slot/>
-
-  <br/>
-
-  <AlertList>
-    <Alert icon="warning" error>{ t('alert.error.topicQuestion') }</Alert>
-    <Alert icon="checkmark-outline" success>{ t('alert.success.createProcess') }</Alert>
-    <Alert icon="warning" error>{ t('alert.error.proposalsMissing') }</Alert>
-    <Alert icon="warning" error>{ t('alert.error.payloadSizeTooLarge') }</Alert>
-    <Alert icon="checkmark-outline" warning>{ t('alert.success.creatingProcess') }</Alert>
-  </AlertList>
 </BaseLayout>

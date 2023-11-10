@@ -10,7 +10,7 @@ changeLanguage("en");
 
 const cookieHeader = Astro.request.headers.get("cookie");
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { weighting = "", title = "", description = "" } = parsedCookies;
+const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "" } = parsedCookies;
 ---
 
 <CreateProcessLayout step={1}>
@@ -29,8 +29,12 @@ const { weighting = "", title = "", description = "" } = parsedCookies;
     />
     <br/>
     <p>{ t('process.description') }</p>
-    <div id="description" />
-    <textarea id="nojsdescription" name="description" class="textarea textarea-bordered w-full">{description}</textarea>
+    <div id="description">Loading QuillEditor...</div>
+  
+    <noscript>
+      <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
+    </noscript>
+    <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
 
     <details class="text-center">
       <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary>
@@ -63,13 +67,24 @@ const { weighting = "", title = "", description = "" } = parsedCookies;
 
 <script>
   import { createQuill, updateQuill } from "composable/quillUtils";
-  const temp_des = document.getElementById('nojsdescription') as HTMLElement;
-  temp_des.style.display = 'none';
+
+  const quillContainer = document.getElementById('description') as HTMLElement;
+  quillContainer.innerText = '';
+  const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
   const quillEditor = createQuill('#description');
 
+  if (quillOpsInput.value) {
+    try {
+      const quillOps = JSON.parse(quillOpsInput.value);
+      updateQuill(quillEditor, quillOps);
+    } catch (error) {
+      console.error('Error parsing quillopsdescription:', error);
+    }
+  }
+
   quillEditor.on('text-change', () => {
-      const quillContent = document.getElementById('nojsdescription') as HTMLTextAreaElement;
-      quillContent.value = quillEditor.root.innerHTML;
+    /* @ts-ignore */
+    quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
   });
 
 </script>

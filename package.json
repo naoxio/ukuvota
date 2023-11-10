@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.4",
-    "@types/quill": "^2.0.13",
+    "@types/quill": "^2.0.14",
     "cypress": "^13.1.0",
     "daisyui": "^3.9.2",
     "unplugin-icons": "^0.17.0"

@@ -5,9 +5,6 @@
   import { process } from 'stores/processStore';
   import { Quill } from 'quill'
 
-  const translationsElement = document.getElementById('translations') as HTMLElement;
-  const t = JSON.parse(translationsElement.getAttribute('data-translations'));
-
   class ProposalList extends HTMLElement {
     proposals = [];
     updateProposalDescription(i: number, quill: Quill) {

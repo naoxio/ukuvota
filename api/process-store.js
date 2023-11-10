@@ -4,12 +4,13 @@ export default async (req, res) => {
 
     if (step === "1") {
       try {
-        const { weighting, topicQuestion, description } = req.body;
+        const { weighting, topicQuestion, nojsdescription, quillopsdescription  } = req.body;
 
         res.setHeader('Set-Cookie', [
           `weighting=${weighting}; Path=/; HttpOnly`,
           `title=${topicQuestion}; Path=/; HttpOnly`,
-          `description=${description}; Path=/; HttpOnly`
+          `nojsdescription=${nojsdescription}; Path=/; HttpOnly`,
+          `quillopsdescription=${quillopsdescription}; Path=/; HttpOnly`
         ]);
         
         res.writeHead(302, { Location: '/create/phases' });

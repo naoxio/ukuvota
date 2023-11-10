@@ -7,8 +7,6 @@ changeLanguage("en");
 ---
 
 <CreateProcessLayout step={2}>
-  <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
-  <br/>
   <form action='/api/process-store' method="POST">
     <input type="hidden" name="step" value="2" />
     <div class="flex justify-around flex-wrap">

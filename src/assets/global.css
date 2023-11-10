@@ -192,6 +192,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background-color: var(--link-hover-color);
 }
 
+.border-lightred {
+    border-color: var(--link-hover-color);
+}
 .text-indianared {
     color: var(--link-color);
 }
