@@ -22,7 +22,6 @@ export default async function(req, res) {
             if (error.message === 'Process not found') {
                 res.status(404).json({ error: 'Process not found.' });
             } else {
-                console.log(error)
                 res.status(500).json({ error: 'An unexpected error occurred' });
             }
         }
@@ -68,7 +67,6 @@ export default async function(req, res) {
             await putProcessIntoDatabase(process);
             res.json({ id: uuid });
         } catch (error) {
-            console.log(error)
             res.status(500).json({ error: 'Failed to save process.' });
         }
     }

@@ -37,26 +37,26 @@ const allProcesses = processes.get();
         <div class="modal modal-bottom sm:modal-middle">
           <div class="modal-box">
             <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            
-            <h1 class="font-bold text-lg">{t('dashboard.options')}</h1>
+          
+            <p class="font-bold text-lg">{t('dashboard.options')}</p>
             <br/>
-            <a href={localizePath('/create')} class="btn btn-primary">
+            
+            <a href={localizePath('/create')} class="btn btn-primary mb-4">
               {t('dashboard.createNewProcess')}
             </a>
-            <br/>
-            
-            <form action="/api/add-by-uuid" method="post">
-              <input type="text" name="uuid" class="input input-bordered" required />
-              <button type="submit" class="btn m-2">
-                {t('dashboard.addByUUID')}
+
+            <form class="mt-4" action="/api/add-by-uuid" method="post">
+              <input placeholder={t('dashboard.enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <button type="submit" class="btn btn-primary m-2">
+                {t('dashboard.add')}
               </button>
             </form>
-            <br/>
             
-            <form action="/api/import-csv" method="post" enctype="multipart/form-data">
+            <form class="flex items-center mt-4" action="/api/import-csv" method="post" enctype="multipart/form-data">
               <input type="file" name="file" accept=".csv" required />
-              <button type="submit" class="btn m-2">
-                {t('dashboard.importCSV')}
+              <br/>
+              <button type="submit" class="btn m-2 btn-primary">
+                {t('dashboard.import')}
               </button>
             </form>
           </div>

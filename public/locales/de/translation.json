@@ -9,8 +9,11 @@
     "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
     "options": "Was möchten Sie tun?",
     "createNewProcess": "Neuen Prozess erstellen",
+    "add": "Hinzufügen",
     "addByUUID": "Prozess per UUID hinzufügen",
-    "importCSV": "Prozesse aus CSV importieren",
+    "enterUUID": "Geben Sie UUID oder Link ein",
+    "importProcesses": "Prozesse importieren",
+    "import": "Importieren",
     "export": "Prozesse exportieren"
   },
   "policy": "Datenschutzerklärung",

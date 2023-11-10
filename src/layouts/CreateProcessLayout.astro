@@ -15,7 +15,6 @@ const cookieHeader = Astro.request.headers.get('cookie');
 const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
 const { phases = '', title = '' } = parsedCookies;
 
-console.log(`hi: ${phases}`)
 // Define the steps and their respective links outside the template.
 const steps = [
   { stepNumber: 1, href: "/create" },

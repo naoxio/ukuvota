@@ -11,7 +11,7 @@ if (!firstVisit.get()) {
     firstVisit.set(false);
     url = localizePath("/about");
 }
-console.log(url);
+
 return Astro.redirect(url);
 ---
 

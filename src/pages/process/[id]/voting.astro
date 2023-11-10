@@ -148,7 +148,6 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title
             proposal_node.querySelector('p').innerHTML = getQuillHTML(proposal.description)
-            console.log(proposal.title, proposal.description)
             const buttons = proposal_node.querySelectorAll('button')
             this.addButtonListeners(buttons, proposal_node);
             this.proposal_list.appendChild(proposal_node)

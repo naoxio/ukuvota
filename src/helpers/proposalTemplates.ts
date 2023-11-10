@@ -19,7 +19,6 @@ function translate(key: string) {
         value = value[k];
         if (value === undefined) break;
     }
-    console.log(value)
     return value || `Missing translation for ${key}`;
   } else {
       return serverTranslate(key)

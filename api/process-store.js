@@ -23,7 +23,6 @@ export default async (req, res) => {
     else if (step === "2") {
       try {
         const { phase } = req.body;
-        console.log(phase)
 
         res.setHeader('Set-Cookie', `phases=${phase}; Path=/; HttpOnly`);
 

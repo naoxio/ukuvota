@@ -9,8 +9,11 @@
     "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
     "options": "What would you like to do?",
     "createNewProcess": "Create New Process",
+    "add": "Add",
     "addByUUID": "Add Process by UUID",
-    "importCSV": "Import Processes from CSV",
+    "enterUUID": "Enter UUID or link",
+    "importProcesses": "Import Processes",
+    "import": "Import",
     "export": "Export Processes"
   },
   "policy": "Privacy Policy",

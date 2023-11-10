@@ -74,8 +74,6 @@ changeLanguage("en");
 
     // Create process
     async createProcess() {
-      console.log("createProcess function called!");
-
       const title = process.get().title.trim();
       if (!title) {
 
@@ -110,12 +108,8 @@ changeLanguage("en");
       }
 
       try {
-          console.log("About to make the API request");
           addAlert(this.alertList, this.alerts[4])
-
           const response = await createNewProcess(body);
-          console.log("API request made. Response:", response);
-
           if (response.status === 413) {
               addAlert(this.alertList, this.alerts[3])
               return;
@@ -126,7 +120,6 @@ changeLanguage("en");
           /* @ts-ignore */
           process.setKey('description', { ops: [] });
           process.setKey('proposals', []);
-          console.log(processId)
           addAlert(this.alertList, this.alerts[1])
           const href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`
           window.location.href = href;
