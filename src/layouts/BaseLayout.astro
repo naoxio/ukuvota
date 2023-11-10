@@ -5,19 +5,27 @@ import Header from "@/navigation/Header.astro";
 import 'assets/quill.snow.css';
 import "assets/global.css"
 import { localizePath } from "astro-i18next";
+import { parse } from 'cookie';
 
 const supportedLanguages = i18next.languages;
-const {title, description, simpleHeader = false} = Astro.props;
+const { title, description } = Astro.props;
 
-const { url } = Astro;
+const { url, request } = Astro;
 
-const href = url.href
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
-const translations = i18next.getResourceBundle(i18next.language, 'translation')
 
+const cookies = parse(request.headers.get('cookie') || '');
+let theme = cookies.theme || 'light';
+
+if (url.hash.includes('#/app/')) {
+  const newHash = url.hash.replace('#/app/', '');
+  const cleanHash = newHash.split('/')[0];
+  Astro.redirect(`${url.href}/process/${cleanHash}`);
+}
+console.log(url)
 ---
 <!DOCTYPE html>
-<html lang={i18next.language} data-theme="light">
+<html lang={i18next.language} data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
@@ -39,7 +47,7 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
         <link
           rel="alternate"
           hreflang={supportedLanguage}
-          href={localizePath(href, supportedLanguage)}
+          href={localizePath(url.href, supportedLanguage)}
         />
       ))
     }
@@ -50,46 +58,21 @@ const translations = i18next.getResourceBundle(i18next.language, 'translation')
       <!-- Open Graph -->
     <meta property="og:title" content={display_title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${href}social_logo.png`} />
-    <meta property="og:url" content={href} />
+    <meta property="og:image" content={`${url.origin}social_logo.png`} />
+    <meta property="og:url" content={url.origin} />
     <meta property="og:type" content="website" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={display_title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${href}social_logo.png`} />
+    <meta name="twitter:image" content={`${url.origin}social_logo.png`} />
   </head>
   <body>
-    <div id="translations" data-translations={JSON.stringify(translations)} style="display: none;"></div>
-    <Header simpleHeader={simpleHeader}/>
+    <Header/>
     <main>
       <slot />
     </main>
     <br/>
   </body>
 </html>
-
-<script is:inline>
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme"))
-      return localStorage.getItem("theme");
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches)
-      return "dark";
-    return "light";
-  })();
-
-  document.documentElement.dataset.theme = theme
-  document.documentElement.classList = theme
-
-  window.localStorage.setItem("theme", theme);
-
-  const hash = window.location.hash
-  
-  if (hash.includes('#/app/')) {
-    const newHash = hash.replace('#/app/', '');
-    const cleanHash = newHash.split('/')[0];
-
-    window.location.href = `${location.origin}/process/${cleanHash}`
-  }
-</script>

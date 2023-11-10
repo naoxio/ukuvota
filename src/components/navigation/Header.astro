@@ -4,11 +4,14 @@ import i18next, { t } from "i18next";
 import { localizePath } from "astro-i18next";
 import ISO6991 from "iso-639-1";
 import { Icon } from 'astro-icon';
-import ThemeSelector from '@/ui/ThemeSelector.astro';
+import { parse } from 'cookie';
 
 const supportedLanguages = i18next.languages;
 const currentLanguage = i18next.language;
 const { pathname } = Astro.url;
+
+const cookies = parse(Astro.request.headers.get('cookie') || '');
+let theme = cookies.theme || 'light';
 
 ---
 
@@ -18,7 +21,6 @@ const { pathname } = Astro.url;
       <a href={localizePath('/', currentLanguage)}>
             <img width="48" id="logo" alt="Ukuvota logo" class="p-2" src={logo.src} />
       </href>
-
     
       <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
         {i18next.t('buttons.about')}
@@ -36,19 +38,15 @@ const { pathname } = Astro.url;
         ))}
       </select>
 
-      <ThemeSelector>
-        <Icon class="icon-sun" width="22" name="sun" />
-        <Icon class="icon-moon" width="22" name="moon" />
-      </ThemeSelector>
+      <form action="/api/theme" method="POST">
+        <input type="hidden" name="theme" value={theme === 'light' ? 'dark' : 'light'} />
+        <button type="submit" class="btn btn-ghost btn-sm">
+          { theme === 'dark' ? (
+            <Icon class="icon-sun" width="22" name="sun" />
+            ) : ( <Icon class="icon-moon" width="22" name="moon" /> 
+          )}
+        </button>
+      </form>
     </div>
   </div>
 </header>
-
-<style is:inline>
-
-    .icon-sun { display: none; }
-    .icon-moon { display: block; }
-
-    :global(.dark) .icon-sun { display: block; }
-    :global(.dark) .icon-moon { display: none; }
-</style>

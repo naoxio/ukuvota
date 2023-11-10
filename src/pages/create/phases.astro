@@ -11,9 +11,9 @@ changeLanguage("en");
   <br/>
   <form action='/api/process-store' method="POST">
     <input type="hidden" name="step" value="2" />
-    <div class="flex justify-around">
-      <button type="submit" name="phase" value="full" class="btn btn-primary p-4">{ t('process.phases.full') }</button>
-      <button type="submit" name="phase" value="voting" class="btn btn-primary p-4">{ t('process.phases.voting') }</button>
+    <div class="flex justify-around flex-wrap">
+      <button type="submit" name="phase" value="full" class="btn btn-primary m-2">{ t('process.phases.full') }</button>
+      <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">{ t('process.phases.voting') }</button>
     </div>
   </form>
 </CreateProcessLayout>
