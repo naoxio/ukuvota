@@ -5,27 +5,24 @@ import Header from "@/navigation/Header.astro";
 import 'assets/quill.snow.css';
 import "assets/global.css"
 import { localizePath } from "astro-i18next";
-import { parse } from 'cookie';
 
 const supportedLanguages = i18next.languages;
 const { title, description } = Astro.props;
 
-const { url, request } = Astro;
+const { url } = Astro;
 
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 
-const cookies = parse(request.headers.get('cookie') || '');
-let theme = cookies.theme || 'light';
+const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
 
 if (url.hash.includes('#/app/')) {
   const newHash = url.hash.replace('#/app/', '');
   const cleanHash = newHash.split('/')[0];
   Astro.redirect(`${url.href}/process/${cleanHash}`);
 }
-console.log(url)
 ---
 <!DOCTYPE html>
-<html lang={i18next.language} data-theme={theme}>
+<html lang={i18next.language} data-theme={theme} class={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />

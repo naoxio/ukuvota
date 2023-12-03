@@ -4,15 +4,13 @@ import i18next, { t } from "i18next";
 import { localizePath } from "astro-i18next";
 import ISO6991 from "iso-639-1";
 import { Icon } from 'astro-icon';
-import { parse } from 'cookie';
 
 const supportedLanguages = i18next.languages;
 const currentLanguage = i18next.language;
 const { pathname } = Astro.url;
 
-const cookies = parse(Astro.request.headers.get('cookie') || '');
-let theme = cookies.theme || 'light';
-
+const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
+console.log(theme);
 ---
 
 <header>

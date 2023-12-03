@@ -1,15 +1,16 @@
 {
-  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
-    "allowJs": true,
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
     "strict": true,
-    "baseUrl": ".",
-    "isolatedModules": true,
     "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
     "paths": {
+      "@api/*": ["api/*"],
       "content/*": ["src/content/*"],
       "assets/*": ["src/assets/*"],
       "composable/*": ["src/composable/*"],
