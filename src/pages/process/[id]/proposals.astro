@@ -1,11 +1,11 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
-import ProcessLayout from "layouts/ProcessLayout.astro";
-import getProcessUrl from "helpers/getProcessUrl";
-import { fetchProcess } from "services/api";
-import AddProposals from "@/process/AddProposals.astro";
-import AlertList from "@/ui/AlertList.astro";
-import Alert from "@/ui/Alert.astro";
+import ProcessLayout from '@layouts/ProcessLayout.astro';
+import getProcessUrl from '@helpers/getProcessUrl";
+import { fetchProcess } from '@services/api";
+import AddProposals from '@components/process/AddProposals.astro';
+import AlertList from '@components/ui/AlertList.astro';
+import Alert from '@components/ui/Alert.astro';
 
 changeLanguage("en");
 
@@ -70,11 +70,11 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-  import type IProposal from "interfaces/IProposal"
-  import { createQuill, updateQuill } from "composable/quillUtils";
-  import Delta from "quill"
-  import getQuillHTML from 'helpers/getQuillHTML'
-  import GUN from "gun";
+  import type IProposal from '@interfaces/IProposal';
+  import { createQuill, updateQuill } from '@composable/quillUtils';
+  import Delta from 'quill'
+  import getQuillHTML from '@helpers/getQuillHTML'
+  import GUN from 'gun';
 
   const processId = window.location.pathname.split('/process/')[1].split('/')[0]
 

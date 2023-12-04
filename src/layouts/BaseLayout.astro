@@ -1,10 +1,10 @@
 ---
-import i18next from "i18next";
-import Header from "@/navigation/Header.astro";
+import i18next from 'i18next';
+import Header from '@components/navigation/Header.astro';
 
-import 'assets/quill.snow.css';
-import "assets/global.css"
-import { localizePath } from "astro-i18next";
+import '@assets/quill.snow.css';
+import '@assets/global.css';
+import { localizePath } from 'astro-i18next';
 
 const supportedLanguages = i18next.languages;
 const { title, description } = Astro.props;
@@ -18,6 +18,7 @@ const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
 if (url.hash.includes('#/app/')) {
   const newHash = url.hash.replace('#/app/', '');
   const cleanHash = newHash.split('/')[0];
+  
   Astro.redirect(`${url.href}/process/${cleanHash}`);
 }
 ---

@@ -1,14 +1,15 @@
 ---
 import { t, changeLanguage } from "i18next";
 import { localizePath } from "astro-i18next";
-import BaseLayout from "layouts/BaseLayout.astro";
-import { firstVisit } from "stores/userStore";
+import BaseLayout from '@layouts/BaseLayout.astro';
 
 changeLanguage("en");
 
 let url = localizePath("/dashboard");
-if (!firstVisit.get()) {
-    firstVisit.set(false);
+const firstVisit = Astro.cookies.get('firstVisit');
+
+if (!firstVisit) {
+    Astro.cookies.set('firstVisit', 'true', { path: '/', httpOnly: true });
     url = localizePath("/about");
 }
 

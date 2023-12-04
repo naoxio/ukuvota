@@ -1,8 +1,6 @@
 ---
 import { t } from 'i18next'
-import { process } from 'stores/processStore';
-import type { Process } from 'stores/processStore';
-import { fmtDuration } from 'helpers/dateHelpers'
+import { fmtDuration } from '@helpers/dateHelpers'
 
 interface Props {
     phase: string
@@ -18,10 +16,7 @@ const { phase } = Astro.props;
 </datetime-slider>
 
 <script>
-  import { process } from 'stores/processStore';
-  import type { Process } from 'stores/processStore';
-  import { fmtDuration } from 'helpers/dateHelpers';
-  import logslider from 'helpers/logslider';
+  import logslider from '@helpers/logslider';
 
   
   class DatetimeSlider extends HTMLElement {
@@ -31,18 +26,17 @@ const { phase } = Astro.props;
 
     changeTime(ev: InputEvent & { target: HTMLInputElement}) {
       const value = Number(ev.target.value)
-      process.setKey(`${this.phase}LogSlider` as keyof Process, value)
+      //process.setKey(`${this.phase}LogSlider` as keyof Process, value)
       let duration = logslider(value)
-      process.setKey(`${this.phase}Duration` as keyof Process, duration)
+      // process.setKey(`${this.phase}Duration` as keyof Process, duration)
       this.updateDisplay();
 
     }
 
     updateDisplay() {
-      const $process = process.get()
-
-      this.inputElement.value = $process[`${this.phase}LogSlider`];
-      this.durationElement.innerHTML = fmtDuration(+new Date() + $process[`${this.phase}Duration`], +new Date());
+      
+      //this.inputElement.value = $process[`${this.phase}LogSlider`];
+      //this.durationElement.innerHTML = fmtDuration(+new Date() + $process[`${this.phase}Duration`], +new Date());
     }
 
     connectedCallback() {
@@ -51,11 +45,11 @@ const { phase } = Astro.props;
 
     constructor() {
       super()
-      this.phase = this.dataset.phase
-      this.inputElement = this.querySelector('input')
-      this.durationElement = this.querySelector('#duration')
+      //this.phase = this.dataset.phase
+      //this.inputElement = this.querySelector('input')
+      //this.durationElement = this.querySelector('#duration')
 
-      this.inputElement.addEventListener('input', (ev: InputEvent & { target: HTMLInputElement}) => this.changeTime(ev))
+      //this.inputElement.addEventListener('input', (ev: InputEvent & { target: HTMLInputElement}) => this.changeTime(ev))
     }
   }
   customElements.define('datetime-slider', DatetimeSlider)

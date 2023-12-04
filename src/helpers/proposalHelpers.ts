@@ -1,4 +1,4 @@
-import type IProposal from "interfaces/IProposal";
+import type IProposal from '@interfaces/IProposal';
 
 const isProposalEmpty = (proposal: IProposal): boolean => {
   const isEmptyStringDescription = typeof proposal.description === 'string' && proposal.description === '';

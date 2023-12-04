@@ -1,10 +1,10 @@
 ---
 import { t, changeLanguage } from "i18next";
-import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
-import weightingOptions from "helpers/weightingOptions";
-import Modal from "@/ui/Modal.astro";
-import ContentDoc from "@/ui/ContentDoc.astro";
-import { parseCookie } from "helpers/cookieHelpers";
+import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
+import weightingOptions from '@helpers/weightingOptions';
+import Modal from '@components/ui/Modal.astro';
+import ContentDoc from '@components/ui/ContentDoc.astro';
+import { parseCookie } from '@helpers/cookieHelpers';
 
 changeLanguage("en");
 
@@ -66,7 +66,7 @@ const { weighting = "", title = "", nojsdescription = "", quillopsdescription = 
 
 
 <script>
-  import { createQuill, updateQuill } from "composable/quillUtils";
+  import { createQuill, updateQuill } from '@composable/quillUtils';
 
   const quillContainer = document.getElementById('description') as HTMLElement;
   quillContainer.innerText = '';

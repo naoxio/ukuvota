@@ -1,19 +1,18 @@
 ---
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "layouts/BaseLayout.astro";
-import ProcessInfo from "@/process/ProcessInfo.astro";
-import { processes } from "stores/userStore";
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ProcessInfo from '@components/process/ProcessInfo.astro';
 import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
-
-const allProcesses = processes.get();
+const processesCookie = (Astro.cookies.get('processes') || '') as string;
+let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---
 
 <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
   {allProcesses.length > 0 ? (
     <div>
-      {allProcesses.map(uuid => (
+      {allProcesses.map((uuid: string) => (
         <ProcessInfo uuid={uuid} />
       ))}
       <form action="/api/export" method="get">

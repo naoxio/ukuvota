@@ -6,11 +6,10 @@ changeLanguage("en");
 
    
 <script>
-  import { process } from 'stores/processStore';
   import { Delta } from 'quill'
-  import addAlert from 'composable/addAlert';
-  import type IProposal from 'interfaces/IProposal';
-  import { createNewProcess } from "services/api"; 
+  import addAlert from '@composable/addAlert';
+  import type IProposal from '@interfaces/IProposal';
+  import { createNewProcess } from '@services/api'; 
   const lang = document.documentElement.getAttribute("lang");
   
   class CreateProcess extends HTMLElement {
