@@ -182,6 +182,13 @@ declare module 'astro:content' {
   collection: "de";
   data: any
 } & { render(): Render[".md"] };
+"Guide.md": {
+	id: "Guide.md";
+  slug: "guide";
+  body: string;
+  collection: "de";
+  data: any
+} & { render(): Render[".md"] };
 "Introduction.md": {
 	id: "Introduction.md";
   slug: "introduction";
@@ -208,6 +215,13 @@ declare module 'astro:content' {
 "Donate.md": {
 	id: "Donate.md";
   slug: "donate";
+  body: string;
+  collection: "en";
+  data: any
+} & { render(): Render[".md"] };
+"Guide.md": {
+	id: "Guide.md";
+  slug: "guide";
   body: string;
   collection: "en";
   data: any
