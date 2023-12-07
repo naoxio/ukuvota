@@ -1,6 +1,4 @@
-// api/process/[id]/vote.js
-import crypto from 'crypto';
-import { getProcessFromDatabase, putProcessIntoDatabase } from '../../../src/lib/database.js';
+/*import crypto from 'crypto';
 
 export default async (req, res) => {
     if (req.method === 'POST') {
@@ -41,3 +39,4 @@ export default async (req, res) => {
         res.status(405).end();  // Method Not Allowed
     }
 };
+*/

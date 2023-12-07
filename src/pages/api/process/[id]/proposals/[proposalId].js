@@ -1,8 +1,4 @@
-import { getProcessFromDatabase, putProcessIntoDatabase } from '../../lib/database.js';
-import GUN from 'gun';
-
-const gun = GUN();
-
+/*
 export default async (req, res) => {
     if (req.method === 'PUT') {
         try {
@@ -39,3 +35,4 @@ export default async (req, res) => {
         res.status(405).end();  // Method Not Allowed
     }
 };
+*/

@@ -1,5 +1,4 @@
-import { getProcessFromDatabase } from '../../../src/lib/database.js';
-
+/*
 export default async (req, res) => {
    if (req.method === 'GET') {
        try {
@@ -11,4 +10,4 @@ export default async (req, res) => {
    } else {
        res.status(405).end();  // Method Not Allowed
    }
-};
+};*/

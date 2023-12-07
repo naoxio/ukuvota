@@ -1,4 +1,4 @@
-import { putProcessIntoDatabase, getProcessFromDatabase } from '../../lib/database.js'
+/*import { putProcessIntoDatabase, getProcessFromDatabase } from '../../lib/database.js'
 import crypto from 'crypto';
 
 const updateDates = (dates) => {
@@ -76,3 +76,4 @@ export default async function(req, res) {
         res.status(405).send('Method not allowed.');
     }
 }
+*/

@@ -1,7 +1,4 @@
-import crypto from 'crypto';
-import GUN from 'gun';
-
-const gun = GUN();
+/*import crypto from 'crypto';
 
 export default async (req, res) => {
   if (req.method === 'POST') {
@@ -32,3 +29,4 @@ export default async (req, res) => {
   }
 };
 
+*/

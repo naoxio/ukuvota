@@ -16,5 +16,4 @@ export default async (req: any, res: any) => {
     res.writeHead(302, { Location: '/error-page' });
     res.end();
   }
-
 };
