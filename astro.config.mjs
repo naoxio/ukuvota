@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import Icons from 'unplugin-icons/vite';
 import tailwind from "@astrojs/tailwind";
 
-import cloudflare from "@astrojs/cloudflare";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,5 +13,5 @@ export default defineConfig({
       compiler: 'astro'
     })]
   },
-  adapter: cloudflare()
+  adapter: netlify()
 });

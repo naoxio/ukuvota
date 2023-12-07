@@ -9,24 +9,18 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"astro": "astro",
-		"test": "cypress open",
 		"i18n:extract": "astro-i18n extract",
 		"i18n:generate:pages": "astro-i18n generate:pages --purge",
 		"i18n:generate:types": "astro-i18n generate:types",
 		"i18n:sync": "npm run i18n:generate:pages && npm run i18n:generate:types"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^8.0.0",
-		"@astrojs/node": "^7.0.0",
+		"@astrojs/netlify": "^3.1.1",
 		"@astrojs/tailwind": "^5.0.1",
-		"ably": "^1.2.45",
-		"appwrite": "^13.0.0",
 		"astro": "^4.0.3",
 		"astro-i18n": "^2.1.18",
 		"astro-icon": "^0.8.0",
-		"axios": "^1.5.1",
 		"body-parser": "^1.20.2",
-		"cookie": "^0.6.0",
 		"date-fns": "^2.29.3",
 		"dompurify": "^3.0.1",
 		"downloadjs": "^1.4.7",
@@ -39,7 +33,6 @@
 		"workbox-cli": "^7.0.0"
 	},
 	"devDependencies": {
-		"@types/cookie": "^0.5.4",
 		"@types/quill": "^2.0.14",
 		"daisyui": "^4.4.19",
 		"unplugin-icons": "^0.17.0"
