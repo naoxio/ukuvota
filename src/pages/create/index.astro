@@ -1,10 +1,24 @@
 ---
-import { t } from "astro-i18n";
-import CreateProcessLayout from "@layouts/CreateProcessLayout.astro";
-import weightingOptions from "@utils/weightingOptions";
-import Modal from "@components/ui/Modal.astro";
-import ContentDoc from "@components/ui/ContentDoc.astro";
+import { t } from 'astro-i18n';
+import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
+import weightingOptions from '@utils/weightingOptions';
+import Modal from '@components/ui/Modal.astro';
+import ContentDoc from '@components/ui/ContentDoc.astro';
+import { Icon } from 'astro-icon'
 
+const checkFormData = async () => {
+  if ('formData' in Astro.request) {
+    try {
+      const formData = await Astro.request.formData();
+      if (formData && 'noGuide' in formData) {
+        const noGuide = formData.get('noGuide');
+        Astro.cookies.set('noGuide', noGuide === 'on' ? 'true' : 'false');
+      }
+    } catch (error) {}
+  }
+};
+
+checkFormData();
 
 type ProcessCookie = {
     weighting?: string;
@@ -12,11 +26,39 @@ type ProcessCookie = {
     nojsdescription?: string;
     quillopsdescription?: string;
 };
-const processCookie = JSON.parse(Astro.cookies.get("process")?.value || "{}");
+const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
 const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "" } = processCookie as ProcessCookie;
+
+const hasExistingProcessData = Object.keys(processCookie).length > 0;
+
 ---
 
 <CreateProcessLayout step={1}>
+  {hasExistingProcessData ? (
+    <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
+    <label for="existingProcessModal" class="modal">
+      <label class="modal-box">
+        <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
+          <Icon width="22" name="close"/>
+        </label>
+          <h3>{t('process.continueEditing')}</h3>
+          <p>{t('process.existingProcessPrompt')}</p>
+
+          <div class="process-details">
+            { title && <p><strong>{t('process.topic')}:</strong> {title}</p> }
+            { nojsdescription && <p><strong>{t('process.description')}:</strong> {nojsdescription}</p> }
+            { weighting && <p><strong>{t('process.weighting')}:</strong> {weighting}</p> }
+          </div>
+
+          <div class="flex justify-center">
+            <a href="/edit-existing" class="btn m-2">{t('process.continue')}</a>
+            <a href="/start-new" class="btn m-2">{t('process.startNew')}</a>
+          </div>
+      </label>
+    </label>
+  ) : null}
+
+
   <form action='/api/process-store' method="POST">
     <input type="hidden" name="step" value="1" />
     <div id="scrollTopicQuestion" />
@@ -31,35 +73,35 @@ const { weighting = "", title = "", nojsdescription = "", quillopsdescription = 
       title={t('alert.error.topicQuestion')}
     />
     <br/>
+    <br/>
     <p>{ t('process.description') }</p>
+  
     <div id="description">Loading QuillEditor...</div>
   
     <noscript>
       <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
     </noscript>
     <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
-
-    <details class="text-center">
-      <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary>
-        <div class="flex justify-center items-center">
-          <span>{ t('process.weighting') }</span>
-          <span class="flex justify-center items-center">
-            <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
-              {weightingOptions.map(weight => (
-                <option value={weight.value}>
-                  { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
-                </option>
-              ))}
-            </select>
-            
-            <Modal id="weightingInfo">
-              <h3>{ t('process.weighting') }</h3>
-              <ContentDoc file_name="NegativeScoreWeighting"/>
-            </Modal>
-          </span>
-        </div>
-      </div>
-    </details>
+    <br/>
+    <!--details class="text-center">
+      <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary-->
+    <div class="flex justify-between items-center">
+      <span>{ t('process.weighting') }</span>
+      <span class="flex justify-center items-center">
+        <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
+          {weightingOptions.map(weight => (
+            <option value={weight.value}>
+              { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
+            </option>
+          ))}
+        </select>
+        
+        <Modal id="weightingInfo">
+          <h3>{ t('process.weighting') }</h3>
+          <ContentDoc file_name="NegativeScoreWeighting"/>
+        </Modal>
+      </span>
+    </div>
     <br/>
     <div class="flex justify-center">
       <input type="submit" class="btn btn-primary" value="Next">
