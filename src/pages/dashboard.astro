@@ -3,8 +3,7 @@ import { astroI18n, t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ProcessInfo from "@components/process/ProcessInfo.astro";
 
-console.log(astroI18n.locale)
-console.log(t)
+console.log(astroI18n.locales)
 const processesCookie = (Astro.cookies.get("processes") || "") as string;
 let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---

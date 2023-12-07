@@ -1,0 +1,34 @@
+---
+import { l } from "astro-i18n";
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+---
+
+<BaseLayout>
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Score Voting Process Guide</h1>
+    
+    <div class="guide-content">
+      <h2 class="text-xl font-semibold">Phase 1: Collection</h2>
+      <p>Anyone can submit solution proposals to a given topic. We aim to pool a diverse set of ideas.</p>
+      
+      <h2 class="text-xl font-semibold">Phase 2: Voting</h2>
+      <p>Proposals are then voted on using emojis from -3 (strongly against) to +3 (strongly in favor). A selectable negative weight factor can adjust the impact of downvotes, ensuring flexibility for your unique needs.</p>
+      
+      <p>Kick off by setting up a process, defining the topic, and choosing phase durations. Collaborate, propose, and vote to converge on the best solutions.</p>
+    </div>
+
+    <!-- Checkbox for not showing the guide again -->
+    <div class="form-control mt-4">
+      <label class="cursor-pointer label">
+        <span class="label-text">Do not show this guide next time</span>
+        <input type="checkbox" class="checkbox checkbox-primary" />
+      </label>
+    </div>
+
+    <!-- Navigation button -->
+  <div class="flex justify-center">
+    <a class="btn text-btn m-2" href={l('/create')}>Create Process</a>
+  </div>
+  </div>
+</BaseLayout>

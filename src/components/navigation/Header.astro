@@ -1,12 +1,25 @@
 ---
-import { astroI18n, l,t } from 'astro-i18n';
+import { astroI18n, l, t } from 'astro-i18n';
 import { Icon } from 'astro-icon';
 
 const supportedLanguages = astroI18n.locales;
 const currentLanguage = astroI18n.locale;
+const primaryLocale = astroI18n.primaryLocale;
+console.log(primaryLocale)
 const { pathname } = Astro.url;
 
 const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
+
+const removeLanguageFromPath = (path: string) => {
+  const pathSegments = path.split('/').filter(Boolean);
+  if (supportedLanguages.includes(pathSegments[0])) {
+    pathSegments.shift(); 
+  }
+  return '/' + pathSegments.join('/'); 
+};
+
+const pathnameWithoutLanguage = removeLanguageFromPath(pathname);
+
 ---
 
 <header>
@@ -25,7 +38,7 @@ const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
         {supportedLanguages.map(lang => (
           <option 
             selected={lang === currentLanguage} 
-            value={l(pathname)}>
+            value={`${lang !== primaryLocale ? lang : ''}${pathnameWithoutLanguage}`}>
             {lang}
           </option>
         ))}
