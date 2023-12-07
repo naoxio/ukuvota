@@ -5,10 +5,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "astro dev",
-		"start": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"server": "node dist/server/entry.mjs",
+		"start": "npm run build && node dist/server/entry.mjs",
 		"astro": "astro",
 		"i18n:extract": "astro-i18n extract",
 		"i18n:generate:pages": "astro-i18n generate:pages --purge",
