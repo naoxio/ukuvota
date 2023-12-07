@@ -7,7 +7,7 @@
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
-		"start": "npm run build && node dist/server/entry.mjs",
+		"start": "node dist/server/entry.mjs",
 		"astro": "astro",
 		"i18n:extract": "astro-i18n extract",
 		"i18n:generate:pages": "astro-i18n generate:pages --purge",
