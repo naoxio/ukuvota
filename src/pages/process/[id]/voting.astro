@@ -81,7 +81,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     import addAlert from '@utils/addAlert'
     import getQuillHTML from '@utils/getQuillHTML';
     import { fetchProcess, submitVote, getVoters } from '@services/api';
-    import { isProposalEmpty } from '@utils/proposalHelpers';
+    import { isProposalEmpty } from '@utils/proposalutils';
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
     const process = await fetchProcess(processId);

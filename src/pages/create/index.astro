@@ -8,21 +8,13 @@ import ContentDoc from "@components/ui/ContentDoc.astro";
 changeLanguage("en");
 
 type ProcessCookie = {
-  weighting?: string;
-  title?: string;
-  nojsdescription?: string;
-  quillopsdescription?: string;
+    weighting?: string;
+    title?: string;
+    nojsdescription?: string;
+    quillopsdescription?: string;
 };
-
-const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
-
-const {
-  weighting = "",
-  title = "",
-  nojsdescription = "",
-  quillopsdescription = ""
-} = processCookie as ProcessCookie
-
+const processCookie = JSON.parse(Astro.cookies.get("process")?.value || "{}");
+const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "" } = processCookie as ProcessCookie;
 ---
 
 <CreateProcessLayout step={1}>

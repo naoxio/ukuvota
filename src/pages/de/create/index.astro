@@ -1,16 +1,20 @@
 ---
 import { t, changeLanguage } from "i18next";
 import CreateProcessLayout from "@layouts/CreateProcessLayout.astro";
-import weightingOptions from "@helpers/weightingOptions";
+import weightingOptions from "@utils/weightingOptions";
 import Modal from "@components/ui/Modal.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
-import { parseCookie } from "@helpers/cookieHelpers";
 
 changeLanguage("de");
 
-const cookieHeader = Astro.request.headers.get("cookie");
-const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "" } = parsedCookies;
+type ProcessCookie = {
+    weighting?: string;
+    title?: string;
+    nojsdescription?: string;
+    quillopsdescription?: string;
+};
+const processCookie = JSON.parse(Astro.cookies.get("process")?.value || "{}");
+const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "" } = processCookie as ProcessCookie;
 ---
 
 <CreateProcessLayout step={1}>
@@ -64,9 +68,8 @@ const { weighting = "", title = "", nojsdescription = "", quillopsdescription = 
   </form>
 </CreateProcessLayout>
 
-
 <script>
-  import { createQuill, updateQuill } from '@composable/quillUtils';
+  import { createQuill, updateQuill } from '@utils/quillUtils';
 
   const quillContainer = document.getElementById('description') as HTMLElement;
   quillContainer.innerText = '';
@@ -87,4 +90,4 @@ const { weighting = "", title = "", nojsdescription = "", quillopsdescription = 
     quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
   });
 
-</script>src/utils/weightingOptionssrc/utils/cookieHelpers
+</script>

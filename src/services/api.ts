@@ -1,9 +1,7 @@
-import GUN from "gun";
 import type IProcess from '@interfaces/IProcess'
 import type IVoter from '@interfaces/IVoter'
 
-const gun = GUN({ peers: ['http://localhost:8765/gun'] });
-
+/*
 export const fetchProcess = async (processId: string): Promise<IProcess> => {
   return new Promise((resolve) => {
     gun.get(`process-${processId}`).once((data) => {
@@ -81,3 +79,4 @@ export const getVoters = async (processId): Promise<IVoter[]>  => {
     });
   });
 };
+*/
