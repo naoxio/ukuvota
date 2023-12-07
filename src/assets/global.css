@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-    --base-100: #ffffff;
-    --base-100-dark: #202124;
-    --link-color: #9a2e2a;
-    --link-hover-color: #b63838;
-    --input-bg-color-light: #f1f3f4;
-    --input-bg-color-dark: #525355;
-    --input-focus-shadow: inset 1px 1px 0 rgba(0,0,0,.14), inset -1px -1px 0 rgba(0,0,0,.07);
+    --base-100: #ffffff; 
+    --base-100-dark: #323639;
+    --link-color: #2a5d9a;
+    --link-hover-color: #3a7ab6;
+    --input-bg-color-light: #f7f7f7;
+    --input-bg-color-dark: #40474d;
+    --input-focus-shadow: inset 1px 1px 0 rgba(0,0,0,.1), inset -1px -1px 0 rgba(0,0,0,.05);
 }
 
 html, body {

@@ -15,9 +15,7 @@ console.log(theme);
 
 <header>
   <div class="navbar bg-base-100">
-    <div class="flex-1 items-center">
-      <img width="48" id="logo" alt="Evotico logo" class="p-2" src={logo.src} />
-      
+    <div class="flex-1 items-center">      
       <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
         {i18next.t('buttons.about')}
       </a>
