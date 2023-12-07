@@ -41,18 +41,18 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
         <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
           <Icon width="22" name="close"/>
         </label>
-          <h3>{t('process.continueEditing')}</h3>
-          <p>{t('process.existingProcessPrompt')}</p>
+          <h3>{() => t('process.continueEditing')}</h3>
+          <p>{() => t('process.existingProcessPrompt')}</p>
 
           <div class="process-details">
-            { title && <p><strong>{t('process.topic')}:</strong> {title}</p> }
-            { nojsdescription && <p><strong>{t('process.description')}:</strong> {nojsdescription}</p> }
-            { weighting && <p><strong>{t('process.weighting')}:</strong> {weighting}</p> }
+            { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
+            { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
+            { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
           </div>
 
           <div class="flex justify-center">
-            <a href="/edit-existing" class="btn m-2">{t('process.continue')}</a>
-            <a href="/start-new" class="btn m-2">{t('process.startNew')}</a>
+            <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
+            <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
           </div>
       </label>
     </label>
@@ -62,7 +62,7 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
   <form action='/api/process-store' method="POST">
     <input type="hidden" name="step" value="1" />
     <div id="scrollTopicQuestion" />
-    <p>{ t('process.topic') }</p>
+    <p>{ () => t('process.topic') }</p>
     <input 
       id="topicQuestion" 
       name="topicQuestion" 
@@ -70,11 +70,11 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
       type="text" 
       value={title} 
       required 
-      title={t('alert.error.topicQuestion')}
+      title={() => t('alert.error.topicQuestion')}
     />
     <br/>
     <br/>
-    <p>{ t('process.description') }</p>
+    <p>{ () => t('process.description') }</p>
   
     <div id="description">Loading QuillEditor...</div>
   
@@ -84,9 +84,9 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
     <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
     <br/>
     <!--details class="text-center">
-      <summary class="cursor-pointer text-indianared mt-6 ">{ t('process.advancedOptions') }</summary-->
+      <summary class="cursor-pointer text-indianared mt-6 ">{ () => t('process.advancedOptions') }</summary-->
     <div class="flex justify-between items-center">
-      <span>{ t('process.weighting') }</span>
+      <span>{ () => t('process.weighting') }</span>
       <span class="flex justify-center items-center">
         <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
           {weightingOptions.map(weight => (
@@ -97,7 +97,7 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
         </select>
         
         <Modal id="weightingInfo">
-          <h3>{ t('process.weighting') }</h3>
+          <h3>{ () => t('process.weighting') }</h3>
           <ContentDoc file_name="NegativeScoreWeighting"/>
         </Modal>
       </span>

@@ -19,33 +19,33 @@ if (pathname !== url.pathname)
 
 <ProcessLayout process={process}>
   <proposal-list >
-    <h2>{ t('process.proposals') }</h2>
+    <h2>{ () => t('process.proposals') }</h2>
     <div class="proposals">
       <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
         <div class="view flex justify-between items-center cursor-pointer">
           <div class="content flex flex-col w-full">
             <div class="flex flex-col"/>
             <div class="flex">
-              <button name="edit" class="btn btn-primary  btn-sm mx-2">{ t('edit') }</button>
+              <button name="edit" class="btn btn-primary  btn-sm mx-2">{ () => t('edit') }</button>
             </div>
             <br/>
           </div>
         </div>
         <div class="edit flex justify-between items-center" style="display: none;">
           <div class="content flex flex-col w-full">
-            <h3>{ t('process.proposal') }</h3>
+            <h3>{ () => t('process.proposal') }</h3>
             <input type="text" class="input input-bordered input-sm my-2"/>
             <br/>
-            <h4>{ t('process.description') }</h4>
+            <h4>{ () => t('process.description') }</h4>
             <br/>
             <div class="quill"/>
             <br/>
             <div class="flex">
               <button name="save" class="btn btn-primary btn-sm mx-2">
-                { t('save') }
+                { () => t('save') }
               </button>
               <button name="delete" class="btn btn-ghost text-error btn-sm mx-2">
-                { t('delete') }
+                { () => t('delete') }
               </button>
             </div>
             <br/>
@@ -57,13 +57,13 @@ if (pathname !== url.pathname)
 
     <AlertList>
       <Alert icon="checkmark-outline" success>
-        { t('alert.success.websocketConnected') }
+        { () => t('alert.success.websocketConnected') }
       </Alert>
       <Alert icon="warning" warning>
-        { t('alert.connecting.connectingToWebsocket') }
+        { () => t('alert.connecting.connectingToWebsocket') }
       </Alert>
       <Alert icon="warning" error>
-        { t('alert.error.errorConnectingToWebsocket') }
+        { () => t('alert.error.errorConnectingToWebsocket') }
       </Alert>
     </AlertList>
   </proposal-list> 

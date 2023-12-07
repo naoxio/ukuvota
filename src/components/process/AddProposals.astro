@@ -11,9 +11,9 @@ const { processId } = Astro.props;
 
 
 <add-proposal class="flex items-center flex-wrap" data-process={processId}>    
-  <button id="add-button" class="btn p-2">{ t('process.addProposal') }</button>
+  <button id="add-button" class="btn p-2">{ () => t('process.addProposal') }</button>
   <div class="dropdown">
-    <label tabindex="0" class="btn m-1">{ t('addProposalTemplate') }</label>
+    <label tabindex="0" class="btn m-1">{ () => t('addProposalTemplate') }</label>
     <ul tabindex="0" class="dropdown-content menu p-2 shadow  rounded-box">
       {dropdownOptions.map(option => (
         <li>

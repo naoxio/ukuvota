@@ -24,8 +24,8 @@ const { phase, dates} = Astro.props;
             <!--Countdown type="success" dates={dates} /-->
         ) : +new Date() < dates[1] ? (
             <!--Countdown dates={dates} type="warning" /-->
-            <span>&nbsp;({ t('remainingTime') })</span>
-        ) : <span class="text-info">{ t('done') }</span>
+            <span>&nbsp;({ () => t('remainingTime') })</span>
+        ) : <span class="text-info">{ () => t('done') }</span>
     }
     <br/>
 

@@ -5,6 +5,6 @@ import ContentDoc from "@components/ui/ContentDoc.astro";
 
 ---
 
-<BaseLayout title={t('donate')} description={t('description')}>
+<BaseLayout title={() => t('donate')} description={() => t('description')}>
     <ContentDoc file_name="Donate"/>
 </BaseLayout>

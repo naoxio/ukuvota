@@ -26,10 +26,10 @@ const pathnameWithoutLanguage = removeLanguageFromPath(pathname);
   <div class="navbar bg-base-100">
     <div class="flex-1 items-center">      
       <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={l('/about')}>
-        {t('buttons.about')}
+        {() => t('buttons.about')}
       </a>
       <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={l('/dashboard')}>
-        {t('buttons.dashboard')}
+        {() => t('buttons.dashboard')}
       </a>
     </div>
     <div class="flex-none items-center">

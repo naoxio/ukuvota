@@ -9,7 +9,7 @@ interface Props {
 const { dates, type } = Astro.props;
 ---
 
-<countdown-view data-dates={dates} data-type={type} data-done={t('done')}>
+<countdown-view data-dates={dates} data-type={type} data-done={() => t('done')}>
   <span id="count"></span>
 </countdown-view>
 

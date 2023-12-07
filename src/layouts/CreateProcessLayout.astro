@@ -35,8 +35,8 @@ const steps = [
 
 ---
 
-<BaseLayout title={ t('setup.process')} description={t('description')}>
-  <h1 class="text-center">{ t('setup.process') }</h1>
+<BaseLayout title={ () => t('setup.process')} description={() => t('description')}>
+  <h1 class="text-center">{ () => t('setup.process') }</h1>
   <div class="flex justify-center space-x-2 m-2">
     {steps.map(({ stepNumber, href, disabled }) => (
       <a href={href} class={disabled ? 'pointer-events-none' : ''}>

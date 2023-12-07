@@ -12,4 +12,4 @@ if (!firstVisit) {
 return Astro.redirect(url);
 ---
 
-<BaseLayout title={t('buttons.home')} description={t('description')}/>
+<BaseLayout title={() => t('buttons.home')} description={() => t('description')}/>

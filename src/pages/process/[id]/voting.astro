@@ -36,7 +36,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 <ProcessLayout process={process}>
     <voting-list >
         <span class='flex justify-end'>
-            <span>{ t('process.voters') }:&nbsp;</span>
+            <span>{ () => t('process.voters') }:&nbsp;</span>
             <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
         </span>
         <div class="proposal-list">
@@ -57,20 +57,20 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             </div>
         </div>
         <br/>   
-        <p>{ t('process.voterName') }</p>
+        <p>{ () => t('process.voterName') }</p>
         <div class="text-center flex items-center">
             <input id="sender-name" type="text" class="input w-full m-2"/>
             <button id="submit-vote" class="btn btn-primary p-2" >
-                {t('process.submitVote')}
+                {() => t('process.submitVote')}
             </button>
         </div>
         <AlertList>
             <Alert icon="checkmark-outline" success>
-                { t('alert.success.submitVote') }
+                { () => t('alert.success.submitVote') }
                 <span class="name"></span>
             </Alert>
             <Alert icon="checkmark-outline" error>
-                { t('alert.error.emptyName') }
+                { () => t('alert.error.emptyName') }
             </Alert>
         </AlertList>
     </voting-list>
