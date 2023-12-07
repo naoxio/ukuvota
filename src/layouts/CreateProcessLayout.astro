@@ -2,7 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro'
 import Alert from '@components/ui/Alert.astro';
 import AlertList from '@components/ui/AlertList.astro';
-import { parseCookie } from '@helpers/cookieHelpers'
+import { parseCookie } from '@utils/cookieHelpers'
 import { t } from "i18next";
 import { parse } from 'cookie';
 
@@ -13,9 +13,21 @@ interface Props {
 
 const { step } = Astro.props;
 
-const cookieHeader = Astro.request.headers.get('cookie');
-const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { phases = '', title = '' } = parsedCookies;
+
+
+type ProcessCookie = {
+  phases?: string;
+  title?: string;
+};
+
+const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
+
+const {
+  phases = "",
+  title = "",
+} = processCookie as ProcessCookie
+
+console.log(processCookie)
 
 // Define the steps and their respective links outside the template.
 const steps = [
@@ -25,10 +37,6 @@ const steps = [
   { stepNumber: 4, href: "/create/review", disabled: (!title && !phases) }
 ];
 
-
-const cookies = parse(Astro.request.headers.get('cookie') || '');
-let theme = cookies.theme || 'light';
-
 ---
 
 <BaseLayout title={ t('setup.process')} description={t('description')}>
@@ -37,8 +45,8 @@ let theme = cookies.theme || 'light';
     {steps.map(({ stepNumber, href, disabled }) => (
       <a href={href} class={disabled ? 'pointer-events-none' : ''}>
         <div class={`w-4 h-4 rounded-full ${
-          step === stepNumber ? 'bg-indianred ring ring-red-300' : 
-          step > stepNumber ? 'bg-indianred' : 
+          step === stepNumber ? 'bg-linkbg ring ring-blue-300' : 
+          step > stepNumber ? 'bg-linkbg' : 
           'bg-gray-300'
         } ${disabled ? 'bg-gray-500' : ''}`}></div>
       </a>

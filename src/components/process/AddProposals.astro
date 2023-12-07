@@ -1,6 +1,6 @@
 ---
 import { t } from 'i18next';
-import dropdownOptions from '@helpers/proposalTemplates'
+import dropdownOptions from '@utils/proposalTemplates'
 
 interface Props {
     processId?: string
@@ -29,7 +29,7 @@ const { processId } = Astro.props;
 
 
 <script>
-  import dropdownOptions from '@helpers/proposalTemplates'
+  import dropdownOptions from '@utils/proposalTemplates'
   import { addProposal } from '@services/api';
 
   const addProposalTemplate = (template = null) => {

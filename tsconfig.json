@@ -13,15 +13,14 @@
       "@api/*": ["api/*"],
       "@content/*": ["src/content/*"],
       "@assets/*": ["src/assets/*"],
-      "@composable/*": ["src/composable/*"],
+      "@utils/*": ["src/utils/*"],
       "@layouts/*": ["src/layouts/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@services/*": ["src/services/*"],
-      "@helpers/*": ["src/helpers/*"],
       "@lib/*": ["lib/*"],
       "@components/*": ["src/components/*"]
     },    
   },
-  "include": ["src/**/*", "api/**/*", "lib/**/*"],
+  "include": ["src/**/*", "src/pages/api/**/*", "lib/**/*"],
   "exclude": ["dist"]
 }

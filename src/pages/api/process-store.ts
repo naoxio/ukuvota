@@ -1,44 +1,53 @@
-export default async (req: any, res: any) => {
-  if (req.method !== 'POST') {
-    res.status(405).end(); // Method Not Allowed
-    return;
-  }
+import type { APIRoute } from "astro";
 
-  const { step } = req.body;
+export const POST: APIRoute = async ({ request }) => {
+  const formData = await request.formData();
+  const step = formData.get('step');
+
+  const processCookieRaw = request.headers.get('cookie');
+  let processCookieObject = processCookieRaw ? JSON.parse(decodeURIComponent(processCookieRaw.split('; ').find(row => row.startsWith('process='))?.split('=')[1] || '{}')) : {};
 
   if (step === "1") {
     try {
-      const { weighting, topicQuestion, nojsdescription, quillopsdescription  } = req.body;
+      Object.assign(processCookieObject, {
+        weighting: formData.get('weighting'),
+        title: formData.get('topicQuestion'),
+        nojsdescription: formData.get('nojsdescription'),
+        quillopsdescription: formData.get('quillopsdescription')
+      });
 
-      res.setHeader('Set-Cookie', [
-        `weighting=${weighting}; Path=/; HttpOnly`,
-        `title=${topicQuestion}; Path=/; HttpOnly`,
-        `nojsdescription=${nojsdescription}; Path=/; HttpOnly`,
-        `quillopsdescription=${quillopsdescription}; Path=/; HttpOnly`
-      ]);
-      
-      res.writeHead(302, { Location: '/create/phases' });
-      res.end();
+      const headers = new Headers({
+        'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
+        'Content-Type': 'application/json'
+      });
+
+      headers.append('Location', '/create/phases');
+      return new Response(null, { status: 303, headers: headers });
+
     } catch (error) {
       console.error("Error:", error);
-      res.writeHead(302, { Location: '/create' });
-      res.end();
+      return new Response(null, { status: 303, headers: { 'Location': '/create' } });
     }
-  } 
-  else if (step === "2") {
+  } else if (step === "2") {
     try {
-      const { phase } = req.body;
+      // Update only the necessary field for step 2
+      processCookieObject.phase = formData.get('phase');
 
-      res.setHeader('Set-Cookie', `phases=${phase}; Path=/; HttpOnly`);
+      const headers = new Headers({
+        'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
+        'Content-Type': 'application/json'
+      });
 
-      let redirectPath = phase === 'full' ? '/create/full-process' : '/create/voting-only';
-      res.writeHead(302, { Location: redirectPath });
-      res.end();
+      let redirectPath = processCookieObject.phase === 'full' ? '/create/full-process' : '/create/voting-only';
+      headers.append('Location', redirectPath);
+      return new Response(null, { status: 303, headers: headers });
+
     } catch (error) {
       console.error("Error:", error);
-      res.writeHead(302, { Location: '/create' });
-      res.end();
+      return new Response(null, { status: 303, headers: { 'Location': '/create' } });
     }
   }
-  
+
+  // If the step is neither "1" nor "2"
+  return new Response(JSON.stringify({ message: "Invalid step" }), { status: 400 });
 };

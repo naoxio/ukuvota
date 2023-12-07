@@ -9,8 +9,6 @@ const currentLanguage = i18next.language;
 const { pathname } = Astro.url;
 
 const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
-
-console.log(theme);
 ---
 
 <header>

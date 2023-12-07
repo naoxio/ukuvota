@@ -2,7 +2,7 @@
 import i18next, { changeLanguage, t } from "i18next";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { fetchProcess } from "@services/api";
-import getProcessUrl from "@helpers/getProcessUrl";
+import getProcessUrl from "@utils/getProcessUrl";
 
 changeLanguage("en");
 
@@ -27,7 +27,7 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-import getQuillHTML from '@helpers/getQuillHTML';
+import getQuillHTML from '@utils/getQuillHTML';
 import {fetchProcess} from '@services/api';
 
 const processId = window.location.pathname.split('/process/')[1].split('/')[0]
