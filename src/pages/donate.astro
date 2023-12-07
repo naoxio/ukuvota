@@ -1,9 +1,8 @@
 ---
-import { t, changeLanguage } from "i18next";
+import { t } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
 
-changeLanguage("en");
 ---
 
 <BaseLayout title={t('donate')} description={t('description')}>

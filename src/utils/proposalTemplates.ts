@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { t } from 'astro-i18n';
 
 export default [
   {

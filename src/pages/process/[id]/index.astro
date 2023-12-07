@@ -1,16 +1,16 @@
 ---
-import i18next, { changeLanguage, t } from "i18next";
+import astro-i18n, { changeLanguage, t } from "astro-i18n";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 //import { fetchProcess } from "@services/api";
 import getProcessUrl from "@utils/getProcessUrl";
 
-changeLanguage("en");
+
 
 const { url } = Astro;
 const processId = Astro.params.id as string;
 const process: any = {};
 //const process = await fetchProcess(processId);
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 ---

@@ -1,11 +1,9 @@
 ---
-import i18next, { t } from 'i18next';
-import { localizePath } from 'astro-i18next';
-import ISO6991 from 'iso-639-1';
+import { astroI18n, l,t } from 'astro-i18n';
 import { Icon } from 'astro-icon';
 
-const supportedLanguages = i18next.languages;
-const currentLanguage = i18next.language;
+const supportedLanguages = astroI18n.locales;
+const currentLanguage = astroI18n.locale;
 const { pathname } = Astro.url;
 
 const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
@@ -14,11 +12,11 @@ const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
 <header>
   <div class="navbar bg-base-100">
     <div class="flex-1 items-center">      
-      <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
-        {i18next.t('buttons.about')}
+      <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={l('/about')}>
+        {t('buttons.about')}
       </a>
-      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={localizePath('/dashboard')}>
-        {i18next.t('buttons.dashboard')}
+      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={l('/dashboard')}>
+        {t('buttons.dashboard')}
       </a>
     </div>
     <div class="flex-none items-center">
@@ -27,8 +25,8 @@ const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
         {supportedLanguages.map(lang => (
           <option 
             selected={lang === currentLanguage} 
-            value={localizePath(pathname, lang)}>
-            {ISO6991.getNativeName(lang)}
+            value={l(pathname)}>
+            {lang}
           </option>
         ))}
       </select>

@@ -1,8 +1,8 @@
 ---
-import { changeLanguage } from "i18next";
-import { localizePath } from "astro-i18next";
+import { changeLanguage } from "astro-i18n";
+import { l } from "astro-i18n";
 
-changeLanguage("en");
 
-return Astro.redirect(localizePath("/"));
+
+return Astro.redirect(l("/"));
 ---

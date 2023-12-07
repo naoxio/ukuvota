@@ -20,6 +20,6 @@
       "@components/*": ["src/components/*"]
     },    
   },
-  "include": ["src/**/*", "src/pages/api/**/*", "lib/**/*"],
+  "include": ["src/**/*", "lib/**/*"],
   "exclude": ["dist"]
 }

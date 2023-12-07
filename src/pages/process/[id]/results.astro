@@ -2,18 +2,18 @@
 import type IProcess from "@interfaces/IProcess";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
-import i18next, { t, changeLanguage } from "i18next";
+import astro-i18n, { t } from "astro-i18n";
 import getProcessUrl from "@utils/getProcessUrl";
 import AlertList from "@components/ui/AlertList.astro";
 import Alert from "@components/ui/Alert.astro";
 
-changeLanguage("en");
+
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
 //const process: IProcess = await fetchProcess(processId);
 const process: any = {};
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];

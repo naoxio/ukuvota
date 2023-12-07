@@ -1,12 +1,12 @@
 ---
-import i18next from 'i18next';
+import {astroI18n} from 'astro-i18n';
 import Header from '@components/navigation/Header.astro';
 
 import '@assets/quill.snow.css';
 import '@assets/global.css';
-import { localizePath } from 'astro-i18next';
+import { l } from 'astro-i18n';
 
-const supportedLanguages = i18next.languages;
+const supportedLanguages = astroI18n.locales;
 const { title, description } = Astro.props;
 
 const { url } = Astro;
@@ -23,7 +23,7 @@ if (url.hash.includes('#/app/')) {
 }
 ---
 <!DOCTYPE html>
-<html lang={i18next.language} data-theme={theme} class={theme}>
+<html lang={astroI18n.locale} data-theme={theme} class={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
@@ -45,7 +45,7 @@ if (url.hash.includes('#/app/')) {
         <link
           rel="alternate"
           hreflang={supportedLanguage}
-          href={localizePath(url.href, supportedLanguage)}
+          href={l(url.href)}
         />
       ))
     }

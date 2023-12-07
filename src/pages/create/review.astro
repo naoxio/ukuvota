@@ -1,9 +1,9 @@
 
 ---
-import { t, changeLanguage } from "i18next";
+import { t } from "astro-i18n";
 import CreateProcessLayout from "@layouts/CreateProcessLayout.astro";
 
-changeLanguage("en");
+
 ---
 
 <CreateProcessLayout step={4} title={t('buttons.home')} description={t('description')}>

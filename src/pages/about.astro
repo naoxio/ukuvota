@@ -1,12 +1,11 @@
 ---
 import logo from "@assets/logo.png";
-import { t, changeLanguage } from "i18next";
+import { t } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
-import { localizePath } from "astro-i18next";
+import { l } from "astro-i18n";
 import Footer from "@components/navigation/Footer.astro";
 
-changeLanguage("en");
 ---
 
 <BaseLayout title={t('buttons.about')} description={t('description')}>
@@ -18,8 +17,8 @@ changeLanguage("en");
 
     <ContentDoc file_name="Introduction"/>
     <div class="flex justify-center">
-      <a class="btn text-btn m-2" href={localizePath('/create')}>Start Process</a>
-      <a class="btn text-btn m-2" href={localizePath('/download')}>Download the App</a>
+      <a class="btn text-btn m-2" href={l('/create')}>Start Process</a>
+      <a class="btn text-btn m-2" href={l('/download')}>Download the App</a>
     </div>
     <br/>
 

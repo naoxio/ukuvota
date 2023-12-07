@@ -1,10 +1,8 @@
 ---
-import { t, changeLanguage } from "i18next";
+import { t } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ProcessInfo from "@components/process/ProcessInfo.astro";
-import { localizePath } from "astro-i18next";
-
-changeLanguage("en");
+import { l } from "astro-i18n";
 
 const processesCookie = (Astro.cookies.get("processes") || "") as string;
 let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
@@ -41,7 +39,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
             <p class="font-bold text-lg">{t('dashboard.options')}</p>
             <br/>
             
-            <a href={localizePath('/create')} class="btn btn-primary mb-4">
+            <a href={l('/create')} class="btn btn-primary mb-4">
               {t('dashboard.createNewProcess')}
             </a>
 
