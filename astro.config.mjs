@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import Icons from 'unplugin-icons/vite';
 import tailwind from "@astrojs/tailwind";
 
-import netlify from "@astrojs/netlify";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,5 +13,7 @@ export default defineConfig({
       compiler: 'astro'
     })]
   },
-  adapter: netlify()
+  adapter: node({
+    mode: "standalone"
+  })
 });

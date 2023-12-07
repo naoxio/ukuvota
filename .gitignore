@@ -20,7 +20,6 @@ pnpm-debug.log*
 .env.production
 .env.development.local
 
-.netlify
 # macOS-specific files
 .DS_Store
 
@@ -29,4 +28,7 @@ pnpm-debug.log*
 /playwright-report/
 /playwright/.cache/
 /cypress/e2e/2-advanced-examples
+
+# deploy related
 .vercel
+.netlify
