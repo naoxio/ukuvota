@@ -1,5 +1,4 @@
 ---
-import logo from '@assets/logo.png';
 import i18next, { t } from 'i18next';
 import { localizePath } from 'astro-i18next';
 import ISO6991 from 'iso-639-1';
@@ -10,6 +9,7 @@ const currentLanguage = i18next.language;
 const { pathname } = Astro.url;
 
 const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
+
 console.log(theme);
 ---
 
