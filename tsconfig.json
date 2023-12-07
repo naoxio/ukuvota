@@ -16,7 +16,6 @@
       "@utils/*": ["src/utils/*"],
       "@layouts/*": ["src/layouts/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@services/*": ["src/services/*"],
       "@lib/*": ["lib/*"],
       "@components/*": ["src/components/*"]
     },    

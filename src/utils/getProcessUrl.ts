@@ -1,9 +1,8 @@
 import type IProcess from '@interfaces/IProcess';
 
-
 export default function getProcessUrl(process: IProcess, processId: string): string {
     switch (true) {
-        case !process:
+        case (process === null):
             return "/";
         case +new Date() >= process.proposalDates[0] && +new Date() < process.proposalDates[1]:
             return `/process/${processId}/proposals`

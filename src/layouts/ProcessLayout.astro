@@ -16,13 +16,7 @@ const {process} = Astro.props;
         <div id="temp"  />
     </div>
     { process &&
-    <ProcessInfo
-        title={process.title}
-        description={JSON.stringify(process.description)}
-        weighting={process.weighting}
-        proposalDates={process.proposalDates}
-        votingDates={process.votingDates}
-        />
+    <ProcessInfo uuid={process.id} />
     }
     <slot/>
 </BaseLayout>

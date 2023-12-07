@@ -53,7 +53,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
             </form>
             
             <form class="flex items-center mt-4" action="/api/import-csv" method="post" enctype="multipart/form-data">
-              <input type="file" name="file" accept=".csv" required />
+              <input type="file" class="file-input" name="file" accept=".csv" required />
               <br/>
               <button type="submit" class="btn m-2 btn-primary">
                 {t('dashboard.import')}

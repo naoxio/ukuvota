@@ -14,15 +14,17 @@ const { dates, type } = Astro.props;
 </countdown-view>
 
 <script>
-  import { fmtDuration } from '@utils/dateutils';
+  /*
+  import { fmtDuration } from '@utils/dateHelpers';
   const timeUnits = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
   
   class Countdown extends HTMLElement {
-    count = null
-    dates = null
-    targetDate = null
-    currentDate = null
-    type = null
+    count = this.querySelector('#count') as HTMLElement
+    dates = [];
+    targetDate = Date.now();
+    currentDate = Date.now();
+    type = this.dataset.type;
+
 
     get filteredUnits() {
       const diff = this.targetDate - this.currentDate;
@@ -56,15 +58,13 @@ const { dates, type } = Astro.props;
     }
     constructor() {
       super()
-      this.type = this.dataset.type
       this.dates = JSON.parse(`[${this.dataset.dates}]`)
-      this.count = this.querySelector('#count')
       this.targetDate = this.dates[1]
       this.currentDate = +new Date()
 
       this.updateTime()
     }
   }
-  customElements.define('countdown-view', Countdown)
+  customElements.define('countdown-view', Countdown)*/
 
 </script>

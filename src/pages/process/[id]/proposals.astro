@@ -1,8 +1,7 @@
 ---
 import i18next, { t, changeLanguage } from "i18next";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
-import getProcessUrl from "@utils/getProcessUrl\";";
-import { fetchProcess } from "@services/api\";";
+import getProcessUrl from "@utils/getProcessUrl";
 import AddProposals from "@components/process/AddProposals.astro";
 import AlertList from "@components/ui/AlertList.astro";
 import Alert from "@components/ui/Alert.astro";
@@ -10,8 +9,9 @@ import Alert from "@components/ui/Alert.astro";
 changeLanguage("en");
 
 const { url } = Astro;
-const processId = Astro.params.id;
-const process = await fetchProcess(processId);
+const processId: any = Astro.params.id;
+//const process = await fetchProcess(processId);
+const process: any = {};
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);

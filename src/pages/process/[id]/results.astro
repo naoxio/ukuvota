@@ -6,13 +6,13 @@ import i18next, { t, changeLanguage } from "i18next";
 import getProcessUrl from "@utils/getProcessUrl";
 import AlertList from "@components/ui/AlertList.astro";
 import Alert from "@components/ui/Alert.astro";
-import { fetchProcess } from "@services/api";
 
 changeLanguage("en");
 
 const { url } = Astro;
-const processId = Astro.params.id;
-const process: IProcess = await fetchProcess(processId);
+const processId: any = Astro.params.id;
+//const process: IProcess = await fetchProcess(processId);
+const process: any = {};
 const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -114,6 +114,7 @@ if (process && !("voters" in process)) {
 
 
 <script>
+    /*
     import download from 'downloadjs';
     import type IProcess from '@interfaces/IProcess';
     import type IProposal from '@interfaces/IProposal';
@@ -387,5 +388,5 @@ if (process && !("voters" in process)) {
         }
 
     }
-    customElements.define('results-card', ResultsCard)
+    customElements.define('results-card', ResultsCard)*/
 </script>

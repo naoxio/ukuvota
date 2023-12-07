@@ -1,7 +1,7 @@
 {
   "name": "@naoxio/evotico",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/cookie": "^0.5.4",
     "@types/quill": "^2.0.14",
-    "daisyui": "^3.9.2",
+    "daisyui": "^4.4.19",
     "unplugin-icons": "^0.17.0"
   }
 }
