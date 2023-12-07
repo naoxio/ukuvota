@@ -16,6 +16,7 @@
 		"i18n:sync": "npm run i18n:generate:pages && npm run i18n:generate:types"
 	},
 	"dependencies": {
+		"@astrojs/cloudflare": "^8.0.0",
 		"@astrojs/node": "^7.0.0",
 		"@astrojs/tailwind": "^5.0.1",
 		"ably": "^1.2.45",

@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import Icons from 'unplugin-icons/vite';
 import tailwind from "@astrojs/tailwind";
-import node from "@astrojs/node";
+
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +13,5 @@ export default defineConfig({
       compiler: 'astro'
     })]
   },
-  adapter: node({
-    mode: "standalone"
-  })
+  adapter: cloudflare()
 });
