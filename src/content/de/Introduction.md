@@ -1,5 +1,3 @@
-Ukuvota: Entlehnt vom Zulu-Wort für 'abstimmen', vereinfacht unsere Webanwendung den Abstimmungsprozess.
-
 Er gliedert sich in zwei Phasen:
 
  - Sammlung: Jeder kann Lösungsvorschläge zu einem gegebenen Thema einreichen. Wir zielen darauf ab, eine vielfältige Auswahl an Ideen zu sammeln.

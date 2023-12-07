@@ -16,12 +16,13 @@ console.log(theme);
 <header>
   <div class="navbar bg-base-100">
     <div class="flex-1 items-center">
-      <a href={localizePath('/', currentLanguage)}>
-            <img width="48" id="logo" alt="Ukuvota logo" class="p-2" src={logo.src} />
-      </href>
-    
+      <img width="48" id="logo" alt="Evotico logo" class="p-2" src={logo.src} />
+      
       <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={localizePath('/about')}>
         {i18next.t('buttons.about')}
+      </a>
+      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={localizePath('/dashboard')}>
+        {i18next.t('buttons.dashboard')}
       </a>
     </div>
     <div class="flex-none items-center">

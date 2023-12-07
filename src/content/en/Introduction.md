@@ -1,5 +1,3 @@
-Ukuvota: Borrowed from the Zulu word for 'to vote', our web application streamlines the voting process.
-
 It unfolds in two phases:
 
 - Collection: Anyone can submit solution proposals to a given topic. We aim to pool a diverse set of ideas.

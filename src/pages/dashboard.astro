@@ -1,11 +1,12 @@
 ---
 import { t, changeLanguage } from "i18next";
-import BaseLayout from '@layouts/BaseLayout.astro';
-import ProcessInfo from '@components/process/ProcessInfo.astro';
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProcessInfo from "@components/process/ProcessInfo.astro";
 import { localizePath } from "astro-i18next";
 
 changeLanguage("en");
-const processesCookie = (Astro.cookies.get('processes') || '') as string;
+
+const processesCookie = (Astro.cookies.get("processes") || "") as string;
 let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---
 

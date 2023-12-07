@@ -1,6 +1,6 @@
 ## Dear supporter
 
-Thank you for considering a donation to Ukuvota, an open source project dedicated to providing a collaborative voting tool that helps individuals and groups make informed decisions.
+Thank you for considering a donation to Evotico, an open source project dedicated to providing a collaborative voting tool that helps individuals and groups make informed decisions.
 
 With your donation, we can continue to improve and expand the capabilities of the platform, making it accessible to even more individuals and communities around the world.
 
@@ -10,7 +10,7 @@ Together, we can create a more equitable and participatory world. Thank you for 
 
 Sincerely,
 
-The Ukuvota Team
+The Evotico Team
 
 Donations are managed by our parent Organization NaoX.
  - [Coindrop](https://coindrop.to/naox)

@@ -1,78 +1,71 @@
 ---
 import { t, changeLanguage } from "i18next";
-import BaseLayout from "layouts/BaseLayout.astro";
-import ProcessInfo from "@/process/ProcessInfo.astro";
-import { processes } from "stores/userStore";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProcessInfo from "@components/process/ProcessInfo.astro";
+import { localizePath } from "astro-i18next";
 
 changeLanguage("de");
 
-const allProcesses = processes.get();
+const processesCookie = (Astro.cookies.get("processes") || "") as string;
+let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---
 
 <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
   {allProcesses.length > 0 ? (
     <div>
-      {allProcesses.map(uuid => (
-        <ProcessInfo key={uuid} />
+      {allProcesses.map((uuid: string) => (
+        <ProcessInfo uuid={uuid} />
       ))}
-      <button class="btn-floating" id="exportButton">Export</button>
-    </div>
+      <form action="/api/export" method="get">
+        <button class="btn-floating" id="exportButton" type="submit">
+          {t('dashboard.export')}
+        </button>
+      </form>
+  </div>
   ) : (
     <div class="empty-state">
       <p>{t('dashboard.noProcesses')}</p>
-      <button class="btn btn-primary btn-circle absolute right-5 bottom-20" id="addProcessFab">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">             
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>             
-        </svg>
-      </button>
+      <p>{t('dashboard.beginProcess')}</p>
+      <div class="absolute right-5 bottom-20">
+        <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>
+          </svg>
+        </label>
+        <input type="checkbox" id="modalToggle" class="modal-toggle" />
+
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+          
+            <p class="font-bold text-lg">{t('dashboard.options')}</p>
+            <br/>
+            
+            <a href={localizePath('/create')} class="btn btn-primary mb-4">
+              {t('dashboard.createNewProcess')}
+            </a>
+
+            <form class="mt-4" action="/api/add-by-uuid" method="post">
+              <input placeholder={t('dashboard.enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <button type="submit" class="btn btn-primary m-2">
+                {t('dashboard.add')}
+              </button>
+            </form>
+            
+            <form class="flex items-center mt-4" action="/api/import-csv" method="post" enctype="multipart/form-data">
+              <input type="file" name="file" accept=".csv" required />
+              <br/>
+              <button type="submit" class="btn m-2 btn-primary">
+                {t('dashboard.import')}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <input type="file" class="hidden" id="fileInput" accept=".csv" />
     </div>
   )}
 </BaseLayout>
-
-<script>
-import { processes, addProcess } from 'stores/userStore';
-import { saveAs } from 'file-saver';
-
-
-const addButton = document.getElementById("addProcessButton") as HTMLButtonElement;
-  addButton.addEventListener("click", addProcessWithUUID);
-
-function addProcessWithUUID(): void {
-    const uuidInput = document.getElementById("processUUID") as HTMLInputElement;
-    const uuid = uuidInput.value;
-    addProcess(uuid);
-}
-
-function importProcessesFromCSV(file: any) {
-  // Function to read the CSV file and extract UUIDs
-  // Update processes with the extracted UUIDs
-}
-const addFab = document.getElementById("addProcessFab") as HTMLButtonElement;
-addFab.addEventListener("click", () => {
-  // Logic to open modal or tooltip with options to add or create process
-});
-
-function exportProcessesToCSV() {
-  const uuids = processes.get();
-  const csvContent = "data:text/csv;charset=utf-8," + uuids.join("\n");
-  const encodedUri = encodeURI(csvContent);
-  saveAs(encodedUri, "processes.csv");
-}
-
-
-const exportButton = document.getElementById("exportButton") as HTMLButtonElement;
-exportButton.addEventListener("click", exportProcessesToCSV);
-
-// Add event listener for file input to handle CSV import
-const fileInput = document.getElementById("fileInput") as HTMLElement;
-fileInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  importProcessesFromCSV(file);
-});
-
-
-</script>
-
 <style>
   .empty-state {
     display: flex;
@@ -82,19 +75,4 @@ fileInput.addEventListener("change", (event) => {
     text-align: center;
   }
 
-  .btn-floating {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 10;
-    /* Add more styles for your FAB here */
-  }
 </style>

@@ -1,32 +1,20 @@
 ---
 import { t, changeLanguage } from "i18next";
-import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
-import AddProposals from "@/process/AddProposals.astro";
-import EditProposalList from "@/process/EditProposalList.astro";
-import TimeSelector from "@/datetime/TimeSelector.astro";
+import CreateProcessLayout from "@layouts/CreateProcessLayout.astro";
+import AddProposals from "@components/process/AddProposals.astro";
+import EditProposalList from "@components/process/EditProposalList.astro";
+import TimeSelector from "@components/datetime/TimeSelector.astro";
 
 changeLanguage("de");
 ---
 
-<CreateProcessLayout step={3} title={t('buttons.home')} description={t('description')}>
-  <h2 class="flex justify-center mt-4">{t('process.timeLeftVotingHeading')}</h2>
+<CreateProcessLayout step={3}>
+  <h2>{t('setup.selectTimeForVoting')}</h2>
   <br/>
   <TimeSelector phase="voting"/>
-  <h2>{ t('process.proposals') }</h2>    
+  <br/>
+  <h2>{ t('setup.proposals') }</h2>    
   <EditProposalList />
+  <br/>
   <AddProposals />
 </CreateProcessLayout>
-
-<script>
-  import { process } from 'stores/processStore';
-  const $process = process.get();
-
-  const fullPhase = document.getElementById('full-phase') as HTMLInputElement;
-  fullPhase.addEventListener('click', () => process.setKey('phases', 'full'));
-  fullPhase.checked = $process.phases === 'full';
-  
-  const votingPhase = document.getElementById('voting-phase') as HTMLInputElement;
-  votingPhase.addEventListener('click', () => process.setKey('phases', 'voting'));
-  votingPhase.checked = $process.phases === 'voting';
-
-</script>  

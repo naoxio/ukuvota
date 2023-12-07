@@ -1,40 +1,17 @@
 ---
+// Import statements remain the same
 import { t, changeLanguage } from "i18next";
-import CreateProcessLayout from "layouts/CreateProcessLayout.astro";
-import { parseCookie } from "helpers/cookieHelpers";
+import CreateProcessLayout from "@layouts/CreateProcessLayout.astro";
 
 changeLanguage("de");
-
-const cookieHeader = Astro.request.headers.get("cookie");
-const parsedCookies = cookieHeader ? parseCookie(cookieHeader) : {};
-const { weighting = "", title = "", description = "" } = parsedCookies;
 ---
 
-<CreateProcessLayout step={2} title={t('buttons.home')} description={t('description')}>
-  <h2 class="flex justify-center mt-4">{ t('process.phases.select') }</h2>
-  <br/>
-  <div class="flex justify-around">
-    <button id="full-phase" class="btn btn-primary p-4">{ t('process.phases.full') }</button>
-    <button id="voting-phase" class="btn btn-primary p-4">{ t('process.phases.voting') }</button>
-  </div>
+<CreateProcessLayout step={2}>
+  <form action='/api/process-store' method="POST">
+    <input type="hidden" name="step" value="2" />
+    <div class="flex justify-around flex-wrap">
+      <button type="submit" name="phase" value="full" class="btn btn-primary m-2">{ t('process.phases.full') }</button>
+      <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">{ t('process.phases.voting') }</button>
+    </div>
+  </form>
 </CreateProcessLayout>
-
-<script>
-  
-  import { process } from 'stores/processStore';
-  const $process = process.get();
-
-  const fullPhase = document.getElementById('full-phase') as HTMLButtonElement;
-  fullPhase.addEventListener('click', () => {
-    process.setKey('phases', 'full');
-    //window.location.href = '/create/full-process';
-  });
-  
-  const votingPhase = document.getElementById('voting-phase') as HTMLButtonElement;
-  votingPhase.addEventListener('click', () => {
-    process.setKey('phases', 'voting');
-    console.log(process.get().phases)
-    //window.location.href = '/create/voting-only';
-  });
-
-  </script>

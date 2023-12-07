@@ -1,6 +1,6 @@
 ## Sehr geehrter Unterstützer
 
-vielen Dank, dass Sie eine Spende an Ukuvota in Erwägung ziehen. Ukuvota ist ein Open-Source-Projekt, das sich der Bereitstellung eines kollaborativen Abstimmungstools widmet, das Einzelpersonen und Gruppen dabei hilft, fundierte Entscheidungen zu treffen.
+vielen Dank, dass Sie eine Spende an Evotico in Erwägung ziehen. Evotico ist ein Open-Source-Projekt, das sich der Bereitstellung eines kollaborativen Abstimmungstools widmet, das Einzelpersonen und Gruppen dabei hilft, fundierte Entscheidungen zu treffen.
 
 Mit Ihrer Spende können wir die Fähigkeiten der Plattform weiter verbessern und erweitern, so dass sie noch mehr Einzelpersonen und Gemeinschaften auf der ganzen Welt zugänglich ist.
 
@@ -10,7 +10,7 @@ Gemeinsam können wir eine gerechtere und partizipativere Welt schaffen. Vielen 
 
 Mit freundlichen Grüßen,
 
-Das Ukuvota-Team
+Das Evoti-Team
 
 Spenden werden von unserer Mutterorganisation NaoX verwaltet.
  - [Coindrop](https://coindrop.to/naox)

@@ -11,7 +11,7 @@ const { title, description } = Astro.props;
 
 const { url } = Astro;
 
-const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
+const display_title = `Evotico ${title ? `- ${title}` : ''}`
 
 const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
 
@@ -29,7 +29,7 @@ if (url.hash.includes('#/app/')) {
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="ukuvota, voting, democracy, consensus, collaborative" />
+    <meta name="keywords" content="evotico, ukuvota, voting, democracy, consensus, collaborative" />
     <meta name="author" content="NaoX" />
     <meta name="generator" content={Astro.generator} />
 

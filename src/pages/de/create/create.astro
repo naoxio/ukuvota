@@ -6,11 +6,10 @@ changeLanguage("de");
 
    
 <script>
-  import { process } from 'stores/processStore';
   import { Delta } from 'quill'
-  import addAlert from 'composable/addAlert';
-  import type IProposal from 'interfaces/IProposal';
-  import { createNewProcess } from "services/api"; 
+  import addAlert from '@composable/addAlert';
+  import type IProposal from '@interfaces/IProposal';
+  import { createNewProcess } from '@services/api'; 
   const lang = document.documentElement.getAttribute("lang");
   
   class CreateProcess extends HTMLElement {
@@ -74,8 +73,6 @@ changeLanguage("de");
 
     // Create process
     async createProcess() {
-      console.log("createProcess function called!");
-
       const title = process.get().title.trim();
       if (!title) {
 
@@ -110,12 +107,8 @@ changeLanguage("de");
       }
 
       try {
-          console.log("About to make the API request");
           addAlert(this.alertList, this.alerts[4])
-
           const response = await createNewProcess(body);
-          console.log("API request made. Response:", response);
-
           if (response.status === 413) {
               addAlert(this.alertList, this.alerts[3])
               return;
@@ -126,7 +119,6 @@ changeLanguage("de");
           /* @ts-ignore */
           process.setKey('description', { ops: [] });
           process.setKey('proposals', []);
-          console.log(processId)
           addAlert(this.alertList, this.alerts[1])
           const href = `/${lang !== 'en' ? `${lang}/` : '' }process/${processId}`
           window.location.href = href;

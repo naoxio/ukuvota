@@ -1,12 +1,12 @@
 ---
-import type IProcess from "interfaces/IProcess";
-import ProcessLayout from "layouts/ProcessLayout.astro";
+import type IProcess from "@interfaces/IProcess";
+import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import i18next, { t, changeLanguage } from "i18next";
-import getProcessUrl from "helpers/getProcessUrl";
-import AlertList from "@/ui/AlertList.astro";
-import Alert from "@/ui/Alert.astro";
-import { fetchProcess } from "services/api";
+import getProcessUrl from "@helpers/getProcessUrl";
+import AlertList from "@components/ui/AlertList.astro";
+import Alert from "@components/ui/Alert.astro";
+import { fetchProcess } from "@services/api";
 
 changeLanguage("de");
 
@@ -114,14 +114,13 @@ if (process && !("voters" in process)) {
 
 
 <script>
-    import download from 'downloadjs'
-    import type IProcess from 'interfaces/IProcess'
-    import type IProposal from 'interfaces/IProposal'
+    import download from 'downloadjs';
+    import type IProcess from '@interfaces/IProcess';
+    import type IProposal from '@interfaces/IProposal';
     import { toPng } from 'html-to-image';
-    import { fetchProcess } from "services/api";   
-    import { process as storeProcess } from 'stores/processStore'
-    import addAlert from 'composable/addAlert'
-    import getQuillHTML from 'helpers/getQuillHTML'
+    import { fetchProcess } from '@services/api';   
+    import addAlert from '@composable/addAlert';
+    import getQuillHTML from '@helpers/getQuillHTML';
     const translationsElement = document.getElementById('translations');
     const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 

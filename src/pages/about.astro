@@ -1,18 +1,18 @@
 ---
-import logo from '@assets/logo.png';
-import { t, changeLanguage } from 'i18next';
-import BaseLayout from '@layouts/BaseLayout.astro';
-import ContentDoc from '@components/ui/ContentDoc.astro';
+import logo from "@assets/logo.png";
+import { t, changeLanguage } from "i18next";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ContentDoc from "@components/ui/ContentDoc.astro";
 import { localizePath } from "astro-i18next";
-import Footer from '@components/navigation/Footer.astro';
+import Footer from "@components/navigation/Footer.astro";
 
 changeLanguage("en");
 ---
 
 <BaseLayout title={t('buttons.about')} description={t('description')}>
     <div class="flex items-center flex-col">
-      <img width="128" id="logo" alt="Ukuvota logo" src={logo.src} />
-      <h1>Ukuvota</h1>
+      <img width="128" id="logo" alt="Evotico logo" src={logo.src} />
+      <h1>Evotico</h1>
     </div>
 
     <ContentDoc file_name="Introduction"/>
