@@ -1,0 +1,12 @@
+{
+  "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
+  "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
+  "options": "Was möchten Sie tun?",
+  "createNewProcess": "Neuen Prozess erstellen",
+  "add": "Hinzufügen",
+  "addByUUID": "Prozess per UUID hinzufügen",
+  "enterUUID": "Geben Sie UUID oder Link ein",
+  "importProcesses": "Prozesse importieren",
+  "import": "Importieren",
+  "export": "Prozesse exportieren"
+}

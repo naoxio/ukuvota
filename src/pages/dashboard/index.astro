@@ -16,14 +16,14 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
       ))}
       <form action="/api/export" method="get">
         <button class="btn-floating" id="exportButton" type="submit">
-          {t('dashboard.export')}
+          {t('export')}
         </button>
       </form>
   </div>
   ) : (
     <div class="empty-state">
-      <p>{t('dashboard.noProcesses')}</p>
-      <p>{t('dashboard.beginProcess')}</p>
+      <p>{t('noProcesses')}</p>
+      <p>{t('beginProcess')}</p>
       <div class="absolute right-5 bottom-20">
         <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
@@ -36,17 +36,17 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
           <div class="modal-box">
             <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
           
-            <p class="font-bold text-lg">{t('dashboard.options')}</p>
+            <p class="font-bold text-lg">{t('options')}</p>
             <br/>
             
             <a href={l('/create')} class="btn btn-primary mb-4">
-              {t('dashboard.createNewProcess')}
+              {t('createNewProcess')}
             </a>
 
             <form class="mt-4" action="/api/add-by-uuid" method="post">
-              <input placeholder={t('dashboard.enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
               <button type="submit" class="btn btn-primary m-2">
-                {t('dashboard.add')}
+                {t('add')}
               </button>
             </form>
             
@@ -54,7 +54,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
               <input type="file" class="file-input" name="file" accept=".csv" required />
               <br/>
               <button type="submit" class="btn m-2 btn-primary">
-                {t('dashboard.import')}
+                {t('import')}
               </button>
             </form>
           </div>
