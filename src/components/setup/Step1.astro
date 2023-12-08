@@ -1,0 +1,65 @@
+---
+import { t } from 'astro-i18n';
+import weightingOptions from '@utils/weightingOptions';
+import Modal from '@components/ui/Modal.astro';
+import ContentDoc from '@components/ui/ContentDoc.astro';
+
+type Props = {
+  title: string;
+  quillopsdescription?: string;
+  nojsdescription?: string;
+  weighting?: string;
+}
+
+const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
+
+---
+
+<form action='/api/process-store' method="POST">
+  <input type="hidden" name="step" value="1" />
+  <div id="scrollTopicQuestion" />
+  <p>{ () => t('process.topic') }</p>
+  <input 
+    id="topicQuestion" 
+    name="topicQuestion" 
+    class="input input-bordered w-full" 
+    type="text" 
+    value={title} 
+    required 
+    title={t('alert.error.topicQuestion')}
+  />
+  <br/>
+  <br/>
+  <p>{ () => t('process.description') }</p>
+
+  <div id="description">{() => t('loadQuill')}</div>
+
+  <noscript>
+    <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
+  </noscript>
+  <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
+  <br/>
+  <!--details class="text-center">
+    <summary class="cursor-pointer text-indianared mt-6 ">{ () => t('process.advancedOptions') }</summary-->
+  <div class="flex justify-between items-center">
+    <span>{ () => t('process.weighting') }</span>
+    <span class="flex justify-center items-center">
+      <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
+        {weightingOptions.map(weight => (
+          <option value={weight.value}>
+            { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
+          </option>
+        ))}
+      </select>
+      
+      <Modal id="weightingInfo">
+        <h3>{ () => t('process.weighting') }</h3>
+        <ContentDoc file_name="NegativeScoreWeighting"/>
+      </Modal>
+    </span>
+  </div>
+  <br/>
+  <div class="flex justify-center">
+    <input type="submit" class="btn btn-primary" value="Next">
+  </div>
+</form>

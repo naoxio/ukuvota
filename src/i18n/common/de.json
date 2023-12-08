@@ -1,4 +1,5 @@
 {
+  "loadQuill": "Lade QuillEditor...",
   "setup": {
     "process": "Process Erstellen",
     "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",

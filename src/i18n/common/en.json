@@ -1,4 +1,5 @@
 {
+  "loadQuill": "Loading QuillEditor...",
   "setup": {
     "process": "Setup Process",
     "selectTimeForVoting": "Select the time for voting",
