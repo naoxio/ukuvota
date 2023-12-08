@@ -1,7 +1,12 @@
 ---
 import { t } from 'astro-i18n';
 import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
-import Step1 from '@components/setup/Step1.astro';
+
+import Step1 from '@components/setupProcess/Step1.astro';
+import Step2 from '@components/setupProcess/Step2.astro';
+import Step3 from '@components/setupProcess/Step3.astro';
+import Step4 from '@components/setupProcess/Step4.astro';
+
 import { Icon } from 'astro-icon'
 
 type ProcessCookie = {
@@ -48,42 +53,13 @@ console.log(currentStep)
     </>
   ) : null}
   {currentStep === 2 ? (
-    <div>
-      <form action='/api/process-store' method="POST">
-        <input type="hidden" name="step" value="2" />
-        <div class="flex justify-around flex-wrap">
-          <button type="submit" name="phase" value="full" class="btn btn-primary m-2">
-            { () => t('process.phases.full') }
-          </button>
-          <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">
-            { () => t('process.phases.voting') }
-          </button>
-        </div>
-      </form>
-    </div>
+    <Step2/>
+  ) : null}
+  {currentStep === 3 ? (
+    <Step3/>
+  ) : null}
+
+  {currentStep === 4 ? (
+    <Step4/>
   ) : null}
 </CreateProcessLayout>
-
-<script>
-  import { createQuill, updateQuill } from '@utils/quillUtils';
-
-  const quillContainer = document.getElementById('description') as HTMLElement;
-  quillContainer.innerText = '';
-  const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
-  const quillEditor = createQuill('#description');
-
-  if (quillOpsInput.value) {
-    try {
-      const quillOps = JSON.parse(quillOpsInput.value);
-      updateQuill(quillEditor, quillOps);
-    } catch (error) {
-      console.error('Error parsing quillopsdescription:', error);
-    }
-  }
-
-  quillEditor.on('text-change', () => {
-    /* @ts-ignore */
-    quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
-  });
-
-</script>
