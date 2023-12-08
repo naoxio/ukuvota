@@ -4,10 +4,9 @@ import { t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
 import Footer from "@components/navigation/Footer.astro";
-
 ---
 
-<BaseLayout title={() => t('buttons.about')} description={() => t('description')}>
+<BaseLayout title={t('buttons.about')} description={t('description')}>
     <div class="flex items-center flex-col">
       <img width="220" class="m-10" id="logo" alt="Evotico logo" src={logo.src} />
       <h1>Evotico</h1>
@@ -16,7 +15,7 @@ import Footer from "@components/navigation/Footer.astro";
 
     <ContentDoc file_name="Introduction"/>
     <div class="flex justify-center">
-      <a class="btn text-btn m-2" href={l('/guide')}>{() => t('homepage.getStarted')}</a>
+      <a class="btn text-btn m-2" href={l('/create')}>{() => t('homepage.getStarted')}</a>
     </div>
     <br/>
     <Footer/>

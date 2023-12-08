@@ -8,7 +8,7 @@ const processesCookie = (Astro.cookies.get("processes") || "") as string;
 let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---
 
-<BaseLayout title={() => t('buttons.dashboard')} description={() => t('description')}>
+<BaseLayout title={t('buttons.dashboard')} description={t('description')}>
   {allProcesses.length > 0 ? (
     <div>
       {allProcesses.map((uuid: string) => (
@@ -44,7 +44,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
             </a>
 
             <form class="mt-4" action="/api/add-by-uuid" method="post">
-              <input placeholder={() => t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
               <button type="submit" class="btn btn-primary m-2">
                 {() => t('add')}
               </button>

@@ -6,20 +6,6 @@ import Modal from '@components/ui/Modal.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
 import { Icon } from 'astro-icon'
 
-const checkFormData = async () => {
-  if ('formData' in Astro.request) {
-    try {
-      const formData = await Astro.request.formData();
-      if (formData && 'noGuide' in formData) {
-        const noGuide = formData.get('noGuide');
-        Astro.cookies.set('noGuide', noGuide === 'on' ? 'true' : 'false');
-      }
-    } catch (error) {}
-  }
-};
-
-checkFormData();
-
 type ProcessCookie = {
     weighting?: string;
     title?: string;
@@ -41,19 +27,19 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
         <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
           <Icon width="22" name="close"/>
         </label>
-          <h3>{() => t('process.continueEditing')}</h3>
-          <p>{() => t('process.existingProcessPrompt')}</p>
+        <h3>{() => t('process.continueEditing')}</h3>
+        <p>{() => t('process.existingProcessPrompt')}</p>
 
-          <div class="process-details">
-            { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
-            { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
-            { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
-          </div>
+        <div class="process-details">
+          { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
+          { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
+          { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
+        </div>
 
-          <div class="flex justify-center">
-            <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
-            <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
-          </div>
+        <div class="flex justify-center">
+          <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
+          <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
+        </div>
       </label>
     </label>
   ) : null}
@@ -70,7 +56,7 @@ const hasExistingProcessData = Object.keys(processCookie).length > 0;
       type="text" 
       value={title} 
       required 
-      title={() => t('alert.error.topicQuestion')}
+      title={t('alert.error.topicQuestion')}
     />
     <br/>
     <br/>

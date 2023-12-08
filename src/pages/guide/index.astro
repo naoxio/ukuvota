@@ -1,5 +1,5 @@
 ---
-import { l, t } from "astro-i18n";
+import { t } from "astro-i18n";
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
@@ -8,20 +8,13 @@ import ContentDoc from "@components/ui/ContentDoc.astro";
 
 <BaseLayout>
   <div class="container mx-auto p-4">
-    
     <ContentDoc file_name="Guide"/>
-
-    <form action={l('/create')} method="POST">
-      <div class="form-control mt-4">
-        <label class="cursor-pointer label" for="noGuide">
-          <span class="label-text">{() => t('checkboxLabel')}</span>
-          <input type="checkbox" name="noGuide" class="checkbox checkbox-primary" checked/>
-        </label>
-      </div>
-
-      <div class="flex justify-center">
-        <button type="submit" class="btn text-btn m-2">{() => t('createProcessButton')}</button>
-      </div>
-    </form>
+    <label class="cursor-pointer label" for="noGuide">
+      <span class="label-text">{() => t('checkboxLabel')}</span>
+      <input type="checkbox" name="noGuide" class="checkbox checkbox-primary" checked/>
+    </label>
+    <div class="flex justify-center">
+      <button type="submit" class="btn text-btn m-2">{() => t('createProcessButton')}</button>
+    </div>
   </div>
 </BaseLayout>

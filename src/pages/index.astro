@@ -1,6 +1,5 @@
 ---
-import { t } from "astro-i18n";
-import { l } from "astro-i18n";
+import { t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 
 let url = l("/dashboard");
@@ -12,4 +11,4 @@ if (!firstVisit) {
 return Astro.redirect(url);
 ---
 
-<BaseLayout title={() => t('buttons.home')} description={() => t('description')}/>
+<BaseLayout title={t('buttons.home')} description={t('description')}/>
