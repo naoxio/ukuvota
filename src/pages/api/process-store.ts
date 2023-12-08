@@ -14,7 +14,8 @@ export const POST: APIRoute = async ({ request }) => {
         weighting: formData.get('weighting'),
         title: formData.get('topicQuestion'),
         nojsdescription: formData.get('nojsdescription'),
-        quillopsdescription: formData.get('quillopsdescription')
+        quillopsdescription: formData.get('quillopsdescription'),
+        phase: formData.get('phase')
       });
 
       const headers = new Headers({
@@ -30,24 +31,6 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(null, { status: 303, headers: { 'Location': '/create' } });
     }
   } else if (step === 2) {
-    try {
-      // Update only the necessary field for step 2
-      processCookieObject.phase = formData.get('phase');
-      processCookieObject.step = nextStep;
-
-      const headers = new Headers({
-        'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json',
-        'Location': referer
-      });
-
-      return new Response(null, { status: 303, headers: headers });
-
-    } catch (error) {
-      console.error("Error:", error);
-      return new Response(null, { status: 303, headers: { 'Location': referer } });
-    }
-  } else if (step === 3) {
     try {
       const now = new Date();
 

@@ -59,8 +59,13 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
     </span>
   </div>
   <br/>
-  <div class="flex justify-center">
-    <input type="submit" class="btn btn-primary" value="Next">
+  <div class="flex justify-around flex-wrap">
+    <button type="submit" name="phase" value="full" class="btn btn-primary m-2">
+      { () => t('process.phases.full') }
+    </button>
+    <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">
+      { () => t('process.phases.voting') }
+    </button>
   </div>
 </form>
 

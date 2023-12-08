@@ -4,8 +4,8 @@ import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
-import Step3 from '@components/setupProcess/Step3.astro';
-import Step4 from '@components/setupProcess/Step4.astro';
+import Step3 from '@components/setupProcess/Step2.astro';
+import Step4 from '@components/setupProcess/Step3.astro';
 
 import { Icon } from 'astro-icon'
 
@@ -59,7 +59,4 @@ console.log(currentStep)
     <Step3/>
   ) : null}
 
-  {currentStep === 4 ? (
-    <Step4/>
-  ) : null}
 </CreateProcessLayout>
