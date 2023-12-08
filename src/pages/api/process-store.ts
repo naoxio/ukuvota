@@ -6,7 +6,7 @@ export const POST: APIRoute = async ({ request }) => {
   const nextStep = step + 1;
   const processCookieRaw = request.headers.get('cookie');
   let processCookieObject = processCookieRaw ? JSON.parse(decodeURIComponent(processCookieRaw.split('; ').find(row => row.startsWith('process='))?.split('=')[1] || '{}')) : {};
-
+  const referer = request.headers.get('referer') as string;
   if (step === 1) {
     try {
       Object.assign(processCookieObject, {
@@ -19,10 +19,10 @@ export const POST: APIRoute = async ({ request }) => {
 
       const headers = new Headers({
         'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Location': referer
       });
 
-      headers.append('Location', '/create');
       return new Response(null, { status: 303, headers: headers });
 
     } catch (error) {
@@ -37,15 +37,15 @@ export const POST: APIRoute = async ({ request }) => {
 
       const headers = new Headers({
         'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Location': referer
       });
 
-      headers.append('Location', '/create');
       return new Response(null, { status: 303, headers: headers });
 
     } catch (error) {
       console.error("Error:", error);
-      return new Response(null, { status: 303, headers: { 'Location': '/create' } });
+      return new Response(null, { status: 303, headers: { 'Location': referer } });
     }
   } else if (step === 3) {
     try {
@@ -71,16 +71,18 @@ export const POST: APIRoute = async ({ request }) => {
 
       const headers = new Headers({
         'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Location': referer
       });
 
-      headers.append('Location', '/create');
       return new Response(null, { status: 303, headers: headers });
-
     } catch (error) {
       console.error("Error:", error);
-      return new Response(null, { status: 303, headers: { 'Location': '/create' } });
+      return new Response(null, { status: 303, headers: { 'Location': referer} });
     }
   }
-  return new Response(JSON.stringify({ message: "Invalid step" }), { status: 400 });
+  console.error("Invalid Step");
+
+  return new Response(null, { status: 303, headers: { 'Location': referer } });
+
 };
