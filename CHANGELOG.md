@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+### [2.0.0] - 2024-xx-xx
+- Update brand name to Evotico
+- Make the app work without Javascript
+- Integrate IPFS for process storage
 
 ## [1.0.0] - 2023-09-10
 ### Changed

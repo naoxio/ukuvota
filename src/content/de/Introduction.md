@@ -1,5 +1,21 @@
-Der Prozess besteht aus zwei Phasen: einer Vorschlagsphase und einer Abstimmungsphase. In der Vorschlagsphase kann jeder einen Vorschlag zur Lösung der Themenfrage hinzufügen. Diese Phase ist darauf ausgelegt, so viele Ideen wie möglich für die Lösung zu sammeln.
+### Was ist Evotico?
 
-Nach der Vorschlagsphase beginnt die Abstimmungsphase. In dieser Phase kann jeder über jeden Vorschlag mit Emojis von -3 bis +3 abstimmen. Die Emojis repräsentieren das Unterstützungsniveau für jeden Vorschlag, wobei -3 stark dagegen und +3 stark dafür ist. Negative Stimmen können auch mit einem negativen Gewichtungsfaktor multipliziert werden, den Sie bei der Erstellung des Prozesses auswählen können. Dieser Faktor ermöglicht es Ihnen, den Einfluss negativer Stimmen an Ihre spezifischen Bedürfnisse anzupassen.
+Evotico repräsentiert die Zukunft des Wählens – eine digitale Transformation, die Effizienz, Sicherheit und Zugänglichkeit in den Vordergrund der Wahlprozesse stellt. Im Kern geht es bei Evotico um Empowerment – jede Stimme durch die Kraft der Technologie hörbar zu machen.
 
-Um loszulegen, erstellen Sie einfach einen neuen Prozess und wählen Sie die Themenfrage, die Dauer der Vorschlagsphase, die Dauer der Abstimmungsphase und den negativen Gewichtungsfaktor aus. Sie und Ihre Mitwirkenden können dann Vorschläge hinzufügen und darüber abstimmen, um gemeinsam eine Lösung zu finden.
+### Unsere Anwendung
+
+**Evotico App:** Unsere Flaggschiff-Anwendung definiert neu, wie Stimmen abgegeben und gezählt werden. Entwickelt für Organisationen und Gemeinschaften, bietet die Evotico App ein nahtloses, benutzerfreundliches Erlebnis und stellt sicher, dass jeder, unabhängig von technischen Fähigkeiten, einfach teilnehmen kann.
+
+**Wesentliche Merkmale:**
+- **Sicherheit an erster Stelle:** Fortschrittliche Verschlüsselung und sichere Kanäle, um die Vertraulichkeit und Integrität der Stimmen zu gewährleisten.
+- **Universelle Zugänglichkeit:** Eine leicht zu navigierende Plattform mit mehrsprachiger Unterstützung, die sich an eine vielfältige Benutzerbasis richtet.
+- **Echtzeitergebnisse:** Schnelle, genaue Stimmenauszählung für zeitnahe Entscheidungsfindung.
+- **Umweltfreundlich:** Eine papierlose Lösung, die zur Umweltnachhaltigkeit beiträgt.
+
+### Wen wir bedienen
+
+**Von lokalen Gemeinschaften bis zu globalen Organisationen:** Ob es sich um eine Wahl in einem lokalen Club, eine Abstimmung von Aktionären eines Unternehmens oder eine Gemeinschaftsumfrage handelt, Evoticos flexible Plattform passt sich verschiedenen Größen und Bedürfnissen an.
+
+### Treten Sie der Bewegung bei
+
+Mit Evotico treten Sie in ein neues Zeitalter des Wählens ein – eines, das digital, sicher und inklusiv ist. Erleben Sie Empowerment direkt an Ihren Fingerspitzen und machen Sie Ihre Stimme in der digitalen Ära zählbar.

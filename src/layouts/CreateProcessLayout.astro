@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro'
+import { t } from "astro-i18n";
+
+interface Props {
+    step: number,
+}
+
+const { step } = Astro.props;
+
+type ProcessCookie = {
+  phase?: string;
+  title?: string;
+  votingEndDate?: string;
+};
+
+const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
+
+const {
+  phase = "",
+  title = "",
+  votingEndDate = "",
+} = processCookie as ProcessCookie
+
+console.log(processCookie)
+
+// Define the steps and their respective states outside the template.
+const steps = [
+  { stepNumber: 1, disabled: false },
+  { stepNumber: 2, disabled: (!title || !phase) },
+  { stepNumber: 3, disabled: (!title || !phase || !votingEndDate) }
+];
+
+---
+
+<BaseLayout title={t('setup.process')} description={t('description')}>
+  <h1 class="text-center">{ () => t('setup.process') }</h1>
+  <div class="flex justify-center space-x-2 m-2">
+    {steps.map(({ stepNumber, disabled }) => (
+      <form action="/api/update-step" method="POST">
+        <input type="hidden" name="step" value={stepNumber}/>
+        <button type="submit" class={`w-4 h-4 rounded-full ${
+          step === stepNumber ? 'bg-linkbg ring ring-blue-300' : 
+          step > stepNumber ? 'bg-linkbg' : 
+          'bg-gray-300'
+        } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} disabled={disabled}></button>
+      </form>
+    ))}
+  </div>
+  <slot/>
+</BaseLayout>

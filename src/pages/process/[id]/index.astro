@@ -1,24 +1,25 @@
 ---
-import i18next, { changeLanguage, t } from "i18next";
-import ProcessLayout from "@/templates/ProcessLayout.astro";
-import getProcessUrl from "composable/getProcessUrl";
-import fetchProcessData from "composable/fetchProcessData";
+import { astroI18n, t } from "astro-i18n";
+import ProcessLayout from "@layouts/ProcessLayout.astro";
+//import { fetchProcess } from "@services/api";
+import getProcessUrl from "@utils/getProcessUrl";
 
-changeLanguage("en");
+
 
 const { url } = Astro;
-const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url.origin);
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+const processId = Astro.params.id as string;
+const process: any = {};
+//const process = await fetchProcess(processId);
+const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
+    return Astro.redirect(pathname);
 ---
 
 <ProcessLayout process={process}>
-    { +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
+    { process && +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
     <div>
-        <h2>{ t('process.proposals') }</h2>
-        <proposal-list  data-proposals={JSON.stringify(process.proposals)}>
+        <h2>{ () => t('process.proposals') }</h2>
+        <proposal-list  data-proposals={process.proposals}>
             <div class="proposals-container"></div>
         </proposal-list>
     </div>
@@ -26,46 +27,44 @@ if (pathname !== url.pathname)
 
 </ProcessLayout>
 
-
-
 <script>
-    import fetchProcessData from "composable/fetchProcessData";
-    import getQuillHTML from "composable/getQuillHTML";
+import getQuillHTML from '@utils/getQuillHTML';
+//import {fetchProcess} from '@services/api';
+/*
+const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+const process = await fetchProcess(processId);
+const proposalStart = process.proposalDates[0]
+const votingStart = process.votingDates[0]
 
-    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
 
-    const process = await fetchProcessData(processId, window.location.origin);
-    
-    const proposalStart = process.proposalDates[0]
-    const votingStart = process.votingDates[0]
-
-    const redirectToPage = (startTime: number, pageName: string) => {
-        if (+new Date() < startTime) {
-            const time = startTime - +new Date();
-            setTimeout(() => {
-                window.location.href = `${location.origin}/process/${processId}/${pageName}`;
-            }, time);
-        }
+const redirectToPage = (startTime: number, pageName: string) => {
+    if (+new Date() < startTime) {
+        const time = startTime - +new Date();
+        setTimeout(() => {
+            window.location.href = `/process/${processId}/${pageName}`;
+        }, time);
     }
-    redirectToPage(proposalStart, 'proposals')
-    redirectToPage(votingStart, 'voting')
+}
+redirectToPage(proposalStart, 'proposals')
+redirectToPage(votingStart, 'voting')
 
-    class ProposalList extends HTMLElement {
-        constructor() {
-            super();
-        }
 
-        connectedCallback() {
-            this.render();
-        }
+class ProposalList extends HTMLElement {
+    constructor() {
+        super();
+    }
 
-        render() {
-            const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
-            const proposalsContainer = this.querySelector(".proposals-container");
-            
-            let proposalsHTML = '';
+    connectedCallback() {
+        this.render();
+    }
 
-            proposals.forEach((proposal: any) => {
+    render() {
+        const proposals = JSON.parse(this.getAttribute("data-proposals") || "[]");
+        const proposalsContainer = this.querySelector(".proposals-container") as HTMLElement;
+        
+        let proposalsHTML = '';
+
+        proposals.forEach((proposal: any) => {
             proposalsHTML += `
                 <div>
                 <h3>${proposal.title}</h3>
@@ -73,12 +72,12 @@ if (pathname !== url.pathname)
                 </div>
                 <br/>
             `;
-            });
+        });
 
-            proposalsContainer.innerHTML = proposalsHTML;
-        }
+        proposalsContainer.innerHTML = proposalsHTML;
     }
+}
 
-    customElements.define("proposal-list", ProposalList);
+customElements.define("proposal-list", ProposalList);*/
 
 </script>

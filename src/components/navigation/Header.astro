@@ -1,0 +1,58 @@
+---
+import { astroI18n, l, t } from 'astro-i18n';
+import { Icon } from 'astro-icon';
+
+const supportedLanguages = astroI18n.locales;
+const currentLanguage = astroI18n.locale;
+const primaryLocale = astroI18n.primaryLocale;
+console.log(primaryLocale)
+const { pathname } = Astro.url;
+
+const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
+
+const removeLanguageFromPath = (path: string) => {
+  const pathSegments = path.split('/').filter(Boolean);
+  if (supportedLanguages.includes(pathSegments[0])) {
+    pathSegments.shift(); 
+  }
+  return '/' + pathSegments.join('/'); 
+};
+
+const pathnameWithoutLanguage = removeLanguageFromPath(pathname);
+
+---
+
+<header>
+  <div class="navbar bg-base-100">
+    <div class="flex-1 items-center">      
+      <a class={'btn btn-link ' + (pathname.includes('/about') ? 'selected' : '')} href={l('/about')}>
+        {() => t('buttons.about')}
+      </a>
+      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={l('/dashboard')}>
+        {() => t('buttons.dashboard')}
+      </a>
+    </div>
+    <div class="flex-none items-center">
+
+      <select class="select select-xs mx-2" onchange="location = this.value">
+        {supportedLanguages.map(lang => (
+          <option 
+            selected={lang === currentLanguage} 
+            value={`${lang !== primaryLocale ? lang : ''}${pathnameWithoutLanguage}`}>
+            {lang}
+          </option>
+        ))}
+      </select>
+
+      <form action="/api/theme" method="POST">
+        <input type="hidden" name="theme" value={theme === 'light' ? 'dark' : 'light'} />
+        <button type="submit" class="btn btn-ghost btn-sm">
+          { theme === 'dark' ? (
+            <Icon class="icon-sun" width="22" name="sun" />
+            ) : ( <Icon class="icon-moon" width="22" name="moon" /> 
+          )}
+        </button>
+      </form>
+    </div>
+  </div>
+</header>

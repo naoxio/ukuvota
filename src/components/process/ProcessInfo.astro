@@ -1,39 +1,43 @@
 ---
-import { t } from 'i18next';
-
-import weightingOptions from "composable/weightingOptions";
-import Modal from '@/ui/Modal.astro';
-import QRCode from '@/QRCode.astro'
-import ContentDoc from "@/ContentDoc.astro"
-import ProcessTimeLabel from '@/process/ProcessTimeLabel.astro';
-import Icon from 'astro-icon'
-import Delta from 'quill'
+import { t } from 'astro-i18n';
+import weightingOptions from '@utils/weightingOptions';
+import Modal from '@components/ui/Modal.astro';
+import QRCode from '@components/ui/QRCode.astro';
+import ContentDoc from '@components/ui/ContentDoc.astro';
+import ProcessTimeLabel from '@components/datetime/ProcessTimeLabel.astro';
+import Icon from 'astro-icon';
+import Delta from 'quill';
+import getQuillHTML from '@utils/getQuillHTML';
 
 const { url } = Astro;
-
 interface Props {
-    title?: string,
-    description?: string | Delta,
-    weighting?: string,
-    shareable?: boolean,
-    proposalDates?: number[],
-    votingDates?: number[]
+    uuid: string;
 }
 
-const { title, description, weighting, shareable = true, proposalDates, votingDates} = Astro.props;
+const { uuid } = Astro.props;
+const processDetails = await fetch(`/api/process/${uuid}`).then(res => res.json());
+const {
+    title,
+    description,
+    weighting,
+    shareable = true,
+    proposalDates,
+    votingDates
+} = processDetails;
 
-const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
-
+const weightLabel = weighting ? weightingOptions[Number(weighting) - 1].label : null;
+const descriptionHTML = getQuillHTML(description);
 ---
 
-<process-info  class="flex flex-col pb-3" data-title={title} data-description={description}>
+
+<div  class="flex flex-col pb-3">
     <h1>{ title }</h1>
-    <p class="topic-description"></p>
+    <p class="topic-description">{descriptionHTML}</p>
     <div class="flex justify-end items-center">
-        { t('process.weighting') }&nbsp;
-        {weight}&nbsp;
+        { () => t('process.weighting') }&nbsp;
+        {weightLabel}&nbsp;
         <Modal id="weightingInfo">
-            <h3>{ t('process.weighting') }</h3>
+            <h3>{ () => t('process.weighting') }</h3>
             <ContentDoc file_name="NegativeScoreWeighting"/>
         </Modal>
     </div>
@@ -45,63 +49,18 @@ const weight = weighting ? weightingOptions[Number(weighting) - 1].label : null
     </div>
     { shareable && 
     <div class="w-full pr-2">
-        <p>{ t('process.shareableUrl') }</p>
+        <p>{ () => t('process.shareableUrl') }</p>
         <div class="flex items-center">
             <input id="shareableUrl" type="text" class="input w-full" readonly value={ url.href }/>
             &nbsp; &nbsp;
             <Modal id="shareableQrCode" icon="qr-code">
-                <h3>{ t('process.qrcode') }</h3>
+                <h3>{ () => t('process.qrcode') }</h3>
                 <div class="flex justify-center">
-                    <QRCode text="Astro.url.href" />
+                    <QRCode text={url.href} />
                 </div>
                 <br/>
             </Modal>
-            <button class="btn btn-sm btn-ghost btn-circle share-button">
-                <Icon name="share"/>
-            </button>
         </div>
     </div>
     }                          
-</process-info>
-
-
-<script>
-    import getQuillHTML from 'composable/getQuillHTML'
-
-    const shareableUrl: HTMLInputElement = document.querySelector('input#shareableUrl')
-    if (shareableUrl) {
-        shareableUrl.addEventListener('click', () => {
-            shareableUrl.focus()
-            shareableUrl.select()
-            shareableUrl.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(shareableUrl.value);
-        })
-    }
-
-    class ProcessInfo extends HTMLElement {
-        constructor() {
-            super()
-            const description = JSON.parse(this.dataset.description)
-            const descriptionHTML = getQuillHTML(description);
-            const topicDescriptionElement = this.querySelector('.topic-description');
-            
-            if (descriptionHTML.trim() === "<p><br></p>") {
-                topicDescriptionElement.remove();
-            } else {
-                topicDescriptionElement.innerHTML = descriptionHTML;
-            }
-            
-        
-            this.querySelector('.share-button').addEventListener('click', function() {
-                if(navigator.share) {
-                    navigator.share({
-                        title: this.dataset.title,
-                        url: window.location.href
-                    })
-                }
-            })
-        }
-        
-    }
-    customElements.define('process-info', ProcessInfo)
-</script>
+</div>

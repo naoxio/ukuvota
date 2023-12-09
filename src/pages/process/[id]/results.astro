@@ -1,23 +1,24 @@
 ---
-import ProcessLayout from "@/templates/ProcessLayout.astro";
+import type IProcess from "@interfaces/IProcess";
+import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
-import i18next, { t, changeLanguage } from "i18next";
-import getProcessUrl from "composable/getProcessUrl";
-import AlertList from "@/ui/AlertList.astro";
-import Alert from "@/ui/Alert.astro";
-import fetchProcessData from "composable/fetchProcessData";
+import { astroI18n, t } from "astro-i18n";
+import getProcessUrl from "@utils/getProcessUrl";
+import AlertList from "@components/ui/AlertList.astro";
+import Alert from "@components/ui/Alert.astro";
 
-changeLanguage("en");
+
 
 const { url } = Astro;
-const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url.origin);
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+const processId: any = Astro.params.id;
+//const process: IProcess = await fetchProcess(processId);
+const process: any = {};
+const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
+    return Astro.redirect(pathname);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
-if (!("voters" in process)) {
-    process["voters"] = [];
+if (process && !("voters" in process)) {
+    process.voters = [];
 }
 ---
 <style>
@@ -40,12 +41,12 @@ if (!("voters" in process)) {
         <div class="tab-content hide">
 
             <span class="flex justify-between items-center">
-                <h2>{ t('process.results') }</h2>
-                <button class='repeat-button btn btn-sm'>{ t('repeatProcess') }</button>
+                <h2>{ () => t('process.results') }</h2>
+                <button class='repeat-button btn btn-sm'>{ () => t('repeatProcess') }</button>
             </span>
             
             <h3>
-                <span class="voter-label">{ t('process.voters') }</span>
+                <span class="voter-label">{ () => t('process.voters') }</span>
                 <span class="num-voters">({ process.voters.length })</span>:
             </h3>
             <div class="flex justify-around flex-wrap">
@@ -65,9 +66,9 @@ if (!("voters" in process)) {
                     <thead>
                         <tr class="table-row-one">
                             <th></th>
-                            <th class="whitespace-normal break-words">{ t('process.proposal') }</th>
-                            <th class="whitespace-normal break-words">{ t('process.averageScore') }</th>
-                            <th class="whitespace-normal break-words">{ t('process.totalScore') }</th>
+                            <th class="whitespace-normal break-words">{ () => t('process.proposal') }</th>
+                            <th class="whitespace-normal break-words">{ () => t('process.averageScore') }</th>
+                            <th class="whitespace-normal break-words">{ () => t('process.totalScore') }</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,7 +77,7 @@ if (!("voters" in process)) {
             </div>
             <br/>
             <div class="card">
-                <h3>{ t('process.exportData') }</h3>
+                <h3>{ () => t('process.exportData') }</h3>
                 <div class="flex justify-around exports">
                     <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
                     <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
@@ -101,10 +102,10 @@ if (!("voters" in process)) {
         </div>
         <AlertList>
             <Alert icon="checkmark-outline" success>
-                { t('alert.success.repeatProcess') }
+                { () => t('alert.success.repeatProcess') }
             </Alert>
             <Alert icon="warning" error>
-                { t('alert.error.missingProposals') }
+                { () => t('alert.error.missingProposals') }
             </Alert>
         </AlertList>
     </results-card>
@@ -113,18 +114,19 @@ if (!("voters" in process)) {
 
 
 <script>
-    import download from 'downloadjs'
-    import type IProposal from 'interfaces/IProposal'
+    /*
+    import download from 'downloadjs';
+    import type IProcess from '@interfaces/IProcess';
+    import type IProposal from '@interfaces/IProposal';
     import { toPng } from 'html-to-image';
-    import fetchProcessData from "composable/fetchProcessData";
-    import { process as storeProcess } from 'stores/processStore'
-    import addAlert from 'composable/addAlert'
-    import getQuillHTML from 'composable/getQuillHTML'
+    import { fetchProcess } from '@services/api';   
+    import addAlert from '@utils/addAlert';
+    import getQuillHTML from '@utils/getQuillHTML';
     const translationsElement = document.getElementById('translations');
     const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcessData(processId, window.location.origin);
+    const process: IProcess = await fetchProcess(processId);
     
     const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
@@ -165,7 +167,7 @@ if (!("voters" in process)) {
                 if (matchingVote) {
                     let v = matchingVote.vote;
                     if (v < 0)
-                        v *= process.weighting;
+                        v *= Number(process.weighting);
                     return sum + v;
                 }
             
@@ -184,7 +186,7 @@ if (!("voters" in process)) {
         getAverageEmoji(total: number, voters: any) {
             let i = this.getAverageScore(total, voters)
             if (i < 0)
-                i /= process.weighting;
+                i /= Number(process.weighting);
             i = Math.round(i)
             return this.emojis[i + 3];
         };
@@ -386,5 +388,5 @@ if (!("voters" in process)) {
         }
 
     }
-    customElements.define('results-card', ResultsCard)
+    customElements.define('results-card', ResultsCard)*/
 </script>

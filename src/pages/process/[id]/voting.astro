@@ -1,20 +1,20 @@
 ---
-import Alert from "@/ui/Alert.astro";
-import ProcessLayout from "@/templates/ProcessLayout.astro";
-import AlertList from "@/ui/AlertList.astro";
-import i18next, { t, changeLanguage } from "i18next";
+import Alert from "@components/ui/Alert.astro";
+import ProcessLayout from "@layouts/ProcessLayout.astro";
+import AlertList from "@components/ui/AlertList.astro";
+import { astroI18n, t } from "astro-i18n";
 import { Icon } from "astro-icon";
-import getProcessUrl from "composable/getProcessUrl";
-import fetchProcessData from "composable/fetchProcessData";
+import getProcessUrl from "@utils/getProcessUrl";
 
-changeLanguage("en");
+
 
 const { url } = Astro;
-const processId = Astro.params.id;
-const process = await fetchProcessData(processId, url.origin);
-const pathname = `${i18next.language === "en" ? "" : `/${i18next.language}`}${getProcessUrl(process, processId)}`;
+const processId: any = Astro.params.id;
+//const process = await fetchProcess(processId);
+const process: any = {};
+const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
-    return Astro.redirect(`${url.origin}${pathname}`);
+    return Astro.redirect(pathname);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 ---
 <style>
@@ -36,7 +36,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 <ProcessLayout process={process}>
     <voting-list >
         <span class='flex justify-end'>
-            <span>{ t('process.voters') }:&nbsp;</span>
+            <span>{ () => t('process.voters') }:&nbsp;</span>
             <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
         </span>
         <div class="proposal-list">
@@ -57,33 +57,33 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             </div>
         </div>
         <br/>   
-        <p>{ t('process.voterName') }</p>
+        <p>{ () => t('process.voterName') }</p>
         <div class="text-center flex items-center">
             <input id="sender-name" type="text" class="input w-full m-2"/>
             <button id="submit-vote" class="btn btn-primary p-2" >
-                {t('process.submitVote')}
+                {() => t('process.submitVote')}
             </button>
         </div>
         <AlertList>
             <Alert icon="checkmark-outline" success>
-                { t('alert.success.submitVote') }
+                { () => t('alert.success.submitVote') }
                 <span class="name"></span>
             </Alert>
             <Alert icon="checkmark-outline" error>
-                { t('alert.error.emptyName') }
+                { () => t('alert.error.emptyName') }
             </Alert>
         </AlertList>
     </voting-list>
 </ProcessLayout>
 
 <script>
-    import type IProposal from 'interfaces/IProposal'
-    import addAlert from 'composable/addAlert'
-    import getQuillHTML from "composable/getQuillHTML";
-    import fetchProcessData from "composable/fetchProcessData";
+/*    import type IProposal from '@interfaces/IProposal'
+    import addAlert from '@utils/addAlert'
+    import getQuillHTML from '@utils/getQuillHTML';
+    import { isProposalEmpty } from '@utils/proposalHelpers';
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcessData(processId, window.location.origin);
+    const process = await fetchProcess(processId);
 
     class VotingList extends HTMLElement {
         voteCounter = this.querySelector('span.no-voters')
@@ -106,46 +106,43 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         }
         submitVote = async () => {
             const votesMap = new Map();
-            const proposals = this.proposal_list.querySelectorAll('div.proposal')
+            const proposals = this.proposal_list.querySelectorAll('div.proposal');
             Array.from(proposals).forEach((proposal_node: HTMLDivElement) => {
-                const svgs = proposal_node.querySelectorAll('svg')
+                const svgs = proposal_node.querySelectorAll('svg');
                 for (const [i, svg] of svgs.entries()) {
-                if (!svg.classList.contains('gray')) {
-                    votesMap.set(proposal_node.id, i - 3);
-                    svg.classList.add('gray');
-                }
-                if (i - 3 == 0)
-                    svg.classList.remove('gray');
-                
+                    if (!svg.classList.contains('gray')) {
+                        votesMap.set(proposal_node.id, i - 3);
+                        svg.classList.add('gray');
+                    }
+                    if (i - 3 == 0)
+                        svg.classList.remove('gray');
                 };
             });
+
             const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
-            const senderName: HTMLInputElement = this.querySelector('input#sender-name')
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name');
             const vote = {
                 name: senderName.value,
                 votes
-            }
+            };
             if (senderName.value !== "") {
-                this.alerts[0].querySelector('span.name').innerHTML = senderName.value
-                addAlert(this.alertList, this.alerts[0])
-                senderName.value = ''  
+                this.alerts[0].querySelector('span.name').innerHTML = senderName.value;
+                addAlert(this.alertList, this.alerts[0]);
+                senderName.value = '';
 
-                const res = await fetch(`${location.origin}/api/process/${processId}/vote`, {
-                    method: "POST",
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify(vote)
-                });
-
-                const res_v = await fetch(`${location.origin}/api/process/${processId}/voters`)
-                const json_v = await res_v.json();
-                this.voteCounter.innerHTML = json_v.length
-            }
-            else {
-                addAlert(this.alertList, this.alerts[1])
+                try {
+                    await submitVote(processId, vote);
+                    const voters = await getVoters(processId);
+                    this.voteCounter.innerHTML = voters.length.toString();
+                } catch (error) {
+                    console.error('Error submitting vote:', error);
+                }
+            } else {
+                addAlert(this.alertList, this.alerts[1]);
             }
         };
         addProposal(proposal: IProposal) {
-            if (proposal.title === '' && proposal.description === '') return
+            if (isProposalEmpty(proposal)) return
             const proposal_node = this.proposal_html.cloneNode(true)
             proposal_node.id = proposal.id
             proposal_node.querySelector('h3').innerHTML = proposal.title
@@ -179,5 +176,5 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         else
             setTimeout(checkTime, time)
     }
-    checkTime()
+    checkTime()*/
 </script>

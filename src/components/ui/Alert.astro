@@ -10,11 +10,11 @@ interface Props {
 
 const { error, success, warning, icon } = Astro.props;
 const classList = `alert w-96 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : ''}`;
-const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
+const showAlertId = `show-alert-${Math.random().toString(36).substring(2, 9)}`;
 ---
 
 <alert-element id={showAlertId} class={classList} style="display: none; pointer-events: auto;">
-    <div>
+    <div class="flex justify-around">
         <Icon width="32" name={icon} />
         <span><slot/></span>
     </div>

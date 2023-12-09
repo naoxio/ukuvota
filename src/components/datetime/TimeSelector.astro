@@ -1,7 +1,7 @@
 ---
-import DatetimePicker from '@/datetime/DatetimePicker.astro';
-import DatetimeSlider from '@/datetime/DatetimeSlider.astro'
-import { t } from 'i18next';
+import DatetimePicker from '@components/datetime/DatetimePicker.astro';
+import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
+import { t } from 'astro-i18n';
 
 interface Props {
     phase: string
@@ -12,10 +12,10 @@ const title = t(`phases.${phase}.title`)
 ---
 
 <div>
-  <h2 class="title">{ title }</h2>
-  <h3>{ t(`phases.startAt`) }:</h3>
+  <h3 class="title">{ title }</h3>
+  <h4>{ t(`phases.startAt`) }:</h4>
   <DatetimePicker phase={phase} index={0} />
-  <h3>{ t(`phases.endsAt`) }:</h3>
+  <h4>{ t(`phases.endsAt`) }:</h4>
   <DatetimePicker phase={phase} index={1} />
   
   <DatetimeSlider phase={phase} />

@@ -1,47 +1,41 @@
 {
-  "name": "@naoxio/ukuvota",
-  "type": "module",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev",
-    "start": "npm run build && node server/server.mjs",
-    "build": "astro build",
-    "server": "node server/server.mjs",
-    "preview": "astro preview",
-    "astro": "astro",
-    "test": "cypress open"
-  },
-  "dependencies": {
-    "@astrojs/node": "^6.0.0",
-    "@astrojs/tailwind": "^5.0.0",
-    "@nanostores/persistent": "^0.7.0",
-    "astro": "^3.0.12",
-    "astro-i18next": "^1.0.0-beta.21",
-    "astro-icon": "^0.8.0",
-    "body-parser": "^1.20.2",
-    "date-fns": "^2.29.3",
-    "dompurify": "^3.0.1",
-    "downloadjs": "^1.4.7",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "html-to-image": "^1.11.11",
-    "i18next": "^23.5.1",
-    "level": "^8.0.0",
-    "nanostores": "^0.7.4",
-    "pouchdb": "^8.0.1",
-    "qrcode": "^1.5.1",
-    "quill": "^1.3.7",
-    "quill-delta-to-html": "^0.12.1",
-    "tailwindcss": "^3.2.7",
-    "workbox-cli": "^7.0.0",
-    "ws": "^8.12.1"
-  },
-  "devDependencies": {
-    "@flydotio/dockerfile": "^0.2.6",
-    "@types/quill": "^2.0.11",
-    "cypress": "^13.1.0",
-    "daisyui": "^3.7.3",
-    "unplugin-icons": "^0.17.0"
-  }
+	"name": "@naoxio/evotico",
+	"type": "module",
+	"version": "2.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"start": "node dist/server/entry.mjs",
+		"astro": "astro",
+		"i18n:extract": "astro-i18n extract",
+		"i18n:generate:pages": "astro-i18n generate:pages --purge",
+		"i18n:generate:types": "astro-i18n generate:types",
+		"i18n:sync": "npm run i18n:generate:pages && npm run i18n:generate:types"
+	},
+	"dependencies": {
+		"@astrojs/netlify": "^3.1.1",
+		"@astrojs/node": "^7.0.0",
+		"@astrojs/tailwind": "^5.0.1",
+		"astro": "^4.0.3",
+		"astro-i18n": "^2.1.18",
+		"astro-icon": "^0.8.0",
+		"body-parser": "^1.20.2",
+		"date-fns": "^2.29.3",
+		"dompurify": "^3.0.1",
+		"downloadjs": "^1.4.7",
+		"file-saver": "^2.0.5",
+		"html-to-image": "^1.11.11",
+		"qrcode": "^1.5.1",
+		"quill": "^1.3.7",
+		"quill-delta-to-html": "^0.12.1",
+		"tailwindcss": "^3.2.7",
+		"workbox-cli": "^7.0.0"
+	},
+	"devDependencies": {
+		"@types/quill": "^2.0.14",
+		"daisyui": "^4.4.19",
+		"unplugin-icons": "^0.17.0"
+	}
 }

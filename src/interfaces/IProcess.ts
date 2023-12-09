@@ -4,6 +4,7 @@ import { Delta } from 'quill'
 
 
 export default interface IProcess {
+  id: string;
   title: string;
   description: string | Delta;
   proposalDates: number[];
@@ -11,5 +12,5 @@ export default interface IProcess {
   strategy: string;
   weighting: string;
   proposals: IProposal[];
-  voters: IVoter[];
+  voters?: IVoter[];
 }

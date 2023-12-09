@@ -1,0 +1,76 @@
+---
+import { astroI18n, t, l } from "astro-i18n";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProcessInfo from "@components/process/ProcessInfo.astro";
+
+console.log(astroI18n.locales)
+const processesCookie = (Astro.cookies.get("processes") || "") as string;
+let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
+---
+
+<BaseLayout title={t('buttons.dashboard')} description={t('description')}>
+  {allProcesses.length > 0 ? (
+    <div>
+      {allProcesses.map((uuid: string) => (
+        <ProcessInfo uuid={uuid} />
+      ))}
+      <form action="/api/export" method="get">
+        <button class="btn-floating" id="exportButton" type="submit">
+          {() => t('export')}
+        </button>
+      </form>
+  </div>
+  ) : (
+    <div class="empty-state">
+      <p>{() => t('noProcesses')}</p>
+      <p>{() => t('beginProcess')}</p>
+      <div class="absolute right-5 bottom-20">
+        <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>
+          </svg>
+        </label>
+        <input type="checkbox" id="modalToggle" class="modal-toggle" />
+
+        <div class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+          
+            <p class="font-bold text-lg">{() => t('options')}</p>
+            <br/>
+            
+            <a href={l('/create')} class="btn btn-primary mb-4">
+              {() => t('createNewProcess')}
+            </a>
+
+            <form class="mt-4" action="/api/add-by-uuid" method="post">
+              <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <button type="submit" class="btn btn-primary m-2">
+                {() => t('add')}
+              </button>
+            </form>
+            
+            <form class="flex items-center mt-4" action="/api/import-csv" method="post" enctype="multipart/form-data">
+              <input type="file" class="file-input" name="file" accept=".csv" required />
+              <br/>
+              <button type="submit" class="btn m-2 btn-primary">
+                {() => t('import')}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <input type="file" class="hidden" id="fileInput" accept=".csv" />
+    </div>
+  )}
+</BaseLayout>
+<style>
+  .empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+</style>

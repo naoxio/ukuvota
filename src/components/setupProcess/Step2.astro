@@ -1,0 +1,24 @@
+---
+import { t } from 'astro-i18n';
+import AddProposals from "@components/process/AddProposals.astro";
+import EditProposalList from "@components/process/EditProposalList.astro";
+import TimeSelector from "@components/datetime/TimeSelector.astro";
+
+---
+<div>
+  <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
+
+  <br/>
+  <TimeSelector phase="proposal"/>  
+  <TimeSelector phase="voting"/>  
+
+
+  <h2>{() => t('setup.selectTimeForVoting')}</h2>
+  <br/>
+  <TimeSelector phase="voting"/>
+  <br/>
+  <h2>{ () => t('setup.proposals') }</h2>    
+  <EditProposalList />
+  <br/>
+  <AddProposals />
+</div>

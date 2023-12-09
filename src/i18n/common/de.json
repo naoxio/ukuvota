@@ -1,0 +1,117 @@
+{
+  "loadQuill": "Lade QuillEditor...",
+  "setup": {
+    "process": "Process Erstellen",
+    "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
+    "proposals": "Vorschläge hinzufügen"
+  },
+  "policy": "Datenschutzerklärung",
+  "donate": "Spenden",
+  "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
+  "duration": "Dauer",
+  "select": "auswählen",
+  "confirm": "Bestätigen",
+  "cancel": "abbrechen",
+  "done": "fertig",
+  "delete": "löschen",
+  "phases": {
+    "start": "Startet",
+    "startAt": "Startet am",
+    "endsAt": "Endet am",
+    "lastFor": "Dauer",
+    "proposal": {
+      "title": "Vorschlagsphase"
+    },
+    "voting": {
+      "title": "Abstimmungsphase"
+    }
+  },
+  "alert": {
+    "success": {
+      "createProcess": "Prozess startet...",
+      "creatingProcess": "Prozess wird erstellt...",
+      "submitVote": "Wahl eingereicht für: ",
+      "repeatProcess": "Wiederhole den Prozess mit der Auswahl...",
+      "websocketConnected": "Erfolgreich mit WebSocket verbunden"
+    },
+    "connecting": {
+      "connectingToWebsocket": "Verbindung zu WebSocket wird hergestellt..."
+    },
+    "error": {
+      "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
+      "emptyName": "Bitte fügen Sie einen Namen hinzu",
+      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
+      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
+      "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
+      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket"
+    } 
+  },
+  "remainingTime": "verbleibende Zeit",
+  "tagline": "Die beste Lösung finden",
+  "buttons": {
+    "dashboard": "Dashboard",
+    "about": "Über",
+    "go": "Los",
+    "home": "Startseite",
+    "quick": "Schnell",
+    "toggle_dark": "Dunkelmodus umschalten",
+    "toggle_langs": "Sprachen ändern",
+    "start_quick": "Starten Sie den schnellen Prozess",
+    "continue": "Weiter",
+    "back": "Zurück"
+  },
+  "loading": "Laden",
+  "calendar": "Kalender",
+  "slider": "Schieberegler",
+  "not-found": "Nicht gefunden",
+  "process": {
+    "setup": "Prozesseinrichtung",
+    "topic": "Thema Frage",
+    "description": "Beschreibung",
+    "weighting": "Negative Punktegewichtung",
+    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
+    "proposal": "Vorschlag",
+    "proposals": "Vorschläge",
+    "addProposal": "Vorschlag hinzufügen",
+    "averageScore": "Durchschnittliche Punktzahl",
+    "totalScore": "Gesamtpunktzahl",
+    "results": "Ergebnisse",
+    "maxProposals": "Maximale Anzahl von Vorschlägen",
+    "amountProposals": "Anzahl von Vorschlägen",
+    "limitProposals": "Anzahl von Vorschlägen begrenzen",
+    "starting": "Prozess beginnt...",
+    "submitVote": "Wahl abschicken",
+    "shareableUrl": "Teilbarer Link",
+    "qrcode": "Qr-Code",
+    "voterName": "Ihr Name oder dauerhafter Alias",
+    "voters": "Wählende",
+    "voter": "Wählende",
+    "exportData": "Daten exportieren",
+    "advancedOptions": "Erweiterte Optionen anzeigen",
+    "phases": {
+      "select": "Phasen auswählen",
+      "full": "Vorschlags- und Abstimmungsphase",
+      "voting": "Nur die Abstimmungsphase"
+    }
+  },
+  "create": "Erstellen",
+  "proposal": {
+    "zero": {
+      "title": "Aktueller Stand",
+      "description": "Die Dinge so belassen, wie sie sind."
+    },
+    "one": {
+      "title": "Prozess wiederholen",
+      "description": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen."
+    }
+  },
+  "redirect": {
+    "legacy": {
+      "title":"Legacy-URL erkannt",
+      "content": "Warnung: Diese Version der App wird nicht mehr unterstützt. Möchten Sie zur alten Legacy-App weitergeleitet werden? Beachten Sie, dass diese Version möglicherweise nicht alle neuesten Funktionen enthält und möglicherweise weniger sicher ist."
+    }
+  },
+  "repeatProcess":"Prozess wiederholen",
+  "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung."
+}

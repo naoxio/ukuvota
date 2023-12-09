@@ -1,0 +1,23 @@
+---
+import { t } from 'astro-i18n';
+---
+<footer>
+    <span>
+      <a class="link link-primary" href="https://naox.io">NaoX</a>
+      <span> © 2023</span>
+    </span>
+    <span>&nbsp;-&nbsp;</span>
+    <span>
+      <a class="link link-primary" href="/privacy-policy">{ () => t('policy') }</a>
+    </span>
+</footer>
+  
+<style>
+  footer {
+      display: flex;
+      display: flex;
+      flex-wrap: wrap;
+      word-break: break-all;
+      justify-content: center;
+  }
+</style>

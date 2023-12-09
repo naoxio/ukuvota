@@ -1,0 +1,120 @@
+---
+import { t } from 'astro-i18n';
+import dropdownOptions from '@utils/proposalTemplates'
+
+interface Props {
+    processId?: string
+}
+
+const { processId } = Astro.props;
+---
+
+
+<add-proposal class="flex items-center flex-wrap" data-process={processId}>    
+  <button id="add-button" class="btn p-2">{ () => t('process.addProposal') }</button>
+  <div class="dropdown">
+    <label tabindex="0" class="btn m-1">{ () => t('addProposalTemplate') }</label>
+    <ul tabindex="0" class="dropdown-content menu p-2 shadow  rounded-box">
+      {dropdownOptions.map(option => (
+        <li>
+          <a class="flex flex-col">
+            <b class="title">{option.title}</b>
+            <p class="description">{option.description.ops[0].insert}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</add-proposal>
+
+
+<script>
+  /*import dropdownOptions from '@utils/proposalTemplates'
+  import { addProposal } from '@services/api';
+
+  const addProposalTemplate = (template = null) => {
+/*
+    const proposals = JSON.parse(JSON.stringify($process.proposals));
+    proposals.push(
+      template !== null
+        ? dropdownOptions[template]
+        : {
+            title: '',
+            description: {ops: [{"insert": ""}]},
+          }
+    );
+    process.setKey('proposals', proposals);
+  };
+
+  class AddProposal extends HTMLElement {
+    isWrapping = false;
+    processId = '';
+
+    async addProposalViaAPI(title = '', description = { ops: [{"insert": ""}]}) {
+      try {
+        await addProposal(this.processId, { title, description });
+      } catch (error) {
+        console.error('Error adding proposal:', error);
+      }
+    }
+
+    checkIsWrapping() {
+      this.isWrapping = window.innerWidth <= 767;
+      this.updateClassList();
+    }
+
+    updateClassList() {
+      if (this.isWrapping) {
+        this.classList.add('justify-center');
+        this.classList.remove('justify-between');
+      } else {
+        this.classList.add('justify-between');
+        this.classList.remove('justify-center');
+      }
+    }
+ 
+    destroy() {
+      window.removeEventListener('resize', this.checkIsWrapping.bind(this));
+    }
+
+    constructor() {
+      super();
+      this.processId = this.dataset.process;
+      const addButton = this.querySelector('#add-button') as HTMLButtonElement;
+      const dropdownItems = this.querySelectorAll('.dropdown-content li a');
+
+      if (this.processId) {
+
+        // Listen for the "Add Proposal" button click event.
+        addButton.addEventListener('click', async() => {
+          this.addProposalViaAPI();
+        });
+
+        // Listen for the proposal template click events.
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', async() => {
+                const title = item.querySelector('.title').innerHTML;
+                const description = { ops: [{"insert": item.querySelector('.description').innerHTML}]};
+                this.addProposalViaAPI(title, description);
+            });
+        });
+      }
+      else {
+        addButton.addEventListener('click', () => addProposalTemplate());
+    
+        dropdownItems.forEach((item, index) => {
+          item.addEventListener('click', () => addProposalTemplate(index));
+        });
+      }
+
+      this.checkIsWrapping();
+      window.addEventListener('resize', this.checkIsWrapping.bind(this));
+    }
+
+    disconnectedCallback() {
+      this.destroy();
+    }
+  }
+
+  customElements.define('add-proposal', AddProposal);*/
+</script>

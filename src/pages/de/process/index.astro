@@ -1,8 +1,5 @@
 ---
-import { changeLanguage } from "i18next";
-import { localizePath } from "astro-i18next";
-
-changeLanguage("de");
-
-return Astro.redirect(localizePath("/"));
+import Page from "../../process/index.astro"
+const { props } = Astro
 ---
+<Page {...props} />
