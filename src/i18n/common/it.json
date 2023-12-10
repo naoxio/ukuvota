@@ -1,0 +1,117 @@
+{
+  "loadQuill": "Caricamento di QuillEditor...",
+  "setup": {
+    "process": "Processo di configurazione",
+    "selectTimeForVoting": "Seleziona l'orario per la votazione",
+    "proposals": "Aggiungi proposte"
+  },
+  "policy": "Informativa sulla privacy",
+  "donate": "Donazione",
+  "addProposalTemplate": "Aggiungi proposta per modello",
+  "duration": "Durata",
+  "select": "seleziona",
+  "confirm": "conferma",
+  "cancel": "annulla",
+  "done": "fatto",
+  "delete": "elimina",
+  "phases": {
+    "start": "Inizio",
+    "startAt": "Inizia alle",
+    "endsAt": "Termina alle",
+    "lastFor": "Dura per",
+    "proposal": {
+      "title": "Fase di proposta"
+    },
+    "voting": {
+      "title": "Fase di votazione"
+    }
+  },
+  "alert": {
+    "success": {
+      "createProcess": "Avvio del processo...",
+      "creatingProcess": "Il processo è in fase di creazione...",
+      "submitVote": "Voto inviato per: ",
+      "repeatProcess": "Ripetere il processo con la selezione...",
+      "websocketConnected": "Connessione a WebSocket riuscita"
+    },
+    "connecting": {
+      "connectingToWebsocket": "Connessione a WebSocket..."
+    },
+    "error": {
+      "topicQuestion": "Si prega di aggiungere una domanda sull'argomento",
+      "emptyName": "Per favore aggiungi un nome",
+      "proposalsMissing": "Proposte mancanti, sono necessarie almeno 2 proposte",
+      "missingProposals": "Proposte mancanti, è necessario selezionare almeno 2 proposte",
+      "payloadSizeTooLarge": "La dimensione del payload è troppo grande, riduci la dimensione del contenuto",
+      "errorConnectingToWebsocket": "Errore di connessione a WebSocket"
+    } 
+  },
+  "remainingTime": "tempo rimanente",
+  "tagline": "Trovare la soluzione migliore",
+  "buttons": {
+    "dashboard": "Pannello di controllo",
+    "about": "Informazoni",
+    "go": "VAI",
+    "home": "Home",
+    "quick": "Veloce",
+    "toggle_dark": "Attivala modalità scura",
+    "toggle_langs": "Cambia lingua",
+    "start_quick": "Avvia il processo rapido",
+    "continue": "Continua",
+    "back": "Indietro"
+  },
+  "loading": "Caricamento",
+  "calendar": "Calendario",
+  "slider": "Dispositivo di scorrimento",
+  "not-found": "Non trovato",
+  "process": {
+    "setup": "Processo di configurazione",
+    "topic": "Domanda sull'argomento",
+    "description": "Descrizione",
+    "weighting": "Ponderazione del punteggio negativo",
+    "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
+    "timeLeftVotingHeading": "Seleziona l'orario per la votazione",
+    "proposal": "Proposta",
+    "proposals": "Proposte",
+    "addProposal": "Aggiungi proposta",
+    "averageScore": "Punteggio medio",
+    "totalScore": "Punteggio totale",
+    "results": "Resultati",
+    "maxProposals": "Numero massimo di proposte",
+    "amountProposals": "Quantità di proposte",
+    "limitProposals": "Limitare la quantità di proposte",
+    "starting": "Avvio del processo...",
+    "submitVote": "Invia voto",
+    "shareableUrl": "Link condivisibile",
+    "qrcode": "QR Code",
+    "voterName": "Il tuo nome o alias persistente",
+    "voters": "Votanti",
+    "voter": "Votante",
+    "exportData": "Esporta dati",
+    "advancedOptions": "Mostra opzioni avanzate",
+    "phases": {
+      "select": "Seleziona fasi",
+      "full": "Proposta + Fase di votazione",
+      "voting": "Solo fase di votazione"
+    }
+  },
+  "create": "Crea",
+  "proposal": {
+    "zero": {
+      "title": "Status quo",
+      "description": "Mantieni le cose come sono."
+    },
+    "one": {
+      "title": "Ripeti il processo",
+      "description": "Ripeti il processo e cerca altre opzioni."
+    }
+  },
+  "redirect": {
+    "legacy": {
+      "title":"Rilevato URL precedente",
+      "content": "Avviso: questa versione dell'app non è più supportata. Desideri procedere con il reindirizzamento alla vecchia app legacy? Tieni presente che questa versione potrebbe non avere tutte le funzionalità più recenti e potrebbe essere meno sicura."
+    }
+  },
+  "repeatProcess":"Ripeti il processo",
+  "description": "Evotico è un potente strumento decisionale che aiuta le persone a fare scelte informate in modo collaborativo e organizzato. "
+}
