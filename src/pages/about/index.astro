@@ -5,18 +5,37 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
 import Footer from "@components/navigation/Footer.astro";
 ---
-
 <BaseLayout title={t('buttons.about')} description={t('description')}>
-    <div class="flex items-center flex-col">
-      <img width="220" class="m-10" id="logo" alt="Evotico logo" src={logo.src} />
-      <h1>Evotico</h1>
-      <h2>{() => t('homepage.subheader')}</h2>
-    </div>
+  <div class="flex items-center flex-col">
+    <img width="220" class="m-10" id="logo" alt="Evotico logo" src={logo.src} />
+    <h1>Evotico</h1>
+    <h2>{() => t('subheader')}</h2>
+  </div>
 
-    <ContentDoc file_name="Introduction"/>
-    <div class="flex justify-center">
-      <a class="btn text-btn m-2" href={l('/create')}>{() => t('homepage.getStarted')}</a>
+  <ContentDoc file_name="Introduction"/>
+  <br/>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="card card-bordered bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">{t('webAppCardTitle')}</h2>
+            <p>{t('webAppCardDescription')}</p>
+            <div class="card-actions justify-end">
+              <a href={l('/create')} class="btn btn-primary">{t('webAppCardButton')}</a>
+            </div>
+        </div>
     </div>
-    <br/>
-    <Footer/>
+    <div class="card card-bordered bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">{t('telegramBotCardTitle')}</h2>
+          <p>{t('telegramBotCardDescription')}</p>
+          <div class="card-actions justify-end">
+            <a href="https://t.me/evotico_bot" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{t('telegramBotCardButton')}</a>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <br/>
+  <Footer/>
+  
 </BaseLayout>

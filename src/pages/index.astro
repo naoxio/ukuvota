@@ -1,14 +1,14 @@
 ---
 import { t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
-
+/*
 let url = l("/dashboard");
 const firstVisit = Astro.cookies.get("firstVisit");
 if (!firstVisit) {
     Astro.cookies.set("firstVisit", "true", { path: "/", httpOnly: true });
     url = l("/about");
-}
-return Astro.redirect(url);
+}*/
+return Astro.redirect(l('/about'));
 ---
 
 <BaseLayout title={t('buttons.home')} description={t('description')}/>

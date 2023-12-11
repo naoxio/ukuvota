@@ -1,7 +1,10 @@
 {
   "description": "Evotico - Voting Made Simple, Secure, and Empowering",
-  "homepage": {
-    "subheader": "Voting Made Simple, Secure, and Empowering",
-    "getStarted": "Get Started"
-  }
+  "subheader": "Voting Made Simple, Secure, and Empowering",
+  "webAppCardTitle": "Evotico Web App",
+  "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
+  "webAppCardButton": "Start Voting",
+  "telegramBotCardTitle": "Evotico Telegram Bot",
+  "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
+  "telegramBotCardButton": "Go to Bot" 
 }

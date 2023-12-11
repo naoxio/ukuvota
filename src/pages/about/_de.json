@@ -1,7 +1,10 @@
 {
-  "description": "Evotico - Wählen einfach, sicher und ermächtigend",
-  "homepage": {
-    "subheader": "Wählen einfach, sicher und ermächtigend",
-    "getStarted": "Loslegen"
-  }
+  "description": "Evotico - Einfaches, sicheres und ermächtigendes Wählen",
+  "subheader": "Einfaches, sicheres und ermächtigendes Wählen",
+  "webAppCardTitle": "Evotico Web-App",
+  "webAppCardDescription": "Nahtlose webbasierte Wahlerfahrung, zugänglich und benutzerfreundlich.",
+  "webAppCardButton": "Wählen Starten",
+  "telegramBotCardTitle": "Evotico Telegram-Bot",
+  "telegramBotCardDescription": "Bequemes Wählen über Telegram, integriert in die tägliche Kommunikation.",
+  "telegramBotCardButton": "Zum Bot gehen"
 }
