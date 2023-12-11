@@ -1,21 +1,14 @@
-### Was ist Evotico?
+**Dezentralisierte Wahltechnologie:**  
+Einsatz modernster, dezentralisierter Systeme für erhöhte Sicherheit und Datenschutz.
 
-Evotico repräsentiert die Zukunft des Wählens – eine digitale Transformation, die Effizienz, Sicherheit und Zugänglichkeit in den Vordergrund der Wahlprozesse stellt. Im Kern geht es bei Evotico um Empowerment – jede Stimme durch die Kraft der Technologie hörbar zu machen.
+**Verschlüsseltes Wählen:**  
+Fortgeschrittene Verschlüsselung gewährleistet die Integrität und Vertraulichkeit jeder Stimme.
 
-### Unsere Anwendung
+**Mehr-Plattform-Zugänglichkeit:**  
+Zugänglich über verschiedene Plattformen, bietet Flexibilität und Bequemlichkeit.
 
-**Evotico App:** Unsere Flaggschiff-Anwendung definiert neu, wie Stimmen abgegeben und gezählt werden. Entwickelt für Organisationen und Gemeinschaften, bietet die Evotico App ein nahtloses, benutzerfreundliches Erlebnis und stellt sicher, dass jeder, unabhängig von technischen Fähigkeiten, einfach teilnehmen kann.
+**Vorschlagssammlung:**  
+Effiziente Sammlung und Verwaltung von Vorschlägen, die den Abstimmungsprozess straffen.
 
-**Wesentliche Merkmale:**
-- **Sicherheit an erster Stelle:** Fortschrittliche Verschlüsselung und sichere Kanäle, um die Vertraulichkeit und Integrität der Stimmen zu gewährleisten.
-- **Universelle Zugänglichkeit:** Eine leicht zu navigierende Plattform mit mehrsprachiger Unterstützung, die sich an eine vielfältige Benutzerbasis richtet.
-- **Echtzeitergebnisse:** Schnelle, genaue Stimmenauszählung für zeitnahe Entscheidungsfindung.
-- **Umweltfreundlich:** Eine papierlose Lösung, die zur Umweltnachhaltigkeit beiträgt.
-
-### Wen wir bedienen
-
-**Von lokalen Gemeinschaften bis zu globalen Organisationen:** Ob es sich um eine Wahl in einem lokalen Club, eine Abstimmung von Aktionären eines Unternehmens oder eine Gemeinschaftsumfrage handelt, Evoticos flexible Plattform passt sich verschiedenen Größen und Bedürfnissen an.
-
-### Treten Sie der Bewegung bei
-
-Mit Evotico treten Sie in ein neues Zeitalter des Wählens ein – eines, das digital, sicher und inklusiv ist. Erleben Sie Empowerment direkt an Ihren Fingerspitzen und machen Sie Ihre Stimme in der digitalen Ära zählbar.
+**Score-Wahl:**  
+Innovatives Score-Wahlsystem für nuancierte und aussagekräftige Wahlergebnisse.

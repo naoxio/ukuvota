@@ -1,21 +1,14 @@
-### Cos'è Evotico?
+**Tecnologia di Voto Decentralizzata:**  
+Adozione di sistemi all'avanguardia e decentralizzati per una maggiore sicurezza e privacy.
 
-Evotico rappresenta il futuro del voto: una trasformazione digitale che porta efficienza, sicurezza e accessibilità in prima linea nei processi elettorali. Fondamentalmente, Evotico riguarda l’empowerment: consentire a ogni voce di essere ascoltata attraverso il potere della tecnologia.
+**Voto Crittografato:**  
+La crittografia avanzata assicura l'integrità e la riservatezza di ogni voto.
 
-### La nostra applicazione
+**Accessibilità Multi-Piattaforma:**  
+Accessibile su varie piattaforme, fornendo flessibilità e comodità.
 
-**App Evotico:** La nostra applicazione di punta ridefinisce il modo in cui vengono espressi e conteggiati i voti. Progettata sia per le organizzazioni che per le comunità, l'app Evotico offre un'esperienza semplice e intuitiva, garantendo che tutti, indipendentemente dalle competenze tecniche, possano partecipare facilmente.
+**Raccolta di Proposte:**  
+Raccolta ed gestione efficiente delle proposte, snellendo il processo di voto.
 
-**Caratteristiche principali:**
-- **La sicurezza prima di tutto:** Crittografia avanzata e canali sicuri per garantire la riservatezza e l'integrità del voto.
-- **Accessibilità universale:** una piattaforma facile da navigare, con supporto multilingue, adatta a una base di utenti diversificata.
-- **Risultati in tempo reale:** Conteggio dei voti rapido e accurato per un processo decisionale tempestivo.
-- **Eco-friendly:** una soluzione senza carta che contribuisce alla sostenibilità ambientale.
-
-### Chi serviamo
-
-**Dalle comunità locali alle organizzazioni globali:** Che si tratti dell'elezione di un club locale, del voto di un azionista aziendale o di un sondaggio comunitario, la piattaforma flessibile di Evotico si adatta a varie scale ed esigenze.
-
-### Unisciti al Movimento
-
-Con Evotico, entra in una nuova era del voto: digitale, sicura e inclusiva. Sperimenta l'empowerment a portata di mano e fai in modo che il tuo voto conti nell'era digitale.
+**Voto a Punteggio:**  
+Sistema di voto a punteggio innovativo per risultati di voto sfumati ed espressivi.
