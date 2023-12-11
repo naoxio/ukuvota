@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro'
+import type { ProcessCookie } from '@utils/parseProcessCookie'
+import { parseProcessCookie } from '@utils/parseProcessCookie'
+
 import { t } from "astro-i18n";
 
 interface Props {
@@ -8,13 +11,9 @@ interface Props {
 
 const { step } = Astro.props;
 
-type ProcessCookie = {
-  phase?: string;
-  title?: string;
-  votingEndDate?: string;
-};
 
-const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
+const rawCookieValue = Astro.cookies.get('process')?.value;
+const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
 
 const {
   phase = "",

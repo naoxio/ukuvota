@@ -106,12 +106,7 @@
       "description": "Ripeti il processo e cerca altre opzioni."
     }
   },
-  "redirect": {
-    "legacy": {
-      "title":"Rilevato URL precedente",
-      "content": "Avviso: questa versione dell'app non è più supportata. Desideri procedere con il reindirizzamento alla vecchia app legacy? Tieni presente che questa versione potrebbe non avere tutte le funzionalità più recenti e potrebbe essere meno sicura."
-    }
-  },
   "repeatProcess":"Ripeti il processo",
-  "description": "Evotico è un potente strumento decisionale che aiuta le persone a fare scelte informate in modo collaborativo e organizzato. "
+  "description": "Evotico è un potente strumento decisionale che aiuta le persone a fare scelte informate in modo collaborativo e organizzato. ",
+  "wip": "In Lavorazione"
 }

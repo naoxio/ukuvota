@@ -17,19 +17,23 @@ import Footer from "@components/navigation/Footer.astro";
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div class="card card-bordered bg-base-100 shadow-xl">
         <div class="card-body">
-            <h2 class="card-title">{t('webAppCardTitle')}</h2>
-            <p>{t('webAppCardDescription')}</p>
-            <div class="card-actions justify-end">
-              <a href={l('/create')} class="btn btn-primary">{t('webAppCardButton')}</a>
-            </div>
+          <h2 class="card-title">{t('webAppCardTitle')}</h2>
+          <p>{t('webAppCardDescription')}</p>
+          <div class="card-actions justify-end">
+            <form action="/api/create-process" method="post">
+              <button type="submit" class="btn btn-primary">{t('webAppCardButton')}</button>
+            </form>
+          </div>
         </div>
     </div>
+  
     <div class="card card-bordered bg-base-100 shadow-xl">
         <div class="card-body">
           <h2 class="card-title">{t('telegramBotCardTitle')}</h2>
           <p>{t('telegramBotCardDescription')}</p>
+          <p class="text-warning">{t('wip')}</p>
           <div class="card-actions justify-end">
-            <a href="https://t.me/evotico_bot" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{t('telegramBotCardButton')}</a>
+            <a href="https://t.me/evotico_bot" class="btn btn-primary btn-disabled" target="_blank" rel="noopener noreferrer">{t('telegramBotCardButton')}</a>
           </div>
         </div>
     </div>

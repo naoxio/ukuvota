@@ -106,12 +106,7 @@
       "description": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen."
     }
   },
-  "redirect": {
-    "legacy": {
-      "title":"Legacy-URL erkannt",
-      "content": "Warnung: Diese Version der App wird nicht mehr unterstützt. Möchten Sie zur alten Legacy-App weitergeleitet werden? Beachten Sie, dass diese Version möglicherweise nicht alle neuesten Funktionen enthält und möglicherweise weniger sicher ist."
-    }
-  },
   "repeatProcess":"Prozess wiederholen",
-  "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung."
+  "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung.",
+  "wip": "in Bearbeitung"
 }

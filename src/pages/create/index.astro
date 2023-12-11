@@ -1,31 +1,33 @@
 ---
 import { t } from 'astro-i18n';
 import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
-
+import { parseProcessCookie } from '@utils/parseProcessCookie'
+import type { ProcessCookie } from '@utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
 import Step3 from '@components/setupProcess/Step3.astro';
 
 import { Icon } from 'astro-icon'
 
-type ProcessCookie = {
-    weighting?: string;
-    title?: string;
-    nojsdescription?: string;
-    quillopsdescription?: string;
-    phase?: string;
-    step: string;
 
-};
-const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
-const { phase = "", weighting = "", title = "", nojsdescription = "", quillopsdescription = "", step = 1 } = processCookie as ProcessCookie;
+
+const rawCookieValue = Astro.cookies.get('process')?.value;
+const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
+
+const { create = '', phase = '', weighting = '', title = '', nojsdescription = '', quillopsdescription = '', step = '1' } = processCookie as ProcessCookie;
 const currentStep = Number(step);
-const hasExistingProcessData = Object.keys(processCookie).length > 0;
-console.log(currentStep)
+
+let modifiedCreate = Boolean(create);
+
+if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !quillopsdescription) {
+    modifiedCreate = false;
+}
+
+console.log(modifiedCreate)
 ---
 
 <CreateProcessLayout step={currentStep}>
-  {hasExistingProcessData ? (
+  {modifiedCreate ? (
     <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
     <label for="existingProcessModal" class="modal">
       <label class="modal-box">
@@ -42,8 +44,10 @@ console.log(currentStep)
         </div>
 
         <div class="flex justify-center">
-          <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
-          <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
+          <label for="existingProcessModal" class="btn m-2">{() => t('process.continue')}</label>
+          <form action="/api/start-new-process" method="post">
+            <button type="submit" class="btn m-2">{t('process.startNew')}</button>
+          </form>
         </div>
       </label>
     </label>
