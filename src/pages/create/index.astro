@@ -9,15 +9,13 @@ import Step3 from '@components/setupProcess/Step3.astro';
 
 import { Icon } from 'astro-icon'
 
-
-
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
 
 const { create = '', phase = '', weighting = '', title = '', nojsdescription = '', quillopsdescription = '', step = '1' } = processCookie as ProcessCookie;
 const currentStep = Number(step);
 
-let modifiedCreate = Boolean(create);
+let modifiedCreate = JSON.parse(create);
 
 if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !quillopsdescription) {
     modifiedCreate = false;

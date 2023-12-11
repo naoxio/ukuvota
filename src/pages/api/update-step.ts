@@ -1,12 +1,11 @@
 import type { APIRoute } from "astro";
+import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
-  const step = formData.get('step');
-
-  let processCookie = request.headers.get('cookie');
-  let processCookieObject = processCookie ? JSON.parse(decodeURIComponent(processCookie.split('; ').find(row => row.startsWith('process='))?.split('=')[1] || '{}')) : {};
-
+  const step = formData.get('step') as string;
+  let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
+  processCookieObject.create = 'false';
   processCookieObject.step = step;
   const headers = new Headers({
     'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,

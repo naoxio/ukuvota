@@ -1,14 +1,45 @@
 ---
+import logo from "@assets/logo.png";
 import { t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
-/*
-let url = l("/dashboard");
-const firstVisit = Astro.cookies.get("firstVisit");
-if (!firstVisit) {
-    Astro.cookies.set("firstVisit", "true", { path: "/", httpOnly: true });
-    url = l("/about");
-}*/
-return Astro.redirect(l('/about'));
+import ContentDoc from "@components/ui/ContentDoc.astro";
+import Footer from "@components/navigation/Footer.astro";
 ---
+<BaseLayout title={t('buttons.about')} description={t('description')}>
+  <div class="flex items-center flex-col">
+    <img width="220" class="m-10" id="logo" alt="Evotico logo" src={logo.src} />
+    <h1>Evotico</h1>
+    <h2>{() => t('subheader')}</h2>
+  </div>
 
-<BaseLayout title={t('buttons.home')} description={t('description')}/>
+  <ContentDoc file_name="Introduction"/>
+  <br/>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="card card-bordered bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">{t('webAppCardTitle')}</h2>
+          <p>{t('webAppCardDescription')}</p>
+          <div class="card-actions justify-end">
+            <form action="/api/create-process" method="post">
+              <button type="submit" class="btn btn-primary">{t('webAppCardButton')}</button>
+            </form>
+          </div>
+        </div>
+    </div>
+  
+    <div class="card card-bordered bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">{t('telegramBotCardTitle')}</h2>
+          <p>{t('telegramBotCardDescription')}</p>
+          <p class="text-warning">{t('wip')}</p>
+          <div class="card-actions justify-end">
+            <a href="https://t.me/evotico_bot" class="btn btn-primary btn-disabled" target="_blank" rel="noopener noreferrer">{t('telegramBotCardButton')}</a>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <br/>
+  <Footer/>
+  
+</BaseLayout>
