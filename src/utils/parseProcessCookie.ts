@@ -6,6 +6,9 @@ export type ProcessCookie = {
   phase?: string;
   step: string;
   create?: string;
+  proposalStartDate?: string;
+  proposalEndDate?: string;
+  votingStartDate?: string;
   votingEndDate?: string;
 };
 
