@@ -4,8 +4,7 @@ import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
-import Step3 from '@components/setupProcess/Step2.astro';
-import Step4 from '@components/setupProcess/Step3.astro';
+import Step3 from '@components/setupProcess/Step3.astro';
 
 import { Icon } from 'astro-icon'
 
@@ -14,49 +13,48 @@ type ProcessCookie = {
     title?: string;
     nojsdescription?: string;
     quillopsdescription?: string;
+    phase?: string;
     step: string;
+
 };
 const processCookie = JSON.parse(Astro.cookies.get('process')?.value || '{}');
-const { weighting = "", title = "", nojsdescription = "", quillopsdescription = "", step = 1 } = processCookie as ProcessCookie;
+const { phase = "", weighting = "", title = "", nojsdescription = "", quillopsdescription = "", step = 1 } = processCookie as ProcessCookie;
 const currentStep = Number(step);
 const hasExistingProcessData = Object.keys(processCookie).length > 0;
 console.log(currentStep)
 ---
 
 <CreateProcessLayout step={currentStep}>
-  {currentStep === 1 ? (
-    <>
-      {hasExistingProcessData ? (
-        <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
-        <label for="existingProcessModal" class="modal">
-          <label class="modal-box">
-            <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
-              <Icon width="22" name="close"/>
-            </label>
-            <h3>{() => t('process.continueEditing')}</h3>
-            <p>{() => t('process.existingProcessPrompt')}</p>
-
-            <div class="process-details">
-              { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
-              { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
-              { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
-            </div>
-
-            <div class="flex justify-center">
-              <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
-              <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
-            </div>
-          </label>
+  {hasExistingProcessData ? (
+    <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
+    <label for="existingProcessModal" class="modal">
+      <label class="modal-box">
+        <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
+          <Icon width="22" name="close"/>
         </label>
-      ) : null}
-      <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
-    </>
+        <h3>{() => t('process.continueEditing')}</h3>
+        <p>{() => t('process.existingProcessPrompt')}</p>
+
+        <div class="process-details">
+          { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
+          { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
+          { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
+        </div>
+
+        <div class="flex justify-center">
+          <a href="/edit-existing" class="btn m-2">{() => t('process.continue')}</a>
+          <a href="/start-new" class="btn m-2">{() => t('process.startNew')}</a>
+        </div>
+      </label>
+    </label>
   ) : null}
-  {currentStep === 2 ? (
-    <Step2/>
-  ) : null}
-  {currentStep === 3 ? (
+
+  { currentStep === 1 ? (
+    <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
+  ) : currentStep === 2 ? (
+    <Step2 phase={phase}/>
+  ) : currentStep === 3 ? (
     <Step3/>
-  ) : null}
+  ) : null }
 
 </CreateProcessLayout>

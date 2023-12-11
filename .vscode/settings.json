@@ -4,5 +4,6 @@
   ],
   "files.exclude": {
     "**/src/pages/de": true,
+    "**/src/pages/it": true
   }
 }

@@ -7,6 +7,12 @@
 # Evotico
 Streamlining secure, efficient electronic voting for organizations and communities, fostering global empowerment.
 
+## Current goals
+- [ ] make the form submission to create a process work without JavaScript
+- [ ] store data securily in a decentralized database (ipfs?)
+- [ ] make proposal collection and voting work without JavaScript
+- [ ] migrate data from ukuvota.world and redirect ukuvota to evotico
+
 ## Development Environment
 
 To set up a development environment for Evotico, follow these steps:

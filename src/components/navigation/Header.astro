@@ -38,11 +38,11 @@ const pathnameWithoutLanguage = removeLanguageFromPath(pathname);
         {supportedLanguages.map(lang => (
           <option 
             selected={lang === currentLanguage} 
-            value={`${lang !== primaryLocale ? lang : ''}${pathnameWithoutLanguage}`}>
+            value={`${lang !== primaryLocale ? '/' + lang : ''}${pathnameWithoutLanguage}`}>
             {lang}
           </option>
         ))}
-      </select>
+      </select>            
 
       <form action="/api/theme" method="POST">
         <input type="hidden" name="theme" value={theme === 'light' ? 'dark' : 'light'} />
