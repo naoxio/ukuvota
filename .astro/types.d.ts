@@ -234,6 +234,36 @@ declare module 'astro:content' {
   data: any
 } & { render(): Render[".md"] };
 };
+"it": {
+"Guide.md": {
+	id: "Guide.md";
+  slug: "guide";
+  body: string;
+  collection: "it";
+  data: any
+} & { render(): Render[".md"] };
+"Introduction.md": {
+	id: "Introduction.md";
+  slug: "introduction";
+  body: string;
+  collection: "it";
+  data: any
+} & { render(): Render[".md"] };
+"NegativeScoreWeighing.md": {
+	id: "NegativeScoreWeighing.md";
+  slug: "negativescoreweighing";
+  body: string;
+  collection: "it";
+  data: any
+} & { render(): Render[".md"] };
+"PrivacyPolicy.md": {
+	id: "PrivacyPolicy.md";
+  slug: "privacypolicy";
+  body: string;
+  collection: "it";
+  data: any
+} & { render(): Render[".md"] };
+};
 
 	};
 
