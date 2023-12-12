@@ -19,7 +19,6 @@ const isValidJSONString = (str: string): boolean => {
 
 const parseProcessCookie = (cookieValue: string | undefined): ProcessCookie => {
   const defaultProcessCookie: ProcessCookie = { step: '1' };
-
   if (cookieValue) {
       if (isValidJSONString(cookieValue)) {
           try {

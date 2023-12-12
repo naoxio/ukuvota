@@ -65,6 +65,8 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
+    "continueEditing": "Continue Editing",
+    "existingProcessPrompt": "You have an existing process. Would you like to continue?",
     "setup": "Setup Process",
     "topic": "Topic Question",
     "description": "Description",

@@ -65,6 +65,8 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
+    "continueEditing": "Bearbeitung Fortsetzen",
+    "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",
     "setup": "Prozesseinrichtung",
     "topic": "Thema Frage",
     "description": "Beschreibung",

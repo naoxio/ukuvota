@@ -11,9 +11,8 @@ import { Icon } from 'astro-icon'
 
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
-
 const {
-  create = '',
+  create = 'false',
   phase = '',
   weighting = '',
   title = '',
@@ -33,7 +32,6 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
     modifiedCreate = false;
 }
 
-console.log(modifiedCreate)
 ---
 
 <CreateProcessLayout step={currentStep}>
