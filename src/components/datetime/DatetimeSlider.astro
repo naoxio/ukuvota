@@ -1,22 +1,26 @@
 ---
 import { t } from 'astro-i18n';
-import { fmtDuration } from '@utils/dateHelpers';
+import { durationToSlider } from '@utils/logslider';
+
 
 interface Props {
-    phase: string
+    phase: string;
+    duration: number;
 }
 
-const { phase } = Astro.props;
+const { phase, duration } = Astro.props;
 ---  
 <datetime-slider data-phase={phase}> 
   <span>{ () => t('duration') }:&nbsp;</span>
   <span id="duration" class="text-success"></span>
   <br/>
-  <input type="range" min="1" max="184" class="range" />
+  <p>{duration}</p>
+  <p>{durationToSlider(duration)}</p>
+  <input type="range" min="1" max="184" class="range" value={durationToSlider(duration)} />
 </datetime-slider>
 
 <script>
-  import logslider from '@utils/logslider';
+  import {sliderToDuration} from '@utils/logslider';
 
   
   class DatetimeSlider extends HTMLElement {
@@ -27,7 +31,7 @@ const { phase } = Astro.props;
     changeTime(ev: InputEvent & { target: HTMLInputElement}) {
       const value = Number(ev.target.value)
       //process.setKey(`${this.phase}LogSlider` as keyof Process, value)
-      let duration = logslider(value)
+      let duration = sliderToDuration(value)
       // process.setKey(`${this.phase}Duration` as keyof Process, duration)
       this.updateDisplay();
 

@@ -1,43 +1,41 @@
-const msIn = {
-  minute: 60 * 1000,
-  hour: 60 * 60 * 1000,
-  day: 24 * 60 * 60 * 1000,
-  week: 7 * 24 * 60 * 60 * 1000,
-  month: 30 * 24 * 60 * 60 * 1000,
-  year: 365 * 24 * 60 * 60 * 1000,
+type SliderMapping = {
+  minSliderValue: number;
+  maxSliderValue: number;
+  minDuration: number; // Starting duration in minutes for this range
+  stepDuration: number; // Duration step change per slider value in minutes
 };
 
-const roundDuration = (duration: number): number => {
-  const { year, month, day, hour, minute } = msIn;
-
-  if (duration >= year) return Math.round(duration / month) * month;
-  if (duration >= month) return Math.round(duration / day) * day;
-  if (duration >= day) return Math.round(duration / hour) * hour;
-  if (duration >= hour) return Math.round(duration / minute) * minute;
-  
-  return duration;
-};
+const sliderMappings: SliderMapping[] = [
+  { minSliderValue: 1, maxSliderValue: 10, minDuration: 0, stepDuration: 1 }, // 1-10: minute by minute
+  { minSliderValue: 11, maxSliderValue: 35, minDuration: 10, stepDuration: 5 }, // 11-35: every 5 minutes
+  { minSliderValue: 36, maxSliderValue: 60, minDuration: 130, stepDuration: 10 }, // 36-60: every 10 minutes
+  { minSliderValue: 61, maxSliderValue: 84, minDuration: 370, stepDuration: 30 }, // 61-84: every 30 minutes
+  { minSliderValue: 85, maxSliderValue: 100, minDuration: 1090, stepDuration: 60 }, // 85-100: every hour
+  { minSliderValue: 101, maxSliderValue: 120, minDuration: 1990, stepDuration: 120 }, // 101-120: every 2 hours
+  { minSliderValue: 121, maxSliderValue: 135, minDuration: 4390, stepDuration: 240 }, // 121-135: every 4 hours
+  { minSliderValue: 136, maxSliderValue: 150, minDuration: 8950, stepDuration: 480 }, // 136-150: every 8 hours
+  { minSliderValue: 151, maxSliderValue: 164, minDuration: 17510, stepDuration: 1440 }, // 151-164: every day
+  { minSliderValue: 165, maxSliderValue: 174, minDuration: 32770, stepDuration: 2880 }, // 165-174: every 2 days
+  { minSliderValue: 175, maxSliderValue: 184, minDuration: 58850, stepDuration: 4320 }, // 175-184: every 3 days
+];
 
 const sliderToDuration = (value: number): number => {
-  const { minute, hour, day, week, month } = msIn;
-  let duration = 0;
-
-  if (value <= 10) duration = value * minute;
-  else if (value <= 35) duration = (minute * 10) + value * (hour - (minute * 10)) / 25 - minute;
-  else if (value <= 47) duration = hour + (value - 35) * 15 * minute;
-  else if (value <= 59) duration = 4 * hour + (value - 47) * 20 * minute;
-  else if (value <= 91) duration = 8 * hour + (value - 59) * 30 * minute;
-  else if (value <= 115) duration = day + (value - 91) * 2 * hour;
-  else if (value <= 139) duration = 3 * day + (value - 115) * 4 * hour;
-  else if (value <= 160) duration = week + (value - 139) * day;
-  else if (value <= 174) duration = month + (value - 160) * 2 * day + day;
-  else if (value <= 178) duration = 2 * month + (value - 174) * week + day;
-  else if (value <= 180) duration = 3 * month + (value - 178) * month;
-  else if (value <= 184) duration = 5 * month + (value - 180) * month + day * (value - 180) * 0.8;
-
-  return Math.round(duration);
+  for (const mapping of sliderMappings) {
+    if (value >= mapping.minSliderValue && value <= mapping.maxSliderValue) {
+      return mapping.minDuration + (value - mapping.minSliderValue) * mapping.stepDuration;
+    }
+  }
+  return 0;
 };
 
-export default function(value: number): number {
-  return roundDuration(sliderToDuration(value));
-}
+const durationToSlider = (duration: number): number => {
+  for (const mapping of sliderMappings) {
+    if (duration >= mapping.minDuration && duration < mapping.minDuration + (mapping.maxSliderValue - mapping.minSliderValue + 1) * mapping.stepDuration) {
+      return mapping.minSliderValue + Math.floor((duration - mapping.minDuration) / mapping.stepDuration);
+    }
+  }
+  return 0; // Default return for out of range values
+};
+
+
+export { sliderToDuration, durationToSlider };
