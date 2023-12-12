@@ -42,8 +42,8 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
         <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
           <Icon width="22" name="close"/>
         </label>
-        <h3>{() => t('process.continueEditing')}</h3>
-        <p>{() => t('process.existingProcessPrompt')}</p>
+        <h3>{() => t('continueEditing')}</h3>
+        <p>{() => t('existingProcessPrompt')}</p>
 
         <div class="process-details">
           { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
@@ -52,10 +52,10 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
         </div>
 
         <div class="flex justify-center">
-          <label for="existingProcessModal" class="btn m-2">{() => t('process.continue')}</label>
           <form action="/api/start-new-process" method="post">
             <button type="submit" class="btn m-2">{t('process.startNew')}</button>
           </form>
+          <label for="existingProcessModal" class="btn m-2">{() => t('buttons.continue')}</label>
         </div>
       </label>
     </label>
@@ -65,6 +65,18 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
     <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
   ) : currentStep === 2 ? (
     <Step2 phase={phase} proposalStartDate={proposalStartDate} proposalEndDate={proposalEndDate} votingStartDate={votingStartDate} votingEndDate={votingEndDate} />
+    <br/>
+    <div class="flex justify-around mt-5">
+      <form action="/api/update-step" method="POST">
+        <input type="hidden" name="step" value="1"/>
+        <button class="btn" type="submit">{() => t('buttons.back')}</button>
+      </form>
+      <form action="/api/update-step" method="POST">
+        <input type="hidden" name="step" value="3"/>
+        <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+      </form>
+    </div>
+
   ) : currentStep === 3 ? (
     <Step3/>
   ) : null }

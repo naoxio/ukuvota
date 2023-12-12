@@ -65,8 +65,6 @@
   "slider": "Dispositivo di scorrimento",
   "not-found": "Non trovato",
   "process": {
-    "continueEditing": "Continua la modifica",
-    "existingProcessPrompt": "Hai un processo esistente. Vuoi continuare?",
     "setup": "Processo di configurazione",
     "topic": "Domanda sull'argomento",
     "description": "Descrizione",
