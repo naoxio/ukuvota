@@ -4,17 +4,18 @@ import { durationToSlider } from '@utils/logslider';
 
 
 interface Props {
-    phase: string;
-    duration: number;
+  id: string;
+  duration: number;
 }
 
-const { phase, duration } = Astro.props;
+const { id, duration } = Astro.props;
+const initialSliderValue = durationToSlider(duration);
+
 ---  
-<div> 
-  <span>{ () => t('duration') }:&nbsp;</span>
-  <span id="duration" class="text-success"></span>
+
+<div id={id}> 
+  <span>{ t('duration') }:&nbsp;</span>
+  <span class="duration-display" class="text-success"></span>
   <br/>
-  <p>{duration}</p>
-  <p>{durationToSlider(duration)}</p>
-  <input type="range" min="1" max="184" class="range" value={durationToSlider(duration)} />
+  <input type="range" min="1" max="184" class="range" id="duration-slider" value={initialSliderValue} />
 </div>
