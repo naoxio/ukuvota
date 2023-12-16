@@ -4,135 +4,23 @@ import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
 import { t } from 'astro-i18n';
 
 interface Props {
-    phase: string;
-    startMinDate: Date;
-    startDate: Date;
-    endDate: Date;
+  phase: string;
+  startMinDate: Date;
+  startDate: Date;
+  endDate: Date;
 }
 
 const { phase, startDate, endDate, startMinDate } = Astro.props;
-const startPickerId = `start-date-picker-${phase}`;
-const endPickerId = `end-date-picker-${phase}`;
-const sliderId = `datetime-slider-${phase}`;
 const title = t(`phases.${phase}.title`);
-const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000;
+const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
 ---
 
-<time-selector data-phase={phase} data-start-picker-id={startPickerId} data-end-picker-id={endPickerId} data-slider-id={sliderId}>
+<div class="time-selector" data-phase={phase}>
   <h3 class="title">{ title }</h3>
   <h4>{ t(`phases.startAt`) }:</h4>
-  <DatetimePicker phase={phase} index={0} date={startDate} min={startMinDate} id={startPickerId} />
+  <DatetimePicker phase={phase} index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
   <h4>{ t(`phases.endsAt`) }:</h4>
-  <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} id={endPickerId} />
-  <DatetimeSlider duration={duration} id={sliderId} />
+  <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
+  <DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} />
   <br/>
-</time-selector>
-
-<script>
-  import { sliderToDuration, durationToSlider } from "@utils/logslider";
-
-  const formatDuration = (durationInSeconds: number) => {
-    if (durationInSeconds < 60) {
-      return '1m';
-    }
-    const minutes = Math.floor(durationInSeconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-
-    const formattedYears = years > 0 ? `${years}y ` : '';
-    const formattedMonths = months > 0 ? `${months % 12}mo ` : '';
-    const formattedDays = days > 0 ? `${days % 30}d ` : '';
-    const formattedHours = hours > 0 ? `${hours % 24}h ` : '';
-    const formattedMinutes = minutes > 0 ? `${minutes % 60}m` : '';
-
-    let formattedDuration = `${formattedYears}${formattedMonths}${formattedDays}${formattedHours}${formattedMinutes}`.trim();
-    const durationParts = formattedDuration.split(' ').filter(part => part);
-    return durationParts.slice(0, 2).join(' ');
-  };
-
-  
-  class TimeSelector extends HTMLElement {
-    phase: string = this.getAttribute('data-phase') as string;
-    startPickerId: string = this.getAttribute('data-start-picker-id') as string;
-    endPickerId: string = this.getAttribute('data-end-picker-id') as string;
-    startPicker: HTMLInputElement = document.getElementById(this.startPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
-    endPicker: HTMLInputElement = document.getElementById(this.endPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
-    sliderId: string = this.getAttribute('data-slider-id') as string;
-    durationDisplay: HTMLElement =  document.getElementById(this.sliderId)?.querySelector('.duration-display') as HTMLElement;
-    durationSlider: HTMLInputElement =  document.getElementById(this.sliderId)?.querySelector('input[type="range"]') as HTMLInputElement;
-
-    constructor() {
-      super();
-      this.initDatetimePickers();
-      this.initDurationSlider();
-      this.updateDurationDisplay();
-    }
-
-    updateDurationDisplay = () => {
-      const sliderValue = parseInt(this.durationSlider.value, 10);
-      const durationInSeconds = sliderToDuration(sliderValue) * 60;
-      this.durationDisplay.textContent = formatDuration(durationInSeconds);
-    };
-  
-    initDurationSlider(): void {
-      if (this.durationSlider) {
-        this.durationSlider.addEventListener('input', (event: Event) => {
-          const sliderValue = parseInt((event.target as HTMLInputElement).value, 10);
-          const newDuration = sliderToDuration(sliderValue) * 60 * 1000; // Convert minutes to milliseconds
-          const newEndDate = new Date(new Date(this.startPicker.value).getTime() + newDuration);
-          this.endPicker.value = this.formatLocalDateTime(newEndDate);
-          this.updateDurationDisplay();
-
-        });
-      }
-    }
-    initDatetimePickers() {
-      
-      if (this.startPicker && this.endPicker) {
-        let originalStartDate = new Date(this.startPicker.value);
-        let originalEndDate = new Date(this.endPicker.value);
-        let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-
-        this.startPicker.addEventListener('change', (event: any) => {
-          const newStartDate = new Date(event.target.value);
-          if (isNaN(newStartDate.getTime())) return;
-          
-          let newEndDate = new Date(newStartDate.getTime() + originalDuration);
-          if (newEndDate.getTime() - newStartDate.getTime() < 60000) { // Ensure at least 1 minute difference
-            newEndDate = new Date(newStartDate.getTime() + 60000);
-          }
-          this.endPicker.value = this.formatLocalDateTime(newEndDate);
-          this.endPicker.min = this.formatLocalDateTime(newStartDate);
-        });
-
-        this.endPicker.addEventListener('change', (event: any) => {
-          let newEndDate = new Date(event.target.value);
-          if (isNaN(newEndDate.getTime())) return;
-
-          originalEndDate = newEndDate;
-          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-          originalStartDate = new Date(this.startPicker.value);
-          this.updateDurationSlider();
-          this.updateDurationDisplay();
-
-        });
-      }
-    }
-    updateDurationSlider(): void {
-      if (this.durationSlider && this.startPicker && this.endPicker) {
-        const newDuration = (+new Date(this.endPicker.value) - +new Date(this.startPicker.value)) / 1000; // Duration in seconds
-        const sliderValue = durationToSlider(newDuration / 60); // Convert seconds to minutes for the slider
-        this.durationSlider.value = sliderValue.toString();
-      }
-    }
-    private formatLocalDateTime(date: Date): string {
-      const offset: number = date.getTimezoneOffset() * 60000;
-      const localISOTime: string = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
-      return localISOTime.split('.')[0];
-    }
-  }
-
-  customElements.define('time-selector', TimeSelector);
-</script>
+</div>
