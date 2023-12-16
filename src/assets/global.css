@@ -3,12 +3,14 @@
 @tailwind utilities;
 
 :root {
-    --base-100: #ffffff; 
-    --base-100-dark: #323639;
-    --link-color: #2a5d9a;
-    --link-hover-color: #3a7ab6;
-    --input-bg-color-light: #f7f7f7;
-    --input-bg-color-dark: #40474d;
+    --base-100: #f0f0f0;
+    --base-100-dark: #292929;
+    --link-color: #3e1313;
+    --link-hover-color: #592424;
+    --link-color-dark: #c78f65;
+    --link-hover-color-dark: #d4a987; 
+    --input-bg-color-light: #e1e1e1;
+    --input-bg-color-dark: #1e1e1e;
     --input-focus-shadow: inset 1px 1px 0 rgba(0,0,0,.1), inset -1px -1px 0 rgba(0,0,0,.05);
 }
 
@@ -50,9 +52,16 @@ main {
 a {
     color: var(--link-color);
 }
+.dark a {
+    color: var(--link-color-dark);
+}
 
 a:hover {
     color: var(--link-hover-color);
+}
+
+.dark a:hover {
+    color: var(--link-hover-color-dark);
 }
 
 .link, .link:hover, .btn, .btn:hover  {
@@ -212,4 +221,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background-color: #E5E7EB; /* Gray from Tailwind's palette */
     pointer-events: none;
     cursor: not-allowed;
+}
+
+.brown-ring {
+    --tw-ring-color: var(--link-color-dark);
+    
 }

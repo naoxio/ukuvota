@@ -38,8 +38,8 @@ const steps = [
     {steps.map(({ stepNumber, disabled }) => (
       <form action="/api/update-step" method="POST">
         <input type="hidden" name="step" value={stepNumber}/>
-        <button type="submit" class={`w-4 h-4 rounded-full ${
-          step === stepNumber ? 'bg-linkbg ring ring-blue-300' : 
+        <button type="submit" class={`w-4 h-2 rounded-full ${
+          step === stepNumber ? 'bg-linkbg ring brown-ring ring-2' : 
           step > stepNumber ? 'bg-linkbg' : 
           'bg-gray-300'
         } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} disabled={disabled}></button>
