@@ -38,9 +38,9 @@ const steps = [
     {steps.map(({ stepNumber, disabled }) => (
       <form action="/api/update-step" method="POST">
         <input type="hidden" name="step" value={stepNumber}/>
-        <button type="submit" class={`w-4 h-2 rounded-full ${
-          step === stepNumber ? 'bg-linkbg ring brown-ring ring-2' : 
-          step > stepNumber ? 'bg-linkbg' : 
+        <button type="submit" class={`w-4 h-4 rounded-full ${
+          step === stepNumber ? 'ring-bg ring brown-ring ring-2' : 
+          step > stepNumber ? 'ring-bg' : 
           'bg-gray-300'
         } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} disabled={disabled}></button>
       </form>
@@ -48,3 +48,24 @@ const steps = [
   </div>
   <slot/>
 </BaseLayout>
+
+<style>
+  .brown-ring {
+    --tw-ring-color: var(--link-hover-color);
+  }
+  .dark .brown-ring {
+    --tw-ring-color: var(--link-hover-color-dark);
+  }
+  .ring-bg {
+    background-color: var(--link-color);
+  }
+  .dark .ring-bg {
+    background-color: var(--link-color-dark);
+  }
+  .ring-bg:hover {
+    background-color: var(--link-hover-color);
+  }
+  .dark .ring-bg:hover {
+    background-color: var(--link-hover-color-dark);
+  }
+</style>

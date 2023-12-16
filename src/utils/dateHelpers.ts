@@ -22,13 +22,11 @@ const fmtDuration = (start: any, end: any, units = ['years', 'months', 'weeks', 
     })
 }
 
-
 const fmtDistanceStrict = (date: any, baseDate: any) => {
     return formatDistanceStrict(date, baseDate, {
         locale: getDateLocale(),
     })
 }
-
 
 const fmt = (date: any, formatStr = 'PP') => {
     return format(date, formatStr, {

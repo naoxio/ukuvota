@@ -11,18 +11,68 @@ interface Props {
 }
 
 const { phase, startDate, endDate, startMinDate } = Astro.props;
-const title = t(`phases.${phase}.title`)
+const startPickerId = `start-date-picker-${phase}`;
+const endPickerId = `end-date-picker-${phase}`;
+const title = t(`phases.${phase}.title`);
 const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000;
 ---
 
-<div>
+<time-selector data-phase={phase} data-start-picker-id={startPickerId} data-end-picker-id={endPickerId}>
   <h3 class="title">{ title }</h3>
   <h4>{ t(`phases.startAt`) }:</h4>
-  <DatetimePicker phase={phase} index={0} date={startDate} min={startMinDate} />
+  <DatetimePicker phase={phase} index={0} date={startDate} min={startMinDate} id={startPickerId} />
   <h4>{ t(`phases.endsAt`) }:</h4>
-  <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} />
-  
+  <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} id={endPickerId} />
   <DatetimeSlider phase={phase} duration={duration}/>
   <br/>
-</div>  
+</time-selector>
 
+<script>
+  class TimeSelector extends HTMLElement {
+    constructor() {
+      super();
+      this.initDatetimePickers();
+    }
+
+    initDatetimePickers() {
+      const phase = this.getAttribute('data-phase');
+      const startPickerId = this.getAttribute('data-start-picker-id') as string;
+      const endPickerId = this.getAttribute('data-end-picker-id') as string;
+      const startPicker = document.getElementById(startPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
+      const endPicker = document.getElementById(endPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
+      
+      if (startPicker && endPicker) {
+        let originalStartDate = new Date(startPicker.value);
+        let originalEndDate = new Date(endPicker.value);
+        let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+
+        startPicker.addEventListener('change', (event: any) => {
+          const newStartDate = new Date(event.target.value);
+          if (isNaN(newStartDate.getTime())) return;
+          
+          const newEndDate = new Date(newStartDate.getTime() + originalDuration);
+          endPicker.value = this.formatLocalDateTime(newEndDate);
+          endPicker.min = this.formatLocalDateTime(newStartDate);
+        });
+
+        endPicker.addEventListener('change', (event: any) => {
+          const newEndDate = new Date(event.target.value);
+          if (isNaN(newEndDate.getTime())) return;
+
+          originalEndDate = newEndDate;
+          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+          originalStartDate = new Date(startPicker.value);
+        });
+      }
+    }
+
+
+    private formatLocalDateTime(date: Date): string {
+      const offset: number = date.getTimezoneOffset() * 60000;
+      const localISOTime: string = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
+      return localISOTime.split('.')[0];
+    }
+  }
+
+  customElements.define('time-selector', TimeSelector);
+</script>

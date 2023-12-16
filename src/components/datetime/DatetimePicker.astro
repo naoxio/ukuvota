@@ -1,13 +1,13 @@
 ---
 interface Props {
-    phase: string;
-    index: number;
-    date: Date;
-    min: Date;
+  id: string;
+  phase: string;
+  index: number;
+  date: Date;
+  min: Date;
 }
 
-const { phase, index, date } = Astro.props;
-console.log(phase, index, date)
+const { id, phase, index, date, min } = Astro.props;
 
 const toDateTimeLocal = (date: Date): string => {
   const isoString = date.toISOString();
@@ -17,11 +17,11 @@ const toDateTimeLocal = (date: Date): string => {
 
 ---
 
-<div class="flex flex-col justify-center items-center">
+<div id={id} class="flex flex-col justify-center items-center">
   <form action="/api/date-change" method="POST">
     <input type="hidden" name="phase" value={phase} />
     <input type="hidden" name="index" value={index.toString()} />
-    <input type="datetime-local" name="date" value={toDateTimeLocal(date)}/>
+    <input type="datetime-local" min={toDateTimeLocal(min)} name="date" value={toDateTimeLocal(date)}/>
     <noscript>
       <button type="submit">Set Date</button>
     </noscript>

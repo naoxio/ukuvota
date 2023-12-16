@@ -193,21 +193,6 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     filter: invert(0);
 }
 
-.bg-linkbg {
-    background-color: var(--link-color);
-}
-
-.bg-linkbg:hover {
-    background-color: var(--link-hover-color);
-}
-
-.border-lightred {
-    border-color: var(--link-hover-color);
-}
-.text-indianared {
-    color: var(--link-color);
-}
-
 .text-linkbg:hover,
 .bg-linkwhite:hover {
     background-color: var(--link-hover-color);
@@ -221,9 +206,4 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background-color: #E5E7EB; /* Gray from Tailwind's palette */
     pointer-events: none;
     cursor: not-allowed;
-}
-
-.brown-ring {
-    --tw-ring-color: var(--link-color-dark);
-    
 }
