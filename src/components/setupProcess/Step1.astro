@@ -14,7 +14,7 @@ type Props = {
 const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 ---
 
-<form action='/api/process-store' method="POST">
+<form id="step-1" action='/api/process-store' method="POST">
   <input type="hidden" name="step" value="1" />
   <div id="scrollTopicQuestion" />
   <p>{ () => t('process.topic') }</p>
@@ -70,7 +70,7 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 
 <script>
   import { createQuill, updateQuill } from '@utils/quillUtils';
-  const formElement = document.querySelector('form[action="/api/process-store"]');
+  const formElement = document.getElementById('step-1');
   if (formElement) {
     const quillContainer = document.getElementById('description') as HTMLElement;
     if (quillContainer) quillContainer.innerText = '';

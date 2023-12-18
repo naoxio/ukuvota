@@ -33,37 +33,39 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(null, { status: 303, headers: { 'Location': '/create' } });
     }
   } else if (step === 2) {
-    try {
-      const now = new Date();
+    if (step === 2) {
+      const phase = formData.get('phase');
+  
+      if (phase === 'full') {
+        try {
+          const startProposalDate = new Date(formData.get('start-date-picker-proposal') as string);
+          const endProposalDate = new Date(formData.get('end-date-picker-proposal') as string);
+          const startVotingDate = new Date(formData.get('start-date-picker-voting') as string);
+          const endVotingDate = new Date(formData.get('end-date-picker-voting') as string);
+          Object.assign(processCookieObject, {
+            step: nextStep,
+            startProposalDate: startProposalDate.getTime(),
+            endProposalDate: endProposalDate.getTime(),
+            startVotingDate: startVotingDate.getTime(),
+            endVotingDate: endVotingDate.getTime()
+          });
+    
+        const headers = new Headers({
+          'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
+          'Content-Type': 'application/json',
+          'Location': referer
+        });
 
-        let startDate = new Date(formData.get('startDate') as string);
-        let endDate = new Date(formData.get('endDate') as string);
-
-        if (isNaN(startDate.getTime()) || startDate < now) {
-          startDate = new Date(now);
+        return new Response(null, { status: 303, headers: headers });
+        } catch (error) {
+          console.error("Error:", error);
+          return new Response(null, { status: 303, headers: { 'Location': referer} });
         }
-
-        if (isNaN(endDate.getTime()) || endDate <= startDate) {
-          endDate = new Date(startDate);
-          endDate.setSeconds(endDate.getSeconds() + 1);
-        }
-
-      Object.assign(processCookieObject, {
-        step: nextStep,
-        startDate: startDate.getTime(),
-        endDate: endDate.getTime()
-      });
-
-      const headers = new Headers({
-        'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json',
-        'Location': referer
-      });
-
-      return new Response(null, { status: 303, headers: headers });
-    } catch (error) {
-      console.error("Error:", error);
-      return new Response(null, { status: 303, headers: { 'Location': referer} });
+      } else if (phase === 'voting') {
+        return new Response(null, { status: 303, headers: { 'Location': referer } });
+      } else {
+        return new Response(null, { status: 303, headers: { 'Location': referer } });
+      }
     }
   }
   console.error("Invalid Step");

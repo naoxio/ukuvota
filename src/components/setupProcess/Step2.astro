@@ -23,165 +23,160 @@ const {
 
 ---
 <step-2 data-phase={phase}>
-  { phase === "full" ? (
-    <div>
-      <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
-      <br/>
-      
-      <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
-      <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+  <form id="step-2" action='/api/process-store' method="POST">
+    <input type="hidden" name="step" value="2" />
+
+    { phase === "full" ? (
+      <div>
+        <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
+        <br/>
+        
+        <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+        <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+      </div>
+    ) : phase === "voting" ? ( 
+      <div>
+        <h2>{() => t('setup.selectTimeForVoting')}</h2>
+        <br/>
+        <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+        <br/>
+        <h2>{ () => t('setup.proposals') }</h2>    
+        <EditProposalList />
+        <br/>
+        <AddProposals />
+      </div>
+    ) : null }
+    <br/>
+    <div class="flex justify-around mt-5">
+      <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
     </div>
-  ) : phase === "voting" ? ( 
-    <div>
-      <h2>{() => t('setup.selectTimeForVoting')}</h2>
-      <br/>
-      <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
-      <br/>
-      <h2>{ () => t('setup.proposals') }</h2>    
-      <EditProposalList />
-      <br/>
-      <AddProposals />
-    </div>
-  ) : null }
+  </form>
+  <div class="flex justify-around mt-5">
+    <form action="/api/update-step" method="POST">
+      <input type="hidden" name="step" value="1"/>
+      <button class="btn" type="submit">{() => t('buttons.back')}</button>
+    </form>
+  </div>
 </step-2>
 
 
 <script>
-  import { sliderToDuration, durationToSlider } from "@utils/logslider";
+  import { sliderToDuration, durationToSlider } from '@utils/logslider';
+  import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
+  const formElement = document.getElementById('step-2');
+  if (formElement) {
+    
+    const updateDurationDisplay = (durationSlider: HTMLInputElement, durationDisplay: HTMLElement) => {
+      const sliderValue = parseInt(durationSlider.value, 10);
+      const durationInSeconds = sliderToDuration(sliderValue) * 60;
+      durationDisplay.textContent = formatDuration(durationInSeconds);
+    };
 
+    const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
+      const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
+      if (!votingTimeSelector) return;
 
-  const formatLocalDateTime = (date: Date): string => {
-    const offset: number = date.getTimezoneOffset() * 60000;
-    const localISOTime: string = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
-    return localISOTime.split('.')[0];
-  }
+      const querySelector = (selector: any) => votingTimeSelector.querySelector(selector);
+      const votingStartPicker = querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
+      const votingEndPicker = querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
 
-  const formatDuration = (durationInSeconds: number) => {
-    if (durationInSeconds < 60) {
-      return '1m';
-    }
-    const minutes = Math.floor(durationInSeconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
+      if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
 
-    const formattedYears = years > 0 ? `${years}y ` : '';
-    const formattedMonths = months > 0 ? `${months % 12}mo ` : '';
-    const formattedDays = days > 0 ? `${days % 30}d ` : '';
-    const formattedHours = hours > 0 ? `${hours % 24}h ` : '';
-    const formattedMinutes = minutes > 0 ? `${minutes % 60}m` : '';
-
-    let formattedDuration = `${formattedYears}${formattedMonths}${formattedDays}${formattedHours}${formattedMinutes}`.trim();
-    const durationParts = formattedDuration.split(' ').filter(part => part);
-    return durationParts.slice(0, 2).join(' ');
-  };
-
-  
-  const updateDurationDisplay = (durationSlider: HTMLInputElement, durationDisplay: HTMLElement) => {
-    const sliderValue = parseInt(durationSlider.value, 10);
-    const durationInSeconds = sliderToDuration(sliderValue) * 60;
-    durationDisplay.textContent = formatDuration(durationInSeconds);
-  };
-
-  const adjustVotingPhaseDates = (proposalEndDate: Date, step2Element: HTMLElement) => {
-    const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
-    if (votingTimeSelector) {
-      const votingStartPicker = votingTimeSelector.querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-      const votingEndPicker = votingTimeSelector.querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
       const originalVotingDuration = new Date(votingEndPicker.value).getTime() - new Date(votingStartPicker.value).getTime();
+      const adjustmentDuration = new Date(votingStartPicker.value).getTime() - originalProposalEndDate.getTime();
 
-      const newVotingStartDate = new Date(proposalEndDate.getTime());
+      const newVotingStartDate = new Date(proposalEndDate.getTime() + adjustmentDuration);
       const newVotingEndDate = new Date(newVotingStartDate.getTime() + originalVotingDuration);
-      
+
       votingStartPicker.value = formatLocalDateTime(newVotingStartDate);
       votingEndPicker.value = formatLocalDateTime(newVotingEndDate);
-    
-    }
-  };
+    };
 
-
-  const initDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {
-    if (durationSlider) {
-      durationSlider.addEventListener('input', (event: Event) => {
-        const sliderValue = parseInt((event.target as HTMLInputElement).value, 10);
-        const newDuration = sliderToDuration(sliderValue) * 60 * 1000;
-        const newEndDate = new Date(new Date(startPicker.value).getTime() + newDuration);
-        if (affectVotingStart) adjustVotingPhaseDates(newEndDate, step2Element);
-
-        endPicker.value = formatLocalDateTime(newEndDate);
-        updateDurationDisplay(durationSlider, durationDisplay);
-      });
-      updateDurationDisplay(durationSlider, durationDisplay);
-    }
-  }
-
-  const updateDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement) => {
-    if (durationSlider && startPicker && endPicker) {
-      const newDuration = (+new Date(endPicker.value) - +new Date(startPicker.value)) / 1000;
-      const sliderValue = durationToSlider(newDuration / 60);
-      durationSlider.value = sliderValue.toString();
-      updateDurationDisplay(durationSlider, durationDisplay);
-    }
-  }
-
-  const initDatetimePickers = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {      
-      if (startPicker && endPicker) {
-        let originalStartDate = new Date(startPicker.value);
+    const initDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {
+      if (durationSlider) {
         let originalEndDate = new Date(endPicker.value);
-        let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
 
-        startPicker.addEventListener('change', (event: any) => {
-          const newStartDate = new Date(event.target.value);
-          if (isNaN(newStartDate.getTime())) return;
-          
-          let newEndDate = new Date(newStartDate.getTime() + originalDuration);
-          if (newEndDate.getTime() - newStartDate.getTime() < 60000) { // Ensure at least 1 minute difference
-            newEndDate = new Date(newStartDate.getTime() + 60000);
-          }
-          endPicker.value = formatLocalDateTime(newEndDate);
-          endPicker.min = formatLocalDateTime(newStartDate);
-        });
-
-        endPicker.addEventListener('change', (event: any) => {
-          let newEndDate = new Date(event.target.value);
-          if (isNaN(newEndDate.getTime())) return;
-          if (affectVotingStart) adjustVotingPhaseDates(newEndDate, step2Element);
+        durationSlider.addEventListener('input', (event: Event) => {
+          const sliderValue = parseInt((event.target as HTMLInputElement).value, 10);
+          const newDuration = sliderToDuration(sliderValue) * 60 * 1000;
+          const newEndDate = new Date(new Date(startPicker.value).getTime() + newDuration);
+          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
           originalEndDate = newEndDate;
-          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-          originalStartDate = new Date(startPicker.value);
-          updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
+
+          endPicker.value = formatLocalDateTime(newEndDate);
+          updateDurationDisplay(durationSlider, durationDisplay);
+        });
+        updateDurationDisplay(durationSlider, durationDisplay);
+      }
+    }
+
+    const updateDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement) => {
+      if (durationSlider && startPicker && endPicker) {
+        const newDuration = (+new Date(endPicker.value) - +new Date(startPicker.value)) / 1000;
+        const sliderValue = durationToSlider(newDuration / 60);
+        durationSlider.value = sliderValue.toString();
+        updateDurationDisplay(durationSlider, durationDisplay);
+      }
+    }
+
+    const initDatetimePickers = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {      
+        if (startPicker && endPicker) {
+          let originalStartDate = new Date(startPicker.value);
+          let originalEndDate = new Date(endPicker.value);
+          let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+
+          startPicker.addEventListener('change', (event: any) => {
+            const newStartDate = new Date(event.target.value);
+            if (isNaN(newStartDate.getTime())) return;
+            
+            let newEndDate = new Date(newStartDate.getTime() + originalDuration);
+            if (newEndDate.getTime() - newStartDate.getTime() < 60000) { // Ensure at least 1 minute difference
+              newEndDate = new Date(newStartDate.getTime() + 60000);
+            }
+            endPicker.value = formatLocalDateTime(newEndDate);
+            endPicker.min = formatLocalDateTime(newStartDate);
+          });
+
+          endPicker.addEventListener('change', (event: any) => {
+            let newEndDate = new Date(event.target.value);
+            if (isNaN(newEndDate.getTime())) return;
+            if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
+            originalEndDate = newEndDate;
+            originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+            originalStartDate = new Date(startPicker.value);
+            updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
+          });
+        }
+      }
+
+    class Step2 extends HTMLElement {
+      phaseMode: string= this.dataset.phase || '';
+      constructor() {
+        super();
+        this.initializeTimeSelectors();
+      }
+
+      initializeTimeSelectors() {
+        console.log(this.phaseMode)
+        const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
+        timeSelectors.forEach(selector => {
+          const phase = selector.getAttribute('data-phase');
+
+          const startPickerId = `#start-date-picker-${phase}`;
+          const endPickerId = `#end-date-picker-${phase}`;
+          const sliderId = `#datetime-slider-${phase}`;
+
+          const startPicker = selector.querySelector(startPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
+          const endPicker = selector.querySelector(endPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
+          const durationSlider = selector.querySelector(sliderId)?.querySelector('input[type="range"]') as HTMLInputElement;
+          const durationDisplay = selector.querySelector(sliderId)?.querySelector('.duration-display') as HTMLElement;
+          const affectVotingStart = (this.phaseMode === 'full' && phase === 'proposal') ? true : false;
+          initDatetimePickers(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
+          initDurationSlider(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
         });
       }
     }
 
-  class Step2 extends HTMLElement {
-    phaseMode: string= this.dataset.phase || '';
-    constructor() {
-      super();
-      this.initializeTimeSelectors();
-    }
-
-    initializeTimeSelectors() {
-      console.log(this.phaseMode)
-      const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
-      timeSelectors.forEach(selector => {
-        const phase = selector.getAttribute('data-phase');
-
-        const startPickerId = `#start-date-picker-${phase}`;
-        const endPickerId = `#end-date-picker-${phase}`;
-        const sliderId = `#datetime-slider-${phase}`;
-
-        const startPicker = selector.querySelector(startPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
-        const endPicker = selector.querySelector(endPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
-        const durationSlider = selector.querySelector(sliderId)?.querySelector('input[type="range"]') as HTMLInputElement;
-        const durationDisplay = selector.querySelector(sliderId)?.querySelector('.duration-display') as HTMLElement;
-        const affectVotingStart = (this.phaseMode === 'full' && phase === 'proposal') ? true : false;
-        initDatetimePickers(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
-        initDurationSlider(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
-      });
-    }
+    customElements.define('step-2', Step2);
   }
-
-  customElements.define('step-2', Step2);
 </script>

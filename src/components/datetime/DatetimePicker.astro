@@ -21,7 +21,7 @@ const toDateTimeLocal = (date: Date): string => {
   <form action="/api/date-change" method="POST">
     <input type="hidden" name="phase" value={phase} />
     <input type="hidden" name="index" value={index.toString()} />
-    <input type="datetime-local" min={toDateTimeLocal(min)} name="date" value={toDateTimeLocal(date)}/>
+    <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
     <noscript>
       <button type="submit">Set Date</button>
     </noscript>
