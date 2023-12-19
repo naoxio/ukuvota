@@ -65,12 +65,7 @@ const {
   import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
   const formElement = document.getElementById('step-2');
   if (formElement) {
-    
-    const updateDurationDisplay = (durationSlider: HTMLInputElement, durationDisplay: HTMLElement) => {
-      const sliderValue = parseInt(durationSlider.value, 10);
-      const durationInSeconds = sliderToDuration(sliderValue) * 60;
-      durationDisplay.textContent = formatDuration(durationInSeconds);
-    };
+
 
     const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
       const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
@@ -104,18 +99,19 @@ const {
           originalEndDate = newEndDate;
 
           endPicker.value = formatLocalDateTime(newEndDate);
-          updateDurationDisplay(durationSlider, durationDisplay);
+          durationDisplay.textContent = formatDuration(newDuration / 1000);
         });
-        updateDurationDisplay(durationSlider, durationDisplay);
-      }
+        durationDisplay.textContent = formatDuration(sliderToDuration(parseInt(durationSlider.value, 10)) * 60 );
+
+      } 
     }
 
     const updateDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement) => {
       if (durationSlider && startPicker && endPicker) {
         const newDuration = (+new Date(endPicker.value) - +new Date(startPicker.value)) / 1000;
         const sliderValue = durationToSlider(newDuration / 60);
-        durationSlider.value = sliderValue.toString();
-        updateDurationDisplay(durationSlider, durationDisplay);
+        if (sliderValue) durationSlider.value = sliderValue.toString();
+        durationDisplay.textContent = formatDuration(newDuration);
       }
     }
 
@@ -130,11 +126,11 @@ const {
             if (isNaN(newStartDate.getTime())) return;
             
             let newEndDate = new Date(newStartDate.getTime() + originalDuration);
-            if (newEndDate.getTime() - newStartDate.getTime() < 60000) { // Ensure at least 1 minute difference
+            if (newEndDate.getTime() - newStartDate.getTime() < 60000) {
               newEndDate = new Date(newStartDate.getTime() + 60000);
             }
             endPicker.value = formatLocalDateTime(newEndDate);
-            endPicker.min = formatLocalDateTime(newStartDate);
+            endPicker.min = formatLocalDateTime(new Date(newStartDate.getTime() + 60000));
           });
 
           endPicker.addEventListener('change', (event: any) => {

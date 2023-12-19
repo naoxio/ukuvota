@@ -6,17 +6,18 @@ type SliderMapping = {
 };
 
 const sliderMappings: SliderMapping[] = [
-  { minSliderValue: 1, maxSliderValue: 10, minDuration: 0, stepDuration: 1 }, // 1-10: minute by minute
-  { minSliderValue: 11, maxSliderValue: 35, minDuration: 10, stepDuration: 5 }, // 11-35: every 5 minutes
-  { minSliderValue: 36, maxSliderValue: 60, minDuration: 130, stepDuration: 10 }, // 36-60: every 10 minutes
-  { minSliderValue: 61, maxSliderValue: 84, minDuration: 370, stepDuration: 30 }, // 61-84: every 30 minutes
-  { minSliderValue: 85, maxSliderValue: 100, minDuration: 1090, stepDuration: 60 }, // 85-100: every hour
-  { minSliderValue: 101, maxSliderValue: 120, minDuration: 1990, stepDuration: 120 }, // 101-120: every 2 hours
-  { minSliderValue: 121, maxSliderValue: 135, minDuration: 4390, stepDuration: 240 }, // 121-135: every 4 hours
-  { minSliderValue: 136, maxSliderValue: 150, minDuration: 8950, stepDuration: 480 }, // 136-150: every 8 hours
-  { minSliderValue: 151, maxSliderValue: 164, minDuration: 17510, stepDuration: 1440 }, // 151-164: every day
-  { minSliderValue: 165, maxSliderValue: 174, minDuration: 32770, stepDuration: 2880 }, // 165-174: every 2 days
-  { minSliderValue: 175, maxSliderValue: 184, minDuration: 58850, stepDuration: 4320 }, // 175-184: every 3 days
+  { minSliderValue: 1, maxSliderValue: 10, minDuration: 1, stepDuration: 1 }, // minute by minute
+  { minSliderValue: 11, maxSliderValue: 20, minDuration: 15, stepDuration: 5 }, // every 5 minutes
+  { minSliderValue: 20, maxSliderValue: 32, minDuration: 60, stepDuration: 10 }, // every 10 minutes
+  { minSliderValue: 32, maxSliderValue: 44, minDuration: 180, stepDuration: 15 }, // every 15 minutes
+  { minSliderValue: 44, maxSliderValue: 56, minDuration: 360, stepDuration: 30 }, // every 30 minutes
+  { minSliderValue: 56, maxSliderValue: 60, minDuration: 720, stepDuration: 60 }, // every hour
+  { minSliderValue: 60, maxSliderValue: 64, minDuration: 960, stepDuration: 120 }, // every 2 hours
+  { minSliderValue: 64, maxSliderValue: 94, minDuration: 1440, stepDuration: 240 }, // every 4 hours
+  { minSliderValue: 94, maxSliderValue: 110, minDuration: 8640, stepDuration: 720 }, // every half day
+  { minSliderValue: 110, maxSliderValue: 126, minDuration: 20160, stepDuration: 1440 }, // every day
+  { minSliderValue: 126, maxSliderValue: 141, minDuration: 43200, stepDuration: 2880 }, // every 2 days
+  { minSliderValue: 141, maxSliderValue: 165, minDuration: 86400, stepDuration: 7200 }, // every 5 days
 ];
 
 const sliderToDuration = (value: number): number => {
@@ -34,7 +35,7 @@ const durationToSlider = (duration: number): number => {
       return mapping.minSliderValue + Math.floor((duration - mapping.minDuration) / mapping.stepDuration);
     }
   }
-  return 0; // Default return for out of range values
+  return duration;
 };
 
 
