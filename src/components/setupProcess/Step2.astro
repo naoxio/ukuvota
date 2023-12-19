@@ -7,10 +7,10 @@ import { adjustDates } from '@utils/dateAdjustments';
 
 type Props = {
   phase: string;
-  proposalStartDate: string;
-  proposalEndDate: string;
-  votingStartDate: string;
-  votingEndDate: string;
+  proposalStartDate: number;
+  proposalEndDate: number;
+  votingStartDate: number;
+  votingEndDate: number;
 }
 const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate } = Astro.props;
 
@@ -153,7 +153,6 @@ const {
       }
 
       initializeTimeSelectors() {
-        console.log(this.phaseMode)
         const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
         timeSelectors.forEach(selector => {
           const phase = selector.getAttribute('data-phase');

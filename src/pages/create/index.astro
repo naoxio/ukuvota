@@ -5,7 +5,6 @@ import { parseProcessCookie } from '@utils/parseProcessCookie'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
-import Step3 from '@components/setupProcess/Step3.astro';
 
 import { Icon } from 'astro-icon'
 
@@ -18,10 +17,10 @@ const {
   title = '',
   nojsdescription = '',
   quillopsdescription = '',
-  proposalStartDate = '',
-  proposalEndDate = '',
-  votingStartDate = '',
-  votingEndDate = '',
+  startProposalDate = 0,
+  endProposalDate = 0,
+  startVotingDate = 0,
+  endVotingDate = 0,
   step = '1'
 } = processCookie as ProcessCookie;
 const currentStep = Number(step);
@@ -31,6 +30,21 @@ let modifiedCreate = JSON.parse(create);
 if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !quillopsdescription) {
     modifiedCreate = false;
 }
+
+const formatDate = (timestamp: number): string => {
+  let date = new Date(timestamp)
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+
+  return date.toLocaleDateString('en-US', options);
+}
+console.log(processCookie)
 
 ---
 
@@ -53,7 +67,7 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
 
         <div class="flex justify-center">
           <form action="/api/start-new-process" method="post">
-            <button type="submit" class="btn m-2">{t('process.startNew')}</button>
+            <button type="submit" class="btn m-2">{t('startNew')}</button>
           </form>
           <label for="existingProcessModal" class="btn m-2">{() => t('buttons.continue')}</label>
         </div>
@@ -64,9 +78,28 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
   { currentStep === 1 ? (
     <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
   ) : currentStep === 2 ? (
-    <Step2 phase={phase} proposalStartDate={proposalStartDate} proposalEndDate={proposalEndDate} votingStartDate={votingStartDate} votingEndDate={votingEndDate} />
+    <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} />
   ) : currentStep === 3 ? (
-    <Step3/>
+    <div class="process-details">
+      {title && <p><strong>{t('process.topic')}:</strong> {title}</p>}
+      {nojsdescription && <p><strong>{t('process.description')}:</strong> {nojsdescription}</p>}
+      <p><strong>{ t(`phases.proposal.title`) }</strong></p>
+
+      {startProposalDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startProposalDate)}</p>}
+      {endProposalDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endProposalDate)}</p>}
+      {phase === 'full' && <p><strong>{ t(`phases.voting.title`) }</strong></p>}
+
+      {startVotingDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startVotingDate)}</p>}
+      {endVotingDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endVotingDate)}</p>}
+    </div>
+    <div class="flex justify-center">
+      <form action="/api/update-step" method="post">
+        <input type="hidden" name="step" value="2"/>
+
+        <button type="submit" class="btn m-2">{t('buttons.back')}</button>
+      </form>
+      <label for="existingProcessModal" class="btn m-2">{t('buttons.start')}</label>
+    </div>
   ) : null }
 
 </CreateProcessLayout>

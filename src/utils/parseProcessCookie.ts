@@ -6,10 +6,10 @@ export type ProcessCookie = {
   phase?: string;
   step: string;
   create?: string;
-  proposalStartDate?: string;
-  proposalEndDate?: string;
-  votingStartDate?: string;
-  votingEndDate?: string;
+  startProposalDate?: number;
+  endProposalDate?: number;
+  startVotingDate?: number;
+  endVotingDate?: number;
 };
 
 const isValidJSONString = (str: string): boolean => {

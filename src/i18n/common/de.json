@@ -53,10 +53,9 @@
     "about": "Über",
     "go": "Los",
     "home": "Startseite",
-    "quick": "Schnell",
     "toggle_dark": "Dunkelmodus umschalten",
     "toggle_langs": "Sprachen ändern",
-    "start_quick": "Starten Sie den schnellen Prozess",
+    "start": "Starten Sie den Prozess",
     "continue": "Weiter",
     "back": "Zurück"
   },

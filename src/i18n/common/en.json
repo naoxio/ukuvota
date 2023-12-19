@@ -53,10 +53,9 @@
     "about": "About",
     "go": "GO",
     "home": "Home",
-    "quick": "Quick",
     "toggle_dark": "Toggle dark mode",
     "toggle_langs": "Change languages",
-    "start_quick": "Start quick process",
+    "start": "Start process",
     "continue": "Continue",
     "back": "Back"
   },

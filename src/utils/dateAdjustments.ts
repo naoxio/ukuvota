@@ -9,14 +9,14 @@ type DateAdjustmentResult = {
 
 export const adjustDates = (
   phase: string,
-  proposalStartDate: string,
-  proposalEndDate: string,
-  votingStartDate: string,
-  votingEndDate: string
+  proposalStartDate: number,
+  proposalEndDate: number,
+  votingStartDate: number,
+  votingEndDate: number
 ): DateAdjustmentResult => {
   const now = new Date();
 
-  const parseDate = (dateStr: string, defaultDate: Date): Date => {
+  const parseDate = (dateStr: number, defaultDate: Date): Date => {
     return dateStr ? new Date(dateStr) : defaultDate;
   };
 

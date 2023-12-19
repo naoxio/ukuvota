@@ -1,4 +1,5 @@
 {
   "continueEditing": "Continue Editing",
-  "existingProcessPrompt": "You have an existing process. Would you like to continue?"  
+  "existingProcessPrompt": "You have an existing process. Would you like to continue?",
+  "startNew": "Start over" 
 }

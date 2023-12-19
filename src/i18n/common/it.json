@@ -53,10 +53,9 @@
     "about": "Informazoni",
     "go": "VAI",
     "home": "Home",
-    "quick": "Veloce",
     "toggle_dark": "Attivala modalità scura",
     "toggle_langs": "Cambia lingua",
-    "start_quick": "Avvia il processo rapido",
+    "start": "Avvia il processo",
     "continue": "Continua",
     "back": "Indietro"
   },
