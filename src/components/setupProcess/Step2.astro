@@ -4,6 +4,7 @@ import AddProposals from "@components/process/AddProposals.astro";
 import EditProposalList from "@components/process/EditProposalList.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
+import TimeSelectorNoJS from '@components/datetime/TimeSelectorNoJS.astro';
 
 type Props = {
   phase: string;
@@ -30,9 +31,15 @@ const {
       <div>
         <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
         <br/>
-        
-        <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
-        <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+        <noscript>
+          <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+        </noscript>
+        <div class="js-content hidden">
+          
+          <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
+        </div>
       </div>
     ) : phase === "voting" ? ( 
       <div>
@@ -61,6 +68,12 @@ const {
 
 
 <script>
+
+  const js_content = document.querySelectorAll('.js-content') as NodeListOf<HTMLElement>;
+  js_content.forEach((content: HTMLElement) => {
+    content.style.display = 'block'; 
+  });
+
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
   import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
   const formElement = document.getElementById('step-2');

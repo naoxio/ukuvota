@@ -15,7 +15,8 @@
     "startNew": "Start over",
     "process": "Setup Process",
     "selectTimeForVoting": "Select the time for voting",
-    "proposals": "Add proposals"
+    "proposals": "Add proposals",
+    "setDate": "Set Date"
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",

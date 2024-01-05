@@ -19,11 +19,16 @@ const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
 <div class="time-selector" data-phase={phase}>
   <h3 class="title">{ title }</h3>
   <h4>{ t(`phases.startAt`) }:</h4>
-  <div class="js-content hidden">
-    <DatetimePicker phase={phase} index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
-    <h4>{ t(`phases.endsAt`) }:</h4>
-    <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
-  </div>
+  <DatetimePickerNoJS phase={phase} index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
+  <h4>{ t(`phases.endsAt`) }:</h4>
+  <DatetimePickerNoJS phase={phase} index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
   <!--DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} /-->
   <br/>
 </div>
+
+<script>
+  const inputs = document.querySelectorAll('.js-content') as NodeListOf<HTMLElement>;
+  inputs.forEach((input: HTMLElement) => {
+    input.style.display = 'block'; 
+  });
+</script>

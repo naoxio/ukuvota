@@ -18,5 +18,10 @@ const toDateTimeLocal = (date: Date): string => {
 ---
 
 <div id={id} class="flex flex-col justify-center items-center">
-  <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)} style="display: none;"/>
+  <form action="/api/date-change" method="POST">
+    <input type="hidden" name="phase" value={phase} />
+    <input type="hidden" name="index" value={index.toString()} />
+    <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
+    <button type="submit">{t('setup.setDate')}</button>
+  </form>
 </div>

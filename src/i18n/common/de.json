@@ -15,7 +15,8 @@
     "startNew": "Neu starten",
     "process": "Process Erstellen",
     "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
-    "proposals": "Vorschläge hinzufügen"
+    "proposals": "Vorschläge hinzufügen",
+    "setDate": "Datum festlegen"
   },
   "loadQuill": "Lade QuillEditor...",
   "policy": "Datenschutzerklärung",

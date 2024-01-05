@@ -15,8 +15,9 @@
     "startNew": "Ricominciare",
     "process": "Processo di configurazione",
     "selectTimeForVoting": "Seleziona l'orario per la votazione",
-    "proposals": "Aggiungi proposte"
-  }   ,
+    "proposals": "Aggiungi proposte",
+    "setDate": "Imposta data"
+  },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",
   "donate": "Donazione",
