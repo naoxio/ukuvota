@@ -31,7 +31,7 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
   <br/>
   <p>{ () => t('process.description') }</p>
 
-  <div id="description">{() => t('loadQuill')}</div>
+  <div id="description" class="hidden">{() => t('loadQuill')}</div>
 
   <noscript>
     <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
@@ -70,9 +70,11 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 
 <script>
   import { createQuill, updateQuill } from '@utils/quillUtils';
+
   const formElement = document.getElementById('step-1');
   if (formElement) {
     const quillContainer = document.getElementById('description') as HTMLElement;
+    quillContainer.style.display = 'block';
     if (quillContainer) quillContainer.innerText = '';
     const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
     const quillEditor = createQuill('#description');

@@ -1,10 +1,23 @@
 {
-  "loadQuill": "Loading QuillEditor...",
+  "home": {
+    "description": "Evotico - Voting Made Simple, Secure, and Empowering",
+    "subheader": "Voting Made Simple, Secure, and Empowering",
+    "webAppCardTitle": "Evotico Web App",
+    "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
+    "webAppCardButton": "Start Process",
+    "telegramBotCardTitle": "Evotico Telegram Bot",
+    "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
+    "telegramBotCardButton": "Go to Bot" 
+  },
   "setup": {
+    "continueEditing": "Continue Editing",
+    "existingProcessPrompt": "You have an existing process. Would you like to continue?",
+    "startNew": "Start over",
     "process": "Setup Process",
     "selectTimeForVoting": "Select the time for voting",
     "proposals": "Add proposals"
   },
+  "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",
   "donate": "Donate",
   "addProposalTemplate": "Add proposal by template",
@@ -94,7 +107,6 @@
       "voting": "Voting Phase only"
     }
   },
-  "create": "Create",
   "proposal": {
     "zero": {
       "title": "Status quo",

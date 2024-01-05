@@ -1,10 +1,23 @@
 {
-  "loadQuill": "Lade QuillEditor...",
+  "home": {
+    "description": "Evotico - Einfaches, sicheres und ermächtigendes Wählen",
+    "subheader": "Einfaches, sicheres und ermächtigendes Wählen",
+    "webAppCardTitle": "Evotico Web-App",
+    "webAppCardDescription": "Nahtlose webbasierte Wahlerfahrung, zugänglich und benutzerfreundlich.",
+    "webAppCardButton": "Prozess Starten",
+    "telegramBotCardTitle": "Evotico Telegram-Bot",
+    "telegramBotCardDescription": "Bequemes Wählen über Telegram, integriert in die tägliche Kommunikation.",
+    "telegramBotCardButton": "Zum Bot gehen"
+  },
   "setup": {
+    "continueEditing": "Bearbeitung Fortsetzen",
+    "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",
+    "startNew": "Neu starten",
     "process": "Process Erstellen",
     "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
     "proposals": "Vorschläge hinzufügen"
   },
+  "loadQuill": "Lade QuillEditor...",
   "policy": "Datenschutzerklärung",
   "donate": "Spenden",
   "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
@@ -94,7 +107,6 @@
       "voting": "Nur die Abstimmungsphase"
     }
   },
-  "create": "Erstellen",
   "proposal": {
     "zero": {
       "title": "Aktueller Stand",
