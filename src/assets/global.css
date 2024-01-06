@@ -5,8 +5,8 @@
 :root {
     --base-100: #f0f0f0;
     --base-100-dark: #292929;
-    --link-color: #3e1313;
-    --link-hover-color: #592424;
+    --link-color: #512a2a;
+    --link-hover-color: #693939;
     --link-color-dark: #c78f65;
     --link-hover-color-dark: #d4a987; 
     --input-bg-color-light: #e1e1e1;
@@ -49,18 +49,18 @@ main {
     margin: auto;
 }
 
-a {
+a, .link {
     color: var(--link-color);
 }
-.dark a {
+.dark a, .dark .link {
     color: var(--link-color-dark);
 }
 
-a:hover {
+a:hover, .link:hover {
     color: var(--link-hover-color);
 }
 
-.dark a:hover {
+.dark a:hover, .dark .link:hover {
     color: var(--link-hover-color-dark);
 }
 

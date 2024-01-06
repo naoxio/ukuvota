@@ -16,12 +16,10 @@ const toDateTimeLocal = (date: Date): string => {
   return isoString.slice(0, 16);
 };
 ---
-
-<div id={id} class="flex flex-col justify-center items-center">
-  <form action="/api/date-change" method="POST">
-    <input type="hidden" name="phase" value={phase} />
-    <input type="hidden" name="index" value={index.toString()} />
-    <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
-    <button type="submit">{t('setup.setDate')}</button>
-  </form>
-</div>
+<form id={id} action="/api/date-change" method="POST" class="flex justify-between items-center">
+  <h4>{ index == 0 ? t(`phases.startAt`) :  t(`phases.endsAt`)}</h4>
+  <input type="hidden" name="phase" value={phase} />
+  <input type="hidden" name="index" value={index.toString()} />
+  <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
+  <button class="btn btn-secondary" type="submit">{t('setup.setDate')}</button>
+</form>

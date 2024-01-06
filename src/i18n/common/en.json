@@ -2,10 +2,10 @@
   "home": {
     "description": "Evotico - Voting Made Simple, Secure, and Empowering",
     "subheader": "Voting Made Simple, Secure, and Empowering",
-    "webAppCardTitle": "Evotico Web App",
+    "webAppCardTitle": "Web App",
     "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
     "webAppCardButton": "Start Process",
-    "telegramBotCardTitle": "Evotico Telegram Bot",
+    "telegramBotCardTitle": "Telegram Bot",
     "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
     "telegramBotCardButton": "Go to Bot" 
   },
@@ -16,13 +16,14 @@
     "process": "Setup Process",
     "selectTimeForVoting": "Select the time for voting",
     "proposals": "Add proposals",
-    "setDate": "Set Date"
+    "setDate": "Set Date",
+    "duration": "Duration",
+    "setDuration": "Set Duration"
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",
   "donate": "Donate",
   "addProposalTemplate": "Add proposal by template",
-  "duration": "Duration",
   "select": "select",
   "confirm": "confirm",
   "cancel": "cancel",

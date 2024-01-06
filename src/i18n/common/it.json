@@ -2,10 +2,10 @@
   "home": {
     "description": "Evotico - Voto Semplice, Sicuro e Responsabilizzante",
     "subheader": "Voto Semplice, Sicuro e Responsabilizzante",
-    "webAppCardTitle": "App Web Evotico",
+    "webAppCardTitle": "App Web",
     "webAppCardDescription": "Esperienza di voto web senza interruzioni, accessibile e facile da usare.",
     "webAppCardButton": "Avvia Processo",
-    "telegramBotCardTitle": "Bot Telegram di Evotico",
+    "telegramBotCardTitle": "Bot Telegram",
     "telegramBotCardDescription": "Voto conveniente tramite Telegram, integrando il voto nella comunicazione quotidiana.",
     "telegramBotCardButton": "Vai al Bot"
   },
@@ -16,13 +16,14 @@
     "process": "Processo di configurazione",
     "selectTimeForVoting": "Seleziona l'orario per la votazione",
     "proposals": "Aggiungi proposte",
-    "setDate": "Imposta data"
+    "setDate": "Imposta data",
+    "duration": "Durata",
+    "setDuration": "Imposta durata"
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",
   "donate": "Donazione",
   "addProposalTemplate": "Aggiungi proposta per modello",
-  "duration": "Durata",
   "select": "seleziona",
   "confirm": "conferma",
   "cancel": "annulla",

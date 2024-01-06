@@ -33,10 +33,10 @@ const {
         <br/>
         <noscript>
           <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <br/><br/>
           <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
         </noscript>
         <div class="js-content hidden">
-          
           <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
           <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
         </div>
@@ -54,6 +54,14 @@ const {
       </div>
     ) : null }
     <br/>
+    <noscript>
+      <form action='/api/update-step' method="POST">
+        <input type="hidden" name="step" value="3" />
+        <div class="flex justify-around mt-5">
+          <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+        </div>
+      </form>
+    </noscript>
     <div class="flex justify-around mt-5">
       <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
     </div>
@@ -68,6 +76,27 @@ const {
 
 
 <script>
+  const step2Element: HTMLElement | null = document.querySelector('step-2');
+  if (step2Element) {
+    const form: HTMLFormElement = document.createElement('form');
+    form.id = 'step-2';
+    form.method = 'POST';
+    form.action = '/api/process-store';
+
+    const hiddenInput: HTMLInputElement = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'step';
+    hiddenInput.value = '2';
+    form.appendChild(hiddenInput);
+
+    Array.from(step2Element.children).forEach(child => {
+      if (child.tagName !== 'FORM') {
+        form.appendChild(child);
+      }
+    });
+
+    step2Element.appendChild(form);
+  }
 
   const js_content = document.querySelectorAll('.js-content') as NodeListOf<HTMLElement>;
   js_content.forEach((content: HTMLElement) => {
