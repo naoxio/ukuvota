@@ -2,7 +2,6 @@
 import DatetimePicker from '@components/datetime/DatetimePicker.astro';
 import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
 import { t } from 'astro-i18n';
-import DatetimePickerNoJS from './DatetimePickerNoJS.astro';
 
 interface Props {
   phase: string;
@@ -24,6 +23,6 @@ const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
     <h4>{ t(`phases.endsAt`) }:</h4>
     <DatetimePicker phase={phase} index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
   </div>
-  <!--DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} /-->
+  <DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} />
   <br/>
 </div>

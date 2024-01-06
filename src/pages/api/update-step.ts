@@ -7,6 +7,7 @@ export const POST: APIRoute = async ({ request }) => {
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
   processCookieObject.create = 'false';
   processCookieObject.step = step;
+  console.log('hi,', step)
   const headers = new Headers({
     'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
     'Content-Type': 'application/json',

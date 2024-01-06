@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 
+
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
   const step = Number(formData.get('step') || 1);
@@ -36,30 +37,50 @@ export const POST: APIRoute = async ({ request }) => {
   } else if (step === 2) {
     const phase = processCookieObject.phase;
     if (phase === 'full') {
-      try {
-        const startProposalDate = new Date(formData.get('start-date-picker-proposal') as string);
-        const endProposalDate = new Date(formData.get('end-date-picker-proposal') as string);
-        const startVotingDate = new Date(formData.get('start-date-picker-voting') as string);
-        const endVotingDate = new Date(formData.get('end-date-picker-voting') as string);
-        Object.assign(processCookieObject, {
-          step: nextStep,
-          startProposalDate: startProposalDate.getTime(),
-          endProposalDate: endProposalDate.getTime(),
-          startVotingDate: startVotingDate.getTime(),
-          endVotingDate: endVotingDate.getTime()
-        });
-  
-      const headers = new Headers({
-        'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-        'Content-Type': 'application/json',
-        'Location': referer
-      });
+        try {
+          const currentDate = new Date().getTime();
+          const timezoneOffset = formData.get('timezoneOffset');
+          console.log(formData)
+          // Default values based on provided logic
+          console.log(new Date(formData.get('end-date-picker-proposal') as string).toISOString());
+          let startProposalDate = formData.get('start-date-picker-proposal') ? new Date(formData.get('start-date-picker-proposal') as string).getTime() : processCookieObject.startProposalDate || currentDate;
+          let endProposalDate = formData.get('end-date-picker-proposal') ? new Date(formData.get('end-date-picker-proposal') as string).getTime() : processCookieObject.endProposalDate || (startProposalDate + 3600000); // +1 hour
+          let startVotingDate = formData.get('start-date-picker-voting') ? new Date(formData.get('start-date-picker-voting') as string).getTime() : processCookieObject.startVotingDate || endProposalDate;
+          let endVotingDate = formData.get('end-date-picker-voting') ? new Date(formData.get('end-date-picker-voting') as string).getTime() : processCookieObject.endVotingDate || (startVotingDate + 3600000); // +1 hour
+          if (endProposalDate <= startProposalDate) {
+            endProposalDate = startProposalDate + 60000;
+          }
 
-      return new Response(null, { status: 303, headers: headers });
-      } catch (error) {
-        console.error("Error:", error);
-        return new Response(null, { status: 303, headers: { 'Location': referer} });
-      }
+          if (startVotingDate < endProposalDate) {
+            startVotingDate = endProposalDate;
+          }
+
+          if (endVotingDate <= startVotingDate) {
+              endVotingDate = startVotingDate + 60000;
+          }
+
+          processCookieObject.startProposalDate = startProposalDate;
+          processCookieObject.endProposalDate = endProposalDate;
+          processCookieObject.startVotingDate = startVotingDate;
+          processCookieObject.endVotingDate = endVotingDate;
+
+          if (!formData.get('nojsSubmission')) {
+            processCookieObject.step = nextStep.toString();
+          }
+
+          
+          const headers = new Headers({
+            'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
+            'Content-Type': 'application/json',
+            'Location': referer
+          });
+
+          return new Response(null, { status: 303, headers: headers });
+        } catch (error) {
+          console.error("Error:", error);
+          return new Response(null, { status: 303, headers: { 'Location': referer} });
+        }
+        
     } else if (phase === 'voting') {
       return new Response(null, { status: 303, headers: { 'Location': referer } });
     } else {

@@ -26,7 +26,6 @@ export const adjustDates = (
 
   let pStart = parseDate(proposalStartDate, now);
   let pEnd = parseDate(proposalEndDate, new Date(pStart.getTime() + 60 * 60000));
-
   let vStart = parseDate(votingStartDate, (phase === 'full' ? pEnd : now));
   let vEnd = parseDate(votingEndDate, new Date(vStart.getTime() + 60 * 60000));
 

@@ -92,13 +92,13 @@ console.log(processCookie)
       {startVotingDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startVotingDate)}</p>}
       {endVotingDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endVotingDate)}</p>}
     </div>
-    <div class="flex justify-center">
+    <div class="flex justify-around mt-5">
       <form action="/api/update-step" method="post">
         <input type="hidden" name="step" value="2"/>
 
         <button type="submit" class="btn m-2">{t('buttons.back')}</button>
       </form>
-      <label for="existingProcessModal" class="btn m-2">{t('buttons.start')}</label>
+      <button class="btn btn-primary m-2">{t('buttons.start')}</button>
     </div>
   ) : null }
 

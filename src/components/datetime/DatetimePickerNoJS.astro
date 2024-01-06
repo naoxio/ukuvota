@@ -3,23 +3,27 @@ import { t } from 'astro-i18n';
 
 interface Props {
   id: string;
-  phase: string;
   index: number;
   date: Date;
   min: Date;
 }
 
-const { id, phase, index, date, min } = Astro.props;
-
-const toDateTimeLocal = (date: Date): string => {
-  const isoString = date.toISOString();
-  return isoString.slice(0, 16);
+const { id, index, date, min } = Astro.props;
+const toDateTimeLocal = (date: Date) => {
+  const offset = date.getTimezoneOffset();
+  const adjustedHours = (date.getUTCHours() - offset / 60 + 24) % 24; 
+  const paddedHours = String(Math.floor(adjustedHours)).padStart(2, '0');
+  const paddedMinutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${date.toISOString().slice(0, 10)}T${paddedHours}:${paddedMinutes}:00`;
 };
+
+
 ---
-<form id={id} action="/api/date-change" method="POST" class="flex justify-between items-center">
+<form id={id} action="/api/process-store" method="POST" class="flex justify-between items-center">
+  <input type="hidden" name="nojsSubmission" value="true" />
+
   <h4>{ index == 0 ? t(`phases.startAt`) :  t(`phases.endsAt`)}</h4>
-  <input type="hidden" name="phase" value={phase} />
-  <input type="hidden" name="index" value={index.toString()} />
+  <input type="hidden" name="step" value="2" />
   <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
   <button class="btn btn-secondary" type="submit">{t('setup.setDate')}</button>
 </form>

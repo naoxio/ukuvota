@@ -11,20 +11,12 @@ interface Props {
 
 const { phase, startDate, endDate, startMinDate } = Astro.props;
 const title = t(`phases.${phase}.title`);
-const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
 ---
 
-<div class="time-selector" data-phase={phase}>
+<div class="time-selector">
   <h3 class="title text-center">{ title }</h3>
   <br/>
-  <DatetimePickerNoJS phase={phase} index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
+  <DatetimePickerNoJS index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
   <br/>
-  <DatetimePickerNoJS phase={phase} index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
+  <DatetimePickerNoJS index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
 </div>
-
-<script>
-  const inputs = document.querySelectorAll('.js-content') as NodeListOf<HTMLElement>;
-  inputs.forEach((input: HTMLElement) => {
-    input.style.display = 'block'; 
-  });
-</script>

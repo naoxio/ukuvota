@@ -24,7 +24,7 @@ const {
 
 ---
 <step-2 data-phase={phase}>
-  <form id="step-2" action='/api/process-store' method="POST">
+  <div id="step-2">
     <input type="hidden" name="step" value="2" />
 
     { phase === "full" ? (
@@ -54,23 +54,16 @@ const {
       </div>
     ) : null }
     <br/>
-    <noscript>
+    <div class="flex justify-around mt-5">
+      <form action="/api/update-step" method="POST">
+        <input type="hidden" name="step" value="1"/>
+        <button class="btn" type="submit">{() => t('buttons.back')}</button>
+      </form>
       <form action='/api/update-step' method="POST">
         <input type="hidden" name="step" value="3" />
-        <div class="flex justify-around mt-5">
-          <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
-        </div>
+        <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
       </form>
-    </noscript>
-    <div class="flex justify-around mt-5">
-      <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
     </div>
-  </form>
-  <div class="flex justify-around mt-5">
-    <form action="/api/update-step" method="POST">
-      <input type="hidden" name="step" value="1"/>
-      <button class="btn" type="submit">{() => t('buttons.back')}</button>
-    </form>
   </div>
 </step-2>
 
