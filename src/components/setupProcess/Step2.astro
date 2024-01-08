@@ -35,8 +35,19 @@ const {
           <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
           <br/><br/>
           <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+          <div class="flex justify-around mt-5">
+            
+            <form action="/api/update-step" method="POST">
+              <input type="hidden" name="step" value="1"/>
+              <button class="btn" type="submit">{() => t('buttons.back')}</button>
+            </form>
+            <form action='/api/update-step' method="POST">
+              <input type="hidden" name="step" value="3" />
+              <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+            </form>
+          </div>
         </noscript>
-        <div class="js-content hidden">
+        <div class="js-content-block hidden">
           <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
           <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
         </div>
@@ -54,54 +65,19 @@ const {
       </div>
     ) : null }
     <br/>
-    <div class="flex justify-around mt-5">
-      <form action="/api/update-step" method="POST">
-        <input type="hidden" name="step" value="1"/>
-        <button class="btn" type="submit">{() => t('buttons.back')}</button>
-      </form>
-      <form action='/api/update-step' method="POST">
-        <input type="hidden" name="step" value="3" />
-        <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
-      </form>
+    <div class="justify-around mt-5 js-content-flex hidden">
+      <button id="backButton" class="btn" type="submit">{() => t('buttons.back')}</button>
+      <button id="continueButton" class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
     </div>
   </div>
 </step-2>
 
 
 <script>
-  const step2Element: HTMLElement | null = document.querySelector('step-2');
-  if (step2Element) {
-    const form: HTMLFormElement = document.createElement('form');
-    form.id = 'step-2';
-    form.method = 'POST';
-    form.action = '/api/process-store';
-
-    const hiddenInput: HTMLInputElement = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'step';
-    hiddenInput.value = '2';
-    form.appendChild(hiddenInput);
-
-    Array.from(step2Element.children).forEach(child => {
-      if (child.tagName !== 'FORM') {
-        form.appendChild(child);
-      }
-    });
-
-    step2Element.appendChild(form);
-  }
-
-  const js_content = document.querySelectorAll('.js-content') as NodeListOf<HTMLElement>;
-  js_content.forEach((content: HTMLElement) => {
-    content.style.display = 'block'; 
-  });
-
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
   import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
   const formElement = document.getElementById('step-2');
   if (formElement) {
-
-
     const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
       const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
       if (!votingTimeSelector) return;
@@ -151,62 +127,137 @@ const {
     }
 
     const initDatetimePickers = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {      
-        if (startPicker && endPicker) {
-          let originalStartDate = new Date(startPicker.value);
-          let originalEndDate = new Date(endPicker.value);
-          let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+      if (startPicker && endPicker) {
+        let originalStartDate = new Date(startPicker.value);
+        let originalEndDate = new Date(endPicker.value);
+        let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
 
-          startPicker.addEventListener('change', (event: any) => {
-            const newStartDate = new Date(event.target.value);
-            if (isNaN(newStartDate.getTime())) return;
-            
-            let newEndDate = new Date(newStartDate.getTime() + originalDuration);
-            if (newEndDate.getTime() - newStartDate.getTime() < 60000) {
-              newEndDate = new Date(newStartDate.getTime() + 60000);
-            }
-            endPicker.value = formatLocalDateTime(newEndDate);
-            endPicker.min = formatLocalDateTime(new Date(newStartDate.getTime() + 60000));
-          });
+        startPicker.addEventListener('change', (event: any) => {
+          const newStartDate = new Date(event.target.value);
+          if (isNaN(newStartDate.getTime())) return;
+          
+          let newEndDate = new Date(newStartDate.getTime() + originalDuration);
+          if (newEndDate.getTime() - newStartDate.getTime() < 60000) {
+            newEndDate = new Date(newStartDate.getTime() + 60000);
+          }
+          endPicker.value = formatLocalDateTime(newEndDate);
+          endPicker.min = formatLocalDateTime(new Date(newStartDate.getTime() + 60000));
+        });
 
-          endPicker.addEventListener('change', (event: any) => {
-            let newEndDate = new Date(event.target.value);
-            if (isNaN(newEndDate.getTime())) return;
-            if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
-            originalEndDate = newEndDate;
-            originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-            originalStartDate = new Date(startPicker.value);
-            updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
-          });
+        endPicker.addEventListener('change', (event: any) => {
+          let newEndDate = new Date(event.target.value);
+          if (isNaN(newEndDate.getTime())) return;
+          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
+          originalEndDate = newEndDate;
+          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+          originalStartDate = new Date(startPicker.value);
+          updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
+        });
+      }
+    }
+    class Step2 extends HTMLElement {
+      phase: string = this.dataset.phase as string;
+      constructor() {
+        super();
+        this.phase = this.dataset.phase || '';
+        this.initialize();
+      }
+
+      initialize() {
+        this.initializeTimeSelectors();
+        this.setupEventListeners();
+        this.displayJavaScriptContent();
+      }
+
+      setupEventListeners() {
+        const backButton = this.querySelector('#backButton');
+        const continueButton = this.querySelector('#continueButton');
+
+        if (backButton) {
+          backButton.addEventListener('click', (event) => this.handleBackButtonClick(event));
+        }
+
+        if (continueButton) {
+          continueButton.addEventListener('click', (event) => this.handleContinueButtonClick(event));
         }
       }
 
-    class Step2 extends HTMLElement {
-      phaseMode: string= this.dataset.phase || '';
-      constructor() {
-        super();
-        this.initializeTimeSelectors();
+      handleBackButtonClick(event: Event) {
+        this.submitFormData('/api/update-step', { 'step': '1' });
+      }
+
+      handleContinueButtonClick(event: Event) {
+
+        const formData = new FormData();
+        formData.append('step', '2');
+
+        if (this.phase === 'full') {
+          this.appendInputValueToFormData(formData, 'start-date-picker-proposal');
+          this.appendInputValueToFormData(formData, 'end-date-picker-proposal');
+          this.appendInputValueToFormData(formData, 'start-date-picker-voting');
+          this.appendInputValueToFormData(formData, 'end-date-picker-voting');
+        }
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+        this.submitFormData('/api/process-store', formData);
+      }
+
+      appendInputValueToFormData(formData: FormData, containerId: string) {
+        const containerElement = this.querySelector(`#${containerId}`);
+        if (containerElement) {
+          const inputElement = containerElement.querySelector('input');
+          if (inputElement && inputElement.value) {
+            formData.append(containerId, inputElement.value);
+          } else {
+            console.log(`Input not found inside container #${containerId}`);
+          }
+        } else {
+          console.log(`Container #${containerId} not found`);
+        }
+      }
+
+      submitFormData(url: string, formData: any) {
+        fetch(url, {
+          method: 'POST',
+          body: formData
+        }).then(response => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            console.error('Error in submission');
+          }
+        }).catch(error => {
+          console.error('Error sending request', error);
+        });
+      }
+
+      displayJavaScriptContent() {
+        const jsContentBlocks = this.querySelectorAll('.js-content-block, .js-content-flex') as NodeListOf<HTMLElement>;
+        jsContentBlocks.forEach((content) => {
+          content.style.display = content.classList.contains('js-content-flex') ? 'flex' : 'block';
+        });
       }
 
       initializeTimeSelectors() {
         const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
         timeSelectors.forEach(selector => {
-          const phase = selector.getAttribute('data-phase');
+          const phaseMode = selector.getAttribute('data-phase');
 
-          const startPickerId = `#start-date-picker-${phase}`;
-          const endPickerId = `#end-date-picker-${phase}`;
-          const sliderId = `#datetime-slider-${phase}`;
+          const startPickerId = `#start-date-picker-${phaseMode}`;
+          const endPickerId = `#end-date-picker-${phaseMode}`;
+          const sliderId = `#datetime-slider-${phaseMode}`;
 
           const startPicker = selector.querySelector(startPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
           const endPicker = selector.querySelector(endPickerId)?.querySelector('input[type="datetime-local"]') as HTMLInputElement;
           const durationSlider = selector.querySelector(sliderId)?.querySelector('input[type="range"]') as HTMLInputElement;
           const durationDisplay = selector.querySelector(sliderId)?.querySelector('.duration-display') as HTMLElement;
-          const affectVotingStart = (this.phaseMode === 'full' && phase === 'proposal') ? true : false;
+          const affectVotingStart = (this.phase === 'full' && phaseMode === 'proposal') ? true : false;
           initDatetimePickers(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
           initDurationSlider(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart, this);
         });
       }
     }
-
     customElements.define('step-2', Step2);
   }
 </script>

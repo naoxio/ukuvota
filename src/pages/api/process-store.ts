@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request }) => {
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
   processCookieObject.create = 'false';
   const referer = request.headers.get('referer') as string;
-  console.log(step)
+
   if (step === 1) {
     try {
       Object.assign(processCookieObject, {
@@ -39,14 +39,11 @@ export const POST: APIRoute = async ({ request }) => {
     if (phase === 'full') {
         try {
           const currentDate = new Date().getTime();
-          const timezoneOffset = formData.get('timezoneOffset');
-          console.log(formData)
-          // Default values based on provided logic
-          console.log(new Date(formData.get('end-date-picker-proposal') as string).toISOString());
           let startProposalDate = formData.get('start-date-picker-proposal') ? new Date(formData.get('start-date-picker-proposal') as string).getTime() : processCookieObject.startProposalDate || currentDate;
           let endProposalDate = formData.get('end-date-picker-proposal') ? new Date(formData.get('end-date-picker-proposal') as string).getTime() : processCookieObject.endProposalDate || (startProposalDate + 3600000); // +1 hour
           let startVotingDate = formData.get('start-date-picker-voting') ? new Date(formData.get('start-date-picker-voting') as string).getTime() : processCookieObject.startVotingDate || endProposalDate;
           let endVotingDate = formData.get('end-date-picker-voting') ? new Date(formData.get('end-date-picker-voting') as string).getTime() : processCookieObject.endVotingDate || (startVotingDate + 3600000); // +1 hour
+
           if (endProposalDate <= startProposalDate) {
             endProposalDate = startProposalDate + 60000;
           }

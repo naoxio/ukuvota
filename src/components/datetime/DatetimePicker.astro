@@ -3,13 +3,12 @@ import { t } from 'astro-i18n';
 
 interface Props {
   id: string;
-  phase: string;
   index: number;
   date: Date;
   min: Date;
 }
 
-const { id, phase, index, date, min } = Astro.props;
+const { id, index, date, min } = Astro.props;
 
 const toDateTimeLocal = (date: Date): string => {
   const isoString = date.toISOString();
