@@ -17,6 +17,8 @@ const toDateTimeLocal = (date: Date): string => {
 };
 ---
 
-<div id={id} class="flex flex-col justify-center items-center">
-  <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)} style="display: none;"/>
+<div id={id} class="flex justify-between items-center">
+  <h4>{ index == 0 ? t(`phases.startAt`) :  t(`phases.endsAt`)}</h4>
+
+  <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)} />
 </div>

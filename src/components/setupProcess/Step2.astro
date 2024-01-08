@@ -37,8 +37,8 @@ const {
           <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
         </noscript>
         <div class="js-content hidden">
-          <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
-          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
+          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
         </div>
       </div>
     ) : phase === "voting" ? ( 
