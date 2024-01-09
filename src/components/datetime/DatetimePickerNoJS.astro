@@ -19,7 +19,7 @@ const toDateTimeLocal = (date: Date) => {
 
 
 ---
-<form id={id} action="/api/process-store" method="POST" class="flex justify-between items-center">
+<form id={id} action="/api/process-store" method="POST" class="flex justify-between items-center flex-wrap">
   <input type="hidden" name="nojsSubmission" value="true" />
 
   <h4>{ index == 0 ? t(`phases.startAt`) :  t(`phases.endsAt`)}</h4>

@@ -1,7 +1,9 @@
 ---
 import { t } from 'astro-i18n';
 import AddProposals from "@components/process/AddProposals.astro";
+import AddProposalsNoJS from "@components/process/AddProposalsNoJS.astro";
 import EditProposalList from "@components/process/EditProposalList.astro";
+import EditProposalListNoJS from "@components/process/EditProposalListNoJS.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
 import TimeSelectorNoJS from '@components/datetime/TimeSelectorNoJS.astro';
@@ -25,8 +27,6 @@ const {
 ---
 <step-2 data-phase={phase}>
   <div id="step-2">
-    <input type="hidden" name="step" value="2" />
-
     { phase === "full" ? (
       <div>
         <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
@@ -52,19 +52,35 @@ const {
           <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
         </div>
       </div>
-    ) : phase === "voting" ? ( 
+    ) : phase === "voting" ? (
       <div>
-        <h2>{() => t('setup.selectTimeForVoting')}</h2>
-        <br/>
-        <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
-        <br/>
-        <h2>{ () => t('setup.proposals') }</h2>    
-        <EditProposalList />
-        <br/>
-        <AddProposals />
+        <noscript>
+          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <br/><br/>
+          <EditProposalListNoJS />
+          <br/>
+          <AddProposalsNoJS />
+          <div class="flex justify-around mt-5">
+            <form action="/api/update-step" method="POST">
+              <input type="hidden" name="step" value="1"/>
+              <button class="btn" type="submit">{() => t('buttons.back')}</button>
+            </form>
+            <form action="/api/update-step" method="POST">
+              <input type="hidden" name="step" value="3" />
+              <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+            </form>
+          </div>
+        </noscript>
+        <div class="js-content-block hidden">
+          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <br/>
+          <h2>{ () => t('setup.proposals') }</h2>    
+          <EditProposalList />
+          <br/>
+          <AddProposals />
+        </div>
       </div>
     ) : null }
-    <br/>
     <div class="justify-around mt-5 js-content-flex hidden">
       <button id="backButton" class="btn" type="submit">{() => t('buttons.back')}</button>
       <button id="continueButton" class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
