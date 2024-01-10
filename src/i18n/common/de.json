@@ -18,7 +18,9 @@
     "proposals": "Vorschläge hinzufügen",
     "setDate": "Datum festlegen",
     "duration": "Dauer",
-    "setDuration": "Dauer festlegen"
+    "setDuration": "Dauer festlegen",
+    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung"
   },
   "loadQuill": "Lade QuillEditor...",
   "policy": "Datenschutzerklärung",
@@ -79,12 +81,9 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
-    "setup": "Prozesseinrichtung",
     "topic": "Thema Frage",
     "description": "Beschreibung",
     "weighting": "Negative Punktegewichtung",
-    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
-    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
     "proposal": "Vorschlag",
     "proposals": "Vorschläge",
     "addProposal": "Vorschlag hinzufügen",

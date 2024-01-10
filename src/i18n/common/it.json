@@ -18,7 +18,9 @@
     "proposals": "Aggiungi proposte",
     "setDate": "Imposta data",
     "duration": "Durata",
-    "setDuration": "Imposta durata"
+    "setDuration": "Imposta durata",
+    "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
+    "timeLeftVotingHeading": "Seleziona l'orario per la votazione"
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",
@@ -79,12 +81,9 @@
   "slider": "Dispositivo di scorrimento",
   "not-found": "Non trovato",
   "process": {
-    "setup": "Processo di configurazione",
     "topic": "Domanda sull'argomento",
     "description": "Descrizione",
     "weighting": "Ponderazione del punteggio negativo",
-    "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
-    "timeLeftVotingHeading": "Seleziona l'orario per la votazione",
     "proposal": "Proposta",
     "proposals": "Proposte",
     "addProposal": "Aggiungi proposta",

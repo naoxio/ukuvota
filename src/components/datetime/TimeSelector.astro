@@ -8,20 +8,29 @@ interface Props {
   startMinDate: Date;
   startDate: Date;
   endDate: Date;
+  hideTitle?: Boolean;
+  nojs? : Boolean
 }
 
-const { phase, startDate, endDate, startMinDate } = Astro.props;
+const { phase, startDate, endDate, startMinDate, hideTitle, nojs} = Astro.props;
 const title = t(`phases.${phase}.title`);
 const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
 ---
 
 <div class="time-selector" data-phase={phase}>
-  <h3 class="title">{ title }</h3>
-  <br/>
-  <DatetimePicker index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
-  <br/>
-  <DatetimePicker index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
-  <br/>
-  <DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} />
-  <br/>
+  { hideTitle ?  <h3 class="title">{ title }</h3> : null }
+  { nojs ? (
+    <br/>
+    <DatetimePicker nojs index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
+    <br/>
+    <DatetimePicker nojs index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
+  ) : (
+    <br/>
+    <DatetimePicker index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
+    <br/>
+    <DatetimePicker index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
+    <br/>
+    <DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} />
+    <br/>
+  )}
 </div>

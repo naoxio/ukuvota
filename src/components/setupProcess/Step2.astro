@@ -1,12 +1,8 @@
 ---
 import { t } from 'astro-i18n';
-import AddProposals from "@components/process/AddProposals.astro";
-import AddProposalsNoJS from "@components/process/AddProposalsNoJS.astro";
-import EditProposalList from "@components/process/EditProposalList.astro";
-import EditProposalListNoJS from "@components/process/EditProposalListNoJS.astro";
+import ProposalsList from "@components/process/ProposalsList.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
-import TimeSelectorNoJS from '@components/datetime/TimeSelectorNoJS.astro';
 
 type Props = {
   phase: string;
@@ -29,14 +25,13 @@ const {
   <div id="step-2">
     { phase === "full" ? (
       <div>
-        <h2 class="flex justify-center mt-4">{() => t('process.timeLeftHeading')}</h2>
+        <h2 class="flex justify-center mt-4">{() => t('setup.timeLeftHeading')}</h2>
         <br/>
         <noscript>
-          <TimeSelectorNoJS phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
           <br/><br/>
-          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+          <TimeSelector nojs phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
           <div class="flex justify-around mt-5">
-            
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="1"/>
               <button class="btn" type="submit">{() => t('buttons.back')}</button>
@@ -54,12 +49,15 @@ const {
       </div>
     ) : phase === "voting" ? (
       <div>
+        <h2 class="flex justify-center mt-4">{() => t('setup.timeLeftVotingHeading')}</h2>
+        <br/>
         <noscript>
-          <TimeSelectorNoJS phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/><br/>
-          <EditProposalListNoJS />
+          <h2>{ () => t('setup.proposals') }</h2>    
+
+          <ProposalsList nojs />
           <br/>
-          <AddProposalsNoJS />
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="1"/>
@@ -72,12 +70,10 @@ const {
           </div>
         </noscript>
         <div class="js-content-block hidden">
-          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/>
           <h2>{ () => t('setup.proposals') }</h2>    
-          <EditProposalList />
-          <br/>
-          <AddProposals />
+          <ProposalsList />
         </div>
       </div>
     ) : null }

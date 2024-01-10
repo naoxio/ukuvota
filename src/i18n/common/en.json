@@ -18,7 +18,9 @@
     "proposals": "Add proposals",
     "setDate": "Set Date",
     "duration": "Duration",
-    "setDuration": "Set Duration"
+    "setDuration": "Set Duration",
+    "timeLeftHeading": "Select the time for proposals and voting",
+    "timeLeftVotingHeading": "Select the time for voting"
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",
@@ -79,12 +81,9 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
-    "setup": "Setup Process",
     "topic": "Topic Question",
     "description": "Description",
     "weighting": "Negative Score Weighting",
-    "timeLeftHeading": "Select the time for proposals and voting",
-    "timeLeftVotingHeading": "Select the time for voting",
     "proposal": "Proposal",
     "proposals": "Proposals",
     "addProposal": "Add proposal",

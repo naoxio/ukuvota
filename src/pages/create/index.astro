@@ -81,12 +81,12 @@ const formatDate = (timestamp: number): string => {
     <div class="process-details">
       {title && <p><strong>{t('process.topic')}:</strong> {title}</p>}
       {nojsdescription && <p><strong>{t('process.description')}:</strong> {nojsdescription}</p>}
-      <p><strong>{ t(`phases.proposal.title`) }</strong></p>
-
-      {startProposalDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startProposalDate)}</p>}
-      {endProposalDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endProposalDate)}</p>}
-      {phase === 'full' && <p><strong>{ t(`phases.voting.title`) }</strong></p>}
-
+      {startProposalDate && endProposalDate ? (
+        <p><strong>{ t(`phases.proposal.title`) }</strong></p>
+        <p><strong>{t('phases.startAt')}:</strong> {formatDate(startProposalDate)}</p>
+        <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endProposalDate)}</p>
+      ) : null }
+      <p><strong>{ t(`phases.voting.title`) }</strong></p>
       {startVotingDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startVotingDate)}</p>}
       {endVotingDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endVotingDate)}</p>}
     </div>
