@@ -9,6 +9,22 @@
     "telegramBotCardDescription": "Bequemes Wählen über Telegram, integriert in die tägliche Kommunikation.",
     "telegramBotCardButton": "Zum Bot gehen"
   },
+  "dashboard": {
+    "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
+    "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
+    "options": "Was möchten Sie tun?",
+    "createNewProcess": "Neuen Prozess erstellen",
+    "add": "Hinzufügen",
+    "addByUUID": "Prozess per UUID hinzufügen",
+    "enterUUID": "Geben Sie UUID oder Link ein",
+    "importProcesses": "Prozesse importieren",
+    "import": "Importieren",
+    "export": "Prozesse exportieren"
+  },
+  "guide": {
+    "checkboxLabel": "Diesen Leitfaden das nächste Mal nicht anzeigen",
+    "createProcessButton": "Prozess erstellen"
+  },
   "setup": {
     "continueEditing": "Bearbeitung Fortsetzen",
     "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",

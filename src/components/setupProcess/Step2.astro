@@ -3,15 +3,17 @@ import { t } from 'astro-i18n';
 import ProposalsList from "@components/process/ProposalsList.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
+import IProposal from '@interfaces/IProposal';
 
 type Props = {
   phase: string;
+  proposals: Array<IProposal>;
   proposalStartDate: number;
   proposalEndDate: number;
   votingStartDate: number;
   votingEndDate: number;
 }
-const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate } = Astro.props;
+const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals } = Astro.props;
 
 const {
   pStart,
@@ -56,7 +58,7 @@ const {
           <br/><br/>
           <h2>{ () => t('setup.proposals') }</h2>    
 
-          <ProposalsList nojs />
+          <ProposalsList nojs proposals={proposals}/>
           <br/>
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
@@ -73,7 +75,7 @@ const {
           <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/>
           <h2>{ () => t('setup.proposals') }</h2>    
-          <ProposalsList />
+          <ProposalsList proposals={proposals}/>
         </div>
       </div>
     ) : null }

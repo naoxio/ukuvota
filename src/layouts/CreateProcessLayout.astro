@@ -18,14 +18,13 @@ const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
 const {
   phase = "",
   title = "",
-  votingEndDate = "",
+  endVotingDate = "",
 } = processCookie as ProcessCookie
 
-// Define the steps and their respective states outside the template.
 const steps = [
   { stepNumber: 1, disabled: false },
   { stepNumber: 2, disabled: (!title || !phase) },
-  { stepNumber: 3, disabled: (!title || !phase || !votingEndDate) }
+  { stepNumber: 3, disabled: (!title || !phase || !endVotingDate) }
 ];
 
 ---

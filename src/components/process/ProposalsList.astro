@@ -1,10 +1,12 @@
 ---
 import { t } from 'astro-i18n';
 import dropdownOptions from '@utils/proposalTemplates';
+import IProposal from '@interfaces/IProposal';
 
 interface Props {
     processId?: string;
     nojs?: boolean;
+    proposals: Array<IProposal>
 }
 
 const { processId, nojs } = Astro.props;

@@ -21,7 +21,8 @@ const {
   endProposalDate = 0,
   startVotingDate = 0,
   endVotingDate = 0,
-  step = '1'
+  step = '1',
+  proposals = []
 } = processCookie as ProcessCookie;
 const currentStep = Number(step);
 
@@ -76,7 +77,7 @@ const formatDate = (timestamp: number): string => {
   { currentStep === 1 ? (
     <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
   ) : currentStep === 2 ? (
-    <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} />
+    <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
   ) : currentStep === 3 ? (
     <div class="process-details">
       {title && <p><strong>{t('process.topic')}:</strong> {title}</p>}

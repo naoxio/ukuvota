@@ -1,3 +1,5 @@
+import IProposal from "@interfaces/IProposal";
+
 export type ProcessCookie = {
   weighting?: string;
   title?: string;
@@ -10,6 +12,7 @@ export type ProcessCookie = {
   endProposalDate?: number;
   startVotingDate?: number;
   endVotingDate?: number;
+  proposals?: Array<IProposal>
 };
 
 const isValidJSONString = (str: string): boolean => {

@@ -1,4 +1,4 @@
-import { Delta } from 'quill'
+import type Delta from 'quill'
 
 export default interface IProposal {
     id: string;
