@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { randomUUID } from 'crypto';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 
@@ -42,9 +43,7 @@ export const POST: APIRoute = async ({ request }) => {
     let endProposalDate = formData.get('end-date-picker-proposal') ? new Date(formData.get('end-date-picker-proposal') as string).getTime() : processCookieObject.endProposalDate || (startProposalDate + 3600000); // +1 hour
     let startVotingDate = formData.get('start-date-picker-voting') ? new Date(formData.get('start-date-picker-voting') as string).getTime() : processCookieObject.startVotingDate || endProposalDate;
     let endVotingDate = formData.get('end-date-picker-voting') ? new Date(formData.get('end-date-picker-voting') as string).getTime() : processCookieObject.endVotingDate || (startVotingDate + 3600000); // +1 hour
-    
-    console.log(startVotingDate)
-    console.log( new Date(formData.get('start-date-picker-voting') as string).getTime())
+
     if (endProposalDate <= startProposalDate) {
       endProposalDate = startProposalDate + 60000;
     }
@@ -67,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
         if (!formData.get('nojsSubmission')) {
           processCookieObject.step = nextStep.toString();
         }
-        
+
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',
@@ -79,15 +78,27 @@ export const POST: APIRoute = async ({ request }) => {
         console.error("Error:", error);
         return new Response(null, { status: 303, headers: { 'Location': referer} });
       }
-    } else if (phase === 'voting') { 
+    } else if (phase === 'voting') {
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
+        console.log(formData.get('nojsSubmission'));
+        if (formData.get('nojsSubmission')) {
+          console.log('hi')
 
-        if (!formData.get('nojsSubmission')) {
+          console.log(formData.has('title'));
+          if (formData.has('title')) {
+            const title = formData.get('title') as string;
+            const description = formData.get('description') as string;
+            const proposalId = randomUUID(); 
+            console.log(title)
+            processCookieObject.proposals = processCookieObject.proposals || [];
+            processCookieObject.proposals.push({ id: proposalId, title, description, createdAt: new Date().getTime() });
+          }
+        } else {
           processCookieObject.step = nextStep.toString();
         }
-        
+
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',

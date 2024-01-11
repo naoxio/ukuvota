@@ -9,11 +9,53 @@ interface Props {
     proposals: Array<IProposal>
 }
 
-const { processId, nojs } = Astro.props;
+const { processId, nojs, proposals } = Astro.props;
+console.log(proposals)
 ---
-
 <div>
-  <div id="proposals-container"></div>
+  <div id="proposals-container">
+    {proposals.map((proposal: IProposal) => (
+      <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full">
+        <div class="flex items-center flex-col">
+          <div class="flex flex-col w-full">
+            {proposal.editing ? (
+              <div>
+                {nojs ? (
+                  <form action="/api/update-proposal" method="POST">
+                    <input type="hidden" name="proposalId" value={proposal.id} />
+                    <b>{t('process.proposal')}</b>
+                    <input type="text" name="title" class="input input-bordered input-sm my-2 w-full" value={proposal.title} required />
+                    <label>{t('process.description')}</label>
+
+                    <textarea class="textarea textarea-bordered textarea-sm my-2 w-full" name="description">{proposal.description}</textarea>
+                    <button type="submit" class="btn">{t('buttons.update')}</button>
+                  </form>
+                  <form action="/api/delete-proposal" method="POST">
+                    <input type="hidden" name="proposalId" value={proposal.id} />
+                    <button type="submit" class="btn text-error">{t('buttons.delete')}</button>
+                  </form>
+                ) : (
+                  <div>
+                    <input type="text" value={proposal.title} />
+                    <textarea>{proposal.description}</textarea>
+                    <button class="btn save-btn" data-id={proposal.id}>{t('buttons.save')}</button>
+                    <button class="btn delete-btn" data-id={proposal.id}>{t('buttons.delete')}</button>
+
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <b>{proposal.title || 'Untitled Proposal'}</b>
+                <p>{proposal.description}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
   
   {nojs ? (
     <div class="flex items-center flex-wrap justify-center">
@@ -21,7 +63,7 @@ const { processId, nojs } = Astro.props;
       <form action="/api/process-store" method="POST">
         <input type="hidden" name="step" value="2" />
         <input type="hidden" name="nojsSubmission" value="true" />
-
+        <input type="hidden" name="title" value="" />
         <input type="hidden" name="processId" value={processId} />
         <button class="btn p-2">{t('process.addProposal')}</button>
       </form>
@@ -48,7 +90,7 @@ const { processId, nojs } = Astro.props;
       </div>
     </div>
   ) : (
-    <div class="flex items-center flex-wrap" data-process={processId}>
+    <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
       <button id="add-button" class="btn p-2">{ () => t('process.addProposal') }</button>
       <div class="dropdown">
         <label tabindex="0" class="btn m-1">{ () => t('addProposalTemplate') }</label>

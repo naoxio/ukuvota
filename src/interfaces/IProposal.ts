@@ -5,4 +5,5 @@ export default interface IProposal {
     title: string;
     description: string | Delta;
     createdAt?: number;
+    editing?: boolean;
 }

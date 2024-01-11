@@ -22,6 +22,9 @@ const {
   vEnd
 } = adjustDates(phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate);
 
+if (proposals && proposals.length > 0) {
+  proposals.forEach(proposal => proposal.editing = true);
+}
 ---
 <step-2 data-phase={phase}>
   <div id="step-2">
