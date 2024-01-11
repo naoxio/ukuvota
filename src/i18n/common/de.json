@@ -41,12 +41,6 @@
   "loadQuill": "Lade QuillEditor...",
   "policy": "Datenschutzerklärung",
   "donate": "Spenden",
-  "addProposalTemplate": "Vorschlag per Vorlage hinzufügen",
-  "select": "auswählen",
-  "confirm": "Bestätigen",
-  "cancel": "abbrechen",
-  "done": "fertig",
-  "delete": "löschen",
   "phases": {
     "start": "Startet",
     "startAt": "Startet am",
@@ -90,7 +84,12 @@
     "toggle_langs": "Sprachen ändern",
     "start": "Starten Sie den Prozess",
     "continue": "Weiter",
-    "back": "Zurück"
+    "back": "Zurück",
+    "select": "auswählen",
+    "confirm": "Bestätigen",
+    "cancel": "abbrechen",
+    "done": "fertig",
+    "delete": "löschen"
   },
   "loading": "Laden",
   "calendar": "Kalender",
@@ -122,7 +121,8 @@
       "select": "Phasen auswählen",
       "full": "Vorschlags- und Abstimmungsphase",
       "voting": "Nur die Abstimmungsphase"
-    }
+    },
+    "addProposalTemplate": "Vorschlag per Vorlage hinzufügen"
   },
   "proposal": {
     "zero": {

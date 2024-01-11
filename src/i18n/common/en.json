@@ -41,12 +41,6 @@
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",
   "donate": "Donate",
-  "addProposalTemplate": "Add proposal by template",
-  "select": "select",
-  "confirm": "confirm",
-  "cancel": "cancel",
-  "done": "done",
-  "delete": "delete",
   "phases": {
     "start": "Starts",
     "startAt": "Start at",
@@ -90,7 +84,12 @@
     "toggle_langs": "Change languages",
     "start": "Start process",
     "continue": "Continue",
-    "back": "Back"
+    "back": "Back",
+    "select": "select",
+    "confirm": "confirm",
+    "cancel": "cancel",
+    "done": "done",
+    "delete": "delete"
   },
   "loading": "Loading",
   "calendar": "Calendar",
@@ -122,7 +121,8 @@
       "select": "Select phases",
       "full": "Proposal + Voting Phase",
       "voting": "Voting Phase only"
-    }
+    },
+    "addProposalTemplate": "Add proposal by template"
   },
   "proposal": {
     "zero": {

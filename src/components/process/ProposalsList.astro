@@ -79,7 +79,7 @@ console.log(proposals)
       </form>
 
       <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ () => t('addProposalTemplate') }</label>
+        <label tabindex="0" class="btn m-1">{ () => t('process.addProposalTemplate') }</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
           {dropdownOptions.map((option: any, index) => (
             <form action="/api/process-store" method="POST"  class="flex justify-between items-center flex-wrap">
@@ -104,7 +104,7 @@ console.log(proposals)
     <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
       <button id="add-button" class="btn p-2">{ () => t('process.addProposal') }</button>
       <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ () => t('addProposalTemplate') }</label>
+        <label tabindex="0" class="btn m-1">{ () => t('process.addProposalTemplate') }</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
           {dropdownOptions.map((option, index) => (
             <li>
