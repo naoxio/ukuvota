@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { randomUUID } from 'crypto';
+import proposalTemplates from '@utils/proposalTemplates';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 
@@ -88,10 +89,17 @@ export const POST: APIRoute = async ({ request }) => {
 
           console.log(formData.has('title'));
           if (formData.has('title')) {
-            const title = formData.get('title') as string;
-            const description = formData.get('description') as string;
+            let title = formData.get('title') as string;
+            let description = formData.get('description') as string;
+            if (formData.has('tmpl')) {
+              const tmpl = Number(formData.get('tmpl') as string);
+              title = proposalTemplates[tmpl].title;
+              description = proposalTemplates[tmpl].description.ops[0].insert;
+
+              console.log(tmpl, title)
+
+            }
             const proposalId = randomUUID(); 
-            console.log(title)
             processCookieObject.proposals = processCookieObject.proposals || [];
             processCookieObject.proposals.push({ id: proposalId, title, description, createdAt: new Date().getTime() });
           }

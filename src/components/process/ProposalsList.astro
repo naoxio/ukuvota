@@ -76,9 +76,9 @@ console.log(proposals)
               <input type="hidden" name="step" value="2" />
               <input type="hidden" name="nojsSubmission" value="true" />
 
-              <input type="hidden" name="title" value={option.title} />
-              <input type="hidden" name="description" value={option.description.ops[0].insert} />
+              <input type="hidden" name="title" value="" />
               <input type="hidden" name="processId" value={processId} />
+              <input type="hidden" name="tmpl" value={index}/>
 
               <button type="submit" class="btn w-64 mt-2 h-24 items-center flex flex-col justify-center">
                 <b class="title">{option.title}</b>

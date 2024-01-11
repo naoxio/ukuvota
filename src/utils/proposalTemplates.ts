@@ -2,18 +2,18 @@ import { t } from 'astro-i18n';
 
 export default [
   {
-    title: () => t('proposal.zero.title'),
+    title: t('proposal.zero.title'),
     description: {
       ops: [
-        { insert: () => t('proposal.zero.description') },
+        { insert: t('proposal.zero.description') },
       ]
     }
   },
   {
-    title: () => t('proposal.one.title'),
+    title: t('proposal.one.title'),
     description: {
       ops: [
-        { insert: () => t('proposal.one.description') },
+        { insert: t('proposal.one.description') },
       ]
     }
   },
