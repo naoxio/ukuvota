@@ -89,7 +89,8 @@
     "confirm": "confirm",
     "cancel": "cancel",
     "done": "done",
-    "delete": "delete"
+    "delete": "Delete",
+    "update": "Update"
   },
   "loading": "Loading",
   "calendar": "Calendar",

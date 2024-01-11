@@ -22,6 +22,14 @@ console.log(proposals)
             {proposal.editing ? (
               <div>
                 {nojs ? (
+
+                  <form action={ isSetup ? "/api/process-store" : "/api/delete-proposal" } method="POST" class="flex justify-end">
+                    <input type="hidden" name="step" value="2" />
+                    <input type="hidden" name="nojsSubmission" value="true" />
+                    <input type="hidden" name="proposalId" value={proposal.id} />
+                    <input type="hidden" name="deleteProposal" value="true" />
+                    <button type="submit" class="button button-text text-error">&#128465;</button>
+                  </form>
                   <form action={ isSetup ? "/api/process-store" : "/api/update-proposal" } method="POST">
                     <input type="hidden" name="step" value="2" />
                     <input type="hidden" name="nojsSubmission" value="true" />
@@ -33,21 +41,19 @@ console.log(proposals)
                     <label>{t('process.description')}</label>
 
                     <textarea class="textarea textarea-bordered textarea-sm my-2 w-full" name="description">{proposal.description}</textarea>
-                    <button type="submit" class="btn">{t('buttons.update')}</button>
-                  </form>
-                  <form action={ isSetup ? "/api/process-store" : "/api/delete-proposal" } method="POST">
-                    <input type="hidden" name="step" value="2" />
-                    <input type="hidden" name="nojsSubmission" value="true" />
-                    <input type="hidden" name="proposalId" value={proposal.id} />
-                    <input type="hidden" name="deleteProposal" value="true" />
-                    <button type="submit" class="btn text-error">{t('buttons.delete')}</button>
+                    <div class="flex justify-center">
+                      <button type="submit" class="btn">{t('buttons.update')}</button>
+                    </div>
                   </form>
                 ) : (
                   <div>
+                    <span class="flex justify-end">
+                      <button class="button" data-id={proposal.id}>&#128465;</button>
+                    </span>
+
                     <input type="text" value={proposal.title} />
                     <textarea>{proposal.description}</textarea>
-                    <button class="btn save-btn" data-id={proposal.id}>{t('buttons.save')}</button>
-                    <button class="btn delete-btn" data-id={proposal.id}>{t('buttons.delete')}</button>
+                    <button class="button" data-id={proposal.id}>{t('buttons.save')}</button>
 
                   </div>
                 )}
@@ -63,7 +69,7 @@ console.log(proposals)
       </div>
     ))}
   </div>
-
+  <br/>
   
   {nojs ? (
     <div class="flex items-center flex-wrap justify-center">

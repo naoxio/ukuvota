@@ -89,7 +89,8 @@
     "confirm": "Bestätigen",
     "cancel": "abbrechen",
     "done": "fertig",
-    "delete": "löschen"
+    "delete": "Löschen",
+    "update": "Update"
   },
   "loading": "Laden",
   "calendar": "Kalender",

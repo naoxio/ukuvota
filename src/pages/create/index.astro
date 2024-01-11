@@ -7,6 +7,7 @@ import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
 
 import { Icon } from 'astro-icon'
+import IProposal from '@interfaces/IProposal';
 
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
@@ -80,16 +81,34 @@ const formatDate = (timestamp: number): string => {
     <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
   ) : currentStep === 3 ? (
     <div class="process-details">
-      {title && <p><strong>{t('process.topic')}:</strong> {title}</p>}
-      {nojsdescription && <p><strong>{t('process.description')}:</strong> {nojsdescription}</p>}
+      {title ? (
+        <h2>{t('process.topic')}</h2> 
+        <p>{title}</p> 
+      ) : null}
+      {nojsdescription ? <p><h3>{t('process.description')}:</h3> {nojsdescription}</p> : null}
       {startProposalDate && endProposalDate ? (
-        <p><strong>{ t(`phases.proposal.title`) }</strong></p>
-        <p><strong>{t('phases.startAt')}:</strong> {formatDate(startProposalDate)}</p>
-        <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endProposalDate)}</p>
+        <h2>{ t(`phases.proposal.title`) }</h2>
+        <p><h3>{t('phases.startAt')}:</h3> {formatDate(startProposalDate)}</p>
+        <p><h3>{t('phases.endsAt')}:</h3> {formatDate(endProposalDate)}</p>
       ) : null }
-      <p><strong>{ t(`phases.voting.title`) }</strong></p>
-      {startVotingDate && <p><strong>{t('phases.startAt')}:</strong> {formatDate(startVotingDate)}</p>}
-      {endVotingDate && <p><strong>{t('phases.endsAt')}:</strong> {formatDate(endVotingDate)}</p>}
+      <h2>{ t(`phases.voting.title`) }</h2>
+      {startVotingDate ? <p><h3>{t('phases.startAt')}:</h3> {formatDate(startVotingDate)}</p> : null}
+      {endVotingDate ? <p><h3>{t('phases.endsAt')}:</h3> {formatDate(endVotingDate)}</p> : null}
+
+      {proposals.length > 0 ? (
+        <>
+          <br/><br/>
+          <h2>{t('process.proposals')}</h2>
+          { proposals.map((proposal: IProposal) => (
+          <ul class="flex flex-wrap">
+            <li>
+              <b>{proposal.title || 'Untitled Proposal'}</b>
+              <p>{proposal.description}</p>
+            </li>
+          </ul>
+          ))}
+        </>
+      ) : null}
     </div>
     <div class="flex justify-around mt-5">
       <form action="/api/update-step" method="post">

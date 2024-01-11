@@ -30,7 +30,7 @@ if (proposals && proposals.length > 0) {
   <div id="step-2">
     { phase === "full" ? (
       <div>
-        <h2 class="flex justify-center mt-4">{() => t('setup.timeLeftHeading')}</h2>
+        <h2 class="flex  mt-4">{() => t('setup.timeLeftHeading')}</h2>
         <br/>
         <noscript>
           <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
@@ -54,7 +54,7 @@ if (proposals && proposals.length > 0) {
       </div>
     ) : phase === "voting" ? (
       <div>
-        <h2 class="flex justify-center mt-4">{() => t('setup.timeLeftVotingHeading')}</h2>
+        <h2 class="flex mt-4">{() => t('setup.timeLeftVotingHeading')}</h2>
         <br/>
         <noscript>
           <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
