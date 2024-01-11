@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import proposalTemplates from '@utils/proposalTemplates';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
+import IProposal from "@interfaces/IProposal";
 
 
 export const POST: APIRoute = async ({ request }) => {
@@ -85,10 +86,7 @@ export const POST: APIRoute = async ({ request }) => {
         processCookieObject.endVotingDate = endVotingDate;
         console.log(formData.get('nojsSubmission'));
         if (formData.get('nojsSubmission')) {
-          console.log('hi')
-
-          console.log(formData.has('title'));
-          if (formData.has('title')) {
+          if (formData.has('addProposal')) {
             let title = formData.get('title') as string;
             let description = formData.get('description') as string;
             if (formData.has('tmpl')) {
@@ -97,12 +95,28 @@ export const POST: APIRoute = async ({ request }) => {
               description = proposalTemplates[tmpl].description.ops[0].insert;
 
               console.log(tmpl, title)
-
             }
             const proposalId = randomUUID(); 
             processCookieObject.proposals = processCookieObject.proposals || [];
             processCookieObject.proposals.push({ id: proposalId, title, description, createdAt: new Date().getTime() });
           }
+          else if (formData.has('deleteProposal')) {
+            const proposalIdToDelete = formData.get('proposalId') as string;
+            if (processCookieObject.proposals) processCookieObject.proposals = processCookieObject.proposals.filter(proposal => proposal.id !== proposalIdToDelete);
+          }
+          // Update Proposal Logic
+          else if (formData.has('updateProposal')) {
+            const proposalIdToUpdate = formData.get('proposalId') as string;
+            const updatedTitle = formData.get('title') as string;
+            const updatedDescription = formData.get('description') as string;
+            let proposalToUpdate: IProposal | undefined;
+            if (processCookieObject.proposals) proposalToUpdate = processCookieObject.proposals.find(proposal => proposal.id === proposalIdToUpdate) ;
+            if (proposalToUpdate) {
+              proposalToUpdate.title = updatedTitle;
+              proposalToUpdate.description = updatedDescription;
+            }
+          }
+
         } else {
           processCookieObject.step = nextStep.toString();
         }

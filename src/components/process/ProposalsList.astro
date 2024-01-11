@@ -6,10 +6,11 @@ import IProposal from '@interfaces/IProposal';
 interface Props {
     processId?: string;
     nojs?: boolean;
-    proposals: Array<IProposal>
+    proposals: Array<IProposal>;
+    isSetup?: boolean;
 }
 
-const { processId, nojs, proposals } = Astro.props;
+const { processId, nojs, proposals, isSetup } = Astro.props;
 console.log(proposals)
 ---
 <div>
@@ -21,8 +22,12 @@ console.log(proposals)
             {proposal.editing ? (
               <div>
                 {nojs ? (
-                  <form action="/api/update-proposal" method="POST">
+                  <form action={ isSetup ? "/api/process-store" : "/api/update-proposal" } method="POST">
+                    <input type="hidden" name="step" value="2" />
+                    <input type="hidden" name="nojsSubmission" value="true" />
                     <input type="hidden" name="proposalId" value={proposal.id} />
+                    <input type="hidden" name="updateProposal" value="true" />
+
                     <b>{t('process.proposal')}</b>
                     <input type="text" name="title" class="input input-bordered input-sm my-2 w-full" value={proposal.title} required />
                     <label>{t('process.description')}</label>
@@ -30,8 +35,11 @@ console.log(proposals)
                     <textarea class="textarea textarea-bordered textarea-sm my-2 w-full" name="description">{proposal.description}</textarea>
                     <button type="submit" class="btn">{t('buttons.update')}</button>
                   </form>
-                  <form action="/api/delete-proposal" method="POST">
+                  <form action={ isSetup ? "/api/process-store" : "/api/delete-proposal" } method="POST">
+                    <input type="hidden" name="step" value="2" />
+                    <input type="hidden" name="nojsSubmission" value="true" />
                     <input type="hidden" name="proposalId" value={proposal.id} />
+                    <input type="hidden" name="deleteProposal" value="true" />
                     <button type="submit" class="btn text-error">{t('buttons.delete')}</button>
                   </form>
                 ) : (
@@ -64,6 +72,8 @@ console.log(proposals)
         <input type="hidden" name="step" value="2" />
         <input type="hidden" name="nojsSubmission" value="true" />
         <input type="hidden" name="title" value="" />
+        <input type="hidden" name="addProposal" value="true" />
+
         <input type="hidden" name="processId" value={processId} />
         <button class="btn p-2">{t('process.addProposal')}</button>
       </form>
@@ -75,6 +85,7 @@ console.log(proposals)
             <form action="/api/process-store" method="POST"  class="flex justify-between items-center flex-wrap">
               <input type="hidden" name="step" value="2" />
               <input type="hidden" name="nojsSubmission" value="true" />
+              <input type="hidden" name="addProposal" value="true" />
 
               <input type="hidden" name="title" value="" />
               <input type="hidden" name="processId" value={processId} />

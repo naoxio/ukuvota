@@ -61,7 +61,7 @@ if (proposals && proposals.length > 0) {
           <br/><br/>
           <h2>{ () => t('setup.proposals') }</h2>    
 
-          <ProposalsList nojs proposals={proposals}/>
+          <ProposalsList nojs isSetup={true} proposals={proposals}/>
           <br/>
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
