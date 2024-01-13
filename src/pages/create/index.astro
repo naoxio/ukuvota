@@ -85,7 +85,10 @@ const formatDate = (timestamp: number): string => {
         <h2>{t('process.topic')}</h2> 
         <p>{title}</p> 
       ) : null}
-      {nojsdescription ? <p><h3>{t('process.description')}:</h3> {nojsdescription}</p> : null}
+      {nojsdescription ? (
+        <h3>{t('process.description')}:</h3>
+        <p>{nojsdescription}</p>
+      ) : null}
       {startProposalDate && endProposalDate ? (
         <h2>{ t(`phases.proposal.title`) }</h2>
         <p><h3>{t('phases.startAt')}:</h3> {formatDate(startProposalDate)}</p>

@@ -1,5 +1,5 @@
 ---
-import { astroI18n, t, l } from "astro-i18n";
+import { t, l } from "astro-i18n";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ProcessInfo from "@components/process/ProcessInfo.astro";
 
@@ -15,14 +15,14 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
       ))}
       <form action="/api/export" method="get">
         <button class="btn-floating" id="exportButton" type="submit">
-          {() => t('export')}
+          {() => t('dashboard.export')}
         </button>
       </form>
   </div>
   ) : (
     <div class="empty-state">
-      <p>{() => t('noProcesses')}</p>
-      <p>{() => t('beginProcess')}</p>
+      <p>{() => t('dashboard.noProcesses')}</p>
+      <p>{() => t('dashboard.beginProcess')}</p>
       <div class="absolute right-5 bottom-20">
         <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
@@ -35,17 +35,17 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
           <div class="modal-box">
             <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
           
-            <p class="font-bold text-lg">{() => t('options')}</p>
+            <p class="font-bold text-lg">{() => t('dashboard.options')}</p>
             <br/>
             
             <a href={l('/create')} class="btn btn-primary mb-4">
-              {() => t('createNewProcess')}
+              {() => t('dashboard.createNewProcess')}
             </a>
 
             <form class="mt-4" action="/api/add-by-uuid" method="post">
               <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
               <button type="submit" class="btn btn-primary m-2">
-                {() => t('add')}
+                {() => t('dashboard.add')}
               </button>
             </form>
             
@@ -53,7 +53,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
               <input type="file" class="file-input" name="file" accept=".csv" required />
               <br/>
               <button type="submit" class="btn m-2 btn-primary">
-                {() => t('import')}
+                {() => t('dashboard.import')}
               </button>
             </form>
           </div>
