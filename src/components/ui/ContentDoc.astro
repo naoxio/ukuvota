@@ -4,9 +4,8 @@ interface Props {
 }
 const { file_name } = Astro.props;
 
-import { astroI18n } from "astro-i18n";
 
-const content = await import(`../../content/${astroI18n.locale}/${file_name}.md`);
+const content = await import(`../../content/${Astro.currentLocale}/${file_name}.md`);
 ---
 
 <Fragment set:html={content.compiledContent()} />

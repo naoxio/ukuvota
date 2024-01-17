@@ -1,20 +1,25 @@
-import { t } from 'astro-i18n';
+import { Translator } from '@utils/i18n.js';
 
-export default [
-  {
-    title: t('proposal.zero.title'),
-    description: {
-      ops: [
-        { insert: t('proposal.zero.description') },
-      ]
-    }
-  },
-  {
-    title: t('proposal.one.title'),
-    description: {
-      ops: [
-        { insert: t('proposal.one.description') },
-      ]
-    }
-  },
-];
+export default async function getProposalTemplates(locale: string) {
+  const translator = new Translator(locale); 
+  await translator.init();
+
+  return [
+    {
+      title: translator.t('proposal.zero.title'),
+      description: {
+        ops: [
+          { insert: translator.t('proposal.zero.description') },
+        ]
+      }
+    },
+    {
+      title: translator.t('proposal.one.title'),
+      description: {
+        ops: [
+          { insert: translator.t('proposal.one.description') },
+        ]
+      }
+    },
+  ];
+}

@@ -1,5 +1,7 @@
 ---
-import { t } from 'astro-i18n'
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
+
 import Countdown from '@components/datetime/Countdown.astro';
 
 interface Props {
@@ -12,20 +14,20 @@ const { phase, dates} = Astro.props;
 ---
 
 <process-time-label data-start={dates[0]}>
-    <span>{ t(`phases.${phase}.title`) }:&nbsp;</span>
+    <span>{ translator.t(`phases.${phase}.title`) }:&nbsp;</span>
 
     { 
         +new Date() < dates[0] ? (
             <br/>
-            <span>{ t(`phases.start`) }:&nbsp;</span>
+            <span>{ translator.t(`phases.start`) }:&nbsp;</span>
             <span id="start-date" class="link-success"></span>
             <br/>
-            <span>{ t(`phases.lastFor`) }:&nbsp;</span>
+            <span>{ translator.t(`phases.lastFor`) }:&nbsp;</span>
             <!--Countdown type="success" dates={dates} /-->
         ) : +new Date() < dates[1] ? (
             <!--Countdown dates={dates} type="warning" /-->
-            <span>&nbsp;({ () => t('remainingTime') })</span>
-        ) : <span class="text-info">{ () => t('done') }</span>
+            <span>&nbsp;({ translator.t('remainingTime') })</span>
+        ) : <span class="text-info">{ translator.t('done') }</span>
     }
     <br/>
 

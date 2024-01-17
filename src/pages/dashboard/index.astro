@@ -1,13 +1,17 @@
 ---
-import { t, l } from "astro-i18n";
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { Translator } from '@utils/i18n.js';
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ProcessInfo from "@components/process/ProcessInfo.astro";
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 
 const processesCookie = (Astro.cookies.get("processes") || "") as string;
 let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
 ---
 
-<BaseLayout title={t('buttons.dashboard')} description={t('description')}>
+<BaseLayout title={translator.t('buttons.dashboard')} description={translator.t('description')}>
   {allProcesses.length > 0 ? (
     <div>
       {allProcesses.map((uuid: string) => (
@@ -15,14 +19,14 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
       ))}
       <form action="/api/export" method="get">
         <button class="btn-floating" id="exportButton" type="submit">
-          {() => t('dashboard.export')}
+          {translator.t('dashboard.export')}
         </button>
       </form>
   </div>
   ) : (
     <div class="empty-state">
-      <p>{() => t('dashboard.noProcesses')}</p>
-      <p>{() => t('dashboard.beginProcess')}</p>
+      <p>{translator.t('dashboard.noProcesses')}</p>
+      <p>{translator.t('dashboard.beginProcess')}</p>
       <div class="absolute right-5 bottom-20">
         <label for="modalToggle" class="btn btn-primary btn-circle fixed right-5 bottom-20">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
@@ -35,17 +39,17 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
           <div class="modal-box">
             <label for="modalToggle" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
           
-            <p class="font-bold text-lg">{() => t('dashboard.options')}</p>
+            <p class="font-bold text-lg">{translator.t('dashboard.options')}</p>
             <br/>
             
-            <a href={l('/create')} class="btn btn-primary mb-4">
-              {() => t('dashboard.createNewProcess')}
+            <a href={getAbsoluteLocaleUrl(Astro.currentLocale || 'en', '/create')} class="btn btn-primary mb-4">
+              {translator.t('dashboard.createNewProcess')}
             </a>
 
             <form class="mt-4" action="/api/add-by-uuid" method="post">
-              <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
+              <input placeholder={translator.t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
               <button type="submit" class="btn btn-primary m-2">
-                {() => t('dashboard.add')}
+                {translator.t('dashboard.add')}
               </button>
             </form>
             
@@ -53,7 +57,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
               <input type="file" class="file-input" name="file" accept=".csv" required />
               <br/>
               <button type="submit" class="btn m-2 btn-primary">
-                {() => t('dashboard.import')}
+                {translator.t('dashboard.import')}
               </button>
             </form>
           </div>

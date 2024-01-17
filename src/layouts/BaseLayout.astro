@@ -1,12 +1,13 @@
 ---
-import {astroI18n} from 'astro-i18n';
 import Header from '@components/navigation/Header.astro';
 
 import '@assets/quill.snow.css';
 import '@assets/global.css';
-import { l } from 'astro-i18n';
 
-const supportedLanguages = astroI18n.locales;
+import { getPathByLocale } from 'astro:i18n';
+
+const supportedLanguages = Astro.preferredLocaleList as string[];
+console.log(supportedLanguages)
 const { title, description } = Astro.props;
 
 const { url } = Astro;
@@ -23,7 +24,7 @@ if (url.hash.includes('#/app/')) {
 }
 ---
 <!DOCTYPE html>
-<html lang={astroI18n.locale} data-theme={theme} class={theme}>
+<html lang={Astro.currentLocale} data-theme={theme} class={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
@@ -45,7 +46,7 @@ if (url.hash.includes('#/app/')) {
         <link
           rel="alternate"
           hreflang={supportedLanguage}
-          href={l(url.href)}
+          href={getPathByLocale(url.href)}
         />
       ))
     }

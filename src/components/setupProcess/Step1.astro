@@ -1,5 +1,6 @@
 ---
-import { t } from 'astro-i18n';
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
 import weightingOptions from '@utils/weightingOptions';
 import Modal from '@components/ui/Modal.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
@@ -17,7 +18,7 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 <form id="step-1" action='/api/process-store' method="POST">
   <input type="hidden" name="step" value="1" />
   <div id="scrollTopicQuestion" />
-  <p>{ () => t('process.topic') }</p>
+  <p>{ translator.t('process.topic') }</p>
   <input 
     id="topicQuestion" 
     name="topicQuestion" 
@@ -25,13 +26,13 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
     type="text" 
     value={title} 
     required 
-    title={t('alert.error.topicQuestion')}
+    title={translator.t('alert.error.topicQuestion')}
   />
   <br/>
   <br/>
-  <p>{ () => t('process.description') }</p>
+  <p>{ translator.t('process.description') }</p>
 
-  <div id="description" class="hidden">{() => t('loadQuill')}</div>
+  <div id="description" class="hidden">{translator.t('loadQuill')}</div>
 
   <noscript>
     <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
@@ -39,9 +40,9 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
   <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
   <br/>
   <!--details class="text-center">
-    <summary class="cursor-pointer text-indianared mt-6 ">{ () => t('process.advancedOptions') }</summary-->
+    <summary class="cursor-pointer text-indianared mt-6 ">{ translator.t('process.advancedOptions') }</summary-->
   <div class="flex justify-between items-center">
-    <span>{ () => t('process.weighting') }</span>
+    <span>{ translator.t('process.weighting') }</span>
     <span class="flex justify-center items-center">
       <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
         {weightingOptions.map(weight => (
@@ -52,7 +53,7 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
       </select>
       
       <Modal id="weightingInfo">
-        <h3>{ () => t('process.weighting') }</h3>
+        <h3>{ translator.t('process.weighting') }</h3>
         <ContentDoc file_name="NegativeScoreWeighting"/>
       </Modal>
     </span>
@@ -60,10 +61,10 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
   <br/>
   <div class="flex justify-around flex-wrap">
     <button type="submit" name="phase" value="full" class="btn btn-primary m-2">
-      { () => t('process.phases.full') }
+      { translator.t('process.phases.full') }
     </button>
     <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">
-      { () => t('process.phases.voting') }
+      { translator.t('process.phases.voting') }
     </button>
   </div>
 </form>

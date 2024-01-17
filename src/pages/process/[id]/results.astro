@@ -2,18 +2,16 @@
 import type IProcess from "@interfaces/IProcess";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
-import { astroI18n, t } from "astro-i18n";
 import getProcessUrl from "@utils/getProcessUrl";
-import AlertList from "@components/ui/AlertList.astro";
-import Alert from "@components/ui/Alert.astro";
-
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
 
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
 //const process: IProcess = await fetchProcess(processId);
 const process: any = {};
-const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 const emojis = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
@@ -41,12 +39,12 @@ if (process && !("voters" in process)) {
         <div class="tab-content hide">
 
             <span class="flex justify-between items-center">
-                <h2>{ () => t('process.results') }</h2>
-                <button class='repeat-button btn btn-sm'>{ () => t('repeatProcess') }</button>
+                <h2>{ translator.t('process.results') }</h2>
+                <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
             </span>
             
             <h3>
-                <span class="voter-label">{ () => t('process.voters') }</span>
+                <span class="voter-label">{ translator.t('process.voters') }</span>
                 <span class="num-voters">({ process.voters.length })</span>:
             </h3>
             <div class="flex justify-around flex-wrap">
@@ -66,9 +64,9 @@ if (process && !("voters" in process)) {
                     <thead>
                         <tr class="table-row-one">
                             <th></th>
-                            <th class="whitespace-normal break-words">{ () => t('process.proposal') }</th>
-                            <th class="whitespace-normal break-words">{ () => t('process.averageScore') }</th>
-                            <th class="whitespace-normal break-words">{ () => t('process.totalScore') }</th>
+                            <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
+                            <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
+                            <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,7 +75,7 @@ if (process && !("voters" in process)) {
             </div>
             <br/>
             <div class="card">
-                <h3>{ () => t('process.exportData') }</h3>
+                <h3>{ translator.t('process.exportData') }</h3>
                 <div class="flex justify-around exports">
                     <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
                     <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
@@ -100,14 +98,6 @@ if (process && !("voters" in process)) {
                 <br/>
             </div>
         </div>
-        <AlertList>
-            <Alert icon="checkmark-outline" success>
-                { () => t('alert.success.repeatProcess') }
-            </Alert>
-            <Alert icon="warning" error>
-                { () => t('alert.error.missingProposals') }
-            </Alert>
-        </AlertList>
     </results-card>
 </ProcessLayout>
 

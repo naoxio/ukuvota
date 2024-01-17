@@ -1,7 +1,14 @@
 ---
-import { t } from 'astro-i18n';
-import dropdownOptions from '@utils/proposalTemplates';
+import getProposalTemplates from '@utils/proposalTemplates.js';
+
+const locale = Astro.currentLocale || 'en';
+const dropdownOptions = await getProposalTemplates(locale);
+
 import IProposal from '@interfaces/IProposal';
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 
 interface Props {
     processId?: string;
@@ -36,13 +43,13 @@ console.log(proposals)
                     <input type="hidden" name="proposalId" value={proposal.id} />
                     <input type="hidden" name="updateProposal" value="true" />
 
-                    <b>{t('process.proposal')}</b>
+                    <b>{translator.t('process.proposal')}</b>
                     <input type="text" name="title" class="input input-bordered input-sm my-2 w-full" value={proposal.title} required />
-                    <label>{t('process.description')}</label>
+                    <label>{translator.t('process.description')}</label>
 
                     <textarea class="textarea textarea-bordered textarea-sm my-2 w-full" name="description">{proposal.description}</textarea>
                     <div class="flex justify-center">
-                      <button type="submit" class="btn">{t('buttons.update')}</button>
+                      <button type="submit" class="btn">{translator.t('buttons.update')}</button>
                     </div>
                   </form>
                 ) : (
@@ -53,7 +60,7 @@ console.log(proposals)
 
                     <input type="text" value={proposal.title} />
                     <textarea>{proposal.description}</textarea>
-                    <button class="button" data-id={proposal.id}>{t('buttons.save')}</button>
+                    <button class="button" data-id={proposal.id}>{translator.t('buttons.save')}</button>
 
                   </div>
                 )}
@@ -81,11 +88,11 @@ console.log(proposals)
         <input type="hidden" name="addProposal" value="true" />
 
         <input type="hidden" name="processId" value={processId} />
-        <button class="btn p-2">{t('process.addProposal')}</button>
+        <button class="btn p-2">{translator.t('process.addProposal')}</button>
       </form>
 
       <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ () => t('process.addProposalTemplate') }</label>
+        <label tabindex="0" class="btn m-1">{ translator.t('process.addProposalTemplate') }</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
           {dropdownOptions.map((option: any, index) => (
             <form action="/api/process-store" method="POST"  class="flex justify-between items-center flex-wrap">
@@ -108,9 +115,9 @@ console.log(proposals)
     </div>
   ) : (
     <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
-      <button id="add-button" class="btn p-2">{ () => t('process.addProposal') }</button>
+      <button id="add-button" class="btn p-2">{ translator.t('process.addProposal') }</button>
       <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ () => t('process.addProposalTemplate') }</label>
+        <label tabindex="0" class="btn m-1">{ translator.t('process.addProposalTemplate') }</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
           {dropdownOptions.map((option, index) => (
             <li>

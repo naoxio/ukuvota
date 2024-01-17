@@ -1,10 +1,9 @@
 ---
-import { astroI18n, t } from "astro-i18n";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import getProcessUrl from "@utils/getProcessUrl";
 import AddProposals from "@components/process/ProposalsList.astro";
-import AlertList from "@components/ui/AlertList.astro";
-import Alert from "@components/ui/Alert.astro";
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
 
 
 
@@ -12,40 +11,40 @@ const { url } = Astro;
 const processId: any = Astro.params.id;
 //const process = await fetchProcess(processId);
 const process: any = {};
-const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 ---
 
 <ProcessLayout process={process}>
   <proposal-list >
-    <h2>{ () => t('process.proposals') }</h2>
+    <h2>{ translator.t('process.proposals') }</h2>
     <div class="proposals">
       <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
         <div class="view flex justify-between items-center cursor-pointer">
           <div class="content flex flex-col w-full">
             <div class="flex flex-col"/>
             <div class="flex">
-              <button name="edit" class="btn btn-primary  btn-sm mx-2">{ () => t('edit') }</button>
+              <button name="edit" class="btn btn-primary  btn-sm mx-2">{ translator.t('edit') }</button>
             </div>
             <br/>
           </div>
         </div>
         <div class="edit flex justify-between items-center" style="display: none;">
           <div class="content flex flex-col w-full">
-            <h3>{ () => t('process.proposal') }</h3>
+            <h3>{ translator.t('process.proposal') }</h3>
             <input type="text" class="input input-bordered input-sm my-2"/>
             <br/>
-            <h4>{ () => t('process.description') }</h4>
+            <h4>{ translator.t('process.description') }</h4>
             <br/>
             <div class="quill"/>
             <br/>
             <div class="flex">
               <button name="save" class="btn btn-primary btn-sm mx-2">
-                { () => t('save') }
+                { translator.t('save') }
               </button>
               <button name="delete" class="btn btn-ghost text-error btn-sm mx-2">
-                { () => t('delete') }
+                { translator.t('delete') }
               </button>
             </div>
             <br/>
@@ -53,19 +52,6 @@ if (pathname !== url.pathname)
         </div>
       </div>
     </div>
-    <AddProposals processId={processId}/>
-
-    <AlertList>
-      <Alert icon="checkmark-outline" success>
-        { () => t('alert.success.websocketConnected') }
-      </Alert>
-      <Alert icon="warning" warning>
-        { () => t('alert.connecting.connectingToWebsocket') }
-      </Alert>
-      <Alert icon="warning" error>
-        { () => t('alert.error.errorConnectingToWebsocket') }
-      </Alert>
-    </AlertList>
   </proposal-list> 
 </ProcessLayout>
 

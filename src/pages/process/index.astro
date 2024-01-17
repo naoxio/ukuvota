@@ -1,5 +1,4 @@
 ---
-import { l } from "astro-i18n";
-
-return Astro.redirect(l("/"));
+import { getAbsoluteLocaleUrl } from "astro:i18n";
+return Astro.redirect(getAbsoluteLocaleUrl(Astro.currentLocale, "/"));
 ---

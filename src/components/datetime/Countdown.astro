@@ -1,5 +1,8 @@
 ---
-import { t } from 'astro-i18n'
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 
 interface Props {
     dates: [number , number]
@@ -9,7 +12,7 @@ interface Props {
 const { dates, type } = Astro.props;
 ---
 
-<countdown-view data-dates={dates} data-type={type} data-done={() => t('done')}>
+<countdown-view data-dates={dates} data-type={type} data-done={translator.t('done')}>
   <span id="count"></span>
 </countdown-view>
 

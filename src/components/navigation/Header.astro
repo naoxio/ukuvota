@@ -1,10 +1,17 @@
 ---
-import { astroI18n, l, t } from 'astro-i18n';
+
+
+import { getAbsoluteLocaleUrl, getAbsoluteLocaleUrlList } from 'astro:i18n';
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
+
 import { Icon } from 'astro-icon';
 
-const supportedLanguages = astroI18n.locales;
-const currentLanguage = astroI18n.locale;
-const primaryLocale = astroI18n.primaryLocale;
+const supportedLanguages = Astro.preferredLocaleList || ['en'];
+const currentLanguage = Astro.currentLocale || 'en';
+const primaryLocale = 'en';
 
 const { pathname } = Astro.url;
 
@@ -31,11 +38,11 @@ const languageNames: any = {
 <header>
   <div class="navbar bg-base-100">
     <div class="flex-1 items-center">      
-      <a class={'btn btn-link ' + (pathname.includes('/') ? 'selected' : '')} href={l('/')}>
-        {() => t('buttons.home')}
+      <a class={'btn btn-link ' + (pathname.includes('/') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/')}>
+        {translator.t('buttons.home')}
       </a>
-      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={l('/dashboard')}>
-        {() => t('buttons.dashboard')}
+      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/dashboard')}>
+        {translator.t('buttons.dashboard')}
       </a>
     </div>
     <div class="flex-none items-center">

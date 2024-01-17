@@ -1,5 +1,8 @@
 ---
-import { t } from 'astro-i18n';
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 
 interface Props {
   id: string;
@@ -24,14 +27,14 @@ const toDateTimeLocal = (date: Date) => {
   <form id={id} action="/api/process-store" method="POST" class="flex justify-between items-center flex-wrap">
     <input type="hidden" name="nojsSubmission" value="true" />
 
-    <h4>{ index == 0 ? t(`phases.startAt`) : t(`phases.endsAt`)}</h4>
+    <h4>{ index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
     <input type="hidden" name="step" value="2" />
     <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)}/>
-    <button class="btn btn-secondary" type="submit">{t('setup.setDate')}</button>
+    <button class="btn btn-secondary" type="submit">{translator.t('setup.setDate')}</button>
   </form>
 ): (
   <div id={id} class="flex justify-between items-center flex-wrap">
-    <h4>{ index == 0 ? t(`phases.startAt`) : t(`phases.endsAt`)}</h4>
+    <h4>{ index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
 
     <input type="datetime-local" min={toDateTimeLocal(min)} name={id} value={toDateTimeLocal(date)} />
   </div>

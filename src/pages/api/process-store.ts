@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { randomUUID } from 'crypto';
-import proposalTemplates from '@utils/proposalTemplates';
+import getProposalTemplates from '@utils/proposalTemplates.js';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import IProposal from "@interfaces/IProposal";
@@ -81,6 +81,10 @@ export const POST: APIRoute = async ({ request }) => {
         return new Response(null, { status: 303, headers: { 'Location': referer} });
       }
     } else if (phase === 'voting') {
+
+      const locale = 'en';
+      const proposalTemplates = await getProposalTemplates(locale);
+
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;

@@ -1,6 +1,6 @@
 ---
-import { t } from 'astro-i18n';
----
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en'); ---
 <footer>
     <span>
       <a class="link link-primary" href="https://naox.io">NaoX</a>
@@ -8,7 +8,7 @@ import { t } from 'astro-i18n';
     </span>
     <span>&nbsp;-&nbsp;</span>
     <span>
-      <a class="link link-primary" href="/privacy-policy">{ () => t('policy') }</a>
+      <a class="link link-primary" href="/privacy-policy">{ translator.t('policy') }</a>
     </span>
 </footer>
   

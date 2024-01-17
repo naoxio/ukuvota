@@ -1,16 +1,15 @@
 ---
-import { astroI18n, t } from "astro-i18n";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 //import { fetchProcess } from "@services/api";
 import getProcessUrl from "@utils/getProcessUrl";
-
-
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
 
 const { url } = Astro;
 const processId = Astro.params.id as string;
 const process: any = {};
 //const process = await fetchProcess(processId);
-const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 ---
@@ -18,7 +17,7 @@ if (pathname !== url.pathname)
 <ProcessLayout process={process}>
     { process && +new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] &&
     <div>
-        <h2>{ () => t('process.proposals') }</h2>
+        <h2>{ translator.t('process.proposals') }</h2>
         <proposal-list  data-proposals={process.proposals}>
             <div class="proposals-container"></div>
         </proposal-list>

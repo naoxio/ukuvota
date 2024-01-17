@@ -1,8 +1,8 @@
 ---
-import Alert from "@components/ui/Alert.astro";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
-import AlertList from "@components/ui/AlertList.astro";
-import { astroI18n, t } from "astro-i18n";
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
+
 import { Icon } from "astro-icon";
 import getProcessUrl from "@utils/getProcessUrl";
 
@@ -12,7 +12,7 @@ const { url } = Astro;
 const processId: any = Astro.params.id;
 //const process = await fetchProcess(processId);
 const process: any = {};
-const pathname = `${astroI18n.locale === "en" ? "" : `/${astroI18n.locale}`}${getProcessUrl(process, processId)}`;
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
@@ -36,7 +36,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 <ProcessLayout process={process}>
     <voting-list >
         <span class='flex justify-end'>
-            <span>{ () => t('process.voters') }:&nbsp;</span>
+            <span>{ translator.t('process.voters') }:&nbsp;</span>
             <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
         </span>
         <div class="proposal-list">
@@ -57,22 +57,13 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             </div>
         </div>
         <br/>   
-        <p>{ () => t('process.voterName') }</p>
+        <p>{ translator.t('process.voterName') }</p>
         <div class="text-center flex items-center">
             <input id="sender-name" type="text" class="input w-full m-2"/>
             <button id="submit-vote" class="btn btn-primary p-2" >
-                {() => t('process.submitVote')}
+                {translator.t('process.submitVote')}
             </button>
         </div>
-        <AlertList>
-            <Alert icon="checkmark-outline" success>
-                { () => t('alert.success.submitVote') }
-                <span class="name"></span>
-            </Alert>
-            <Alert icon="checkmark-outline" error>
-                { () => t('alert.error.emptyName') }
-            </Alert>
-        </AlertList>
     </voting-list>
 </ProcessLayout>
 

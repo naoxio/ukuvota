@@ -1,8 +1,9 @@
 ---
 import DatetimePicker from '@components/datetime/DatetimePicker.astro';
 import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
-import { t } from 'astro-i18n';
-
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 interface Props {
   phase: string;
   startMinDate: Date;

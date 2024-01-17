@@ -1,6 +1,6 @@
 ---
-import { t } from 'astro-i18n';
-import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en'); import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 import { parseProcessCookie } from '@utils/parseProcessCookie'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
@@ -57,19 +57,19 @@ const formatDate = (timestamp: number): string => {
         <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
           <Icon width="22" name="close"/>
         </label>
-        <h3>{() => t('setup.continueEditing')}</h3>
-        <p>{() => t('setup.existingProcessPrompt')}</p>
+        <h3>{translator.t('setup.continueEditing')}</h3>
+        <p>{translator.t('setup.existingProcessPrompt')}</p>
         <div class="process-details">
-          { title && <p><strong>{() => t('process.topic')}:</strong> {title}</p> }
-          { nojsdescription && <p><strong>{() => t('process.description')}:</strong> {nojsdescription}</p> }
-          { weighting && <p><strong>{() => t('process.weighting')}:</strong> {weighting}</p> }
+          { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
+          { nojsdescription && <p><strong>{translator.t('process.description')}:</strong> {nojsdescription}</p> }
+          { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
         </div>
 
         <div class="flex justify-center">
           <form action="/api/start-new-process" method="post">
-            <button type="submit" class="btn m-2">{t('startNew')}</button>
+            <button type="submit" class="btn m-2">{translator.t('startNew')}</button>
           </form>
-          <label for="existingProcessModal" class="btn m-2">{() => t('buttons.continue')}</label>
+          <label for="existingProcessModal" class="btn m-2">{translator.t('buttons.continue')}</label>
         </div>
       </label>
     </label>
@@ -82,26 +82,26 @@ const formatDate = (timestamp: number): string => {
   ) : currentStep === 3 ? (
     <div class="process-details">
       {title ? (
-        <h2>{t('process.topic')}</h2> 
+        <h2>{translator.t('process.topic')}</h2> 
         <p>{title}</p> 
       ) : null}
       {nojsdescription ? (
-        <h3>{t('process.description')}:</h3>
+        <h3>{translator.t('process.description')}:</h3>
         <p>{nojsdescription}</p>
       ) : null}
       {startProposalDate && endProposalDate ? (
-        <h2>{ t(`phases.proposal.title`) }</h2>
-        <p><h3>{t('phases.startAt')}:</h3> {formatDate(startProposalDate)}</p>
-        <p><h3>{t('phases.endsAt')}:</h3> {formatDate(endProposalDate)}</p>
+        <h2>{ translator.t(`phases.proposal.title`) }</h2>
+        <p><h3>{translator.t('phases.startAt')}:</h3> {formatDate(startProposalDate)}</p>
+        <p><h3>{translator.t('phases.endsAt')}:</h3> {formatDate(endProposalDate)}</p>
       ) : null }
-      <h2>{ t(`phases.voting.title`) }</h2>
-      {startVotingDate ? <p><h3>{t('phases.startAt')}:</h3> {formatDate(startVotingDate)}</p> : null}
-      {endVotingDate ? <p><h3>{t('phases.endsAt')}:</h3> {formatDate(endVotingDate)}</p> : null}
+      <h2>{ translator.t(`phases.voting.title`) }</h2>
+      {startVotingDate ? <p><h3>{translator.t('phases.startAt')}:</h3> {formatDate(startVotingDate)}</p> : null}
+      {endVotingDate ? <p><h3>{translator.t('phases.endsAt')}:</h3> {formatDate(endVotingDate)}</p> : null}
 
       {proposals.length > 0 ? (
         <>
           <br/><br/>
-          <h2>{t('process.proposals')}</h2>
+          <h2>{translator.t('process.proposals')}</h2>
           { proposals.map((proposal: IProposal) => (
           <ul class="flex flex-wrap">
             <li>
@@ -117,9 +117,9 @@ const formatDate = (timestamp: number): string => {
       <form action="/api/update-step" method="post">
         <input type="hidden" name="step" value="2"/>
 
-        <button type="submit" class="btn m-2">{t('buttons.back')}</button>
+        <button type="submit" class="btn m-2">{translator.t('buttons.back')}</button>
       </form>
-      <button class="btn btn-primary m-2">{t('buttons.start')}</button>
+      <button class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
     </div>
   ) : null }
 

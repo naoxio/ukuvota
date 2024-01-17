@@ -1,9 +1,13 @@
 ---
-import { t } from 'astro-i18n';
+import { Translator } from '@utils/i18n.js';
+
 import ProposalsList from "@components/process/ProposalsList.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
 import IProposal from '@interfaces/IProposal';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
 
 type Props = {
   phase: string;
@@ -30,7 +34,7 @@ if (proposals && proposals.length > 0) {
   <div id="step-2">
     { phase === "full" ? (
       <div>
-        <h2 class="flex  mt-4">{() => t('setup.timeLeftHeading')}</h2>
+        <h2 class="flex  mt-4">{translator.t('setup.timeLeftHeading')}</h2>
         <br/>
         <noscript>
           <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
@@ -39,11 +43,11 @@ if (proposals && proposals.length > 0) {
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="1"/>
-              <button class="btn" type="submit">{() => t('buttons.back')}</button>
+              <button class="btn" type="submit">{translator.t('buttons.back')}</button>
             </form>
             <form action='/api/update-step' method="POST">
               <input type="hidden" name="step" value="3" />
-              <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+              <button class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
             </form>
           </div>
         </noscript>
@@ -54,37 +58,37 @@ if (proposals && proposals.length > 0) {
       </div>
     ) : phase === "voting" ? (
       <div>
-        <h2 class="flex mt-4">{() => t('setup.timeLeftVotingHeading')}</h2>
+        <h2 class="flex mt-4">{translator.t('setup.timeLeftVotingHeading')}</h2>
         <br/>
         <noscript>
           <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/><br/>
-          <h2>{ () => t('setup.proposals') }</h2>    
+          <h2>{ translator.t('setup.proposals') }</h2>    
 
           <ProposalsList nojs isSetup={true} proposals={proposals}/>
           <br/>
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="1"/>
-              <button class="btn" type="submit">{() => t('buttons.back')}</button>
+              <button class="btn" type="submit">{translator.t('buttons.back')}</button>
             </form>
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="3" />
-              <button class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+              <button class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
             </form>
           </div>
         </noscript>
         <div class="js-content-block hidden">
           <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/>
-          <h2>{ () => t('setup.proposals') }</h2>    
+          <h2>{ translator.t('setup.proposals') }</h2>    
           <ProposalsList proposals={proposals}/>
         </div>
       </div>
     ) : null }
     <div class="justify-around mt-5 js-content-flex hidden">
-      <button id="backButton" class="btn" type="submit">{() => t('buttons.back')}</button>
-      <button id="continueButton" class="btn btn-primary" type="submit">{() => t('buttons.continue')}</button>
+      <button id="backButton" class="btn" type="submit">{translator.t('buttons.back')}</button>
+      <button id="continueButton" class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
     </div>
   </div>
 </step-2>
