@@ -11,7 +11,13 @@ import Footer from "@components/navigation/Footer.astro";
     <h1>Evotico</h1>
     <h2>{() => t('home.subheader')}</h2>
   </div>
-
+  <div class="alert alert-warning flex">
+    <span>
+      <strong>Note:</strong>
+      This version is not ready yet. Please use
+      <a href="https://ukuvota.world" target="_blank" rel="noopener noreferrer">Ukuvota.world</a>.
+    </span>
+  </div>
   <ContentDoc file_name="Introduction"/>
   <br/>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
