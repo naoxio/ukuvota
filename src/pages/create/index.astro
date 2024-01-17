@@ -1,13 +1,17 @@
 ---
 import { Translator } from '@utils/i18n.js';
-const translator = new Translator(Astro.currentLocale || 'en'); import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 import { parseProcessCookie } from '@utils/parseProcessCookie'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
+import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
+
 
 import { Icon } from 'astro-icon'
 import IProposal from '@interfaces/IProposal';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
 
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);

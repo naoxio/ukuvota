@@ -1,9 +1,11 @@
 ---
 import { Translator } from '@utils/i18n.js';
-const translator = new Translator(Astro.currentLocale || 'en');
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
+
+const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
 
 ---
 

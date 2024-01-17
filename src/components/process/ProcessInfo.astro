@@ -1,6 +1,7 @@
 ---
 import { Translator } from '@utils/i18n.js';
-const translator = new Translator(Astro.currentLocale || 'en'); import weightingOptions from '@utils/weightingOptions';
+
+import weightingOptions from '@utils/weightingOptions';
 import Modal from '@components/ui/Modal.astro';
 import QRCode from '@components/ui/QRCode.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
@@ -8,6 +9,9 @@ import ProcessTimeLabel from '@components/datetime/ProcessTimeLabel.astro';
 import Icon from 'astro-icon';
 import Delta from 'quill';
 import getQuillHTML from '@utils/getQuillHTML';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
 
 const { url } = Astro;
 interface Props {

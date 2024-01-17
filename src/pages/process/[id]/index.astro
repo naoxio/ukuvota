@@ -4,6 +4,7 @@ import ProcessLayout from "@layouts/ProcessLayout.astro";
 import getProcessUrl from "@utils/getProcessUrl";
 import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
 
 const { url } = Astro;
 const processId = Astro.params.id as string;

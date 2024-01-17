@@ -1,8 +1,7 @@
 ---
 import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
-
-import Countdown from '@components/datetime/Countdown.astro';
+await translator.init();
 
 interface Props {
     phase: string,

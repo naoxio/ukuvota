@@ -1,7 +1,7 @@
 ---
 import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en'); import { durationToSlider } from '@utils/logslider';
-
+await translator.init();
 
 interface Props {
   id: string;
