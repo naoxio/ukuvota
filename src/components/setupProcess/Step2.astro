@@ -7,6 +7,7 @@ import { adjustDates } from '@utils/dateAdjustments';
 import IProposal from '@interfaces/IProposal';
 
 const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
 
 
 type Props = {
@@ -64,7 +65,6 @@ if (proposals && proposals.length > 0) {
           <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
           <br/><br/>
           <h2>{ translator.t('setup.proposals') }</h2>    
-
           <ProposalsList nojs isSetup={true} proposals={proposals}/>
           <br/>
           <div class="flex justify-around mt-5">

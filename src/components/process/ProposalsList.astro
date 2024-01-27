@@ -1,5 +1,5 @@
 ---
-import getProposalTemplates from '@utils/proposalTemplates.js';
+import getProposalTemplates from '@utils/proposalTemplates';
 
 const locale = Astro.currentLocale || 'en';
 const dropdownOptions = await getProposalTemplates(locale);
@@ -117,8 +117,8 @@ console.log(proposals)
     <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
       <button id="add-button" class="btn p-2">{ translator.t('process.addProposal') }</button>
       <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ translator.t('process.addProposalTemplate') }</label>
-        <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
+        <div tabindex={0} role="button" class="btn m-1">{ translator.t('process.addProposalTemplate') }</div>
+        <ul tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
           {dropdownOptions.map((option, index) => (
             <li>
               <a class="flex flex-col">
@@ -136,31 +136,46 @@ console.log(proposals)
 
 
 <script>
+
+  import { createQuill, updateQuill } from '@utils/quillUtils';
+  /* @ts-ignore */
+  import { v4 as uuidv4 } from 'uuid';
+
+  const createProposalElement = (uniqueId: string, title: string, description: string): HTMLDivElement => {
+    const proposalElement: HTMLDivElement = document.createElement('div');
+    proposalElement.className = 'proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full';
+    proposalElement.innerHTML = `
+      <div class="flex items-center flex-col" id="${uniqueId}">
+        <div class="flex flex-col w-full">
+          <b>Title</b>
+          <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
+          <label>Description</label>
+          <div id="description-${uniqueId}">${description}</div>
+          <input type="hidden" id="quillops-${uniqueId}" />
+        </div>
+      </div>
+      <div class="flex justify-center w-full pt-2">
+        <button class="delete btn btn-ghost text-error btn-xs">Delete</button>
+      </div>
+    `;
+    return proposalElement;
+  }
+
+
   const addButton: HTMLElement | null = document.getElementById('add-button');
   const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
   let proposalCount: number = 0;
 
   if (addButton && proposalsContainer) {
     addButton.addEventListener('click', () => {
-      const proposalElement: HTMLDivElement = document.createElement('div');
-      const uniqueId: string = `proposal-${proposalCount}`;
-      proposalElement.className = 'proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full';
-      proposalElement.innerHTML = `
-        <div class="flex items-center flex-col" id="${uniqueId}">
-          <div class="flex flex-col w-full">
-            <b>Proposal</b>
-            <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" />
-            <label>Description</label>
-            <div id="description-${uniqueId}"></div>
-          </div>
-        </div>
-        <div class="flex justify-center w-full pt-2">
-          <button class="delete btn btn-ghost text-error btn-xs">Delete</button>
-        </div>
-      `;
+      const uniqueId: string = uuidv4();
+      const proposalElement = createProposalElement(uniqueId, '', '');
+      proposalsContainer.appendChild(proposalElement);
 
       const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
-      const deleteButton: HTMLElement | null = proposalElement.querySelector(`#${uniqueId} .delete`);
+      const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
+      const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
+      const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
 
       if (titleInput) {
         titleInput.addEventListener('input', (event: Event) => {
@@ -170,15 +185,71 @@ console.log(proposals)
         });
       }
 
+      console.log(deleteButton)
       if (deleteButton) {
         deleteButton.addEventListener('click', () => {
           proposalsContainer.removeChild(proposalElement);
         });
       }
 
-      proposalsContainer.appendChild(proposalElement);
+      if (descriptionDiv && quillOpsInput) {
+        // Initialize Quill on the description div
+        const quillEditor = createQuill(`#description-${uniqueId}`);
+
+        if (quillOpsInput.value) {
+          try {
+            const quillOps = JSON.parse(quillOpsInput.value);
+            updateQuill(quillEditor, quillOps);
+          } catch (error) {
+            console.error('Error parsing quillops:', error);
+          }
+        }
+
+        quillEditor.on('text-change', () => {
+          /* @ts-ignore */
+          quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+        });
+      }
       proposalCount++;
     });
   }
 
+  // Get the dropdown options
+  const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
+
+  dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
+    dropdownOptionElement.addEventListener('click', (event: Event) => {
+      const selectedTemplateTitle = dropdownOptionElement.querySelector('.title')?.textContent || '';
+      const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
+
+      const uniqueId = uuidv4();
+      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, '');
+
+      if (proposalsContainer) {
+        proposalsContainer.appendChild(proposalElement);
+        const deleteButton = proposalElement.querySelector('.delete');
+        if (deleteButton) {
+          deleteButton.addEventListener('click', () => {
+            proposalsContainer.removeChild(proposalElement);
+          });
+        }
+
+        const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
+        const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
+
+        if (descriptionDiv && quillOpsInput) {
+          // Initialize Quill on the description div
+          const quillEditor = createQuill(`#description-${uniqueId}`);
+
+          // Set the content of the Quill editor to the selected template description
+          quillEditor.clipboard.dangerouslyPasteHTML(selectedTemplateDescription);
+
+          quillEditor.on('text-change', () => {
+            /* @ts-ignore */
+            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+          });
+        }
+      }
+  });
+});
 </script>

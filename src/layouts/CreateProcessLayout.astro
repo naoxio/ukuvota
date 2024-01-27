@@ -3,6 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import { parseProcessCookie } from '@utils/parseProcessCookie'
 import { Translator } from '@utils/i18n.js';
+
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 

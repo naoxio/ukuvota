@@ -16,7 +16,7 @@ interface Props {
 }
 
 const { phase, startDate, endDate, startMinDate, hideTitle, nojs} = Astro.props;
-const title = t(`phases.${phase}.title`);
+const title = translator.t(`phases.${phase}.title`);
 const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
 ---
 
