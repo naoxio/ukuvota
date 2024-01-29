@@ -97,6 +97,7 @@ if (proposals && proposals.length > 0) {
 <script>
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
   import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
+import IProposal from '@interfaces/IProposal';
   const formElement = document.getElementById('step-2');
   if (formElement) {
     const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
@@ -218,8 +219,29 @@ if (proposals && proposals.length > 0) {
           this.appendInputValueToFormData(formData, 'start-date-picker-voting');
           this.appendInputValueToFormData(formData, 'end-date-picker-voting');
         }
-        for (let [key, value] of formData.entries()) {
-          console.log(`${key}: ${value}`);
+        else if (this.phase === 'voting') {
+          this.appendInputValueToFormData(formData, 'start-date-picker-voting');
+          this.appendInputValueToFormData(formData, 'end-date-picker-voting');
+
+          const proposals: IProposal[] = [];
+          const proposalElements = document.querySelectorAll('.proposal .flex');
+
+          proposalElements.forEach((proposalElement: Element) => {
+            const id = proposalElement.id;
+            const titleInput: HTMLInputElement | null = proposalElement.querySelector('input[type="text"]');
+            const descriptionDiv: HTMLElement | null = proposalElement.querySelector('div[id^="description-"]');
+            const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector('input[type="hidden"]');
+
+            if (titleInput && descriptionDiv && quillOpsInput) {
+              proposals.push({
+                id,
+                title: titleInput.value,
+                description: descriptionDiv.innerText,
+              });
+            }
+          });
+
+          formData.append('proposals', JSON.stringify(proposals));
         }
         this.submitFormData('/api/process-store', formData);
       }

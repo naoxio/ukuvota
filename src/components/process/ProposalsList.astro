@@ -214,7 +214,6 @@ console.log(proposals)
     });
   }
 
-  // Get the dropdown options
   const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
 
   dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
@@ -238,10 +237,7 @@ console.log(proposals)
         const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
 
         if (descriptionDiv && quillOpsInput) {
-          // Initialize Quill on the description div
           const quillEditor = createQuill(`#description-${uniqueId}`);
-
-          // Set the content of the Quill editor to the selected template description
           quillEditor.clipboard.dangerouslyPasteHTML(selectedTemplateDescription);
 
           quillEditor.on('text-change', () => {

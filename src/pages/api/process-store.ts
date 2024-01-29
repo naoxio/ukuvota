@@ -88,7 +88,6 @@ export const POST: APIRoute = async ({ request }) => {
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
-        console.log(formData.get('nojsSubmission'));
         if (formData.get('nojsSubmission')) {
           if (formData.has('addProposal')) {
             let title = formData.get('title') as string;
@@ -97,8 +96,6 @@ export const POST: APIRoute = async ({ request }) => {
               const tmpl = Number(formData.get('tmpl') as string);
               title = proposalTemplates[tmpl].title;
               description = proposalTemplates[tmpl].description.ops[0].insert;
-
-              console.log(tmpl, title)
             }
             const proposalId = randomUUID(); 
             processCookieObject.proposals = processCookieObject.proposals || [];
@@ -123,7 +120,11 @@ export const POST: APIRoute = async ({ request }) => {
 
         } else {
           processCookieObject.step = nextStep.toString();
-        }
+
+          const proposals = JSON.parse(formData.get('proposals') as string);
+          processCookieObject.proposals = processCookieObject.proposals || [];
+          processCookieObject.proposals.push(...proposals);
+        }      
 
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
