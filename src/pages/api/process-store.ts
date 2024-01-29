@@ -120,11 +120,25 @@ export const POST: APIRoute = async ({ request }) => {
 
         } else {
           processCookieObject.step = nextStep.toString();
+          processCookieObject.proposals = [];
 
-          const proposals = JSON.parse(formData.get('proposals') as string);
-          processCookieObject.proposals = processCookieObject.proposals || [];
-          processCookieObject.proposals.push(...proposals);
-        }      
+          const proposalsData = formData.get('proposals');
+          if (proposalsData) {
+            const proposals = JSON.parse(proposalsData as string);
+            proposals.forEach((proposal: IProposal) => {
+              processCookieObject.proposals = processCookieObject.proposals || [];
+
+              const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
+
+              if (existingProposalIndex !== -1) {
+                processCookieObject.proposals[existingProposalIndex] = proposal;
+              } else {
+                if (proposal.id) proposal.id = randomUUID();
+                processCookieObject.proposals.push(proposal);
+              }
+            });
+          }
+        }
 
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,

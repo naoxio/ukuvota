@@ -24,12 +24,11 @@ console.log(proposals)
   <div id="proposals-container">
     {proposals.map((proposal: IProposal) => (
       <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full">
-        <div class="flex items-center flex-col">
-          <div class="flex flex-col w-full">
-            {proposal.editing ? (
-              <div>
-                {nojs ? (
-
+        {proposal.editing ? (
+          <>
+            {nojs ? (
+              <div class="flex items-center flex-col">
+                <div class="flex flex-col w-full">
                   <form action={ isSetup ? "/api/process-store" : "/api/delete-proposal" } method="POST" class="flex justify-end">
                     <input type="hidden" name="step" value="2" />
                     <input type="hidden" name="nojsSubmission" value="true" />
@@ -52,30 +51,31 @@ console.log(proposals)
                       <button type="submit" class="btn">{translator.t('buttons.update')}</button>
                     </div>
                   </form>
-                ) : (
-                  <div>
-                    <span class="flex justify-end">
-                      <button class="button" data-id={proposal.id}>&#128465;</button>
-                    </span>
-
-                    <input type="text" value={proposal.title} />
-                    <textarea>{proposal.description}</textarea>
-                    <button class="button" data-id={proposal.id}>{translator.t('buttons.save')}</button>
-
-                  </div>
-                )}
+                </div>
               </div>
             ) : (
-              <div>
-                <b>{proposal.title || 'Untitled Proposal'}</b>
-                <p>{proposal.description}</p>
+              <div class="flex items-center flex-col" id={proposal.id}>
+                <div class="flex flex-col w-full">
+                  <b>Title</b>
+                  <input id={`title-${proposal.id}`} type="text" class="input input-bordered input-sm my-2 w-full" value={proposal.title} />
+                  <label>Description</label>
+                  <div id={`description-${proposal.id}`}>{proposal.description}</div>
+                  <input type="hidden" id={`quillops-${proposal.id}`} />
+                </div>
+                <div class="flex justify-center w-full pt-2">
+                  <button id={`delete-${proposal.id}`} class="delete btn btn-ghost text-error btn-xs">Delete</button>
+                </div>
               </div>
             )}
-          </div>
+        </>
+      ) : (
+        <div>
+          <b>{proposal.title || 'Untitled Proposal'}</b>
+          <p>{proposal.description}</p>
         </div>
+      )}
       </div>
     ))}
-  </div>
   <br/>
   
   {nojs ? (
@@ -161,16 +161,51 @@ console.log(proposals)
     return proposalElement;
   }
 
-
   const addButton: HTMLElement | null = document.getElementById('add-button');
   const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
   let proposalCount: number = 0;
 
   if (addButton && proposalsContainer) {
+    const proposalElements = proposalsContainer.children;
+
+    for (let i = 0; i < proposalElements.length; i++) {
+      const flexElement = proposalElements[i].querySelector('.flex') as HTMLElement;
+      console.log(flexElement)
+      if (flexElement) {
+        const descriptionDiv: HTMLElement | null = proposalsContainer.querySelector(`#description-${flexElement.id}`);
+        const quillOpsInput: HTMLInputElement | null = proposalsContainer.querySelector(`#quillops-${flexElement.id}`);
+        const deleteButton: HTMLElement | null = proposalsContainer.querySelector(`#delete-${flexElement.id}`);
+
+        if (descriptionDiv && quillOpsInput) {
+          const quillEditor = createQuill(`#description-${flexElement.id}`);
+
+          if (quillOpsInput.value) {
+            try {
+              const quillOps = JSON.parse(quillOpsInput.value);
+              updateQuill(quillEditor, quillOps);
+            } catch (error) {
+              console.error('Error parsing quillops:', error);
+            }
+          }
+
+          quillEditor.on('text-change', () => {
+            /* @ts-ignore */
+            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+          });
+        }
+        if (deleteButton) {
+          deleteButton.addEventListener('click', () => {
+            proposalsContainer.removeChild(proposalElements[i]);
+          });
+        }
+      }
+    }
+
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
       const proposalElement = createProposalElement(uniqueId, '', '');
       proposalsContainer.appendChild(proposalElement);
+      
 
       const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
       const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
@@ -230,6 +265,7 @@ console.log(proposals)
         if (deleteButton) {
           deleteButton.addEventListener('click', () => {
             proposalsContainer.removeChild(proposalElement);
+            
           });
         }
 
