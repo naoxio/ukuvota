@@ -225,14 +225,14 @@ import IProposal from '@interfaces/IProposal';
 
           const proposals: IProposal[] = [];
           const proposalElements = document.querySelectorAll('.proposal .flex');
-
+          console.log(proposalElements)
           proposalElements.forEach((proposalElement: Element) => {
             const id = proposalElement.id;
             const titleInput: HTMLInputElement | null = proposalElement.querySelector('input[type="text"]');
             const descriptionDiv: HTMLElement | null = proposalElement.querySelector('div[id^="description-"]');
             const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector('input[type="hidden"]');
-
-            if (titleInput && descriptionDiv && quillOpsInput) {
+            console.log(titleInput?.value)
+            if (id && titleInput && descriptionDiv && quillOpsInput) {
               proposals.push({
                 id,
                 title: titleInput.value,

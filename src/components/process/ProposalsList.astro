@@ -76,8 +76,7 @@ console.log(proposals)
       )}
       </div>
     ))}
-  <br/>
-  
+  </div>
   {nojs ? (
     <div class="flex items-center flex-wrap justify-center">
       <br/>
@@ -206,7 +205,6 @@ console.log(proposals)
       const proposalElement = createProposalElement(uniqueId, '', '');
       proposalsContainer.appendChild(proposalElement);
       
-
       const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
       const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
       const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);

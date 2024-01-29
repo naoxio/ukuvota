@@ -125,15 +125,19 @@ export const POST: APIRoute = async ({ request }) => {
           const proposalsData = formData.get('proposals');
           if (proposalsData) {
             const proposals = JSON.parse(proposalsData as string);
+            console.log(proposals)
             proposals.forEach((proposal: IProposal) => {
-              processCookieObject.proposals = processCookieObject.proposals || [];
+              if (!proposal.id) {
+                return;
+              }
 
+              processCookieObject.proposals = processCookieObject.proposals || [];
+              
               const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
 
               if (existingProposalIndex !== -1) {
                 processCookieObject.proposals[existingProposalIndex] = proposal;
               } else {
-                if (proposal.id) proposal.id = randomUUID();
                 processCookieObject.proposals.push(proposal);
               }
             });
