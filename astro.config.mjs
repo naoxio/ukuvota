@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import Icons from 'unplugin-icons/vite';
 import tailwind from "@astrojs/tailwind";
-
 import node from "@astrojs/node";
+
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,9 +14,7 @@ export default defineConfig({
       compiler: 'astro'
     })]
   },
-  adapter: node({
-    mode: "standalone"
-  }),
+  adapter: vercel(),
   i18n: {
     defaultLocale: "en",
     locales: ["en", "de", "it"],
