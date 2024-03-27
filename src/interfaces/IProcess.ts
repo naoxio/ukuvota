@@ -1,10 +1,11 @@
 import type IProposal from "./IProposal";
 import type IVoter from "./IVoter";
+/* @ts-ignore */
 import { Delta } from 'quill'
 
 
 export default interface IProcess {
-  id: string;
+  _id: string;
   title: string;
   description: string | Delta;
   proposalDates: number[];

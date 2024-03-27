@@ -6,7 +6,10 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   const processRef = ref(firebaseDB, `process/${processId}`);
   const snapshot = await get(processRef);
   if (snapshot.exists()) {
-    process = snapshot.val();
+
+    const processData = snapshot.val();
+    const firstKey = Object.keys(processData)[0];
+    process = processData[firstKey];
   } else {
     process = null;
   }

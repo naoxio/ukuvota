@@ -4,14 +4,15 @@ import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import getProcessUrl from "@utils/getProcessUrl";
 import { Translator } from '@utils/i18n.js';
+import fetchProcessData from '@utils/fetchProcessData';   
+
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
-//const process: IProcess = await fetchProcess(processId);
-const process: any = {};
+const process: IProcess = await fetchProcessData(processId);
 const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -26,78 +27,77 @@ if (process && !("voters" in process)) {
     }
 </style>
 <ProcessLayout process={process}>
-    <results-card >
+    <results-card data-process={JSON.stringify(process)}>
         <div class="hide">
             { emojis.map(emoji => (
                 <Icon class="emoji" name={emoji} width="48" />
             ))}
         </div>
-        <div class="tabs flex flex-nowrap w-full justify-between">
-            <a class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
-            <a class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
-        </div>
-
-        <div class="tab-content hide">
-
-            <span class="flex justify-between items-center">
-                <h2>{ translator.t('process.results') }</h2>
-                <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
-            </span>
-            
-            <h3>
-                <span class="voter-label">{ translator.t('process.voters') }</span>
-                <span class="num-voters">({ process.voters.length })</span>:
-            </h3>
-            <div class="flex justify-around flex-wrap">
-                { process.voters.map((voter: any) => (
-                    <div id={voter.id} class="flex items-center p-2 voter">
-                        <input type="checkbox" checked class="checkbox checkbox-xs" />
-                        <span class="p-1 cursor-pointer select-none">
-                            { voter.name }
-                        </span>
-                    </div>
-                ))}
+            <div role="tablist" class="tabs tabs-bordered">
+                <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
             </div>
-            <br/>
-            <div class="overflow-x-auto">
-                <table class="table w-full">
-                    <!-- head -->
-                    <thead>
-                        <tr class="table-row-one">
-                            <th></th>
-                            <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
-                            <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
-                            <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <br/>
-            <div class="card">
-                <h3>{ translator.t('process.exportData') }</h3>
-                <div class="flex justify-around exports">
-                    <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
-                    <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+
+            <div class="tab-custom-content hide">
+                <span class="flex justify-between items-center">
+                    <h2>{ translator.t('process.results') }</h2>
+                    <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
+                </span>
+                
+                <h3>
+                    <span class="voter-label">{ translator.t('process.voters') }</span>
+                    <span class="num-voters">({ process.voters?.length })</span>:
+                </h3>
+                <div class="flex justify-around flex-wrap">
+                    { process.voters?.map((voter: any) => (
+                        <div id={voter.id} class="flex items-center p-2 voter">
+                            <input type="checkbox" checked class="checkbox checkbox-xs" />
+                            <span class="p-1 cursor-pointer select-none">
+                                { voter.name }
+                            </span>
+                        </div>
+                    ))}
                 </div>
-            </div> 
-        </div>
-        <div class="tab-content hide">
-            <div>
-                <br/>
                 <br/>
                 <div class="overflow-x-auto">
                     <table class="table w-full">
                         <!-- head -->
                         <thead>
+                            <tr class="table-row-one">
+                                <th></th>
+                                <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
+                                <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
+                                <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
+                            </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
                 </div>
                 <br/>
+                <div class="card">
+                    <h3>{ translator.t('process.exportData') }</h3>
+                    <div class="flex justify-around exports">
+                        <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
+                        <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+                    </div>
+                </div> 
             </div>
+            <div class="tab-custom-content hide">
+                <div>
+                    <br/>
+                    <br/>
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                            <!-- head -->
+                            <thead>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                </div>
         </div>
     </results-card>
 </ProcessLayout>
@@ -105,20 +105,14 @@ if (process && !("voters" in process)) {
 
 
 <script>
-    /*
+    /* @ts-ignore */
     import download from 'downloadjs';
     import type IProcess from '@interfaces/IProcess';
-    import type IProposal from '@interfaces/IProposal';
     import { toPng } from 'html-to-image';
-    import { fetchProcess } from '@services/api';   
     import addAlert from '@utils/addAlert';
     import getQuillHTML from '@utils/getQuillHTML';
-    const translationsElement = document.getElementById('translations');
-    const t = JSON.parse(translationsElement.getAttribute('data-translations'));
 
-    const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process: IProcess = await fetchProcess(processId);
-    
+
     const save = (filename: string, data: any, type: string): void => {
         const blob = new Blob([data], {type});
 
@@ -145,20 +139,21 @@ if (process && !("voters" in process)) {
 
     class ResultsCard extends HTMLElement {
         voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
-        table_body = this.querySelectorAll('tbody') 
-        table_head = this.querySelectorAll('thead')                                                                                                                                                                                                                    
-        emojis = this.querySelectorAll('svg.emoji')
-        alertList = this.querySelector('div.alert-list')
-        alerts = this.querySelectorAll('alert-element')
-       
+        table_body = this.querySelectorAll('tbody')  as NodeListOf<HTMLElement>;
+        table_head = this.querySelectorAll('thead') as NodeListOf<HTMLElement> ;                                                                                                                                                                                                                   
+        emojis = this.querySelectorAll('svg.emoji') as NodeListOf<HTMLElement>;
+        alertList = this.querySelector('div.alert-list') as HTMLElement;
+        alerts = this.querySelectorAll('alert-element') as NodeListOf<HTMLElement>;
+        process: IProcess = JSON.parse(this.getAttribute('data-process') || '{}');
+
         getTotal(proposalId: string, selectedVoters: any) {
             return selectedVoters.reduce((sum: number, voter: any) => {
-                const process_voter = process.voters.find((vote: any) => vote.id === voter.id)
-                const matchingVote = process_voter.votes.find((vote: any) => vote.proposalId === proposalId);
+                const process_voter = this.process.voters?.find((vote: any) => vote.id === voter.id)
+                const matchingVote = process_voter?.votes.find((vote: any) => vote.proposalId === proposalId);
                 if (matchingVote) {
                     let v = matchingVote.vote;
                     if (v < 0)
-                        v *= Number(process.weighting);
+                        v *= Number(this.process.weighting);
                     return sum + v;
                 }
             
@@ -177,17 +172,18 @@ if (process && !("voters" in process)) {
         getAverageEmoji(total: number, voters: any) {
             let i = this.getAverageScore(total, voters)
             if (i < 0)
-                i /= Number(process.weighting);
+                i /= Number(this.process.weighting);
             i = Math.round(i)
             return this.emojis[i + 3];
         };
         
         updateTable() {
             const selectedVoters = this.getSelectedVoters();
-            const proposals = process.proposals;
-            this.querySelector('span.num-voters').innerHTML = `(${selectedVoters.length})`;
+            const proposals = this.process.proposals;
+            const numVoters = this.querySelector('span.num-voters') as HTMLElement
+            numVoters.innerHTML = `(${selectedVoters.length})`;
             proposals.forEach((proposal: any) => {
-                proposal["total"] = this.getTotal(proposal.id, selectedVoters);
+                proposal['total'] = this.getTotal(proposal.id, selectedVoters);
             });
             const sortedProposals = proposals.sort((a: any, b: any) => {
                 return b.total - a.total;
@@ -195,19 +191,19 @@ if (process && !("voters" in process)) {
             this.table_body[0].innerHTML = '';
             this.table_body[1].innerHTML = '';
 
-            let head_content = `<th>${t.process['voter']}</th>`
-            process.proposals.forEach(proposal => {
+            let head_content = `<th>voter</th>` // TODO: translate
+            this.process.proposals.forEach(proposal => {
                 head_content += `<th>${proposal.title}</th>\n`
             });
             let body_content = ''
 
-            process.voters.forEach((voters: any) => {
+            this.process.voters?.forEach((voters: any) => {
                 body_content += `
                 <tr>
                 <td>
                     <span>${voters.name}</span>
                 </td>\n`
-                process.proposals.forEach(proposal => {
+                this.process.proposals.forEach(proposal => {
                     let vote = voters.votes.find((p: any) => p.proposalId == proposal.id).vote
                     body_content += `<th class="text-center">${vote}</th>\n`
                 });
@@ -218,7 +214,7 @@ if (process && !("voters" in process)) {
             this.table_body[1].innerHTML = body_content
 
             let rank = 0;
-            let prevProposal = null;
+            let prevProposal: any = null;
             sortedProposals.forEach((proposal: any, index: number) => {
                 const description = getQuillHTML(proposal.description)
                 if (proposal.title === '' && description === '<p><br></p>') return
@@ -242,7 +238,7 @@ if (process && !("voters" in process)) {
 
         createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
             const description = getQuillHTML(proposal.description)
-
+            
             const row = document.createElement('tr');
             row.className = 'color-' + rank;
             row.innerHTML = `
@@ -256,16 +252,17 @@ if (process && !("voters" in process)) {
                 </td>
                 <td align="center">
                     <div class="emoji-container tooltip cursor-pointer tooltip-left" data-tip=${this.getAverageScore(proposal.total, selectedVoters)}>`
-            row.querySelector('div.emoji-container').insertAdjacentElement('beforeend', this.getAverageEmoji(proposal.total, selectedVoters));
+            const emojiContainer = row.querySelector('div.emoji-container') as HTMLElement;
+            emojiContainer.insertAdjacentElement('beforeend', this.getAverageEmoji(proposal.total, selectedVoters));
             row.innerHTML += `</div>
                 </td>
                 <td align="center">${proposal.total}</td>
             `;
 
-            const repeat = row.querySelector('td.select-for-repeat')
-            repeat.addEventListener('click', (ev) => {
+            const repeat = row.querySelector('td.select-for-repeat') as HTMLElement;
+            repeat.addEventListener('click', (ev: any) => {
                 if ('tagName' in ev.target && ev.target.tagName === 'INPUT') return
-                const input = repeat.querySelector('input')
+                const input = repeat.querySelector('input') as HTMLInputElement;
                 input.checked = !input.checked
             })
             return row;
@@ -275,18 +272,20 @@ if (process && !("voters" in process)) {
 
         getMarkdownFile() {
             const selectedVoters = this.getSelectedVoters();
-            const title = process.title;
-            const processId = process.id;
-            const description = getQuillHTML(process.description);
-            const voterLabel = this.querySelector('span.voter-label').innerHTML;
-            const numVoters = this.querySelector('span.num-voters').innerHTML;
+            const title = this.process.title;
+            const processId = this.process._id;
+            const description = getQuillHTML(this.process.description);
+            const voterLabelElement = this.querySelector('span.voter-label') as HTMLElement;
+            const numVotersElement = this.querySelector('span.num-voters')as HTMLElement;
+            const voterLabel = voterLabelElement.innerHTML ;
+            const numVoters = numVotersElement.innerHTML;
             const selectedVotersString = selectedVoters.map((voter: any) => {
-                const processVoter = process.voters.find((vote: any) => vote.id === voter.id);
-                return `${processVoter.name} `;
+                const processVoter = this.process.voters?.find((vote: any) => vote.id === voter.id);
+                return `${processVoter?.name} `;
             }).join('');
-            const tableRowOne = this.querySelector('tr.table-row-one');
+            const tableRowOne = this.querySelector('tr.table-row-one') as HTMLElement;
             const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
-            const proposals = process.proposals.map((proposal: any, index: number) => {
+            const proposals = this.process.proposals.map((proposal: any, index: number) => {
                 if (proposal.title === '' && proposal.description === '') return
                 const averageScore = this.getAverageScore(proposal.total, selectedVoters);
                 return ` | ${index + 1} | ${proposal.title} - ${getQuillHTML(proposal.description)} | ${averageScore} | ${proposal.total} |`;
@@ -307,12 +306,15 @@ if (process && !("voters" in process)) {
         }
 
         getSelectedVoters() {
-            return Array.from(this.voter_list).filter((div: HTMLDivElement) => div.querySelector('input').checked)
+            return Array.from(this.voter_list).filter((div: HTMLDivElement) => {
+                const inputElement =  div.querySelector('input') as HTMLInputElement;
+                inputElement.checked
+            })
         }
         constructor() {
             super();
             const tabs = this.querySelectorAll('a.tab');
-            const contents = this.querySelectorAll('div.tab-content');
+            const contents = this.querySelectorAll('div.tab-custom-content');
             for (let i = 0; i < tabs.length; i++) {
                 const tab = tabs[i];
                 tab.addEventListener('click', () => {
@@ -320,13 +322,13 @@ if (process && !("voters" in process)) {
                 });
             }
             this.showTab(tabs, contents, 0);
-
             this.voter_list.forEach((div: HTMLDivElement) => {
-                const input =div.querySelector('input')
+                const input = div.querySelector('input') as HTMLInputElement;
                 input.addEventListener('click', () => {
                     this.updateTable();
                 });
-                div.querySelector('span').addEventListener('click', () => {
+                const span = div.querySelector('span') as HTMLElement;
+                span.addEventListener('click', () => {
                     input.checked = !input.checked
                     this.updateTable();
                 });
@@ -334,8 +336,8 @@ if (process && !("voters" in process)) {
 
             this.updateTable();
 
-            const exportMarkdownButton = this.querySelector('.export-markdown');
-            const exportImageButton = this.querySelector('.export-image');
+            const exportMarkdownButton = this.querySelector('.export-markdown')  as HTMLButtonElement;
+            const exportImageButton = this.querySelector('.export-image')  as HTMLButtonElement;
             exportMarkdownButton.addEventListener('click', () => {
                 this.getMarkdownFile();
             });
@@ -343,26 +345,25 @@ if (process && !("voters" in process)) {
                 const theme = localStorage.getItem("theme");
 
                 toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
-                    download(dataUrl, process.title + '.png');
+                    download(dataUrl, this.process.title + '.png');
                 });
             });
 
-            const repeatButton = this.querySelector('button.repeat-button')
-            repeatButton.addEventListener('click', () => {
-                const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: HTMLInputElement) => input.checked);
+            const repeatButton = this.querySelector('button.repeat-button') as HTMLButtonElement;
+            repeatButton.addEventListener('click', async () => {
+                const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: any) => input.checked);
                 if (items.length > 1) {
-                    addAlert(this.alertList, this.alerts[0])
+                    addAlert(this.alertList, this.alerts[0]);
 
-                    storeProcess.setKey('title', process.title)
-                    storeProcess.setKey('description', process.description)
-                    storeProcess.setKey('weighting', process.weighting)
-                    storeProcess.setKey('phases', 'voting')
-                    const proposals = process.proposals.filter((proposal: IProposal) => 
-                       items.some((item) => item.id === proposal.id)
-                    );
-                    storeProcess.setKey('proposals', proposals)
-                    window.location.href = `${window.location.origin}/`
+                    const formData = new FormData();
+                    items.forEach((item) => {
+                    formData.append('selectedProposals[]', item.id);
+                    });
 
+                    const response = await fetch('/api/repeat-process', {
+                    method: 'POST',
+                    body: formData,
+                    });
                 }
                 else {
                     addAlert(this.alertList, this.alerts[1])
@@ -379,5 +380,5 @@ if (process && !("voters" in process)) {
         }
 
     }
-    customElements.define('results-card', ResultsCard)*/
+    customElements.define('results-card', ResultsCard)
 </script>

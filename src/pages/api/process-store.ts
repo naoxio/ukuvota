@@ -125,7 +125,6 @@ export const POST: APIRoute = async ({ request }) => {
           const proposalsData = formData.get('proposals');
           if (proposalsData) {
             const proposals = JSON.parse(proposalsData as string);
-            console.log(proposals)
             proposals.forEach((proposal: IProposal) => {
               if (!proposal.id) {
                 return;

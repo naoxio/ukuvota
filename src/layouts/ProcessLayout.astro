@@ -8,7 +8,6 @@ interface Props {
 }
 
 const {process} = Astro.props;
-
 ---
 
 <BaseLayout title={process ? process.title : null} simpleHeader={true}>
@@ -16,7 +15,7 @@ const {process} = Astro.props;
         <div id="temp"  />
     </div>
     { process &&
-    <ProcessInfo uuid={process.id} />
+    <ProcessInfo uuid={process._id} />
     }
     <slot/>
 </BaseLayout>

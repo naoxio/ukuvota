@@ -6,12 +6,12 @@ import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
+import fetchProcessData from '@utils/fetchProcessData';
 
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
-//const process = await fetchProcess(processId);
-const process: any = {};
+const process = await fetchProcessData(processId);
 const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -57,192 +57,188 @@ if (pathname !== url.pathname)
 </ProcessLayout>
 
 <script>
-  import type IProposal from '@interfaces/IProposal';
-  import { createQuill, updateQuill } from '@utils/quillUtils';
-  import Delta from 'quill'
-  import getQuillHTML from '@utils/getQuillHTML'
-/*
-  const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+import type IProposal from '@interfaces/IProposal';
+import { createQuill, updateQuill } from '@utils/quillUtils';
+import Delta from 'quill'
+import getQuillHTML from '@utils/getQuillHTML'
+import fetchProcessData from '@utils/fetchProcessData';
+import IProcess from '@interfaces/IProcess';
 
-  const gun = GUN({ peers: ['http://localhost:8765/gun'] });
-  const processNode = gun.get(`process-${processId}`);
 
-  let process;
-  gun.get(`process-${processId}`).on(data => {
-      process = data;
-  });
+const processId = window.location.pathname.split('/process/')[1].split('/')[0]
+const process: IProcess = await fetchProcessData(processId);
 
-  class ProposalList extends HTMLElement {
-    proposal_html = null
-    proposals = null
-    descriptionQuills = {}
-    currentAlert = null
-    
-    alertList = this.querySelector('div.alert-list')
-    alerts = this.querySelectorAll('alert-element')
+class ProposalList extends HTMLElement {
+  proposal_html = null
+  proposals = null
+  descriptionQuills = {}
+  currentAlert = null
+  
+  alertList = this.querySelector('div.alert-list')
+  alerts = this.querySelectorAll('alert-element')
 
-    updateProposalAPI(method, data) {
-      const proposalNode = gun.get(`process-${processId}`).get('proposals').get(data.id);
-      if (method === "delete") {
-        proposalNode.put(null);
-      } else if (method === "put") {
-        proposalNode.put(data);
+  updateProposalAPI(method, data) {
+    const proposalNode = gun.get(`process-${processId}`).get('proposals').get(data.id);
+    if (method === "delete") {
+      proposalNode.put(null);
+    } else if (method === "put") {
+      proposalNode.put(data);
+    }
+  }
+
+  updateProposalView(proposal: any, title: string, description: Delta ) {
+    const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
+    view_content.innerHTML = `
+      <h3>${title}</h3>
+      <div>${getQuillHTML(description)}</div>`
+  }
+  
+  updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
+    const edit_content = proposal.querySelector('div.edit').querySelector('div')
+    const inputs = [
+      edit_content.querySelector("input"),
+      edit_content.querySelector(".quill"),
+    ];
+    inputs[0].value = title
+    this.descriptionQuills[inputs[1].id] = updateQuill(this.descriptionQuills[inputs[1].id], description)
+    return inputs[1]
+  }
+  
+  async updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): Promise<void> {
+    const { titleInput, descriptionElement } = inputs;
+    const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
+    const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
+
+    const proposalId = proposal.id;
+    const title = titleInput.value;
+
+    if (title === '' && isEmptyDescription) {
+      try {
+        this.updateProposalAPI('delete', { id: proposalId });
+      } catch (error) {
+        console.error('Error deleting proposal:', error);
+      }
+    } else {
+      try {
+        this.updateProposalAPI('put', {
+          id: proposalId,
+          title,
+          description: descriptionContent
+        });
+      } catch (error) {
+        console.error('Error updating proposal:', error);
       }
     }
 
-    updateProposalView(proposal: any, title: string, description: Delta ) {
-      const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
-      view_content.innerHTML = `
-        <h3>${title}</h3>
-        <div>${getQuillHTML(description)}</div>`
-    }
-    
-    updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
-      const edit_content = proposal.querySelector('div.edit').querySelector('div')
-      const inputs = [
-        edit_content.querySelector("input"),
-        edit_content.querySelector(".quill"),
-      ];
-      inputs[0].value = title
-      this.descriptionQuills[inputs[1].id] = updateQuill(this.descriptionQuills[inputs[1].id], description)
-      return inputs[1]
-    }
-    
-    async updateProposal(inputs: { titleInput: HTMLInputElement; descriptionElement: HTMLElement }, proposal: HTMLElement): Promise<void> {
-      const { titleInput, descriptionElement } = inputs;
-      const descriptionContent = this.descriptionQuills[descriptionElement.id].getContents();
-      const isEmptyDescription = JSON.stringify(descriptionContent) === '{"ops":[{"insert":"\\n"}]}';
+    this.updateProposalView(proposal, title, descriptionContent);
+  }
 
-      const proposalId = proposal.id;
-      const title = titleInput.value;
+  addProposal(data: IProposal, editing: boolean = false): void {
+    const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
+    proposal.id = data.id;
 
-      if (title === '' && isEmptyDescription) {
-        try {
-          this.updateProposalAPI('delete', { id: proposalId });
-        } catch (error) {
-          console.error('Error deleting proposal:', error);
+    const view = proposal.querySelector('div.view') as HTMLElement;
+    const edit = proposal.querySelector('div.edit') as HTMLElement;
+
+    if (editing) {
+      view.style.display = 'none';
+      edit.style.display = 'flex';
+    }
+
+    view.addEventListener('click', () => {
+      view.style.display = 'none';
+      edit.style.display = 'flex';
+    });
+
+    const editContent = edit.querySelector('div') as HTMLElement;
+    const titleInput = editContent.querySelector('input') as HTMLInputElement;
+    const descriptionElement = editContent.querySelector('.quill') as HTMLElement;
+
+    titleInput.value = data.title;
+    const proposalId = data.id;
+
+    const descriptionId = `quill-${proposalId}`;
+    descriptionElement.id = descriptionId;
+
+    const saveButtons = Array.from(edit.querySelectorAll('button')) as HTMLButtonElement[];
+    saveButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.name === 'delete') {
+          titleInput.value = '';
+          const quillInstance = this.descriptionQuills[descriptionElement.id];
+          if (quillInstance) {
+            quillInstance.setText('');
+          }
+        }
+
+        view.style.display = 'flex';
+        edit.style.display = 'none';
+
+        this.updateProposal({ titleInput, descriptionElement }, proposal);
+      });
+    });
+
+    this.proposals.appendChild(proposal);
+
+    // Create a Quill editor for the description field
+    let quill = createQuill('#' + descriptionId);
+    quill = updateQuill(quill, data.description)
+
+    this.updateProposalView(proposal, data.title, quill);
+    this.descriptionQuills[descriptionId] = quill;
+
+    titleInput.addEventListener('input', () => {
+        this.updateProposal({ titleInput, descriptionElement }, proposal);
+    });
+  }
+
+
+  constructor() {
+    super();
+    
+    // Find the proposals container and clone a proposal template.
+    this.proposals = this.querySelector('div.proposals');
+    this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
+    this.proposals.innerHTML = "";
+
+    // Add existing proposals to the UI.
+    process.proposals.forEach((proposal: any) => {
+        this.addProposal(proposal);
+    });
+
+    // Listen for changes to the proposals data in GUN
+    processNode.get('proposals').map().on((proposal, proposalId) => {
+      if (proposal) {
+        const existingProposalElement = Array.from(this.proposals.children).find((child: any) => child.id === proposalId);
+        if (existingProposalElement) {
+          this.updateProposalEdit(existingProposalElement, proposal.title, proposal.description);
+          this.updateProposalView(existingProposalElement, proposal.title, proposal.description);
+        } else {
+          this.addProposal({ ...proposal, id: proposalId });
         }
       } else {
-        try {
-          this.updateProposalAPI('put', {
-            id: proposalId,
-            title,
-            description: descriptionContent
-          });
-        } catch (error) {
-          console.error('Error updating proposal:', error);
-        }
-      }
-
-      this.updateProposalView(proposal, title, descriptionContent);
-    }
-
-    addProposal(data: IProposal, editing: boolean = false): void {
-      const proposal = this.proposal_html.cloneNode(true) as HTMLElement;
-      proposal.id = data.id;
-
-      const view = proposal.querySelector('div.view') as HTMLElement;
-      const edit = proposal.querySelector('div.edit') as HTMLElement;
-
-      if (editing) {
-        view.style.display = 'none';
-        edit.style.display = 'flex';
-      }
-
-      view.addEventListener('click', () => {
-        view.style.display = 'none';
-        edit.style.display = 'flex';
-      });
-
-      const editContent = edit.querySelector('div') as HTMLElement;
-      const titleInput = editContent.querySelector('input') as HTMLInputElement;
-      const descriptionElement = editContent.querySelector('.quill') as HTMLElement;
-
-      titleInput.value = data.title;
-      const proposalId = data.id;
-
-      const descriptionId = `quill-${proposalId}`;
-      descriptionElement.id = descriptionId;
-
-      const saveButtons = Array.from(edit.querySelectorAll('button')) as HTMLButtonElement[];
-      saveButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          if (btn.name === 'delete') {
-            titleInput.value = '';
-            const quillInstance = this.descriptionQuills[descriptionElement.id];
-            if (quillInstance) {
-              quillInstance.setText('');
-            }
-          }
-
-          view.style.display = 'flex';
-          edit.style.display = 'none';
-
-          this.updateProposal({ titleInput, descriptionElement }, proposal);
-        });
-      });
-
-      this.proposals.appendChild(proposal);
-
-      // Create a Quill editor for the description field
-      let quill = createQuill('#' + descriptionId);
-      quill = updateQuill(quill, data.description)
-
-      this.updateProposalView(proposal, data.title, quill);
-      this.descriptionQuills[descriptionId] = quill;
-
-      titleInput.addEventListener('input', () => {
-          this.updateProposal({ titleInput, descriptionElement }, proposal);
-      });
-    }
-
-
-    constructor() {
-      super();
-      
-      // Find the proposals container and clone a proposal template.
-      this.proposals = this.querySelector('div.proposals');
-      this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
-      this.proposals.innerHTML = "";
-
-      // Add existing proposals to the UI.
-      process.proposals.forEach((proposal: any) => {
-          this.addProposal(proposal);
-      });
-
-      // Listen for changes to the proposals data in GUN
-      processNode.get('proposals').map().on((proposal, proposalId) => {
-        if (proposal) {
-          const existingProposalElement = Array.from(this.proposals.children).find((child: any) => child.id === proposalId);
-          if (existingProposalElement) {
-            this.updateProposalEdit(existingProposalElement, proposal.title, proposal.description);
-            this.updateProposalView(existingProposalElement, proposal.title, proposal.description);
-          } else {
-            this.addProposal({ ...proposal, id: proposalId });
-          }
-        } else {
-          for (const child of this.proposals.children) {
-            if (child.id === proposalId) {
-              this.proposals.removeChild(child);
-              break;
-            }
+        for (const child of this.proposals.children) {
+          if (child.id === proposalId) {
+            this.proposals.removeChild(child);
+            break;
           }
         }
-      });
-    }
+      }
+    });
   }
-  customElements.define('proposal-list', ProposalList)
+}
+customElements.define('proposal-list', ProposalList)
 
 
-  const checkTime = () => {
-    const time =  process.proposalDates[1] - +new Date()
-    if (time <= 0)
-      window.location.href = `${window.location.origin}/process/${processId}/voting`
-    else
-      setTimeout(checkTime, time)
-  }
-  checkTime()
-*/
-    
+const checkTime = () => {
+  const time =  process.proposalDates[1] - +new Date()
+  if (time <= 0)
+    window.location.href = `${window.location.origin}/process/${processId}/voting`
+  else
+    setTimeout(checkTime, time)
+}
+checkTime()
+
+  
 
 </script>

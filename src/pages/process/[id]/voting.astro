@@ -1,18 +1,18 @@
 ---
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Translator } from '@utils/i18n.js';
-const translator = new Translator(Astro.currentLocale || 'en');
-await translator.init();
+import fetchProcessData from '@utils/fetchProcessData';
 
 import { Icon } from "astro-icon";
 import getProcessUrl from "@utils/getProcessUrl";
 
-
+const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
-//const process = await fetchProcess(processId);
-const process: any = {};
+console.log(processId)
+const process = await fetchProcessData(processId);
 const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
@@ -69,13 +69,14 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
 </ProcessLayout>
 
 <script>
-/*    import type IProposal from '@interfaces/IProposal'
+    import type IProposal from '@interfaces/IProposal'
     import addAlert from '@utils/addAlert'
     import getQuillHTML from '@utils/getQuillHTML';
     import { isProposalEmpty } from '@utils/proposalHelpers';
+    import fetchProcessData from '@utils/fetchProcessData';
 
     const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-    const process = await fetchProcess(processId);
+    const process = await fetchProcessData(processId);
 
     class VotingList extends HTMLElement {
         voteCounter = this.querySelector('span.no-voters')
@@ -168,5 +169,5 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         else
             setTimeout(checkTime, time)
     }
-    checkTime()*/
+    checkTime()
 </script>
