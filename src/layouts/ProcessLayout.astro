@@ -15,7 +15,7 @@ const {process} = Astro.props;
         <div id="temp"  />
     </div>
     { process &&
-    <ProcessInfo uuid={process._id} />
+    <ProcessInfo process={process} />
     }
     <slot/>
 </BaseLayout>

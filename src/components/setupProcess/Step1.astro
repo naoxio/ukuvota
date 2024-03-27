@@ -7,6 +7,7 @@ import ContentDoc from '@components/ui/ContentDoc.astro';
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
+const timezoneOffset = new Date().getTimezoneOffset();
 
 type Props = {
   title: string;
@@ -20,6 +21,8 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 
 <form id="step-1" action='/api/process-store' method="POST">
   <input type="hidden" name="step" value="1" />
+  <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
+
   <div id="scrollTopicQuestion" />
   <p>{ translator.t('process.topic') }</p>
   <input 

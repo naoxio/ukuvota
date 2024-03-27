@@ -13,7 +13,7 @@ const { url } = Astro;
 const processId: any = Astro.params.id;
 console.log(processId)
 const process = await fetchProcessData(processId);
-const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process, processId)}`;
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];

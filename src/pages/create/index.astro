@@ -9,9 +9,11 @@ import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 
 import { Icon } from 'astro-icon'
 import IProposal from '@interfaces/IProposal';
+import { zonedTimeToUtc, utcToZonedTime, format } from 'date-fns-tz';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 await translator.init();
+
 
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
@@ -27,8 +29,15 @@ const {
   startVotingDate = 0,
   endVotingDate = 0,
   step = '1',
-  proposals = []
+  proposals = [],
+  clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 } = processCookie as ProcessCookie;
+
+const formatDate = (timestamp: number): string => {
+  return format(utcToZonedTime(timestamp, clientTimezone), 'MMMM d, yyyy h:mm a', { timeZone: clientTimezone });
+};
+
+
 const currentStep = Number(step);
 
 let modifiedCreate = JSON.parse(create);
@@ -37,19 +46,6 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
     modifiedCreate = false;
 }
 
-const formatDate = (timestamp: number): string => {
-  let date = new Date(timestamp)
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  };
-
-  return date.toLocaleDateString('en-US', options);
-}
 
 ---
 

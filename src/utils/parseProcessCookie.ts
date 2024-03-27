@@ -1,6 +1,7 @@
 import IProposal from "@interfaces/IProposal";
 
 export type ProcessCookie = {
+  clientTimezone: string;
   weighting?: string;
   title?: string;
   nojsdescription?: string;
@@ -21,7 +22,10 @@ const isValidJSONString = (str: string): boolean => {
 }
 
 const parseProcessCookie = (cookieValue: string | undefined): ProcessCookie => {
-  const defaultProcessCookie: ProcessCookie = { step: '1' };
+  const defaultProcessCookie: ProcessCookie = {
+    step: '1',
+    clientTimezone: ''
+  };
   if (cookieValue) {
       if (isValidJSONString(cookieValue)) {
           try {

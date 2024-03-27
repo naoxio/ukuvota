@@ -1,50 +1,61 @@
 ---
 import { Translator } from '@utils/i18n.js';
+import Countdown from './Countdown.astro';
+import { format, utcToZonedTime } from 'date-fns-tz';
+
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 interface Props {
-    phase: string,
-    dates: number[]
+  phase: string;
+  dates: number[];
+  clientTimezone: string;
 }
 
-const { phase, dates} = Astro.props;
+const { phase, dates, clientTimezone } = Astro.props;
 
+const formatDateInTimezone = (date: number, timezone: string) => {
+  return format(utcToZonedTime(date, timezone), 'MMMM d, yyyy h:mm a', { timeZone: timezone });
+};
 ---
 
-<process-time-label data-start={dates[0]}>
-    <span>{ translator.t(`phases.${phase}.title`) }:&nbsp;</span>
-
-    { 
-        +new Date() < dates[0] ? (
-            <br/>
-            <span>{ translator.t(`phases.start`) }:&nbsp;</span>
-            <span id="start-date" class="link-success"></span>
-            <br/>
-            <span>{ translator.t(`phases.lastFor`) }:&nbsp;</span>
-            <!--Countdown type="success" dates={dates} /-->
-        ) : +new Date() < dates[1] ? (
-            <!--Countdown dates={dates} type="warning" /-->
-            <span>&nbsp;({ translator.t('remainingTime') })</span>
-        ) : <span class="text-info">{ translator.t('done') }</span>
-    }
-    <br/>
-
+<process-time-label data-start={dates[0]} data-timezone={clientTimezone}>
+  <span>{translator.t(`phases.${phase}.title`)}:&nbsp;</span>
+  {utcToZonedTime(dates[0], clientTimezone) > new Date() ? (
+    <>
+      <br />
+      <span>{translator.t(`phases.start`)}:&nbsp;</span>
+      <span id="start-date" class="link-success"></span>
+      <br />
+      <span>{translator.t(`phases.lastFor`)}:&nbsp;</span>
+      <Countdown type="success" dates={dates} timezone={clientTimezone} />
+    </>
+  ) : utcToZonedTime(dates[1], clientTimezone) > new Date() ? (
+    <>
+      <Countdown dates={dates} type="warning" timezone={clientTimezone} />
+      <span>&nbsp;({translator.t('remainingTime')})</span>
+    </>
+  ) : (
+    <span class="text-info">{translator.t('done')}</span>
+  )}
+  <br />
 </process-time-label>
 
 <script>
-    /*
-    import { fmt } from '@utils/dateHelpers'
+import { format, utcToZonedTime } from 'date-fns-tz';
 
-    class ProcessTimeLabel extends HTMLElement {
-        constructor() {
-            super()
-            const startDate = this.querySelector('span#start-date')
-            if (startDate)
-                startDate.innerHTML = fmt(new Date(Number(this.dataset.start)), 'PPPPpppp')
+class ProcessTimeLabel extends HTMLElement {
+  constructor() {
+    super();
+    const startDate = this.querySelector('span#start-date');
+    const clientTimezone = this.dataset.timezone || 'UTC';
 
-        }
+    if (startDate) {
+      const start = utcToZonedTime(Number(this.dataset.start), clientTimezone);
+      startDate.innerHTML = format(start, 'MMMM d, yyyy h:mm a', { timeZone: clientTimezone });
     }
-    customElements.define('process-time-label', ProcessTimeLabel)*/
+  }
+}
 
+customElements.define('process-time-label', ProcessTimeLabel);
 </script>

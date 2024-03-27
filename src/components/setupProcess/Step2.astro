@@ -6,9 +6,11 @@ import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
 import IProposal from '@interfaces/IProposal';
 
+
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
+const timezoneOffset = new Date().getTimezoneOffset();
 
 type Props = {
   phase: string;
@@ -98,7 +100,10 @@ if (proposals && proposals.length > 0) {
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
   import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
 import IProposal from '@interfaces/IProposal';
+const timezoneOffset = new Date().getTimezoneOffset();
+
   const formElement = document.getElementById('step-2');
+
   if (formElement) {
     const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
       const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
@@ -205,7 +210,12 @@ import IProposal from '@interfaces/IProposal';
       }
 
       handleBackButtonClick(event: Event) {
-        this.submitFormData('/api/update-step', { 'step': '1' });
+
+        const formData = new FormData();
+        formData.append('step', '1');
+
+        this.submitFormData('/api/update-step', formData);
+
       }
 
       handleContinueButtonClick(event: Event) {
@@ -213,6 +223,8 @@ import IProposal from '@interfaces/IProposal';
         const formData = new FormData();
         formData.append('step', '2');
 
+        const timezoneOffset = new Date().getTimezoneOffset();
+        formData.append('timezoneOffset', timezoneOffset.toString());
         if (this.phase === 'full') {
           this.appendInputValueToFormData(formData, 'start-date-picker-proposal');
           this.appendInputValueToFormData(formData, 'end-date-picker-proposal');

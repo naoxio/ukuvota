@@ -14,4 +14,5 @@ export default interface IProcess {
   weighting: string;
   proposals: IProposal[];
   voters?: IVoter[];
+  timezoneOffset?: number;
 }

@@ -8,22 +8,19 @@ import ContentDoc from '@components/ui/ContentDoc.astro';
 import ProcessTimeLabel from '@components/datetime/ProcessTimeLabel.astro';
 import getQuillHTML from '@utils/getQuillHTML';
 import fetchProcessData from '@utils/fetchProcessData';
+import IProcess from '@interfaces/IProcess';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 const { url } = Astro;
 interface Props {
-    uuid: string;
+    process: IProcess;
 }
 
-const { uuid } = Astro.props;
-const process = await fetchProcessData(uuid);
-
+const { process } = Astro.props;
 const weightLabel = process.weighting ? weightingOptions[Number(process.weighting) - 1].label : null;
 const descriptionHTML = getQuillHTML(process.description);
-
-console.log(descriptionHTML)
 ---
 
 
@@ -44,7 +41,7 @@ console.log(descriptionHTML)
         { process.votingDates && <ProcessTimeLabel phase="voting" dates={process.votingDates}/> }
         <br/>
     </div>
-    { process.shareable && 
+    <!-- { process.shareable && -->
     <div class="w-full pr-2">
         <p>{ translator.t('process.shareableUrl') }</p>
         <div class="flex items-center">
@@ -59,5 +56,5 @@ console.log(descriptionHTML)
             </Modal>
         </div>
     </div>
-    }                          
+    <!-- }-->                          
 </div>
