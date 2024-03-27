@@ -2,7 +2,7 @@
 import { Translator } from '@utils/i18n.js';
 import { durationToSlider } from '@utils/logslider';
 
-const translator = new Translator(Astro.currentLocale || 'en'); 
+const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 interface Props {
@@ -12,12 +12,11 @@ interface Props {
 
 const { id, duration } = Astro.props;
 const initialSliderValue = durationToSlider(duration);
+---
 
----  
-
-<div id={id}> 
-  <span>{ translator.t('setup.duration') }:&nbsp;</span>
+<div id={id}>
+  <span>{translator.t('setup.duration')}:&nbsp;</span>
   <span class="duration-display" class="text-success"></span>
-  <br/>
+  <br />
   <input type="range" min="1" max="165" class="range" name={id} value={initialSliderValue} />
 </div>

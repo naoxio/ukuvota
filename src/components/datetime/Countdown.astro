@@ -1,7 +1,5 @@
 ---
 import { Translator } from '@utils/i18n.js';
-import { formatDuration } from '@utils/dateHelpers';
-
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
@@ -11,15 +9,16 @@ interface Props {
   timezone: string;
 }
 
-const { dates, type } = Astro.props;
+const { dates, type, timezone } = Astro.props;
 ---
 
-<countdown-view data-dates={dates} data-type={type} data-done={translator.t('done')}>
+<countdown-view data-dates={dates} data-type={type} data-done={translator.t('done')} data-timezone={timezone}>
   <span id="count"></span>
 </countdown-view>
 
 <script>
 import { formatDuration } from '@utils/dateHelpers';
+import { utcToZonedTime } from 'date-fns-tz';
 
 class Countdown extends HTMLElement {
   count = this.querySelector('#count') as HTMLElement;
@@ -27,16 +26,14 @@ class Countdown extends HTMLElement {
   targetDate = Date.now();
   currentDate = Date.now();
   type = this.dataset.type;
+  timezone = this.dataset.timezone || 'UTC';
 
   updateTime() {
-    this.currentDate = this.dates[0] < +new Date() ? +new Date() : this.dates[0];
-
-    if (this.targetDate > this.currentDate) {
-      const diff = this.targetDate - this.currentDate;
+    this.currentDate = utcToZonedTime(this.dates[0], this.timezone) < new Date() ? new Date() : utcToZonedTime(this.dates[0], this.timezone);
+    if (utcToZonedTime(this.targetDate, this.timezone) > this.currentDate) {
+      const diff = utcToZonedTime(this.targetDate, this.timezone).getTime() - this.currentDate.getTime();
       const duration = formatDuration(diff / 1000);
-
       this.count.innerHTML = duration;
-
       if (this.type === 'warning' && diff > 300000) {
         this.count.classList.add('link-warning');
       } else if (this.type === 'warning' && diff <= 300000) {
@@ -44,7 +41,6 @@ class Countdown extends HTMLElement {
       } else if (this.type === 'success') {
         this.count.classList.add('link-success');
       }
-
       setTimeout(() => this.updateTime(), 1000);
     } else {
       this.count.classList = 'text-info';
@@ -56,7 +52,7 @@ class Countdown extends HTMLElement {
     super();
     this.dates = JSON.parse(`[${this.dataset.dates}]`);
     this.targetDate = this.dates[1];
-    this.currentDate = +new Date();
+    this.currentDate = new Date();
     this.updateTime();
   }
 }

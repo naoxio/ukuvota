@@ -5,12 +5,10 @@ import ProposalsList from "@components/process/ProposalsList.astro";
 import TimeSelector from "@components/datetime/TimeSelector.astro";
 import { adjustDates } from '@utils/dateAdjustments';
 import IProposal from '@interfaces/IProposal';
-
+import { utcToZonedTime } from 'date-fns-tz';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
-
-const timezoneOffset = new Date().getTimezoneOffset();
 
 type Props = {
   phase: string;
@@ -19,8 +17,9 @@ type Props = {
   proposalEndDate: number;
   votingStartDate: number;
   votingEndDate: number;
+  timezone: string;
 }
-const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals } = Astro.props;
+const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals, timezone } = Astro.props;
 
 const {
   pStart,
@@ -33,16 +32,16 @@ if (proposals && proposals.length > 0) {
   proposals.forEach(proposal => proposal.editing = true);
 }
 ---
-<step-2 data-phase={phase}>
+<step-2 data-phase={phase} data-timezone={timezone}>
   <div id="step-2">
     { phase === "full" ? (
       <div>
         <h2 class="flex  mt-4">{translator.t('setup.timeLeftHeading')}</h2>
         <br/>
         <noscript>
-          <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
+          <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} timezone={timezone}/>  
           <br/><br/>
-          <TimeSelector nojs phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>  
+          <TimeSelector nojs phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} timezone={timezone}/>  
           <div class="flex justify-around mt-5">
             <form action="/api/update-step" method="POST">
               <input type="hidden" name="step" value="1"/>
@@ -55,8 +54,8 @@ if (proposals && proposals.length > 0) {
           </div>
         </noscript>
         <div class="js-content-block hidden">
-          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()}/>  
-          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd}/>
+          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} timezone={timezone}/>  
+          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} timezone={timezone}/>
         </div>
       </div>
     ) : phase === "voting" ? (
@@ -64,7 +63,7 @@ if (proposals && proposals.length > 0) {
         <h2 class="flex mt-4">{translator.t('setup.timeLeftVotingHeading')}</h2>
         <br/>
         <noscript>
-          <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} timezone={timezone}/>
           <br/><br/>
           <h2>{ translator.t('setup.proposals') }</h2>    
           <ProposalsList nojs isSetup={true} proposals={proposals}/>
@@ -81,7 +80,7 @@ if (proposals && proposals.length > 0) {
           </div>
         </noscript>
         <div class="js-content-block hidden">
-          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()}/>
+          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} timezone={timezone}/>
           <br/>
           <h2>{ translator.t('setup.proposals') }</h2>    
           <ProposalsList proposals={proposals}/>
@@ -98,13 +97,15 @@ if (proposals && proposals.length > 0) {
 
 <script>
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
-  import { formatDuration, formatLocalDateTime } from '@utils/dateHelpers';
-import IProposal from '@interfaces/IProposal';
-const timezoneOffset = new Date().getTimezoneOffset();
+  import { formatDuration, formatDateInTimezone } from '@utils/dateUtils';
+  import IProposal from '@interfaces/IProposal';
+  import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
   const formElement = document.getElementById('step-2');
 
   if (formElement) {
+    const timezone = formElement.getAttribute('data-timezone') || 'UTC';
+
     const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
       const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
       if (!votingTimeSelector) return;
@@ -115,75 +116,77 @@ const timezoneOffset = new Date().getTimezoneOffset();
 
       if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
 
-      const originalVotingDuration = new Date(votingEndPicker.value).getTime() - new Date(votingStartPicker.value).getTime();
-      const adjustmentDuration = new Date(votingStartPicker.value).getTime() - originalProposalEndDate.getTime();
+      const originalVotingDuration = utcToZonedTime(new Date(votingEndPicker.value), timezone).getTime() - utcToZonedTime(new Date(votingStartPicker.value), timezone).getTime();
+      const adjustmentDuration = utcToZonedTime(new Date(votingStartPicker.value), timezone).getTime() - utcToZonedTime(originalProposalEndDate, timezone).getTime();
 
-      const newVotingStartDate = new Date(proposalEndDate.getTime() + adjustmentDuration);
-      const newVotingEndDate = new Date(newVotingStartDate.getTime() + originalVotingDuration);
+      const newVotingStartDate = utcToZonedTime(new Date(utcToZonedTime(proposalEndDate, timezone).getTime() + adjustmentDuration), timezone);
+      const newVotingEndDate = utcToZonedTime(new Date(utcToZonedTime(newVotingStartDate, timezone).getTime() + originalVotingDuration), timezone);
 
-      votingStartPicker.value = formatLocalDateTime(newVotingStartDate);
-      votingEndPicker.value = formatLocalDateTime(newVotingEndDate);
+      votingStartPicker.value = formatDateInTimezone(newVotingStartDate.getTime(), timezone);
+      votingEndPicker.value = formatDateInTimezone(newVotingEndDate.getTime(), timezone);
     };
 
     const initDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {
       if (durationSlider) {
-        let originalEndDate = new Date(endPicker.value);
+        let originalEndDate = utcToZonedTime(new Date(endPicker.value), timezone);
 
         durationSlider.addEventListener('input', (event: Event) => {
           const sliderValue = parseInt((event.target as HTMLInputElement).value, 10);
           const newDuration = sliderToDuration(sliderValue) * 60 * 1000;
-          const newEndDate = new Date(new Date(startPicker.value).getTime() + newDuration);
+          const newEndDate = utcToZonedTime(new Date(utcToZonedTime(new Date(startPicker.value), timezone).getTime() + newDuration), timezone);
           if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
           originalEndDate = newEndDate;
 
-          endPicker.value = formatLocalDateTime(newEndDate);
+          endPicker.value = formatDateInTimezone(newEndDate.getTime(), timezone);
           durationDisplay.textContent = formatDuration(newDuration / 1000);
         });
-        durationDisplay.textContent = formatDuration(sliderToDuration(parseInt(durationSlider.value, 10)) * 60 );
-
-      } 
-    }
+        durationDisplay.textContent = formatDuration(sliderToDuration(parseInt(durationSlider.value, 10)) * 60);
+      }
+    };
 
     const updateDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement) => {
       if (durationSlider && startPicker && endPicker) {
-        const newDuration = (+new Date(endPicker.value) - +new Date(startPicker.value)) / 1000;
+        const newDuration = (utcToZonedTime(new Date(endPicker.value), timezone).getTime() - utcToZonedTime(new Date(startPicker.value), timezone).getTime()) / 1000;
         const sliderValue = durationToSlider(newDuration / 60);
         if (sliderValue) durationSlider.value = sliderValue.toString();
         durationDisplay.textContent = formatDuration(newDuration);
       }
-    }
+    };
 
-    const initDatetimePickers = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {      
+    const initDatetimePickers = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {
       if (startPicker && endPicker) {
-        let originalStartDate = new Date(startPicker.value);
-        let originalEndDate = new Date(endPicker.value);
+        let originalStartDate = utcToZonedTime(new Date(startPicker.value), timezone);
+        let originalEndDate = utcToZonedTime(new Date(endPicker.value), timezone);
         let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
 
         startPicker.addEventListener('change', (event: any) => {
-          const newStartDate = new Date(event.target.value);
+          const newStartDate = utcToZonedTime(new Date(event.target.value), timezone);
           if (isNaN(newStartDate.getTime())) return;
-          
-          let newEndDate = new Date(newStartDate.getTime() + originalDuration);
+
+          let newEndDate = utcToZonedTime(new Date(newStartDate.getTime() + originalDuration), timezone);
           if (newEndDate.getTime() - newStartDate.getTime() < 60000) {
-            newEndDate = new Date(newStartDate.getTime() + 60000);
+            newEndDate = utcToZonedTime(new Date(newStartDate.getTime() + 60000), timezone);
           }
-          endPicker.value = formatLocalDateTime(newEndDate);
-          endPicker.min = formatLocalDateTime(new Date(newStartDate.getTime() + 60000));
+          endPicker.value = formatDateInTimezone(newEndDate.getTime(), timezone);
+          endPicker.min = formatDateInTimezone(utcToZonedTime(new Date(newStartDate.getTime() + 60000), timezone).getTime(), timezone);
         });
 
         endPicker.addEventListener('change', (event: any) => {
-          let newEndDate = new Date(event.target.value);
+          let newEndDate = utcToZonedTime(new Date(event.target.value), timezone);
           if (isNaN(newEndDate.getTime())) return;
           if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
           originalEndDate = newEndDate;
           originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-          originalStartDate = new Date(startPicker.value);
+          originalStartDate = utcToZonedTime(new Date(startPicker.value), timezone);
           updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
         });
       }
-    }
+    };
+
     class Step2 extends HTMLElement {
       phase: string = this.dataset.phase as string;
+      timezone: string = this.dataset.timezone || 'UTC';
+
       constructor() {
         super();
         this.phase = this.dataset.phase || '';
@@ -210,40 +213,34 @@ const timezoneOffset = new Date().getTimezoneOffset();
       }
 
       handleBackButtonClick(event: Event) {
-
         const formData = new FormData();
         formData.append('step', '1');
 
         this.submitFormData('/api/update-step', formData);
-
       }
 
       handleContinueButtonClick(event: Event) {
-
         const formData = new FormData();
         formData.append('step', '2');
 
-        const timezoneOffset = new Date().getTimezoneOffset();
-        formData.append('timezoneOffset', timezoneOffset.toString());
         if (this.phase === 'full') {
           this.appendInputValueToFormData(formData, 'start-date-picker-proposal');
           this.appendInputValueToFormData(formData, 'end-date-picker-proposal');
           this.appendInputValueToFormData(formData, 'start-date-picker-voting');
           this.appendInputValueToFormData(formData, 'end-date-picker-voting');
-        }
-        else if (this.phase === 'voting') {
+        } else if (this.phase === 'voting') {
           this.appendInputValueToFormData(formData, 'start-date-picker-voting');
           this.appendInputValueToFormData(formData, 'end-date-picker-voting');
 
           const proposals: IProposal[] = [];
           const proposalElements = document.querySelectorAll('.proposal .flex');
-          console.log(proposalElements)
+          console.log(proposalElements);
           proposalElements.forEach((proposalElement: Element) => {
             const id = proposalElement.id;
             const titleInput: HTMLInputElement | null = proposalElement.querySelector('input[type="text"]');
             const descriptionDiv: HTMLElement | null = proposalElement.querySelector('div[id^="description-"]');
             const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector('input[type="hidden"]');
-            console.log(titleInput?.value)
+            console.log(titleInput?.value);
             if (id && titleInput && descriptionDiv && quillOpsInput) {
               proposals.push({
                 id,
@@ -255,6 +252,9 @@ const timezoneOffset = new Date().getTimezoneOffset();
 
           formData.append('proposals', JSON.stringify(proposals));
         }
+
+        formData.append('timezone', this.timezone);
+
         this.submitFormData('/api/process-store', formData);
       }
 
@@ -263,7 +263,9 @@ const timezoneOffset = new Date().getTimezoneOffset();
         if (containerElement) {
           const inputElement = containerElement.querySelector('input');
           if (inputElement && inputElement.value) {
-            formData.append(containerId, inputElement.value);
+            const date = new Date(inputElement.value);
+            const utcTimestamp = zonedTimeToUtc(date, this.timezone).getTime();
+            formData.append(containerId, utcTimestamp.toString());
           } else {
             console.log(`Input not found inside container #${containerId}`);
           }
@@ -275,16 +277,18 @@ const timezoneOffset = new Date().getTimezoneOffset();
       submitFormData(url: string, formData: any) {
         fetch(url, {
           method: 'POST',
-          body: formData
-        }).then(response => {
-          if (response.ok) {
-            window.location.reload();
-          } else {
-            console.error('Error in submission');
-          }
-        }).catch(error => {
-          console.error('Error sending request', error);
-        });
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              console.error('Error in submission');
+            }
+          })
+          .catch((error) => {
+            console.error('Error sending request', error);
+          });
       }
 
       displayJavaScriptContent() {
@@ -293,7 +297,6 @@ const timezoneOffset = new Date().getTimezoneOffset();
           content.style.display = content.classList.contains('js-content-flex') ? 'flex' : 'block';
         });
       }
-
       initializeTimeSelectors() {
         const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
         timeSelectors.forEach(selector => {

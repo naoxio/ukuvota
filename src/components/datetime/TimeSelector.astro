@@ -1,9 +1,10 @@
 ---
 import DatetimePicker from '@components/datetime/DatetimePicker.astro';
 import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
+import { toDateTimeLocal } from '@utils/dateUtils';
 import { Translator } from '@utils/i18n.js';
 
-const translator = new Translator(Astro.currentLocale || 'en'); 
+const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 interface Props {
@@ -12,28 +13,65 @@ interface Props {
   startDate: Date;
   endDate: Date;
   hideTitle?: Boolean;
-  nojs? : Boolean
+  nojs?: Boolean;
+  timezone: string;
 }
 
-const { phase, startDate, endDate, startMinDate, hideTitle, nojs} = Astro.props;
+const { phase, startDate, endDate, startMinDate, hideTitle, nojs, timezone } = Astro.props;
 const title = translator.t(`phases.${phase}.title`);
-const duration = (+ new Date(endDate) -  + new Date(startDate)) / 1000 / 60;
+
+const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60;
 ---
 
 <div class="time-selector" data-phase={phase}>
-  { hideTitle ?  <h3 class="title">{ title }</h3> : null }
-  { nojs ? (
-    <br/>
-    <DatetimePicker nojs index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
-    <br/>
-    <DatetimePicker nojs index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
+  {!hideTitle && (
+    <h3 class="title">{title}</h3>
+  )}
+  {nojs ? (
+    <>
+      <br />
+      <DatetimePicker
+        nojs
+        index={0}
+        date={startDate}
+        min={startMinDate}
+        id={`start-date-picker-${phase}`}
+        timezone={timezone}
+      />
+      <br />
+      <DatetimePicker
+        nojs
+        index={1}
+        date={endDate}
+        min={startDate}
+        id={`end-date-picker-${phase}`}
+        timezone={timezone}
+      />
+    </>
   ) : (
-    <br/>
-    <DatetimePicker index={0} date={startDate} min={startMinDate} id={`start-date-picker-${phase}`} />
-    <br/>
-    <DatetimePicker index={1} date={endDate} min={startDate} id={`end-date-picker-${phase}`} />
-    <br/>
-    <DatetimeSlider duration={duration} id={`datetime-slider-${phase}`} />
-    <br/>
+    <>
+      <br />
+      <DatetimePicker
+        index={0}
+        date={startDate}
+        min={startMinDate}
+        id={`start-date-picker-${phase}`}
+        timezone={timezone}
+      />
+      <br />
+      <DatetimePicker
+        index={1}
+        date={endDate}
+        min={startDate}
+        id={`end-date-picker-${phase}`}
+        timezone={timezone}
+      />
+      <br />
+      <DatetimeSlider
+        duration={duration}
+        id={`datetime-slider-${phase}`}
+      />
+      <br />
+    </>
   )}
 </div>

@@ -9,7 +9,7 @@ import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 
 import { Icon } from 'astro-icon'
 import IProposal from '@interfaces/IProposal';
-import { zonedTimeToUtc, utcToZonedTime, format } from 'date-fns-tz';
+import { utcToZonedTime, format } from 'date-fns-tz';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 await translator.init();
@@ -30,14 +30,22 @@ const {
   endVotingDate = 0,
   step = '1',
   proposals = [],
-  clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
+
+  clientTimezone,
 } = processCookie as ProcessCookie;
 
+const defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const timezone = clientTimezone || defaultTimezone;
+
 const formatDate = (timestamp: number): string => {
-  return format(utcToZonedTime(timestamp, clientTimezone), 'MMMM d, yyyy h:mm a', { timeZone: clientTimezone });
+  return format(utcToZonedTime(timestamp, timezone), 'MMMM d, yyyy h:mm a', { timeZone: timezone });
 };
 
-
+console.log('hi from index')
+console.log(startVotingDate)
+console.log(clientTimezone)
+console.log(timezone)
+console.log(step)
 const currentStep = Number(step);
 
 let modifiedCreate = JSON.parse(create);
@@ -78,7 +86,7 @@ if (currentStep === 1 && !phase && !weighting && !title && !nojsdescription && !
   { currentStep === 1 ? (
     <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} nojsdescription={nojsdescription}/>
   ) : currentStep === 2 ? (
-    <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
+    <Step2 phase={phase} timezone={timezone} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
   ) : currentStep === 3 ? (
   <div class="process-details">
   <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
