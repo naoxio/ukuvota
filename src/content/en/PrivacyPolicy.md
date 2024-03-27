@@ -1,10 +1,10 @@
-# Privacy Policy for Evotico
+# Privacy Policy for Ukuvota
 
 **Last updated: 2023-09-09**
 
 ## 1. Introduction
 
-Welcome to Evotico. We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.
+Welcome to Ukuvota. We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.
 
 This privacy notice describes how we might use your information if you use our score voting tool. It applies to all users of our tool.
 
@@ -26,7 +26,7 @@ We retain the data you input into our tool indefinitely. As of now, we do not of
 
 ## 6. Limitation of Liability
 
-While we strive to protect the data you input into our tool, Evotico is not responsible for any loss of data. We recommend that users regularly back up their data to prevent any potential loss.
+While we strive to protect the data you input into our tool, Ukuvota is not responsible for any loss of data. We recommend that users regularly back up their data to prevent any potential loss.
 
 ## 7. Updates to this Privacy Notice
 

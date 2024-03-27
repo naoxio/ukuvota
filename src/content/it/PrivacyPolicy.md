@@ -1,10 +1,10 @@
-# Informativa sulla privacy per Evotico
+# Informativa sulla privacy per Ukuvota
 
 **Ultimo aggiornamento: 09-09-2023**
 
 ## 1. Introduzione
 
-Benvenuti su Evotico. Ci impegniamo a proteggere le tue informazioni personali e il tuo diritto alla privacy. In caso di domande o dubbi sulla presente informativa sulla privacy o sulle nostre pratiche relative ai tuoi dati personali, ti preghiamo di contattarci.
+Benvenuti su Ukuvota. Ci impegniamo a proteggere le tue informazioni personali e il tuo diritto alla privacy. In caso di domande o dubbi sulla presente informativa sulla privacy o sulle nostre pratiche relative ai tuoi dati personali, ti preghiamo di contattarci.
 
 Questa informativa sulla privacy descrive come potremmo utilizzare le tue informazioni se utilizzi il nostro strumento di votazione del punteggio. Si applica a tutti gli utenti del nostro strumento.
 
@@ -26,7 +26,7 @@ Conserviamo i dati che inserisci nel nostro strumento a tempo indeterminato. Al 
 
 ## 6. Limitazione di responsabilità
 
-Sebbene ci sforziamo di proteggere i dati che inserisci nel nostro strumento, Evotico non è responsabile per alcuna perdita di dati. Consigliamo agli utenti di eseguire regolarmente il backup dei propri dati per prevenire potenziali perdite.
+Sebbene ci sforziamo di proteggere i dati che inserisci nel nostro strumento, Ukuvota non è responsabile per alcuna perdita di dati. Consigliamo agli utenti di eseguire regolarmente il backup dei propri dati per prevenire potenziali perdite.
 
 ##7. Aggiornamenti alla presente Informativa sulla Privacy
 

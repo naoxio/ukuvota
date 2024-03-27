@@ -1,10 +1,10 @@
-# Datenschutzerklärung für Evotico
+# Datenschutzerklärung für Ukuvota
 
 **Zuletzt aktualisiert: 2023-09-09**
 
 ## 1. Einleitung
 
-Willkommen bei Evotico. Wir verpflichten uns zum Schutz Ihrer persönlichen Informationen und Ihres Rechts auf Privatsphäre. Wenn Sie Fragen oder Bedenken zu dieser Datenschutzhinweis oder unseren Praktiken in Bezug auf Ihre persönlichen Daten haben, kontaktieren Sie uns bitte.
+Willkommen bei Ukuvota. Wir verpflichten uns zum Schutz Ihrer persönlichen Informationen und Ihres Rechts auf Privatsphäre. Wenn Sie Fragen oder Bedenken zu dieser Datenschutzhinweis oder unseren Praktiken in Bezug auf Ihre persönlichen Daten haben, kontaktieren Sie uns bitte.
 
 Diese Datenschutzerklärung beschreibt, wie wir Ihre Informationen verwenden könnten, wenn Sie unser Bewertungswerkzeug verwenden. Sie gilt für alle Benutzer unseres Werkzeugs.
 
@@ -26,7 +26,7 @@ Wir bewahren die Daten, die Sie in unser Werkzeug eingeben, unbegrenzt auf. Derz
 
 ## 6. Haftungsbeschränkung
 
-Obwohl wir uns bemühen, die von Ihnen in unser Werkzeug eingegebenen Daten zu schützen, übernimmt Evotico keine Verantwortung für Datenverluste. Wir empfehlen den Benutzern, ihre Daten regelmäßig zu sichern, um möglichen Verlusten vorzubeugen.
+Obwohl wir uns bemühen, die von Ihnen in unser Werkzeug eingegebenen Daten zu schützen, übernimmt Ukuvota keine Verantwortung für Datenverluste. Wir empfehlen den Benutzern, ihre Daten regelmäßig zu sichern, um möglichen Verlusten vorzubeugen.
 
 ## 7. Aktualisierungen dieser Datenschutzerklärung
 

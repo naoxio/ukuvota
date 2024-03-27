@@ -1,6 +1,7 @@
 ---
 
 
+// @ts-ignore
 import { getAbsoluteLocaleUrl, getAbsoluteLocaleUrlList } from 'astro:i18n';
 import { Translator } from '@utils/i18n.js';
 
@@ -41,9 +42,9 @@ const languageNames: any = {
       <a class={'btn btn-link ' + (pathname.includes('/') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/')}>
         {translator.t('buttons.home')}
       </a>
-      <a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/dashboard')}>
+      <!--a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/dashboard')}>
         {translator.t('buttons.dashboard')}
-      </a>
+      </a-->
     </div>
     <div class="flex-none items-center">
       <form action="/api/update-language" method="POST">

@@ -1,4 +1,5 @@
 ---
+/* @ts-ignore */
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { Translator } from '@utils/i18n.js';
 import BaseLayout from "@layouts/BaseLayout.astro";
@@ -25,6 +26,9 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
   </div>
   ) : (
     <div class="empty-state">
+      <div class="alert alert-warning">
+        Under construction
+      </div>
       <p>{translator.t('dashboard.noProcesses')}</p>
       <p>{translator.t('dashboard.beginProcess')}</p>
       <div class="absolute right-5 bottom-20">

@@ -1,14 +1,9 @@
-**Tecnologia di Voto Decentralizzata:**  
-Adozione di sistemi all'avanguardia e decentralizzati per una maggiore sicurezza e privacy.
+**Votazione ponderata a punteggio:** Consente agli elettori di esprimere le proprie preferenze con precisione, dando ai voti negativi un peso maggiore rispetto a quelli positivi.
 
-**Voto Crittografato:**  
-La crittografia avanzata assicura l'integrità e la riservatezza di ogni voto.
+**Condivisione senza sforzo:** Condividi facilmente i link di voto con chiunque, consentendo un'ampia partecipazione e coinvolgimento.
 
-**Accessibilità Multi-Piattaforma:**  
-Accessibile su varie piattaforme, fornendo flessibilità e comodità.
+**Approccio basato sul consenso:** Raccogli proposte diverse dai partecipanti, promuovendo un processo decisionale collaborativo.
 
-**Raccolta di Proposte:**  
-Raccolta ed gestione efficiente delle proposte, snellendo il processo di voto.
+**Interfaccia user-friendly:** Piattaforma intuitiva e facile da usare, garantendo l'accessibilità per gli elettori di tutti i background.
 
-**Voto a Punteggio:**  
-Sistema di voto a punteggio innovativo per risultati di voto sfumati ed espressivi.
+**Risultati trasparenti:** Visualizzazione in tempo reale dei risultati delle votazioni, promuovendo la trasparenza e la fiducia nel processo.

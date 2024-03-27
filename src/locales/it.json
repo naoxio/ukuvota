@@ -4,7 +4,7 @@
     "subheader": "Voto Semplice, Sicuro e Responsabilizzante",
     "webAppCardTitle": "App Web",
     "webAppCardDescription": "Esperienza di voto web senza interruzioni, accessibile e facile da usare.",
-    "webAppCardButton": "Avvia Processo",
+    "webAppCardButton": "Creare Nuovo Processo",
     "telegramBotCardTitle": "Bot Telegram",
     "telegramBotCardDescription": "Voto conveniente tramite Telegram, integrando il voto nella comunicazione quotidiana.",
     "telegramBotCardButton": "Vai al Bot"
@@ -136,6 +136,6 @@
     }
   },
   "repeatProcess":"Ripeti il processo",
-  "description": "Evotico è un potente strumento decisionale che aiuta le persone a fare scelte informate in modo collaborativo e organizzato. ",
+  "description": "Ukuvota è un potente strumento decisionale che aiuta le persone a fare scelte informate in modo collaborativo e organizzato. ",
   "wip": "In Lavorazione"
 }

@@ -2,7 +2,7 @@
 import logo from "@assets/logo.png";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
-import Footer from "@components/navigation/Footer.astro";
+import Footer from "@components/layout/Footer.astro";
 import { Translator } from '@utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
@@ -11,45 +11,19 @@ await translator.init();
 ---
 <BaseLayout title={translator.t('buttons.about')} description={translator.t('home.description')}>
   <div class="flex items-center flex-col">
-    <img width="220" class="m-10" id="logo" alt="Evotico logo" src={logo.src} />
-    <h1>Evotico</h1>
+    <img width="220" class="m-10" id="logo" alt="Ukuvota logo" src={logo.src} />
+    <h1>Ukuvota</h1>
     <h2>{translator.t('home.subheader')}</h2>
-  </div>
-  <div class="alert alert-warning flex">
-    <span>
-      <strong>Note:</strong>
-      This version is not ready yet. Please use
-      <a href="https://ukuvota.world" target="_blank" rel="noopener noreferrer">Ukuvota.world</a>.
-    </span>
   </div>
   <ContentDoc file_name="Introduction"/>
   <br/>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="card card-bordered bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">{translator.t('home.webAppCardTitle')}</h2>
-          <p>{translator.t('home.webAppCardDescription')}</p>
-          <div class="card-actions justify-end">
-            <form action="/api/create-process" method="post">
-              <button type="submit" class="btn btn-primary">{translator.t('home.webAppCardButton')}</button>
-            </form>
-          </div>
-        </div>
-    </div>
-  
-    <div class="card card-bordered bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">{translator.t('home.telegramBotCardTitle')}</h2>
-          <p>{translator.t( 'home.telegramBotCardDescription')}</p>
-          <p class="text-warning">{translator.t('wip')}</p>
-          <div class="card-actions justify-end">
-            <a href="https://t.me/evotico_bot" class="btn btn-primary btn-disabled" target="_blank" rel="noopener noreferrer">{translator.t('home.telegramBotCardButton')}</a>
-          </div>
-        </div>
-    </div>
+  <div class="card-actions justify-center">
+    <form action="/api/create-process" method="post">
+      <button type="submit" class="btn btn-primary">{translator.t('home.webAppCardButton')}</button>
+    </form>
   </div>
 
-  <br/>
+  <br/><br/>
   <Footer/>
   
 </BaseLayout>

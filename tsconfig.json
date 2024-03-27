@@ -8,18 +8,16 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "@api/*": ["api/*"],
-      "@content/*": ["src/content/*"],
-      "@assets/*": ["src/assets/*"],
-      "@utils/*": ["src/utils/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@lib/*": ["lib/*"],
-      "@components/*": ["src/components/*"]
-    },    
+      "@content/*": ["content/*"],
+      "@assets/*": ["assets/*"],
+      "@utils/*": ["utils/*"],
+      "@layouts/*": ["layouts/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@components/*": ["components/*"]
+    }
   },
-  "include": ["src/**/*", "lib/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["dist"]
 }
