@@ -7,7 +7,6 @@ import QRCode from '@components/ui/QRCode.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
 import ProcessTimeLabel from '@components/datetime/ProcessTimeLabel.astro';
 import getQuillHTML from '@utils/getQuillHTML';
-import fetchProcessData from '@utils/fetchProcessData';
 import IProcess from '@interfaces/IProcess';
 
 const translator = new Translator(Astro.currentLocale || 'en');
@@ -21,6 +20,7 @@ interface Props {
 const { process } = Astro.props;
 const weightLabel = process.weighting ? weightingOptions[Number(process.weighting) - 1].label : null;
 const descriptionHTML = getQuillHTML(process.description);
+const timezone = process.timezone ? process.timezone : 'UTC';
 ---
 
 
@@ -36,9 +36,9 @@ const descriptionHTML = getQuillHTML(process.description);
         </Modal>
     </div>
     <div>
-        { process.proposalDates && process.proposalDates[0] > 0 && <ProcessTimeLabel phase="proposal" dates={process.proposalDates}/> }
+        { process.proposalDates && process.proposalDates[0] > 0 && <ProcessTimeLabel timezone={timezone} phase="proposal" dates={process.proposalDates}/> }
         <br/>
-        { process.votingDates && <ProcessTimeLabel phase="voting" dates={process.votingDates}/> }
+        { process.votingDates && <ProcessTimeLabel timezone={timezone} phase="voting" dates={process.votingDates}/> }
         <br/>
     </div>
     <!-- { process.shareable && -->

@@ -4,20 +4,19 @@ import getProposalTemplates from '@utils/proposalTemplates.js';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import IProposal from "@interfaces/IProposal";
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
   const step = Number(formData.get('step') || 1);
   const nextStep = step + 1;
-  const clientTimezone = formData.get('timezone') as string;
+  const timezone = formData.get('timezone') as string;
 
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
   processCookieObject.create = 'false';
-  processCookieObject.clientTimezone = clientTimezone;
+  processCookieObject.timezone = timezone;
 
   const referer = request.headers.get('referer') as string;
-
 
   if (step === 1) {
     try {
@@ -45,38 +44,33 @@ export const POST: APIRoute = async ({ request }) => {
   } else if (step === 2) {
     const phase = processCookieObject.phase;
 
-    const currentDate = new Date();
-
-    let startProposalDate = formData.get('start-date-picker-proposal')
-      ? zonedTimeToUtc(new Date(Number(formData.get('start-date-picker-proposal'))), clientTimezone).getTime()
-      : processCookieObject.startProposalDate || currentDate.getTime();
-
-    let endProposalDate = formData.get('end-date-picker-proposal')
-      ? zonedTimeToUtc(new Date(Number(formData.get('end-date-picker-proposal'))), clientTimezone).getTime()
-      : processCookieObject.endProposalDate || (startProposalDate + 3600000);
+    const currentDate = timezone ? utcToZonedTime(new Date(), timezone) : new Date();
 
     let startVotingDate = formData.get('start-date-picker-voting')
-      ? zonedTimeToUtc(new Date(Number(formData.get('start-date-picker-voting'))), clientTimezone).getTime()
-      : processCookieObject.startVotingDate || endProposalDate;
+      ? Number(formData.get('start-date-picker-voting'))
+      : processCookieObject.startVotingDate || currentDate.getTime();
 
     let endVotingDate = formData.get('end-date-picker-voting')
-      ? zonedTimeToUtc(new Date(Number(formData.get('end-date-picker-voting'))), clientTimezone).getTime()
+      ? Number(formData.get('end-date-picker-voting'))
       : processCookieObject.endVotingDate || (startVotingDate + 3600000);
-      
-
-    if (endProposalDate <= startProposalDate) {
-      endProposalDate = startProposalDate + 60000;
-    }
-
-    if (startVotingDate < endProposalDate) {
-      startVotingDate = endProposalDate;
-    }
-
-    if (endVotingDate <= startVotingDate) {
-      endVotingDate = startVotingDate + 60000;
-    }
 
     if (phase === 'full') {
+      let startProposalDate = formData.get('start-date-picker-proposal')
+        ? Number(formData.get('start-date-picker-proposal'))
+        : processCookieObject.startProposalDate || currentDate.getTime();
+
+      let endProposalDate = formData.get('end-date-picker-proposal')
+        ? Number(formData.get('end-date-picker-proposal'))
+        : processCookieObject.endProposalDate || (startProposalDate + 3600000);
+
+      if (endProposalDate <= startProposalDate) {
+        endProposalDate = startProposalDate + 60000;
+      }
+
+      if (startVotingDate < endProposalDate) {
+        startVotingDate = endProposalDate;
+      }
+
       try {
         processCookieObject.startProposalDate = startProposalDate;
         processCookieObject.endProposalDate = endProposalDate;
@@ -99,6 +93,10 @@ export const POST: APIRoute = async ({ request }) => {
         return new Response(null, { status: 303, headers: { 'Location': referer } });
       }
     } else if (phase === 'voting') {
+      if (endVotingDate <= startVotingDate) {
+        endVotingDate = startVotingDate + 60000;
+      }
+
       const locale = 'en';
       const proposalTemplates = await getProposalTemplates(locale);
 
@@ -107,7 +105,35 @@ export const POST: APIRoute = async ({ request }) => {
         processCookieObject.endVotingDate = endVotingDate;
 
         if (formData.get('nojsSubmission')) {
-          // ... (No-JS submission logic remains the same)
+          if (formData.has('addProposal')) {
+            let title = formData.get('title') as string;
+            let description = formData.get('description') as string;
+            if (formData.has('tmpl')) {
+              const tmpl = Number(formData.get('tmpl') as string);
+              title = proposalTemplates[tmpl].title;
+              description = proposalTemplates[tmpl].description.ops[0].insert;
+            }
+            const proposalId = randomUUID(); 
+            processCookieObject.proposals = processCookieObject.proposals || [];
+            processCookieObject.proposals.push({ id: proposalId, title, description, createdAt: new Date().getTime() });
+          }
+          else if (formData.has('deleteProposal')) {
+            const proposalIdToDelete = formData.get('proposalId') as string;
+            if (processCookieObject.proposals) processCookieObject.proposals = processCookieObject.proposals.filter(proposal => proposal.id !== proposalIdToDelete);
+          }
+          // Update Proposal Logic
+          else if (formData.has('updateProposal')) {
+            const proposalIdToUpdate = formData.get('proposalId') as string;
+            const updatedTitle = formData.get('title') as string;
+            const updatedDescription = formData.get('description') as string;
+            let proposalToUpdate: IProposal | undefined;
+            if (processCookieObject.proposals) proposalToUpdate = processCookieObject.proposals.find(proposal => proposal.id === proposalIdToUpdate) ;
+            if (proposalToUpdate) {
+              proposalToUpdate.title = updatedTitle;
+              proposalToUpdate.description = updatedDescription;
+            }
+          }
+
         } else {
           processCookieObject.step = nextStep.toString();
           processCookieObject.proposals = [];

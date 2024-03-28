@@ -9,30 +9,27 @@ await translator.init();
 interface Props {
   phase: string;
   dates: number[];
-  clientTimezone: string;
+  timezone: string;
 }
 
-const { phase, dates, clientTimezone } = Astro.props;
+const { phase, dates, timezone } = Astro.props;
 
-const formatDateInTimezone = (date: number, timezone: string) => {
-  return format(utcToZonedTime(date, timezone), 'MMMM d, yyyy h:mm a', { timeZone: timezone });
-};
 ---
 
-<process-time-label data-start={dates[0]} data-timezone={clientTimezone}>
+<process-time-label data-start={dates[0]} data-timezone={timezone}>
   <span>{translator.t(`phases.${phase}.title`)}:&nbsp;</span>
-  {utcToZonedTime(dates[0], clientTimezone) > new Date() ? (
+  {utcToZonedTime(dates[0], timezone) > new Date() ? (
     <>
       <br />
       <span>{translator.t(`phases.start`)}:&nbsp;</span>
       <span id="start-date" class="link-success"></span>
       <br />
       <span>{translator.t(`phases.lastFor`)}:&nbsp;</span>
-      <Countdown type="success" dates={dates} timezone={clientTimezone} />
+      <Countdown type="success" dates={dates} timezone={timezone} />
     </>
-  ) : utcToZonedTime(dates[1], clientTimezone) > new Date() ? (
+  ) : utcToZonedTime(dates[1], timezone) > new Date() ? (
     <>
-      <Countdown dates={dates} type="warning" timezone={clientTimezone} />
+      <Countdown dates={dates} type="warning" timezone={timezone} />
       <span>&nbsp;({translator.t('remainingTime')})</span>
     </>
   ) : (
@@ -48,11 +45,11 @@ class ProcessTimeLabel extends HTMLElement {
   constructor() {
     super();
     const startDate = this.querySelector('span#start-date');
-    const clientTimezone = this.dataset.timezone || 'UTC';
+    const timezone = this.dataset.timezone || 'UTC';
 
     if (startDate) {
-      const start = utcToZonedTime(Number(this.dataset.start), clientTimezone);
-      startDate.innerHTML = format(start, 'MMMM d, yyyy h:mm a', { timeZone: clientTimezone });
+      const start = utcToZonedTime(Number(this.dataset.start), timezone);
+      startDate.innerHTML = format(start, 'MMMM d, yyyy h:mm a', { timeZone: timezone });
     }
   }
 }

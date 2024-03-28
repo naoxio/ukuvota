@@ -79,11 +79,12 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
     const process = await fetchProcessData(processId);
 
     class VotingList extends HTMLElement {
-        voteCounter = this.querySelector('span.no-voters')
-        alertList = this.querySelector('div.alert-list')
-        alerts = this.querySelectorAll('alert-element')
-        proposal_html = null
-        proposal_list = null
+        voteCounter = this.querySelector('span.no-voters') as HTMLElement;
+        alertList = this.querySelector('div.alert-list') as HTMLElement;
+        alerts = this.querySelectorAll('alert-element') as NodeListOf<HTMLElement>;
+
+        proposal_list = this.querySelector('div.proposal-list') as HTMLElement;
+        proposal_html = (this.proposal_list.querySelector('div.proposal') as HTMLElement).cloneNode(true);
         addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal_node: HTMLDivElement) {
             buttons.forEach((button: HTMLButtonElement) => {
                 button.addEventListener('click', () => {
@@ -93,14 +94,14 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 });
 
                 const svg = button.querySelector('svg');
-                svg.classList.remove('gray');
+                svg?.classList.remove('gray');
                 });
             });
         }
         submitVote = async () => {
             const votesMap = new Map();
-            const proposals = this.proposal_list.querySelectorAll('div.proposal');
-            Array.from(proposals).forEach((proposal_node: HTMLDivElement) => {
+            const proposals = this.proposal_list.querySelectorAll('div.proposal') as NodeListOf<HTMLElement>;
+            Array.from(proposals).forEach((proposal_node) => {
                 const svgs = proposal_node.querySelectorAll('svg');
                 for (const [i, svg] of svgs.entries()) {
                     if (!svg.classList.contains('gray')) {
@@ -113,20 +114,20 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             });
 
             const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
-            const senderName: HTMLInputElement = this.querySelector('input#sender-name');
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name') as HTMLInputElement;
             const vote = {
                 name: senderName.value,
                 votes
             };
             if (senderName.value !== "") {
-                this.alerts[0].querySelector('span.name').innerHTML = senderName.value;
+                const span = this.alerts[0].querySelector('span.name') as HTMLElement;
+                span.innerHTML = senderName.value;
                 addAlert(this.alertList, this.alerts[0]);
                 senderName.value = '';
 
                 try {
-                    await submitVote(processId, vote);
-                    const voters = await getVoters(processId);
-                    this.voteCounter.innerHTML = voters.length.toString();
+                    await this.submitVote();
+                    this.voteCounter.innerHTML = process.voters.length.toString();
                 } catch (error) {
                     console.error('Error submitting vote:', error);
                 }
@@ -136,27 +137,27 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
         };
         addProposal(proposal: IProposal) {
             if (isProposalEmpty(proposal)) return
-            const proposal_node = this.proposal_html.cloneNode(true)
+            const proposal_node = this.proposal_html.cloneNode(true) as HTMLDivElement;
             proposal_node.id = proposal.id
-            proposal_node.querySelector('h3').innerHTML = proposal.title
-            proposal_node.querySelector('p').innerHTML = getQuillHTML(proposal.description)
+            const h3 = proposal_node.querySelector('h3') as HTMLElement
+            h3.innerHTML = proposal.title
+            const p =proposal_node.querySelector('p') as HTMLElement;
+            p.innerHTML = getQuillHTML(proposal.description)
             const buttons = proposal_node.querySelectorAll('button')
             this.addButtonListeners(buttons, proposal_node);
             this.proposal_list.appendChild(proposal_node)
         }
         constructor() {
             super()
-
-            this.proposal_list = this.querySelector('div.proposal-list')
-            this.proposal_html = this.proposal_list.querySelector('div.proposal').cloneNode(true)
-            this.proposal_list.innerHTML = ""
+            this.proposal_html = (this.proposal_list.querySelector('div.proposal') as HTMLElement).cloneNode(true);
+            this.proposal_list.innerHTML = "";
 
             process.proposals.forEach((proposal: IProposal) => {
-                this.addProposal(proposal)
+                this.addProposal(proposal);
             });
 
-            const submit = this.querySelector('button#submit-vote')
-            submit.addEventListener('click', this.submitVote)
+            const submit = this.querySelector('button#submit-vote') as HTMLButtonElement;
+            submit.addEventListener('click', this.submitVote);
             
         }
     }

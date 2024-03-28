@@ -4,14 +4,13 @@ import { ref, push } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
 export const POST: APIRoute = async ({ request }) => {
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
-  const clientTimezone = processCookieObject.clientTimezone || 'UTC';
+  const timezone = processCookieObject.timezone || 'UTC';
 
-  // Get the current timestamp in UTC
-  const currentTimestamp = Date.now();
+  // Get the current timestamp in the client's timezone
+  const currentTimestamp = new Date().getTime();
 
   // Validate and adjust proposal dates
   let startProposalDate = processCookieObject.startProposalDate;
@@ -44,11 +43,11 @@ export const POST: APIRoute = async ({ request }) => {
       ops: processCookieObject.nojsdescription || processCookieObject.quillopsdescription
     },
     proposalDates: [startProposalDate, endProposalDate],
-    proposals: processCookieObject.proposals,
+    proposals: processCookieObject.proposals ? processCookieObject.proposals.filter((proposal) => proposal !== undefined) : [],
     title: processCookieObject.title,
     votingDates: [startVotingDate, endVotingDate],
     weighting: processCookieObject.weighting,
-    clientTimezone: clientTimezone,
+    timezone: timezone,
   };
 
   push(ref(firebaseDB, 'process/' + processId), reformattedProcess);

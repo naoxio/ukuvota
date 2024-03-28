@@ -1,8 +1,6 @@
 import type IProposal from "./IProposal";
 import type IVoter from "./IVoter";
-/* @ts-ignore */
-import { Delta } from 'quill'
-
+import type Delta from 'quill-delta';
 
 export default interface IProcess {
   _id: string;
@@ -14,5 +12,5 @@ export default interface IProcess {
   weighting: string;
   proposals: IProposal[];
   voters?: IVoter[];
-  timezoneOffset?: number;
+  timezone?: string;
 }

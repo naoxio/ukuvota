@@ -1,5 +1,5 @@
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-import Delta from 'quill';
+import type Delta from 'quill-delta';
 
 
 const getQuillHTML = (content: string | Delta): string =>{

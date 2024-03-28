@@ -1,5 +1,6 @@
 ---
 import { Translator } from '@utils/i18n.js';
+
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
@@ -17,23 +18,29 @@ const { dates, type, timezone } = Astro.props;
 </countdown-view>
 
 <script>
-import { formatDuration } from '@utils/dateHelpers';
+import { formatDuration } from '@utils/dateUtils';
 import { utcToZonedTime } from 'date-fns-tz';
 
 class Countdown extends HTMLElement {
   count = this.querySelector('#count') as HTMLElement;
   dates = [];
-  targetDate = Date.now();
-  currentDate = Date.now();
+  targetDate = 0;
+  currentDate = 0;
   type = this.dataset.type;
   timezone = this.dataset.timezone || 'UTC';
 
   updateTime() {
-    this.currentDate = utcToZonedTime(this.dates[0], this.timezone) < new Date() ? new Date() : utcToZonedTime(this.dates[0], this.timezone);
-    if (utcToZonedTime(this.targetDate, this.timezone) > this.currentDate) {
-      const diff = utcToZonedTime(this.targetDate, this.timezone).getTime() - this.currentDate.getTime();
+    this.currentDate = utcToZonedTime(this.dates[0], this.timezone).getTime();
+    const now = new Date().getTime();
+    if (this.currentDate < now) {
+      this.currentDate = now;
+    }
+
+    if (this.targetDate > this.currentDate) {
+      const diff = this.targetDate - this.currentDate;
       const duration = formatDuration(diff / 1000);
       this.count.innerHTML = duration;
+
       if (this.type === 'warning' && diff > 300000) {
         this.count.classList.add('link-warning');
       } else if (this.type === 'warning' && diff <= 300000) {
@@ -41,18 +48,19 @@ class Countdown extends HTMLElement {
       } else if (this.type === 'success') {
         this.count.classList.add('link-success');
       }
+
       setTimeout(() => this.updateTime(), 1000);
     } else {
-      this.count.classList = 'text-info';
-      this.count.innerHTML = this.dataset.done;
+      this.count.classList.add('text-info');
+      this.count.innerHTML = this.dataset.done || '';
     }
   }
 
   constructor() {
     super();
     this.dates = JSON.parse(`[${this.dataset.dates}]`);
-    this.targetDate = this.dates[1];
-    this.currentDate = new Date();
+    this.targetDate = utcToZonedTime(this.dates[1], this.timezone).getTime();
+    this.currentDate = utcToZonedTime(this.dates[0], this.timezone).getTime();
     this.updateTime();
   }
 }

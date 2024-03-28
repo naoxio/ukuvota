@@ -16,7 +16,7 @@ let allProcesses = processesCookie ? JSON.parse(processesCookie) : [];
   {allProcesses.length > 0 ? (
     <div>
       {allProcesses.map((uuid: string) => (
-        <ProcessInfo uuid={uuid} />
+        <!--ProcessInfo process={uuid} /-->
       ))}
       <form action="/api/export" method="get">
         <button class="btn-floating" id="exportButton" type="submit">

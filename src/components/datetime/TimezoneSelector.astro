@@ -1,0 +1,16 @@
+---
+
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+await translator.init();
+---
+
+<div class="flex items-center">
+    <label for="timezone-select">{translator.t('setup.timezone')}</label>
+    <select id="timezone-select" class="select select-bordered ml-2">
+      {Intl.supportedValuesOf('timeZone').map((timezone: string) => (
+        <option value={timezone}>{timezone}</option>
+      ))}
+    </select>
+  </div>
