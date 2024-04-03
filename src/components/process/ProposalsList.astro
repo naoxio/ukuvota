@@ -18,7 +18,6 @@ interface Props {
 }
 
 const { processId, nojs, proposals, isSetup } = Astro.props;
-console.log(proposals)
 ---
 <div>
   <div id="proposals-container">
@@ -169,7 +168,6 @@ console.log(proposals)
 
     for (let i = 0; i < proposalElements.length; i++) {
       const flexElement = proposalElements[i].querySelector('.flex') as HTMLElement;
-      console.log(flexElement)
       if (flexElement) {
         const descriptionDiv: HTMLElement | null = proposalsContainer.querySelector(`#description-${flexElement.id}`);
         const quillOpsInput: HTMLInputElement | null = proposalsContainer.querySelector(`#quillops-${flexElement.id}`);
@@ -214,11 +212,9 @@ console.log(proposals)
         titleInput.addEventListener('input', (event: Event) => {
           // Logic to handle title input
           const inputElement = event.target as HTMLInputElement;
-          console.log(`Title Updated: ${inputElement.value}`);
         });
       }
 
-      console.log(deleteButton)
       if (deleteButton) {
         deleteButton.addEventListener('click', () => {
           proposalsContainer.removeChild(proposalElement);

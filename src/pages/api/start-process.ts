@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
-import { ref, push } from 'firebase/database';
+import { ref, set } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
@@ -50,7 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
     timezone: timezone,
   };
 
-  push(ref(firebaseDB, 'process/' + processId), reformattedProcess);
+  set(ref(firebaseDB, 'process/' + processId), reformattedProcess);
 
   const headers = new Headers({
     'Set-Cookie': `process=; Path=/; HttpOnly; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,

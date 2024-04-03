@@ -21,4 +21,12 @@ const formatDateInTimezone = (date: number, timezone: string): string => {
 };
 
 
-export { formatDuration, formatDateInTimezone };
+function getTimezoneOffset(timezone: string): number {
+  const currentDate = new Date().toLocaleString('en-US', { timeZone: timezone });
+  const timezoneDate = new Date(currentDate);
+  const timezoneOffset = timezoneDate.getTimezoneOffset();
+  return timezoneOffset;
+}
+
+export { formatDuration, formatDateInTimezone, getTimezoneOffset };
+

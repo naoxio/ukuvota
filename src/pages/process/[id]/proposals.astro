@@ -15,10 +15,11 @@ const process = await fetchProcessData(processId);
 const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
+
 ---
 
 <ProcessLayout process={process}>
-  <proposal-list >
+  <proposal-list data-process={JSON.stringify(process)}>
     <h2>{ translator.t('process.proposals') }</h2>
     <div class="proposals">
       <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
@@ -59,45 +60,42 @@ if (pathname !== url.pathname)
 <script>
 import type IProposal from '@interfaces/IProposal';
 import { createQuill, updateQuill } from '@utils/quillUtils';
-import Delta from 'quill'
 import getQuillHTML from '@utils/getQuillHTML'
-import fetchProcessData from '@utils/fetchProcessData';
-import IProcess from '@interfaces/IProcess';
-
+import type Delta from 'quill-delta';
 
 const processId = window.location.pathname.split('/process/')[1].split('/')[0]
-const process: IProcess = await fetchProcessData(processId);
 
 class ProposalList extends HTMLElement {
-  proposal_html = null
-  proposals = null
+  proposals = this.querySelector('div.proposals') as HTMLElement;
+  proposal_html = (this.proposals.querySelector('div.proposal') as HTMLElement).cloneNode(true);
   descriptionQuills = {}
   currentAlert = null
-  
-  alertList = this.querySelector('div.alert-list')
-  alerts = this.querySelectorAll('alert-element')
+  process = JSON.parse(this.getAttribute("data-process") || "{}");
+  alertList = this.querySelector('div.alert-list') as HTMLElement;
+  alerts = this.querySelectorAll('alert-element') as NodeListOf<HTMLElement>;
 
-  updateProposalAPI(method, data) {
-    const proposalNode = gun.get(`process-${processId}`).get('proposals').get(data.id);
-    if (method === "delete") {
-      proposalNode.put(null);
-    } else if (method === "put") {
-      proposalNode.put(data);
-    }
+  async updateProposalAPI(method: any, data: any) {
+    const url = `/api/process/${processId}/proposal/${data.id}`;
+    const options = {
+      method: method === 'delete' ? 'DELETE' : 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    };
+    await fetch(url, options);
   }
 
   updateProposalView(proposal: any, title: string, description: Delta ) {
     const view_content = proposal.querySelector('div.view').querySelector('div.content').querySelector('.flex')
     view_content.innerHTML = `
       <h3>${title}</h3>
-      <div>${getQuillHTML(description)}</div>`
+      <div>${getQuillHTML(description )}</div>`
   }
   
   updateProposalEdit(proposal: any, title: string, description: Delta): HTMLInputElement {
     const edit_content = proposal.querySelector('div.edit').querySelector('div')
     const inputs = [
-      edit_content.querySelector("input"),
-      edit_content.querySelector(".quill"),
+      edit_content.querySelector("input") as HTMLInputElement,
+      edit_content.querySelector(".quill") as HTMLInputElement,
     ];
     inputs[0].value = title
     this.descriptionQuills[inputs[1].id] = updateQuill(this.descriptionQuills[inputs[1].id], description)
@@ -114,13 +112,13 @@ class ProposalList extends HTMLElement {
 
     if (title === '' && isEmptyDescription) {
       try {
-        this.updateProposalAPI('delete', { id: proposalId });
+        await this.updateProposalAPI('delete', { id: proposalId });
       } catch (error) {
         console.error('Error deleting proposal:', error);
       }
     } else {
       try {
-        this.updateProposalAPI('put', {
+        await this.updateProposalAPI('put', {
           id: proposalId,
           title,
           description: descriptionContent
@@ -195,49 +193,57 @@ class ProposalList extends HTMLElement {
 
   constructor() {
     super();
-    
     // Find the proposals container and clone a proposal template.
-    this.proposals = this.querySelector('div.proposals');
-    this.proposal_html = this.proposals.querySelector('div.proposal').cloneNode(true);
     this.proposals.innerHTML = "";
-
     // Add existing proposals to the UI.
-    process.proposals.forEach((proposal: any) => {
+    if (this.process.proposals) {
+      const proposals = Object.values(this.process.proposals) as any[];
+      console.log(proposals)
+      proposals.forEach((proposal: any) => {
         this.addProposal(proposal);
-    });
+      });
 
-    // Listen for changes to the proposals data in GUN
-    processNode.get('proposals').map().on((proposal, proposalId) => {
-      if (proposal) {
+    }
+    // Listen for changes to the proposals data from the API
+    const eventSource = new EventSource(`/api/process/${processId}/proposals`);
+    eventSource.onmessage = (event) => {
+      const proposals = JSON.parse(event.data);
+
+      for (const proposalId in proposals) {
+        const proposal = proposals[proposalId];
         const existingProposalElement = Array.from(this.proposals.children).find((child: any) => child.id === proposalId);
+
         if (existingProposalElement) {
           this.updateProposalEdit(existingProposalElement, proposal.title, proposal.description);
           this.updateProposalView(existingProposalElement, proposal.title, proposal.description);
         } else {
           this.addProposal({ ...proposal, id: proposalId });
         }
-      } else {
-        for (const child of this.proposals.children) {
-          if (child.id === proposalId) {
-            this.proposals.removeChild(child);
-            break;
-          }
-        }
       }
-    });
+
+      
+      // Remove proposals that no longer exist
+      Array.from(this.proposals.children).forEach((child: any) => {
+        if (!proposals[child.id]) {
+          this.proposals.removeChild(child);
+        }
+      });
+
+
+    const checkTime = () => {
+      const time =  this.process.proposalDates[1] - +new Date()
+      if (time <= 0)
+        window.location.href = `${window.location.origin}/process/${processId}/voting`
+      else
+        setTimeout(checkTime, time)
+    }
+    checkTime()
+
+    };
   }
 }
 customElements.define('proposal-list', ProposalList)
 
-
-const checkTime = () => {
-  const time =  process.proposalDates[1] - +new Date()
-  if (time <= 0)
-    window.location.href = `${window.location.origin}/process/${processId}/voting`
-  else
-    setTimeout(checkTime, time)
-}
-checkTime()
 
   
 

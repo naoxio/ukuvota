@@ -7,9 +7,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   const snapshot = await get(processRef);
   if (snapshot.exists()) {
 
-    const processData = snapshot.val();
-    const firstKey = Object.keys(processData)[0];
-    process = processData[firstKey];
+    process = snapshot.val();
   } else {
     process = null;
   }

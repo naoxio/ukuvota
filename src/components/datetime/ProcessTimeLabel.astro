@@ -2,6 +2,7 @@
 import { Translator } from '@utils/i18n.js';
 import Countdown from './Countdown.astro';
 import { format, utcToZonedTime } from 'date-fns-tz';
+import IProposal from '@interfaces/IProposal';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
@@ -10,9 +11,10 @@ interface Props {
   phase: string;
   dates: number[];
   timezone: string;
+  proposals_length?: number;
 }
 
-const { phase, dates, timezone } = Astro.props;
+const { phase, dates, timezone, proposals_length } = Astro.props;
 
 ---
 
@@ -33,9 +35,16 @@ const { phase, dates, timezone } = Astro.props;
       <span>&nbsp;({translator.t('remainingTime')})</span>
     </>
   ) : (
-    <span class="text-info">{translator.t('done')}</span>
+    <>
+      {(proposals_length !== undefined && proposals_length === 0) ? (
+        <span class="text-info">skipped</span>
+      ) : (
+        <span class="text-info">{translator.t('done')}</span>
+      )}
+    </>
   )}
   <br />
+
 </process-time-label>
 
 <script>

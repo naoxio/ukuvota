@@ -7,7 +7,7 @@ type DateAdjustmentResult = {
   vEnd: Date;
 };
 
-export const adjustDates = (
+const adjustDates = (
   phase: string,
   proposalStartDate: number,
   proposalEndDate: number,
@@ -41,3 +41,29 @@ export const adjustDates = (
 
   return { pStart, pEnd, vStart, vEnd };
 };
+
+import { formatDateInTimezone } from '@utils/dateUtils';
+import { utcToZonedTime } from 'date-fns-tz';
+
+const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement, timezone: string) => {
+  const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
+  if (!votingTimeSelector) return;
+
+  const querySelector = (selector: any) => votingTimeSelector.querySelector(selector);
+  const votingStartPicker = querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
+  const votingEndPicker = querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
+
+  if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
+
+  const originalVotingStartDate = utcToZonedTime(new Date(votingStartPicker.value), timezone);
+  const originalVotingEndDate = utcToZonedTime(new Date(votingEndPicker.value), timezone);
+  const originalVotingDuration = originalVotingEndDate.getTime() - originalVotingStartDate.getTime();
+
+  const newVotingStartDate = utcToZonedTime(proposalEndDate, timezone);
+  const newVotingEndDate = utcToZonedTime(new Date(newVotingStartDate.getTime() + originalVotingDuration), timezone);
+
+  votingStartPicker.value = formatDateInTimezone(newVotingStartDate.getTime(), timezone);
+  votingEndPicker.value = formatDateInTimezone(newVotingEndDate.getTime(), timezone);
+};
+
+export { adjustDates, adjustVotingPhaseDates }

@@ -87,13 +87,14 @@ if (proposals && proposals.length > 0) {
           <br/>
           <h2>{ translator.t('setup.proposals') }</h2>    
           <ProposalsList proposals={proposals}/>
+          <div id="errorMessage" class="text-red-500 mt-4 hidden">{translator.t('setup.errorMinProposals')}</div>
         </div>
       </div>
     ) : null }
-    <div class="justify-around mt-5 js-content-flex hidden">
-      <button id="backButton" class="btn" type="submit">{translator.t('buttons.back')}</button>
-      <button id="continueButton" class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
-    </div>
+      <div class="justify-around mt-5 js-content-flex hidden">
+        <button id="backButton" class="btn" type="submit">{translator.t('buttons.back')}</button>
+        <button id="continueButton" class="btn btn-primary disabled" type="submit">{translator.t('buttons.continue')}</button>
+      </div>
   </div>
 </step-2>
 
@@ -103,31 +104,12 @@ if (proposals && proposals.length > 0) {
   import { formatDuration, formatDateInTimezone } from '@utils/dateUtils';
   import IProposal from '@interfaces/IProposal';
   import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+  import { adjustVotingPhaseDates } from '@utils/dateAdjustments';
 
   const formElement = document.getElementById('step-2');
 
   if (formElement) {
     const timezone = formElement.getAttribute('data-timezone') || 'UTC';
-
-    const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement) => {
-      const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
-      if (!votingTimeSelector) return;
-
-      const querySelector = (selector: any) => votingTimeSelector.querySelector(selector);
-      const votingStartPicker = querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-      const votingEndPicker = querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-
-      if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
-
-      const originalVotingDuration = utcToZonedTime(new Date(votingEndPicker.value), timezone).getTime() - utcToZonedTime(new Date(votingStartPicker.value), timezone).getTime();
-      const adjustmentDuration = utcToZonedTime(new Date(votingStartPicker.value), timezone).getTime() - utcToZonedTime(originalProposalEndDate, timezone).getTime();
-
-      const newVotingStartDate = utcToZonedTime(new Date(utcToZonedTime(proposalEndDate, timezone).getTime() + adjustmentDuration), timezone);
-      const newVotingEndDate = utcToZonedTime(new Date(utcToZonedTime(newVotingStartDate, timezone).getTime() + originalVotingDuration), timezone);
-
-      votingStartPicker.value = formatDateInTimezone(newVotingStartDate.getTime(), timezone);
-      votingEndPicker.value = formatDateInTimezone(newVotingEndDate.getTime(), timezone);
-    };
 
     const initDurationSlider = (durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean, step2Element: HTMLElement) => {
       if (durationSlider) {
@@ -137,7 +119,7 @@ if (proposals && proposals.length > 0) {
           const sliderValue = parseInt((event.target as HTMLInputElement).value, 10);
           const newDuration = sliderToDuration(sliderValue) * 60 * 1000;
           const newEndDate = utcToZonedTime(new Date(utcToZonedTime(new Date(startPicker.value), timezone).getTime() + newDuration), timezone);
-          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
+          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element, timezone);
           originalEndDate = newEndDate;
 
           endPicker.value = formatDateInTimezone(newEndDate.getTime(), timezone);
@@ -177,7 +159,7 @@ if (proposals && proposals.length > 0) {
         endPicker.addEventListener('change', (event: any) => {
           let newEndDate = utcToZonedTime(new Date(event.target.value), timezone);
           if (isNaN(newEndDate.getTime())) return;
-          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element);
+          if (affectVotingStart) adjustVotingPhaseDates(originalEndDate, newEndDate, step2Element, timezone);
           originalEndDate = newEndDate;
           originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
           originalStartDate = utcToZonedTime(new Date(startPicker.value), timezone);
@@ -201,6 +183,7 @@ if (proposals && proposals.length > 0) {
         this.setupEventListeners();
         this.displayJavaScriptContent();
         this.initializeTimezoneSelector();
+        this.updateContinueButton();
 
       }
 
@@ -280,27 +263,25 @@ if (proposals && proposals.length > 0) {
 
           const proposals: IProposal[] = [];
           const proposalElements = document.querySelectorAll('.proposal .flex');
-          console.log(proposalElements);
+          
           proposalElements.forEach((proposalElement: Element) => {
             const id = proposalElement.id;
             const titleInput: HTMLInputElement | null = proposalElement.querySelector('input[type="text"]');
             const descriptionDiv: HTMLElement | null = proposalElement.querySelector('div[id^="description-"]');
             const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector('input[type="hidden"]');
-            console.log(titleInput?.value);
-            if (id && titleInput && descriptionDiv && quillOpsInput) {
+            if (id && titleInput) {
               proposals.push({
                 id,
                 title: titleInput.value,
-                description: descriptionDiv.innerText,
+                description: descriptionDiv?.innerText
               });
             }
-          });
-
+            
+          })
           formData.append('proposals', JSON.stringify(proposals));
         }
 
         formData.append('timezone', this.timezone);
-
         this.submitFormData('/api/process-store', formData);
       }
 
@@ -320,6 +301,7 @@ if (proposals && proposals.length > 0) {
         }
       }
 
+
       submitFormData(url: string, formData: any) {
         fetch(url, {
           method: 'POST',
@@ -329,13 +311,27 @@ if (proposals && proposals.length > 0) {
             if (response.ok) {
               window.location.reload();
             } else {
-              console.error('Error in submission');
+              response.text().then((errorMessage) => {
+                const errorElement = this.querySelector('#errorMessage') as HTMLElement;
+                errorElement.classList.remove('hidden');
+              });
             }
           })
           .catch((error) => {
             console.error('Error sending request', error);
           });
       }
+      updateContinueButton() {
+        const continueButton = this.querySelector('#continueButton') as HTMLButtonElement;
+        const proposals = document.querySelectorAll('.proposal .flex');
+
+        if (proposals.length >= 2) {
+          continueButton.classList.remove('disabled');
+        } else {
+          continueButton.classList.add('disabled');
+        }
+      }
+
 
       displayJavaScriptContent() {
         const jsContentBlocks = this.querySelectorAll('.js-content-block, .js-content-flex') as NodeListOf<HTMLElement>;

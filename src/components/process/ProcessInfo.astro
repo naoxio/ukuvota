@@ -21,6 +21,8 @@ const { process } = Astro.props;
 const weightLabel = process.weighting ? weightingOptions[Number(process.weighting) - 1].label : null;
 const descriptionHTML = getQuillHTML(process.description);
 const timezone = process.timezone ? process.timezone : 'UTC';
+const proposalsLength = process.proposals ? Object.values(process.proposals).length : 0;
+
 ---
 
 
@@ -38,7 +40,7 @@ const timezone = process.timezone ? process.timezone : 'UTC';
     <div>
         { process.proposalDates && process.proposalDates[0] > 0 && <ProcessTimeLabel timezone={timezone} phase="proposal" dates={process.proposalDates}/> }
         <br/>
-        { process.votingDates && <ProcessTimeLabel timezone={timezone} phase="voting" dates={process.votingDates}/> }
+        { process.votingDates && <ProcessTimeLabel timezone={timezone} phase="voting" dates={process.votingDates} proposals_length={proposalsLength}/> }
         <br/>
     </div>
     <!-- { process.shareable && -->

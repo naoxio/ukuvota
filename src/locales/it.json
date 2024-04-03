@@ -36,7 +36,9 @@
     "duration": "Durata",
     "setDuration": "Imposta durata",
     "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
-    "timeLeftVotingHeading": "Seleziona l'orario per la votazione"
+    "timeLeftVotingHeading": "Seleziona l'orario per la votazione",
+    "errorMinProposals": "È necessario almeno 2 proposte per procedere.",
+    "timezone": "Fuso orario"
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",
@@ -97,6 +99,7 @@
   "slider": "Dispositivo di scorrimento",
   "not-found": "Non trovato",
   "process": {
+    "noProposalsSubmitted": "Nessuna proposta è stata inviata.",
     "topic": "Domanda sull'argomento",
     "description": "Descrizione",
     "weighting": "Ponderazione del punteggio negativo",

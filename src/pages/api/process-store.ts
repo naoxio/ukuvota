@@ -93,13 +93,21 @@ export const POST: APIRoute = async ({ request }) => {
         return new Response(null, { status: 303, headers: { 'Location': referer } });
       }
     } else if (phase === 'voting') {
+      const proposals = JSON.parse(formData.get('proposals') as string|| '') as IProposal[] || processCookieObject.proposals || [];
+      if (proposals.length < 2) {
+        const headers = new Headers({
+          'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
+          'Location': request.headers.get('referer') as string,
+        });
+        return new Response('At least 2 proposals are required for the voting phase.', { status: 400, headers: headers });
+      }
+
       if (endVotingDate <= startVotingDate) {
         endVotingDate = startVotingDate + 60000;
       }
 
       const locale = 'en';
       const proposalTemplates = await getProposalTemplates(locale);
-
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;

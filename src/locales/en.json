@@ -36,7 +36,9 @@
     "duration": "Duration",
     "setDuration": "Set Duration",
     "timeLeftHeading": "Select the time for proposals and voting",
-    "timeLeftVotingHeading": "Select the time for voting"
+    "timeLeftVotingHeading": "Select the time for voting",
+    "errorMinProposals": "You need at least 2 proposals to proceed.",
+    "timezone": "Timezone"
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",
@@ -97,6 +99,7 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
+    "noProposalsSubmitted": "No proposals were submitted.",
     "topic": "Topic Question",
     "description": "Description",
     "weighting": "Negative Score Weighting",

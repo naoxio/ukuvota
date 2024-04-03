@@ -36,7 +36,10 @@
     "duration": "Dauer",
     "setDuration": "Dauer festlegen",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
-    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung"
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
+    "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
+    "timezone": "Zeitzone"
+
   },
   "loadQuill": "Lade QuillEditor...",
   "policy": "Datenschutzerklärung",
@@ -97,6 +100,7 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
+    "noProposalsSubmitted": "Es wurden keine Vorschläge eingereicht.",
     "topic": "Thema Frage",
     "description": "Beschreibung",
     "weighting": "Negative Punktegewichtung",

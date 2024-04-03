@@ -33,72 +33,80 @@ if (process && !("voters" in process)) {
                 <Icon class="emoji" name={emoji} width="48" />
             ))}
         </div>
-            <div role="tablist" class="tabs tabs-bordered">
-                <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
-                <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
-            </div>
+        {process.proposals && Object.keys(process.proposals).length > 0 ? (
+            <div>
+                <div role="tablist" class="tabs tabs-bordered">
+                    <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                    <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
+                </div>
 
-            <div class="tab-custom-content hide">
-                <span class="flex justify-between items-center">
-                    <h2>{ translator.t('process.results') }</h2>
-                    <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
-                </span>
-                
-                <h3>
-                    <span class="voter-label">{ translator.t('process.voters') }</span>
-                    <span class="num-voters">({ process.voters?.length })</span>:
-                </h3>
-                <div class="flex justify-around flex-wrap">
-                    { process.voters?.map((voter: any) => (
-                        <div id={voter.id} class="flex items-center p-2 voter">
-                            <input type="checkbox" checked class="checkbox checkbox-xs" />
-                            <span class="p-1 cursor-pointer select-none">
-                                { voter.name }
-                            </span>
-                        </div>
-                    ))}
-                </div>
-                <br/>
-                <div class="overflow-x-auto">
-                    <table class="table w-full">
-                        <!-- head -->
-                        <thead>
-                            <tr class="table-row-one">
-                                <th></th>
-                                <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
-                                <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
-                                <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <br/>
-                <div class="card">
-                    <h3>{ translator.t('process.exportData') }</h3>
-                    <div class="flex justify-around exports">
-                        <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
-                        <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+                <div class="tab-custom-content hide">
+                    <span class="flex justify-between items-center">
+                        <h2>{ translator.t('process.results') }</h2>
+                        <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
+                    </span>
+                    
+                    <h3>
+                        <span class="voter-label">{ translator.t('process.voters') }</span>
+                        <span class="num-voters">({ process.voters?.length })</span>:
+                    </h3>
+                    <div class="flex justify-around flex-wrap">
+                        { process.voters?.map((voter: any) => (
+                            <div id={voter.id} class="flex items-center p-2 voter">
+                                <input type="checkbox" checked class="checkbox checkbox-xs" />
+                                <span class="p-1 cursor-pointer select-none">
+                                    { voter.name }
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                </div> 
-            </div>
-            <div class="tab-custom-content hide">
-                <div>
-                    <br/>
                     <br/>
                     <div class="overflow-x-auto">
                         <table class="table w-full">
                             <!-- head -->
                             <thead>
+                                <tr class="table-row-one">
+                                    <th></th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
+                                </tr>
                             </thead>
                             <tbody>
                             </tbody>
                         </table>
                     </div>
                     <br/>
+                    <div class="card">
+                        <h3>{ translator.t('process.exportData') }</h3>
+                        <div class="flex justify-around exports">
+                            <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
+                            <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+                        </div>
+                    </div> 
                 </div>
-        </div>
+                <div class="tab-custom-content hide">
+                    <div>
+                        <br/>
+                        <br/>
+                        <div class="overflow-x-auto">
+                            <table class="table w-full">
+                                <!-- head -->
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        ) : (
+            <div class="text-center">
+                <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
+            </div>
+        )}
     </results-card>
 </ProcessLayout>
 
@@ -141,7 +149,7 @@ const getHighlighting = (className: string) => {
 class ResultsCard extends HTMLElement {
     voter_list: NodeListOf<HTMLDivElement> = this.querySelectorAll('div.voter')
     table_body = this.querySelectorAll('tbody')  as NodeListOf<HTMLElement>;
-    table_head = this.querySelectorAll('thead') as NodeListOf<HTMLElement> ;                                                                                                                                                                                                                   
+    table_head: NodeListOf<HTMLElement> = this.querySelectorAll('thead');                                                                                                                                                                                                                   
     emojis = this.querySelectorAll('svg.emoji') as NodeListOf<HTMLElement>;
     alertList = this.querySelector('div.alert-list') as HTMLElement;
     alerts = this.querySelectorAll('alert-element') as NodeListOf<HTMLElement>;
@@ -180,66 +188,69 @@ class ResultsCard extends HTMLElement {
     
     updateTable() {
         const selectedVoters = this.getSelectedVoters();
-        const proposals = this.process.proposals;
-        const numVotersElement = this.querySelector('span.num-voters') as HTMLElement
-        numVotersElement.innerHTML = `(${selectedVoters.length})`;
+        const proposals = this.process.proposals ? Object.values(this.process.proposals) : []; // Convert proposals object to an array
+        const numVotersElement = this.querySelector('span.num-voters') as HTMLElement;
+        if (numVotersElement) numVotersElement.innerHTML = `(${selectedVoters.length})`;
         proposals.forEach((proposal: any) => {
             proposal['total'] = this.getTotal(proposal.id, selectedVoters);
         });
         const sortedProposals = proposals.sort((a: any, b: any) => {
             return b.total - a.total;
         });
-        this.table_body[0].innerHTML = '';
-        this.table_body[1].innerHTML = '';
+        if (this.table_body[0]) this.table_body[0].innerHTML = '';
+        if (this.table_body[1]) this.table_body[1].innerHTML = '';
 
-        let head_content = `<th>voter</th>` // TODO: translate
-        this.process.proposals.forEach(proposal => {
+        let head_content = `<th>voter</th>`; // TODO: translate
+        proposals.forEach(proposal => {
             if (isProposalEmpty(proposal)) return;
 
             const truncatedTitle = truncateTitle(proposal.title, 50);
             head_content += `<th>${truncatedTitle}</th>\n`;
         });
-        let body_content = ''
+        let body_content = '';
 
         this.process.voters?.forEach((voters: any) => {
             body_content += `
             <tr>
             <td>
                 <span>${voters.name}</span>
-            </td>\n`
-            this.process.proposals.forEach(proposal => {
+            </td>\n`;
+            proposals.forEach(proposal => {
+                if (!proposal.id) return;
                 if (isProposalEmpty(proposal)) return;
-
-                let vote = voters.votes.find((p: any) => p.proposalId == proposal.id).vote
-                body_content += `<th class="text-center">${vote}</th>\n`
+                let vote = voters.votes.find((p: any) => p.proposalId == proposal.id).vote;
+                body_content += `<th class="text-center">${vote}</th>\n`;
             });
-            body_content += '</tr>\n'
+            body_content += '</tr>\n';
         });
-    
-        this.table_head[1].innerHTML = head_content
-        this.table_body[1].innerHTML = body_content
+
+
+        if (this.table_head[1]) this.table_head[1].innerHTML = head_content;
+        if (this.table_body[1]) this.table_body[1].innerHTML = body_content;
 
         let rank = 0;
         let prevProposal: any = null;
         sortedProposals.forEach((proposal: any, index: number) => {
-            const description = getQuillHTML(proposal.description)
+            if(!proposal.description) return;
+            const description = getQuillHTML(proposal.description);
             if (isProposalEmpty(proposal)) return;
 
             if (prevProposal) {
                 rank += prevProposal.total === proposal.total ? 0 : 1;
             }
             prevProposal = proposal;
-        
+
             this.table_body[0].appendChild(this.createRow(rank, index, proposal, selectedVoters));
         });
-
-        const items = this.table_body[0].querySelectorAll('tr');
-        items.forEach((item) => {
-            const rows = item.querySelectorAll('td');
-            rows.forEach((row) => {
-                row.style.backgroundColor = getHighlighting(item.className);
+        if (this.table_body[0]) {
+            const items = this.table_body[0].querySelectorAll('tr');
+            items.forEach((item) => {
+                const rows = item.querySelectorAll('td');
+                rows.forEach((row) => {
+                    row.style.backgroundColor = getHighlighting(item.className);
+                });
             });
-        });
+        }
     }
 
     createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
@@ -270,9 +281,9 @@ class ResultsCard extends HTMLElement {
         `;
 
         const titleElement = row.querySelector('h3.truncated-title') as HTMLElement;
-        if (isTitleTruncated) {
+        if (isTitleTruncated ) {
             titleElement.addEventListener('click', () => {
-            if (titleElement.classList.contains('expanded')) {
+            if (titleElement.classList.contains('expanded') && truncatedTitle) {
                 titleElement.innerHTML = truncatedTitle;
                 titleElement.classList.remove('expanded');
             } else {
@@ -307,11 +318,11 @@ class ResultsCard extends HTMLElement {
         }).join('');
         const tableRowOne = this.querySelector('tr.table-row-one') as HTMLElement;
         const tableColumns = Array.from(tableRowOne.querySelectorAll('th')).map((row: any) => row.innerHTML).join(' | ');
-        const proposals = this.process.proposals.map((proposal: any, index: number) => {
+        const proposals = this.process.proposals ? Object.values(this.process.proposals).map((proposal: any, index: number) => {
             if (isProposalEmpty(proposal)) return;
             const averageScore = this.getAverageScore(proposal.total, selectedVoters);
             return ` | ${index + 1} | ${proposal.title} - ${getQuillHTML(proposal.description)} | ${averageScore} | ${proposal.total} |`;
-        }).join('\n');
+        }).join('\n') : '';
         
         let rtn = '';
 
@@ -360,45 +371,52 @@ class ResultsCard extends HTMLElement {
 
         const exportMarkdownButton = this.querySelector('.export-markdown')  as HTMLButtonElement;
         const exportImageButton = this.querySelector('.export-image')  as HTMLButtonElement;
-        exportMarkdownButton.addEventListener('click', () => {
-            this.getMarkdownFile();
-        });
-        exportImageButton.addEventListener('click', () => {
-            const theme = localStorage.getItem("theme");
-
-            toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
-                download(dataUrl, this.process.title + '.png');
+        if (exportMarkdownButton) {
+            exportMarkdownButton.addEventListener('click', () => {
+                this.getMarkdownFile();
             });
-        });
+        }
+        if (exportImageButton) {
+            exportImageButton.addEventListener('click', () => {
+                const theme = localStorage.getItem("theme");
+
+                toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
+                    download(dataUrl, this.process.title + '.png');
+                });
+            });
+        }
 
         const repeatButton = this.querySelector('button.repeat-button') as HTMLButtonElement;
-        repeatButton.addEventListener('click', async () => {
-            const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: any) => input.checked);
-            if (items.length > 1) {
-                addAlert(this.alertList, this.alerts[0]);
+        if (repeatButton) {
+            repeatButton.addEventListener('click', async () => {
+                const items = Array.from(this.querySelectorAll('td.select-for-repeat input[type="checkbox"]')).filter((input: any) => input.checked);
+                if (items.length > 1) {
+                    addAlert(this.alertList, this.alerts[0]);
 
-                const formData = new FormData();
-                items.forEach((item) => {
-                formData.append('selectedProposals[]', item.id);
-                });
+                    const formData = new FormData();
+                    items.forEach((item) => {
+                    formData.append('selectedProposals[]', item.id);
+                    });
 
-                const response = await fetch('/api/repeat-process', {
-                method: 'POST',
-                body: formData,
-                });
-            }
-            else {
-                addAlert(this.alertList, this.alerts[1])
-            }
-        })
+                    const response = await fetch('/api/repeat-process', {
+                    method: 'POST',
+                    body: formData,
+                    });
+                }
+                else {
+                    addAlert(this.alertList, this.alerts[1])
+                }
+            })
+        }
         
     }
 
     showTab(tabs: NodeListOf<Element>, contents: NodeListOf<Element>, index: number) {
-        contents.forEach((content) => content.classList.add('hide'));
-        tabs.forEach((tab) => tab.classList.remove('tab-active'));
-        tabs[index].classList.add('tab-active');
-        contents[index].classList.remove('hide');
+
+        contents.forEach((content) => { if (content) content.classList.add('hide') });
+        tabs.forEach((tab) => { if (tab) tab.classList.remove('tab-active') });
+        if (tabs[index]) tabs[index].classList.add('tab-active');
+        if (contents[index]) contents[index].classList.remove('hide');
     }
 
 }
