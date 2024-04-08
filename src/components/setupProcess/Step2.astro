@@ -39,21 +39,6 @@ if (proposals && proposals.length > 0) {
         <h2 class="flex  mt-4">{translator.t('setup.timeLeftHeading')}</h2>
         <TimezoneSelector/>
         <br/>
-        <noscript>
-          <TimeSelector nojs phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} timezone={timezone}/>  
-          <br/><br/>
-          <TimeSelector nojs phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} timezone={timezone}/>  
-          <div class="flex justify-around mt-5">
-            <form action="/api/update-step" method="POST">
-              <input type="hidden" name="step" value="1"/>
-              <button class="btn" type="submit">{translator.t('buttons.back')}</button>
-            </form>
-            <form action='/api/update-step' method="POST">
-              <input type="hidden" name="step" value="3" />
-              <button class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
-            </form>
-          </div>
-        </noscript>
         <div class="js-content-block hidden">
           <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} timezone={timezone}/>  
           <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} timezone={timezone}/>
@@ -63,25 +48,7 @@ if (proposals && proposals.length > 0) {
       <div>
         <h2 class="flex mt-4">{translator.t('setup.timeLeftVotingHeading')}</h2>
         <TimezoneSelector/>
-
         <br/>
-        <noscript>
-          <TimeSelector nojs hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} timezone={timezone}/>
-          <br/><br/>
-          <h2>{ translator.t('setup.proposals') }</h2>    
-          <ProposalsList nojs isSetup={true} proposals={proposals}/>
-          <br/>
-          <div class="flex justify-around mt-5">
-            <form action="/api/update-step" method="POST">
-              <input type="hidden" name="step" value="1"/>
-              <button class="btn" type="submit">{translator.t('buttons.back')}</button>
-            </form>
-            <form action="/api/update-step" method="POST">
-              <input type="hidden" name="step" value="3" />
-              <button class="btn btn-primary" type="submit">{translator.t('buttons.continue')}</button>
-            </form>
-          </div>
-        </noscript>
         <div class="js-content-block hidden">
           <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} timezone={timezone}/>
           <br/>

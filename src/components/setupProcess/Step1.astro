@@ -12,11 +12,10 @@ const timezoneOffset = new Date().getTimezoneOffset();
 type Props = {
   title: string;
   quillopsdescription?: string;
-  nojsdescription?: string;
   weighting?: string;
 }
 
-const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
+const { title, quillopsdescription, weighting } = Astro.props;
 ---
 
 <form id="step-1" action='/api/process-store' method="POST">
@@ -40,9 +39,6 @@ const { title, quillopsdescription, weighting, nojsdescription } = Astro.props;
 
   <div id="description" class="hidden">{translator.t('loadQuill')}</div>
 
-  <noscript>
-    <textarea id="nojsdescription" name="nojsdescription" class="textarea textarea-bordered w-full">{nojsdescription}</textarea>
-  </noscript>
   <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
   <br/>
   <!--details class="text-center">

@@ -6,7 +6,6 @@ export const POST: APIRoute = async ({ request }) => {
   const selectedProposals = formData.getAll('selectedProposals[]') as string[];
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const nojsdescription = formData.get('nojsdescription') as string;
   const weighting = formData.get('weighting') as string;
   const proposals = JSON.parse(formData.get('proposals') as string);
 
@@ -15,7 +14,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     processCookieObject.title = title;
     processCookieObject.quillopsdescription = description;
-    processCookieObject.nojsdescription = nojsdescription;
     processCookieObject.weighting = weighting;
     processCookieObject.phase = 'voting';
     processCookieObject.proposals = proposals.filter((proposal: any) =>

@@ -24,7 +24,6 @@ export const POST: APIRoute = async ({ request }) => {
         step: nextStep,
         weighting: formData.get('weighting'),
         title: formData.get('topicQuestion'),
-        nojsdescription: formData.get('nojsdescription'),
         quillopsdescription: formData.get('quillopsdescription'),
         phase: formData.get('phase')
       });
@@ -77,10 +76,6 @@ export const POST: APIRoute = async ({ request }) => {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
 
-        if (!formData.get('nojsSubmission')) {
-          processCookieObject.step = nextStep.toString();
-        }
-
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',
@@ -112,59 +107,29 @@ export const POST: APIRoute = async ({ request }) => {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
 
-        if (formData.get('nojsSubmission')) {
-          if (formData.has('addProposal')) {
-            let title = formData.get('title') as string;
-            let description = formData.get('description') as string;
-            if (formData.has('tmpl')) {
-              const tmpl = Number(formData.get('tmpl') as string);
-              title = proposalTemplates[tmpl].title;
-              description = proposalTemplates[tmpl].description.ops[0].insert;
+        
+        processCookieObject.step = nextStep.toString();
+        processCookieObject.proposals = [];
+
+        const proposalsData = formData.get('proposals');
+        if (proposalsData) {
+          const proposals = JSON.parse(proposalsData as string);
+          proposals.forEach((proposal: IProposal) => {
+            if (!proposal.id) {
+              return;
             }
-            const proposalId = randomUUID(); 
+
             processCookieObject.proposals = processCookieObject.proposals || [];
-            processCookieObject.proposals.push({ id: proposalId, title, description, createdAt: new Date().getTime() });
-          }
-          else if (formData.has('deleteProposal')) {
-            const proposalIdToDelete = formData.get('proposalId') as string;
-            if (processCookieObject.proposals) processCookieObject.proposals = processCookieObject.proposals.filter(proposal => proposal.id !== proposalIdToDelete);
-          }
-          // Update Proposal Logic
-          else if (formData.has('updateProposal')) {
-            const proposalIdToUpdate = formData.get('proposalId') as string;
-            const updatedTitle = formData.get('title') as string;
-            const updatedDescription = formData.get('description') as string;
-            let proposalToUpdate: IProposal | undefined;
-            if (processCookieObject.proposals) proposalToUpdate = processCookieObject.proposals.find(proposal => proposal.id === proposalIdToUpdate) ;
-            if (proposalToUpdate) {
-              proposalToUpdate.title = updatedTitle;
-              proposalToUpdate.description = updatedDescription;
+            
+            const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
+
+            if (existingProposalIndex !== -1) {
+              processCookieObject.proposals[existingProposalIndex] = proposal;
+            } else {
+              processCookieObject.proposals.push(proposal);
             }
-          }
-
-        } else {
-          processCookieObject.step = nextStep.toString();
-          processCookieObject.proposals = [];
-
-          const proposalsData = formData.get('proposals');
-          if (proposalsData) {
-            const proposals = JSON.parse(proposalsData as string);
-            proposals.forEach((proposal: IProposal) => {
-              if (!proposal.id) {
-                return;
-              }
-
-              processCookieObject.proposals = processCookieObject.proposals || [];
-              
-              const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
-
-              if (existingProposalIndex !== -1) {
-                processCookieObject.proposals[existingProposalIndex] = proposal;
-              } else {
-                processCookieObject.proposals.push(proposal);
-              }
-            });
-          }
+          });
+        
         }
 
         const headers = new Headers({

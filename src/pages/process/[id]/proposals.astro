@@ -7,6 +7,7 @@ const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
 
 import fetchProcessData from '@utils/fetchProcessData';
+import ProposalsList from "@components/process/ProposalsList.astro";
 
 
 const { url } = Astro;
@@ -16,10 +17,14 @@ const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}
 if (pathname !== url.pathname)
     return Astro.redirect(pathname);
 
+const proposals = process.proposals ? process.proposals : [];
+
 ---
 
 <ProcessLayout process={process}>
-  <proposal-list data-process={JSON.stringify(process)}>
+  <ProposalsList proposals={proposals}/>
+
+  <!--proposal-list data-process={JSON.stringify(process)}>
     <h2>{ translator.t('process.proposals') }</h2>
     <div class="proposals">
       <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
@@ -54,10 +59,11 @@ if (pathname !== url.pathname)
         </div>
       </div>
     </div>
-  </proposal-list> 
+  </proposal-list--> 
 </ProcessLayout>
 
 <script>
+  /*
 import type IProposal from '@interfaces/IProposal';
 import { createQuill, updateQuill } from '@utils/quillUtils';
 import getQuillHTML from '@utils/getQuillHTML'
@@ -246,5 +252,5 @@ customElements.define('proposal-list', ProposalList)
 
 
   
-
+*/
 </script>

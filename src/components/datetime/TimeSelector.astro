@@ -12,11 +12,10 @@ interface Props {
   startDate: Date;
   endDate: Date;
   hideTitle?: Boolean;
-  nojs?: Boolean;
   timezone: string;
 }
 
-const { phase, startDate, endDate, startMinDate, hideTitle, nojs, timezone } = Astro.props;
+const { phase, startDate, endDate, startMinDate, hideTitle, timezone } = Astro.props;
 const title = translator.t(`phases.${phase}.title`);
 
 const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60;
@@ -26,51 +25,30 @@ const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) /
   {!hideTitle && (
     <h3 class="title">{title}</h3>
   )}
-  {nojs ? (
-    <>
-      <br />
-      <DatetimePicker
-        nojs
-        index={0}
-        date={startDate}
-        min={startMinDate}
-        id={`start-date-picker-${phase}`}
-        timezone={timezone}
-      />
-      <br />
-      <DatetimePicker
-        nojs
-        index={1}
-        date={endDate}
-        min={startDate}
-        id={`end-date-picker-${phase}`}
-        timezone={timezone}
-      />
-    </>
-  ) : (
-    <>
-      <br />
-      <DatetimePicker
-        index={0}
-        date={startDate}
-        min={startMinDate}
-        id={`start-date-picker-${phase}`}
-        timezone={timezone}
-      />
-      <br />
-      <DatetimePicker
-        index={1}
-        date={endDate}
-        min={startDate}
-        id={`end-date-picker-${phase}`}
-        timezone={timezone}
-      />
-      <br />
-      <DatetimeSlider
-        duration={duration}
-        id={`datetime-slider-${phase}`}
-      />
-      <br />
-    </>
-  )}
+  
+  <>
+    <br />
+    <DatetimePicker
+      index={0}
+      date={startDate}
+      min={startMinDate}
+      id={`start-date-picker-${phase}`}
+      timezone={timezone}
+    />
+    <br />
+    <DatetimePicker
+      index={1}
+      date={endDate}
+      min={startDate}
+      id={`end-date-picker-${phase}`}
+      timezone={timezone}
+    />
+    <br />
+    <DatetimeSlider
+      duration={duration}
+      id={`datetime-slider-${phase}`}
+    />
+    <br />
+  </>
+
 </div>

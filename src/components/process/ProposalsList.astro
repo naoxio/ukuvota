@@ -12,129 +12,63 @@ await translator.init();
 
 interface Props {
     processId?: string;
-    nojs?: boolean;
     proposals: Array<IProposal>;
     isSetup?: boolean;
 }
 
-const { processId, nojs, proposals, isSetup } = Astro.props;
+const { processId, proposals, isSetup } = Astro.props;
 ---
+
 <div>
   <div id="proposals-container">
-    {proposals.map((proposal: IProposal) => (
-      <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full">
-        {proposal.editing ? (
-          <>
-            {nojs ? (
-              <div class="flex items-center flex-col">
-                <div class="flex flex-col w-full">
-                  <form action={ isSetup ? "/api/process-store" : "/api/delete-proposal" } method="POST" class="flex justify-end">
-                    <input type="hidden" name="step" value="2" />
-                    <input type="hidden" name="nojsSubmission" value="true" />
-                    <input type="hidden" name="proposalId" value={proposal.id} />
-                    <input type="hidden" name="deleteProposal" value="true" />
-                    <button type="submit" class="button button-text text-error">&#128465;</button>
-                  </form>
-                  <form action={ isSetup ? "/api/process-store" : "/api/update-proposal" } method="POST">
-                    <input type="hidden" name="step" value="2" />
-                    <input type="hidden" name="nojsSubmission" value="true" />
-                    <input type="hidden" name="proposalId" value={proposal.id} />
-                    <input type="hidden" name="updateProposal" value="true" />
-
-                    <b>{translator.t('process.proposal')}</b>
-                    <input type="text" name="title" class="input input-bordered input-sm my-2 w-full" value={proposal.title} required />
-                    <label>{translator.t('process.description')}</label>
-
-                    <textarea class="textarea textarea-bordered textarea-sm my-2 w-full" name="description">{proposal.description}</textarea>
-                    <div class="flex justify-center">
-                      <button type="submit" class="btn">{translator.t('buttons.update')}</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            ) : (
-              <div class="flex items-center flex-col" id={proposal.id}>
-                <div class="flex flex-col w-full">
-                  <b>Title</b>
-                  <input id={`title-${proposal.id}`} type="text" class="input input-bordered input-sm my-2 w-full" value={proposal.title} />
-                  <label>Description</label>
-                  <div id={`description-${proposal.id}`}>{proposal.description}</div>
-                  <input type="hidden" id={`quillops-${proposal.id}`} />
-                </div>
-                <div class="flex justify-center w-full pt-2">
-                  <button id={`delete-${proposal.id}`} class="delete btn btn-ghost text-error btn-xs">Delete</button>
-                </div>
-              </div>
-            )}
-        </>
-      ) : (
-        <div>
+    {proposals.map((proposal) => (
+      <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id={proposal.id} data-editing={proposal.editing.toString()}>
+        <div class="view" style={proposal.editing ? 'display: none;' : ''}>
           <b>{proposal.title || 'Untitled Proposal'}</b>
           <p>{proposal.description}</p>
+          {!isSetup && (
+            <button class="toggle-edit-button btn btn-primary btn-sm">{translator.t('edit')}</button>
+          )}
         </div>
-      )}
+        <div class="edit" style={proposal.editing ? '' : 'display: none;'}>
+          <div class="flex flex-col w-full">
+            <b>Title</b>
+            <input type="text" class="title-input input input-bordered input-sm my-2 w-full" value={proposal.title} />
+            <label>Description</label>
+            <div class="description">{proposal.description}</div>
+            <input type="hidden" class="quillops" />
+          </div>
+          <div class="flex justify-center w-full pt-2">
+            {!isSetup && (
+              <button class="toggle-edit-button btn btn-primary btn-sm">{translator.t('save')}</button>
+            )}
+            <button class="delete-button btn btn-ghost text-error btn-xs">{translator.t('delete')}</button>
+          </div>
+        </div>
       </div>
     ))}
   </div>
-  {nojs ? (
-    <div class="flex items-center flex-wrap justify-center">
-      <br/>
-      <form action="/api/process-store" method="POST">
-        <input type="hidden" name="step" value="2" />
-        <input type="hidden" name="nojsSubmission" value="true" />
-        <input type="hidden" name="title" value="" />
-        <input type="hidden" name="addProposal" value="true" />
-
-        <input type="hidden" name="processId" value={processId} />
-        <button class="btn p-2">{translator.t('process.addProposal')}</button>
-      </form>
-
-      <div class="dropdown">
-        <label tabindex="0" class="btn m-1">{ translator.t('process.addProposalTemplate') }</label>
-        <ul tabindex="0" class="dropdown-content menu p-2 shadow rounded-box">
-          {dropdownOptions.map((option: any, index) => (
-            <form action="/api/process-store" method="POST"  class="flex justify-between items-center flex-wrap">
-              <input type="hidden" name="step" value="2" />
-              <input type="hidden" name="nojsSubmission" value="true" />
-              <input type="hidden" name="addProposal" value="true" />
-
-              <input type="hidden" name="title" value="" />
-              <input type="hidden" name="processId" value={processId} />
-              <input type="hidden" name="tmpl" value={index}/>
-
-              <button type="submit" class="btn w-64 mt-2 h-24 items-center flex flex-col justify-center">
-                <b class="title">{option.title}</b>
-                <p class="description">{option.description.ops[0].insert}</p>
-              </button>
-            </form>
-          ))}
-        </ul>
-      </div>
+ 
+  <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
+    <button id="add-button" class="btn p-2">{translator.t('process.addProposal')}</button>
+    <div class="dropdown">
+      <div tabindex={0} role="button" class="btn m-1">{translator.t('process.addProposalTemplate')}</div>
+      <ul tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
+        {dropdownOptions.map((option, index) => (
+          <li>
+            <a class="flex flex-col">
+              <b class="title">{option.title}</b>
+              <p class="description">{option.description.ops[0].insert}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
-  ) : (
-    <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
-      <button id="add-button" class="btn p-2">{ translator.t('process.addProposal') }</button>
-      <div class="dropdown">
-        <div tabindex={0} role="button" class="btn m-1">{ translator.t('process.addProposalTemplate') }</div>
-        <ul tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
-          {dropdownOptions.map((option, index) => (
-            <li>
-              <a class="flex flex-col">
-                <b class="title">{option.title}</b>
-                <p class="description">{option.description.ops[0].insert}</p>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )}
+  </div>
+
 </div>
 
-
-
 <script>
-
   import { createQuill, updateQuill } from '@utils/quillUtils';
   /* @ts-ignore */
   import { v4 as uuidv4 } from 'uuid';
@@ -167,11 +101,36 @@ const { processId, nojs, proposals, isSetup } = Astro.props;
     const proposalElements = proposalsContainer.children;
 
     for (let i = 0; i < proposalElements.length; i++) {
-      const flexElement = proposalElements[i].querySelector('.flex') as HTMLElement;
+      const proposalElement = proposalElements[i];
+      const toggleEditButton = proposalElement.querySelector('.toggle-edit-button');
+      const viewElement = proposalElement.querySelector('.view');
+      const editElement = proposalElement.querySelector('.edit');
+
+      if (toggleEditButton && viewElement && editElement) {
+        toggleEditButton.addEventListener('click', () => {
+          const isEditing = proposalElement.getAttribute('data-editing') === 'true';
+
+          if (isEditing) {
+            // Save the changes and switch to view mode
+            viewElement.style.display = 'block';
+            editElement.style.display = 'none';
+            proposalElement.setAttribute('data-editing', 'false');
+            toggleEditButton.textContent = translator.t('edit');
+          } else {
+            // Switch to edit mode
+            viewElement.style.display = 'none';
+            editElement.style.display = 'block';
+            proposalElement.setAttribute('data-editing', 'true');
+            toggleEditButton.textContent = translator.t('save');
+          }
+        });
+      }
+
+      const flexElement = proposalElement.querySelector('.flex') as HTMLElement;
       if (flexElement) {
-        const descriptionDiv: HTMLElement | null = proposalsContainer.querySelector(`#description-${flexElement.id}`);
-        const quillOpsInput: HTMLInputElement | null = proposalsContainer.querySelector(`#quillops-${flexElement.id}`);
-        const deleteButton: HTMLElement | null = proposalsContainer.querySelector(`#delete-${flexElement.id}`);
+        const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${flexElement.id}`);
+        const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${flexElement.id}`);
+        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete-button`);
 
         if (descriptionDiv && quillOpsInput) {
           const quillEditor = createQuill(`#description-${flexElement.id}`);
@@ -192,7 +151,7 @@ const { processId, nojs, proposals, isSetup } = Astro.props;
         }
         if (deleteButton) {
           deleteButton.addEventListener('click', () => {
-            proposalsContainer.removeChild(proposalElements[i]);
+            proposalsContainer.removeChild(proposalElement);
           });
         }
       }
@@ -276,6 +235,6 @@ const { processId, nojs, proposals, isSetup } = Astro.props;
           });
         }
       }
+    });
   });
-});
 </script>

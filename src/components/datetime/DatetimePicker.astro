@@ -10,25 +10,13 @@ interface Props {
   index: number;
   date: Date;
   min: Date;
-  nojs?: Boolean;
   timezone: string;
 }
 
-const { nojs, id, index, date, min, timezone } = Astro.props;
+const {  id, index, date, min, timezone } = Astro.props;
 
 ---
-
-{nojs ? (
-  <form id={id} action="/api/process-store" method="POST" class="flex justify-between items-center flex-wrap">
-    <input type="hidden" name="nojsSubmission" value="true" />
-    <h4>{index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
-    <input type="hidden" name="step" value="2" />
-    <input type="datetime-local" min={formatDateInTimezone(min.getTime(), timezone)} name={id} value={formatDateInTimezone(date.getTime(), timezone)} />
-    <button class="btn btn-secondary" type="submit">{translator.t('setup.setDate')}</button>
-  </form>
-) : (
-  <div id={id} class="flex justify-between items-center flex-wrap">
-    <h4>{index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
-    <input type="datetime-local" min={formatDateInTimezone(min.getTime(), timezone)} name={id} value={formatDateInTimezone(date.getTime(), timezone)} />
-  </div>
-)}
+<div id={id} class="flex justify-between items-center flex-wrap">
+  <h4>{index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
+  <input type="datetime-local" min={formatDateInTimezone(min.getTime(), timezone)} name={id} value={formatDateInTimezone(date.getTime(), timezone)} />
+</div>
