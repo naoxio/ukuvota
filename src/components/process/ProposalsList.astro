@@ -57,34 +57,50 @@ const { processId, proposals, isSetup } = Astro.props;
 
   const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
   const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
+
+
+  const setupEditButtonListener = ( proposalElement: Element ) => {
+    const editButton = proposalElement.querySelector('.edit-button') as HTMLButtonElement;
+    const saveButton = proposalElement.querySelector('.save-button') as HTMLButtonElement;
+    const viewElement = proposalElement.querySelector('.view-mode') as HTMLElement;
+    const editElement = proposalElement.querySelector('.edit-mode') as HTMLElement;
+    if (!(editButton && saveButton && viewElement && editElement)) return
+    // Listener for entering edit mode
+    editButton.addEventListener('click', () => {
+      viewElement.style.display = 'none';
+      editElement.style.display = 'block';
+      editButton.style.display = 'none';
+      saveButton.style.display = 'block';
+      proposalElement.setAttribute('data-editing', 'true');
+    });
+    // Listener for saving changes (exiting edit mode)
+    saveButton.addEventListener('click', () => {
+      console.log(proposalElement.id)
+      // Fetching the updated values
+      const titleInputValue = (proposalElement.querySelector(`.edit-mode input`) as HTMLInputElement).value;
+      const quillEditorContent = (proposalElement.querySelector(`.edit-mode .ql-editor`) as HTMLElement).innerHTML;
+
+      // Updating the view mode elements
+      const h1 = proposalElement.querySelector('.view-mode h1') as HTMLElement
+      h1.textContent = titleInputValue;
+      const desc = proposalElement.querySelector('.view-mode p') as HTMLElement
+      desc.innerHTML = quillEditorContent;
+
+      // Switching the display modes
+      viewElement.style.display = 'block';
+      editElement.style.display = 'none';
+      editButton.style.display = 'block';
+      saveButton.style.display = 'none';
+      proposalElement.setAttribute('data-editing', 'false');
+    });
+}
+
   if (addButton && proposalsContainer) {
     const proposalElements = proposalsContainer.children;
 
     for (let i = 0; i < proposalElements.length; i++) {
       const proposalElement = proposalElements[i];
-      const editButton = proposalElement.querySelector('.edit-button') as HTMLButtonElement;
-      const viewElement = proposalElement.querySelector('.view') as HTMLElement;
-      const editElement = proposalElement.querySelector('.edit') as HTMLElement;
-
-      if (editButton && viewElement && editElement) {
-        editButton.addEventListener('click', () => {
-          const isEditing = proposalElement.getAttribute('data-editing') === 'true';
-
-          if (isEditing) {
-            // Save the changes and switch to view mode
-            viewElement.style.display = 'block';
-            editElement.style.display = 'none';
-            proposalElement.setAttribute('data-editing', 'false');
-            editButton.textContent = isSetup ? 'Edit' : 'Save';
-          } else {
-            // Switch to edit mode
-            viewElement.style.display = 'none';
-            editElement.style.display = 'block';
-            proposalElement.setAttribute('data-editing', 'true');
-            editButton.textContent = isSetup ? 'Save' : 'Edit';
-          }
-        });
-      }
+      setupEditButtonListener(proposalElement);
 
       const flexElement = proposalElement.querySelector('.flex') as HTMLElement;
       if (flexElement) {
@@ -130,6 +146,8 @@ const { processId, proposals, isSetup } = Astro.props;
         } else {
           console.log('Proposals container not found');
         }
+
+        setupEditButtonListener(proposalElement);
 
         const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
         const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
@@ -185,14 +203,15 @@ const { processId, proposals, isSetup } = Astro.props;
 
       const uniqueId = uuidv4();
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, '', false);
-
+          
+      setupEditButtonListener(proposalElement);
+      
       if (proposalsContainer) {
         proposalsContainer.appendChild(proposalElement);
         const deleteButton = proposalElement.querySelector('.delete');
         if (deleteButton) {
           deleteButton.addEventListener('click', () => {
             proposalsContainer.removeChild(proposalElement);
-            
           });
         }
 
@@ -211,4 +230,5 @@ const { processId, proposals, isSetup } = Astro.props;
       }
     });
   });
+
 </script>
