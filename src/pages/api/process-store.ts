@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { randomUUID } from 'crypto';
-import getProposalTemplates from '@utils/proposalTemplates.js';
+import { exampleProposals } from '@utils/exampleProposals.js';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import IProposal from "@interfaces/IProposal";
@@ -76,6 +76,8 @@ export const POST: APIRoute = async ({ request }) => {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
 
+        processCookieObject.step = nextStep.toString();
+
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',
@@ -102,12 +104,11 @@ export const POST: APIRoute = async ({ request }) => {
       }
 
       const locale = 'en';
-      const proposalTemplates = await getProposalTemplates(locale);
+      const proposalTemplates = await exampleProposals(locale);
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
 
-        
         processCookieObject.step = nextStep.toString();
         processCookieObject.proposals = [];
 
@@ -129,9 +130,8 @@ export const POST: APIRoute = async ({ request }) => {
               processCookieObject.proposals.push(proposal);
             }
           });
-        
         }
-
+        
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',

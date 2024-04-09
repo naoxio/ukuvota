@@ -1,14 +1,11 @@
 ---
-import getProposalTemplates from '@utils/proposalTemplates';
+import { createProposalElement } from '@utils/proposalTemplate';
+import { exampleProposals } from '@utils/exampleProposals';
 
 const locale = Astro.currentLocale || 'en';
-const dropdownOptions = await getProposalTemplates(locale);
+const dropdownOptions = await exampleProposals(locale);
 
 import IProposal from '@interfaces/IProposal';
-import { Translator } from '@utils/i18n.js';
-
-const translator = new Translator(Astro.currentLocale || 'en'); 
-await translator.init();
 
 interface Props {
     processId?: string;
@@ -20,39 +17,22 @@ const { processId, proposals, isSetup } = Astro.props;
 ---
 
 <div>
-  <div id="proposals-container">
-    {proposals.map((proposal) => (
-      <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id={proposal.id} data-editing={proposal.editing.toString()}>
-        <div class="view" style={proposal.editing ? 'display: none;' : ''}>
-          <b>{proposal.title || 'Untitled Proposal'}</b>
-          <p>{proposal.description}</p>
-          {!isSetup && (
-            <button class="toggle-edit-button btn btn-primary btn-sm">{translator.t('edit')}</button>
-          )}
+  <div id="proposals-container" data-is-setup={isSetup}>
+    {proposals.length > 0 ? (
+      proposals.map((proposal) => (
+        <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id={proposal.id} data-editing={proposal.editing?.toString()}>
+          {createProposalElement(proposal.id, proposal.title, proposal.description || '', isSetup)}
         </div>
-        <div class="edit" style={proposal.editing ? '' : 'display: none;'}>
-          <div class="flex flex-col w-full">
-            <b>Title</b>
-            <input type="text" class="title-input input input-bordered input-sm my-2 w-full" value={proposal.title} />
-            <label>Description</label>
-            <div class="description">{proposal.description}</div>
-            <input type="hidden" class="quillops" />
-          </div>
-          <div class="flex justify-center w-full pt-2">
-            {!isSetup && (
-              <button class="toggle-edit-button btn btn-primary btn-sm">{translator.t('save')}</button>
-            )}
-            <button class="delete-button btn btn-ghost text-error btn-xs">{translator.t('delete')}</button>
-          </div>
-        </div>
-      </div>
-    ))}
+      ))
+     ) : (
+      <p>No proposals found.</p>
+    )}
   </div>
  
   <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
-    <button id="add-button" class="btn p-2">{translator.t('process.addProposal')}</button>
+    <button id="add-button" class="btn p-2">Add Proposal</button>
     <div class="dropdown">
-      <div tabindex={0} role="button" class="btn m-1">{translator.t('process.addProposalTemplate')}</div>
+      <div tabindex={0} role="button" class="btn m-1">Add Proposal Template</div>
       <ul tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
         {dropdownOptions.map((option, index) => (
           <li>
@@ -65,49 +45,29 @@ const { processId, proposals, isSetup } = Astro.props;
       </ul>
     </div>
   </div>
-
 </div>
-
 <script>
   import { createQuill, updateQuill } from '@utils/quillUtils';
   /* @ts-ignore */
   import { v4 as uuidv4 } from 'uuid';
-
-  const createProposalElement = (uniqueId: string, title: string, description: string): HTMLDivElement => {
-    const proposalElement: HTMLDivElement = document.createElement('div');
-    proposalElement.className = 'proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full';
-    proposalElement.innerHTML = `
-      <div class="flex items-center flex-col" id="${uniqueId}">
-        <div class="flex flex-col w-full">
-          <b>Title</b>
-          <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
-          <label>Description</label>
-          <div id="description-${uniqueId}">${description}</div>
-          <input type="hidden" id="quillops-${uniqueId}" />
-        </div>
-      </div>
-      <div class="flex justify-center w-full pt-2">
-        <button class="delete btn btn-ghost text-error btn-xs">Delete</button>
-      </div>
-    `;
-    return proposalElement;
-  }
+  import { createProposalElement } from '@utils/proposalTemplate';
 
   const addButton: HTMLElement | null = document.getElementById('add-button');
-  const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
   let proposalCount: number = 0;
 
+  const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
+  const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
   if (addButton && proposalsContainer) {
     const proposalElements = proposalsContainer.children;
 
     for (let i = 0; i < proposalElements.length; i++) {
       const proposalElement = proposalElements[i];
-      const toggleEditButton = proposalElement.querySelector('.toggle-edit-button');
-      const viewElement = proposalElement.querySelector('.view');
-      const editElement = proposalElement.querySelector('.edit');
+      const editButton = proposalElement.querySelector('.edit-button') as HTMLButtonElement;
+      const viewElement = proposalElement.querySelector('.view') as HTMLElement;
+      const editElement = proposalElement.querySelector('.edit') as HTMLElement;
 
-      if (toggleEditButton && viewElement && editElement) {
-        toggleEditButton.addEventListener('click', () => {
+      if (editButton && viewElement && editElement) {
+        editButton.addEventListener('click', () => {
           const isEditing = proposalElement.getAttribute('data-editing') === 'true';
 
           if (isEditing) {
@@ -115,13 +75,13 @@ const { processId, proposals, isSetup } = Astro.props;
             viewElement.style.display = 'block';
             editElement.style.display = 'none';
             proposalElement.setAttribute('data-editing', 'false');
-            toggleEditButton.textContent = translator.t('edit');
+            editButton.textContent = isSetup ? 'Edit' : 'Save';
           } else {
             // Switch to edit mode
             viewElement.style.display = 'none';
             editElement.style.display = 'block';
             proposalElement.setAttribute('data-editing', 'true');
-            toggleEditButton.textContent = translator.t('save');
+            editButton.textContent = isSetup ? 'Save' : 'Edit';
           }
         });
       }
@@ -130,7 +90,7 @@ const { processId, proposals, isSetup } = Astro.props;
       if (flexElement) {
         const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${flexElement.id}`);
         const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${flexElement.id}`);
-        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete-button`);
+        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
 
         if (descriptionDiv && quillOpsInput) {
           const quillEditor = createQuill(`#description-${flexElement.id}`);
@@ -157,49 +117,63 @@ const { processId, proposals, isSetup } = Astro.props;
       }
     }
 
-    addButton.addEventListener('click', () => {
-      const uniqueId: string = uuidv4();
-      const proposalElement = createProposalElement(uniqueId, '', '');
-      proposalsContainer.appendChild(proposalElement);
-      
-      const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
-      const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
-      const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
-      const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
-
-      if (titleInput) {
-        titleInput.addEventListener('input', (event: Event) => {
-          // Logic to handle title input
-          const inputElement = event.target as HTMLInputElement;
-        });
-      }
-
-      if (deleteButton) {
-        deleteButton.addEventListener('click', () => {
-          proposalsContainer.removeChild(proposalElement);
-        });
-      }
-
-      if (descriptionDiv && quillOpsInput) {
-        // Initialize Quill on the description div
-        const quillEditor = createQuill(`#description-${uniqueId}`);
-
-        if (quillOpsInput.value) {
-          try {
-            const quillOps = JSON.parse(quillOpsInput.value);
-            updateQuill(quillEditor, quillOps);
-          } catch (error) {
-            console.error('Error parsing quillops:', error);
-          }
+    if (addButton) {
+      console.log('Add button found');
+      addButton.addEventListener('click', () => {
+        console.log('Add button clicked');
+        const uniqueId: string = uuidv4();
+        const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
+        if (proposalsContainer) {
+          console.log('Proposals container found');
+          proposalsContainer.appendChild(proposalElement);
+          console.log('Proposal element added');
+        } else {
+          console.log('Proposals container not found');
         }
 
-        quillEditor.on('text-change', () => {
-          /* @ts-ignore */
-          quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
-        });
-      }
-      proposalCount++;
-    });
+        const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
+        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
+        const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
+        const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
+
+        if (titleInput) {
+          titleInput.addEventListener('input', (event: Event) => {
+            // Logic to handle title input
+            const inputElement = event.target as HTMLInputElement;
+          });
+        }
+
+        if (deleteButton) {
+          deleteButton.addEventListener('click', () => {
+            proposalsContainer.removeChild(proposalElement);
+          });
+        }
+
+        if (descriptionDiv && quillOpsInput) {
+          // Initialize Quill on the description div
+          const quillEditor = createQuill(`#description-${uniqueId}`);
+
+          if (quillOpsInput.value) {
+            try {
+              const quillOps = JSON.parse(quillOpsInput.value);
+              updateQuill(quillEditor, quillOps);
+            } catch (error) {
+              console.error('Error parsing quillops:', error);
+            }
+          }
+
+          quillEditor.on('text-change', () => {
+            /* @ts-ignore */
+            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+          });
+        }
+        proposalCount++;
+      });
+    } else {
+      console.log('Add button not found');
+    }
+  } else {
+    console.log('Proposals container or add button not found');
   }
 
   const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
@@ -210,7 +184,7 @@ const { processId, proposals, isSetup } = Astro.props;
       const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
 
       const uniqueId = uuidv4();
-      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, '');
+      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, '', false);
 
       if (proposalsContainer) {
         proposalsContainer.appendChild(proposalElement);
