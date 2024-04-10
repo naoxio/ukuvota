@@ -4,7 +4,7 @@ export type ProcessCookie = {
   timezone?: string;
   weighting?: string;
   title?: string;
-  quillopsdescription?: string;
+  descriptionId?: string;
   phase?: string;
   step: string;
   create?: string;

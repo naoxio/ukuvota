@@ -4,13 +4,12 @@ import { parseProcessCookie } from '@utils/parseProcessCookie'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
+import Step3 from '@components/setupProcess/Step3.astro';
 import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 
 
 import { Icon } from 'astro-icon'
-import IProposal from '@interfaces/IProposal';
-import { utcToZonedTime, format } from 'date-fns-tz';
-import { formatDateInTimezone } from '@utils/dateUtils';
+import localforage from 'localforage';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 await translator.init();
@@ -23,7 +22,7 @@ const {
   phase = '',
   weighting = '',
   title = '',
-  quillopsdescription = '',
+  descriptionId = '',
   startProposalDate = 0,
   endProposalDate = 0,
   startVotingDate = 0,
@@ -40,94 +39,53 @@ const currentStep = Number(step);
 
 let modifiedCreate = JSON.parse(create);
 
-if (currentStep === 1 && !phase && !weighting && !title && !quillopsdescription) {
+if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
     modifiedCreate = false;
 }
 
-
 ---
 
-<CreateProcessLayout step={currentStep}>
-  {modifiedCreate ? (
-    <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
-    <label for="existingProcessModal" class="modal">
-      <label class="modal-box">
-        <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
-          <Icon width="22" name="close"/>
-        </label>
-        <h3>{translator.t('setup.continueEditing')}</h3>
-        <p>{translator.t('setup.existingProcessPrompt')}</p>
-        <div class="process-details">
-          { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
-          { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
-        </div>
-
-        <div class="flex justify-center">
-          <form action="/api/start-new-process" method="post">
-            <button type="submit" class="btn m-2">{translator.t('startNew')}</button>
-          </form>
-          <label for="existingProcessModal" class="btn m-2">{translator.t('buttons.continue')}</label>
-        </div>
-      </label>
-    </label>
-  ) : null}
-
-  { currentStep === 1 ? (
-    <Step1 title={title} quillopsdescription={quillopsdescription} weighting={weighting} />
-  ) : currentStep === 2 ? (
-    <Step2 phase={phase} timezone={tz} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
-  ) : currentStep === 3 ? (
-  <div class="process-details">
-  <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
-    {title ? (
-      <div class="mb-4">
-        <h2 class="text-xl font-semibold mb-2">{translator.t('process.topic')}</h2>
-        <p>{title}</p>
-      </div>
-    ) : null}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {startProposalDate && endProposalDate ? (
-        <div class="p-4">
-          <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.proposal.title`) }</h2>
-          <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(startProposalDate, tz)}</p>
-          <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(endProposalDate, tz)}</p>
-        </div>
-      ) : null }
-      <div class="p-4">
-        <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.voting.title`) }</h2>
-        {startVotingDate ? <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(startVotingDate, tz)}</p> : null}
-        {endVotingDate ? <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(endVotingDate, tz)}</p> : null}
-      </div>
-      <div class="mt-4">
-        <h3 class="text-lg font-semibold mb-2">{translator.t('setup.timezone')}:</h3>
-        <p>{tz}</p>
-      </div>
-    </div>
-    {proposals.length > 0 ? (
-      <div class="mt-8">
-        <h2 class="text-xl font-semibold mb-4">{translator.t('process.proposals')}</h2>
-        <ul class="space-y-4">
-          { proposals.map((proposal: IProposal) => (
-            <li class="bgborder border-gray-200 rounded-lg p-4">
-              <b class="text-lg">{proposal.title || 'Untitled Proposal'}</b>
-              <p class="mt-2">{proposal.description}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ) : null}
+<noscript>
+  <style>
+    #jsContent { display: none; }
+  </style>
+  <div class="alert">
+    <p>JavaScript is required for the full functionality of this page. Please enable JavaScript in your browser settings.</p>
   </div>
-</div>
-    <div class="flex justify-around mt-5">
-      <form action="/api/update-step" method="post">
-        <input type="hidden" name="step" value="2"/>
+</noscript>
 
-        <button type="submit" class="btn m-2">{translator.t('buttons.back')}</button>
-      </form>
-      <form action="/api/start-process" method="post">
-        <button type="submit" class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
-      </form>
-    </div>
-  ) : null }
+<CreateProcessLayout step={currentStep}>
+  <div id="jsContent">
+    {modifiedCreate ? (
+      <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
+      <label for="existingProcessModal" class="modal">
+        <label class="modal-box">
+          <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
+            <Icon width="22" name="close"/>
+          </label>
+          <h3>{translator.t('setup.continueEditing')}</h3>
+          <p>{translator.t('setup.existingProcessPrompt')}</p>
+          <div class="process-details">
+            { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
+            { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
+          </div>
 
+          <div class="flex justify-center">
+            <form action="/api/start-new-process" method="post">
+              <button type="submit" class="btn m-2">{translator.t('startNew')}</button>
+            </form>
+            <label for="existingProcessModal" class="btn m-2">{translator.t('buttons.continue')}</label>
+          </div>
+        </label>
+      </label>
+    ) : null}
+
+    { currentStep === 1 ? (
+      <Step1 title={title} descriptionId={descriptionId} weighting={weighting} />
+    ) : currentStep === 2 ? (
+      <Step2 phase={phase} timezone={tz} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
+    ) : currentStep === 3 ? (
+      <Step3 title={title} descriptionId={descriptionId} weighting={weighting} timezone={tz} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
+    ) : null }
+  </div>
 </CreateProcessLayout>

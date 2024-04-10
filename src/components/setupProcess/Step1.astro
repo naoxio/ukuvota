@@ -11,11 +11,12 @@ const timezoneOffset = new Date().getTimezoneOffset();
 
 type Props = {
   title: string;
-  quillopsdescription?: string;
+  descriptionId?: string;
   weighting?: string;
 }
 
-const { title, quillopsdescription, weighting } = Astro.props;
+const { title, descriptionId, weighting } = Astro.props;
+console.log(descriptionId)
 ---
 
 <form id="step-1" action='/api/process-store' method="POST">
@@ -37,9 +38,9 @@ const { title, quillopsdescription, weighting } = Astro.props;
   <br/>
   <p>{ translator.t('process.description') }</p>
 
-  <div id="description" class="hidden">{translator.t('loadQuill')}</div>
-
-  <input id="quillops" name="quillopsdescription" class="hidden" value={quillopsdescription} />
+  <input id="descriptionId" name="descriptionId" type="hidden" />
+  <div id="description" class="hidden" data-description-id={descriptionId}>{translator.t('loadQuill')}</div>
+  <input id="quillops" name="description" class="hidden" value='' />
   <br/>
   <!--details class="text-center">
     <summary class="cursor-pointer text-indianared mt-6 ">{ translator.t('process.advancedOptions') }</summary-->
@@ -70,30 +71,39 @@ const { title, quillopsdescription, weighting } = Astro.props;
     </button>
   </div>
 </form>
-
 <script>
+  import localforage from 'localforage';
   import { createQuill, updateQuill } from '@utils/quillUtils';
 
   const formElement = document.getElementById('step-1');
   if (formElement) {
     const quillContainer = document.getElementById('description') as HTMLElement;
+    const descriptionId = quillContainer.dataset.descriptionId || `description_${Date.now()}`;
+    console.log('client side ', descriptionId)
     quillContainer.style.display = 'block';
     if (quillContainer) quillContainer.innerText = '';
-    const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
-    const quillEditor = createQuill('#description');
 
-    if (quillOpsInput && quillOpsInput.value) {
-      try {
-        const quillOps = JSON.parse(quillOpsInput.value);
+    const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
+    const descriptionIdInput = document.getElementById('descriptionId') as HTMLInputElement;
+    const quillEditor = createQuill('#description');
+    console.log(descriptionIdInput)
+    if (descriptionIdInput) descriptionIdInput.value = descriptionId;
+    console.log('descriptoion id input', descriptionIdInput.value)
+
+    // Retrieve the description data from localforage using the descriptionId
+    localforage.getItem(descriptionId).then((descriptionData) => {
+      if (descriptionData) {
+        console.log(descriptionData)
+        const quillOps = JSON.parse(descriptionData as string);
         updateQuill(quillEditor, quillOps);
-      } catch (error) {
-        console.error('Error parsing quillopsdescription:', error);
+        quillOpsInput.value = descriptionData as string;
       }
-    }
+    });
+
     if (quillEditor) {
       quillEditor.on('text-change', () => {
-        /* @ts-ignore */
-        quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+        const quillOps = quillEditor.getContents();
+        localforage.setItem(descriptionId, JSON.stringify(quillOps));
       });
     }
   }

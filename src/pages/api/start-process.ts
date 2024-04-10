@@ -40,7 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
   const reformattedProcess = {
     _id: processId,
     description: {
-      ops: processCookieObject.quillopsdescription
+      ops: processCookieObject.description
     },
     proposalDates: [startProposalDate, endProposalDate],
     proposals: processCookieObject.proposals ? processCookieObject.proposals.filter((proposal) => proposal !== undefined) : [],

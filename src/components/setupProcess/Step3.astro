@@ -1,0 +1,93 @@
+---
+import IProposal from '@interfaces/IProposal';
+import { Translator } from '@utils/i18n.js';
+import { formatDateInTimezone } from '@utils/dateUtils';
+import getQuillHTML from '@utils/getQuillHTML';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+await translator.init();
+
+type Props = {
+    title: string;
+    descriptionId: string;
+    proposals: Array<IProposal>;
+    proposalStartDate: number;
+    proposalEndDate: number;
+    votingStartDate: number;
+    votingEndDate: number;
+    timezone: string;
+    weighting: string;
+}
+const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals, timezone, weighting } = Astro.props;
+console.log(descriptionId)
+
+---
+<div class="process-details">
+    <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
+        {title ? (
+            <div class="mb-4">
+                <h2 class="text-xl font-semibold mb-2">{translator.t('process.topic')}</h2>
+                <p>{title}</p>
+                <div id="descriptionContent" data-description-id={descriptionId}/>
+
+            </div>
+        ) : null}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {proposalStartDate && proposalEndDate ? (
+                <div class="p-4">
+                        <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.proposal.title`) }</h2>
+                        <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(proposalStartDate, timezone)}</p>
+                        <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(proposalEndDate, timezone)}</p>
+                </div>
+            ) : null }
+            <div class="p-4">
+                <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.voting.title`) }</h2>
+                {votingStartDate ? <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(votingStartDate, timezone)}</p> : null}
+                {votingEndDate ? <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(votingEndDate, timezone)}</p> : null}
+            </div>
+            <div class="mt-4">
+            <h3 class="text-lg font-semibold mb-2">{translator.t('setup.timezone')}:</h3>
+            <p>{timezone}</p>
+            </div>
+        </div>
+        {proposals.length > 0 ? (
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-4">{translator.t('process.proposals')}</h2>
+                <ul class="space-y-4">
+                    { proposals.map((proposal: IProposal) => (
+                    <li class="bgborder border-gray-200 rounded-lg p-4">
+                        <b class="text-lg">{proposal.title || 'Untitled Proposal'}</b>
+                        <p class="mt-2">{proposal.description}</p>
+                    </li>
+                    ))}
+                </ul>
+            </div>
+        ) : null}
+    </div>
+</div>
+<div class="flex justify-around mt-5">
+    <form action="/api/update-step" method="post">
+        <input type="hidden" name="step" value="2"/>
+
+        <button type="submit" class="btn m-2">{translator.t('buttons.back')}</button>
+    </form>
+    <form action="/api/start-process" method="post">
+        <button type="submit" class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
+    </form>
+</div>
+<script>
+    import getQuillHTML from '@utils/getQuillHTML';
+    import localforage from 'localforage';
+
+    const descriptionContentDiv = document.getElementById('descriptionContent') as HTMLElement;
+    if (descriptionContentDiv) {
+        const descriptionId = descriptionContentDiv.dataset.descriptionId || '';
+        console.log(descriptionId)
+        const descriptionContent = await localforage.getItem(descriptionId) as string || '';
+        console.log(descriptionContent)
+        if (descriptionContent) {
+            const descriptionHTML = getQuillHTML(JSON.parse(descriptionContent));
+            descriptionContentDiv.innerHTML = descriptionHTML;
+        }
+    }
+</script>

@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
     let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
 
     processCookieObject.title = title;
-    processCookieObject.quillopsdescription = description;
+    processCookieObject.description = description;
     processCookieObject.weighting = weighting;
     processCookieObject.phase = 'voting';
     processCookieObject.proposals = proposals.filter((proposal: any) =>

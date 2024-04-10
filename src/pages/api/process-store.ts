@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
-import { randomUUID } from 'crypto';
 import { exampleProposals } from '@utils/exampleProposals.js';
 
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import IProposal from "@interfaces/IProposal";
 import { utcToZonedTime } from 'date-fns-tz';
+import { gzipSync } from 'zlib';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
@@ -24,16 +24,17 @@ export const POST: APIRoute = async ({ request }) => {
         step: nextStep,
         weighting: formData.get('weighting'),
         title: formData.get('topicQuestion'),
-        quillopsdescription: formData.get('quillopsdescription'),
+        descriptionId: formData.get('descriptionId'),
         phase: formData.get('phase')
       });
+      console.log(formData.get('descriptionId'))
 
       const headers = new Headers({
         'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
         'Content-Type': 'application/json',
         'Location': referer
       });
-
+      console.log(headers)
       return new Response(null, { status: 303, headers: headers });
 
     } catch (error) {
