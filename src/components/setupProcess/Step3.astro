@@ -2,7 +2,6 @@
 import IProposal from '@interfaces/IProposal';
 import { Translator } from '@utils/i18n.js';
 import { formatDateInTimezone } from '@utils/dateUtils';
-import getQuillHTML from '@utils/getQuillHTML';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 await translator.init();

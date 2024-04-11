@@ -4,6 +4,6 @@
 
 **Consensus-Driven Approach:** Collect diverse proposals from participants, fostering a collaborative decision-making process.
 
-**User-Friendly Interface:** Intuitive and easy-to-use platform, ensuring accessibility for voters of all backgrounds.
+**User-Friendly Interface:** Intuitive and easy-to-navigate platform, ensuring easy accessibility on all devices.
 
-**Transparent Results:** Real-time display of voting outcomes, promoting transparency and trust in the process.
+**Transparent Results:** After the voting phase ends, all votes are transparently displayed, promoting trust in the process.

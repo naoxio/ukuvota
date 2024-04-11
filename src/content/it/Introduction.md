@@ -4,6 +4,6 @@
 
 **Approccio basato sul consenso:** Raccogli proposte diverse dai partecipanti, promuovendo un processo decisionale collaborativo.
 
-**Interfaccia user-friendly:** Piattaforma intuitiva e facile da usare, garantendo l'accessibilità per gli elettori di tutti i background.
+**Interfaccia user-friendly:**  Interfaccia intuitiva e facile da navigare, garantendo un'accessibilità facile su tutti i dispositivi.
 
-**Risultati trasparenti:** Visualizzazione in tempo reale dei risultati delle votazioni, promuovendo la trasparenza e la fiducia nel processo.
+**Risultati trasparenti:** Dopo la fine della fase di voto, tutti i voti vengono visualizzati in modo trasparente, promuovendo la fiducia nel processo.

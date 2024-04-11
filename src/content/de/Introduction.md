@@ -4,6 +4,6 @@
 
 **Konsensorientierter Ansatz:** Sammeln Sie vielfältige Vorschläge von Teilnehmern und fördern Sie einen kollaborativen Entscheidungsprozess.
 
-**Benutzerfreundliche Oberfläche:** Intuitive und einfach zu bedienende Plattform, die Zugänglichkeit für Wähler aller Hintergründe gewährleistet.
+**Benutzerfreundliche Oberfläche:** Intuitives und leicht zu navigierendes Interface, das eine einfache Zugänglichkeit auf allen Geräten gewährleistet.
 
-**Transparente Ergebnisse:** Echtzeit-Anzeige der Abstimmungsergebnisse, um Transparenz und Vertrauen in den Prozess zu fördern.
+**Transparente Ergebnisse:** Nach Abschluss der Abstimmungsphase werden alle Stimmen transparent angezeigt, was das Vertrauen in den Prozess fördert.
