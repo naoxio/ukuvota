@@ -14,14 +14,16 @@ export const GET: APIRoute = ({ params, request }) => {
 
   const stream = new ReadableStream({
     start(controller) {
-      onValue(proposalsRef, (snapshot) => {
+      const listener = onValue(proposalsRef, (snapshot) => {
         const proposals = snapshot.val();
         const data = `data: ${JSON.stringify(proposals)}\n\n`;
         controller.enqueue(new TextEncoder().encode(data));
       });
-    },
-    cancel() {
-      off(proposalsRef);
+
+      // Clean up the listener when the stream is closed
+      return () => {
+        off(proposalsRef, 'value', listener);
+      };
     },
   });
 

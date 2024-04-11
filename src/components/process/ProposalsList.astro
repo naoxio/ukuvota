@@ -14,22 +14,27 @@ interface Props {
 }
 
 const { processId, proposals, isSetup } = Astro.props;
+
+console.log(processId)
 ---
 
 <div>
-  <div id="proposals-container" data-is-setup={isSetup}>
+  <div>
     {proposals.length > 0 ? (
-      proposals.map((proposal) => (
-        <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id={proposal.id} data-editing={proposal.editing?.toString()}>
-          {createProposalElement(proposal.id, proposal.title, proposal.description || '', isSetup)}
+      <div id="proposals-container" data-is-setup={isSetup} data-process={processId}>
+          { proposals.map((proposal) => (
+            <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id={proposal.id} data-editing={proposal.editing?.toString()}>
+              {createProposalElement(proposal.id, proposal.title, proposal.description || '', isSetup)}
+            </div>
+          ))}
         </div>
-      ))
-     ) : (
-      <p>No proposals found.</p>
-    )}
+      ) : (
+        <p id="no-proposals-text">No proposals found.</p>
+      )}
   </div>
+
  
-  <div class="flex items-center flex-wrap justify-center w-full" data-process={processId}>
+  <div class="flex items-center flex-wrap justify-center w-full">
     <button id="add-button" class="btn p-2">Add Proposal</button>
     <div class="dropdown">
       <div tabindex={0} role="button" class="btn m-1">Add Proposal Template</div>
@@ -53,18 +58,38 @@ const { processId, proposals, isSetup } = Astro.props;
   import { createProposalElement } from '@utils/proposalTemplate';
 
   const addButton: HTMLElement | null = document.getElementById('add-button');
-  let proposalCount: number = 0;
-
-  const proposalsContainer: HTMLElement | null = document.getElementById('proposals-container');
+  const proposalsContainer: HTMLElement = document.getElementById('proposals-container') as HTMLElement;
   const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
+  const noProposalsText = document.getElementById('no-proposals-text');
+  const processId = proposalsContainer.dataset.process;
 
+  const setupDeleteButtonListener = (proposalElement: Element) => {
+    const deleteButton = proposalElement.querySelector('.delete-button') as HTMLButtonElement;
+    if (deleteButton) {
+      deleteButton.addEventListener('click', async () => {
+        proposalsContainer.removeChild(proposalElement);
+        console.log(proposalsContainer.children)
+        //if (proposalsContainer.children.length <= 1 && noProposalsText) {
+        // noProposalsText.style.display = 'block';
+        //}
+        const processId = document.querySelector('[data-process]')?.getAttribute('data-process');
+        if (processId) {
+          await fetch(`/api/process/${processId}/proposals`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: proposalElement.id }),
+          });
+        }
+      });
+    }
+  };
 
-  const setupEditButtonListener = ( proposalElement: Element ) => {
+  const setupEditButtonListener = (proposalElement: Element) => {
     const editButton = proposalElement.querySelector('.edit-button') as HTMLButtonElement;
     const saveButton = proposalElement.querySelector('.save-button') as HTMLButtonElement;
     const viewElement = proposalElement.querySelector('.view-mode') as HTMLElement;
     const editElement = proposalElement.querySelector('.edit-mode') as HTMLElement;
-    if (!(editButton && saveButton && viewElement && editElement)) return
+    if (!(editButton && saveButton && viewElement && editElement)) return;
     // Listener for entering edit mode
     editButton.addEventListener('click', () => {
       viewElement.style.display = 'none';
@@ -74,16 +99,17 @@ const { processId, proposals, isSetup } = Astro.props;
       proposalElement.setAttribute('data-editing', 'true');
     });
     // Listener for saving changes (exiting edit mode)
-    saveButton.addEventListener('click', () => {
-      console.log(proposalElement.id)
+    saveButton.addEventListener('click', async () => {
+      console.log(proposalElement.id);
+      console.log(proposalElement)
       // Fetching the updated values
-      const titleInputValue = (proposalElement.querySelector(`.edit-mode input`) as HTMLInputElement).value;
-      const quillEditorContent = (proposalElement.querySelector(`.edit-mode .ql-editor`) as HTMLElement).innerHTML;
+      const titleInputValue = (proposalElement.querySelector('.edit-mode input') as HTMLInputElement).value;
+      const quillEditorContent = (proposalElement.querySelector('.edit-mode .ql-editor') as HTMLElement).innerHTML;
 
       // Updating the view mode elements
-      const h1 = proposalElement.querySelector('.view-mode h1') as HTMLElement
+      const h1 = proposalElement.querySelector('.view-mode h1') as HTMLElement;
       h1.textContent = titleInputValue;
-      const desc = proposalElement.querySelector('.view-mode p') as HTMLElement
+      const desc = proposalElement.querySelector('.view-mode p') as HTMLElement;
       desc.innerHTML = quillEditorContent;
 
       // Switching the display modes
@@ -92,8 +118,20 @@ const { processId, proposals, isSetup } = Astro.props;
       editButton.style.display = 'block';
       saveButton.style.display = 'none';
       proposalElement.setAttribute('data-editing', 'false');
+
+      if (processId) {
+        await fetch(`/api/process/${processId}/proposals`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: proposalElement.id,
+            title: titleInputValue,
+            description: quillEditorContent,
+          }),
+        });
+      }
     });
-}
+  };
 
   if (addButton && proposalsContainer) {
     const proposalElements = proposalsContainer.children;
@@ -101,12 +139,12 @@ const { processId, proposals, isSetup } = Astro.props;
     for (let i = 0; i < proposalElements.length; i++) {
       const proposalElement = proposalElements[i];
       setupEditButtonListener(proposalElement);
+      setupDeleteButtonListener(proposalElement);
 
       const flexElement = proposalElement.querySelector('.flex') as HTMLElement;
       if (flexElement) {
         const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${flexElement.id}`);
         const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${flexElement.id}`);
-        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
 
         if (descriptionDiv && quillOpsInput) {
           const quillEditor = createQuill(`#description-${flexElement.id}`);
@@ -122,74 +160,54 @@ const { processId, proposals, isSetup } = Astro.props;
 
           quillEditor.on('text-change', () => {
             /* @ts-ignore */
-            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
-          });
-        }
-        if (deleteButton) {
-          deleteButton.addEventListener('click', () => {
-            proposalsContainer.removeChild(proposalElement);
+            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta);
           });
         }
       }
     }
 
-    if (addButton) {
-      console.log('Add button found');
-      addButton.addEventListener('click', () => {
-        console.log('Add button clicked');
-        const uniqueId: string = uuidv4();
-        const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
-        if (proposalsContainer) {
-          console.log('Proposals container found');
-          proposalsContainer.appendChild(proposalElement);
-          console.log('Proposal element added');
-        } else {
-          console.log('Proposals container not found');
-        }
+    addButton.addEventListener('click', () => {
+      const uniqueId: string = uuidv4();
+      const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
+      if (proposalsContainer) {
+        proposalsContainer.appendChild(proposalElement);
+      }
+      if (noProposalsText) {
+        noProposalsText.style.display = 'none';
+      }
+      setupEditButtonListener(proposalElement);
+      setupDeleteButtonListener(proposalElement);
 
-        setupEditButtonListener(proposalElement);
+      const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
+      const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
+      const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
 
-        const titleInput: HTMLElement | null = proposalElement.querySelector(`#title-${uniqueId}`);
-        const deleteButton: HTMLElement | null = proposalElement.querySelector(`.delete`);
-        const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
-        const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
+      if (titleInput) {
+        titleInput.addEventListener('input', (event: Event) => {
+          // Logic to handle title input
+          const inputElement = event.target as HTMLInputElement;
+        });
+      }
 
-        if (titleInput) {
-          titleInput.addEventListener('input', (event: Event) => {
-            // Logic to handle title input
-            const inputElement = event.target as HTMLInputElement;
-          });
-        }
+      if (descriptionDiv && quillOpsInput) {
+        // Initialize Quill on the description div
+        const quillEditor = createQuill(`#description-${uniqueId}`);
 
-        if (deleteButton) {
-          deleteButton.addEventListener('click', () => {
-            proposalsContainer.removeChild(proposalElement);
-          });
-        }
-
-        if (descriptionDiv && quillOpsInput) {
-          // Initialize Quill on the description div
-          const quillEditor = createQuill(`#description-${uniqueId}`);
-
-          if (quillOpsInput.value) {
-            try {
-              const quillOps = JSON.parse(quillOpsInput.value);
-              updateQuill(quillEditor, quillOps);
-            } catch (error) {
-              console.error('Error parsing quillops:', error);
-            }
+        if (quillOpsInput.value) {
+          try {
+            const quillOps = JSON.parse(quillOpsInput.value);
+            updateQuill(quillEditor, quillOps);
+          } catch (error) {
+            console.error('Error parsing quillops:', error);
           }
-
-          quillEditor.on('text-change', () => {
-            /* @ts-ignore */
-            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
-          });
         }
-        proposalCount++;
-      });
-    } else {
-      console.log('Add button not found');
-    }
+
+        quillEditor.on('text-change', () => {
+          /* @ts-ignore */
+          quillOpsInput.value = JSON.stringify(quillEditor.editor.delta);
+        });
+      }
+    });
   } else {
     console.log('Proposals container or add button not found');
   }
@@ -197,23 +215,21 @@ const { processId, proposals, isSetup } = Astro.props;
   const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
 
   dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
-    dropdownOptionElement.addEventListener('click', (event: Event) => {
+    dropdownOptionElement.addEventListener('click', () => {
       const selectedTemplateTitle = dropdownOptionElement.querySelector('.title')?.textContent || '';
       const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
 
       const uniqueId = uuidv4();
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, '', false);
-          
+        
       setupEditButtonListener(proposalElement);
+      setupDeleteButtonListener(proposalElement);
       
       if (proposalsContainer) {
-        proposalsContainer.appendChild(proposalElement);
-        const deleteButton = proposalElement.querySelector('.delete');
-        if (deleteButton) {
-          deleteButton.addEventListener('click', () => {
-            proposalsContainer.removeChild(proposalElement);
-          });
+        if (noProposalsText) {
+          noProposalsText.style.display = 'none';
         }
+        proposalsContainer.appendChild(proposalElement);
 
         const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${uniqueId}`);
         const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${uniqueId}`);
@@ -224,11 +240,41 @@ const { processId, proposals, isSetup } = Astro.props;
 
           quillEditor.on('text-change', () => {
             /* @ts-ignore */
-            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta)
+            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta);
           });
         }
       }
     });
   });
 
+  if (processId) {
+    const eventSource = new EventSource(`/api/process/${processId}/proposals`);
+    console.log('setup eventSource', processId)
+    eventSource.onmessage = (event) => {
+      const proposals = JSON.parse(event.data);
+
+      proposalsContainer.innerHTML = '';
+      console.log(proposals)
+      if (!proposals || Object.keys(proposals).length === 0) {
+        if (noProposalsText) {
+          console.log('hi')
+          console.log(noProposalsText)
+          noProposalsText.style.display = 'block';
+        }
+      } else {
+        console.log('xxx')
+        if (noProposalsText) {
+          noProposalsText.style.display = 'none';
+        }
+
+        for (const proposalId in proposals) {
+          const proposal = proposals[proposalId];
+          const proposalElement = createProposalElement(proposalId, proposal.title, proposal.description || '', isSetup);
+          proposalsContainer.appendChild(proposalElement);
+          setupEditButtonListener(proposalElement);
+          setupDeleteButtonListener(proposalElement);
+        }
+      }
+    };
+  }
 </script>

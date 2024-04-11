@@ -16,7 +16,6 @@ type Props = {
 }
 
 const { title, descriptionId, weighting } = Astro.props;
-console.log(descriptionId)
 ---
 
 <form id="step-1" action='/api/process-store' method="POST">
@@ -78,17 +77,14 @@ console.log(descriptionId)
   const formElement = document.getElementById('step-1');
   if (formElement) {
     const quillContainer = document.getElementById('description') as HTMLElement;
-    const descriptionId = quillContainer.dataset.descriptionId || `description_${Date.now()}`;
-    console.log('client side ', descriptionId)
+    const descriptionId = quillContainer.dataset.descriptionId || `description_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     quillContainer.style.display = 'block';
     if (quillContainer) quillContainer.innerText = '';
 
     const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
     const descriptionIdInput = document.getElementById('descriptionId') as HTMLInputElement;
     const quillEditor = createQuill('#description');
-    console.log(descriptionIdInput)
     if (descriptionIdInput) descriptionIdInput.value = descriptionId;
-    console.log('descriptoion id input', descriptionIdInput.value)
 
     // Retrieve the description data from localforage using the descriptionId
     localforage.getItem(descriptionId).then((descriptionData) => {

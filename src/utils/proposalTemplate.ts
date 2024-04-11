@@ -15,6 +15,7 @@ const createProposalElement = (
   } else {
     descriptionContent = description.ops.reduce((acc, op) => acc + op.insert, '');
   }
+  proposalElement.id = uniqueId;
 
   proposalElement.innerHTML = `
     <div class="flex items-center flex-col" id="${uniqueId}">
@@ -33,7 +34,7 @@ const createProposalElement = (
     <div class="flex justify-center w-full pt-2">
       <button class="edit-button btn btn-primary btn-sm" style="${isSetup ? 'display:block;' : 'display:none;'}">Edit</button>
       <button class="save-button btn btn-primary btn-sm" style="${isSetup ? 'display:none;' : 'display:block;'}">Save</button>
-      <button class="delete btn btn-ghost text-error btn-xs" style="display:block;">Delete</button>
+      <button class="delete-button btn btn-ghost text-error btn-xs" style="display:block;">Delete</button>
     </div>
   `;
   return proposalElement;

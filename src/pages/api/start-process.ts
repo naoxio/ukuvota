@@ -6,6 +6,7 @@ import { firebaseDB } from '@utils/firebaseConfig';
 
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
+import IProcess from '@interfaces/IProcess';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
@@ -16,7 +17,6 @@ export const POST: APIRoute = async ({ request }) => {
 
   const storage = getStorage();
 
-  // Store the descriptionContent on Firebase Cloud Storage
   if (descriptionId && descriptionContent) {
     const descriptionRef = storageRef(storage, `descriptions/${descriptionId}.json`);
     console.log(descriptionRef)
@@ -29,10 +29,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const timezone = processCookieObject.timezone || 'UTC';
 
-  // Get the current timestamp in the client's timezone
   const currentTimestamp = new Date().getTime();
 
-  // Validate and adjust proposal dates
   let startProposalDate = processCookieObject.startProposalDate;
   let endProposalDate = processCookieObject.endProposalDate;
 
@@ -59,14 +57,18 @@ export const POST: APIRoute = async ({ request }) => {
   const processId = uuidv4();
   const reformattedProcess = {
     _id: processId,
-    descriptionId: descriptionId,
     proposalDates: [startProposalDate, endProposalDate],
     proposals: processCookieObject.proposals ? processCookieObject.proposals.filter((proposal) => proposal !== undefined) : [],
     title: processCookieObject.title,
     votingDates: [startVotingDate, endVotingDate],
     weighting: processCookieObject.weighting,
     timezone: timezone,
-  };
+  } as IProcess;
+
+  if (descriptionContent) {
+    reformattedProcess.descriptionId = descriptionId;
+  }
+
 
   set(ref(firebaseDB, 'process/' + processId), reformattedProcess);
 
