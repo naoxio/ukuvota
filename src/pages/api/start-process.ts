@@ -1,12 +1,32 @@
 import type { APIRoute } from 'astro';
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import { ref, set } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadString } from 'firebase/storage';
 import { firebaseDB } from '@utils/firebaseConfig';
+
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
 
 export const POST: APIRoute = async ({ request }) => {
+  const formData = await request.formData();
+
+  const descriptionContent = formData.get('descriptionContent') as string;
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));
+  const descriptionId = processCookieObject.descriptionId;
+
+  const storage = getStorage();
+
+  // Store the descriptionContent on Firebase Cloud Storage
+  if (descriptionId && descriptionContent) {
+    const descriptionRef = storageRef(storage, `descriptions/${descriptionId}.json`);
+    console.log(descriptionRef)
+    uploadString(descriptionRef, descriptionContent, 'raw').then((snapshot) => {
+      console.log(snapshot);
+    }).catch((error: any) => {
+      console.log(error)
+    });
+  }
+
   const timezone = processCookieObject.timezone || 'UTC';
 
   // Get the current timestamp in the client's timezone
@@ -39,9 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
   const processId = uuidv4();
   const reformattedProcess = {
     _id: processId,
-    description: {
-      ops: processCookieObject.description
-    },
+    descriptionId: descriptionId,
     proposalDates: [startProposalDate, endProposalDate],
     proposals: processCookieObject.proposals ? processCookieObject.proposals.filter((proposal) => proposal !== undefined) : [],
     title: processCookieObject.title,

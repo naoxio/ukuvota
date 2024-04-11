@@ -71,6 +71,7 @@ console.log(descriptionId)
         <button type="submit" class="btn m-2">{translator.t('buttons.back')}</button>
     </form>
     <form action="/api/start-process" method="post">
+        <input type="hidden" name="descriptionContent" id="descriptionContentInput" />
         <button type="submit" class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
     </form>
 </div>
@@ -79,14 +80,14 @@ console.log(descriptionId)
     import localforage from 'localforage';
 
     const descriptionContentDiv = document.getElementById('descriptionContent') as HTMLElement;
-    if (descriptionContentDiv) {
+    const descriptionContentInput = document.getElementById('descriptionContentInput') as HTMLInputElement;
+    if (descriptionContentDiv && descriptionContentInput) {
         const descriptionId = descriptionContentDiv.dataset.descriptionId || '';
-        console.log(descriptionId)
         const descriptionContent = await localforage.getItem(descriptionId) as string || '';
-        console.log(descriptionContent)
         if (descriptionContent) {
             const descriptionHTML = getQuillHTML(JSON.parse(descriptionContent));
             descriptionContentDiv.innerHTML = descriptionHTML;
+            descriptionContentInput.value = JSON.stringify(descriptionContent);
         }
     }
 </script>
