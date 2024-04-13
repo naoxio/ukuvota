@@ -1,4 +1,8 @@
 {
+  "proposalsContainer": "Contenitore delle proposte",
+  "noProposalsFound": "Nessuna proposta trovata.",
+  "addProposal": "Aggiungi Proposta",
+  "addProposalTemplate": "Aggiungi modello di proposta",
   "enableJavaScript": "JavaScript è necessario per la piena funzionalità di questa pagina. Si prega di abilitare JavaScript nelle impostazioni del browser.",
   "home": {
     "description": " Voto Semplice, Sicuro e Responsabilizzante",
@@ -77,6 +81,7 @@
     } 
   },
   "remainingTime": "tempo rimanente",
+  "skipped": "saltato",
   "tagline": "Trovare la soluzione migliore",
   "buttons": {
     "dashboard": "Pannello di controllo",

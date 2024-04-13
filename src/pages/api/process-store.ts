@@ -27,14 +27,12 @@ export const POST: APIRoute = async ({ request }) => {
         descriptionId: formData.get('descriptionId'),
         phase: formData.get('phase')
       });
-      console.log(formData.get('descriptionId'))
 
       const headers = new Headers({
         'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
         'Content-Type': 'application/json',
         'Location': referer
       });
-      console.log(headers)
       return new Response(null, { status: 303, headers: headers });
 
     } catch (error) {

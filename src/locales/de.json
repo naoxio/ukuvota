@@ -1,4 +1,8 @@
 {
+  "proposalsContainer": "Vorschläge Container",
+  "noProposalsFound": "Keine Vorschläge gefunden.",
+  "addProposal": "Vorschlag hinzufügen",
+  "addProposalTemplate": "Vorlagen-Vorschlag hinzufügen",
   "enableJavaScript": "JavaScript wird für die volle Funktionalität dieser Seite benötigt. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.",
   "home": {
     "description": "Einfaches, sicheres und ermächtigendes Wählen",
@@ -78,6 +82,7 @@
     } 
   },
   "remainingTime": "verbleibende Zeit",
+  "skipped": "übersprungen",
   "tagline": "Die beste Lösung finden",
   "buttons": {
     "dashboard": "Dashboard",

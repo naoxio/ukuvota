@@ -19,12 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (descriptionId && descriptionContent) {
     const descriptionRef = storageRef(storage, `descriptions/${descriptionId}.json`);
-    console.log(descriptionRef)
-    uploadString(descriptionRef, descriptionContent, 'raw').then((snapshot) => {
-      console.log(snapshot);
-    }).catch((error: any) => {
-      console.log(error)
-    });
+    await uploadString(descriptionRef, descriptionContent, 'raw');
   }
 
   const timezone = processCookieObject.timezone || 'UTC';

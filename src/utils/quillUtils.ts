@@ -39,4 +39,5 @@ const updateQuill = (quill: Quill, delta: Delta | string): Quill => {
     return quill;
 }
 
+
 export { createQuill, updateQuill }

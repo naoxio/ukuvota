@@ -1,4 +1,8 @@
 {
+  "proposalsContainer": "Proposals Container",
+  "noProposalsFound": "No proposals found.",
+  "addProposal": "Add Proposal",
+  "addProposalTemplate": "Add Proposal Template",
   "enableJavaScript": "JavaScript is required for the full functionality of this page. Please enable JavaScript in your browser settings.",
   "home": {
     "description": "Voting Made Simple, Secure, and Empowering",
@@ -77,6 +81,7 @@
     } 
   },
   "remainingTime": "remaining time",
+  "skipped": "skipped",
   "tagline": "Finding the best solution",
   "buttons": {
     "dashboard": "Dashboard",

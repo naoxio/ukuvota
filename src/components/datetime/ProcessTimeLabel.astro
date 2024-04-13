@@ -1,8 +1,7 @@
 ---
 import { Translator } from '@utils/i18n.js';
 import Countdown from './Countdown.astro';
-import { format, utcToZonedTime } from 'date-fns-tz';
-import IProposal from '@interfaces/IProposal';
+import { utcToZonedTime } from 'date-fns-tz';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 await translator.init();
@@ -15,7 +14,6 @@ interface Props {
 }
 
 const { phase, dates, timezone, proposals_length } = Astro.props;
-
 ---
 
 <process-time-label data-start={dates[0]} data-timezone={timezone}>
@@ -31,20 +29,23 @@ const { phase, dates, timezone, proposals_length } = Astro.props;
     </>
   ) : utcToZonedTime(dates[1], timezone) > new Date() ? (
     <>
-      <Countdown dates={dates} type="warning" timezone={timezone} />
-      <span>&nbsp;({translator.t('remainingTime')})</span>
+      {(proposals_length !== undefined && proposals_length === 0) ? (
+        <span class="text-info">{translator.t('skipped')}</span>
+      ) : (
+        <Countdown dates={dates} type="warning" timezone={timezone} />
+        <span>&nbsp;({translator.t('remainingTime')})</span>
+      )}
     </>
   ) : (
     <>
       {(proposals_length !== undefined && proposals_length === 0) ? (
-        <span class="text-info">skipped</span>
+        <span class="text-info">{translator.t('skipped')}</span>
       ) : (
         <span class="text-info">{translator.t('done')}</span>
       )}
     </>
   )}
   <br />
-
 </process-time-label>
 
 <script>

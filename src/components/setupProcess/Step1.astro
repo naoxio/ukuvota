@@ -89,7 +89,6 @@ const { title, descriptionId, weighting } = Astro.props;
     // Retrieve the description data from localforage using the descriptionId
     localforage.getItem(descriptionId).then((descriptionData) => {
       if (descriptionData) {
-        console.log(descriptionData)
         const quillOps = JSON.parse(descriptionData as string);
         updateQuill(quillEditor, quillOps);
         quillOpsInput.value = descriptionData as string;
