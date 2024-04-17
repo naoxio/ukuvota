@@ -37,20 +37,19 @@ const { processId, proposals, isSetup } = Astro.props;
     <button id="add-button" class="btn p-2">{translator.t('addProposal')}</button>
     <div class="dropdown">
       <div tabindex={0} role="button" class="btn m-1">{translator.t('addProposalTemplate')}</div>
-      <ul tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
+      <div tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
         {dropdownOptions.map((option, index) => (
-          <li>
-            <a class="flex flex-col">
-              <b class="title">{option.title}</b>
-              <p class="description">{option.description.ops[0].insert}</p>
-            </a>
-          </li>
+          <a class="card-body link">
+            <h3 class="card-title">{option.title}</h3>
+            <p class="description">{option.description.ops[0].insert}</p>
+          </a>
         ))}
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 <script>
+  
 import { createQuill, updateQuill } from '@utils/quillUtils';
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
@@ -72,7 +71,7 @@ if (proposalsContainer) {
     for (let i = 0; i < proposalElements.length; i++) {
       const proposalElement = proposalElements[i];
       setupButtonListeners(proposalElement, proposalsContainer, processId, noProposalsText);
-      initializeQuill(proposalElement, proposalElement.id);
+      initializeQuill(proposalElement, proposalElement.id, isSetup);
 
       const flexElement = proposalElement.querySelector('.flex') as HTMLElement;
       if (flexElement) {
@@ -105,21 +104,22 @@ if (proposalsContainer) {
 
       const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
 
-      insertNewProposal(proposalElement, proposalsContainer, processId, noProposalsText);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
     });
+    
   }
 
   const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
 
   dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
     dropdownOptionElement.addEventListener('click', () => {
-      const selectedTemplateTitle = dropdownOptionElement.querySelector('.title')?.textContent || '';
+      const selectedTemplateTitle = dropdownOptionElement.querySelector('.card-title')?.textContent || '';
       const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
 
       const uniqueId = uuidv4();
 
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, isSetup);
-      insertNewProposal(proposalElement, proposalsContainer, processId, noProposalsText);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
     });
   });
   if (processId) {
@@ -143,7 +143,7 @@ if (proposalsContainer) {
           proposalsContainer.insertAdjacentHTML('beforeend', proposalElement);
           const newProposalElement = proposalsContainer.lastElementChild as HTMLElement;
           setupButtonListeners(newProposalElement, proposalsContainer, processId, noProposalsText);
-          initializeQuill(newProposalElement, proposalId);
+          initializeQuill(newProposalElement, proposalId, isSetup);
         }
       }
     };
