@@ -71,6 +71,9 @@
     "connecting": {
       "connectingToWebsocket": "Connecting to WebSocket..."
     },
+    "info": {
+      "submittingVote": "Submitting vote..."
+    },
     "error": {
       "topicQuestion": "Please add a Topic Question",
       "emptyName": "Please add a name",
@@ -105,6 +108,7 @@
   "slider": "Slider",
   "not-found": "Not found",
   "process": {
+    "noVotesSubmitted": "No votes submitted",
     "noProposalsSubmitted": "No proposals were submitted.",
     "topic": "Topic Question",
     "description": "Description",

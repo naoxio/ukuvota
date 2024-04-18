@@ -33,78 +33,85 @@ if (process && !("voters" in process)) {
                 <Icon class="emoji" name={emoji} width="48" />
             ))}
         </div>
-        {process.proposals && Object.keys(process.proposals).length > 0 ? (
-            <div>
-                <div role="tablist" class="tabs tabs-bordered">
-                    <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
-                    <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
-                </div>
+        {process.voters && process.voters.length > 0 ? (
 
-                <div class="tab-custom-content hide">
-                    <span class="flex justify-between items-center">
-                        <h2>{ translator.t('process.results') }</h2>
-                        <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
-                    </span>
-                    
-                    <h3>
-                        <span class="voter-label">{ translator.t('process.voters') }</span>
-                        <span class="num-voters">({ process.voters?.length })</span>:
-                    </h3>
-                    <div class="flex justify-around flex-wrap">
-                        { process.voters?.map((voter: any) => (
-                            <div id={voter.id} class="flex items-center p-2 voter">
-                                <input type="checkbox" checked class="checkbox checkbox-xs" />
-                                <span class="p-1 cursor-pointer select-none">
-                                    { voter.name }
-                                </span>
-                            </div>
-                        ))}
+            process.proposals && Object.keys(process.proposals).length > 0 ? (
+                <div>
+                    <div role="tablist" class="tabs tabs-bordered">
+                        <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                        <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
                     </div>
-                    <br/>
-                    <div class="overflow-x-auto">
-                        <table class="table w-full">
-                            <!-- head -->
-                            <thead>
-                                <tr class="table-row-one">
-                                    <th></th>
-                                    <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
-                                    <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
-                                    <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <br/>
-                    <div class="card">
-                        <h3>{ translator.t('process.exportData') }</h3>
-                        <div class="flex justify-around exports">
-                            <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
-                            <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+
+                    <div class="tab-custom-content hide">
+                        <span class="flex justify-between items-center">
+                            <h2>{ translator.t('process.results') }</h2>
+                            <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
+                        </span>
+                        
+                        <h3>
+                            <span class="voter-label">{ translator.t('process.voters') }</span>
+                            <span class="num-voters">({ process.voters?.length })</span>:
+                        </h3>
+                        <div class="flex justify-around flex-wrap">
+                            { process.voters?.map((voter: any) => (
+                                <div id={voter.id} class="flex items-center p-2 voter">
+                                    <input type="checkbox" checked class="checkbox checkbox-xs" />
+                                    <span class="p-1 cursor-pointer select-none">
+                                        { voter.name }
+                                    </span>
+                                </div>
+                            ))}
                         </div>
-                    </div> 
-                </div>
-                <div class="tab-custom-content hide">
-                    <div>
-                        <br/>
                         <br/>
                         <div class="overflow-x-auto">
                             <table class="table w-full">
                                 <!-- head -->
                                 <thead>
+                                    <tr class="table-row-one">
+                                        <th></th>
+                                        <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
+                                        <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
+                                        <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                             </table>
                         </div>
                         <br/>
+                        <div class="card">
+                            <h3>{ translator.t('process.exportData') }</h3>
+                            <div class="flex justify-around exports">
+                                <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
+                                <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="tab-custom-content hide">
+                        <div>
+                            <br/>
+                            <br/>
+                            <div class="overflow-x-auto">
+                                <table class="table w-full">
+                                    <!-- head -->
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br/>
+                        </div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div class="text-center">
+                    <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
+                </div>
+            )
         ) : (
             <div class="text-center">
-                <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
+                <h2>{ translator.t('process.noVotesSubmitted') }</h2>
             </div>
         )}
     </results-card>
@@ -203,7 +210,6 @@ class ResultsCard extends HTMLElement {
         let head_content = `<th>voter</th>`; // TODO: translate
         proposals.forEach(proposal => {
             if (isProposalEmpty(proposal)) return;
-
             const truncatedTitle = truncateTitle(proposal.title, 50);
             head_content += `<th>${truncatedTitle}</th>\n`;
         });
@@ -231,8 +237,6 @@ class ResultsCard extends HTMLElement {
         let rank = 0;
         let prevProposal: any = null;
         sortedProposals.forEach((proposal: any, index: number) => {
-            if(!proposal.description) return;
-            const description = getQuillHTML(proposal.description);
             if (isProposalEmpty(proposal)) return;
 
             if (prevProposal) {
@@ -307,7 +311,10 @@ class ResultsCard extends HTMLElement {
         const selectedVoters = this.getSelectedVoters();
         const title = this.process.title;
         const processId = this.process._id;
-        const description = getQuillHTML(this.process.description);
+        let description = ''
+        if (this.process.description) {
+            description = getQuillHTML(this.process.description );
+        }
         const voterLabelElement = this.querySelector('span.voter-label') as HTMLElement;
         const numVotersElement = this.querySelector('span.num-voters')as HTMLElement;
         const voterLabel = voterLabelElement.innerHTML ;

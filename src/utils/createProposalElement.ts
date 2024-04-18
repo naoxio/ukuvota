@@ -14,13 +14,19 @@ const createProposalElement = (
     descriptionContent = description.ops.reduce((acc, op) => acc + op.insert, '');
   }
 
+  const descriptionArea = `
+    <div id="description-${uniqueId}" class="ql-container ql-snow">
+      <div class="ql-editor" data-gramm="false">${descriptionContent}</div>
+    </div>
+    <input type="hidden" id="quillops-${uniqueId}">
+  `;
+
   const editMode = `
     <div class="flex flex-col w-full edit-mode">
       <b>Title</b>
       <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
       <label>Description</label>
-      <div id="description-${uniqueId}">${descriptionContent}</div>
-      <input type="hidden" id="quillops-${uniqueId}" />
+      ${descriptionArea}
     </div>
   `;
 

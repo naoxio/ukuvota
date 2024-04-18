@@ -22,10 +22,17 @@ export const POST: APIRoute = async ({ request }) => {
     await uploadString(descriptionRef, descriptionContent, 'raw');
   }
 
+  const proposalsData = JSON.parse(formData.get('proposalsData') as string);
+  const proposalsMetadata = await Promise.all(proposalsData.map(async (proposal: any) => {
+    if (proposal.description && typeof proposal.description === 'string') {
+      const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
+      await uploadString(proposalDescriptionRef, proposal.description, 'raw');
+    }
+    return { id: proposal.id, title: proposal.title };
+  }));
+
   const timezone = processCookieObject.timezone || 'UTC';
-
   const currentTimestamp = new Date().getTime();
-
   let startProposalDate = processCookieObject.startProposalDate;
   let endProposalDate = processCookieObject.endProposalDate;
 
@@ -53,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
   const reformattedProcess = {
     _id: processId,
     proposalDates: [startProposalDate, endProposalDate],
-    proposals: processCookieObject.proposals ? processCookieObject.proposals.filter((proposal) => proposal !== undefined) : [],
+    proposals: proposalsMetadata,
     title: processCookieObject.title,
     votingDates: [startVotingDate, endVotingDate],
     weighting: processCookieObject.weighting,

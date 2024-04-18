@@ -1,4 +1,7 @@
 ---
+
+import Alert from "@components/ui/Alert.astro";
+import AlertList from "components/ui/AlertList.astro";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Translator } from '@utils/i18n.js';
 import fetchProcessData from '@utils/fetchProcessData';
@@ -66,6 +69,22 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                 {translator.t('process.submitVote')}
             </button>
         </div>
+        <AlertList>
+            <Alert icon="sync" info>
+                { translator.t('alert.info.submittingVote') }
+            </Alert>
+            <Alert icon="checkmark-outline" success>
+                { translator.t('alert.success.submitVote') }
+                <span class="name"></span>
+            </Alert>
+            <Alert icon="close-circle-outline" error>
+                { translator.t('alert.error.submitVote') }
+            </Alert>
+            <Alert icon="close-circle-outline" error>
+                { translator.t('alert.error.emptyName') }
+            </Alert>
+        </AlertList>
+        
     </voting-list>
 </ProcessLayout>
 
@@ -122,7 +141,7 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
             
             if (senderName.value !== "") {
                 if (this.alerts.length > 0) {
-                    const span = this.alerts[0].querySelector('span.name') as HTMLElement;
+                    const span = this.alerts[1].querySelector('span.name') as HTMLElement;
                     span.innerHTML = senderName.value;
                     addAlert(this.alertList, this.alerts[0]);
                 }
@@ -140,19 +159,21 @@ const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "lovi
                     if (response.ok) {
                         const data = await response.json();
                         if (data.success) {
-                            window.location.reload();
+                            addAlert(this.alertList, this.alerts[1]);
                         } else {
-                            console.error('Error submitting vote:', data.error);
+                            addAlert(this.alertList, this.alerts[2]);
                         }
                     } else {
-                        console.error('Error submitting vote:', response.statusText);
+                        addAlert(this.alertList, this.alerts[2]);
+
                     }
                 } catch (error) {
+                    addAlert(this.alertList, this.alerts[2]);
                     console.error('Error submitting vote:', error);
                 }
             } else {
                 if (this.alerts.length > 1) {
-                    addAlert(this.alertList, this.alerts[1]);
+                    addAlert(this.alertList, this.alerts[3]);
                 }
             }
         };

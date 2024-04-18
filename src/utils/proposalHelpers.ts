@@ -4,7 +4,6 @@ import { createQuill, updateQuill } from '@utils/quillUtils';
 const initializeQuill = (proposalElement: Element, uniqueId: string, isSetup: boolean) => {
   const descriptionDiv = proposalElement.querySelector(`#description-${uniqueId}`) as HTMLElement;
   const quillOpsInput = proposalElement.querySelector(`#quillops-${uniqueId}`) as HTMLInputElement;
-  console.log(uniqueId)
   if (descriptionDiv && quillOpsInput) {
     const quillEditor = createQuill(`#description-${uniqueId}`);
 
@@ -12,6 +11,7 @@ const initializeQuill = (proposalElement: Element, uniqueId: string, isSetup: bo
     if (isSetup) {
       localforage.getItem(descriptionDiv.id).then((savedOps) => {
         if (savedOps) {
+
           const ops = JSON.parse(savedOps as string);
           quillEditor.setContents(ops);
         }

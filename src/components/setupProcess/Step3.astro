@@ -52,9 +52,9 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
                 <h2 class="text-xl font-semibold mb-4">{translator.t('process.proposals')}</h2>
                 <ul class="space-y-4">
                     { proposals.map((proposal: IProposal) => (
-                    <li class="bgborder border-gray-200 rounded-lg p-4">
+                    <li class="border border-gray-200 rounded-lg p-4" id={`proposal-${proposal.id}`}>
                         <b class="text-lg">{proposal.title || 'Untitled Proposal'}</b>
-                        <p class="mt-2">{proposal.description}</p>
+                        <p class="mt-2" id={`description-${proposal.id}`}></p>
                     </li>
                     ))}
                 </ul>
@@ -70,12 +70,15 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
     </form>
     <form action="/api/start-process" method="post">
         <input type="hidden" name="descriptionContent" id="descriptionContentInput" />
+        <input type="hidden" name="proposalsData" id="proposalsDataInput" />
         <button type="submit" class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
     </form>
 </div>
 <script>
     import getQuillHTML from '@utils/getQuillHTML';
     import localforage from 'localforage';
+    import type Delta from 'quill-delta';
+
 
     const descriptionContentDiv = document.getElementById('descriptionContent') as HTMLElement;
     const descriptionContentInput = document.getElementById('descriptionContentInput') as HTMLInputElement;
@@ -88,4 +91,30 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
             descriptionContentInput.value = JSON.stringify(descriptionContent);
         }
     }
+
+    const proposals = document.querySelectorAll('[id^="proposal-"]');
+        const proposalsData = await Promise.all(Array.from(proposals).map(async (proposal) => {
+            const proposalId = proposal.id.replace('proposal-', '');
+            const titleElement = proposal.querySelector('b.text-lg');
+            const descriptionContent = await localforage.getItem(`description-${proposalId}`) as string || '';
+            if(descriptionContent) {
+                const descriptionDelta = JSON.parse(descriptionContent) as Delta;
+                    
+                const descriptionElement = document.getElementById(`description-${proposalId}`);
+                if (descriptionElement) {
+                    descriptionElement.innerHTML = getQuillHTML(descriptionDelta);
+                }
+            }
+            return {
+                id: proposalId,
+                title: titleElement ? titleElement.textContent : '',
+                description: descriptionContent
+            };
+        }));
+
+        const proposalsDataInput = document.getElementById('proposalsDataInput') as HTMLInputElement;
+        if (proposalsDataInput) {
+            proposalsDataInput.value = JSON.stringify(proposalsData);
+        }
+
 </script>

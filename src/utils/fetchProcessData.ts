@@ -28,6 +28,32 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
       }
     }
+
+    const currentTime = new Date().getTime();
+    if (currentTime > process.proposalDates[1]) {
+      const updatedProposals = await Promise.all(process.proposals.map(async (proposal: any) => {
+        if (!proposal.description && proposal.id) {
+          const storage = getStorage();
+          const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
+          try {
+            const downloadURL = await getDownloadURL(proposalDescriptionRef);
+            const response = await fetch(downloadURL);
+            const proposalDescription = await response.text();
+            proposal.description = JSON.parse(proposalDescription);
+          } catch (error: any) {
+            if (error && error.code === 'storage/object-not-found') {
+              console.error('Proposal description not found in Firebase Storage:', error.message);
+            } else {
+              console.error('Error fetching proposal description:', error);
+            }
+          }
+        }
+        return proposal;
+      }));
+
+      process.proposals = updatedProposals;
+    }
+
   } else {
     process = null;
   }

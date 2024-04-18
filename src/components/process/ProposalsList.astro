@@ -32,12 +32,11 @@ const { processId, proposals, isSetup } = Astro.props;
     <p id="no-proposals-text">{translator.t('noProposalsFound')}</p>
   )}
 
- 
   <div class="flex items-center flex-wrap justify-center w-full">
     <button id="add-button" class="btn p-2">{translator.t('addProposal')}</button>
     <div class="dropdown">
       <div tabindex={0} role="button" class="btn m-1">{translator.t('addProposalTemplate')}</div>
-      <div tabindex={0} class="dropdown-content menu p-2 shadow rounded-box z-[1]">
+      <div tabindex={0} class="dropdown-content menu p-2 shadow rounded-box bg-base-100 z-[1]">
         {dropdownOptions.map((option, index) => (
           <a class="card-body link">
             <h3 class="card-title">{option.title}</h3>
@@ -55,16 +54,15 @@ import { createQuill, updateQuill } from '@utils/quillUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { createProposalElement } from '@utils/createProposalElement';
 import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
+import localforage from 'localforage';
 
 const addButton: HTMLElement | null = document.getElementById('add-button');
 const proposalsContainer: HTMLElement = document.getElementById('proposals-container') as HTMLElement;
 const noProposalsText = document.getElementById('no-proposals-text');
-
-console.log(noProposalsText, proposalsContainer)
+  
 if (proposalsContainer) {
   const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
   const processId = proposalsContainer ? proposalsContainer.dataset.process || '' : '';
-
   if (addButton) {
     const proposalElements = proposalsContainer.children;
 
@@ -72,35 +70,11 @@ if (proposalsContainer) {
       const proposalElement = proposalElements[i];
       setupButtonListeners(proposalElement, proposalsContainer, processId, noProposalsText);
       initializeQuill(proposalElement, proposalElement.id, isSetup);
-
-      const flexElement = proposalElement.querySelector('.flex') as HTMLElement;
-      if (flexElement) {
-        const descriptionDiv: HTMLElement | null = proposalElement.querySelector(`#description-${flexElement.id}`);
-        const quillOpsInput: HTMLInputElement | null = proposalElement.querySelector(`#quillops-${flexElement.id}`);
-
-        if (descriptionDiv && quillOpsInput) {
-          const quillEditor = createQuill(`#description-${flexElement.id}`);
-
-          if (quillOpsInput.value) {
-            try {
-              const quillOps = JSON.parse(quillOpsInput.value);
-              updateQuill(quillEditor, quillOps);
-            } catch (error) {
-              console.error('Error parsing quillops:', error);
-            }
-          }
-
-          quillEditor.on('text-change', () => {
-            /* @ts-ignore */
-            quillOpsInput.value = JSON.stringify(quillEditor.editor.delta);
-          });
-        }
-      }
+  
     }
 
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
-      console.log('hi im going to add')
 
       const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
 
@@ -120,8 +94,13 @@ if (proposalsContainer) {
 
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, isSetup);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
+      if (isSetup) {
+        const deltaOps = [{ insert: selectedTemplateDescription + '\n' }];
+        localforage.setItem(`description-${uniqueId}`, JSON.stringify({ ops: deltaOps })); 
+      }
     });
   });
+
   if (processId) {
     const eventSource = new EventSource(`/api/process/${processId}/proposals`);
     eventSource.onmessage = (event) => {

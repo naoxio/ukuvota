@@ -72,6 +72,9 @@
     "connecting": {
       "connectingToWebsocket": "Verbindung zu WebSocket wird hergestellt..."
     },
+    "info": {
+      "submittingVote": "Wahl wird eingereicht..."
+    },
     "error": {
       "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
       "emptyName": "Bitte fügen Sie einen Namen hinzu",
@@ -106,6 +109,7 @@
   "slider": "Schieberegler",
   "not-found": "Nicht gefunden",
   "process": {
+    "noVotesSubmitted": "Keine Stimmen abgegeben",
     "noProposalsSubmitted": "Es wurden keine Vorschläge eingereicht.",
     "topic": "Thema Frage",
     "description": "Beschreibung",

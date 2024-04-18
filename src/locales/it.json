@@ -71,6 +71,9 @@
     "connecting": {
       "connectingToWebsocket": "Connessione a WebSocket..."
     },
+    "info": {
+      "submittingVote": "Invio del voto..."
+    },
     "error": {
       "topicQuestion": "Si prega di aggiungere una domanda sull'argomento",
       "emptyName": "Per favore aggiungi un nome",
@@ -105,6 +108,7 @@
   "slider": "Dispositivo di scorrimento",
   "not-found": "Non trovato",
   "process": {
+    "noVotesSubmitted": "Nessun voto inviato",
     "noProposalsSubmitted": "Nessuna proposta è stata inviata.",
     "topic": "Domanda sull'argomento",
     "description": "Descrizione",
