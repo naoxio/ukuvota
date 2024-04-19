@@ -46,6 +46,9 @@ const formatDateInTimezone = (date: number, timezone?: string): string => {
   const zonedDate = utcToZonedTime(date, timezone || 'UTC');
   return format(zonedDate, "yyyy-MM-dd'T'HH:mm", { timeZone: timezone });
 };
+const formatDate = (date: number): string => {
+  return format(date, "yyyy-MM-dd'T'HH:mm",);
+};
 
 
 function getTimezoneOffset(timezone: string): number {
@@ -55,5 +58,5 @@ function getTimezoneOffset(timezone: string): number {
   return timezoneOffset;
 }
 
-export { formatDuration, formatDateInTimezone, getTimezoneOffset };
+export { formatDuration, formatDateInTimezone, formatDate, getTimezoneOffset };
 
