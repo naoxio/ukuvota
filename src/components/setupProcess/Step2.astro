@@ -73,7 +73,7 @@ if (proposals && proposals.length > 0) {
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
     timezone = storedTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone as string || 'UTC';
-
+    
     constructor() {
       super();
       this.initialize();
@@ -91,7 +91,7 @@ if (proposals && proposals.length > 0) {
       const timezoneSelect = this.querySelector('#timezone-select') as HTMLSelectElement;
       if (timezoneSelect) {
         timezoneSelect.value = this.timezone ;
-
+        console.log(this.timezone, storedTimeZone, Intl.DateTimeFormat().resolvedOptions().timeZone)
         timezoneSelect.addEventListener('change', async () => {
           this.timezone = timezoneSelect.value;
           await localforage.setItem('userTimezone', this.timezone);
