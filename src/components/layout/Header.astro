@@ -10,7 +10,9 @@ await translator.init();
 
 import { Icon } from 'astro-icon';
 
-const supportedLanguages = Astro.preferredLocaleList || ['en'];
+//const supportedLanguages = Astro.preferredLocaleList || ['en'];
+const supportedLanguages = ["en", "de", "it"];
+
 const currentLanguage = Astro.currentLocale || 'en';
 const primaryLocale = 'en';
 

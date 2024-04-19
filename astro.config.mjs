@@ -12,7 +12,9 @@ export default defineConfig({
       compiler: 'astro'
     })]
   },
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
   i18n: {
     defaultLocale: "en",
     locales: ["en", "de", "it"],

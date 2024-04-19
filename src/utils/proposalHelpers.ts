@@ -1,7 +1,7 @@
 import localforage from 'localforage';
 import { createQuill, updateQuill } from '@utils/quillUtils';
 import IProposal from '@interfaces/IProposal';
-import Quill from 'quill';
+import { isProposalEmpty } from '@utils/proposalUtils';
 
 
 const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
@@ -10,6 +10,7 @@ const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
   const editButton = element.querySelector('.edit-button') as HTMLButtonElement;
   const saveButton = element.querySelector('.save-button') as HTMLButtonElement;
   const deleteButton = element.querySelector('.delete-button') as HTMLButtonElement;
+  const emptyProposalElement = viewElement.querySelector('.empty-proposal') as HTMLElement;
 
   if (isEditing) {
     viewElement.style.display = 'none';
@@ -19,6 +20,9 @@ const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
     deleteButton.style.display = 'block';
     element.setAttribute('data-editing', 'true');
   } else {
+    const title = (viewElement.querySelector('.title') as HTMLElement).textContent || '';
+    const descriptionContent = (viewElement.querySelector('.desc') as HTMLElement).innerHTML;
+
     viewElement.style.display = 'block';
     editElement.style.display = 'none';
     editButton.style.display = 'block';
@@ -26,6 +30,14 @@ const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
     deleteButton.style.display = 'none';
 
     element.setAttribute('data-editing', 'false');
+
+
+    const isEmpty = isProposalEmpty({
+      title: title,
+      description: descriptionContent,
+    } as IProposal);
+
+    emptyProposalElement.style.display = isEmpty ? 'block' : 'none';
   }
 };
 const initializeQuill = (

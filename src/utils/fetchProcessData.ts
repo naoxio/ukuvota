@@ -9,7 +9,6 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   if (snapshot.exists()) {
     process = snapshot.val();
 
-    // Check if 'description' key does not exist and 'descriptionId' key exists
     if (!process.description && process.descriptionId) {
       const storage = getStorage();
       const descriptionRef = storageRef(storage, `descriptions/${process.descriptionId}.json`);
@@ -31,8 +30,11 @@ export default async function fetchProcessData(processId: string): Promise<any> 
 
     const currentTime = new Date().getTime();
     if (currentTime > process.proposalDates[1]) {
+      console.log(process.proposals)
       if (!process.proposals) return undefined;
-      const updatedProposals = await Promise.all(process.proposals.map(async (proposal: any) => {
+      // Normalize the data to always be an array
+      const proposalsArray = Array.isArray(process.proposals) ? process.proposals : Object.values(process.proposals);
+      const updatedProposals = await Promise.all(proposalsArray.map(async (proposal: any) => {
         if (!proposal.description && proposal.id) {
           const storage = getStorage();
           const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);

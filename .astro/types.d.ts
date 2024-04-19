@@ -200,9 +200,9 @@ declare module 'astro:content' {
   collection: "it";
   data: any
 } & { render(): Render[".md"] };
-"NegativeScoreWeighing.md": {
-	id: "NegativeScoreWeighing.md";
-  slug: "negativescoreweighing";
+"NegativeScoreWeighting.md": {
+	id: "NegativeScoreWeighting.md";
+  slug: "negativescoreweighting";
   body: string;
   collection: "it";
   data: any

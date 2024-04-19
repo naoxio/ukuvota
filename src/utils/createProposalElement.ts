@@ -1,5 +1,7 @@
 
 import type Delta from 'quill-delta';
+import { isProposalEmpty } from './proposalUtils';
+import IProposal from '@interfaces/IProposal';
 
 const createProposalElement = (
   uniqueId: string,
@@ -13,7 +15,7 @@ const createProposalElement = (
   } else {
     descriptionContent = description.ops.reduce((acc, op) => acc + op.insert, '');
   }
-
+  const isEmpty = isProposalEmpty({title, description: descriptionContent} as IProposal)
   const descriptionArea = `
     <div id="description-${uniqueId}" class="ql-container ql-snow">
       <div class="ql-editor" data-gramm="false">${descriptionContent}</div>
@@ -22,7 +24,7 @@ const createProposalElement = (
   `;
 
   const editMode = `
-    <div class="flex flex-col w-full edit-mode" style="${isSetup ? 'display:block' : 'display:none'}">
+    <div class="flex flex-col w-full edit-mode" style="${isSetup ? 'display:block;' : 'display:none;'}">
       <b>Title</b>
       <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
       <label>Description</label>
@@ -31,9 +33,11 @@ const createProposalElement = (
   `;
 
   const viewMode = `
-    <div class="flex flex-col w-full view-mode" style="${isSetup ? 'display:none' : 'display:block'}">
+    <div class="flex flex-col w-full view-mode" style="${isSetup ? 'display:none;' : 'display:block;'}">
       <h2 class="title">${title}</h2>
       <div class="desc">${descriptionContent}</div>
+      <p class="text-center text-gray-500 empty-proposal" style="${isEmpty ? 'display:block;' : 'display:none;'}">This proposal is empty.</p>
+
     </div>
   `;
   const buttons = `
