@@ -68,11 +68,11 @@ if (proposals && proposals.length > 0) {
   import { adjustVotingPhaseDates } from '@utils/dateAdjustments';
   import localforage from 'localforage';
 
-  const storedTimeZone = await localforage.getItem('userTimezone') as string;
+  const storedTimeZone = await localforage.getItem('userTimezone') || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
-    timezone = storedTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone as string || 'UTC';
+    timezone = storedTimeZone as string;
     
     constructor() {
       super();
