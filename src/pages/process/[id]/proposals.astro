@@ -12,8 +12,6 @@ const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}
 if (pathname !== url.pathname) {
     return Astro.redirect(pathname);
 }
-console.log(pathname)
-console.log(process)
 const proposals = process.proposals ? process.proposals : [];
 const endTime = new Date(process.proposalDates[1]).toISOString();
 ---
@@ -38,7 +36,6 @@ const endTime = new Date(process.proposalDates[1]).toISOString();
         setTimeout(checkTime, timeLeft > 1000 ? 1000 : timeLeft); // Check every second or after remaining time
     }
   };
-  console.log(endTime)
 
   checkTime();
 </script>

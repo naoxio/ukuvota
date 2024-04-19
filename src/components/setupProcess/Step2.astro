@@ -16,10 +16,9 @@ type Props = {
   proposalEndDate: number;
   votingStartDate: number;
   votingEndDate: number;
-  timezone: string;
 }
 
-const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals, timezone } = Astro.props;
+const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals } = Astro.props;
 
 const { pStart, pEnd, vStart, vEnd } = adjustDates(phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate);
 
@@ -28,7 +27,7 @@ if (proposals && proposals.length > 0) {
 }
 ---
 
-<step-2 data-phase={phase} data-timezone={timezone}>
+<step-2 data-phase={phase} >
   <div id="step-2">
     {phase === "full" ? (
       <div>
@@ -36,8 +35,8 @@ if (proposals && proposals.length > 0) {
         <TimezoneSelector />
         <br />
         <div class="js-content-block hidden">
-          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} timezone={timezone} />  
-          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} timezone={timezone} />
+          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} />  
+          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} />
         </div>
       </div>
     ) : phase === "voting" ? (
@@ -46,7 +45,7 @@ if (proposals && proposals.length > 0) {
         <TimezoneSelector />
         <br />
         <div class="js-content-block hidden">
-          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} timezone={timezone} />
+          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} />
           <br />
           <h2>{translator.t('setup.proposals')}</h2>    
           <ProposalsList proposals={proposals} isSetup/>
@@ -69,9 +68,11 @@ if (proposals && proposals.length > 0) {
   import { adjustVotingPhaseDates } from '@utils/dateAdjustments';
   import localforage from 'localforage';
 
+  const storedTimeZone = await localforage.getItem('userTimezone') as string;
+
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
-    timezone = this.dataset.timezone || '';
+    timezone = storedTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone as string || 'UTC';
 
     constructor() {
       super();
@@ -89,9 +90,12 @@ if (proposals && proposals.length > 0) {
     initializeTimezoneSelector() {
       const timezoneSelect = this.querySelector('#timezone-select') as HTMLSelectElement;
       if (timezoneSelect) {
-        timezoneSelect.value = this.timezone;
-        timezoneSelect.addEventListener('change', () => {
+        timezoneSelect.value = this.timezone ;
+
+        timezoneSelect.addEventListener('change', async () => {
           this.timezone = timezoneSelect.value;
+          await localforage.setItem('userTimezone', this.timezone);
+
           this.updateTimeSelectors();
         });
       }

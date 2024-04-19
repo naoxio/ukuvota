@@ -42,8 +42,8 @@ const formatDuration = (durationInSeconds: number): string => {
   return result;
 };
 
-const formatDateInTimezone = (date: number, timezone: string): string => {
-  const zonedDate = utcToZonedTime(date, timezone);
+const formatDateInTimezone = (date: number, timezone?: string): string => {
+  const zonedDate = utcToZonedTime(date, timezone || 'UTC');
   return format(zonedDate, "yyyy-MM-dd'T'HH:mm", { timeZone: timezone });
 };
 

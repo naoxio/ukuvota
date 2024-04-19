@@ -32,8 +32,6 @@ const {
   timezone,
 } = processCookie as ProcessCookie;
 
-const defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const tz = timezone || defaultTimezone;
 
 const currentStep = Number(step);
 
@@ -83,9 +81,9 @@ if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
     { currentStep === 1 ? (
       <Step1 title={title} descriptionId={descriptionId} weighting={weighting} />
     ) : currentStep === 2 ? (
-      <Step2 phase={phase} timezone={tz} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
+      <Step2 phase={phase} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
     ) : currentStep === 3 ? (
-      <Step3 title={title} descriptionId={descriptionId} weighting={weighting} timezone={tz} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
+      <Step3 title={title} descriptionId={descriptionId} weighting={weighting} timezone={timezone as string} proposalStartDate={startProposalDate} proposalEndDate={endProposalDate} votingStartDate={startVotingDate} votingEndDate={endVotingDate} proposals={proposals} />
     ) : null }
   </div>
 </CreateProcessLayout>

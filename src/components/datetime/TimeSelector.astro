@@ -12,10 +12,9 @@ interface Props {
   startDate: Date;
   endDate: Date;
   hideTitle?: Boolean;
-  timezone: string;
 }
 
-const { phase, startDate, endDate, startMinDate, hideTitle, timezone } = Astro.props;
+const { phase, startDate, endDate, startMinDate, hideTitle } = Astro.props;
 const title = translator.t(`phases.${phase}.title`);
 
 const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60;
@@ -33,7 +32,6 @@ const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) /
       date={startDate}
       min={startMinDate}
       id={`start-date-picker-${phase}`}
-      timezone={timezone}
     />
     <br />
     <DatetimePicker
@@ -41,7 +39,6 @@ const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) /
       date={endDate}
       min={startDate}
       id={`end-date-picker-${phase}`}
-      timezone={timezone}
     />
     <br />
     <DatetimeSlider
