@@ -31,6 +31,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
     const currentTime = new Date().getTime();
     if (currentTime > process.proposalDates[1]) {
       console.log(process.proposals)
+      console.log('hiii')
       if (!process.proposals) return undefined;
       // Normalize the data to always be an array
       const proposalsArray = Array.isArray(process.proposals) ? process.proposals : Object.values(process.proposals);

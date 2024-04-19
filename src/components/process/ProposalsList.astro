@@ -22,7 +22,7 @@ const { processId, proposals, isSetup } = Astro.props;
   <div id="proposals-container" data-is-setup={(isSetup || false).toString()} data-process={processId}>
     {(proposals.length > 0) && (
       proposals.map((proposal: any) => (
-      <Fragment set:html={createProposalElement(proposal.id, proposal.title, proposal.description || '', isSetup)} />
+      <Fragment set:html={createProposalElement(proposal.id, proposal.title, proposal.description || '', translator, isSetup)} />
 
     )))}
   </div>
@@ -50,16 +50,20 @@ const { processId, proposals, isSetup } = Astro.props;
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
 import { createProposalElement } from '@utils/createProposalElement';
-import { initializeQuill, insertNewProposal, setupButtonListeners, updateProposalElement } from '@utils/proposalHelpers';
+import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
 import localforage from 'localforage';
+
+import { Translator } from '@utils/i18n.js';
+const locale = document.querySelector('meta[name="locale"]')?.getAttribute('content');
+const translator = new Translator(locale || 'en');
 
 const addButton: HTMLElement | null = document.getElementById('add-button');
 const proposalsContainer: HTMLElement = document.getElementById('proposals-container') as HTMLElement;
 const noProposalsText = document.getElementById('no-proposals-text');
   
 if (proposalsContainer) {
-  const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
-  const processId = proposalsContainer ? proposalsContainer.dataset.process || '' : '';
+  const isSetup: boolean = proposalsContainer.dataset.isSetup === 'true';
+  const processId = proposalsContainer.dataset.process || '';
 
   const proposalElements = proposalsContainer.children;
   const notifyNewProposal = (uniqueId: string, title: string, description: string) => {
@@ -95,7 +99,7 @@ if (proposalsContainer) {
         // Only add new proposals
         Object.entries(latestProposals).forEach(([id, proposal]: [string, any]) => {
           if (!existingProposals.has(id)) {
-            const proposalElement = createProposalElement(id, proposal.title, proposal.description, isSetup);
+            const proposalElement = createProposalElement(id, proposal.title, proposal.description, translator, isSetup);
             insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
           }
         });
@@ -129,7 +133,7 @@ if (proposalsContainer) {
   if (addButton) {
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
-      const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
+      const proposalElement = createProposalElement(uniqueId, '', '', translator, isSetup);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, true);
       if (processId) {
         notifyNewProposal(uniqueId, '', '');
@@ -147,7 +151,7 @@ if (proposalsContainer) {
 
       const uniqueId = uuidv4();
 
-      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, isSetup);
+      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, translator, isSetup);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, false);
       if (processId) {
         notifyNewProposal(uniqueId, selectedTemplateTitle, selectedTemplateDescription);

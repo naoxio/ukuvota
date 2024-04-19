@@ -19,8 +19,6 @@ export const GET: APIRoute = ({ params, request }) => {
       const listener = onValue(proposalsRef, (snapshot) => {
         if (snapshot.exists()) {
           const proposals = snapshot.val();
-          console.log(processId)
-          console.log(proposals)
           const data = `data: ${JSON.stringify(proposals)}\n\n`;
           controller.enqueue(new TextEncoder().encode(data));
         }

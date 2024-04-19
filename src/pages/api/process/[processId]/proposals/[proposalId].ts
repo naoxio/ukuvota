@@ -1,6 +1,44 @@
 import type { APIRoute } from 'astro';
-import { ref, update, remove } from 'firebase/database';
+import { ref, update, remove, onValue,off } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
+
+
+
+export const GET: APIRoute = async ({ params, request }) => {
+  const { processId, proposalId } = params;
+  const proposalRef = ref(firebaseDB, `process/${processId}/proposals/${proposalId}`);
+
+  const stream = new ReadableStream({
+    start(controller) {
+      const sendUpdate = (snapshot: any) => {
+        if (snapshot.exists()) {
+          const data = JSON.stringify(snapshot.val());
+          controller.enqueue(`data: ${data}\n\n`);
+        }
+      };
+
+      const errorCallback = (error: any) => {
+        controller.error(`Event stream failed: ${error}`);
+        controller.close();
+      };
+
+      onValue(proposalRef, sendUpdate, errorCallback);
+
+      return () => {
+        off(proposalRef, 'value', sendUpdate);
+        controller.close();
+      };
+    }
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    }
+  });
+};
 
 export const PUT: APIRoute = async ({ params, request }) => {
   const { processId, proposalId } = params;

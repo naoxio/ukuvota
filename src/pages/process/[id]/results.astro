@@ -8,8 +8,6 @@ import fetchProcessData from '@utils/fetchProcessData';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
-
-
 const { url } = Astro;
 const processId: any = Astro.params.id;
 const process: IProcess = await fetchProcessData(processId);
@@ -33,85 +31,85 @@ if (process && !("voters" in process)) {
                 <Icon class="emoji" name={emoji} width="48" />
             ))}
         </div>
-        {process.voters && process.voters.length > 0 ? (
 
-            process.proposals && Object.keys(process.proposals).length > 0 ? (
-                <div>
-                    <div role="tablist" class="tabs tabs-bordered">
-                        <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
-                        <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
+
+        { !process.voters || process.voters.length == 0 && (
+        <div class="text-center text-warning">
+            <p>{ translator.t('process.noVotesSubmitted') }</p>
+        </div>
+        )}
+        {process.proposals && Object.keys(process.proposals).length > 0 ? (
+
+            <div>
+                <div role="tablist" class="tabs tabs-bordered">
+                    <a role="tab" class="tab tab-bordered tab-active w-full h-12"><Icon width="16" name="face-cool"/></a> 
+                    <a role="tab" class="tab tab-bordered w-full h-12"><Icon width="16" name="list"/></a> 
+                </div>
+
+                <div class="tab-custom-content hide">
+                    <span class="flex justify-between items-center">
+                        <h2>{ translator.t('process.results') }</h2>
+                        <!--button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button-->
+                    </span>
+                    <h3>
+                        <span class="voter-label">{ translator.t('process.voters') }</span>
+                        <span class="num-voters">({ process.voters?.length })</span>:
+                    </h3>
+                    <div class="flex justify-around flex-wrap">
+                        { process.voters?.map((voter: any) => (
+                            <div id={voter.id} class="flex items-center p-2 voter">
+                                <input type="checkbox" checked class="checkbox checkbox-xs" />
+                                <span class="p-1 cursor-pointer select-none">
+                                    { voter.name }
+                                </span>
+                            </div>
+                        ))}
                     </div>
-
-                    <div class="tab-custom-content hide">
-                        <span class="flex justify-between items-center">
-                            <h2>{ translator.t('process.results') }</h2>
-                            <!--button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button-->
-                        </span>
-                        
-                        <h3>
-                            <span class="voter-label">{ translator.t('process.voters') }</span>
-                            <span class="num-voters">({ process.voters?.length })</span>:
-                        </h3>
-                        <div class="flex justify-around flex-wrap">
-                            { process.voters?.map((voter: any) => (
-                                <div id={voter.id} class="flex items-center p-2 voter">
-                                    <input type="checkbox" checked class="checkbox checkbox-xs" />
-                                    <span class="p-1 cursor-pointer select-none">
-                                        { voter.name }
-                                    </span>
-                                </div>
-                            ))}
+                    <br/>
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                            <!-- head -->
+                            <thead>
+                                <tr class="table-row-one">
+                                    <th></th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
+                                    <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div class="card">
+                        <h3>{ translator.t('process.exportData') }</h3>
+                        <div class="flex justify-around exports">
+                            <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
+                            <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
                         </div>
+                    </div> 
+                </div>
+                <div class="tab-custom-content hide">
+                    <div>
+                        <br/>
                         <br/>
                         <div class="overflow-x-auto">
                             <table class="table w-full">
                                 <!-- head -->
                                 <thead>
-                                    <tr class="table-row-one">
-                                        <th></th>
-                                        <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
-                                        <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
-                                        <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
-                                    </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                             </table>
                         </div>
                         <br/>
-                        <div class="card">
-                            <h3>{ translator.t('process.exportData') }</h3>
-                            <div class="flex justify-around exports">
-                                <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
-                                <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="tab-custom-content hide">
-                        <div>
-                            <br/>
-                            <br/>
-                            <div class="overflow-x-auto">
-                                <table class="table w-full">
-                                    <!-- head -->
-                                    <thead>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <br/>
-                        </div>
                     </div>
                 </div>
-            ) : (
-                <div class="text-center">
-                    <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
-                </div>
-            )
+            </div>
         ) : (
             <div class="text-center">
-                <h2>{ translator.t('process.noVotesSubmitted') }</h2>
+                <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
             </div>
         )}
     </results-card>

@@ -1,4 +1,5 @@
 ---
+/* @ts-ignore*/
 import SpeedInsights from "@vercel/speed-insights/astro"
 import Header from '@components/layout/Header.astro';
 
@@ -36,6 +37,7 @@ if (url.hash.includes('#/app/')) {
     <meta name="keywords" content="evotico, ukuvota, voting, democracy, consensus, collaborative" />
     <meta name="author" content="NaoX" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="locale" content={Astro.currentLocale}>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">

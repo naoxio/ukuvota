@@ -40,19 +40,16 @@ const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
     emptyProposalElement.style.display = isEmpty ? 'block' : 'none';
   }
 };
-const initializeQuill = (
-  proposalElement: Element,
-  uniqueId: string,
-  processId: string,
-  isSetup: boolean
-): void => {
+
+const initializeQuill = (proposalElement: Element, uniqueId: string, processId: string, isSetup: boolean): void => {
   const descriptionDiv = proposalElement.querySelector(`#description-${uniqueId}`) as HTMLElement;
   const quillOpsInput = proposalElement.querySelector(`#quillops-${uniqueId}`) as HTMLInputElement;
+  const titleInput = proposalElement.querySelector(`.edit-mode input[type='text']`) as HTMLInputElement;
+  const titleDisplay = proposalElement.querySelector('.view-mode .title') as HTMLElement;
 
   if (descriptionDiv && quillOpsInput) {
     const quillEditor = createQuill(`#description-${uniqueId}`);
 
-    // Initialize or restore saved content
     if (isSetup) {
       localforage.getItem(descriptionDiv.id).then((savedOps) => {
         if (savedOps) {
@@ -61,29 +58,33 @@ const initializeQuill = (
         }
       });
     }
-
-  // Handle real-time updates
-  quillEditor.on('text-change', (delta, oldDelta, source) => {
-    const ops = quillEditor.getContents();
-    quillOpsInput.value = JSON.stringify(ops);
-    if (isSetup) {
-      localforage.setItem(descriptionDiv.id, JSON.stringify(ops));
-    }
+    const eventSource = new EventSource(`/api/process/${processId}/proposals/${uniqueId}`);
     
-    if (source === 'user') {
-      fetch(`/api/process/${processId}/proposals`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: uniqueId, 
-          description: ops
-        })
-      }).catch(console.error);
-    }
-  });
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data) {
+        if (data.description) {
+          quillEditor.setContents(data.description);
+          quillOpsInput.value = JSON.stringify(data.description);
+          (proposalElement.querySelector('.view-mode .desc') as HTMLElement).innerHTML = data.description;
+          (proposalElement.querySelector('.edit-mode .ql-editor') as HTMLElement).innerHTML = data.description;
+        }
+        if (data.title) {
+          titleDisplay.textContent = data.title;
+          titleInput.value = data.title;
+        }
+      }
 
+    };
+
+    eventSource.onerror = (error) => {
+      console.error("EventSource failed:", error);
+    };
+    
+    
+
+    // Clean up the event source when the component is destroyed or unmounted
+    proposalElement.addEventListener('remove', () => eventSource.close());
   }
 };
 
@@ -112,7 +113,6 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
     if (!(editButton && saveButton)) return;
 
     editButton.addEventListener('click', () => {
-      console.log('edit')
       toggleDisplay(proposalElement as HTMLElement, true);
     });
 
@@ -178,41 +178,4 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
   };
 
 
-function updateProposalElement(proposalElement: Element, proposal: IProposal) {
-  const titleViewElement = proposalElement.querySelector('.view-mode .title') as HTMLElement;
-  const titleEditElement = proposalElement.querySelector('.edit-mode input[type="text"]') as HTMLInputElement;
-  if (titleViewElement) titleViewElement.textContent = proposal.title;
-  if (titleEditElement) titleEditElement.value = proposal.title;
-
-  const descViewElement = proposalElement.querySelector('.view-mode .desc') as HTMLElement;
-  if (descViewElement) {
-      if (typeof proposal.description !== 'string' && proposal.description?.ops) {
-          const textContent = proposal.description.ops.reduce((acc, op) => acc + (typeof op.insert === 'string' ? op.insert : ''), '');
-          descViewElement.innerHTML = textContent;
-      } else {
-          descViewElement.innerHTML = proposal.description as string;
-      }
-  }
-
-  const quillContainer = proposalElement.querySelector(`#description-${proposalElement.id} .ql-editor`);
-  if (quillContainer) {
-      const quillEditor = createQuill(`#description-${proposalElement.id}`);
-
-      if (quillEditor) {
-          if (typeof proposal.description !== 'string' && proposal.description?.ops) {
-            console.log(proposal.description)
-              quillEditor.setContents(proposal.description);
-          } else {
-              quillEditor.setText(proposal.description as string);
-          }
-      }
-  }
-
-  const quillOpsInput = proposalElement.querySelector(`#quillops-${proposalElement.id}`) as HTMLInputElement;
-  if (quillOpsInput) {
-      quillOpsInput.value = JSON.stringify(proposal.description);
-  }
-}
-
-
-  export {setupButtonListeners, setupDeleteButtonListener, initializeQuill, setupEditButtonListener, insertNewProposal, updateProposalElement}
+  export {setupButtonListeners, setupDeleteButtonListener, initializeQuill, setupEditButtonListener, insertNewProposal, }
