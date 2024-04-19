@@ -49,11 +49,10 @@ const { processId, proposals, isSetup } = Astro.props;
 </div>
 <script>
   
-import { createQuill, updateQuill } from '@utils/quillUtils';
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
 import { createProposalElement } from '@utils/createProposalElement';
-import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
+import { initializeQuill, insertNewProposal, setupButtonListeners, updateProposalElement } from '@utils/proposalHelpers';
 import localforage from 'localforage';
 
 const addButton: HTMLElement | null = document.getElementById('add-button');
@@ -63,22 +62,75 @@ const noProposalsText = document.getElementById('no-proposals-text');
 if (proposalsContainer) {
   const isSetup: boolean = proposalsContainer?.dataset.isSetup === 'true';
   const processId = proposalsContainer ? proposalsContainer.dataset.process || '' : '';
-  if (addButton) {
-    const proposalElements = proposalsContainer.children;
 
+  const proposalElements = proposalsContainer.children;
+
+  if (processId) {
+    const eventSource = new EventSource(`/api/process/${processId}/proposals`);
+
+    eventSource.onmessage = (event: MessageEvent) => {
+      console.log(processId)
+      console.log(event.data)
+      try {
+        const latestProposals = JSON.parse(event.data);
+        if (!latestProposals || typeof latestProposals !== 'object') {
+          console.error('Received non-object data:', latestProposals);
+          return;
+        }
+
+        const existingProposals = new Map(
+          Array.from(proposalElements).map(element => [element.id, element])
+        );
+        console.log(existingProposals)
+
+        const receivedIds = new Set(Object.keys(latestProposals));
+
+        // Update or add new proposals
+        Object.entries(latestProposals).forEach(([id, proposal]: [string, any]) => {
+          console.log(id)
+          const existingElement = existingProposals.get(id);
+          console.log(existingElement)
+          if (existingElement) {
+            updateProposalElement(existingElement, proposal);
+          } else {
+            const proposalElement = createProposalElement(id, proposal.title, proposal.description, isSetup);
+            insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
+          }
+        });
+        
+        existingProposals.forEach((element, id) => {
+          if (!receivedIds.has(id as string)) {
+            console.log('remove???', id)
+            proposalsContainer.removeChild(element);
+          }
+        });
+      
+        if (noProposalsText) {
+          noProposalsText.style.display = Object.keys(latestProposals).length === 0 ? 'block' : 'none';
+        }
+      } catch (error) {
+        console.error('Error processing incoming data:', error);
+      }
+    };
+
+  }
+  else {
     for (let i = 0; i < proposalElements.length; i++) {
       const proposalElement = proposalElements[i];
       setupButtonListeners(proposalElement, proposalsContainer, processId, noProposalsText);
-      initializeQuill(proposalElement, proposalElement.id, isSetup);
-  
+      if (isSetup) {
+        initializeQuill(proposalElement, proposalElement.id, processId, isSetup);
+      }
     }
+  }
 
+  if (addButton) {
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
 
       const proposalElement = createProposalElement(uniqueId, '', '', isSetup);
 
-      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, true);
     });
     
   }
@@ -93,7 +145,8 @@ if (proposalsContainer) {
       const uniqueId = uuidv4();
 
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, isSetup);
-      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, false);
+      
       if (isSetup) {
         const deltaOps = [{ insert: selectedTemplateDescription + '\n' }];
         localforage.setItem(`description-${uniqueId}`, JSON.stringify({ ops: deltaOps })); 
@@ -101,31 +154,5 @@ if (proposalsContainer) {
     });
   });
 
-  if (processId) {
-    const eventSource = new EventSource(`/api/process/${processId}/proposals`);
-    eventSource.onmessage = (event) => {
-      const proposals = JSON.parse(event.data);
-
-      proposalsContainer.innerHTML = '';
-      if (!proposals || Object.keys(proposals).length === 0) {
-        if (noProposalsText) {
-          noProposalsText.style.display = 'block';
-        }
-      } else {
-        if (noProposalsText) {
-          noProposalsText.style.display = 'none';
-        }
-
-        for (const proposalId in proposals) {
-          const proposal = proposals[proposalId];
-          const proposalElement = createProposalElement(proposalId, proposal.title, proposal.description || '', isSetup);
-          proposalsContainer.insertAdjacentHTML('beforeend', proposalElement);
-          const newProposalElement = proposalsContainer.lastElementChild as HTMLElement;
-          setupButtonListeners(newProposalElement, proposalsContainer, processId, noProposalsText);
-          initializeQuill(newProposalElement, proposalId, isSetup);
-        }
-      }
-    };
-  }
 }
 </script>

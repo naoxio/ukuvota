@@ -22,7 +22,7 @@ const createProposalElement = (
   `;
 
   const editMode = `
-    <div class="flex flex-col w-full edit-mode">
+    <div class="flex flex-col w-full edit-mode" style="${isSetup ? 'display:block' : 'display:none'}">
       <b>Title</b>
       <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
       <label>Description</label>
@@ -31,22 +31,25 @@ const createProposalElement = (
   `;
 
   const viewMode = `
-    <div class="flex flex-col w-full view-mode" style="display:none">
-      <h1>${title}</h1>
-      <p>${descriptionContent}</p>
+    <div class="flex flex-col w-full view-mode" style="${isSetup ? 'display:none' : 'display:block'}">
+      <h2 class="title">${title}</h2>
+      <div class="desc">${descriptionContent}</div>
     </div>
   `;
-
   const buttons = `
-    <div class="flex justify-center w-full pt-2">
-      <button class="edit-button btn btn-primary btn-sm" style="display:none;">Edit</button>
-      <button class="save-button btn btn-primary btn-sm" style="${isSetup ? 'display:none;' : 'display:block;'}">Save</button>
-      <button class="delete-button btn btn-ghost text-error btn-xs" style="display:block;">Delete</button>
+    <div class="flex justify-around w-full pt-2">
+      
+      <button class="edit-button btn btn-primary btn-sm" style="${isSetup ? 'display:none;' : 'display:block;'}">Edit</button>
+      <button class="save-button btn btn-primary btn-sm" style="display:none;">View</button>
     </div>
   `;
 
   const proposalElement = `
-    <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-2 w-full" id="${uniqueId}">
+    <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-8 w-full" id="${uniqueId}">
+      <div class="flex justify-end">
+        <button class="delete-button btn btn-ghost text-error btn-xs" style="${isSetup ? 'display:block;' : 'display:none;'}" >Delete</button>
+      </div>
+
       <div class="flex items-center flex-col" id="${uniqueId}">
         ${editMode}
         ${viewMode}

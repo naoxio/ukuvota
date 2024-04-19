@@ -45,7 +45,7 @@ if (process && !("voters" in process)) {
                     <div class="tab-custom-content hide">
                         <span class="flex justify-between items-center">
                             <h2>{ translator.t('process.results') }</h2>
-                            <button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button>
+                            <!--button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button-->
                         </span>
                         
                         <h3>
@@ -266,7 +266,7 @@ class ResultsCard extends HTMLElement {
         row.className = 'color-' + rank;
         row.innerHTML = `
             <td class='select-for-repeat cursor-pointer'>
-            <input id="${proposal.id}" type="checkbox" class="checkbox checkbox-xs" />
+            <!--input id="${proposal.id}" type="checkbox" class="checkbox checkbox-xs" /-->
             </td>
             <td class="whitespace-normal break-words">
             <h3 class="${isTitleTruncated ? 'truncated-title' : ''}">${truncatedTitle}</h3>
@@ -296,14 +296,14 @@ class ResultsCard extends HTMLElement {
             }
             });
         }
-
+/*
         const repeat = row.querySelector('td.select-for-repeat') as HTMLElement;
         repeat.addEventListener('click', (ev: any) => {
             if ('tagName' in ev.target && ev.target.tagName === 'INPUT') return;
             const input = repeat.querySelector('input') as HTMLInputElement;
             input.checked = !input.checked;
         });
-
+*/
         return row;
         }
 
@@ -392,7 +392,7 @@ class ResultsCard extends HTMLElement {
                 });
             });
         }
-
+/*
         const repeatButton = this.querySelector('button.repeat-button') as HTMLButtonElement;
         if (repeatButton) {
             repeatButton.addEventListener('click', async () => {
@@ -415,7 +415,7 @@ class ResultsCard extends HTMLElement {
                 }
             })
         }
-        
+        */
     }
 
     showTab(tabs: NodeListOf<Element>, contents: NodeListOf<Element>, index: number) {

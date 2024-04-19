@@ -13,5 +13,5 @@ With these steps, you will have Ukuvota running on your local machine, and you c
 ## Community
 We welcome any participates and you should feel welcome to share your ideas.
 
-- [Telegram](https://t.me/naoxio)
-- [Twitter](https://twitter.com/naox_io)
+- [Telegram](https://t.me/ukuvota)
+- [Twitter](https://twitter.com/ukuvota)

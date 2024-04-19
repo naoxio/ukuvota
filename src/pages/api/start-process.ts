@@ -75,6 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
   set(ref(firebaseDB, 'process/' + processId), reformattedProcess);
 
   const headers = new Headers({
+    
     'Set-Cookie': `process=; Path=/; HttpOnly; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
     'Location': `/process/${processId}`,
   });

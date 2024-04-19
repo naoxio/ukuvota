@@ -1,26 +1,31 @@
 import type { APIRoute } from 'astro';
-import { ref, onValue, push, update, remove, off } from 'firebase/database';
+import { ref, onValue, update, remove, off } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 
 export const GET: APIRoute = ({ params, request }) => {
   const { processId } = params;
+  const headers = new Headers({
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*',  
+  });
 
-  const headers = new Headers();
-  headers.set('Content-Type', 'text/event-stream');
-  headers.set('Cache-Control', 'no-cache');
-  headers.set('Connection', 'keep-alive');
 
   const proposalsRef = ref(firebaseDB, `process/${processId}/proposals`);
 
   const stream = new ReadableStream({
     start(controller) {
       const listener = onValue(proposalsRef, (snapshot) => {
-        const proposals = snapshot.val();
-        const data = `data: ${JSON.stringify(proposals)}\n\n`;
-        controller.enqueue(new TextEncoder().encode(data));
+        if (snapshot.exists()) {
+          const proposals = snapshot.val();
+          console.log(processId)
+          console.log(proposals)
+          const data = `data: ${JSON.stringify(proposals)}\n\n`;
+          controller.enqueue(new TextEncoder().encode(data));
+        }
       });
 
-      // Clean up the listener when the stream is closed
       return () => {
         off(proposalsRef, 'value', listener);
       };
@@ -32,13 +37,26 @@ export const GET: APIRoute = ({ params, request }) => {
 
 export const PUT: APIRoute = async ({ params, request }) => {
   const { processId } = params;
-  const { id, title, description } = await request.json();
+  const body = await request.json();
+  const { id, title, description } = body;
 
   const proposalRef = ref(firebaseDB, `process/${processId}/proposals/${id}`);
-  await update(proposalRef, { title, description });
+  
+  const updateData: any = {};
+  if (title !== null && title !== undefined) {
+    updateData.title = title;
+  }
+  if (description !== null && description !== undefined) {
+    updateData.description = description;
+  }
+
+  if (Object.keys(updateData).length > 0) {
+    await update(proposalRef, updateData);
+  }
 
   return new Response(null, { status: 200 });
 };
+
 
 export const DELETE: APIRoute = async ({ params, request }) => {
   const { processId } = params;

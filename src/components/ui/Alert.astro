@@ -11,7 +11,7 @@ interface Props {
 
 const { error, success, warning, info, icon } = Astro.props;
 const classList = `alert flex w-80 shadow-lg m-2 cursor-pointer ${error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : info ? 'alert-info' : ''}`;
-const showAlertId = `show-alert-${Math.random().toString(36).substr(2, 9)}`;
+const showAlertId = `show-alert-${Math.random().toString(36).slice(2, 11)}`;
 ---
 
 <alert-element id={showAlertId} class={classList} style="display: none; pointer-events: auto;">

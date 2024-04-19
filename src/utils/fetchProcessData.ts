@@ -31,6 +31,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
 
     const currentTime = new Date().getTime();
     if (currentTime > process.proposalDates[1]) {
+      if (!process.proposals) return undefined;
       const updatedProposals = await Promise.all(process.proposals.map(async (proposal: any) => {
         if (!proposal.description && proposal.id) {
           const storage = getStorage();
