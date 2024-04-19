@@ -109,7 +109,6 @@ if (proposals && proposals.length > 0) {
         timezoneSelect.addEventListener('change', async () => {
           this.timezone = timezoneSelect.value;
           await localforage.setItem('userTimezone', this.timezone);
-          console.log('Timezone Updated:', this.timezone);
 
           this.updateTimeSelectors();
         });
@@ -130,35 +129,48 @@ if (proposals && proposals.length > 0) {
         this.initDurationSlider(durationSlider, startPicker, endPicker, durationDisplay, affectVotingStart);
       });
     }
-
     initDatetimePickers(durationSlider: HTMLInputElement, startPicker: HTMLInputElement, endPicker: HTMLInputElement, durationDisplay: HTMLElement, affectVotingStart: boolean) {
       if (startPicker && endPicker) {
         let originalStartDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
         let originalEndDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
         let originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
 
-        console.log(this.timezone)
-          console.log('hi change startpicker')
         startPicker.addEventListener('change', (event: any) => {
           const newStartDate = zonedTimeToUtc(new Date(event.target.value), this.timezone);
-          if (isNaN(newStartDate.getTime()) || newStartDate < new Date()) return;
+          const currentDate = new Date();
+
+          // Ensure start date is not earlier than current date
+          if (newStartDate < currentDate || isNaN(newStartDate.getTime())) return;
+
+          // Calculate the new end date based on the new start date and the original duration
           let newEndDate = new Date(newStartDate.getTime() + originalDuration);
+
+          // Ensure the minimum duration of 1 minute
           if (newEndDate.getTime() - newStartDate.getTime() < 60000) {
             newEndDate = new Date(newStartDate.getTime() + 60000);
+            originalDuration = 60000;
           }
+
+          originalStartDate = newStartDate;
           endPicker.value = formatDateInTimezone(utcToZonedTime(newEndDate, this.timezone).getTime(), this.timezone);
           endPicker.min = formatDateInTimezone(utcToZonedTime(new Date(newStartDate.getTime() + 60000), this.timezone).getTime(), this.timezone);
         });
 
         endPicker.addEventListener('change', (event: any) => {
-          let newEndDate = new Date(event.target.value);
-          if (isNaN(newEndDate.getTime())) return;
+          const newEndDate = zonedTimeToUtc(new Date(event.target.value), this.timezone);
+          const currentDate = new Date();
+
+          // Ensure end date is not earlier than current date
+          if (newEndDate < currentDate || isNaN(newEndDate.getTime())) return;
+
+          // Update the original end date and recalculate the duration
+          originalEndDate = newEndDate;
+          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
+
           if (affectVotingStart) {
             adjustVotingPhaseDates(utcToZonedTime(originalEndDate, this.timezone), utcToZonedTime(newEndDate, this.timezone), this, this.timezone);
           }
-          originalEndDate = newEndDate;
-          originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
-          originalStartDate = new Date(startPicker.value);
+
           this.updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
         });
       }
@@ -184,18 +196,33 @@ if (proposals && proposals.length > 0) {
 
     updateTimeSelectors() {
       const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
+      const currentDate = new Date();
+
       timeSelectors.forEach(selector => {
         const phaseMode = selector.getAttribute('data-phase');
         const startPicker = selector.querySelector(`#start-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
         const endPicker = selector.querySelector(`#end-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
         const durationSlider = selector.querySelector(`#datetime-slider-${phaseMode} input[type="range"]`) as HTMLInputElement;
         const durationDisplay = selector.querySelector(`#datetime-slider-${phaseMode} .duration-display`) as HTMLElement;
+
         if (startPicker && endPicker) {
-          const startDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
-          const endDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
-          startPicker.value = formatDateInTimezone(utcToZonedTime(startDate, this.timezone).getTime(), this.timezone);
-          endPicker.value = formatDateInTimezone(utcToZonedTime(endDate, this.timezone).getTime(), this.timezone);
-    
+          let startDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
+          let endDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
+
+          // Ensure start date is not earlier than current date
+          if (startDate < currentDate) {
+            const duration = endDate.getTime() - startDate.getTime();
+            startDate = new Date(currentDate.getTime());
+            endDate = new Date(startDate.getTime() + duration);
+          }
+
+          const setPickerValue = (picker: HTMLInputElement, date: Date, timezone: string) => {
+            picker.value = formatDateInTimezone(utcToZonedTime(date, timezone).getTime(), timezone);
+          };
+
+          setPickerValue(startPicker, startDate, this.timezone);
+          setPickerValue(endPicker, endDate, this.timezone);
+
           if (durationSlider && durationDisplay) {
             const duration = (endDate.getTime() - startDate.getTime()) / 1000;
             const sliderValue = durationToSlider(duration / 60);
