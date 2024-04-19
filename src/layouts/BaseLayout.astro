@@ -1,4 +1,5 @@
 ---
+import SpeedInsights from "@vercel/speed-insights/astro"
 import Header from '@components/layout/Header.astro';
 
 import '@assets/quill.snow.css';
@@ -75,5 +76,6 @@ if (url.hash.includes('#/app/')) {
       <slot />
     </main>
     <br/>
+    <SpeedInsights/>
   </body>
 </html>

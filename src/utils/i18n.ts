@@ -1,19 +1,23 @@
 // src/utils/i18n.ts
-import { promises as fs } from 'fs';
-import path from 'path';
+import enTranslations from '../locales/en.json';
+import deTranslations from '../locales/de.json';
+import itTranslations from '../locales/it.json';
 
 export class Translator {
-  private translations: any = {};
+  private translations: any;
 
-  constructor(private locale: string) {}
+  constructor(private locale: string) {
+    this.setTranslations();
+  }
 
-  public async init(): Promise<void> {
-    try {
-      const fileContent = await fs.readFile(path.join(process.cwd(), 'src', 'locales', `${this.locale}.json`), 'utf-8');
-      this.translations = JSON.parse(fileContent);
-    } catch (error) {
-      console.error('Error loading translations:', error);
-    }
+  private setTranslations(): void {
+    const translationsMap: { [key: string]: any } = { 
+      en: enTranslations,
+      de: deTranslations,
+      it: itTranslations
+    };
+
+    this.translations = translationsMap[this.locale] || translationsMap.en;
   }
 
   public t(key: string): string {
@@ -23,7 +27,7 @@ export class Translator {
     for (const keyPart of keys) {
       value = value[keyPart];
       if (value === undefined) {
-        return key; 
+        return key;  // Fallback to the key if translation is missing
       }
     }
 

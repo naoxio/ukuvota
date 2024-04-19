@@ -3,7 +3,7 @@ import { formatDateInTimezone } from '@utils/dateUtils';
 import { Translator } from '@utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en');
-await translator.init();
+
 
 interface Props {
   id: string;

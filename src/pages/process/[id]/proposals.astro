@@ -6,7 +6,7 @@ import fetchProcessData from '@utils/fetchProcessData';
 import ProposalsList from "@components/process/ProposalsList.astro";
 
 const translator = new Translator(Astro.currentLocale || 'en');
-await translator.init();
+
 
 const { url } = Astro;
 const processId: any = Astro.params.id;

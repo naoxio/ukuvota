@@ -10,7 +10,7 @@ import getQuillHTML from '@utils/getQuillHTML';
 import IProcess from '@interfaces/IProcess';
 
 const translator = new Translator(Astro.currentLocale || 'en');
-await translator.init();
+
 
 const { url } = Astro;
 interface Props {

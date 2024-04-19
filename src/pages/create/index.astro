@@ -12,7 +12,7 @@ import { Icon } from 'astro-icon'
 import localforage from 'localforage';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
-await translator.init();
+
 
 
 const rawCookieValue = Astro.cookies.get('process')?.value;

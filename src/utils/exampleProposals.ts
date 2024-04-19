@@ -2,7 +2,7 @@ import { Translator } from '@utils/i18n.js';
 
 const exampleProposals = async (locale: string) => {
   const translator = new Translator(locale);
-  await translator.init();
+  
   return [
     {
       title: translator.t('proposal.zero.title'),

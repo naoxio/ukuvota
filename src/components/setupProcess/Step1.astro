@@ -5,7 +5,7 @@ import Modal from '@components/ui/Modal.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
 
 const translator = new Translator(Astro.currentLocale || 'en');
-await translator.init();
+
 
 const timezoneOffset = new Date().getTimezoneOffset();
 
