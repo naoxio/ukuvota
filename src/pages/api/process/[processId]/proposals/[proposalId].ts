@@ -3,7 +3,6 @@ import { ref, update, remove, onValue,off } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 
 
-
 export const GET: APIRoute = async ({ params, request }) => {
   const { processId, proposalId } = params;
   const proposalRef = ref(firebaseDB, `process/${processId}/proposals/${proposalId}`);

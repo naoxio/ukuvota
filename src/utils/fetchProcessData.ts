@@ -1,6 +1,6 @@
-import { ref, get } from 'firebase/database';
+import { ref, get, remove } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
-import { getDownloadURL, ref as storageRef, getStorage } from 'firebase/storage';
+import { getDownloadURL, ref as storageRef, getStorage, uploadString } from 'firebase/storage';
 
 export default async function fetchProcessData(processId: string): Promise<any> {
   let process;
@@ -9,6 +9,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   if (snapshot.exists()) {
     process = snapshot.val();
 
+    // Check if 'description' key does not exist and 'descriptionId' key exists
     if (!process.description && process.descriptionId) {
       const storage = getStorage();
       const descriptionRef = storageRef(storage, `descriptions/${process.descriptionId}.json`);
@@ -27,29 +28,34 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
       }
     }
-
     const currentTime = new Date().getTime();
     if (currentTime > process.proposalDates[1]) {
-      console.log(process.proposals)
-      console.log('hiii')
       if (!process.proposals) return undefined;
-      // Normalize the data to always be an array
       const proposalsArray = Array.isArray(process.proposals) ? process.proposals : Object.values(process.proposals);
+      const storage = getStorage();
+      
+      await Promise.all(proposalsArray.map(async (proposal: any) => {
+        if (proposal.id && proposal.description) {
+          const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
+
+          await uploadString(proposalDescriptionRef, JSON.stringify({description: proposal.description}), 'raw');
+
+          const realtimeDescriptionRef = ref(firebaseDB, `process/${processId}/proposals/${proposal.id}/description`);
+          await remove(realtimeDescriptionRef);
+        }
+      }));
+      
       const updatedProposals = await Promise.all(proposalsArray.map(async (proposal: any) => {
-        if (!proposal.description && proposal.id) {
-          const storage = getStorage();
+        if (proposal.id) {
           const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
           try {
             const downloadURL = await getDownloadURL(proposalDescriptionRef);
             const response = await fetch(downloadURL);
-            const proposalDescription = await response.text();
-            proposal.description = JSON.parse(proposalDescription);
-          } catch (error: any) {
-            if (error && error.code === 'storage/object-not-found') {
-              console.error('Proposal description not found in Firebase Storage:', error.message);
-            } else {
-              console.error('Error fetching proposal description:', error);
-            }
+            const descriptionData = await response.json();
+            proposal.description = descriptionData.description;
+          } catch (error) {
+            console.error('Failed to fetch description from Firebase Storage:', error);
+            delete proposal.description;
           }
         }
         return proposal;

@@ -1,18 +1,45 @@
 import { format, utcToZonedTime } from 'date-fns-tz';
-
 const formatDuration = (durationInSeconds: number): string => {
-  if (durationInSeconds < 60) return '1m';
-  const units = ['y', 'mo', 'd', 'h', 'm'];
-  const times = [31536000, 2592000, 86400, 3600, 60];
+  const times = {
+    year: 31536000,
+    month: 2592000,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+    second: 1
+  };
+
   let result = '';
-  for (let i = 0; i < units.length; i++) {
-    const unitValue = Math.floor(durationInSeconds / times[i]);
-    if (unitValue > 0) {
-      result += `${unitValue}${units[i]} `;
-      durationInSeconds %= times[i];
-    }
+  let remainingSeconds = durationInSeconds;
+
+  if (durationInSeconds >= times.year) {
+    const years = Math.floor(remainingSeconds / times.year);
+    remainingSeconds %= times.year;
+    const months = Math.floor(remainingSeconds / times.month);
+    result = `${years}y ${months}mo`;
+  } else if (durationInSeconds >= times.month) {
+    const months = Math.floor(remainingSeconds / times.month);
+    remainingSeconds %= times.month;
+    const days = Math.floor(remainingSeconds / times.day);
+    result = `${months}mo ${days}d`;
+  } else if (durationInSeconds >= times.day) {
+    const days = Math.floor(remainingSeconds / times.day);
+    remainingSeconds %= times.day;
+    const hours = Math.floor(remainingSeconds / times.hour);
+    result = `${days}d ${hours}h`;
+  } else if (durationInSeconds >= times.hour) {
+    const hours = Math.floor(remainingSeconds / times.hour);
+    remainingSeconds %= times.hour;
+    const minutes = Math.floor(remainingSeconds / times.minute);
+    result = `${hours}h ${minutes}m`;
+  } else if (durationInSeconds >= times.minute * 5) {
+    const minutes = Math.floor(remainingSeconds / times.minute);
+    result = `${minutes}m`;
+  } else {
+    result = `${Math.floor(remainingSeconds)}s`;
   }
-  return result.trim();
+
+  return result;
 };
 
 const formatDateInTimezone = (date: number, timezone: string): string => {
