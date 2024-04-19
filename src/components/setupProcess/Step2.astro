@@ -69,7 +69,6 @@ if (proposals && proposals.length > 0) {
   import localforage from 'localforage';
 
   const storedTimeZone = await localforage.getItem('userTimezone') || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  console.log(storedTimeZone)
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
     timezone = 'UTC'
@@ -82,7 +81,6 @@ if (proposals && proposals.length > 0) {
     async fetchAndSetTimezone() {
       const storedTimeZone = await localforage.getItem('userTimezone') || Intl.DateTimeFormat().resolvedOptions().timeZone;
       this.timezone = storedTimeZone as string;
-      console.log('Initial Timezone Set:', this.timezone);
     }
 
     constructor() {
@@ -105,7 +103,6 @@ if (proposals && proposals.length > 0) {
       const timezoneSelect = this.querySelector('#timezone-select') as HTMLSelectElement;
       if (timezoneSelect) {
         timezoneSelect.value = this.timezone ;
-        console.log(this.timezone, storedTimeZone, Intl.DateTimeFormat().resolvedOptions().timeZone)
         timezoneSelect.addEventListener('change', async () => {
           this.timezone = timezoneSelect.value;
           await localforage.setItem('userTimezone', this.timezone);
@@ -208,7 +205,6 @@ if (proposals && proposals.length > 0) {
         if (startPicker && endPicker) {
           let startDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
           let endDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
-
           // Ensure start date is not earlier than current date
           if (startDate < currentDate) {
             const duration = endDate.getTime() - startDate.getTime();
