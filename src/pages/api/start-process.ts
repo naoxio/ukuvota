@@ -36,10 +36,6 @@ export const POST: APIRoute = async ({ request }) => {
   const currentTimestamp = new Date().getTime();
   let startProposalDate = processCookieObject.startProposalDate as number;
   let endProposalDate = processCookieObject.endProposalDate as number;
-  console.log('before checks')
-  console.log(prettyFormatInTimezone(currentTimestamp, timezone))
-  console.log(prettyFormatInTimezone(startProposalDate, timezone))
-  console.log(prettyFormatInTimezone(endProposalDate, timezone))
   if (!startProposalDate || startProposalDate < currentTimestamp) {
     startProposalDate = currentTimestamp;
   }
@@ -47,10 +43,6 @@ export const POST: APIRoute = async ({ request }) => {
   if (!endProposalDate || endProposalDate < startProposalDate) {
     endProposalDate = startProposalDate;
   }
-  console.log('after checks')
-
-  console.log(prettyFormatInTimezone(startProposalDate, timezone))
-  console.log(prettyFormatInTimezone(endProposalDate, timezone))
 
   // Validate and adjust voting dates
   let startVotingDate = processCookieObject.startVotingDate;
