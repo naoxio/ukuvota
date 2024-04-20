@@ -1,6 +1,7 @@
 import { ref, get, remove } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 import { getDownloadURL, ref as storageRef, getStorage, uploadString } from 'firebase/storage';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 
 export default async function fetchProcessData(processId: string): Promise<any> {
   let process;
@@ -8,7 +9,8 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   const snapshot = await get(processRef);
   if (snapshot.exists()) {
     process = snapshot.val();
-
+    console.log('inside fetch')
+    console.log(process)
     // Check if 'description' key does not exist and 'descriptionId' key exists
     if (!process.description && process.descriptionId) {
       const storage = getStorage();
@@ -28,9 +30,11 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
       }
     }
-    const currentTime = new Date().getTime();
-    if (currentTime > process.proposalDates[1]) {
-      if (!process.proposals) return undefined;
+    const timezone = process.timezone || 'UTC';
+    const currentTime = new Date();
+
+    if (currentTime > zonedTimeToUtc(process.proposalDates[1], timezone)) {
+      if (!process.proposals) return process;
       const proposalsArray = Array.isArray(process.proposals) ? process.proposals : Object.values(process.proposals);
       const storage = getStorage();
       
