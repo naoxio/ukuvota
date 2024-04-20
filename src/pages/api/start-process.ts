@@ -3,6 +3,7 @@ import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import { ref, set } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadString } from 'firebase/storage';
 import { firebaseDB } from '@utils/firebaseConfig';
+import { prettyFormatInTimezone } from '@utils/dateUtils';
 
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
@@ -33,9 +34,12 @@ export const POST: APIRoute = async ({ request }) => {
 
   const timezone = processCookieObject.timezone || 'UTC';
   const currentTimestamp = new Date().getTime();
-  let startProposalDate = processCookieObject.startProposalDate;
-  let endProposalDate = processCookieObject.endProposalDate;
-
+  let startProposalDate = processCookieObject.startProposalDate as number;
+  let endProposalDate = processCookieObject.endProposalDate as number;
+  console.log('before checks')
+  console.log(prettyFormatInTimezone(currentTimestamp, timezone))
+  console.log(prettyFormatInTimezone(startProposalDate, timezone))
+  console.log(prettyFormatInTimezone(endProposalDate, timezone))
   if (!startProposalDate || startProposalDate < currentTimestamp) {
     startProposalDate = currentTimestamp;
   }
@@ -43,6 +47,10 @@ export const POST: APIRoute = async ({ request }) => {
   if (!endProposalDate || endProposalDate < startProposalDate) {
     endProposalDate = startProposalDate;
   }
+  console.log('after checks')
+
+  console.log(prettyFormatInTimezone(startProposalDate, timezone))
+  console.log(prettyFormatInTimezone(endProposalDate, timezone))
 
   // Validate and adjust voting dates
   let startVotingDate = processCookieObject.startVotingDate;

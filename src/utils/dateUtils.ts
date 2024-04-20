@@ -42,6 +42,13 @@ const formatDuration = (durationInSeconds: number): string => {
   return result;
 };
 
+
+const prettyFormatInTimezone = (utcMillis: number, timezone: string, formatStr = 'MMMM do, yyyy, h:mm aa') => {
+  const date = new Date(utcMillis);
+  const zonedDate = utcToZonedTime(date, timezone);
+  return format(zonedDate, formatStr);
+}
+
 const formatDateInTimezone = (date: number, timezone?: string): string => {
   const zonedDate = utcToZonedTime(date, timezone || 'UTC');
   return format(zonedDate, "yyyy-MM-dd'T'HH:mm", { timeZone: timezone });
@@ -58,5 +65,5 @@ function getTimezoneOffset(timezone: string): number {
   return timezoneOffset;
 }
 
-export { formatDuration, formatDateInTimezone, formatDate, getTimezoneOffset };
+export { formatDuration, formatDateInTimezone, prettyFormatInTimezone, formatDate, getTimezoneOffset };
 

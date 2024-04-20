@@ -1,7 +1,7 @@
 ---
 import IProposal from '@interfaces/IProposal';
 import { Translator } from '@utils/i18n.js';
-import { formatDateInTimezone } from '@utils/dateUtils';
+import { prettyFormatInTimezone } from '@utils/dateUtils';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 
@@ -18,6 +18,7 @@ type Props = {
     weighting: string;
 }
 const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals, timezone, weighting } = Astro.props;
+
 ---
 <div class="process-details">
     <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
@@ -33,14 +34,14 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
             {proposalStartDate && proposalEndDate ? (
                 <div class="p-4">
                         <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.proposal.title`) }</h2>
-                        <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(proposalStartDate, timezone)}</p>
-                        <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(proposalEndDate, timezone)}</p>
+                        <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {prettyFormatInTimezone(proposalStartDate, timezone)}</p>
+                        <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {prettyFormatInTimezone(proposalEndDate, timezone)}</p>
                 </div>
             ) : null }
             <div class="p-4">
                 <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.voting.title`) }</h2>
-                {votingStartDate ? <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(votingStartDate, timezone)}</p> : null}
-                {votingEndDate ? <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(votingEndDate, timezone)}</p> : null}
+                {votingStartDate ? <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {prettyFormatInTimezone(votingStartDate, timezone)}</p> : null}
+                {votingEndDate ? <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {prettyFormatInTimezone(votingEndDate, timezone)}</p> : null}
             </div>
             <div class="mt-4">
             <h3 class="text-lg font-semibold mb-2">{translator.t('setup.timezone')}:</h3>
