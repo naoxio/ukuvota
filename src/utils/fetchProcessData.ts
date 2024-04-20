@@ -9,8 +9,6 @@ export default async function fetchProcessData(processId: string): Promise<any> 
   const snapshot = await get(processRef);
   if (snapshot.exists()) {
     process = snapshot.val();
-    console.log('inside fetch')
-    console.log(process)
     // Check if 'description' key does not exist and 'descriptionId' key exists
     if (!process.description && process.descriptionId) {
       const storage = getStorage();
