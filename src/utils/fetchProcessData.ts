@@ -1,7 +1,8 @@
 import { ref, get, remove } from 'firebase/database';
 import { firebaseDB } from '@utils/firebaseConfig';
 import { getDownloadURL, ref as storageRef, getStorage, uploadString } from 'firebase/storage';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import IProposal from '@interfaces/IProposal';
 
 export default async function fetchProcessData(processId: string): Promise<any> {
   let process;
@@ -32,29 +33,38 @@ export default async function fetchProcessData(processId: string): Promise<any> 
     const currentTime = new Date();
 
     if (currentTime > zonedTimeToUtc(process.proposalDates[1], timezone)) {
+      console.log('currentime > than zonedTime' )
+      console.log(process.proposals)
       if (!process.proposals) return process;
-      const proposalsArray = Array.isArray(process.proposals) ? process.proposals : Object.values(process.proposals);
+    
+      const proposalsObj = process.proposals;
       const storage = getStorage();
+
+      console.log(proposalsObj)
       
-      await Promise.all(proposalsArray.map(async (proposal: any) => {
-        if (proposal.id && proposal.description) {
-          const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
+      await Promise.all(Object.entries(proposalsObj).map(async ([id, proposal] : [string, any]) => {
+        if (id && proposal.description) {
+          console.log(id)
+          const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
 
           await uploadString(proposalDescriptionRef, JSON.stringify({description: proposal.description}), 'raw');
 
-          const realtimeDescriptionRef = ref(firebaseDB, `process/${processId}/proposals/${proposal.id}/description`);
+          const realtimeDescriptionRef = ref(firebaseDB, `process/${processId}/proposals/${id}/description`);
           await remove(realtimeDescriptionRef);
         }
       }));
       
-      const updatedProposals = await Promise.all(proposalsArray.map(async (proposal: any) => {
-        if (proposal.id) {
-          const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
+      const updatedProposals = await Promise.all(Object.entries(proposalsObj).map(async ([id, proposal]: [string, any]) => {
+        console.log(id)
+        if (id) {
+          const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
           try {
             const downloadURL = await getDownloadURL(proposalDescriptionRef);
             const response = await fetch(downloadURL);
             const descriptionData = await response.json();
             proposal.description = descriptionData.description;
+            proposal.id = id;
+            console.log(descriptionData)
           } catch (error) {
             console.error('Failed to fetch description from Firebase Storage:', error);
             delete proposal.description;
@@ -62,7 +72,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
         return proposal;
       }));
-
+      console.log(updatedProposals)
       process.proposals = updatedProposals;
     }
 

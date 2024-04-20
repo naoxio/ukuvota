@@ -61,14 +61,14 @@ export const POST: APIRoute = async ({ request }) => {
     _id: processId,
     proposalDates: [startProposalDate, endProposalDate],
     proposals: proposalsMetadata,
-    title: processCookieObject.title,
+    title: processCookieObject.title || '',
     votingDates: [startVotingDate, endVotingDate],
-    weighting: processCookieObject.weighting,
+    weighting: processCookieObject.weighting || '1',
     timezone: timezone,
   } as IProcess;
 
   if (descriptionContent) {
-    reformattedProcess.descriptionId = descriptionId;
+    reformattedProcess.descriptionId = descriptionId || '';
   }
 
 

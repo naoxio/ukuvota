@@ -1,6 +1,7 @@
 import type IProposal from '@interfaces/IProposal';
 
 const isProposalEmpty = (proposal: IProposal): boolean => {
+  if (proposal.id === undefined) return true;
   const isEmptyStringDescription = typeof proposal.description === 'string' && proposal.description === '';
   let isEmptyOpsDescription = false;
   if (typeof proposal.description === 'object' && proposal.description.ops) {

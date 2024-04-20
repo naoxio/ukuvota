@@ -15,7 +15,7 @@ const createProposalElement = (
   } else {
     descriptionContent = description.ops.reduce((acc, op) => acc + op.insert, '');
   }
-  const isEmpty = isProposalEmpty({title, description: descriptionContent} as IProposal);
+  const isEmpty = isProposalEmpty({id: uniqueId, title, description: descriptionContent} as IProposal);
 
   // Use translator.t to fetch localized strings
   const descriptionArea = `
