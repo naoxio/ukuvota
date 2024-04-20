@@ -86,7 +86,6 @@ if (proposals && proposals.length > 0) {
     initialize() {
 
       this.fetchAndSetTimezone().then(async () => {
-        console.log(this.timezone, await localforage.getItem('userTimezone'), Intl.DateTimeFormat().resolvedOptions().timeZone)
         this.initializeTimezoneSelector();
 
         this.initializeTimeSelectors();

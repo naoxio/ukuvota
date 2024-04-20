@@ -15,10 +15,9 @@ interface Props {
 
 const { phase, dates, timezone, proposals_length } = Astro.props;
 ---
-
 <process-time-label data-start={dates[0]} data-timezone={timezone}>
   <span>{translator.t(`phases.${phase}.title`)}:&nbsp;</span>
-  {utcToZonedTime(dates[0], timezone) > new Date() ? (
+  {dates[0] > Date.now() ? (
     <>
       <br />
       <span>{translator.t(`phases.start`)}:&nbsp;</span>
@@ -27,7 +26,7 @@ const { phase, dates, timezone, proposals_length } = Astro.props;
       <span>{translator.t(`phases.lastFor`)}:&nbsp;</span>
       <Countdown type="success" dates={dates} timezone={timezone} />
     </>
-  ) : utcToZonedTime(dates[1], timezone) > new Date() ? (
+  ) : dates[1] > Date.now() ? (
     <>
       {(proposals_length !== undefined && proposals_length === 0) ? (
         <span class="text-info">{translator.t('skipped')}</span>
@@ -49,16 +48,17 @@ const { phase, dates, timezone, proposals_length } = Astro.props;
 </process-time-label>
 
 <script>
-import { format, utcToZonedTime } from 'date-fns-tz';
+import { format } from 'date-fns-tz';
 
 class ProcessTimeLabel extends HTMLElement {
   constructor() {
     super();
     const startDate = this.querySelector('span#start-date');
     const timezone = this.dataset.timezone || 'UTC';
+    const startMillis = Number(this.dataset.start);
 
     if (startDate) {
-      const start = utcToZonedTime(Number(this.dataset.start), timezone);
+      const start = new Date(startMillis);
       startDate.innerHTML = format(start, 'MMMM d, yyyy h:mm a', { timeZone: timezone });
     }
   }
