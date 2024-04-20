@@ -4,7 +4,6 @@ import { exampleProposals } from '@utils/exampleProposals.js';
 import { parseProcessRawCookie } from '@utils/parseProcessCookie';
 import IProposal from "@interfaces/IProposal";
 import { utcToZonedTime } from 'date-fns-tz';
-import { gzipSync } from 'zlib';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
@@ -53,6 +52,7 @@ export const POST: APIRoute = async ({ request }) => {
       : processCookieObject.endVotingDate || (startVotingDate + 3600000);
 
     if (phase === 'full') {
+      if (processCookieObject.proposals) processCookieObject.proposals = []
       let startProposalDate = formData.get('start-date-picker-proposal')
         ? Number(formData.get('start-date-picker-proposal'))
         : processCookieObject.startProposalDate || currentDate.getTime();

@@ -58,33 +58,33 @@ const initializeQuill = (proposalElement: Element, uniqueId: string, processId: 
         }
       });
     }
-    const eventSource = new EventSource(`/api/process/${processId}/proposals/${uniqueId}`);
-    
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data) {
-        if (data.description) {
-          quillEditor.setContents(data.description);
-          quillOpsInput.value = JSON.stringify(data.description);
-          (proposalElement.querySelector('.view-mode .desc') as HTMLElement).innerHTML = data.description;
-          (proposalElement.querySelector('.edit-mode .ql-editor') as HTMLElement).innerHTML = data.description;
+    else {
+      const eventSource = new EventSource(`/api/process/${processId}/proposals/${uniqueId}`);
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data) {
+          if (data.description) {
+            quillEditor.setContents(data.description);
+            quillOpsInput.value = JSON.stringify(data.description);
+            (proposalElement.querySelector('.view-mode .desc') as HTMLElement).innerHTML = data.description;
+            (proposalElement.querySelector('.edit-mode .ql-editor') as HTMLElement).innerHTML = data.description;
+          }
+          if (data.title) {
+            titleDisplay.textContent = data.title;
+            titleInput.value = data.title;
+          }
         }
-        if (data.title) {
-          titleDisplay.textContent = data.title;
-          titleInput.value = data.title;
-        }
-      }
 
-    };
+      };
 
-    eventSource.onerror = (error) => {
-      console.error("EventSource failed:", error);
-    };
-    
-    
+      eventSource.onerror = (error) => {
+        console.error("EventSource failed:", error);
+      };
 
-    // Clean up the event source when the component is destroyed or unmounted
-    proposalElement.addEventListener('remove', () => eventSource.close());
+      // Clean up the event source when the component is destroyed or unmounted
+      proposalElement.addEventListener('remove', () => eventSource.close());
+    }
   }
 };
 
@@ -148,9 +148,9 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
     setupDeleteButtonListener(proposalElement, proposalsContainer, processId, noProposalsText);
   };
   const insertNewProposal = (
-    proposalHTML: string, 
-    proposalsContainer: HTMLElement, 
-    processId: string, 
+    proposalHTML: string,
+    proposalsContainer: HTMLElement,
+    processId: string,
     isSetup: boolean,
     noProposalsText: HTMLElement | null,
     editing?: boolean | null,
@@ -158,7 +158,7 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
     const parser = new DOMParser();
     const doc = parser.parseFromString(proposalHTML, 'text/html');
     const newProposalElement = doc.body.firstChild as HTMLElement;
-  
+
     if (newProposalElement) {
 
       if (editing) {
@@ -166,7 +166,7 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
 
       }
       proposalsContainer.appendChild(newProposalElement);
-  
+
       setupButtonListeners(newProposalElement, proposalsContainer, processId, noProposalsText);
       initializeQuill(newProposalElement, newProposalElement.id, processId, isSetup);
       if (noProposalsText && proposalsContainer.children.length > 0) {
