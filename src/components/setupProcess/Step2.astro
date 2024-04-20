@@ -68,7 +68,6 @@ if (proposals && proposals.length > 0) {
   import { adjustVotingPhaseDates } from '@utils/dateAdjustments';
   import localforage from 'localforage';
 
-  const storedTimeZone = await localforage.getItem('userTimezone') || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
     timezone = 'UTC'
@@ -86,12 +85,14 @@ if (proposals && proposals.length > 0) {
 
     initialize() {
 
-      this.fetchAndSetTimezone().then(() => {
+      this.fetchAndSetTimezone().then(async () => {
+        console.log(this.timezone, await localforage.getItem('userTimezone'), Intl.DateTimeFormat().resolvedOptions().timeZone)
         this.initializeTimezoneSelector();
 
         this.initializeTimeSelectors();
         this.setupEventListeners();
         this.updateContinueButton();
+        this.updateTimeSelectors();
       });
     }
 
@@ -177,58 +178,56 @@ if (proposals && proposals.length > 0) {
       }
     }
     updateTimeSelectors() {
-  const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
-  const currentDate = new Date();
+      const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
+      const currentDate = new Date();
 
-  timeSelectors.forEach(selector => {
-    const phaseMode = selector.getAttribute('data-phase');
-    const startPicker = selector.querySelector(`#start-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
-    const endPicker = selector.querySelector(`#end-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
-    const durationSlider = selector.querySelector(`#datetime-slider-${phaseMode} input[type="range"]`) as HTMLInputElement;
-    const durationDisplay = selector.querySelector(`#datetime-slider-${phaseMode} .duration-display`) as HTMLElement;
+      timeSelectors.forEach(selector => {
+        const phaseMode = selector.getAttribute('data-phase');
+        const startPicker = selector.querySelector(`#start-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
+        const endPicker = selector.querySelector(`#end-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
+        const durationSlider = selector.querySelector(`#datetime-slider-${phaseMode} input[type="range"]`) as HTMLInputElement;
+        const durationDisplay = selector.querySelector(`#datetime-slider-${phaseMode} .duration-display`) as HTMLElement;
 
-    if (startPicker && endPicker) {
-      let startDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
-      let endDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
-      const affectVotingStart = (phaseMode === 'proposal' && this.phase === 'full');
+        if (startPicker && endPicker) {
+          let startDate = zonedTimeToUtc(new Date(startPicker.value), this.timezone);
+          let endDate = zonedTimeToUtc(new Date(endPicker.value), this.timezone);
+          const affectVotingStart = (phaseMode === 'proposal' && this.phase === 'full');
 
-      // Ensure start date is not earlier than current date
-      if (startDate < currentDate) {
-        const duration = endDate.getTime() - startDate.getTime();
-        startDate = new Date(currentDate.getTime());
-        endDate = new Date(startDate.getTime() + duration);
-      }
+          if (startDate < currentDate) {
+            const duration = endDate.getTime() - startDate.getTime();
+            startDate = new Date(currentDate.getTime());
+            endDate = new Date(startDate.getTime() + duration);
+          }
 
-      // If phasemode is "proposal" and the phase is "full", adjust voting phase dates
-      if (affectVotingStart) {
-        const votingStartPicker = this.querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-        const newVotingStartDate = new Date(endDate.getTime() + 60000); // Add 1 minute after proposal end date
-        const votingEndPicker = this.querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-        const votingStartDate = zonedTimeToUtc(new Date(votingStartPicker.value), this.timezone);
-        const votingEndDate = zonedTimeToUtc(new Date(votingEndPicker.value), this.timezone);
-        const votingDuration = votingEndDate.getTime() - votingStartDate.getTime();
+          if (affectVotingStart) {
+            const votingStartPicker = this.querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
+            const newVotingStartDate = new Date(endDate.getTime() + 60000);
+            const votingEndPicker = this.querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
+            const votingStartDate = zonedTimeToUtc(new Date(votingStartPicker.value), this.timezone);
+            const votingEndDate = zonedTimeToUtc(new Date(votingEndPicker.value), this.timezone);
+            const votingDuration = votingEndDate.getTime() - votingStartDate.getTime();
 
-        const newVotingEndDate = new Date(newVotingStartDate.getTime() + votingDuration);
-        votingStartPicker.value = formatDateInTimezone(utcToZonedTime(newVotingStartDate, this.timezone).getTime(), this.timezone);
-        votingEndPicker.value = formatDateInTimezone(utcToZonedTime(newVotingEndDate, this.timezone).getTime(), this.timezone);
-      }
+            const newVotingEndDate = new Date(newVotingStartDate.getTime() + votingDuration);
+            votingStartPicker.value = formatDateInTimezone(utcToZonedTime(newVotingStartDate, this.timezone).getTime(), this.timezone);
+            votingEndPicker.value = formatDateInTimezone(utcToZonedTime(newVotingEndDate, this.timezone).getTime(), this.timezone);
+          }
 
-      const setPickerValue = (picker: HTMLInputElement, date: Date, timezone: string) => {
-        picker.value = formatDateInTimezone(utcToZonedTime(date, timezone).getTime(), timezone);
-      };
+          const setPickerValue = (picker: HTMLInputElement, date: Date, timezone: string) => {
+            picker.value = formatDateInTimezone(utcToZonedTime(date, timezone).getTime(), timezone);
+          };
 
-      setPickerValue(startPicker, startDate, this.timezone);
-      setPickerValue(endPicker, endDate, this.timezone);
+          setPickerValue(startPicker, startDate, this.timezone);
+          setPickerValue(endPicker, endDate, this.timezone);
 
-      if (durationSlider && durationDisplay) {
-        const duration = (endDate.getTime() - startDate.getTime()) / 1000;
-        const sliderValue = durationToSlider(duration / 60);
-        if (sliderValue) durationSlider.value = sliderValue.toString();
-        durationDisplay.textContent = formatDuration(duration);
-      }
+          if (durationSlider && durationDisplay) {
+            const duration = (endDate.getTime() - startDate.getTime()) / 1000;
+            const sliderValue = durationToSlider(duration / 60);
+            if (sliderValue) durationSlider.value = sliderValue.toString();
+            durationDisplay.textContent = formatDuration(duration);
+          }
+        }
+      });
     }
-  });
-}
     setupEventListeners() {
       const backButton = this.querySelector('#backButton');
       const continueButton = this.querySelector('#continueButton');
