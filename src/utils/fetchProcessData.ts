@@ -33,18 +33,15 @@ export default async function fetchProcessData(processId: string): Promise<any> 
     const currentTime = new Date();
 
     if (currentTime > zonedTimeToUtc(process.proposalDates[1], timezone)) {
-      console.log('currentime > than zonedTime' )
-      console.log(process.proposals)
       if (!process.proposals) return process;
     
       const proposalsObj = process.proposals;
       const storage = getStorage();
 
-      console.log(proposalsObj)
       
-      await Promise.all(Object.entries(proposalsObj).map(async ([id, proposal] : [string, any]) => {
+      await Promise.all(Object.entries(proposalsObj).map(async ([index, proposal] : [string, any]) => {
+        let id = proposal.id ? proposal.id : index;
         if (id && proposal.description) {
-          console.log(id)
           const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
 
           await uploadString(proposalDescriptionRef, JSON.stringify({description: proposal.description}), 'raw');
@@ -54,8 +51,8 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
       }));
       
-      const updatedProposals = await Promise.all(Object.entries(proposalsObj).map(async ([id, proposal]: [string, any]) => {
-        console.log(id)
+      const updatedProposals = await Promise.all(Object.entries(proposalsObj).map(async ([index, proposal]: [string, any]) => {
+        let id = proposal.id ? proposal.id : index;
         if (id) {
           const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
           try {
@@ -64,7 +61,6 @@ export default async function fetchProcessData(processId: string): Promise<any> 
             const descriptionData = await response.json();
             proposal.description = descriptionData.description;
             proposal.id = id;
-            console.log(descriptionData)
           } catch (error) {
             console.error('Failed to fetch description from Firebase Storage:', error);
             delete proposal.description;
@@ -72,7 +68,6 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         }
         return proposal;
       }));
-      console.log(updatedProposals)
       process.proposals = updatedProposals;
     }
 

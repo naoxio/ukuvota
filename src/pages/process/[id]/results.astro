@@ -220,7 +220,6 @@ class ResultsCard extends HTMLElement {
                 <span>${voters.name}</span>
             </td>\n`;
             proposals.forEach(proposal => {
-                if (!proposal.id) return;
                 if (isProposalEmpty(proposal)) return;
                 let vote = voters.votes.find((p: any) => p.proposalId == proposal.id).vote;
                 body_content += `<th class="text-center">${vote}</th>\n`;
