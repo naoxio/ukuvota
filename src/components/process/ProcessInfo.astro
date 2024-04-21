@@ -18,8 +18,8 @@ interface Props {
 }
 
 const { process } = Astro.props;
-const weightLabel = process.weighting ? weightingOptions[Number(process.weighting) - 1].label : null;
-const descriptionHTML = getQuillHTML(process.description);
+const weightLabel = process.weighting ? weightingOptions[process.weighting] : null;
+const descriptionHTML = getQuillHTML(process.description ? process.description : '');
 const timezone = process.timezone ? process.timezone : 'UTC';
 const proposalsLength = process.proposals ? Object.values(process.proposals).length : 0;
 

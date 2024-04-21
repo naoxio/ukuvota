@@ -1,19 +1,15 @@
 interface WeightingOptions {
-    value: string
-    label: string
-  }
-const options: WeightingOptions[] = []
-  
-  for (let i = 1; i <= 6; i++) {
-    options.push({
-      value: String(i),
-      label: `x${i}`,
-    })
-  }
+  [key: string]: string;
+}
 
-  options.push({
-    value: '-1',
-    label: '',
-  })
+const weightingOptions: WeightingOptions = {
+  '1': 'x1',
+  '2': 'x2',
+  '3': 'x3',
+  '4': 'x4',
+  '5': 'x5',
+  '6': 'x6',
+  '-1': '∞'
+};
 
-export default options
+export default weightingOptions;

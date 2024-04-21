@@ -47,9 +47,9 @@ const { title, descriptionId, weighting } = Astro.props;
     <span>{ translator.t('process.weighting') }</span>
     <span class="flex justify-center items-center">
       <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
-        {weightingOptions.map(weight => (
-          <option value={weight.value}>
-            { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
+        {Object.entries(weightingOptions).map(([value, label]) => (
+          <option value={value}>
+            { Number(value) > 0 ? <span>{label}</span> : <span>&infin;</span> }
           </option>
         ))}
       </select>
