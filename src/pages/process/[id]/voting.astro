@@ -11,16 +11,21 @@ import getProcessUrl from "@utils/getProcessUrl";
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
+const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
 const process = await fetchProcessData(processId);
-const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
 
-if (pathname !== url.pathname)
-    return Astro.redirect(pathname);
+const localePrefix = Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`;
+const pathname = `${localePrefix}${getProcessUrl(process)}`;
 
-const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+try {
+    if (pathname !== url.pathname) {
+        return Astro.redirect(pathname);
+    }
+} catch (error) {}
+
 ---
 <style>
     .gray {
