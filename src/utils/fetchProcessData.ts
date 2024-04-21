@@ -43,7 +43,6 @@ export default async function fetchProcessData(processId: string): Promise<any> 
         let id = proposal.id ? proposal.id : index;
         if (id && proposal.description) {
           const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
-
           await uploadString(proposalDescriptionRef, JSON.stringify({description: proposal.description}), 'raw');
 
           const realtimeDescriptionRef = ref(firebaseDB, `process/${processId}/proposals/${id}/description`);
@@ -53,7 +52,7 @@ export default async function fetchProcessData(processId: string): Promise<any> 
       
       const updatedProposals = await Promise.all(Object.entries(proposalsObj).map(async ([index, proposal]: [string, any]) => {
         let id = proposal.id ? proposal.id : index;
-        if (id) {
+        if (id && id !== "-1") {
           const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
           try {
             const downloadURL = await getDownloadURL(proposalDescriptionRef);
