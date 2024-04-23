@@ -53,7 +53,6 @@ if (process && !("voters" in process)) {
                 <div class="tab-custom-content hide">
                     <span class="flex justify-between items-center">
                         <h2>{ translator.t('process.results') }</h2>
-                        <!--button class='repeat-button btn btn-sm'>{ translator.t('repeatProcess') }</button-->
                     </span>
                     <h3>
                         <span class="voter-label">{ translator.t('process.voters') }</span>
@@ -72,10 +71,8 @@ if (process && !("voters" in process)) {
                     <br/>
                     <div class="overflow-x-auto">
                         <table class="table w-full">
-                            <!-- head -->
                             <thead>
                                 <tr class="table-row-one">
-                                    <th></th>
                                     <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
                                     <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
                                     <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
@@ -128,7 +125,7 @@ import type IProcess from '@interfaces/IProcess';
 import { toPng } from 'html-to-image';
 import addAlert from '@utils/addAlert';
 import getQuillHTML from '@utils/getQuillHTML';
-import { isProposalEmpty, truncateTitle } from '@utils/proposalUtils';
+import { isProposalEmpty, truncateString } from '@utils/proposalUtils';
 
 
 const save = (filename: string, data: any, type: string): void => {
@@ -209,10 +206,12 @@ class ResultsCard extends HTMLElement {
         if (this.table_body[0]) this.table_body[0].innerHTML = '';
         if (this.table_body[1]) this.table_body[1].innerHTML = '';
 
-        let head_content = `<th>voter</th>`; // TODO: translate
-        proposals.forEach(proposal => {
+        let head_content = `<th></th>`; // TODO: translate
+        proposals.forEach((proposal: any, index: number) => {
             if (isProposalEmpty(proposal)) return;
-            const truncatedTitle = truncateTitle(proposal.title, 50);
+            let truncatedTitle = truncateString(proposal.title, 50);
+            if (truncatedTitle === '') truncatedTitle = truncateString(proposal.id, 2, true);
+
             head_content += `<th>${truncatedTitle}</th>\n`;
         });
         let body_content = '';
@@ -226,7 +225,7 @@ class ResultsCard extends HTMLElement {
             proposals.forEach(proposal => {
                 if (isProposalEmpty(proposal)) return;
                 let vote = voters.votes.find((p: any) => p.proposalId == proposal.id)?.vote;
-                if (!vote) return
+                if (vote === undefined || vote === '' || vote === null) return
                 body_content += `<th class="text-center">${vote}</th>\n`;
             });
             body_content += '</tr>\n';
@@ -261,15 +260,11 @@ class ResultsCard extends HTMLElement {
 
     createRow(rank: number, index: number, proposal: any, selectedVoters: any[]) {
         const description = getQuillHTML(proposal.description);
-        const truncatedTitle = truncateTitle(proposal.title, 50);
+        const truncatedTitle = truncateString(proposal.title, 50);
         const isTitleTruncated = proposal.title !== truncatedTitle;
-
         const row = document.createElement('tr');
         row.className = 'color-' + rank;
         row.innerHTML = `
-            <td class='select-for-repeat cursor-pointer'>
-            <!--input id="${proposal.id}" type="checkbox" class="checkbox checkbox-xs" /-->
-            </td>
             <td class="whitespace-normal break-words">
             <h3 class="${isTitleTruncated ? 'truncated-title' : ''}">${truncatedTitle}</h3>
             <p>${description}</p>

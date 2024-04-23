@@ -187,7 +187,7 @@ try {
             const proposal_node = this.proposal_html.cloneNode(true) as HTMLDivElement;
             proposal_node.id = proposal.id
             const h3 = proposal_node.querySelector('h3') as HTMLElement
-            h3.innerHTML = proposal.title
+            h3.innerHTML = proposal.title || '';
             const p =proposal_node.querySelector('p') as HTMLElement;
             p.innerHTML = getQuillHTML(proposal.description || '')
             const buttons = proposal_node.querySelectorAll('button')

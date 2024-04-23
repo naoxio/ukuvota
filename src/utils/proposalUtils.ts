@@ -37,13 +37,13 @@ const truncateDescription = (description: any, maxLength: number) => {
   return '';
 };
 
-const truncateTitle = (title: string, maxLength: number) => {
-  if (!title) return
+const truncateString = (title: string | undefined, maxLength: number, dotdot: boolean = true) => {
+  if (!title) return ''
   if (title.length > maxLength) {
-    return title.substring(0, maxLength) + '...';
+    return title.substring(0, maxLength) + (dotdot ? '...' : '..');
   }
   return title;
 };
 
 
-export { isProposalEmpty, truncateDescription, truncateTitle };
+export { isProposalEmpty, truncateDescription, truncateString };
