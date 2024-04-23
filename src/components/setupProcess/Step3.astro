@@ -54,7 +54,7 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
                 <ul class="space-y-4">
                     { proposals.map((proposal: IProposal) => (
                     <li class="border border-gray-200 rounded-lg p-4" id={`proposal-${proposal.id}`}>
-                        <b class="text-lg">{proposal.title || 'Untitled Proposal'}</b>
+                        <b class="text-lg" id={`title-${proposal.id}`}></b>
                         <p class="mt-2" id={`description-${proposal.id}`}></p>
                     </li>
                     ))}
@@ -96,7 +96,7 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
     const proposals = document.querySelectorAll('[id^="proposal-"]');
         const proposalsData = await Promise.all(Array.from(proposals).map(async (proposal) => {
             const proposalId = proposal.id.replace('proposal-', '');
-            const titleElement = proposal.querySelector('b.text-lg');
+            const titleContent = await localforage.getItem(`title-${proposalId}`) as string || '';
             const descriptionContent = await localforage.getItem(`description-${proposalId}`) as string || '';
             if(descriptionContent) {
                 const descriptionDelta = JSON.parse(descriptionContent) as Delta;
@@ -106,9 +106,16 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
                     descriptionElement.innerHTML = getQuillHTML(descriptionDelta);
                 }
             }
+            if (titleContent) {
+                const titleElement = document.getElementById(`title-${proposalId}`);
+                if (titleElement) {
+                    titleElement.textContent = titleContent;
+                }
+
+            }
             return {
                 id: proposalId,
-                title: titleElement ? titleElement.textContent : '',
+                title: titleContent,
                 description: descriptionContent
             };
         }));

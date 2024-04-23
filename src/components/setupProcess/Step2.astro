@@ -55,7 +55,7 @@ if (proposals && proposals.length > 0) {
     ) : null}
     <div class="justify-around mt-5 flex">
       <button id="backButton" class="btn" type="submit">{translator.t('buttons.back')}</button>
-      <button id="continueButton" class="btn btn-primary disabled" type="submit">{translator.t('buttons.continue')}</button>
+      <button id="continueButton" class="btn btn-primary" disabled type="submit">{translator.t('buttons.continue')}</button>
     </div>
   </div>
 </step-2>
@@ -67,6 +67,7 @@ if (proposals && proposals.length > 0) {
   import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
   import { adjustVotingPhaseDates } from '@utils/dateAdjustments';
   import localforage from 'localforage';
+import { isProposalEmpty } from '@utils/proposalUtils';
 
   class Step2 extends HTMLElement {
     phase = this.dataset.phase || '';
@@ -87,14 +88,32 @@ if (proposals && proposals.length > 0) {
 
       this.fetchAndSetTimezone().then(async () => {
         this.initializeTimezoneSelector();
-
         this.initializeTimeSelectors();
         this.setupEventListeners();
-        this.updateContinueButton();
         this.updateTimeSelectors();
+        this.updateContinueButton();
+        this.observeProposalsListChanges();
       });
     }
 
+
+  observeProposalsListChanges() {
+    const proposalsContainer = this.querySelector('#proposals-container');
+    const config = { childList: true, subtree: true };
+
+    const callback = (mutationsList: any, observer: any) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          this.updateContinueButton();
+        }
+      }
+    };
+
+    const observer = new MutationObserver(callback);
+    if (proposalsContainer) {
+      observer.observe(proposalsContainer, config);
+    }
+  }
     initializeTimezoneSelector() {
       const timezoneSelect = this.querySelector('#timezone-select') as HTMLSelectElement;
       if (timezoneSelect) {
@@ -280,19 +299,11 @@ if (proposals && proposals.length > 0) {
       
       proposalElements.forEach((proposalElement: Element) => {
         const id = proposalElement.id;
-        const titleInput = proposalElement.querySelector('input[type="text"]') as HTMLInputElement;
-        const descriptionDiv = proposalElement.querySelector('div[id^="description-"]') as HTMLElement;
         
-        if (id && titleInput) {
+        if (id) {
           proposals.push({
-            id,
-            title: titleInput.value
+            id
           });
-
-          if (descriptionDiv) {
-            const descriptionId = `description_${id}`;
-            localforage.setItem(descriptionId, descriptionDiv.innerText);
-          }
         }
       });
 
@@ -319,14 +330,28 @@ if (proposals && proposals.length > 0) {
         });
     }
 
-    updateContinueButton() {
+    async updateContinueButton() {
       const continueButton = this.querySelector('#continueButton') as HTMLButtonElement;
-      const proposals = this.querySelectorAll('.proposal .flex');
+      const proposals = this.querySelectorAll('.proposal');
+      let enableButton = proposals.length >= 2;
 
-      if (proposals.length >= 2) {
-        continueButton.classList.remove('disabled');
+      if (enableButton) {
+        for (const proposal of proposals) {
+          const proposalId = proposal.id.replace('proposal-', '');
+          const titleContent = await localforage.getItem(`title-${proposalId}`) as string || '';
+          const descriptionContent = await localforage.getItem(`description-${proposalId}`) as string || '';
+
+          if (isProposalEmpty({id: proposalId, title: titleContent, description: descriptionContent})) {
+            enableButton = false;
+            break;  // Exit the loop early if a condition fails
+          }
+        }
+      }
+
+      if (enableButton) {
+        continueButton.removeAttribute('disabled');
       } else {
-        continueButton.classList.add('disabled');
+        continueButton.setAttribute('disabled', 'true');
       }
     }
 

@@ -151,14 +151,16 @@ if (proposalsContainer) {
 
       const uniqueId = uuidv4();
 
+      if (isSetup) {
+        const deltaOps = [{ insert: selectedTemplateDescription + '\n' }];
+        localforage.setItem(`title-${uniqueId}`, selectedTemplateTitle)
+        localforage.setItem(`description-${uniqueId}`, JSON.stringify({ ops: deltaOps })); 
+      }
+
       const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, translator, isSetup);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, false);
       if (processId) {
         notifyNewProposal(uniqueId, selectedTemplateTitle, selectedTemplateDescription);
-      }
-      if (isSetup) {
-        const deltaOps = [{ insert: selectedTemplateDescription + '\n' }];
-        localforage.setItem(`description-${uniqueId}`, JSON.stringify({ ops: deltaOps })); 
       }
     });
   });

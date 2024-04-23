@@ -56,9 +56,18 @@ export default async function fetchProcessData(processId: string): Promise<any> 
           const proposalDescriptionRef = storageRef(storage, `proposals/${id}.json`);
           try {
             const downloadURL = await getDownloadURL(proposalDescriptionRef);
-            const response = await fetch(downloadURL);
-            const descriptionData = await response.json();
-            proposal.description = descriptionData.description;
+            const response = await fetch(downloadURL);const descriptionData = await response.json();
+            if (typeof descriptionData.description === 'string') {
+              try {
+                proposal.description = JSON.parse(descriptionData.description);
+              } catch (error) {
+                console.error('Error parsing description JSON:', error);
+                proposal.description = descriptionData.description;
+              }
+            } else {
+              proposal.description = descriptionData.description;
+            }
+            
             proposal.id = id;
           } catch (error) {
             console.error('Failed to fetch description from Firebase Storage:', error);

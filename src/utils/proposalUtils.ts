@@ -5,7 +5,7 @@ const isProposalEmpty = (proposal: IProposal): boolean => {
   const isEmptyStringDescription = typeof proposal.description === 'string' && proposal.description === '';
   let isEmptyOpsDescription = false;
   if (typeof proposal.description === 'object' && proposal.description.ops) {
-    isEmptyOpsDescription = proposal.description.ops.length === 1 && proposal.description.ops[0].insert === '';
+    isEmptyOpsDescription = proposal.description.ops.length === 1 && (proposal.description.ops[0].insert === '' || proposal.description.ops[0].insert === '\n');
   }
   return proposal.title === '' && (isEmptyStringDescription || isEmptyOpsDescription);
 };

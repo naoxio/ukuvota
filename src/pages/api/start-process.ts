@@ -25,9 +25,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   const proposalsData = JSON.parse(formData.get('proposalsData') as string);
   const proposalsMetadata = await Promise.all(proposalsData.map(async (proposal: any) => {
-    if (proposal.description && typeof proposal.description === 'string') {
+    if (proposal.description) {
       const proposalDescriptionRef = storageRef(storage, `proposals/${proposal.id}.json`);
-      await uploadString(proposalDescriptionRef, proposal.description, 'raw');
+      try {
+        await uploadString(proposalDescriptionRef, JSON.stringify({description: proposal.description}), 'raw');
+      } catch (error) {
+        console.error(`Failed to upload description for proposal ${proposal.id}:`, error);
+      }
     }
     return { id: proposal.id, title: proposal.title };
   }));

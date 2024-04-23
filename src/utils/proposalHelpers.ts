@@ -51,12 +51,28 @@ const initializeQuill = (proposalElement: Element, uniqueId: string, processId: 
     const quillEditor = createQuill(`#description-${uniqueId}`);
 
     if (isSetup) {
+      localforage.getItem(titleInput.id).then((value: any) => {
+        titleInput.value = titleInput.value !== 'undefined' ? titleInput.value : value || '';
+      })
       localforage.getItem(descriptionDiv.id).then((savedOps) => {
         if (savedOps) {
           const ops = JSON.parse(savedOps as string);
           quillEditor.setContents(ops);
         }
       });
+       // Listen for changes in the Quill editor
+       quillEditor.on('text-change', function() {
+        const contents = quillEditor.getContents();
+        localforage.setItem(descriptionDiv.id, JSON.stringify(contents));
+        quillOpsInput.value = JSON.stringify(contents);
+      });
+
+      // Listen for changes in the title input
+      titleInput.addEventListener('input', function() {
+        localforage.setItem(titleInput.id, titleInput.value);
+        
+        titleDisplay.textContent = titleInput.value;
+      }); 
     }
     else {
       const eventSource = new EventSource(`/api/process/${processId}/proposals/${uniqueId}`);
@@ -124,7 +140,7 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
       title.textContent = titleInputValue;
       const desc = proposalElement.querySelector('.view-mode .desc') as HTMLElement;
       desc.innerHTML = quillEditorContent;
-
+      
       toggleDisplay(proposalElement as HTMLElement, false);
 
       proposalElement.setAttribute('data-editing', 'false');
@@ -161,7 +177,7 @@ const setupDeleteButtonListener = (proposalElement: Element, proposalsContainer:
 
     if (newProposalElement) {
 
-      if (editing) {
+      if (!isSetup && editing) {
         toggleDisplay(newProposalElement as HTMLElement, true);
 
       }

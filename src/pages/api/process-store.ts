@@ -53,6 +53,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (phase === 'full') {
       if (processCookieObject.proposals) processCookieObject.proposals = []
+
       let startProposalDate = formData.get('start-date-picker-proposal')
         ? Number(formData.get('start-date-picker-proposal'))
         : processCookieObject.startProposalDate || currentDate.getTime();
@@ -102,8 +103,6 @@ export const POST: APIRoute = async ({ request }) => {
         endVotingDate = startVotingDate + 60000;
       }
 
-      const locale = 'en';
-      const proposalTemplates = await exampleProposals(locale);
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
@@ -114,21 +113,8 @@ export const POST: APIRoute = async ({ request }) => {
         const proposalsData = formData.get('proposals');
         if (proposalsData) {
           const proposals = JSON.parse(proposalsData as string);
-          proposals.forEach((proposal: IProposal) => {
-            if (!proposal.id) {
-              return;
-            }
 
-            processCookieObject.proposals = processCookieObject.proposals || [];
-            
-            const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
-
-            if (existingProposalIndex !== -1) {
-              processCookieObject.proposals[existingProposalIndex] = proposal;
-            } else {
-              processCookieObject.proposals.push(proposal);
-            }
-          });
+          processCookieObject.proposals = proposals || [];
         }
         
         const headers = new Headers({
