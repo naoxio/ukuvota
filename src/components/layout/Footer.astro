@@ -1,10 +1,12 @@
 ---
 import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en'); 
+import { Icon } from 'astro-icon';
 
 
 ---
-<footer>
+<footer class="flex flex-col justify-center items-center gap-4">
+  <div class="flex">
     <span>
       <a class="link link-primary" href="https://naox.io">NaoX</a>
       <span> © 2023</span>
@@ -13,14 +15,17 @@ const translator = new Translator(Astro.currentLocale || 'en');
     <span>
       <a class="link link-primary" href="/privacy-policy">{ translator.t('policy') }</a>
     </span>
+  </div>
+  <div class="flex gap-4">
+    <a href="mailto:ukuvota@naox.io" aria-label="Email" title="Email">
+      <Icon class="icon-email" width="24" name="email" />
+    </a>
+    <a href="https://t.me/ukuvota" aria-label="Telegram" title="Telegram">
+      <Icon class="icon-telegram" width="24" name="telegram" />
+    </a>
+    <a href="https://x.com/ukuvota" aria-label="X" title="X">
+      <Icon class="icon-x" width="24" name="x" />
+    </a>
+  </div>
 </footer>
   
-<style>
-  footer {
-      display: flex;
-      display: flex;
-      flex-wrap: wrap;
-      word-break: break-all;
-      justify-content: center;
-  }
-</style>
