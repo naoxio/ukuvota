@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/screens/home_screen.dart';
+import 'package:ukuvota/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +11,16 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 
   static void setLocale(BuildContext context, Locale newLocale) {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    MyAppState? state = context.findAncestorStateOfType<MyAppState>();
     state?.setLocale(newLocale);
   }
 }
 
-class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale('en');
+class MyAppState extends State<MyApp> {
+  Locale _locale = const Locale('en');
 
   void setLocale(Locale locale) {
     setState(() {
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Ukuvota',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         Locale('it', ''),
       ],
       locale: _locale,
-      home: const HomeScreen(),
+      routerConfig: router,
     );
   }
 }

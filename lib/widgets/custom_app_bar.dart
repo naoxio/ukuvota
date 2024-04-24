@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ukuvota/main.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -19,13 +20,18 @@ class CustomAppBarState extends State<CustomAppBar> {
 
     return AppBar(
       title: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Ukuvota'),
+          InkWell(
+            onTap: () => context.go('/'),
+            child: const Text(
+              'Ukuvota',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
           const SizedBox(width: 16),
           TextButton(
-            onPressed: () {
-              // Handle dashboard navigation
-            },
+            onPressed: () => context.go('/dashboard'),
             child: Text(
               localizations.buttonDashboard,
               style: const TextStyle(color: Colors.white),
@@ -35,6 +41,9 @@ class CustomAppBarState extends State<CustomAppBar> {
       ),
       actions: [
         DropdownButton<String>(
+          underline: Container(),
+          dropdownColor: Theme.of(context).primaryColor,
+          icon: const Icon(Icons.language, color: Colors.white),
           value: localizations.localeName,
           onChanged: (String? newValue) {
             if (newValue != null) {
@@ -55,7 +64,8 @@ class CustomAppBarState extends State<CustomAppBar> {
                 languageCode;
             return DropdownMenuItem(
               value: languageCode,
-              child: Text(languageName),
+              child: Text(languageName,
+                  style: const TextStyle(color: Colors.white)),
             );
           }).toList(),
         ),

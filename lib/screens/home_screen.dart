@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/custom_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -49,10 +51,11 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle button press
+                    context.go('/create');
                   },
                   child: Text(localizations.webAppCardButton),
                 ),
+
                 const SizedBox(height: 40),
                 // Add your footer widget here
               ],
