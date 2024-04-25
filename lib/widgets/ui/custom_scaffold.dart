@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ukuvota/widgets/custom_app_bar.dart';
-import 'package:ukuvota/widgets/custom_drawer.dart';
+import 'package:ukuvota/widgets/ui/custom_app_bar.dart';
+import 'package:ukuvota/widgets/ui/custom_drawer.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;

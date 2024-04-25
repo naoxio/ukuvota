@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/main.dart';
+import 'package:ukuvota/widgets/language_switcher.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.dashboard),
+                  leading: const Icon(Icons.dashboard),
                   title: Text(localizations.buttonDashboard),
                   onTap: () {
                     context.go('/dashboard');
@@ -38,38 +39,14 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 if (isSmallScreen)
                   ListTile(
-                    leading: Icon(Icons.language),
-                    title: Text('Language'),
+                    leading: const Icon(Icons.language),
+                    title: const Text('Language'),
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
+                        builder: (context) => const AlertDialog(
                           title: Text('Select Language'),
-                          content: DropdownButton<String>(
-                            value: localizations.localeName,
-                            onChanged: (String? newValue) {
-                              if (newValue != null) {
-                                MyApp.setLocale(context, Locale(newValue));
-                                Navigator.pop(context);
-                              }
-                            },
-                            items:
-                                AppLocalizations.supportedLocales.map((locale) {
-                              final languageCode = locale.languageCode;
-                              final languageName = {
-                                    'en': 'English',
-                                    'es': 'Español',
-                                    'de': 'Deutsch',
-                                    'fr': 'Français',
-                                    'it': 'Italiano',
-                                  }[languageCode] ??
-                                  languageCode;
-                              return DropdownMenuItem(
-                                value: languageCode,
-                                child: Text(languageName),
-                              );
-                            }).toList(),
-                          ),
+                          content: LanguageSwitcher(),
                         ),
                       );
                     },

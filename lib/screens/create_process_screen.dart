@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:ukuvota/widgets/custom_app_bar.dart';
+import 'package:ukuvota/widgets/ui/custom_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/widgets/custom_drawer.dart';
-import 'package:ukuvota/widgets/custom_scaffold.dart';
+import 'package:ukuvota/widgets/ui/custom_drawer.dart';
+import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor_widget.dart';
 import 'package:go_router/go_router.dart';
 
