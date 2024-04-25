@@ -33,6 +33,12 @@ class ProposalVotingScreen extends StatelessWidget {
                   startDate: DateTime.now(),
                   endDate: DateTime.now().add(const Duration(days: 7)),
                   startMinDate: DateTime.now(),
+                  onStartDateChanged: (selectedStartDate) {
+                    // Handle start date change
+                  },
+                  onEndDateChanged: (selectedEndDate) {
+                    // Handle end date change
+                  },
                 ),
                 const SizedBox(height: 20),
                 TimeSelector(
@@ -40,6 +46,12 @@ class ProposalVotingScreen extends StatelessWidget {
                   startDate: DateTime.now().add(const Duration(days: 7)),
                   endDate: DateTime.now().add(const Duration(days: 14)),
                   startMinDate: DateTime.now().add(const Duration(days: 7)),
+                  onStartDateChanged: (selectedStartDate) {
+                    // Handle start date change
+                  },
+                  onEndDateChanged: (selectedEndDate) {
+                    // Handle end date change
+                  },
                 ),
               ],
             ),

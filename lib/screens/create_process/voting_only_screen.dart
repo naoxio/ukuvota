@@ -35,6 +35,12 @@ class VotingOnlyScreen extends StatelessWidget {
                   endDate: DateTime.now().add(const Duration(days: 7)),
                   startMinDate: DateTime.now(),
                   hideTitle: true,
+                  onStartDateChanged: (selectedStartDate) {
+                    // Handle start date change
+                  },
+                  onEndDateChanged: (selectedEndDate) {
+                    // Handle end date change
+                  },
                 ),
                 const SizedBox(height: 20),
                 Text(

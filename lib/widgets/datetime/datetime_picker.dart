@@ -8,6 +8,7 @@ class DatetimePicker extends StatelessWidget {
   final DateTime date;
   final DateTime min;
   final String id;
+  final Function(DateTime) onChanged;
 
   const DatetimePicker({
     Key? key,
@@ -15,6 +16,7 @@ class DatetimePicker extends StatelessWidget {
     required this.date,
     required this.min,
     required this.id,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,6 @@ class DatetimePicker extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label),
         SizedBox(
           width: 200,
           child: TextFormField(
@@ -36,7 +37,8 @@ class DatetimePicker extends StatelessWidget {
               border: const OutlineInputBorder(),
             ),
             onChanged: (value) {
-              // Handle date change
+              final selectedDate = DateTime.parse(value);
+              onChanged(selectedDate);
             },
           ),
         ),
