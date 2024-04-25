@@ -20,10 +20,10 @@ class DatetimePicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DatetimePickerState createState() => _DatetimePickerState();
+  DatetimePickerState createState() => DatetimePickerState();
 }
 
-class _DatetimePickerState extends State<DatetimePicker> {
+class DatetimePickerState extends State<DatetimePicker> {
   late DateTime selectedDate;
 
   @override

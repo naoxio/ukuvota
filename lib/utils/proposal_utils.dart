@@ -1,4 +1,3 @@
-// file: lib/utils/proposal_utils.dart
 import 'package:ukuvota/models/proposal.dart';
 
 bool isProposalEmpty(Proposal proposal) {

@@ -1,4 +1,3 @@
-// file: lib/widgets/datetime/datetime_slider.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/utils/logslider.dart';
@@ -14,10 +13,10 @@ class DatetimeSlider extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DatetimeSliderState createState() => _DatetimeSliderState();
+  DatetimeSliderState createState() => DatetimeSliderState();
 }
 
-class _DatetimeSliderState extends State<DatetimeSlider> {
+class DatetimeSliderState extends State<DatetimeSlider> {
   late double sliderValue;
 
   @override

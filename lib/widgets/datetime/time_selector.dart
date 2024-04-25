@@ -1,4 +1,3 @@
-// file: lib/widgets/datetime/time_selector.dart
 import 'package:flutter/material.dart';
 import 'package:ukuvota/widgets/datetime/datetime_picker.dart';
 import 'package:ukuvota/widgets/datetime/datetime_slider.dart';

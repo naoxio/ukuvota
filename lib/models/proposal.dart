@@ -1,4 +1,3 @@
-// file: lib/models/proposal.dart
 class Proposal {
   final String id;
   String title;

@@ -1,4 +1,3 @@
-// file: lib/utils/example_proposals.dart
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 

@@ -53,9 +53,7 @@ class HomeScreen extends StatelessWidget {
                   },
                   child: Text(localizations.webAppCardButton),
                 ),
-
                 const SizedBox(height: 40),
-                // Add your footer widget here
               ],
             ),
           ),

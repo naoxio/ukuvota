@@ -1,4 +1,3 @@
-// file: lib/screens/create_process/proposal_voting_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
