@@ -59,7 +59,7 @@ class QuillEditorWidget extends StatelessWidget {
           SizedBox(
             height: height,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: const BoxDecoration(),
               child: QuillEditor.basic(
                 configurations: QuillEditorConfigurations(

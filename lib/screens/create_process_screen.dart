@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:ukuvota/widgets/custom_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ukuvota/widgets/custom_drawer.dart';
+import 'package:ukuvota/widgets/custom_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateProcessScreen extends StatefulWidget {
   const CreateProcessScreen({Key? key}) : super(key: key);
@@ -30,8 +33,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: const CustomAppBar(),
+    return CustomScaffold(
       body: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(
@@ -90,18 +92,20 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Wrap(
+                  alignment: WrapAlignment.spaceAround,
+                  spacing: 8.0,
+                  runSpacing: 10.0,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Handle button press for proposal + voting
+                        context.go('/create/proposal-voting');
                       },
                       child: Text(localizations.processPhasesFull),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle button press for voting only phase
+                        context.go('/create/voting-only');
                       },
                       child: Text(localizations.processPhasesVoting),
                     ),
