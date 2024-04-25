@@ -119,5 +119,10 @@
   "proposalOneDescription": "Repetir el proceso y buscar otras opciones.",
   "repeatProcess": "Repetir el proceso",
   "description": "Ukuvota es una herramienta poderosa de toma de decisiones que ayuda a las personas a tomar decisiones informadas de manera colaborativa y organizada.",
-  "wip": "En proceso"
+  "wip": "En proceso",
+  "settingsTitle": "Ajustes",
+  "settingsLanguage": "Idioma",
+  "settingsNotifications": "Notificaciones",
+  "settingsPrivacy": "Privacidad",
+  "settingsAbout": "Acerca de"
 }

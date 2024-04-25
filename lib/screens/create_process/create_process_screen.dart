@@ -16,17 +16,28 @@ class CreateProcessScreen extends StatefulWidget {
 
 class CreateProcessScreenState extends State<CreateProcessScreen> {
   late QuillController _controller;
+  late TextEditingController _titleController;
+  bool _isTitleEmpty = true;
 
   @override
   void initState() {
     super.initState();
     _controller = QuillController.basic();
+    _titleController = TextEditingController();
+    _titleController.addListener(_checkTitleEmpty);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _titleController.dispose();
     super.dispose();
+  }
+
+  void _checkTitleEmpty() {
+    setState(() {
+      _isTitleEmpty = _titleController.text.isEmpty;
+    });
   }
 
   @override
@@ -51,6 +62,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: _titleController,
                   decoration: InputDecoration(
                     labelText: localizations.processTitle,
                     hintText: localizations.processTopic,
@@ -98,15 +110,19 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                   runSpacing: 10.0,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        context.go('/create/proposal-voting');
-                      },
+                      onPressed: _isTitleEmpty
+                          ? null
+                          : () {
+                              context.go('/create/proposal-voting');
+                            },
                       child: Text(localizations.processPhasesFull),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        context.go('/create/voting-only');
-                      },
+                      onPressed: _isTitleEmpty
+                          ? null
+                          : () {
+                              context.go('/create/voting-only');
+                            },
                       child: Text(localizations.processPhasesVoting),
                     ),
                   ],

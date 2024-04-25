@@ -119,5 +119,10 @@
   "proposalOneDescription": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen.",
   "repeatProcess": "Prozess wiederholen",
   "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung.",
-  "wip": "in Bearbeitung"
+  "wip": "in Bearbeitung",
+  "settingsTitle": "Einstellungen",
+  "settingsLanguage": "Sprache",
+  "settingsNotifications": "Benachrichtigungen",
+  "settingsPrivacy": "Datenschutz",
+  "settingsAbout": "Über"
 }
