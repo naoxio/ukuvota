@@ -1,9 +1,8 @@
-// file: lib/widgets/datetime/datetime_picker.dart
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DatetimePicker extends StatefulWidget {
+class DatetimePicker extends StatelessWidget {
   final int index;
   final DateTime date;
   final DateTime min;
@@ -19,27 +18,14 @@ class DatetimePicker extends StatefulWidget {
     required this.onChanged,
   }) : super(key: key);
 
-  @override
-  DatetimePickerState createState() => DatetimePickerState();
-}
-
-class DatetimePickerState extends State<DatetimePicker> {
-  late DateTime selectedDate;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedDate = widget.date;
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context, DateTime initialDate) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: widget.min,
+      initialDate: initialDate,
+      firstDate: min,
       lastDate: DateTime(2100),
     );
-    if (pickedDate != null && pickedDate != selectedDate) {
+    if (pickedDate != null) {
       _selectTime(context, pickedDate);
     }
   }
@@ -50,25 +36,22 @@ class DatetimePickerState extends State<DatetimePicker> {
       initialTime: TimeOfDay.fromDateTime(pickedDate),
     );
     if (pickedTime != null) {
-      setState(() {
-        selectedDate = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-        widget.onChanged(selectedDate);
-      });
+      final selectedDate = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+      onChanged(selectedDate);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final label = widget.index == 0
-        ? localizations.phasesStartAt
-        : localizations.phasesEndsAt;
+    final label =
+        index == 0 ? localizations.phasesStartAt : localizations.phasesEndsAt;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,13 +61,13 @@ class DatetimePickerState extends State<DatetimePicker> {
           child: TextFormField(
             readOnly: true,
             controller: TextEditingController(
-                text: DateFormat('yyyy-MM-dd HH:mm').format(selectedDate)),
+                text: DateFormat('yyyy-MM-dd HH:mm').format(date)),
             decoration: InputDecoration(
               labelText: label,
               border: const OutlineInputBorder(),
               suffixIcon: const Icon(Icons.calendar_today),
             ),
-            onTap: () => _selectDate(context),
+            onTap: () => _selectDate(context, date),
           ),
         ),
       ],

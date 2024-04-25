@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ukuvota/utils/date_utils.dart';
 import 'package:ukuvota/utils/logslider.dart';
 
 class DatetimeSlider extends StatefulWidget {
-  final int duration;
+  final int durationInMinutes;
   final String id;
+  final Function(int) onChanged;
 
   const DatetimeSlider({
     Key? key,
-    required this.duration,
+    required this.durationInMinutes,
     required this.id,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -17,21 +20,30 @@ class DatetimeSlider extends StatefulWidget {
 }
 
 class DatetimeSliderState extends State<DatetimeSlider> {
-  late double sliderValue;
+  late int sliderValue;
 
   @override
   void initState() {
     super.initState();
-    sliderValue = durationToSlider(widget.duration).toDouble();
+    _updateSliderValue();
   }
 
-  int sliderValueToDuration(double value) {
-    return (value * 10).round();
+  @override
+  void didUpdateWidget(covariant DatetimeSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.durationInMinutes != widget.durationInMinutes) {
+      _updateSliderValue();
+    }
+  }
+
+  void _updateSliderValue() {
+    sliderValue = durationToSlider(widget.durationInMinutes);
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    int durationInSeconds = sliderToDuration(sliderValue) * 60;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,17 +51,19 @@ class DatetimeSliderState extends State<DatetimeSlider> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-              '${localizations.setupDuration}: ${sliderValueToDuration(sliderValue)} mins'),
+            '${localizations.setupDuration}: ${formatDuration(durationInSeconds)}',
+          ),
         ),
         Slider(
-          value: sliderValue,
+          value: sliderValue.toDouble(),
           min: 1,
           max: 165,
           divisions: 164,
-          label: '${sliderValueToDuration(sliderValue)} mins',
+          label: formatDuration(durationInSeconds),
           onChanged: (double newValue) {
             setState(() {
-              sliderValue = newValue;
+              sliderValue = newValue.toInt();
+              widget.onChanged(sliderToDuration(sliderValue));
             });
           },
         ),
