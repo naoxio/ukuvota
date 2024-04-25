@@ -1,7 +1,7 @@
 // file: lib/screens/create_process/voting_only_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
+import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 
@@ -35,12 +35,8 @@ class VotingOnlyScreen extends StatelessWidget {
                   endDate: DateTime.now().add(const Duration(days: 7)),
                   startMinDate: DateTime.now(),
                   hideTitle: true,
-                  onStartDateChanged: (selectedStartDate) {
-                    // Handle start date change
-                  },
-                  onEndDateChanged: (selectedEndDate) {
-                    // Handle end date change
-                  },
+                  onStartDateChanged: (selectedStartDate) {},
+                  onEndDateChanged: (selectedEndDate) {},
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -56,9 +52,7 @@ class VotingOnlyScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    // Handle continue button click
-                  },
+                  onPressed: () {},
                   child: Text(localizations.buttonContinue),
                 ),
               ],

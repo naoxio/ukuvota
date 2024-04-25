@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
 
@@ -16,7 +15,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return AppBar(
@@ -46,6 +44,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
+                /*
                 const SizedBox(width: 16),
                 TextButton.icon(
                   icon: const Icon(Icons.dashboard,
@@ -55,7 +54,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     style: const TextStyle(color: Colors.white),
                   ),
                   onPressed: () => context.go('/dashboard'),
-                ),
+                ),*/
               ],
             ),
       actions: !isSmallScreen

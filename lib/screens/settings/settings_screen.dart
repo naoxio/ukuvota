@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
-import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
+import 'package:ukuvota/widgets/layout/main_layout.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);

@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/widgets/ui/custom_app_bar.dart';
-import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
+import 'package:ukuvota/widgets/layout/main_layout.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-
     return CustomScaffold(
       body: Center(
         child: SingleChildScrollView(

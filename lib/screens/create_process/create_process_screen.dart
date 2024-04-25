@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:ukuvota/widgets/ui/custom_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/widgets/ui/custom_drawer.dart';
-import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
+import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/quill_editor_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -83,7 +81,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                     labelText: localizations.processWeighting,
                     border: const OutlineInputBorder(),
                   ),
-                  value: 'x1', // Default value
+                  value: 'x1',
                   items: [
                     for (final option in [
                       'x1',
@@ -99,9 +97,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                         child: Text(option),
                       ),
                   ],
-                  onChanged: (value) {
-                    // Handle value change
-                  },
+                  onChanged: (value) {},
                 ),
                 const SizedBox(height: 20),
                 Wrap(

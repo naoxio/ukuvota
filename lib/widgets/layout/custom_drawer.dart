@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -8,7 +6,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return isSmallScreen
@@ -28,14 +25,14 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                ListTile(
+                /*ListTile(
                   leading: const Icon(Icons.dashboard),
                   title: Text(localizations.buttonDashboard),
                   onTap: () {
                     context.go('/dashboard');
                     Navigator.pop(context);
                   },
-                ),
+                ),*/
                 if (isSmallScreen)
                   ListTile(
                     leading: const Icon(Icons.language),

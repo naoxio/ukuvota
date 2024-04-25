@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/utils/logslider.dart';
 
-class DatetimeSlider extends StatelessWidget {
+class DatetimeSlider extends StatefulWidget {
   final int duration;
   final String id;
 
@@ -14,26 +14,44 @@ class DatetimeSlider extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _DatetimeSliderState createState() => _DatetimeSliderState();
+}
+
+class _DatetimeSliderState extends State<DatetimeSlider> {
+  late double sliderValue;
+
+  @override
+  void initState() {
+    super.initState();
+    sliderValue = durationToSlider(widget.duration).toDouble();
+  }
+
+  int sliderValueToDuration(double value) {
+    return (value * 10).round();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final initialSliderValue = durationToSlider(duration);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${localizations.setupDuration}: '),
-        const SizedBox(width: 8),
-        const Text(
-          '',
-          style: TextStyle(color: Colors.green),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+              '${localizations.setupDuration}: ${sliderValueToDuration(sliderValue)} mins'),
         ),
-        const SizedBox(height: 8),
         Slider(
-          value: initialSliderValue.toDouble(),
+          value: sliderValue,
           min: 1,
           max: 165,
-          onChanged: (value) {
-            // Handle slider value change
+          divisions: 164,
+          label: '${sliderValueToDuration(sliderValue)} mins',
+          onChanged: (double newValue) {
+            setState(() {
+              sliderValue = newValue;
+            });
           },
         ),
       ],

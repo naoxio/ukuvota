@@ -1,7 +1,7 @@
 // file: lib/screens/create_process/proposal_voting_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:ukuvota/widgets/ui/custom_scaffold.dart';
+import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 
 class ProposalVotingScreen extends StatelessWidget {
@@ -33,12 +33,8 @@ class ProposalVotingScreen extends StatelessWidget {
                   startDate: DateTime.now(),
                   endDate: DateTime.now().add(const Duration(days: 7)),
                   startMinDate: DateTime.now(),
-                  onStartDateChanged: (selectedStartDate) {
-                    // Handle start date change
-                  },
-                  onEndDateChanged: (selectedEndDate) {
-                    // Handle end date change
-                  },
+                  onStartDateChanged: (selectedStartDate) {},
+                  onEndDateChanged: (selectedEndDate) {},
                 ),
                 const SizedBox(height: 20),
                 TimeSelector(
@@ -46,12 +42,8 @@ class ProposalVotingScreen extends StatelessWidget {
                   startDate: DateTime.now().add(const Duration(days: 7)),
                   endDate: DateTime.now().add(const Duration(days: 14)),
                   startMinDate: DateTime.now().add(const Duration(days: 7)),
-                  onStartDateChanged: (selectedStartDate) {
-                    // Handle start date change
-                  },
-                  onEndDateChanged: (selectedEndDate) {
-                    // Handle end date change
-                  },
+                  onStartDateChanged: (selectedStartDate) {},
+                  onEndDateChanged: (selectedEndDate) {},
                 ),
               ],
             ),

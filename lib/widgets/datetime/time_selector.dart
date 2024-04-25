@@ -1,6 +1,5 @@
 // file: lib/widgets/datetime/time_selector.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/widgets/datetime/datetime_picker.dart';
 import 'package:ukuvota/widgets/datetime/datetime_slider.dart';
 
@@ -26,10 +25,6 @@ class TimeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    final title = phase == "proposal"
-        ? localizations.phasesProposalTitle
-        : localizations.phasesVotingTitle;
     final duration = endDate.difference(startDate).inMinutes;
 
     return Column(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/utils/create_proposal_element.dart';
-import 'package:ukuvota/utils/example_proposals.dart';
+import 'package:ukuvota/utils/proposal_templates.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
 import 'package:uuid/uuid.dart';
 
@@ -64,26 +64,11 @@ class ProposalsListState extends State<ProposalsList> {
     _updateProposalApi(updatedProposal);
   }
 
-  void _notifyNewProposal(Proposal proposal) {
-    // Implement the logic to notify the server about the new proposal
-    // You can use an API call or any other mechanism to send the proposal data
-    // Example:
-    // await apiService.createProposal(proposal);
-  }
+  void _notifyNewProposal(Proposal proposal) {}
 
-  void _deleteProposalApi(String id) {
-    // Implement the logic to delete the proposal from the server
-    // You can use an API call or any other mechanism to delete the proposal
-    // Example:
-    // await apiService.deleteProposal(id);
-  }
+  void _deleteProposalApi(String id) {}
 
-  void _updateProposalApi(Proposal proposal) {
-    // Implement the logic to update the proposal on the server
-    // You can use an API call or any other mechanism to update the proposal
-    // Example:
-    // await apiService.updateProposal(proposal);
-  }
+  void _updateProposalApi(Proposal proposal) {}
 
   @override
   Widget build(BuildContext context) {

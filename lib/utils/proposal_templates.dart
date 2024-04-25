@@ -14,6 +14,5 @@ List<Proposal> exampleProposals(AppLocalizations localizations) {
       title: localizations.proposalOneTitle,
       description: localizations.proposalOneDescription,
     ),
-    // Add more example proposals as needed
   ];
 }
