@@ -10,6 +10,7 @@ class TimeSelector extends StatefulWidget {
   final bool hideTitle;
   final Function(DateTime) onStartDateChanged;
   final Function(DateTime) onEndDateChanged;
+  final String? selectedTimeZone;
 
   const TimeSelector({
     Key? key,
@@ -20,6 +21,7 @@ class TimeSelector extends StatefulWidget {
     this.hideTitle = false,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
+    this.selectedTimeZone,
   }) : super(key: key);
 
   @override
@@ -53,19 +55,24 @@ class TimeSelectorState extends State<TimeSelector> {
   void _onStartDateChanged(DateTime newStartDate) {
     setState(() {
       _startDate = newStartDate;
-      _updateEndDate();
+      _endDate = _startDate.add(Duration(minutes: _duration));
       _updateDuration();
     });
     widget.onStartDateChanged(newStartDate);
+    widget.onEndDateChanged(_endDate);
   }
 
   void _onEndDateChanged(DateTime newEndDate) {
+    var endDate = newEndDate;
+    if (newEndDate.isBefore(_startDate)) {
+      endDate = _startDate.add(const Duration(minutes: 1));
+    }
     setState(() {
-      _endDate = newEndDate;
+      _endDate = endDate;
       _updateStartDate();
       _updateDuration();
     });
-    widget.onEndDateChanged(newEndDate);
+    widget.onEndDateChanged(endDate);
   }
 
   void _onDurationChanged(int durationInMinutes) {
@@ -79,13 +86,7 @@ class TimeSelectorState extends State<TimeSelector> {
 
   void _updateStartDate() {
     if (_endDate.isBefore(_startDate)) {
-      _startDate = _endDate;
-    }
-  }
-
-  void _updateEndDate() {
-    if (_endDate.isBefore(_startDate)) {
-      _endDate = _startDate.add(const Duration(minutes: 1));
+      _startDate = _endDate.subtract(const Duration(minutes: 1));
     }
   }
 
@@ -108,6 +109,7 @@ class TimeSelectorState extends State<TimeSelector> {
               min: widget.startMinDate,
               id: 'start-date-picker-${widget.phase}',
               onChanged: _onStartDateChanged,
+              selectedTimeZone: widget.selectedTimeZone,
             ),
             DatetimePicker(
               index: 1,
@@ -115,6 +117,7 @@ class TimeSelectorState extends State<TimeSelector> {
               min: _startDate,
               id: 'end-date-picker-${widget.phase}',
               onChanged: _onEndDateChanged,
+              selectedTimeZone: widget.selectedTimeZone,
             ),
           ],
         ),

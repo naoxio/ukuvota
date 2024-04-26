@@ -84,6 +84,18 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
     _processDataService.saveProcessData(processData);
   }
 
+  void _updateVotingDates() {
+    if (_proposalEndDate != null &&
+        _votingStartDate != null &&
+        _votingEndDate != null) {
+      Duration votingDuration = _votingEndDate!.difference(_votingStartDate!);
+      setState(() {
+        _votingStartDate = _proposalEndDate;
+        _votingEndDate = _votingStartDate!.add(votingDuration);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -125,6 +137,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
                 ),
                 TimeSelector(
                   phase: 'proposal',
+                  selectedTimeZone: _selectedTimeZone,
                   startDate: _proposalStartDate ?? DateTime.now(),
                   endDate: _proposalEndDate ??
                       DateTime.now().add(const Duration(hours: 1)),
@@ -137,6 +150,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
                   onEndDateChanged: (DateTime date) {
                     setState(() {
                       _proposalEndDate = date;
+                      _updateVotingDates();
                     });
                   },
                 ),
@@ -150,6 +164,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
                 ),
                 TimeSelector(
                   phase: 'voting',
+                  selectedTimeZone: _selectedTimeZone,
                   startDate: _votingStartDate ??
                       DateTime.now().add(const Duration(hours: 1)),
                   endDate: _votingEndDate ??

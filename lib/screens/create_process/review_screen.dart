@@ -244,7 +244,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      print(_mode);
                       if (_mode == 'voting-only') {
                         context.go('/create/voting-only');
                       } else {

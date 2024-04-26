@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class DatetimePicker extends StatelessWidget {
   final int index;
@@ -8,6 +9,7 @@ class DatetimePicker extends StatelessWidget {
   final DateTime min;
   final String id;
   final Function(DateTime) onChanged;
+  final String? selectedTimeZone;
 
   const DatetimePicker({
     Key? key,
@@ -16,6 +18,7 @@ class DatetimePicker extends StatelessWidget {
     required this.min,
     required this.id,
     required this.onChanged,
+    this.selectedTimeZone,
   }) : super(key: key);
 
   Future<void> _selectDate(BuildContext context, DateTime initialDate) async {
@@ -53,6 +56,13 @@ class DatetimePicker extends StatelessWidget {
     final label =
         index == 0 ? localizations.phasesStartAt : localizations.phasesEndsAt;
 
+    // Format the date and time in the selected timezone
+    final formattedDate = selectedTimeZone != null
+        ? DateFormat('yyyy-MM-dd HH:mm').format(
+            tz.TZDateTime.from(date, tz.getLocation(selectedTimeZone!)),
+          )
+        : DateFormat('yyyy-MM-dd HH:mm').format(date);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -60,8 +70,7 @@ class DatetimePicker extends StatelessWidget {
           width: 200,
           child: TextFormField(
             readOnly: true,
-            controller: TextEditingController(
-                text: DateFormat('yyyy-MM-dd HH:mm').format(date)),
+            controller: TextEditingController(text: formattedDate),
             decoration: InputDecoration(
               labelText: label,
               border: const OutlineInputBorder(),

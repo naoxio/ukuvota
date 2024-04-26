@@ -54,23 +54,25 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final localizations = AppLocalizations.of(context)!;
+
         return AlertDialog(
-          title: const Text('Existing Process Data'),
-          content: const Text(
-              'You have existing process data. Do you want to start a new process or continue the existing one?'),
+          title: Text(localizations.existingProcessData),
+          content: Text(localizations.existingProcessDataMessage),
           actions: [
             TextButton(
               onPressed: () {
+                _processDataService.clearProcessData();
                 Navigator.of(context).pop();
               },
-              child: const Text('Start New'),
+              child: Text(localizations.startNew),
             ),
             TextButton(
               onPressed: () {
                 _loadExistingProcessData(processData);
                 Navigator.of(context).pop();
               },
-              child: const Text('Continue Existing'),
+              child: Text(localizations.continueExisting),
             ),
           ],
         );

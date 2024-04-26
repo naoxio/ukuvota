@@ -28,7 +28,6 @@
   "guideCreateProcessButton": "Crea Processo",
   "setupContinueEditing": "Continua la modifica",
   "setupExistingProcessPrompt": "Hai un processo esistente. Vuoi continuare?",
-  "setupStartNew": "Ricominciare",
   "setupProcess": "Processo di configurazione",
   "setupSelectTimeForVoting": "Seleziona l'orario per la votazione",
   "setupProposals": "Aggiungi proposte",
@@ -124,5 +123,10 @@
   "settingsLanguage": "Lingua",
   "settingsNotifications": "Notifiche",
   "settingsPrivacy": "Privacy",
-  "settingsAbout": "Informazioni"
+  "settingsAbout": "Informazioni",
+
+  "existingProcessData": "Dati del processo esistente",
+  "existingProcessDataMessage": "Hai dei dati di processo esistenti. Vuoi avviare un nuovo processo o continuare quello esistente?",
+  "startNew": "Avvia Nuovo",
+  "continueExisting": "Continua Esistente"
 }
