@@ -33,9 +33,7 @@ class SettingsScreen extends StatelessWidget {
                 child: SwitchListTile(
                   title: Text(localizations.settingsNotifications),
                   value: true,
-                  onChanged: (value) {
-                    // Handle notifications toggle
-                  },
+                  onChanged: (value) {},
                 ),
               ),
               const SizedBox(height: 16),
@@ -43,9 +41,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text(localizations.settingsPrivacy),
                   trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    // Navigate to privacy settings
-                  },
+                  onTap: () {},
                 ),
               ),
               const SizedBox(height: 16),
@@ -53,9 +49,7 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text(localizations.settingsAbout),
                   trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    // Navigate to about screen
-                  },
+                  onTap: () {},
                 ),
               ),
             ],

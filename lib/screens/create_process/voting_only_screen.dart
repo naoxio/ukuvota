@@ -10,14 +10,14 @@ class VotingOnlyScreen extends StatefulWidget {
   const VotingOnlyScreen({Key? key}) : super(key: key);
 
   @override
-  _VotingOnlyScreenState createState() => _VotingOnlyScreenState();
+  VotingOnlyScreenState createState() => VotingOnlyScreenState();
 }
 
-class _VotingOnlyScreenState extends State<VotingOnlyScreen> {
+class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   final ProcessDataService _processDataService = ProcessDataService();
 
-  DateTime? _votingStartDate;
-  DateTime? _votingEndDate;
+  DateTime? _votingOnlyStartDate;
+  DateTime? _votingOnlyEndDate;
 
   @override
   void initState() {
@@ -29,16 +29,23 @@ class _VotingOnlyScreenState extends State<VotingOnlyScreen> {
     final processData = await _processDataService.getProcessData();
     if (processData != null) {
       setState(() {
-        _votingStartDate = DateTime.parse(processData['votingStartDate']);
-        _votingEndDate = DateTime.parse(processData['votingEndDate']);
+        _votingOnlyStartDate = processData['votingOnlyStartDate'] != null
+            ? DateTime.parse(processData['votingOnlyStartDate'])
+            : null;
+        _votingOnlyEndDate = processData['votingOnlyEndDate'] != null
+            ? DateTime.parse(processData['votingOnlyEndDate'])
+            : null;
+        print(processData);
       });
     }
   }
 
   void _saveProcessData() {
     final processData = {
-      'votingStartDate': _votingStartDate?.toIso8601String(),
-      'votingEndDate': _votingEndDate?.toIso8601String(),
+      'votingOnlyStartDate': _votingOnlyStartDate?.toIso8601String() ??
+          DateTime.now().toIso8601String(),
+      'votingOnlyEndDate': _votingOnlyEndDate?.toIso8601String() ??
+          DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
     };
     _processDataService.saveProcessData(processData);
   }
@@ -66,19 +73,19 @@ class _VotingOnlyScreenState extends State<VotingOnlyScreen> {
                 const SizedBox(height: 20),
                 TimeSelector(
                   phase: 'voting',
-                  startDate: _votingStartDate ?? DateTime.now(),
-                  endDate: _votingEndDate ??
-                      DateTime.now().add(const Duration(days: 7)),
+                  startDate: _votingOnlyStartDate ?? DateTime.now(),
+                  endDate: _votingOnlyEndDate ??
+                      DateTime.now().add(const Duration(hours: 1)),
                   startMinDate: DateTime.now(),
                   hideTitle: true,
                   onStartDateChanged: (DateTime date) {
                     setState(() {
-                      _votingStartDate = date;
+                      _votingOnlyStartDate = date;
                     });
                   },
                   onEndDateChanged: (DateTime date) {
                     setState(() {
-                      _votingEndDate = date;
+                      _votingOnlyEndDate = date;
                     });
                   },
                 ),
@@ -108,7 +115,7 @@ class _VotingOnlyScreenState extends State<VotingOnlyScreen> {
                     ElevatedButton(
                       onPressed: () {
                         _saveProcessData();
-                        // Logic to go forward
+                        context.go('/create/review');
                       },
                       child: Text(localizations.buttonContinue),
                     ),

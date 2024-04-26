@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
-import 'package:ukuvota/widgets/quill_editor_widget.dart';
+import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateProcessScreen extends StatefulWidget {
@@ -154,7 +154,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                       onPressed: _isTitleEmpty
                           ? null
                           : () {
-                              _saveProcessData();
+                              _saveProcessData('full');
                               context.go('/create/proposal-voting');
                             },
                       child: Text(localizations.processPhasesFull),
@@ -163,7 +163,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                       onPressed: _isTitleEmpty
                           ? null
                           : () {
-                              _saveProcessData();
+                              _saveProcessData('voting-only');
                               context.go('/create/voting-only');
                             },
                       child: Text(localizations.processPhasesVoting),
@@ -178,12 +178,13 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
     );
   }
 
-  Future<void> _saveProcessData() async {
+  Future<void> _saveProcessData(String mode) async {
     final existingProcessData =
         await _processDataService.getProcessData() ?? {};
     final newProcessData = {
       'title': _titleController.text,
       'content': _controller.document.toDelta().toJson(),
+      'mode': mode,
     };
 
     final mergedProcessData = {

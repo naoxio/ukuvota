@@ -5,8 +5,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProcessDataService {
   static const String _processDataKey = 'process_data';
 
-  Future<void> saveProcessData(Map<String, dynamic> processData) async {
+  Future<void> saveProcessData(Map<String, dynamic> newProcessData) async {
     final prefs = await SharedPreferences.getInstance();
+    final existingProcessDataString = prefs.getString(_processDataKey);
+
+    Map<String, dynamic> processData;
+    if (existingProcessDataString != null) {
+      processData = jsonDecode(existingProcessDataString);
+      processData.addAll(newProcessData);
+    } else {
+      processData = newProcessData;
+    }
+
     await prefs.setString(_processDataKey, jsonEncode(processData));
   }
 

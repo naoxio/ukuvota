@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:ukuvota/screens/create_process/review_screen.dart';
 import 'package:ukuvota/screens/home/home_screen.dart';
 import 'package:ukuvota/screens/create_process/create_process_screen.dart';
 import 'package:ukuvota/screens/create_process/voting_only_screen.dart';
@@ -23,6 +24,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'proposal-voting',
           builder: (context, state) => const ProposalVotingScreen(),
+        ),
+        GoRoute(
+          path: 'review',
+          builder: (context, state) => const ReviewScreen(),
         ),
       ],
     ),

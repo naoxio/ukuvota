@@ -15,10 +15,8 @@ String formatDuration(int durationInSeconds) {
     'minute': 60,
     'second': 1,
   };
-
   String result = '';
   int remainingSeconds = durationInSeconds;
-
   if (durationInSeconds >= times['year']!) {
     final years = remainingSeconds ~/ times['year']!;
     remainingSeconds %= times['year']!;
@@ -51,7 +49,6 @@ String formatDuration(int durationInSeconds) {
   } else {
     result = '0s';
   }
-
   return result.trim();
 }
 
@@ -65,4 +62,10 @@ String formatDateInTimezone(int utcMillis, String timezone,
 String formatDate(int utcMillis) {
   final date = DateTime.fromMillisecondsSinceEpoch(utcMillis);
   return DateFormat("yyyy-MM-dd'T'HH:mm").format(date);
+}
+
+String prettyFormatInTimezone(DateTime dateTime, String timezone) {
+  tz.Location location = tz.getLocation(timezone);
+  tz.TZDateTime tzDateTime = tz.TZDateTime.from(dateTime, location);
+  return DateFormat('MMMM d, yyyy, h:mm a').format(tzDateTime);
 }

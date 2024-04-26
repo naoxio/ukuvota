@@ -3,16 +3,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/main.dart';
 
 class LanguageSwitcher extends StatelessWidget {
-  const LanguageSwitcher({Key? key}) : super(key: key);
+  final bool hideIcon;
+
+  const LanguageSwitcher({Key? key, this.hideIcon = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-
     return DropdownButton<String>(
       underline: Container(),
       dropdownColor: Theme.of(context).primaryColor,
-      icon: const Icon(Icons.language, color: Colors.white),
+      icon: hideIcon
+          ? const SizedBox()
+          : const Icon(Icons.language, color: Colors.white),
       value: localizations.localeName,
       onChanged: (String? newValue) {
         if (newValue != null) {

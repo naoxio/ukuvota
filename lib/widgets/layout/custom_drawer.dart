@@ -7,7 +7,6 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
-
     return isSmallScreen
         ? Drawer(
             child: ListView(
@@ -25,14 +24,6 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                /*ListTile(
-                  leading: const Icon(Icons.dashboard),
-                  title: Text(localizations.buttonDashboard),
-                  onTap: () {
-                    context.go('/dashboard');
-                    Navigator.pop(context);
-                  },
-                ),*/
                 if (isSmallScreen)
                   ListTile(
                     leading: const Icon(Icons.language),
@@ -42,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
                         context: context,
                         builder: (context) => const AlertDialog(
                           title: Text('Select Language'),
-                          content: LanguageSwitcher(),
+                          content: LanguageSwitcher(hideIcon: true),
                         ),
                       );
                     },

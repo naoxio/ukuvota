@@ -42,8 +42,6 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
         _votingEndDate = processData['votingEndDate'] != null
             ? DateTime.parse(processData['votingEndDate'])
             : null;
-        print(_proposalStartDate);
-        print(_proposalEndDate);
         print(processData);
       });
     }
@@ -51,10 +49,14 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
 
   void _saveProcessData() {
     final processData = {
-      'proposalStartDate': _proposalStartDate?.toIso8601String(),
-      'proposalEndDate': _proposalEndDate?.toIso8601String(),
-      'votingStartDate': _votingStartDate?.toIso8601String(),
-      'votingEndDate': _votingEndDate?.toIso8601String(),
+      'proposalStartDate': _proposalStartDate?.toIso8601String() ??
+          DateTime.now().toIso8601String(),
+      'proposalEndDate': _proposalEndDate?.toIso8601String() ??
+          DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+      'votingStartDate': _votingStartDate?.toIso8601String() ??
+          DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+      'votingEndDate': _votingEndDate?.toIso8601String() ??
+          DateTime.now().add(const Duration(hours: 2)).toIso8601String(),
     };
     _processDataService.saveProcessData(processData);
   }
@@ -144,7 +146,7 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
                     ElevatedButton(
                       onPressed: () {
                         _saveProcessData();
-                        // Logic to go forward
+                        context.go('/create/review');
                       },
                       child: Text(localizations.buttonContinue),
                     ),

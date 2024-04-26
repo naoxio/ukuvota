@@ -25,6 +25,9 @@ dependencies:
   uuid: ^4.4.0
   timezone: ^0.9.3
   shared_preferences: ^2.2.3
+  vsc_quill_delta_to_html: ^1.0.4
+  flutter_widget_from_html: ^0.9.1
+  chewie: ^1.8.1
 
 dev_dependencies:
   flutter_test:
