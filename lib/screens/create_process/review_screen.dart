@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
@@ -9,6 +10,8 @@ import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({Key? key}) : super(key: key);
@@ -47,7 +50,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       setState(() {
         _title = processData['title'];
         _descriptionContent = processData['descriptionContent'];
-        _timezone = processData['timezone'];
+        _timezone = processData['timezone'] ?? tz.local.name;
         _weighting = processData['weighting'];
 
         _mode = processData['mode'];
@@ -139,16 +142,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
               const SizedBox(height: 24),
               Row(
                 children: [
-                  if (_proposalStartDate != null &&
-                      _proposalEndDate != null &&
-                      _timezone != null)
+                  if (_proposalStartDate != null && _proposalEndDate != null)
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             localizations.phasesProposalTitle,
-                            style: Theme.of(context).textTheme.subtitle1,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -170,20 +171,19 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(height: 8),
-                        if (_proposalVotingStartDate != null &&
-                            _timezone != null)
+                        if (_proposalVotingStartDate != null)
                           Text(
                             '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_proposalVotingStartDate!, _timezone!)}',
                           ),
-                        if (_proposalVotingEndDate != null && _timezone != null)
+                        if (_proposalVotingEndDate != null)
                           Text(
                             '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_proposalVotingEndDate!, _timezone!)}',
                           ),
-                        if (_votingOnlyStartDate != null && _timezone != null)
+                        if (_votingOnlyStartDate != null)
                           Text(
                             '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_votingOnlyStartDate!, _timezone!)}',
                           ),
-                        if (_votingOnlyEndDate != null && _timezone != null)
+                        if (_votingOnlyEndDate != null)
                           Text(
                             '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_votingOnlyEndDate!, _timezone!)}',
                           ),

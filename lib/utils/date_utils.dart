@@ -64,8 +64,26 @@ String formatDate(int utcMillis) {
   return DateFormat("yyyy-MM-dd'T'HH:mm").format(date);
 }
 
-String prettyFormatInTimezone(DateTime dateTime, String timezone) {
-  tz.Location location = tz.getLocation(timezone);
-  tz.TZDateTime tzDateTime = tz.TZDateTime.from(dateTime, location);
-  return DateFormat('MMMM d, yyyy, h:mm a').format(tzDateTime);
+String prettyFormatInTimezone(DateTime dateTime, String? timezone) {
+  final defaultTimezone =
+      tz.local.name; // Use the client's current timezone as the default
+  String formattedDate;
+
+  try {
+    if (timezone != null) {
+      tz.Location location = tz.getLocation(timezone);
+      tz.TZDateTime tzDateTime = tz.TZDateTime.from(dateTime, location);
+      formattedDate = DateFormat('MMMM d, yyyy, h:mm a').format(tzDateTime);
+    } else {
+      tz.Location location = tz.getLocation(defaultTimezone);
+      tz.TZDateTime tzDateTime = tz.TZDateTime.from(dateTime, location);
+      formattedDate = DateFormat('MMMM d, yyyy, h:mm a').format(tzDateTime);
+    }
+  } catch (e) {
+    tz.Location location = tz.getLocation(defaultTimezone);
+    tz.TZDateTime tzDateTime = tz.TZDateTime.from(dateTime, location);
+    formattedDate = DateFormat('MMMM d, yyyy, h:mm a').format(tzDateTime);
+  }
+
+  return formattedDate;
 }

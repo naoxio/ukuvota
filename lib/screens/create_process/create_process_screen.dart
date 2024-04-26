@@ -19,6 +19,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
   final ProcessDataService _processDataService = ProcessDataService();
+  String _selectedWeighting = 'x1';
 
   @override
   void initState() {
@@ -126,7 +127,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                     labelText: localizations.processWeighting,
                     border: const OutlineInputBorder(),
                   ),
-                  value: 'x1',
+                  value: _selectedWeighting,
                   items: [
                     for (final option in [
                       'x1',
@@ -142,7 +143,11 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                         child: Text(option),
                       ),
                   ],
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedWeighting = value!;
+                    });
+                  },
                 ),
                 const SizedBox(height: 20),
                 Wrap(
@@ -179,19 +184,13 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   }
 
   Future<void> _saveProcessData(String mode) async {
-    final existingProcessData =
-        await _processDataService.getProcessData() ?? {};
     final newProcessData = {
       'title': _titleController.text,
       'content': _controller.document.toDelta().toJson(),
+      'weighting': _selectedWeighting,
       'mode': mode,
     };
 
-    final mergedProcessData = {
-      ...existingProcessData,
-      ...newProcessData,
-    };
-
-    _processDataService.saveProcessData(mergedProcessData);
+    _processDataService.saveProcessData(newProcessData);
   }
 }

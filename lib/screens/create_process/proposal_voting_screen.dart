@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/services/process_data_service.dart';
+import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:go_router/go_router.dart';
@@ -9,16 +10,17 @@ class ProposalVotingScreen extends StatefulWidget {
   const ProposalVotingScreen({Key? key}) : super(key: key);
 
   @override
-  _ProposalVotingScreenState createState() => _ProposalVotingScreenState();
+  ProposalVotingScreenState createState() => ProposalVotingScreenState();
 }
 
-class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
+class ProposalVotingScreenState extends State<ProposalVotingScreen> {
   final ProcessDataService _processDataService = ProcessDataService();
 
   DateTime? _proposalStartDate;
   DateTime? _proposalEndDate;
   DateTime? _votingStartDate;
   DateTime? _votingEndDate;
+  String? _selectedTimeZone;
 
   @override
   void initState() {
@@ -36,13 +38,12 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
         _proposalEndDate = processData['proposalEndDate'] != null
             ? DateTime.parse(processData['proposalEndDate'])
             : null;
-        _votingStartDate = processData['votingStartDate'] != null
-            ? DateTime.parse(processData['votingStartDate'])
+        _votingStartDate = processData['proposalVotingStartDate'] != null
+            ? DateTime.parse(processData['proposalVotingStartDate'])
             : null;
-        _votingEndDate = processData['votingEndDate'] != null
-            ? DateTime.parse(processData['votingEndDate'])
+        _votingEndDate = processData['proposalVotingEndDate'] != null
+            ? DateTime.parse(processData['proposalVotingEndDate'])
             : null;
-        print(processData);
       });
     }
   }
@@ -53,10 +54,11 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
           DateTime.now().toIso8601String(),
       'proposalEndDate': _proposalEndDate?.toIso8601String() ??
           DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
-      'votingStartDate': _votingStartDate?.toIso8601String() ??
+      'proposalVotingStartDate': _votingStartDate?.toIso8601String() ??
           DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
-      'votingEndDate': _votingEndDate?.toIso8601String() ??
+      'proposalVotingEndDate': _votingEndDate?.toIso8601String() ??
           DateTime.now().add(const Duration(hours: 2)).toIso8601String(),
+      'timezone': _selectedTimeZone,
     };
     _processDataService.saveProcessData(processData);
   }
@@ -103,6 +105,14 @@ class _ProposalVotingScreenState extends State<ProposalVotingScreen> {
                   onEndDateChanged: (DateTime date) {
                     setState(() {
                       _proposalEndDate = date;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+                TimeZoneSelector(
+                  onTimeZoneChanged: (timeZone) {
+                    setState(() {
+                      _selectedTimeZone = timeZone;
                     });
                   },
                 ),
