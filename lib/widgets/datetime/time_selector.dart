@@ -8,6 +8,8 @@ class TimeSelector extends StatefulWidget {
   final DateTime endDate;
   final DateTime startMinDate;
   final bool hideTitle;
+  final Function(DateTime) onStartDateChanged;
+  final Function(DateTime) onEndDateChanged;
 
   const TimeSelector({
     Key? key,
@@ -16,13 +18,15 @@ class TimeSelector extends StatefulWidget {
     required this.endDate,
     required this.startMinDate,
     this.hideTitle = false,
+    required this.onStartDateChanged,
+    required this.onEndDateChanged,
   }) : super(key: key);
 
   @override
-  _TimeSelectorState createState() => _TimeSelectorState();
+  TimeSelectorState createState() => TimeSelectorState();
 }
 
-class _TimeSelectorState extends State<TimeSelector> {
+class TimeSelectorState extends State<TimeSelector> {
   late DateTime _startDate;
   late DateTime _endDate;
   late int _duration;
@@ -35,12 +39,24 @@ class _TimeSelectorState extends State<TimeSelector> {
     _duration = _endDate.difference(_startDate).inMinutes;
   }
 
+  @override
+  void didUpdateWidget(covariant TimeSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.startDate != oldWidget.startDate ||
+        widget.endDate != oldWidget.endDate) {
+      _startDate = widget.startDate;
+      _endDate = widget.endDate;
+      _duration = _endDate.difference(_startDate).inMinutes;
+    }
+  }
+
   void _onStartDateChanged(DateTime newStartDate) {
     setState(() {
       _startDate = newStartDate;
       _updateEndDate();
       _updateDuration();
     });
+    widget.onStartDateChanged(newStartDate);
   }
 
   void _onEndDateChanged(DateTime newEndDate) {
@@ -49,12 +65,15 @@ class _TimeSelectorState extends State<TimeSelector> {
       _updateStartDate();
       _updateDuration();
     });
+    widget.onEndDateChanged(newEndDate);
   }
 
   void _onDurationChanged(int durationInMinutes) {
     setState(() {
       _duration = durationInMinutes;
       _endDate = _startDate.add(Duration(minutes: durationInMinutes));
+      _updateDuration();
+      _onEndDateChanged(_endDate);
     });
   }
 

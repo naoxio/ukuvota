@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quill/quill_delta.dart';
+import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/quill_editor_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +18,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late QuillController _controller;
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
+  final ProcessDataService _processDataService = ProcessDataService();
 
   @override
   void initState() {
@@ -23,6 +26,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
     _controller = QuillController.basic();
     _titleController = TextEditingController();
     _titleController.addListener(_checkTitleEmpty);
+    _loadProcessData();
   }
 
   @override
@@ -36,6 +40,47 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
     setState(() {
       _isTitleEmpty = _titleController.text.isEmpty;
     });
+  }
+
+  Future<void> _loadProcessData() async {
+    final processData = await _processDataService.getProcessData();
+    if (processData != null) {
+      _showProcessDataModal(processData);
+    }
+  }
+
+  void _showProcessDataModal(Map<String, dynamic> processData) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Existing Process Data'),
+          content: const Text(
+              'You have existing process data. Do you want to start a new process or continue the existing one?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Start New'),
+            ),
+            TextButton(
+              onPressed: () {
+                _loadExistingProcessData(processData);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Continue Existing'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _loadExistingProcessData(Map<String, dynamic> processData) {
+    _titleController.text = processData['title'] ?? '';
+    _controller.compose(Delta.fromJson(processData['content'] ?? <dynamic>[]),
+        _controller.selection, ChangeSource.local);
   }
 
   @override
@@ -109,6 +154,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                       onPressed: _isTitleEmpty
                           ? null
                           : () {
+                              _saveProcessData();
                               context.go('/create/proposal-voting');
                             },
                       child: Text(localizations.processPhasesFull),
@@ -117,6 +163,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                       onPressed: _isTitleEmpty
                           ? null
                           : () {
+                              _saveProcessData();
                               context.go('/create/voting-only');
                             },
                       child: Text(localizations.processPhasesVoting),
@@ -129,5 +176,21 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _saveProcessData() async {
+    final existingProcessData =
+        await _processDataService.getProcessData() ?? {};
+    final newProcessData = {
+      'title': _titleController.text,
+      'content': _controller.document.toDelta().toJson(),
+    };
+
+    final mergedProcessData = {
+      ...existingProcessData,
+      ...newProcessData,
+    };
+
+    _processDataService.saveProcessData(mergedProcessData);
   }
 }

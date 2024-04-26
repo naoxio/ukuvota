@@ -50,8 +50,19 @@ class DatetimeSliderState extends State<DatetimeSlider> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            '${localizations.setupDuration}: ${formatDuration(durationInSeconds)}',
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: '${localizations.setupDuration}: '),
+                TextSpan(
+                  text: formatDuration(durationInSeconds),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Slider(

@@ -24,6 +24,7 @@ dependencies:
   go_router: ^13.2.4
   uuid: ^4.4.0
   timezone: ^0.9.3
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
