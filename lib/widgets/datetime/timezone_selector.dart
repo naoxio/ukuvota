@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_timezone_plus/flutter_timezone_plus.dart';
 
 class TimeZoneSelector extends StatefulWidget {
   final void Function(String) onTimeZoneChanged;
+  final String? initialTimeZone;
 
-  const TimeZoneSelector({Key? key, required this.onTimeZoneChanged})
-      : super(key: key);
+  const TimeZoneSelector({
+    Key? key,
+    required this.onTimeZoneChanged,
+    this.initialTimeZone,
+  }) : super(key: key);
 
   @override
   TimeZoneSelectorState createState() => TimeZoneSelectorState();
@@ -24,10 +27,8 @@ class TimeZoneSelectorState extends State<TimeZoneSelector> {
 
   Future<void> initTimezone() async {
     tz.initializeTimeZones();
-    String? currentTimeZone = await FlutterTimezone.getLocalTimezone();
     setState(() {
-      _selectedTimeZone = currentTimeZone ?? 'UTC';
-      tz.setLocalLocation(tz.getLocation(_selectedTimeZone!));
+      _selectedTimeZone = widget.initialTimeZone;
     });
   }
 
@@ -40,6 +41,7 @@ class TimeZoneSelectorState extends State<TimeZoneSelector> {
             onChanged: (timeZone) {
               setState(() {
                 _selectedTimeZone = timeZone;
+                tz.setLocalLocation(tz.getLocation(_selectedTimeZone!));
               });
               widget.onTimeZoneChanged(timeZone!);
             },

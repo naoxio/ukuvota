@@ -5,6 +5,9 @@ import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ukuvota/utils/timezone_util.dart';
+
+import 'package:timezone/timezone.dart' as tz;
 
 class ProposalVotingScreen extends StatefulWidget {
   const ProposalVotingScreen({Key? key}) : super(key: key);
@@ -31,19 +34,37 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
   Future<void> _loadProcessData() async {
     final processData = await _processDataService.getProcessData();
     if (processData != null) {
+      DateTime now = DateTime.now();
+      DateTime proposalStartDate = processData['proposalStartDate'] != null
+          ? DateTime.parse(processData['proposalStartDate'])
+          : now;
+      DateTime proposalEndDate = processData['proposalEndDate'] != null
+          ? DateTime.parse(processData['proposalEndDate'])
+          : now.add(const Duration(hours: 1));
+      DateTime votingStartDate = processData['proposalVotingStartDate'] != null
+          ? DateTime.parse(processData['proposalVotingStartDate'])
+          : now.add(const Duration(hours: 1));
+      DateTime votingEndDate = processData['proposalVotingEndDate'] != null
+          ? DateTime.parse(processData['proposalVotingEndDate'])
+          : now.add(const Duration(hours: 2));
+
+      if (proposalStartDate.isBefore(now)) {
+        Duration difference = now.difference(proposalStartDate);
+        proposalStartDate = now;
+        proposalEndDate = proposalEndDate.add(difference);
+        votingStartDate = votingStartDate.add(difference);
+        votingEndDate = votingEndDate.add(difference);
+      }
+
+      String selectedTimeZone =
+          processData['timezone'] ?? await getCurrentTimeZone();
       setState(() {
-        _proposalStartDate = processData['proposalStartDate'] != null
-            ? DateTime.parse(processData['proposalStartDate'])
-            : null;
-        _proposalEndDate = processData['proposalEndDate'] != null
-            ? DateTime.parse(processData['proposalEndDate'])
-            : null;
-        _votingStartDate = processData['proposalVotingStartDate'] != null
-            ? DateTime.parse(processData['proposalVotingStartDate'])
-            : null;
-        _votingEndDate = processData['proposalVotingEndDate'] != null
-            ? DateTime.parse(processData['proposalVotingEndDate'])
-            : null;
+        _proposalStartDate = proposalStartDate;
+        _proposalEndDate = proposalEndDate;
+        _votingStartDate = votingStartDate;
+        _votingEndDate = votingEndDate;
+        _selectedTimeZone = selectedTimeZone;
+        tz.setLocalLocation(tz.getLocation(_selectedTimeZone!));
       });
     }
   }
@@ -84,6 +105,17 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
+                _selectedTimeZone == null
+                    ? const CircularProgressIndicator()
+                    : TimeZoneSelector(
+                        initialTimeZone: _selectedTimeZone,
+                        onTimeZoneChanged: (timeZone) {
+                          setState(() {
+                            _selectedTimeZone = timeZone;
+                          });
+                        },
+                      ),
+                const SizedBox(height: 20),
                 Text(
                   localizations.phasesProposalTitle,
                   style: const TextStyle(
@@ -105,14 +137,6 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
                   onEndDateChanged: (DateTime date) {
                     setState(() {
                       _proposalEndDate = date;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                TimeZoneSelector(
-                  onTimeZoneChanged: (timeZone) {
-                    setState(() {
-                      _selectedTimeZone = timeZone;
                     });
                   },
                 ),
