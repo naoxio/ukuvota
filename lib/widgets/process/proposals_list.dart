@@ -121,9 +121,6 @@ class ProposalsListState extends State<ProposalsList> {
                 final uniqueId = const Uuid().v4();
                 final delta = Delta()..insert(selectedProposal.description);
 
-                print(delta);
-                print(jsonEncode(delta.toJson()));
-
                 final newProposal = Proposal(
                   id: uniqueId,
                   title: selectedProposal.title,

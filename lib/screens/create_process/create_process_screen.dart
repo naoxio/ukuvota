@@ -110,8 +110,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                 TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
-                    labelText: localizations.processTitle,
-                    hintText: localizations.processTopic,
+                    labelText: localizations.processTopic,
                     border: const OutlineInputBorder(),
                   ),
                 ),

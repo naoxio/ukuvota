@@ -80,7 +80,7 @@ Widget createProposalElement(
                 const SizedBox(height: 16),
                 QuillEditorWidget(
                   controller: descriptionController,
-                  sharedConfigurations: QuillSharedConfigurations(),
+                  sharedConfigurations: const QuillSharedConfigurations(),
                   readOnly: false,
                 ),
                 const SizedBox(height: 16),

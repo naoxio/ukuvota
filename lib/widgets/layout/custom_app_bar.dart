@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
+import 'package:ukuvota/widgets/search_delegate.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -26,44 +27,31 @@ class CustomAppBarState extends State<CustomAppBar> {
                 Scaffold.of(context).openDrawer();
               },
             )
-          : null,
-      title: isSmallScreen
-          ? InkWell(
-              onTap: () => context.go('/'),
-              child: const Text(
-                'Ukuvota',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () => context.go('/'),
-                  child: const Text(
-                    'Ukuvota',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                /*
-                const SizedBox(width: 16),
-                TextButton.icon(
-                  icon: const Icon(Icons.dashboard,
-                      color: Colors.white), // Icon with specified color
-                  label: Text(
-                    localizations.buttonDashboard,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () => context.go('/dashboard'),
-                ),*/
-              ],
+          : IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
+              },
             ),
-      actions: !isSmallScreen
-          ? [
-              const LanguageSwitcher(),
-              const SizedBox(width: 16),
-            ]
-          : null,
+      title: InkWell(
+        onTap: () => context.go('/'),
+        child: const Text(
+          'Ukuvota',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      actions: [
+        if (!isSmallScreen)
+          const Row(
+            children: [
+              LanguageSwitcher(),
+              SizedBox(width: 16),
+            ],
+          ),
+      ],
     );
   }
 }
