@@ -15,11 +15,22 @@ class Proposal {
 
   factory Proposal.fromJson(Map<String, dynamic> json) {
     return Proposal(
-        id: json['id'],
-        title: json['title'],
-        description: json['description'],
-        editing: json['editing'] ?? false,
-        total: json['total']);
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      editing: json['editing'] ?? false,
+      total: json['total'],
+    );
+  }
+
+  factory Proposal.fromMap(Map<String, dynamic> map) {
+    return Proposal(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      editing: map['editing'] ?? false,
+      total: map['total']?.toDouble(),
+    );
   }
 
   Map<String, dynamic> toJson() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
 import 'package:ukuvota/utils/process_utils.dart';
 import 'package:ukuvota/widgets/layout/process_scaffold.dart';
@@ -29,7 +30,7 @@ class VotingScreenState extends State<VotingScreen> {
       create: (_) => ProcessDataProvider(),
       child: Consumer<ProcessDataProvider>(
         builder: (context, processDataProvider, _) {
-          return FutureBuilder<Map<String, dynamic>?>(
+          return FutureBuilder<Process?>(
             future: processDataProvider.fetchProcessData(widget.processId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,8 +39,8 @@ class VotingScreenState extends State<VotingScreen> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 final process = processDataProvider.processData!;
-                final proposals = process['proposals'] ?? [];
-                _endTime = process['votingDates'][1];
+                final proposals = process.proposals ?? [];
+                _endTime = process.votingDates[1] as String;
                 final expectedPath = getProcessUrl(process);
 
                 if (expectedPath != ModalRoute.of(context)?.settings.name) {
@@ -54,14 +55,14 @@ class VotingScreenState extends State<VotingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '${localizations.processVoters}: ${process['voters']?.length ?? '0'}',
+                        '${localizations.processVoters}: ${process.voters?.length ?? '0'}',
                       ),
                       VotingList(
                         processId: widget.processId,
                         proposals: proposals,
                       ),
                       const SizedBox(height: 16),
-                      Text('${localizations.processVoterName}'),
+                      Text(localizations.processVoterName),
                       Row(
                         children: [
                           Expanded(

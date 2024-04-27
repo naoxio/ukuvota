@@ -4,28 +4,30 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:ukuvota/models/process.dart';
+import 'package:ukuvota/models/proposal.dart';
 
 class ProcessDataService {
-  Future<Map<String, dynamic>?> fetchProcessData(String processId) async {
-    Map<String, dynamic>? process;
+  Future<Process?> fetchProcessData(String processId) async {
     final DatabaseReference processRef =
         FirebaseDatabase.instance.ref().child('process/$processId');
     final DataSnapshot snapshot = await processRef.get();
 
     if (snapshot.exists) {
-      process = Map<String, dynamic>.from(snapshot.value as Map);
+      final Map<String, dynamic> processData =
+          Map<String, dynamic>.from(snapshot.value as Map);
 
-      if (!process.containsKey('description') &&
-          process.containsKey('descriptionId')) {
+      if (!processData.containsKey('description') &&
+          processData.containsKey('descriptionId')) {
         final Reference descriptionRef = FirebaseStorage.instance
             .ref()
-            .child('descriptions/${process['descriptionId']}.json');
+            .child('descriptions/${processData['descriptionId']}.json');
         try {
           final String downloadURL = await descriptionRef.getDownloadURL();
           final http.Response response = await http.get(Uri.parse(downloadURL));
           final Map<String, dynamic> descriptionContent =
               json.decode(response.body);
-          process['description'] = descriptionContent;
+          processData['description'] = descriptionContent;
         } catch (error) {
           if (error is FirebaseException &&
               error.code == 'storage/object-not-found') {
@@ -37,20 +39,20 @@ class ProcessDataService {
         }
       }
 
-      final String timezone = process['timezone'] ?? 'UTC';
+      final String timezone = processData['timezone'] ?? 'UTC';
       final DateTime currentTime = DateTime.now();
       final DateTime proposalEndTime = tz.TZDateTime.from(
-        DateTime.fromMillisecondsSinceEpoch(process['proposalDates'][1]),
+        DateTime.fromMillisecondsSinceEpoch(processData['proposalDates'][1]),
         tz.getLocation(timezone),
       ).toUtc();
 
       if (currentTime.isAfter(proposalEndTime)) {
-        if (!process.containsKey('proposals')) {
-          return process;
+        if (!processData.containsKey('proposals')) {
+          return Process.fromMap(processData);
         }
 
         final Map<String, dynamic> proposalsObj =
-            Map<String, dynamic>.from(process['proposals']);
+            Map<String, dynamic>.from(processData['proposals']);
         await Future.wait(
             proposalsObj.entries.map((MapEntry<String, dynamic> entry) async {
           final String index = entry.key;
@@ -67,7 +69,7 @@ class ProcessDataService {
           }
         }));
 
-        final List<Map<String, dynamic>> updatedProposals = await Future.wait(
+        final List<Proposal> updatedProposals = await Future.wait(
             proposalsObj.entries.map((MapEntry<String, dynamic> entry) async {
           final String index = entry.key;
           final Map<String, dynamic> proposal =
@@ -105,15 +107,15 @@ class ProcessDataService {
             }
           }
 
-          return proposal;
+          return Proposal.fromMap(proposal);
         }));
 
-        process['proposals'] = updatedProposals;
+        processData['proposals'] = updatedProposals;
       }
-    } else {
-      process = null;
-    }
 
-    return process;
+      return Process.fromMap(processData);
+    } else {
+      return null;
+    }
   }
 }

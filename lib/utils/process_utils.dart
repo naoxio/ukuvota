@@ -1,31 +1,29 @@
-String getProcessUrl(Map<String, dynamic> process) {
-  if (process.isEmpty) {
-    return '/';
-  }
+import 'package:ukuvota/models/process.dart';
 
+String getProcessUrl(Process process) {
   final currentTime = DateTime.now();
   final proposalStartTime =
-      DateTime.fromMillisecondsSinceEpoch(process['proposalDates'][0]);
+      DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
   final proposalEndTime =
-      DateTime.fromMillisecondsSinceEpoch(process['proposalDates'][1]);
+      DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
   final votingStartTime =
-      DateTime.fromMillisecondsSinceEpoch(process['votingDates'][0]);
+      DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
   final votingEndTime =
-      DateTime.fromMillisecondsSinceEpoch(process['votingDates'][1]);
+      DateTime.fromMillisecondsSinceEpoch(process.votingDates[1]);
 
   if (currentTime.isAfter(proposalStartTime) &&
       currentTime.isBefore(proposalEndTime)) {
-    return '/process/${process['_id']}/proposals';
+    return '/process/${process.id}/proposals';
   } else if (currentTime.isAfter(votingStartTime) &&
       currentTime.isBefore(votingEndTime)) {
-    final proposals = process['proposals'];
+    final proposals = process.proposals;
     if (proposals == null || proposals.isEmpty) {
-      return '/process/${process['_id']}/results';
+      return '/process/${process.id}/results';
     }
-    return '/process/${process['_id']}/voting';
+    return '/process/${process.id}/voting';
   } else if (currentTime.isAfter(votingEndTime)) {
-    return '/process/${process['_id']}/results';
+    return '/process/${process.id}/results';
   } else {
-    return '/process/${process['_id']}';
+    return '/process/${process.id}';
   }
 }

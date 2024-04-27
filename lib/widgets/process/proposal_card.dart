@@ -49,14 +49,14 @@ class ProposalCardState extends State<ProposalCard> {
           children: [
             Text(
               widget.proposal.title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             HtmlWidget(convertToHtml(widget.proposal.description!)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(

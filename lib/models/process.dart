@@ -5,7 +5,7 @@ class Process {
   final String id;
   final String title;
   final String? description;
-  final List<int> proposalDates;
+  final List<int>? proposalDates;
   final List<int> votingDates;
   final String? timezone;
   final String? weighting;
@@ -16,7 +16,7 @@ class Process {
     required this.id,
     required this.title,
     this.description,
-    required this.proposalDates,
+    this.proposalDates,
     required this.votingDates,
     this.timezone,
     this.weighting,
@@ -29,13 +29,15 @@ class Process {
       id: map['_id'] as String,
       title: map['title'] as String,
       description: map['description'] as String?,
-      proposalDates: List<int>.from(map['proposalDates']),
+      proposalDates: map['proposalDates'] != null
+          ? List<int>.from(map['proposalDates'])
+          : null,
       votingDates: List<int>.from(map['votingDates']),
       timezone: map['timezone'] as String?,
       weighting: map['weighting'] as String?,
       proposals: map['proposals'] != null
           ? List<Proposal>.from(
-              map['proposals'].map((proposal) => Proposal.fromJson(proposal)),
+              map['proposals'].map((proposal) => Proposal.fromMap(proposal)),
             )
           : null,
       voters: map['voters'] != null

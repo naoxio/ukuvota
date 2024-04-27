@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
 import 'package:ukuvota/utils/process_utils.dart';
 import 'package:ukuvota/widgets/layout/process_scaffold.dart';
@@ -26,7 +27,7 @@ class ProcessScreenState extends State<ProcessScreen> {
       create: (_) => ProcessDataProvider(),
       child: Consumer<ProcessDataProvider>(
         builder: (context, processDataProvider, _) {
-          return FutureBuilder<Map<String, dynamic>?>(
+          return FutureBuilder<Process?>(
             future: processDataProvider.fetchProcessData(widget.processId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -76,11 +77,11 @@ class ProcessScreenState extends State<ProcessScreen> {
     final process = processDataProvider.processData!;
 
     final proposalStartDate =
-        DateTime.fromMillisecondsSinceEpoch(process['proposalDates'][0]);
+        DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
     final proposalEndDate =
-        DateTime.fromMillisecondsSinceEpoch(process['proposalDates'][1]);
+        DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
     final votingStartDate =
-        DateTime.fromMillisecondsSinceEpoch(process['votingDates'][0]);
+        DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
 
     final currentTime = DateTime.now();
 
