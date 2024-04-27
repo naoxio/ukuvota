@@ -6,12 +6,12 @@ List<Proposal> exampleProposals(AppLocalizations localizations) {
     Proposal(
       id: '1',
       title: localizations.proposalZeroTitle,
-      description: localizations.proposalZeroDescription,
+      description: '${localizations.proposalZeroDescription}\n',
     ),
     Proposal(
       id: '2',
       title: localizations.proposalOneTitle,
-      description: localizations.proposalOneDescription,
+      description: '${localizations.proposalOneDescription}\n',
     ),
   ];
 }

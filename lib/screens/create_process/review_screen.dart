@@ -1,26 +1,22 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
 import 'package:ukuvota/widgets/layout/main_layout.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:ukuvota/utils/proposal_utils.dart';
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({Key? key}) : super(key: key);
 
   @override
-  _ReviewScreenState createState() => _ReviewScreenState();
+  ReviewScreenState createState() => ReviewScreenState();
 }
 
-class _ReviewScreenState extends State<ReviewScreen> {
+class ReviewScreenState extends State<ReviewScreen> {
   final ProcessDataService _processDataService = ProcessDataService();
 
   String? _title;
@@ -35,7 +31,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
   String? _timezone;
   String? _weighting;
   String? _mode;
-  String? _descriptionHTML;
 
   @override
   void initState() {
@@ -75,24 +70,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
           _votingOnlyEndDate = processData['votingOnlyEndDate'] != null
               ? DateTime.parse(processData['votingOnlyEndDate'])
               : null;
-        }
 
-        _proposals = processData['proposals'] != null
-            ? List<Map<String, dynamic>>.from(processData['proposals'])
-                .map((proposalData) => Proposal.fromJson(proposalData))
-                .toList()
-            : [];
-        if (_descriptionContent != null) {
-          final deltaOps = jsonDecode(_descriptionContent!);
-          final converter = QuillDeltaToHtmlConverter(
-            deltaOps,
-            ConverterOptions.forEmail(),
-          );
-          _descriptionHTML = converter.convert();
+          _proposals = processData['proposals'] != null
+              ? List<Map<String, dynamic>>.from(processData['proposals'])
+                  .map((proposalData) => Proposal.fromJson(proposalData))
+                  .toList()
+              : [];
         }
       });
     }
-    print(processData);
   }
 
   @override
@@ -117,7 +103,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     const SizedBox(height: 8),
                     Text(_title!),
                     const SizedBox(height: 16),
-                    if (_descriptionHTML != null)
+                    if (_descriptionContent != null)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -128,7 +114,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           const SizedBox(height: 8),
                           Text(_title!),
                           const SizedBox(height: 16),
-                          HtmlWidget(_descriptionHTML!),
+                          HtmlWidget(convertToHtml(_descriptionContent!)),
                         ],
                       ),
                   ],
@@ -226,11 +212,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                             children: [
                               Text(
                                 proposal.title,
-                                style: Theme.of(context).textTheme.subtitle1,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                               const SizedBox(height: 8),
-                              if (proposal.descriptionHtml != null)
-                                HtmlWidget(proposal.descriptionHtml ?? ''),
+                              HtmlWidget(convertToHtml(proposal.description)),
                             ],
                           ),
                         );

@@ -53,12 +53,16 @@ class TimeSelectorState extends State<TimeSelector> {
   }
 
   void _onStartDateChanged(DateTime newStartDate) {
+    var startDate = newStartDate;
+    if (newStartDate.isBefore(DateTime.now())) {
+      startDate = DateTime.now().add(const Duration(minutes: 1));
+    }
     setState(() {
-      _startDate = newStartDate;
+      _startDate = startDate;
       _endDate = _startDate.add(Duration(minutes: _duration));
       _updateDuration();
     });
-    widget.onStartDateChanged(newStartDate);
+    widget.onStartDateChanged(startDate);
     widget.onEndDateChanged(_endDate);
   }
 

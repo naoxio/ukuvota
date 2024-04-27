@@ -118,6 +118,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                 const SizedBox(height: 20),
                 QuillEditorWidget(
                   controller: _controller,
+                  showBorder: true,
                   sharedConfigurations: QuillSharedConfigurations(
                     locale: Locale(localizations.localeName),
                   ),

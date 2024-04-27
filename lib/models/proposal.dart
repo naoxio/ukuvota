@@ -19,6 +19,17 @@ class Proposal {
       title: json['title'],
       description: json['description'],
       editing: json['editing'] ?? false,
+      descriptionHtml: json['descriptionHtml'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'editing': editing,
+      'descriptionHtml': descriptionHtml,
+    };
   }
 }

@@ -1,7 +1,11 @@
 // file: lib/utils/create_proposal_element.dart
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/proposal.dart';
+import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
 
 Widget createProposalElement(
@@ -12,8 +16,12 @@ Widget createProposalElement(
   Function(Proposal)? onUpdate,
 }) {
   final titleController = TextEditingController(text: proposal.title);
-  final descriptionController =
-      TextEditingController(text: proposal.description);
+  final descriptionController = QuillController(
+    document: proposal.description.isNotEmpty
+        ? Document.fromJson(jsonDecode(proposal.description))
+        : Document(),
+    selection: const TextSelection.collapsed(offset: 0),
+  );
 
   void toggleEditMode(bool editing) {
     proposal.editing = editing;
@@ -24,7 +32,8 @@ Widget createProposalElement(
 
   void saveProposal() {
     proposal.title = titleController.text;
-    proposal.description = descriptionController.text;
+    proposal.description =
+        jsonEncode(descriptionController.document.toDelta().toJson());
     toggleEditMode(false);
   }
 
@@ -41,7 +50,7 @@ Widget createProposalElement(
         if (!proposal.editing)
           ListTile(
             title: Text(proposal.title),
-            subtitle: Text(truncateDescription(proposal.description, 100)),
+            subtitle: HtmlWidget(convertToHtml(proposal.description)),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -69,12 +78,10 @@ Widget createProposalElement(
                   ),
                 ),
                 const SizedBox(height: 16),
-                TextField(
+                QuillEditorWidget(
                   controller: descriptionController,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    labelText: localizations.processDescription,
-                  ),
+                  sharedConfigurations: QuillSharedConfigurations(),
+                  readOnly: false,
                 ),
                 const SizedBox(height: 16),
                 Row(
