@@ -32,6 +32,8 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_timezone: ^1.0.8
   flutter_timezone_plus: ^1.1.0
+  firebase_database: ^10.5.4
+  firebase_storage: ^11.7.4
 
 dev_dependencies:
   flutter_test:

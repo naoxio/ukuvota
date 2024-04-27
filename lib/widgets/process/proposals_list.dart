@@ -13,12 +13,13 @@ class ProposalsList extends StatefulWidget {
   final bool isSetup;
   final List<Proposal> proposals;
   final Function(List<Proposal>) onProposalsUpdated;
-
+  final String? processId;
   const ProposalsList({
     Key? key,
-    required this.isSetup,
+    this.isSetup = false,
     required this.proposals,
     required this.onProposalsUpdated,
+    this.processId,
   }) : super(key: key);
 
   @override

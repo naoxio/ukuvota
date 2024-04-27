@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ukuvota/utils/markdown_loader.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -29,23 +29,9 @@ class HomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 20),
-                FutureBuilder<String>(
-                  future: loadMarkdown(context, localizations.localeName),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.hasData) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: MarkdownBody(data: snapshot.data!),
-                      );
-                    } else {
-                      return const Text('Failed to load markdown.');
-                    }
-                  },
-                ),
+                MarkdownLoader(
+                    localeName: localizations.localeName,
+                    fileName: 'Introduction'),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {

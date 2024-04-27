@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
-import 'package:ukuvota/services/process_data_service.dart';
+import 'package:ukuvota/services/process_setup_service.dart';
 import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';

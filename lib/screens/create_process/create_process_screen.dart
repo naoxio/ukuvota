@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
-import 'package:ukuvota/services/process_data_service.dart';
+import 'package:ukuvota/services/process_setup_service.dart';
+import 'package:ukuvota/utils/weighting_options.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
@@ -131,18 +132,10 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
                   ),
                   value: _selectedWeighting,
                   items: [
-                    for (final option in [
-                      'x1',
-                      'x2',
-                      'x3',
-                      'x4',
-                      'x5',
-                      'x6',
-                      '∞'
-                    ])
+                    for (final entry in weightingOptions.entries)
                       DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(option),
+                        value: entry.key,
+                        child: Text(entry.value),
                       ),
                   ],
                   onChanged: (value) {
