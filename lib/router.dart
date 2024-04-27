@@ -6,6 +6,10 @@ import 'package:ukuvota/screens/create_process/voting_only_screen.dart';
 import 'package:ukuvota/screens/create_process/proposal_voting_screen.dart';
 import 'package:ukuvota/screens/dashboard/dashboard_screen.dart';
 import 'package:ukuvota/screens/settings/settings_screen.dart';
+import 'package:ukuvota/screens/process/process_screen.dart';
+import 'package:ukuvota/screens/process/proposals_screen.dart';
+import 'package:ukuvota/screens/process/voting_screen.dart';
+import 'package:ukuvota/screens/process/results_screen.dart';
 
 final GoRouter router = GoRouter(
   routes: [
@@ -38,6 +42,48 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/process/:processId',
+      builder: (context, state) {
+        final processId = state.pathParameters['processId'];
+        if (processId == null) {
+          return const HomeScreen(); // Redirect to home if processId is not provided
+        }
+        return ProcessScreen(processId: processId);
+      },
+      routes: [
+        GoRoute(
+          path: 'proposals',
+          builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen(); // Redirect to home if processId is not provided
+            }
+            return ProposalsScreen(processId: processId);
+          },
+        ),
+        GoRoute(
+          path: 'voting',
+          builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen(); // Redirect to home if processId is not provided
+            }
+            return VotingScreen(processId: processId);
+          },
+        ),
+        GoRoute(
+          path: 'results',
+          builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen(); // Redirect to home if processId is not provided
+            }
+            return ResultsScreen(processId: processId);
+          },
+        ),
+      ],
     ),
   ],
 );

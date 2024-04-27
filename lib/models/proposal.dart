@@ -3,24 +3,23 @@ class Proposal {
   String title;
   String description;
   bool editing;
-  String? descriptionHtml;
+  double? total;
 
   Proposal({
     required this.id,
     required this.title,
     required this.description,
     this.editing = false,
-    this.descriptionHtml,
+    this.total,
   });
 
   factory Proposal.fromJson(Map<String, dynamic> json) {
     return Proposal(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
-      editing: json['editing'] ?? false,
-      descriptionHtml: json['descriptionHtml'],
-    );
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        editing: json['editing'] ?? false,
+        total: json['total']);
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +28,7 @@ class Proposal {
       'title': title,
       'description': description,
       'editing': editing,
-      'descriptionHtml': descriptionHtml,
+      'total': total
     };
   }
 }
