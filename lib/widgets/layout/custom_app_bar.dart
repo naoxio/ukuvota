@@ -18,6 +18,7 @@ class CustomAppBarState extends State<CustomAppBar> {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return AppBar(
+      automaticallyImplyLeading: false,
       leading: isSmallScreen
           ? IconButton(
               icon: const Icon(Icons.menu),

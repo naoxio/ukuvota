@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ukuvota/widgets/layout/main_layout.dart';
+import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(

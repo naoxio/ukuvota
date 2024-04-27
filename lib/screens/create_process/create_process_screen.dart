@@ -3,7 +3,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:ukuvota/services/process_data_service.dart';
-import 'package:ukuvota/widgets/layout/main_layout.dart';
+import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
 
@@ -90,7 +90,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return CustomScaffold(
+    return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(

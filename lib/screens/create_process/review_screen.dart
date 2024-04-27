@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
-import 'package:ukuvota/widgets/layout/main_layout.dart';
+import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -85,7 +85,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return CustomScaffold(
+    return MainScaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -190,7 +190,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                   children: [
                     Text(
                       localizations.processProposals,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
                     ListView.separated(

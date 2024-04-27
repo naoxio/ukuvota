@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
-import 'package:ukuvota/widgets/layout/main_layout.dart';
+import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 import 'package:go_router/go_router.dart';
@@ -79,7 +79,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return CustomScaffold(
+    return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(
