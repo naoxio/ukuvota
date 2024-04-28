@@ -89,24 +89,34 @@ class ReviewScreenState extends State<ReviewScreen> {
 
   Future<void> _startProcess() async {
     try {
-      // Create a new process ID (UUID)
-      String processId = Uuid().v4();
+      String processId = const Uuid().v4();
 
       Map<String, dynamic> processData = {
-        'id': processId,
+        '_id': processId,
         'title': _title,
-        'descriptionContent': _descriptionContent,
-        'proposalStartDate': _proposalStartDate?.millisecondsSinceEpoch,
-        'proposalEndDate': _proposalEndDate?.millisecondsSinceEpoch,
-        'proposalVotingStartDate':
-            _proposalVotingStartDate?.millisecondsSinceEpoch,
-        'proposalVotingEndDate': _proposalVotingEndDate?.millisecondsSinceEpoch,
-        'votingOnlyStartDate': _votingOnlyStartDate?.millisecondsSinceEpoch,
-        'votingOnlyEndDate': _votingOnlyEndDate?.millisecondsSinceEpoch,
-        'proposals': _proposals.map((proposal) => proposal.toJson()).toList(),
+        'description': _descriptionContent,
         'weighting': _weighting,
         'timezone': _timezone,
+        'proposals': _proposals.map((proposal) => proposal.toJson()).toList(),
       };
+
+      // Conditionally add dates based on the mode
+      if (_mode == 'full') {
+        processData['proposalDates'] = [
+          _proposalStartDate?.millisecondsSinceEpoch,
+          _proposalEndDate?.millisecondsSinceEpoch
+        ];
+        processData['votingDates'] = [
+          _proposalVotingStartDate?.millisecondsSinceEpoch,
+          _proposalVotingEndDate?.millisecondsSinceEpoch
+        ];
+      } else if (_mode == 'voting-only') {
+        processData['proposalDates'] = null;
+        processData['votingDates'] = [
+          _votingOnlyStartDate?.millisecondsSinceEpoch,
+          _votingOnlyEndDate?.millisecondsSinceEpoch
+        ];
+      }
 
       await _processDataService.createProcess(processId, processData);
       await _processSetupService.clearProcessData();

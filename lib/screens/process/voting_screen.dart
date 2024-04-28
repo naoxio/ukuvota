@@ -9,14 +9,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
-import 'package:ukuvota/utils/process_utils.dart';
 import 'package:ukuvota/widgets/layout/process_scaffold.dart';
 import 'package:ukuvota/widgets/process/voting_list.dart';
 
 class VotingScreen extends StatefulWidget {
-  final String processId;
+  final Process process;
 
-  const VotingScreen({Key? key, required this.processId}) : super(key: key);
+  const VotingScreen({Key? key, required this.process}) : super(key: key);
 
   @override
   VotingScreenState createState() => VotingScreenState();
@@ -29,67 +28,39 @@ class VotingScreenState extends State<VotingScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final process = widget.process;
 
-    return ChangeNotifierProvider(
-      create: (_) => ProcessDataProvider(),
-      child: Consumer<ProcessDataProvider>(
-        builder: (context, processDataProvider, _) {
-          return FutureBuilder<Process?>(
-            future: processDataProvider.fetchProcessData(widget.processId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final process = processDataProvider.processData!;
-                final proposals = process.proposals ?? [];
-                _endTime = process.votingDates[1] as String;
-                final expectedPath = getProcessUrl(process);
-
-                if (expectedPath != ModalRoute.of(context)?.settings.name) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    context.go(expectedPath);
-                  });
-                }
-
-                return ProcessScaffold(
-                  process: process,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${localizations.processVoters}: ${process.voters?.length ?? '0'}',
-                      ),
-                      VotingList(
-                        processId: widget.processId,
-                        proposals: proposals,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(localizations.processVoterName),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _voterNameController,
-                              decoration: InputDecoration(
-                                hintText: localizations.alertInfoSubmittingVote,
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: _submitVote,
-                            child: Text(localizations.alertSuccessSubmitVote),
-                          ),
-                        ],
-                      ),
-                    ],
+    return ProcessScaffold(
+      process: process,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '${localizations.processVoters}: ${process.voters?.length ?? '0'}',
+          ),
+          VotingList(
+            processId: process.id,
+            proposals: process.proposals,
+          ),
+          const SizedBox(height: 16),
+          Text(localizations.processVoterName),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _voterNameController,
+                  decoration: InputDecoration(
+                    hintText: localizations.alertInfoSubmittingVote,
                   ),
-                );
-              }
-            },
-          );
-        },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: _submitVote,
+                child: Text(localizations.alertSuccessSubmitVote),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -130,7 +101,7 @@ class VotingScreenState extends State<VotingScreen> {
     final timeLeft = endTimeDate.difference(currentTime);
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/process/${widget.processId}/results');
+        context.go('/process/${widget.process.id}/results');
       });
     } else {
       Future.delayed(

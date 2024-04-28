@@ -28,9 +28,6 @@ dependencies:
   vsc_quill_delta_to_html: ^1.0.4
   flutter_widget_from_html: ^0.9.1
   chewie: ^1.8.1
-  geolocator: ^11.0.0
-  flutter_native_timezone: ^2.0.0
-  flutter_timezone: ^1.0.8
   flutter_timezone_plus: ^1.1.0
   firebase_database: ^10.5.4
   firebase_storage: ^11.7.4

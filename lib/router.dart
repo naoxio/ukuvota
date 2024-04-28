@@ -4,6 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:ukuvota/providers/process_data_provider.dart';
 import 'package:ukuvota/screens/create_process/review_screen.dart';
 import 'package:ukuvota/screens/home/home_screen.dart';
 import 'package:ukuvota/screens/create_process/create_process_screen.dart';
@@ -53,39 +55,86 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final processId = state.pathParameters['processId'];
         if (processId == null) {
-          return const HomeScreen(); // Redirect to home if processId is not provided
+          return const HomeScreen();
         }
-        return ProcessScreen(processId: processId);
+        final processDataProvider =
+            Provider.of<ProcessDataProvider>(context, listen: false);
+        final process = processDataProvider.processData;
+        if (process == null) {
+          return const HomeScreen();
+        }
+        return ProcessScreen(process: process);
+      },
+      redirect: (context, state) async {
+        final processId = state.pathParameters['processId'];
+        if (processId == null) {
+          return '/';
+        }
+        final processDataProvider =
+            Provider.of<ProcessDataProvider>(context, listen: false);
+        final process = await processDataProvider.fetchProcessData(processId);
+        if (process == null) {
+          return '/';
+        }
+        final currentTime = DateTime.now();
+        final proposalStartTime =
+            DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
+        final proposalEndTime =
+            DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
+        final votingStartTime =
+            DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
+        final votingEndTime =
+            DateTime.fromMillisecondsSinceEpoch(process.votingDates[1]);
+        if (currentTime.isAfter(proposalStartTime) &&
+            currentTime.isBefore(proposalEndTime)) {
+          return '/process/$processId/proposals';
+        } else if (currentTime.isAfter(votingStartTime) &&
+            currentTime.isBefore(votingEndTime)) {
+          final proposals = process.proposals;
+          if (proposals == null || proposals.isEmpty) {
+            return '/process/$processId/results';
+          }
+          return '/process/$processId/voting';
+        } else if (currentTime.isAfter(votingEndTime)) {
+          return '/process/$processId/results';
+        }
+        return null;
       },
       routes: [
         GoRoute(
           path: 'proposals',
           builder: (context, state) {
-            final processId = state.pathParameters['processId'];
-            if (processId == null) {
-              return const HomeScreen(); // Redirect to home if processId is not provided
+            final processDataProvider =
+                Provider.of<ProcessDataProvider>(context, listen: false);
+            final process = processDataProvider.processData;
+            if (process == null) {
+              return const HomeScreen();
             }
-            return ProposalsScreen(processId: processId);
+            return ProposalsScreen(process: process);
           },
         ),
         GoRoute(
           path: 'voting',
           builder: (context, state) {
-            final processId = state.pathParameters['processId'];
-            if (processId == null) {
-              return const HomeScreen(); // Redirect to home if processId is not provided
+            final processDataProvider =
+                Provider.of<ProcessDataProvider>(context, listen: false);
+            final process = processDataProvider.processData;
+            if (process == null) {
+              return const HomeScreen();
             }
-            return VotingScreen(processId: processId);
+            return VotingScreen(process: process);
           },
         ),
         GoRoute(
           path: 'results',
           builder: (context, state) {
-            final processId = state.pathParameters['processId'];
-            if (processId == null) {
-              return const HomeScreen(); // Redirect to home if processId is not provided
+            final processDataProvider =
+                Provider.of<ProcessDataProvider>(context, listen: false);
+            final process = processDataProvider.processData;
+            if (process == null) {
+              return const HomeScreen();
             }
-            return ResultsScreen(processId: processId);
+            return ResultsScreen(process: process);
           },
         ),
       ],

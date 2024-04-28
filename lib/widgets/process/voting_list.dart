@@ -11,7 +11,7 @@ import 'package:ukuvota/widgets/process/proposal_card.dart';
 
 class VotingList extends StatefulWidget {
   final String processId;
-  final List<Proposal> proposals;
+  final List<Proposal>? proposals;
 
   const VotingList({
     Key? key,
@@ -30,7 +30,7 @@ class VotingListState extends State<VotingList> {
   void initState() {
     super.initState();
     _votes = {};
-    for (final proposal in widget.proposals) {
+    for (final proposal in widget.proposals!) {
       _votes[proposal.id] = 0;
     }
   }
@@ -75,9 +75,9 @@ class VotingListState extends State<VotingList> {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: widget.proposals.length,
+      itemCount: widget.proposals!.length,
       itemBuilder: (context, index) {
-        final proposal = widget.proposals[index];
+        final proposal = widget.proposals![index];
         return ProposalCard(
           proposal: Proposal(
             id: proposal.id,
