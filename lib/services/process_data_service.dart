@@ -37,8 +37,6 @@ class ProcessDataService {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
 
-      debugPrint('Process data: $processData');
-
       if (!processData.containsKey('description') &&
           processData.containsKey('descriptionId')) {
         final Reference descriptionRef = FirebaseStorage.instance
@@ -50,12 +48,9 @@ class ProcessDataService {
           final Map<String, dynamic> descriptionContent =
               json.decode(response.body);
           processData['description'] = descriptionContent;
-          debugPrint('Description content: $descriptionContent');
         } catch (error) {
           if (error is FirebaseException &&
               error.code == 'storage/object-not-found') {
-            debugPrint(
-                'Object not found in Firebase Storage: ${error.message}');
           } else {
             debugPrint('Error fetching description content: $error');
           }
@@ -67,7 +62,6 @@ class ProcessDataService {
 
       final DateTime proposalEndTime;
       if (processData['proposalDates'] is List) {
-        debugPrint('proposalDates is a List');
         proposalEndTime = tz.TZDateTime.from(
           DateTime.fromMillisecondsSinceEpoch(
               processData['proposalDates'][1] as int),

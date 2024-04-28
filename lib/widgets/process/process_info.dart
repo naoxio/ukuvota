@@ -43,11 +43,15 @@ class ProcessInfo extends StatelessWidget {
           ),
           children: [
             const SizedBox(height: 16),
-            QrImage(
-              // Use the QrImage widget from qr_flutter
-              data: Uri.base.toString(),
-              version: QrVersions.auto,
-              size: 200.0,
+            SizedBox(
+              // Wrap the QrImage with a SizedBox
+              width: 200,
+              height: 200,
+              child: QrImageView(
+                data: Uri.base.toString(),
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
             ),
           ],
         );

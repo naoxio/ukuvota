@@ -4,11 +4,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 const Map<String, String> weightingOptions = {
-  'x1': '1x',
-  'x2': '2x',
-  'x3': '3x',
-  'x4': '4x',
-  'x5': '5x',
-  'x6': '6x',
-  '∞': '∞',
+  '1': '1x',
+  '2': '2x',
+  '3': '3x',
+  '4': '4x',
+  '5': '5x',
+  '6': '6x',
+  '-1': '∞',
 };
