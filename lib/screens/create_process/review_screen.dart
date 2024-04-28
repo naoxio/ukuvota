@@ -1,13 +1,18 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/process_setup_service.dart';
+import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:ukuvota/utils/proposal_utils.dart';
+import 'package:uuid/uuid.dart';
 
 class ReviewScreen extends StatefulWidget {
   const ReviewScreen({Key? key}) : super(key: key);
@@ -17,6 +22,7 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class ReviewScreenState extends State<ReviewScreen> {
+  final ProcessSetupService _processSetupService = ProcessSetupService();
   final ProcessDataService _processDataService = ProcessDataService();
 
   String? _title;
@@ -40,7 +46,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _processDataService.getProcessData();
+    final processData = await _processSetupService.getProcessData();
     if (processData != null) {
       setState(() {
         _title = processData['title'];
@@ -78,6 +84,41 @@ class ReviewScreenState extends State<ReviewScreen> {
               : [];
         }
       });
+    }
+  }
+
+  Future<void> _startProcess() async {
+    try {
+      // Create a new process ID (UUID)
+      String processId = Uuid().v4();
+
+      Map<String, dynamic> processData = {
+        'id': processId,
+        'title': _title,
+        'descriptionContent': _descriptionContent,
+        'proposalStartDate': _proposalStartDate?.millisecondsSinceEpoch,
+        'proposalEndDate': _proposalEndDate?.millisecondsSinceEpoch,
+        'proposalVotingStartDate':
+            _proposalVotingStartDate?.millisecondsSinceEpoch,
+        'proposalVotingEndDate': _proposalVotingEndDate?.millisecondsSinceEpoch,
+        'votingOnlyStartDate': _votingOnlyStartDate?.millisecondsSinceEpoch,
+        'votingOnlyEndDate': _votingOnlyEndDate?.millisecondsSinceEpoch,
+        'proposals': _proposals.map((proposal) => proposal.toJson()).toList(),
+        'weighting': _weighting,
+        'timezone': _timezone,
+      };
+
+      await _processDataService.createProcess(processId, processData);
+      await _processSetupService.clearProcessData();
+
+      context.go('/process/$processId');
+    } catch (error) {
+      print('Failed to start the process: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to start the process. Please try again.'),
+        ),
+      );
     }
   }
 
@@ -239,7 +280,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Logic to start the process
+                      _startProcess();
                     },
                     child: Text(localizations.buttonStart),
                   ),

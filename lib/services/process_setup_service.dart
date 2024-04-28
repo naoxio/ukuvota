@@ -1,8 +1,11 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProcessDataService {
+class ProcessSetupService {
   static const String _processDataKey = 'process_data';
 
   Future<void> saveProcessData(Map<String, dynamic> newProcessData) async {

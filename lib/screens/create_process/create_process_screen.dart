@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,7 +22,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late QuillController _controller;
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
-  final ProcessDataService _processDataService = ProcessDataService();
+  final ProcessSetupService _processSetupService = ProcessSetupService();
   String _selectedWeighting = 'x1';
 
   @override
@@ -45,7 +48,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _processDataService.getProcessData();
+    final processData = await _processSetupService.getProcessData();
     if (processData != null) {
       _showProcessDataModal(processData);
     }
@@ -63,7 +66,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                _processDataService.clearProcessData();
+                _processSetupService.clearProcessData();
                 Navigator.of(context).pop();
               },
               child: Text(localizations.startNew),
@@ -186,6 +189,6 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
       'mode': mode,
     };
 
-    _processDataService.saveProcessData(newProcessData);
+    _processSetupService.saveProcessData(newProcessData);
   }
 }

@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
@@ -19,7 +22,7 @@ class VotingOnlyScreen extends StatefulWidget {
 }
 
 class VotingOnlyScreenState extends State<VotingOnlyScreen> {
-  final ProcessDataService _processDataService = ProcessDataService();
+  final ProcessSetupService _processSetupService = ProcessSetupService();
 
   DateTime? _votingOnlyStartDate;
   DateTime? _votingOnlyEndDate;
@@ -34,7 +37,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _processDataService.getProcessData();
+    final processData = await _processSetupService.getProcessData();
 
     if (processData != null) {
       String selectedTimeZone =
@@ -66,7 +69,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
       'proposals': _proposals,
       'timezone': _selectedTimeZone,
     };
-    _processDataService.saveProcessData(processData);
+    _processSetupService.saveProcessData(processData);
   }
 
   void _updateProposals(List<Proposal> proposals) {

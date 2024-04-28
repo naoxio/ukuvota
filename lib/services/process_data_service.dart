@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,6 +11,21 @@ import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/models/proposal.dart';
 
 class ProcessDataService {
+  Future<void> createProcess(
+      String processId, Map<String, dynamic> processData) async {
+    try {
+      // Store the process data in Firebase
+      await FirebaseDatabase.instance
+          .ref()
+          .child('processes')
+          .child(processId)
+          .set(processData);
+    } catch (error) {
+      // Handle any errors that occur during the process creation
+      throw Exception('Failed to create the process: $error');
+    }
+  }
+
   Future<Process?> fetchProcessData(String processId) async {
     final DatabaseReference processRef =
         FirebaseDatabase.instance.ref().child('process/$processId');

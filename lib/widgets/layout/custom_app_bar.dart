@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
@@ -16,7 +19,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 600;
+    final isSmallScreen = MediaQuery.of(context).size.width < 0;
 
     return AppBar(
       automaticallyImplyLeading: false,

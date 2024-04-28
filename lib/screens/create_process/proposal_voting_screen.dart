@@ -1,3 +1,6 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/services/process_setup_service.dart';
@@ -17,7 +20,7 @@ class ProposalVotingScreen extends StatefulWidget {
 }
 
 class ProposalVotingScreenState extends State<ProposalVotingScreen> {
-  final ProcessDataService _processDataService = ProcessDataService();
+  final ProcessSetupService _processSetupService = ProcessSetupService();
 
   DateTime? _proposalStartDate;
   DateTime? _proposalEndDate;
@@ -32,7 +35,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _processDataService.getProcessData();
+    final processData = await _processSetupService.getProcessData();
     if (processData != null) {
       DateTime now = DateTime.now();
       DateTime proposalStartDate = processData['proposalStartDate'] != null
@@ -81,7 +84,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
           DateTime.now().add(const Duration(hours: 2)).toIso8601String(),
       'timezone': _selectedTimeZone,
     };
-    _processDataService.saveProcessData(processData);
+    _processSetupService.saveProcessData(processData);
   }
 
   void _updateVotingDates() {

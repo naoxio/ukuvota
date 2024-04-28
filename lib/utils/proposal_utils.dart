@@ -1,6 +1,8 @@
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import 'package:ukuvota/models/proposal.dart';
 
-// file: lib/utils/proposal_utils.dart
 import 'dart:convert';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
