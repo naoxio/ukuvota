@@ -8,7 +8,7 @@ import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ukuvota/utils/timezone_util.dart';
+import 'package:ukuvota/utils/timezone_utils.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 

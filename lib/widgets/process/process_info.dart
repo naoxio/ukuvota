@@ -4,9 +4,9 @@ import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/utils/markdown_loader.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
 import 'package:ukuvota/utils/weighting_options.dart';
-// import 'package:ukuvota/widgets/ui/qr_code.dart';
 import 'package:ukuvota/widgets/datetime/process_time_label.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ProcessInfo extends StatelessWidget {
   final Process process;
@@ -25,6 +25,29 @@ class ProcessInfo extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showQRCodeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            AppLocalizations.of(context)!.processQrCode,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          children: [
+            const SizedBox(height: 16),
+            QrImage(
+              // Use the QrImage widget from qr_flutter
+              data: Uri.base.toString(),
+              version: QrVersions.auto,
+              size: 200.0,
             ),
           ],
         );
@@ -59,28 +82,18 @@ class ProcessInfo extends StatelessWidget {
             const SizedBox(width: 8),
             Text(weightLabel ?? ''),
             const SizedBox(width: 8),
-            TextButton(
+            IconButton(
+              icon: const Icon(Icons.info),
               onPressed: () {
                 _showModal(
                   context,
                   localizations.processWeighting,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localizations.processWeighting,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      MarkdownLoader(
-                        localeName: localizations.localeName,
-                        fileName: 'NegativeScoreWeighting',
-                      ),
-                    ],
+                  MarkdownLoader(
+                    localeName: localizations.localeName,
+                    fileName: 'NegativeScoreWeighting',
                   ),
                 );
               },
-              child: const Text('Weighting Info'),
             ),
           ],
         ),
@@ -99,43 +112,33 @@ class ProcessInfo extends StatelessWidget {
           proposalsLength: proposalsLength,
         ),
         const SizedBox(height: 16),
-        // Uncomment the following lines if the 'shareable' property is available
-        // if (process['shareable'])
-        //   Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(translator.translate('process.shareableUrl')),
-        //       const SizedBox(height: 8),
-        //       Row(
-        //         children: [
-        //           Expanded(
-        //             child: TextFormField(
-        //               readOnly: true,
-        //               initialValue: Uri.base.toString(),
-        //               decoration: const InputDecoration(
-        //                 border: OutlineInputBorder(),
-        //               ),
-        //             ),
-        //           ),
-        //           const SizedBox(width: 16),
-        //           Modal(
-        //             id: 'shareableQrCode',
-        //             icon: Icons.qr_code,
-        //             child: Column(
-        //               children: [
-        //                 Text(
-        //                   translator.translate('process.qrcode'),
-        //                   style: Theme.of(context).textTheme.headline6,
-        //                 ),
-        //                 const SizedBox(height: 16),
-        //                 QRCode(text: Uri.base.toString()),
-        //               ],
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ],
-        //   ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(localizations.processShareableUrl),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    readOnly: true,
+                    initialValue: Uri.base.toString(),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                IconButton(
+                  icon: const Icon(Icons.qr_code),
+                  onPressed: () {
+                    _showQRCodeDialog(context);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
     );
   }

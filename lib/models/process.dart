@@ -1,5 +1,7 @@
-// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
-// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+import 'dart:convert';
 
 import 'package:ukuvota/models/voter.dart';
 import 'package:ukuvota/models/proposal.dart';
@@ -31,7 +33,9 @@ class Process {
     return Process(
       id: map['_id'] as String,
       title: map['title'] as String,
-      description: map['description'] as String?,
+      description: map['description'] is Map
+          ? json.encode(map['description'])
+          : map['description'].toString(),
       proposalDates: map['proposalDates'] != null
           ? List<int>.from(map['proposalDates'])
           : null,
@@ -39,14 +43,18 @@ class Process {
       timezone: map['timezone'] as String?,
       weighting: map['weighting'] as String?,
       proposals: map['proposals'] != null
-          ? List<Proposal>.from(
-              map['proposals'].map((proposal) => Proposal.fromMap(proposal)),
-            )
+          ? (map['proposals'] as List)
+              .map((proposal) => proposal is Proposal
+                  ? proposal
+                  : proposal is Map
+                      ? Proposal.fromMap(proposal)
+                      : throw ArgumentError('Invalid proposal data: $proposal'))
+              .toList()
           : null,
       voters: map['voters'] != null
-          ? List<Voter>.from(
-              map['voters'].map((voter) => Voter.fromMap(voter)),
-            )
+          ? (map['voters'] as List<dynamic>)
+              .map((voter) => Voter.fromMap(voter))
+              .toList()
           : null,
     );
   }

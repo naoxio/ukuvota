@@ -26,7 +26,7 @@ class Proposal {
     );
   }
 
-  factory Proposal.fromMap(Map<String, dynamic> map) {
+  factory Proposal.fromMap(Map<dynamic, dynamic> map) {
     return Proposal(
       id: map['id'] ?? '',
       title: map['title'] ?? '',

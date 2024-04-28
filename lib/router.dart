@@ -104,6 +104,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'proposals',
           builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen();
+            }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
@@ -116,6 +120,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'voting',
           builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen();
+            }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
@@ -128,6 +136,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'results',
           builder: (context, state) {
+            final processId = state.pathParameters['processId'];
+            if (processId == null) {
+              return const HomeScreen();
+            }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
