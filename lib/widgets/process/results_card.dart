@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/process.dart';
@@ -26,13 +27,22 @@ class ResultsCard extends StatefulWidget {
   ResultsCardState createState() => ResultsCardState();
 }
 
-class ResultsCardState extends State<ResultsCard> {
+class ResultsCardState extends State<ResultsCard>
+    with SingleTickerProviderStateMixin {
   List<Voter> selectedVoters = [];
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     selectedVoters = widget.process.voters ?? [];
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   double getTotal(String proposalId) {
@@ -97,11 +107,12 @@ class ResultsCardState extends State<ResultsCard> {
         if (proposals.isNotEmpty)
           Column(
             children: [
-              const Row(
+              Row(
                 children: [
                   Expanded(
                     child: TabBar(
-                      tabs: [
+                      controller: _tabController,
+                      tabs: const [
                         Tab(icon: Icon(Icons.emoji_emotions)),
                         Tab(icon: Icon(Icons.list)),
                       ],
@@ -109,11 +120,15 @@ class ResultsCardState extends State<ResultsCard> {
                   ),
                 ],
               ),
-              TabBarView(
-                children: [
-                  _buildResultsTab(localizations, proposals),
-                  _buildVotersTab(localizations, proposals),
-                ],
+              SizedBox(
+                height: 600,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildResultsTab(localizations, proposals),
+                    _buildVotersTab(localizations, proposals),
+                  ],
+                ),
               ),
             ],
           )
@@ -133,38 +148,38 @@ class ResultsCardState extends State<ResultsCard> {
     final sortedProposals = proposals.toList()
       ..sort((a, b) => getTotal(b.id).compareTo(getTotal(a.id)));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${localizations.processVoters} (${selectedVoters.length}):',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        Wrap(
-          children: selectedVoters.map((voter) {
-            return Padding(
-              padding: const EdgeInsets.all(4),
-              child: FilterChip(
-                label: Text(voter.name),
-                selected: selectedVoters.contains(voter),
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      selectedVoters.add(voter);
-                    } else {
-                      selectedVoters.remove(voter);
-                    }
-                    updateTable();
-                  });
-                },
-              ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 16),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${localizations.processVoters} (${selectedVoters.length}):',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Wrap(
+            children: selectedVoters.map((voter) {
+              return Padding(
+                padding: const EdgeInsets.all(4),
+                child: FilterChip(
+                  label: Text(voter.name),
+                  selected: selectedVoters.contains(voter),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        selectedVoters.add(voter);
+                      } else {
+                        selectedVoters.remove(voter);
+                      }
+                      updateTable();
+                    });
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          DataTable(
             columns: [
               DataColumn(label: Text(localizations.processProposal)),
               DataColumn(label: Text(localizations.processAverageScore)),
@@ -197,37 +212,37 @@ class ResultsCardState extends State<ResultsCard> {
               );
             }).toList(),
           ),
-        ),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  localizations.processExportData,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.file_download),
-                      onPressed: exportMarkdown,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.image),
-                      onPressed: exportImage,
-                    ),
-                  ],
-                ),
-              ],
+          const SizedBox(height: 16),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    localizations.processExportData,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.file_download),
+                        onPressed: exportMarkdown,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.image),
+                        onPressed: exportImage,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -19,8 +19,8 @@ class ProcessScreen extends StatefulWidget {
 }
 
 class ProcessScreenState extends State<ProcessScreen> {
-  late Timer? _proposalTimer;
-  late Timer? _votingTimer;
+  Timer? _proposalTimer;
+  Timer? _votingTimer;
 
   @override
   void initState() {

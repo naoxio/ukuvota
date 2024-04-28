@@ -17,17 +17,18 @@ class ProcessScaffold extends StatelessWidget {
     required this.process,
     required this.child,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ProcessInfo(process: process),
-          const SizedBox(height: 16),
-          Expanded(child: child),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProcessInfo(process: process),
+            const SizedBox(height: 16),
+            child,
+          ],
+        ),
       ),
     );
   }
