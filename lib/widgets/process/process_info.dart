@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/utils/markdown_loader.dart';
@@ -48,7 +49,7 @@ class ProcessInfo extends StatelessWidget {
               width: 200,
               height: 200,
               child: QrImageView(
-                data: Uri.base.toString(),
+                data: 'https://web.ukuvota.world/#/process/${process.id}',
                 version: QrVersions.auto,
                 size: 200.0,
               ),
@@ -126,9 +127,25 @@ class ProcessInfo extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     readOnly: true,
-                    initialValue: Uri.base.toString(),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                    controller: TextEditingController(
+                      text: 'https://web.ukuvota.world/#/process/${process.id}',
+                    ),
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          final value =
+                              'https://web.ukuvota.world/#/process/${process.id}';
+                          Clipboard.setData(ClipboardData(text: value));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(localizations.linkCopied),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

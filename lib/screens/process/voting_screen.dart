@@ -41,20 +41,19 @@ class VotingScreenState extends State<VotingScreen> {
             proposals: process.proposals,
           ),
           const SizedBox(height: 16),
-          Text(localizations.processVoterName),
           Row(
             children: [
               Expanded(
                 child: TextFormField(
                   controller: _voterNameController,
                   decoration: InputDecoration(
-                    hintText: localizations.alertInfoSubmittingVote,
+                    hintText: localizations.processVoterName,
                   ),
                 ),
               ),
               ElevatedButton(
                 onPressed: _submitVote,
-                child: Text(localizations.alertSuccessSubmitVote),
+                child: Text(localizations.processSubmitVote),
               ),
             ],
           ),

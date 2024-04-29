@@ -17,17 +17,12 @@ class ProcessDataService {
       String processId, Map<String, dynamic> processData) async {
     try {
       // Store the process data in Firebase
-      print('about to send');
-      print(processId);
-      print(processData);
       await FirebaseDatabase.instance
           .ref()
           .child('process')
           .child(processId)
           .set(processData);
     } catch (error) {
-      print('smothenig errr');
-      print(error);
       // Handle any errors that occur during the process creation
       throw Exception('Failed to create the process: $error');
     }
@@ -102,7 +97,6 @@ class ProcessDataService {
           }),
         );
 
-        print('after proposals');
         final List<Proposal> updatedProposals = await Future.wait(
           proposalsObj.entries.map((MapEntry<String, dynamic> entry) async {
             final String index = entry.key;

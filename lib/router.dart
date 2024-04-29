@@ -76,18 +76,25 @@ final GoRouter router = GoRouter(
           return '/';
         }
         final currentTime = DateTime.now();
-        final proposalStartTime =
-            DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
-        final proposalEndTime =
-            DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
+        final proposalDates = process.proposalDates;
         final votingStartTime =
             DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
         final votingEndTime =
             DateTime.fromMillisecondsSinceEpoch(process.votingDates[1]);
-        if (currentTime.isAfter(proposalStartTime) &&
-            currentTime.isBefore(proposalEndTime)) {
-          return '/process/$processId/proposals';
-        } else if (currentTime.isAfter(votingStartTime) &&
+
+        if (proposalDates != null) {
+          final proposalStartTime =
+              DateTime.fromMillisecondsSinceEpoch(proposalDates[0]);
+          final proposalEndTime =
+              DateTime.fromMillisecondsSinceEpoch(proposalDates[1]);
+
+          if (currentTime.isAfter(proposalStartTime) &&
+              currentTime.isBefore(proposalEndTime)) {
+            return '/process/$processId/proposals';
+          }
+        }
+
+        if (currentTime.isAfter(votingStartTime) &&
             currentTime.isBefore(votingEndTime)) {
           final proposals = process.proposals;
           if (proposals == null || proposals.isEmpty) {

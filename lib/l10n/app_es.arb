@@ -131,5 +131,7 @@
   "startNew": "Iniciar Nuevo",
   "continueExisting": "Continuar Existente",
   "hintMinTwoProposals": "Se requieren al menos dos propuestas para continuar.",
-  "hintProposalsNotEmpty": "Las propuestas no pueden estar vacías. Proporciona un título o descripción para cada propuesta."
+  "hintProposalsNotEmpty": "Las propuestas no pueden estar vacías. Proporciona un título o descripción para cada propuesta.",
+  "linkCopied": "Enlace copiado al portapapeles"
+
 }

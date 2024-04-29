@@ -129,7 +129,8 @@
   "existingProcessDataMessage": "You have existing process data. Do you want to start a new process or continue the existing one?",
   "startNew": "Start New",
   "continueExisting": "Continue Existing",
-    "hintMinTwoProposals": "A minimum of two proposals are required to continue.",
-  "hintProposalsNotEmpty": "Proposals cannot be empty. Please provide a title or description for each proposal."
+  "hintMinTwoProposals": "A minimum of two proposals are required to continue.",
+  "hintProposalsNotEmpty": "Proposals cannot be empty. Please provide a title or description for each proposal.",
+  "linkCopied": "Link copied to clipboard"
 
 }

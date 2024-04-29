@@ -24,6 +24,7 @@ class ReviewScreen extends StatefulWidget {
 class ReviewScreenState extends State<ReviewScreen> {
   final SharedSetupService _sharedSetupService = SharedSetupService();
   final ProcessDataService _processDataService = ProcessDataService();
+  bool _isLoading = false;
 
   String? _title;
   String? _descriptionContent;
@@ -88,6 +89,17 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _startProcess() async {
+    final localizations = AppLocalizations.of(context)!;
+
+    setState(() {
+      _isLoading = true;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(localizations.processStarting),
+        duration: const Duration(seconds: 2),
+      ),
+    );
     try {
       String processId = const Uuid().v4();
 
@@ -99,7 +111,6 @@ class ReviewScreenState extends State<ReviewScreen> {
         'timezone': _timezone,
         'proposals': _proposals.map((proposal) => proposal.toJson()).toList(),
       };
-      print(processId);
 
       // Conditionally add dates based on the mode
       if (_mode == 'full') {
@@ -122,9 +133,14 @@ class ReviewScreenState extends State<ReviewScreen> {
       await _processDataService.createProcess(processId, processData);
       await _sharedSetupService.clearProcessData();
 
+      setState(() {
+        _isLoading = false;
+      });
       context.go('/process/$processId');
     } catch (error) {
-      print('Failed to start the process: $error');
+      setState(() {
+        _isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to start the process. Please try again.'),
@@ -290,10 +306,14 @@ class ReviewScreenState extends State<ReviewScreen> {
                     child: Text(localizations.buttonBack),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      _startProcess();
-                    },
-                    child: Text(localizations.buttonStart),
+                    onPressed: _isLoading
+                        ? null
+                        : () {
+                            _startProcess();
+                          },
+                    child: _isLoading
+                        ? const CircularProgressIndicator()
+                        : Text(localizations.buttonStart),
                   ),
                 ],
               ),

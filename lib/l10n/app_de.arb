@@ -130,5 +130,7 @@
   "startNew": "Neu starten",
   "continueExisting": "Vorhandenes fortsetzen",
   "hintMinTwoProposals": "Es sind mindestens zwei Vorschläge erforderlich, um fortzufahren.",
-  "hintProposalsNotEmpty": "Vorschläge dürfen nicht leer sein. Bitte gib für jeden Vorschlag einen Titel oder eine Beschreibung an."
+  "hintProposalsNotEmpty": "Vorschläge dürfen nicht leer sein. Bitte gib für jeden Vorschlag einen Titel oder eine Beschreibung an.",
+  "linkCopied": "Link in die Zwischenablage kopiert"
+
 }
