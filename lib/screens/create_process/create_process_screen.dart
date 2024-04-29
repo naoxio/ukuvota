@@ -23,7 +23,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
   final ProcessSetupService _processSetupService = ProcessSetupService();
-  String _selectedWeighting = 'x1';
+  String _selectedWeighting = '1';
 
   @override
   void initState() {

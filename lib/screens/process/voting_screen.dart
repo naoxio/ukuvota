@@ -5,10 +5,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/process.dart';
-import 'package:ukuvota/providers/process_data_provider.dart';
 import 'package:ukuvota/widgets/layout/process_scaffold.dart';
 import 'package:ukuvota/widgets/process/voting_list.dart';
 
