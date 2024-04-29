@@ -44,14 +44,21 @@ class ProcessInfo extends StatelessWidget {
           ),
           children: [
             const SizedBox(height: 16),
-            SizedBox(
-              // Wrap the QrImage with a SizedBox
-              width: 200,
-              height: 200,
-              child: QrImageView(
-                data: 'https://web.ukuvota.world/#/process/${process.id}',
-                version: QrVersions.auto,
-                size: 200.0,
+            Center(
+              child: SizedBox(
+                // Wrap the QrImage with a SizedBox
+                width: 200,
+                height: 200,
+                child: QrImageView(
+                  data: 'https://web.ukuvota.world/#/process/${process.id}',
+                  version: QrVersions.auto,
+                  size: 200.0,
+                  eyeStyle: const QrEyeStyle(
+                      eyeShape: QrEyeShape.circle, color: Colors.white),
+                  dataModuleStyle: const QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.circle,
+                      color: Colors.white),
+                ),
               ),
             ),
           ],
