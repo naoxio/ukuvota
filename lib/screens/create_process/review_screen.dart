@@ -99,6 +99,7 @@ class ReviewScreenState extends State<ReviewScreen> {
         'timezone': _timezone,
         'proposals': _proposals.map((proposal) => proposal.toJson()).toList(),
       };
+      print(processId);
 
       // Conditionally add dates based on the mode
       if (_mode == 'full') {

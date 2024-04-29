@@ -60,7 +60,7 @@ class ProposalCardState extends State<ProposalCard> {
               ),
             ),
             const SizedBox(height: 8),
-            HtmlWidget(convertToHtml(widget.proposal.description!)),
+            HtmlWidget(convertToHtml(widget.proposal.description)),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -17,12 +17,17 @@ class ProcessDataService {
       String processId, Map<String, dynamic> processData) async {
     try {
       // Store the process data in Firebase
+      print('about to send');
+      print(processId);
+      print(processData);
       await FirebaseDatabase.instance
           .ref()
-          .child('processes')
+          .child('process')
           .child(processId)
           .set(processData);
     } catch (error) {
+      print('smothenig errr');
+      print(error);
       // Handle any errors that occur during the process creation
       throw Exception('Failed to create the process: $error');
     }
@@ -60,7 +65,7 @@ class ProcessDataService {
       final String timezone = processData['timezone'] ?? 'UTC';
       final DateTime currentTime = DateTime.now();
 
-      final DateTime proposalEndTime;
+      final DateTime? proposalEndTime;
       if (processData['proposalDates'] is List) {
         proposalEndTime = tz.TZDateTime.from(
           DateTime.fromMillisecondsSinceEpoch(
@@ -68,12 +73,9 @@ class ProcessDataService {
           tz.getLocation(timezone),
         ).toUtc();
       } else {
-        debugPrint('proposalDates is not a List');
-        // Handle the case when 'proposalDates' is not a list
-        // You can throw an exception or provide a default value
-        throw Exception('Invalid proposalDates format');
+        proposalEndTime = null;
       }
-      if (currentTime.isAfter(proposalEndTime)) {
+      if (proposalEndTime == null || currentTime.isBefore(proposalEndTime)) {
         if (!processData.containsKey('proposals')) {
           debugPrint('No proposals found');
           return Process.fromMap(processData);

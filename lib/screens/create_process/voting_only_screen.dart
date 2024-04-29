@@ -89,6 +89,8 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
     final localizations = AppLocalizations.of(context)!;
     final nonEmptyProposals =
         _proposals.where((proposal) => !_isProposalEmpty(proposal)).length;
+    final hasEmptyProposals =
+        _proposals.isNotEmpty && _proposals.any(_isProposalEmpty);
 
     return MainScaffold(
       body: Center(
@@ -153,11 +155,14 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
                     onProposalsUpdated: _updateProposals,
                   ),
                   const SizedBox(height: 20),
-                  if (nonEmptyProposals < 2)
+                  if (_proposals.length < 2)
                     Text(
-                      nonEmptyProposals == 0
-                          ? localizations.hintMinTwoProposals
-                          : localizations.hintProposalsNotEmpty,
+                      localizations.hintMinTwoProposals,
+                      style: const TextStyle(color: Colors.orange),
+                    )
+                  else if (hasEmptyProposals)
+                    Text(
+                      localizations.hintProposalsNotEmpty,
                       style: const TextStyle(color: Colors.orange),
                     ),
                   const SizedBox(height: 20),
@@ -172,12 +177,12 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
                         child: Text(localizations.buttonBack),
                       ),
                       ElevatedButton(
-                        onPressed: nonEmptyProposals < 2
-                            ? null
-                            : () {
+                        onPressed: _proposals.length >= 2 && !hasEmptyProposals
+                            ? () {
                                 _saveProcessData();
                                 context.go('/create/review');
-                              },
+                              }
+                            : null,
                         child: Text(localizations.buttonContinue),
                       ),
                     ],
