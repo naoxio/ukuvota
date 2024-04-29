@@ -9,8 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:ukuvota/utils/markdown_loader.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

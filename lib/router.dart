@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
 import 'package:ukuvota/screens/create_process/review_screen.dart';
-import 'package:ukuvota/screens/home/home_screen.dart';
 import 'package:ukuvota/screens/create_process/create_process_screen.dart';
 import 'package:ukuvota/screens/create_process/voting_only_screen.dart';
 import 'package:ukuvota/screens/create_process/proposal_voting_screen.dart';
@@ -22,7 +21,7 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/create',
@@ -55,13 +54,13 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final processId = state.pathParameters['processId'];
         if (processId == null) {
-          return const HomeScreen();
+          return const DashboardScreen();
         }
         final processDataProvider =
             Provider.of<ProcessDataProvider>(context, listen: false);
         final process = processDataProvider.processData;
         if (process == null) {
-          return const HomeScreen();
+          return const DashboardScreen();
         }
         return ProcessScreen(process: process);
       },
@@ -106,13 +105,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final processId = state.pathParameters['processId'];
             if (processId == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
             if (process == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             return ProposalsScreen(process: process);
           },
@@ -122,13 +121,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final processId = state.pathParameters['processId'];
             if (processId == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
             if (process == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             return VotingScreen(process: process);
           },
@@ -138,13 +137,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final processId = state.pathParameters['processId'];
             if (processId == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             final processDataProvider =
                 Provider.of<ProcessDataProvider>(context, listen: false);
             final process = processDataProvider.processData;
             if (process == null) {
-              return const HomeScreen();
+              return const DashboardScreen();
             }
             return ResultsScreen(process: process);
           },

@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
-import 'package:ukuvota/services/process_setup_service.dart';
+import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
 import 'package:ukuvota/widgets/layout/main_scaffold.dart';
@@ -22,7 +22,7 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class ReviewScreenState extends State<ReviewScreen> {
-  final ProcessSetupService _processSetupService = ProcessSetupService();
+  final SharedSetupService _SharedSetupService = SharedSetupService();
   final ProcessDataService _processDataService = ProcessDataService();
 
   String? _title;
@@ -46,7 +46,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _processSetupService.getProcessData();
+    final processData = await _SharedSetupService.getProcessData();
     if (processData != null) {
       setState(() {
         _title = processData['title'];
@@ -119,7 +119,7 @@ class ReviewScreenState extends State<ReviewScreen> {
       }
 
       await _processDataService.createProcess(processId, processData);
-      await _processSetupService.clearProcessData();
+      await _SharedSetupService.clearProcessData();
 
       context.go('/process/$processId');
     } catch (error) {

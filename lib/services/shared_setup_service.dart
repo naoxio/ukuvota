@@ -7,7 +7,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProcessSetupService {
+class SharedSetupService {
   static const String _processDataKey = 'process_data';
 
   Future<void> saveProcessData(Map<String, dynamic> newProcessData) async {
