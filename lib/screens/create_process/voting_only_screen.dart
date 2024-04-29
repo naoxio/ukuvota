@@ -24,7 +24,7 @@ class VotingOnlyScreen extends StatefulWidget {
 }
 
 class VotingOnlyScreenState extends State<VotingOnlyScreen> {
-  final SharedSetupService _SharedSetupService = SharedSetupService();
+  final SharedSetupService _sharedSetupService = SharedSetupService();
 
   DateTime? _votingOnlyStartDate;
   DateTime? _votingOnlyEndDate;
@@ -39,7 +39,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _SharedSetupService.getProcessData();
+    final processData = await _sharedSetupService.getProcessData();
 
     if (processData != null) {
       String selectedTimeZone =
@@ -62,6 +62,10 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
     }
   }
 
+  bool _isProposalEmpty(Proposal proposal) {
+    return proposal.title.isEmpty && proposal.description.isEmpty;
+  }
+
   void _saveProcessData() {
     final processData = {
       'votingOnlyStartDate': _votingOnlyStartDate?.toIso8601String() ??
@@ -71,7 +75,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
       'proposals': _proposals,
       'timezone': _selectedTimeZone,
     };
-    _SharedSetupService.saveProcessData(processData);
+    _sharedSetupService.saveProcessData(processData);
   }
 
   void _updateProposals(List<Proposal> proposals) {
@@ -83,88 +87,103 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final nonEmptyProposals =
+        _proposals.where((proposal) => !_isProposalEmpty(proposal)).length;
 
     return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  localizations.setupTimeLeftVotingHeading,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    localizations.setupTimeLeftVotingHeading,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                _selectedTimeZone == null
-                    ? const CircularProgressIndicator()
-                    : TimeZoneSelector(
-                        initialTimeZone: _selectedTimeZone,
-                        onTimeZoneChanged: (timeZone) {
-                          setState(() {
-                            _selectedTimeZone = timeZone;
-                          });
+                  const SizedBox(height: 20),
+                  _selectedTimeZone == null
+                      ? const CircularProgressIndicator()
+                      : TimeZoneSelector(
+                          initialTimeZone: _selectedTimeZone,
+                          onTimeZoneChanged: (timeZone) {
+                            setState(() {
+                              _selectedTimeZone = timeZone;
+                            });
+                          },
+                        ),
+                  const SizedBox(height: 20),
+                  TimeSelector(
+                    phase: 'voting',
+                    startDate: _votingOnlyStartDate ?? DateTime.now(),
+                    endDate: _votingOnlyEndDate ??
+                        DateTime.now().add(const Duration(hours: 1)),
+                    startMinDate: DateTime.now(),
+                    hideTitle: true,
+                    onStartDateChanged: (DateTime date) {
+                      setState(() {
+                        _votingOnlyStartDate = date;
+                      });
+                    },
+                    onEndDateChanged: (DateTime date) {
+                      setState(() {
+                        _votingOnlyEndDate = date;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    localizations.setupProposals,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ProposalsList(
+                    isSetup: true,
+                    proposals: _proposals,
+                    onProposalsUpdated: _updateProposals,
+                  ),
+                  const SizedBox(height: 20),
+                  if (nonEmptyProposals < 2)
+                    Text(
+                      nonEmptyProposals == 0
+                          ? localizations.hintMinTwoProposals
+                          : localizations.hintProposalsNotEmpty,
+                      style: const TextStyle(color: Colors.orange),
+                    ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _saveProcessData();
+                          context.go('/create');
                         },
+                        child: Text(localizations.buttonBack),
                       ),
-                const SizedBox(height: 20),
-                TimeSelector(
-                  phase: 'voting',
-                  startDate: _votingOnlyStartDate ?? DateTime.now(),
-                  endDate: _votingOnlyEndDate ??
-                      DateTime.now().add(const Duration(hours: 1)),
-                  startMinDate: DateTime.now(),
-                  hideTitle: true,
-                  onStartDateChanged: (DateTime date) {
-                    setState(() {
-                      _votingOnlyStartDate = date;
-                    });
-                  },
-                  onEndDateChanged: (DateTime date) {
-                    setState(() {
-                      _votingOnlyEndDate = date;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  localizations.setupProposals,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                      ElevatedButton(
+                        onPressed: nonEmptyProposals < 2
+                            ? null
+                            : () {
+                                _saveProcessData();
+                                context.go('/create/review');
+                              },
+                        child: Text(localizations.buttonContinue),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 10),
-                ProposalsList(
-                  isSetup: true,
-                  proposals: _proposals,
-                  onProposalsUpdated: _updateProposals,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _saveProcessData();
-                        context.go('/create');
-                      },
-                      child: Text(localizations.buttonBack),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _saveProcessData();
-                        context.go('/create/review');
-                      },
-                      child: Text(localizations.buttonContinue),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

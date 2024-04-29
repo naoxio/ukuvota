@@ -20,7 +20,7 @@ class ProposalVotingScreen extends StatefulWidget {
 }
 
 class ProposalVotingScreenState extends State<ProposalVotingScreen> {
-  final SharedSetupService _SharedSetupService = SharedSetupService();
+  final SharedSetupService _sharedSetupService = SharedSetupService();
 
   DateTime? _proposalStartDate;
   DateTime? _proposalEndDate;
@@ -35,7 +35,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _SharedSetupService.getProcessData();
+    final processData = await _sharedSetupService.getProcessData();
     if (processData != null) {
       DateTime now = DateTime.now();
       DateTime proposalStartDate = processData['proposalStartDate'] != null
@@ -84,7 +84,7 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
           DateTime.now().add(const Duration(hours: 2)).toIso8601String(),
       'timezone': _selectedTimeZone,
     };
-    _SharedSetupService.saveProcessData(processData);
+    _sharedSetupService.saveProcessData(processData);
   }
 
   void _updateVotingDates() {
@@ -106,106 +106,109 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
     return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Text(
-                  localizations.setupTimeLeftHeading,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    localizations.setupTimeLeftHeading,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                _selectedTimeZone == null
-                    ? const CircularProgressIndicator()
-                    : TimeZoneSelector(
-                        initialTimeZone: _selectedTimeZone,
-                        onTimeZoneChanged: (timeZone) {
-                          setState(() {
-                            _selectedTimeZone = timeZone;
-                          });
+                  const SizedBox(height: 20),
+                  _selectedTimeZone == null
+                      ? const CircularProgressIndicator()
+                      : TimeZoneSelector(
+                          initialTimeZone: _selectedTimeZone,
+                          onTimeZoneChanged: (timeZone) {
+                            setState(() {
+                              _selectedTimeZone = timeZone;
+                            });
+                          },
+                        ),
+                  const SizedBox(height: 20),
+                  Text(
+                    localizations.phasesProposalTitle,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TimeSelector(
+                    phase: 'proposal',
+                    selectedTimeZone: _selectedTimeZone,
+                    startDate: _proposalStartDate ?? DateTime.now(),
+                    endDate: _proposalEndDate ??
+                        DateTime.now().add(const Duration(hours: 1)),
+                    startMinDate: DateTime.now(),
+                    onStartDateChanged: (DateTime date) {
+                      setState(() {
+                        _proposalStartDate = date;
+                      });
+                    },
+                    onEndDateChanged: (DateTime date) {
+                      setState(() {
+                        _proposalEndDate = date;
+                        _updateVotingDates();
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    localizations.phasesVotingTitle,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TimeSelector(
+                    phase: 'voting',
+                    selectedTimeZone: _selectedTimeZone,
+                    startDate: _votingStartDate ??
+                        DateTime.now().add(const Duration(hours: 1)),
+                    endDate: _votingEndDate ??
+                        DateTime.now().add(const Duration(hours: 2)),
+                    startMinDate: DateTime.now().add(const Duration(hours: 1)),
+                    onStartDateChanged: (DateTime date) {
+                      setState(() {
+                        _votingStartDate = date;
+                      });
+                    },
+                    onEndDateChanged: (DateTime date) {
+                      setState(() {
+                        _votingEndDate = date;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _saveProcessData();
+                          context.go('/create');
                         },
+                        child: Text(localizations.buttonBack),
                       ),
-                const SizedBox(height: 20),
-                Text(
-                  localizations.phasesProposalTitle,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                      ElevatedButton(
+                        onPressed: () {
+                          _saveProcessData();
+                          context.go('/create/review');
+                        },
+                        child: Text(localizations.buttonContinue),
+                      ),
+                    ],
                   ),
-                ),
-                TimeSelector(
-                  phase: 'proposal',
-                  selectedTimeZone: _selectedTimeZone,
-                  startDate: _proposalStartDate ?? DateTime.now(),
-                  endDate: _proposalEndDate ??
-                      DateTime.now().add(const Duration(hours: 1)),
-                  startMinDate: DateTime.now(),
-                  onStartDateChanged: (DateTime date) {
-                    setState(() {
-                      _proposalStartDate = date;
-                    });
-                  },
-                  onEndDateChanged: (DateTime date) {
-                    setState(() {
-                      _proposalEndDate = date;
-                      _updateVotingDates();
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  localizations.phasesVotingTitle,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TimeSelector(
-                  phase: 'voting',
-                  selectedTimeZone: _selectedTimeZone,
-                  startDate: _votingStartDate ??
-                      DateTime.now().add(const Duration(hours: 1)),
-                  endDate: _votingEndDate ??
-                      DateTime.now().add(const Duration(hours: 2)),
-                  startMinDate: DateTime.now().add(const Duration(hours: 1)),
-                  onStartDateChanged: (DateTime date) {
-                    setState(() {
-                      _votingStartDate = date;
-                    });
-                  },
-                  onEndDateChanged: (DateTime date) {
-                    setState(() {
-                      _votingEndDate = date;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _saveProcessData();
-                        context.go('/create');
-                      },
-                      child: Text(localizations.buttonBack),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _saveProcessData();
-                        context.go('/create/review');
-                      },
-                      child: Text(localizations.buttonContinue),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

@@ -22,7 +22,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late QuillController _controller;
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
-  final SharedSetupService _SharedSetupService = SharedSetupService();
+  final SharedSetupService _sharedSetupService = SharedSetupService();
   String _selectedWeighting = '1';
 
   @override
@@ -48,7 +48,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _SharedSetupService.getProcessData();
+    final processData = await _sharedSetupService.getProcessData();
     if (processData != null) {
       _showProcessDataModal(processData);
     }
@@ -66,22 +66,40 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                _SharedSetupService.clearProcessData();
+                _sharedSetupService.clearProcessData();
                 Navigator.of(context).pop();
               },
               child: Text(localizations.startNew),
             ),
             TextButton(
               onPressed: () {
-                _loadExistingProcessData(processData);
                 Navigator.of(context).pop();
+                _continueExistingProcess(processData);
               },
               child: Text(localizations.continueExisting),
             ),
           ],
         );
       },
-    );
+    ).then((value) {
+      if (value == null) {
+        _continueExistingProcess(processData);
+      }
+    });
+  }
+
+  void _continueExistingProcess(Map<String, dynamic> processData) {
+    _loadExistingProcessData(processData);
+
+    final mode = processData['mode'];
+    if (mode == 'full') {
+      context.go('/create/proposal-voting');
+    } else if (mode == 'voting-only') {
+      context.go('/create/voting-only');
+    } else {
+      // Navigate to the current screen ('/create') if mode is not set
+      context.go('/create');
+    }
   }
 
   void _loadExistingProcessData(Map<String, dynamic> processData) {
@@ -192,6 +210,6 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
       'mode': mode,
     };
 
-    _SharedSetupService.saveProcessData(newProcessData);
+    _sharedSetupService.saveProcessData(newProcessData);
   }
 }

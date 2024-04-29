@@ -129,5 +129,7 @@
   "existingProcessData": "Datos del proceso existente",
   "existingProcessDataMessage": "Tienes datos del proceso existente. ¿Quieres iniciar un nuevo proceso o continuar con el existente?",
   "startNew": "Iniciar Nuevo",
-  "continueExisting": "Continuar Existente"
+  "continueExisting": "Continuar Existente",
+  "hintMinTwoProposals": "Se requieren al menos dos propuestas para continuar.",
+  "hintProposalsNotEmpty": "Las propuestas no pueden estar vacías. Proporciona un título o descripción para cada propuesta."
 }

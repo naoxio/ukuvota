@@ -128,5 +128,7 @@
   "existingProcessData": "Vorhandene Prozessdaten",
   "existingProcessDataMessage": "Sie haben vorhandene Prozessdaten. Möchten Sie einen neuen Prozess starten oder den vorhandenen fortsetzen?",
   "startNew": "Neu starten",
-  "continueExisting": "Vorhandenes fortsetzen"
+  "continueExisting": "Vorhandenes fortsetzen",
+  "hintMinTwoProposals": "Es sind mindestens zwei Vorschläge erforderlich, um fortzufahren.",
+  "hintProposalsNotEmpty": "Vorschläge dürfen nicht leer sein. Bitte gib für jeden Vorschlag einen Titel oder eine Beschreibung an."
 }

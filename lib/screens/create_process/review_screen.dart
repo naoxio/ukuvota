@@ -22,7 +22,7 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class ReviewScreenState extends State<ReviewScreen> {
-  final SharedSetupService _SharedSetupService = SharedSetupService();
+  final SharedSetupService _sharedSetupService = SharedSetupService();
   final ProcessDataService _processDataService = ProcessDataService();
 
   String? _title;
@@ -46,7 +46,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _SharedSetupService.getProcessData();
+    final processData = await _sharedSetupService.getProcessData();
     if (processData != null) {
       setState(() {
         _title = processData['title'];
@@ -119,7 +119,7 @@ class ReviewScreenState extends State<ReviewScreen> {
       }
 
       await _processDataService.createProcess(processId, processData);
-      await _SharedSetupService.clearProcessData();
+      await _sharedSetupService.clearProcessData();
 
       context.go('/process/$processId');
     } catch (error) {
@@ -139,7 +139,7 @@ class ReviewScreenState extends State<ReviewScreen> {
     return MainScaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
