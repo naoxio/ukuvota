@@ -28,6 +28,25 @@ class ProcessDataService {
     }
   }
 
+  Future<Map<String, Process>> fetchProcessesByIds(
+      List<String> processIds) async {
+    final DatabaseReference processRef =
+        FirebaseDatabase.instance.ref().child('process');
+    final DataSnapshot snapshot = await processRef.get();
+
+    final processes = <String, Process>{};
+    for (final processId in processIds) {
+      if (snapshot.child(processId).exists) {
+        final processData =
+            Map<String, dynamic>.from(snapshot.child(processId).value as Map);
+        final process = Process.fromMap(processData);
+        processes[processId] = process;
+      }
+    }
+
+    return processes;
+  }
+
   Future<Process?> fetchProcessData(String processId) async {
     final DatabaseReference processRef =
         FirebaseDatabase.instance.ref().child('process/$processId');

@@ -87,8 +87,6 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final nonEmptyProposals =
-        _proposals.where((proposal) => !_isProposalEmpty(proposal)).length;
     final hasEmptyProposals =
         _proposals.isNotEmpty && _proposals.any(_isProposalEmpty);
 

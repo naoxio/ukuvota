@@ -95,6 +95,7 @@ class ReviewScreenState extends State<ReviewScreen> {
     setState(() {
       _isLoading = true;
     });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(localizations.processStarting),
@@ -137,9 +138,6 @@ class ReviewScreenState extends State<ReviewScreen> {
       await SharedProcessService()
           .saveSharedProcessData({'processId': processId});
 
-      setState(() {
-        _isLoading = false;
-      });
       context.go('/process/$processId');
     } catch (error) {
       setState(() {

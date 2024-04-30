@@ -5,12 +5,13 @@
  */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/main_scaffold.dart';
+import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/services/shared_process_service.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -27,26 +28,74 @@ class DashboardScreen extends StatelessWidget {
                     future: SharedProcessService().getSharedProcessData(),
                     builder: (context, snapshot) {
                       final processData = snapshot.data;
-                      final currentlyInProgress =
-                          processData?['currentlyInProgress'] as List<dynamic>?;
-                      final completedProcesses =
-                          processData?['completedProcesses'] as List<dynamic>?;
+                      final currentlyInProgress = <String>[];
+                      final completedProcesses = <String>[];
 
-                      return Column(
-                        children: [
-                          if (currentlyInProgress != null &&
-                              currentlyInProgress.isNotEmpty)
-                            _buildSection(
-                              'Currently In Progress',
-                              currentlyInProgress,
-                            ),
-                          _buildSection(
-                            'Completed Processes',
-                            completedProcesses ?? [],
-                            emptyMessage:
-                                'Completed processes will appear here.',
-                          ),
-                        ],
+                      if (processData != null) {
+                        final now = DateTime.now();
+                        processData.forEach((processId, process) {
+                          final votingDates =
+                              process['votingDates'] as List<dynamic>?;
+                          final proposalDates =
+                              process['proposalDates'] as List<dynamic>?;
+
+                          final votingEndDate =
+                              votingDates != null && votingDates.length == 2
+                                  ? DateTime.fromMillisecondsSinceEpoch(
+                                      votingDates[1] as int)
+                                  : null;
+
+                          final proposalEndDate =
+                              proposalDates != null && proposalDates.length == 2
+                                  ? DateTime.fromMillisecondsSinceEpoch(
+                                      proposalDates[1] as int)
+                                  : null;
+
+                          if (votingEndDate != null &&
+                              votingEndDate.isAfter(now)) {
+                            currentlyInProgress.add(processId);
+                          } else if (proposalEndDate != null &&
+                              proposalEndDate.isAfter(now)) {
+                            currentlyInProgress.add(processId);
+                          } else {
+                            completedProcesses.add(processId);
+                          }
+                        });
+                      }
+
+                      return FutureBuilder<Map<String, Process>>(
+                        future: ProcessDataService().fetchProcessesByIds(
+                            [...currentlyInProgress, ...completedProcesses]),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+
+                          final processes = snapshot.data ?? {};
+
+                          return Column(
+                            children: [
+                              if (currentlyInProgress.isNotEmpty)
+                                _buildSection(
+                                  'Currently In Progress',
+                                  currentlyInProgress
+                                      .map((processId) =>
+                                          processes[processId]?.title ?? '')
+                                      .toList(),
+                                ),
+                              _buildSection(
+                                'Completed Processes',
+                                completedProcesses
+                                    .map((processId) =>
+                                        processes[processId]?.title ?? '')
+                                    .toList(),
+                                emptyMessage:
+                                    'Completed processes will appear here.',
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                   ),
@@ -67,7 +116,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(String title, List<dynamic> items,
+  Widget _buildSection(String title, List<String> items,
       {String emptyMessage = ''}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +144,7 @@ class DashboardScreen extends StatelessWidget {
               final item = items[index];
               return Card(
                 child: Center(
-                  child: Text(item.toString()),
+                  child: Text(item),
                 ),
               );
             },
@@ -108,7 +157,7 @@ class DashboardScreen extends StatelessWidget {
                 child: Text(
                   emptyMessage,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
             ),

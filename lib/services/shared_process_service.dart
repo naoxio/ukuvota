@@ -27,9 +27,11 @@ class SharedProcessService {
   Future<Map<String, dynamic>?> getSharedProcessData() async {
     final prefs = await SharedPreferences.getInstance();
     final processDataString = prefs.getString(_sharedProcessDataKey);
+    print(processDataString);
     if (processDataString != null) {
       return jsonDecode(processDataString);
     }
+
     return null;
   }
 
