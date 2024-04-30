@@ -1,17 +1,21 @@
-/* 
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/services/shared_process_service.dart';
+import 'package:ukuvota/widgets/process/process_info.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -24,48 +28,12 @@ class DashboardScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  FutureBuilder<Map<String, dynamic>?>(
-                    future: SharedProcessService().getSharedProcessData(),
+                  FutureBuilder<List<String>>(
+                    future: SharedProcessService().fetchUUIDs(),
                     builder: (context, snapshot) {
-                      final processData = snapshot.data;
-                      final currentlyInProgress = <String>[];
-                      final completedProcesses = <String>[];
-
-                      if (processData != null) {
-                        final now = DateTime.now();
-                        processData.forEach((processId, process) {
-                          final votingDates =
-                              process['votingDates'] as List<dynamic>?;
-                          final proposalDates =
-                              process['proposalDates'] as List<dynamic>?;
-
-                          final votingEndDate =
-                              votingDates != null && votingDates.length == 2
-                                  ? DateTime.fromMillisecondsSinceEpoch(
-                                      votingDates[1] as int)
-                                  : null;
-
-                          final proposalEndDate =
-                              proposalDates != null && proposalDates.length == 2
-                                  ? DateTime.fromMillisecondsSinceEpoch(
-                                      proposalDates[1] as int)
-                                  : null;
-
-                          if (votingEndDate != null &&
-                              votingEndDate.isAfter(now)) {
-                            currentlyInProgress.add(processId);
-                          } else if (proposalEndDate != null &&
-                              proposalEndDate.isAfter(now)) {
-                            currentlyInProgress.add(processId);
-                          } else {
-                            completedProcesses.add(processId);
-                          }
-                        });
-                      }
-
+                      final uuids = snapshot.data ?? [];
                       return FutureBuilder<Map<String, Process>>(
-                        future: ProcessDataService().fetchProcessesByIds(
-                            [...currentlyInProgress, ...completedProcesses]),
+                        future: ProcessDataService().fetchProcessesByIds(uuids),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
@@ -73,23 +41,49 @@ class DashboardScreen extends StatelessWidget {
                           }
 
                           final processes = snapshot.data ?? {};
+                          final currentlyInProgress = <Process>[];
+                          final completedProcesses = <Process>[];
+
+                          final now = DateTime.now();
+                          for (final process in processes.values) {
+                            DateTime? votingEndTime;
+                            DateTime? proposalEndTime;
+
+                            if (process.votingDates.length == 2) {
+                              votingEndTime =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      process.votingDates[1]);
+                            }
+
+                            if (process.proposalDates != null &&
+                                process.proposalDates!.length == 2) {
+                              proposalEndTime =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      process.proposalDates![1]);
+                            }
+
+                            if (votingEndTime != null &&
+                                votingEndTime.isAfter(now)) {
+                              currentlyInProgress.add(process);
+                            } else if (proposalEndTime != null &&
+                                proposalEndTime.isAfter(now)) {
+                              currentlyInProgress.add(process);
+                            } else {
+                              completedProcesses.add(process);
+                            }
+                          }
 
                           return Column(
                             children: [
-                              if (currentlyInProgress.isNotEmpty)
-                                _buildSection(
-                                  'Currently In Progress',
-                                  currentlyInProgress
-                                      .map((processId) =>
-                                          processes[processId]?.title ?? '')
-                                      .toList(),
-                                ),
+                              _buildSection(
+                                'Currently In Progress',
+                                currentlyInProgress,
+                                emptyMessage:
+                                    'No processes currently in progress.',
+                              ),
                               _buildSection(
                                 'Completed Processes',
-                                completedProcesses
-                                    .map((processId) =>
-                                        processes[processId]?.title ?? '')
-                                    .toList(),
+                                completedProcesses,
                                 emptyMessage:
                                     'Completed processes will appear here.',
                               ),
@@ -102,7 +96,6 @@ class DashboardScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // Navigate to the new process screen using go_router
                       context.go('/create');
                     },
                     child: const Text('Start a New Process'),
@@ -116,7 +109,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(String title, List<String> items,
+  Widget _buildSection(String title, List<Process> processes,
       {String emptyMessage = ''}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +122,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        if (items.isNotEmpty)
+        if (processes.isNotEmpty)
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -139,17 +132,43 @@ class DashboardScreen extends StatelessWidget {
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
-            itemCount: items.length,
+            itemCount: processes.length,
             itemBuilder: (context, index) {
-              final item = items[index];
-              return Card(
-                child: Center(
-                  child: Text(item),
+              final process = processes[index];
+              return MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () async {
+                    setState(() => _isLoading = true);
+                    context.go('/process/${process.id}');
+                  },
+                  child: Stack(
+                    children: [
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: ProcessInfo(
+                            process: process,
+                            showSharePart: false,
+                          ),
+                        ),
+                      ),
+                      if (_isLoading)
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black45,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               );
             },
           )
-        else if (emptyMessage.isNotEmpty)
+        else
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

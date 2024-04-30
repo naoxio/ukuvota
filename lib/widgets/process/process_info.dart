@@ -11,7 +11,11 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class ProcessInfo extends StatelessWidget {
   final Process process;
-  const ProcessInfo({Key? key, required this.process}) : super(key: key);
+  final bool showSharePart;
+
+  const ProcessInfo(
+      {Key? key, required this.process, this.showSharePart = true})
+      : super(key: key);
 
   void _showModal(BuildContext context, String title, Widget content) {
     showDialog(
@@ -46,7 +50,6 @@ class ProcessInfo extends StatelessWidget {
             const SizedBox(height: 16),
             Center(
               child: SizedBox(
-                // Wrap the QrImage with a SizedBox
                 width: 200,
                 height: 200,
                 child: QrImageView(
@@ -124,49 +127,51 @@ class ProcessInfo extends StatelessWidget {
           proposalsLength: proposalsLength,
         ),
         const SizedBox(height: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(localizations.processShareableUrl),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    readOnly: true,
-                    controller: TextEditingController(
-                      text: 'https://web.ukuvota.world/#/process/${process.id}',
-                    ),
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.copy),
-                        onPressed: () {
-                          final value =
-                              'https://web.ukuvota.world/#/process/${process.id}';
-                          Clipboard.setData(ClipboardData(text: value));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(localizations.linkCopied),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        },
+        if (showSharePart)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(localizations.processShareableUrl),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: TextEditingController(
+                        text:
+                            'https://web.ukuvota.world/#/process/${process.id}',
+                      ),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.copy),
+                          onPressed: () {
+                            final value =
+                                'https://web.ukuvota.world/#/process/${process.id}';
+                            Clipboard.setData(ClipboardData(text: value));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(localizations.linkCopied),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                IconButton(
-                  icon: const Icon(Icons.qr_code),
-                  onPressed: () {
-                    _showQRCodeDialog(context);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+                  const SizedBox(width: 16),
+                  IconButton(
+                    icon: const Icon(Icons.qr_code),
+                    onPressed: () {
+                      _showQRCodeDialog(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
       ],
     );
   }

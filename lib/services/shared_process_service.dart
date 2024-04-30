@@ -3,40 +3,41 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedProcessService {
-  static const String _sharedProcessDataKey = 'shared_process_data';
+  static const String _uuidDataKey = 'process_uuids';
 
-  Future<void> saveSharedProcessData(
-      Map<String, dynamic> newProcessData) async {
+  Future<void> addUUID(String uuid) async {
     final prefs = await SharedPreferences.getInstance();
-    final existingProcessDataString = prefs.getString(_sharedProcessDataKey);
-    Map<String, dynamic> processData;
-    if (existingProcessDataString != null) {
-      processData = jsonDecode(existingProcessDataString);
-      processData.addAll(newProcessData);
+    final existingUUIDsString = prefs.getString(_uuidDataKey);
+    List<String> uuids;
+    if (existingUUIDsString != null) {
+      uuids = List<String>.from(jsonDecode(existingUUIDsString));
     } else {
-      processData = newProcessData;
+      uuids = [];
     }
-    await prefs.setString(_sharedProcessDataKey, jsonEncode(processData));
+    uuids.add(uuid);
+    await prefs.setString(_uuidDataKey, jsonEncode(uuids));
   }
 
-  Future<Map<String, dynamic>?> getSharedProcessData() async {
+  Future<List<String>> fetchUUIDs() async {
     final prefs = await SharedPreferences.getInstance();
-    final processDataString = prefs.getString(_sharedProcessDataKey);
-    print(processDataString);
-    if (processDataString != null) {
-      return jsonDecode(processDataString);
+    final uuidsString = prefs.getString(_uuidDataKey);
+    if (kDebugMode) {
+      print(jsonDecode(uuidsString!));
     }
-
-    return null;
+    if (uuidsString != null) {
+      return List<String>.from(jsonDecode(uuidsString));
+    }
+    return [];
   }
 
-  Future<void> clearSharedProcessData() async {
+  /// Clears all stored UUIDs from shared preferences.
+  Future<void> clearUUIDs() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_sharedProcessDataKey);
+    await prefs.remove(_uuidDataKey);
   }
 }

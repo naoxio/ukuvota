@@ -1,13 +1,9 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/process_scaffold.dart';
+import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/widgets/process/voting_list.dart';
 
 class VotingScreen extends StatefulWidget {
@@ -22,6 +18,52 @@ class VotingScreen extends StatefulWidget {
 class VotingScreenState extends State<VotingScreen> {
   late String _endTime;
   final _voterNameController = TextEditingController();
+  late Map<String, int> _votes;
+
+  @override
+  void initState() {
+    super.initState();
+    _votes = {};
+  }
+
+  void _updateVotes(Map<String, int> votes) {
+    setState(() {
+      _votes = votes;
+    });
+  }
+
+  void _submitVote() {
+    final voterName = _voterNameController.text.trim();
+    if (voterName.isEmpty) {
+      _showSnackBar(AppLocalizations.of(context)!.alertErrorEmptyName);
+      return;
+    }
+
+    ProcessDataService()
+        .submitVote(
+            widget.process.id,
+            voterName,
+            _votes.entries
+                .map((entry) => {
+                      'proposalId': entry.key,
+                      'vote': entry.value,
+                    })
+                .toList())
+        .then((_) {
+      _showSnackBar(AppLocalizations.of(context)!.alertSuccessSubmitVote);
+    }).catchError((error) {
+      //_showSnackBar(AppLocalizations.of(context)!.alertErrorSubmitVote);
+      print('Error submitting vote: $error');
+    });
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +81,7 @@ class VotingScreenState extends State<VotingScreen> {
           VotingList(
             processId: process.id,
             proposals: process.proposals,
+            onVotesChanged: _updateVotes,
           ),
           const SizedBox(height: 16),
           Row(
@@ -62,29 +105,6 @@ class VotingScreenState extends State<VotingScreen> {
     );
   }
 
-  void _submitVote() {
-    final voterName = _voterNameController.text.trim();
-    if (voterName.isEmpty) {
-      _showSnackBar(AppLocalizations.of(context)!.alertErrorEmptyName);
-      return;
-    }
-
-    // Implement the logic to submit the vote
-    // ...
-
-    // Show success or error SnackBar based on the result
-    // _showSnackBar(AppLocalizations.of(context)!.alertSuccessSubmitVote);
-    // _showSnackBar(AppLocalizations.of(context)!.alertErrorSubmitVote);
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _voterNameController.dispose();
@@ -96,6 +116,7 @@ class VotingScreenState extends State<VotingScreen> {
     final endTimeDate = DateTime.parse(_endTime);
     final currentTime = DateTime.now();
     final timeLeft = endTimeDate.difference(currentTime);
+
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/process/${widget.process.id}/results');

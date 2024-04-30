@@ -135,8 +135,7 @@ class ReviewScreenState extends State<ReviewScreen> {
       await _processDataService.createProcess(processId, processData);
       await _sharedSetupService.clearProcessData();
 
-      await SharedProcessService()
-          .saveSharedProcessData({'processId': processId});
+      await SharedProcessService().addUUID(processId);
 
       context.go('/process/$processId');
     } catch (error) {
