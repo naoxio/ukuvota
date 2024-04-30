@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 import 'package:go_router/go_router.dart';

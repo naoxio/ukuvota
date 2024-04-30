@@ -5,7 +5,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ukuvota/models/process.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/widgets/process/process_info.dart';
 
 class ProcessScaffold extends StatelessWidget {

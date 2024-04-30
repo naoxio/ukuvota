@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/utils/weighting_options.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
 
@@ -97,7 +97,6 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
     } else if (mode == 'voting-only') {
       context.go('/create/voting-only');
     } else {
-      // Navigate to the current screen ('/create') if mode is not set
       context.go('/create');
     }
   }

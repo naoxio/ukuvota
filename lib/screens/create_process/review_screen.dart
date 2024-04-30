@@ -4,10 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
+import 'package:ukuvota/services/shared_process_service.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -132,6 +133,9 @@ class ReviewScreenState extends State<ReviewScreen> {
 
       await _processDataService.createProcess(processId, processData);
       await _sharedSetupService.clearProcessData();
+
+      await SharedProcessService()
+          .saveSharedProcessData({'processId': processId});
 
       setState(() {
         _isLoading = false;

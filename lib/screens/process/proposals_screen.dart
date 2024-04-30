@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
-import 'package:ukuvota/widgets/layout/process_scaffold.dart';
+import 'package:ukuvota/scaffolds/process_scaffold.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 
 class ProposalsScreen extends StatefulWidget {

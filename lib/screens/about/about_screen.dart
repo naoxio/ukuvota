@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/utils/markdown_loader.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);

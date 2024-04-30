@@ -5,7 +5,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ukuvota/widgets/layout/main_scaffold.dart';
+import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/services/shared_process_service.dart';
 
 class DashboardScreen extends StatelessWidget {

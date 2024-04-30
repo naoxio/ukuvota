@@ -5,7 +5,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ukuvota/models/process.dart';
-import 'package:ukuvota/widgets/layout/process_scaffold.dart';
+import 'package:ukuvota/scaffolds/process_scaffold.dart';
 import 'package:ukuvota/widgets/process/results_card.dart';
 
 class ResultsScreen extends StatefulWidget {
