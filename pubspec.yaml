@@ -37,6 +37,8 @@ dependencies:
   qr_flutter: ^4.1.0
   firebase_core: ^2.30.1
   flutter_svg: ^1.1.6
+  screenshot: ^2.3.0
+  universal_html: ^2.2.4
 
 dev_dependencies:
   flutter_test:

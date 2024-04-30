@@ -1,13 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/models/voter.dart';
+import 'package:ukuvota/widgets/process/results_voters_tab.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
 import 'package:ukuvota/utils/export_utils.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:universal_html/html.dart' as html;
 
 const List<String> emojiNames = [
   'rage',
@@ -31,12 +34,15 @@ class ResultsCard extends StatefulWidget {
 class ResultsCardState extends State<ResultsCard>
     with SingleTickerProviderStateMixin {
   List<Voter> selectedVoters = [];
+  List<Voter> allVoters = [];
   late TabController _tabController;
+  final ScreenshotController _screenshotController = ScreenshotController();
 
   @override
   void initState() {
     super.initState();
-    selectedVoters = widget.process.voters ?? [];
+    allVoters = widget.process.voters ?? [];
+    selectedVoters = List.from(allVoters);
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -69,15 +75,8 @@ class ResultsCardState extends State<ResultsCard>
 
   Widget getAverageEmoji(double total) {
     final average = getAverageScore(total);
-    final emojiIndex = average.round() + 3;
+    final emojiIndex = (average + 3).clamp(0, emojiNames.length - 1).toInt();
     return SvgPicture.asset('emojis/${emojiNames[emojiIndex]}.svg');
-  }
-
-  void updateTable() {
-    setState(() {
-      // Update the table based on the selected voters
-      // You can use the getTotal and getAverageScore methods to calculate the values
-    });
   }
 
   void exportMarkdown() {
@@ -85,8 +84,20 @@ class ResultsCardState extends State<ResultsCard>
     saveMarkdown(markdown, '${widget.process.title}.md');
   }
 
-  void exportImage() {
-    // Implement the logic to export the results as an image
+  void exportImage() async {
+    final imageBytes = await _screenshotController.capture();
+    if (imageBytes != null) {
+      final blob = html.Blob([imageBytes], 'image/png');
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.document.createElement('a') as html.AnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = '${widget.process.title}.png';
+      html.document.body!.children.add(anchor);
+      anchor.click();
+      html.document.body!.children.remove(anchor);
+      html.Url.revokeObjectUrl(url);
+    }
   }
 
   @override
@@ -97,7 +108,7 @@ class ResultsCardState extends State<ResultsCard>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (selectedVoters.isEmpty)
+        if (allVoters.isEmpty)
           Center(
             child: Text(
               localizations.processNoVotesSubmitted,
@@ -125,8 +136,14 @@ class ResultsCardState extends State<ResultsCard>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildResultsTab(localizations, proposals),
-                    _buildVotersTab(localizations, proposals),
+                    Screenshot(
+                      controller: _screenshotController,
+                      child: _buildResultsTab(localizations, proposals),
+                    ),
+                    ResultsVotersTab(
+                      selectedVoters: selectedVoters,
+                      proposals: proposals,
+                    ),
                   ],
                 ),
               ),
@@ -148,33 +165,30 @@ class ResultsCardState extends State<ResultsCard>
     final sortedProposals = proposals.toList()
       ..sort((a, b) => getTotal(b.id).compareTo(getTotal(a.id)));
 
-    Set<Voter> allVoters = widget.process.voters!.toSet();
-    Set<Voter> selectedVotersSet = allVoters.toSet();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${localizations.processVoters} (${selectedVoters.length}):',
+            '${localizations.processVoters} (${selectedVoters.length}/${allVoters.length}):',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Wrap(
             children: allVoters.map((voter) {
+              final isSelected = selectedVoters.contains(voter);
               return Padding(
                 padding: const EdgeInsets.all(4),
                 child: FilterChip(
                   label: Text(voter.name),
-                  selected: selectedVotersSet.contains(voter),
+                  selected: isSelected,
                   onSelected: (selected) {
                     setState(() {
                       if (selected) {
-                        selectedVotersSet.add(voter);
+                        selectedVoters.add(voter);
                       } else {
-                        selectedVotersSet.remove(voter);
+                        selectedVoters.remove(voter);
                       }
-                      selectedVoters = selectedVotersSet.toList();
-                      updateTable();
                     });
                   },
                 ),
@@ -216,67 +230,36 @@ class ResultsCardState extends State<ResultsCard>
             }).toList(),
           ),
           const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    localizations.processExportData,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.file_download),
-                        onPressed: exportMarkdown,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.image),
-                        onPressed: exportImage,
-                      ),
-                    ],
-                  ),
-                ],
+          if (!kIsWeb)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      localizations.processExportData,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.file_download),
+                          onPressed: exportMarkdown,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.image),
+                          onPressed: exportImage,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildVotersTab(
-      AppLocalizations localizations, List<Proposal> proposals) {
-    final sortedProposals = proposals.toList()
-      ..sort((a, b) => a.title.compareTo(b.title));
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columns: [
-          DataColumn(label: Text(localizations.processVoter)),
-          ...sortedProposals.map((proposal) {
-            return DataColumn(label: Text(truncateString(proposal.title, 20)));
-          }).toList(),
-        ],
-        rows: selectedVoters.map((voter) {
-          return DataRow(
-            cells: [
-              DataCell(Text(voter.name)),
-              ...sortedProposals.map((proposal) {
-                final vote = voter.votes.firstWhere(
-                  (vote) => vote.proposalId == proposal.id,
-                  orElse: () => Vote(proposalId: '', vote: 0),
-                );
-                return DataCell(Text(vote.vote.toString()));
-              }).toList(),
-            ],
-          );
-        }).toList(),
       ),
     );
   }

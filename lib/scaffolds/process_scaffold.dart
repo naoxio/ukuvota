@@ -20,16 +20,21 @@ class ProcessScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProcessInfo(process: process),
-              const SizedBox(height: 16),
-              child,
-            ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProcessInfo(process: process),
+                  const SizedBox(height: 16),
+                  child,
+                ],
+              ),
+            ),
           ),
         ),
       ),
