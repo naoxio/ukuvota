@@ -8,8 +8,9 @@ import 'package:ukuvota/widgets/process/voting_list.dart';
 
 class VotingScreen extends StatefulWidget {
   final Process process;
+  final GlobalKey<VotingListState> votingListKey = GlobalKey<VotingListState>();
 
-  const VotingScreen({Key? key, required this.process}) : super(key: key);
+  VotingScreen({Key? key, required this.process}) : super(key: key);
 
   @override
   VotingScreenState createState() => VotingScreenState();
@@ -19,17 +20,22 @@ class VotingScreenState extends State<VotingScreen> {
   late String _endTime;
   final _voterNameController = TextEditingController();
   late Map<String, int> _votes;
+  late Process _process;
 
   @override
   void initState() {
     super.initState();
     _votes = {};
+    _process = widget.process;
   }
 
-  void _updateVotes(Map<String, int> votes) {
-    setState(() {
-      _votes = votes;
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final votingListState = widget.votingListKey.currentState;
+    if (votingListState != null) {
+      _votes = votingListState.votes;
+    }
   }
 
   void _submitVote() {
@@ -41,7 +47,7 @@ class VotingScreenState extends State<VotingScreen> {
 
     ProcessDataService()
         .submitVote(
-            widget.process.id,
+            _process.id,
             voterName,
             _votes.entries
                 .map((entry) => {
@@ -50,11 +56,22 @@ class VotingScreenState extends State<VotingScreen> {
                     })
                 .toList())
         .then((_) {
-      _showSnackBar(AppLocalizations.of(context)!.alertSuccessSubmitVote);
+      _showSuccessSnackBar(voterName);
+      _voterNameController.clear();
+      _reloadProcessData();
     }).catchError((error) {
-      //_showSnackBar(AppLocalizations.of(context)!.alertErrorSubmitVote);
       print('Error submitting vote: $error');
     });
+  }
+
+  void _showSuccessSnackBar(String voterName) {
+    final message =
+        '${AppLocalizations.of(context)!.alertSuccessSubmitVote} $voterName';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   void _showSnackBar(String message) {
@@ -65,23 +82,32 @@ class VotingScreenState extends State<VotingScreen> {
     );
   }
 
+  void _reloadProcessData() async {
+    final processId = _process.id;
+    final newProcess = await ProcessDataService().fetchProcessData(processId);
+    if (newProcess != null) {
+      setState(() {
+        _process = newProcess;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final process = widget.process;
 
     return ProcessScaffold(
-      process: process,
+      process: _process,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            '${localizations.processVoters}: ${process.voters?.length ?? '0'}',
+            '${localizations.processVoters}: ${_process.voters?.length ?? '0'}',
           ),
           VotingList(
-            processId: process.id,
-            proposals: process.proposals,
-            onVotesChanged: _updateVotes,
+            key: widget.votingListKey,
+            processId: _process.id,
+            proposals: _process.proposals,
           ),
           const SizedBox(height: 16),
           Row(
@@ -119,7 +145,7 @@ class VotingScreenState extends State<VotingScreen> {
 
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/process/${widget.process.id}/results');
+        context.go('/process/${_process.id}/results');
       });
     } else {
       Future.delayed(

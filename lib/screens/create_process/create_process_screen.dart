@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
+import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/utils/weighting_options.dart';
-import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
 
@@ -111,92 +111,82 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return MainScaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    localizations.setupProcess,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      labelText: localizations.processTopic,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  QuillEditorWidget(
-                    controller: _controller,
-                    showBorder: true,
-                    sharedConfigurations: QuillSharedConfigurations(
-                      locale: Locale(localizations.localeName),
-                    ),
-                    height: 200,
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: localizations.processWeighting,
-                      border: const OutlineInputBorder(),
-                    ),
-                    value: _selectedWeighting,
-                    items: [
-                      for (final entry in weightingOptions.entries)
-                        DropdownMenuItem<String>(
-                          value: entry.key,
-                          child: Text(entry.value),
-                        ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedWeighting = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Wrap(
-                    alignment: WrapAlignment.spaceAround,
-                    spacing: 8.0,
-                    runSpacing: 10.0,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _isTitleEmpty
-                            ? null
-                            : () {
-                                _saveProcessData('full');
-                                context.go('/create/proposal-voting');
-                              },
-                        child: Text(localizations.processPhasesFull),
-                      ),
-                      ElevatedButton(
-                        onPressed: _isTitleEmpty
-                            ? null
-                            : () {
-                                _saveProcessData('voting-only');
-                                context.go('/create/voting-only');
-                              },
-                        child: Text(localizations.processPhasesVoting),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return SetupProcessScaffold(
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Text(
+            localizations.setupProcess,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _titleController,
+            decoration: InputDecoration(
+              labelText: localizations.processTopic,
+              border: const OutlineInputBorder(),
             ),
           ),
-        ),
+          const SizedBox(height: 20),
+          QuillEditorWidget(
+            controller: _controller,
+            showBorder: true,
+            sharedConfigurations: QuillSharedConfigurations(
+              locale: Locale(localizations.localeName),
+            ),
+            height: 200,
+          ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              labelText: localizations.processWeighting,
+              border: const OutlineInputBorder(),
+            ),
+            value: _selectedWeighting,
+            items: [
+              for (final entry in weightingOptions.entries)
+                DropdownMenuItem<String>(
+                  value: entry.key,
+                  child: Text(entry.value),
+                ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedWeighting = value!;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            alignment: WrapAlignment.spaceAround,
+            spacing: 8.0,
+            runSpacing: 10.0,
+            children: [
+              ElevatedButton(
+                onPressed: _isTitleEmpty
+                    ? null
+                    : () {
+                        _saveProcessData('full');
+                        context.go('/create/proposal-voting');
+                      },
+                child: Text(localizations.processPhasesFull),
+              ),
+              ElevatedButton(
+                onPressed: _isTitleEmpty
+                    ? null
+                    : () {
+                        _saveProcessData('voting-only');
+                        context.go('/create/voting-only');
+                      },
+                child: Text(localizations.processPhasesVoting),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

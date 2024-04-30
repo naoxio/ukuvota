@@ -37,25 +37,48 @@ class ProcessScreenState extends State<ProcessScreen> {
 
   void _setupTimers() {
     final process = widget.process;
-    final proposalStartDate =
-        DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
-    final proposalEndDate =
-        DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
-    final votingStartDate =
-        DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
     final currentTime = DateTime.now();
 
-    if (currentTime.isBefore(proposalStartDate)) {
-      final timeUntilProposalStart = proposalStartDate.difference(currentTime);
-      _proposalTimer = Timer(timeUntilProposalStart, () {
-        context.go('/process/${process.id}/proposals');
-      });
-    } else if (currentTime.isAfter(proposalEndDate) &&
-        currentTime.isBefore(votingStartDate)) {
-      final timeUntilVotingStart = votingStartDate.difference(currentTime);
-      _votingTimer = Timer(timeUntilVotingStart, () {
-        context.go('/process/${process.id}/voting');
-      });
+    // Check if proposalDates are defined
+    if (process.proposalDates != null && process.proposalDates!.length == 2) {
+      final proposalStartDate =
+          DateTime.fromMillisecondsSinceEpoch(process.proposalDates![0]);
+      final proposalEndDate =
+          DateTime.fromMillisecondsSinceEpoch(process.proposalDates![1]);
+
+      if (currentTime.isBefore(proposalStartDate)) {
+        final timeUntilProposalStart =
+            proposalStartDate.difference(currentTime);
+        _proposalTimer = Timer(timeUntilProposalStart, () {
+          context.go('/process/${process.id}/proposals');
+        });
+      } else if (currentTime.isAfter(proposalEndDate)) {
+        // Skip to checking votingDates if currentTime is after proposalEndDate
+        _checkVotingDates(process, currentTime);
+      }
+    } else {
+      // If proposalDates are not defined, skip directly to checking votingDates
+      _checkVotingDates(process, currentTime);
+    }
+  }
+
+  void _checkVotingDates(Process process, DateTime currentTime) {
+    if (process.votingDates.length == 2) {
+      final votingStartDate =
+          DateTime.fromMillisecondsSinceEpoch(process.votingDates[0]);
+      final votingEndDate =
+          DateTime.fromMillisecondsSinceEpoch(process.votingDates[1]);
+
+      if (currentTime.isBefore(votingStartDate)) {
+        final timeUntilVotingStart = votingStartDate.difference(currentTime);
+        _votingTimer = Timer(timeUntilVotingStart, () {
+          context.go('/process/${process.id}/voting');
+        });
+      } else if (currentTime.isAfter(votingEndDate)) {
+        context.go('/process/${process.id}/results');
+      }
+    } else {
+      context.go('/create');
     }
   }
 

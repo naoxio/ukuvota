@@ -28,14 +28,26 @@ class Process {
     this.proposals,
     this.voters,
   });
-
   factory Process.fromMap(Map<String, dynamic> map) {
+    List<Voter>? voters;
+    final dynamic votersData = map['voters'];
+    if (votersData != null) {
+      if (votersData is List<dynamic>) {
+        voters = votersData
+            .map((voter) => voter is Map ? Voter.fromMap(voter) : null)
+            .whereType<Voter>()
+            .toList();
+      } else {
+        voters = [Voter.fromMap(votersData)];
+      }
+    }
+
     return Process(
       id: map['_id'] as String,
       title: map['title'] as String,
       description: map['description'] is Map
           ? json.encode(map['description'])
-          : map['description'].toString(),
+          : map['description']?.toString(),
       proposalDates: map['proposalDates'] != null
           ? List<int>.from(map['proposalDates'])
           : null,
@@ -51,11 +63,7 @@ class Process {
                       : throw ArgumentError('Invalid proposal data: $proposal'))
               .toList()
           : null,
-      voters: map['voters'] != null
-          ? (map['voters'] as List<dynamic>)
-              .map((voter) => Voter.fromMap(voter))
-              .toList()
-          : null,
+      voters: voters,
     );
   }
 }

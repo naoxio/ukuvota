@@ -6,9 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
+import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
-import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 import 'package:go_router/go_router.dart';
@@ -90,106 +90,96 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
     final hasEmptyProposals =
         _proposals.isNotEmpty && _proposals.any(_isProposalEmpty);
 
-    return MainScaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    localizations.setupTimeLeftVotingHeading,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  _selectedTimeZone == null
-                      ? const CircularProgressIndicator()
-                      : TimeZoneSelector(
-                          initialTimeZone: _selectedTimeZone,
-                          onTimeZoneChanged: (timeZone) {
-                            setState(() {
-                              _selectedTimeZone = timeZone;
-                            });
-                          },
-                        ),
-                  const SizedBox(height: 20),
-                  TimeSelector(
-                    phase: 'voting',
-                    startDate: _votingOnlyStartDate ?? DateTime.now(),
-                    endDate: _votingOnlyEndDate ??
-                        DateTime.now().add(const Duration(hours: 1)),
-                    startMinDate: DateTime.now(),
-                    hideTitle: true,
-                    onStartDateChanged: (DateTime date) {
-                      setState(() {
-                        _votingOnlyStartDate = date;
-                      });
-                    },
-                    onEndDateChanged: (DateTime date) {
-                      setState(() {
-                        _votingOnlyEndDate = date;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    localizations.setupProposals,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ProposalsList(
-                    isSetup: true,
-                    proposals: _proposals,
-                    onProposalsUpdated: _updateProposals,
-                  ),
-                  const SizedBox(height: 20),
-                  if (_proposals.length < 2)
-                    Text(
-                      localizations.hintMinTwoProposals,
-                      style: const TextStyle(color: Colors.orange),
-                    )
-                  else if (hasEmptyProposals)
-                    Text(
-                      localizations.hintProposalsNotEmpty,
-                      style: const TextStyle(color: Colors.orange),
-                    ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          _saveProcessData();
-                          context.go('/create');
-                        },
-                        child: Text(localizations.buttonBack),
-                      ),
-                      ElevatedButton(
-                        onPressed: _proposals.length >= 2 && !hasEmptyProposals
-                            ? () {
-                                _saveProcessData();
-                                context.go('/create/review');
-                              }
-                            : null,
-                        child: Text(localizations.buttonContinue),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return SetupProcessScaffold(
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Text(
+            localizations.setupTimeLeftVotingHeading,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          _selectedTimeZone == null
+              ? const CircularProgressIndicator()
+              : TimeZoneSelector(
+                  initialTimeZone: _selectedTimeZone,
+                  onTimeZoneChanged: (timeZone) {
+                    setState(() {
+                      _selectedTimeZone = timeZone;
+                    });
+                  },
+                ),
+          const SizedBox(height: 20),
+          TimeSelector(
+            phase: 'voting',
+            startDate: _votingOnlyStartDate ?? DateTime.now(),
+            endDate: _votingOnlyEndDate ??
+                DateTime.now().add(const Duration(hours: 1)),
+            startMinDate: DateTime.now(),
+            hideTitle: true,
+            onStartDateChanged: (DateTime date) {
+              setState(() {
+                _votingOnlyStartDate = date;
+              });
+            },
+            onEndDateChanged: (DateTime date) {
+              setState(() {
+                _votingOnlyEndDate = date;
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          Text(
+            localizations.setupProposals,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ),
+          const SizedBox(height: 10),
+          ProposalsList(
+            isSetup: true,
+            proposals: _proposals,
+            onProposalsUpdated: _updateProposals,
+          ),
+          const SizedBox(height: 20),
+          if (_proposals.length < 2)
+            Text(
+              localizations.hintMinTwoProposals,
+              style: const TextStyle(color: Colors.orange),
+            )
+          else if (hasEmptyProposals)
+            Text(
+              localizations.hintProposalsNotEmpty,
+              style: const TextStyle(color: Colors.orange),
+            ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _saveProcessData();
+                  context.go('/create');
+                },
+                child: Text(localizations.buttonBack),
+              ),
+              ElevatedButton(
+                onPressed: _proposals.length >= 2 && !hasEmptyProposals
+                    ? () {
+                        _saveProcessData();
+                        context.go('/create/review');
+                      }
+                    : null,
+                child: Text(localizations.buttonContinue),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

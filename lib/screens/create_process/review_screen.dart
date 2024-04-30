@@ -4,11 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
+import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
 import 'package:ukuvota/services/shared_process_service.dart';
 import 'package:ukuvota/services/shared_setup_service.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
-import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -154,173 +154,168 @@ class ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return MainScaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return SetupProcessScaffold(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (_title != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  localizations.processTopic,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(_title!),
+                const SizedBox(height: 16),
+                if (_descriptionContent != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localizations.processTopic,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(_title!),
+                      const SizedBox(height: 16),
+                      HtmlWidget(convertToHtml(_descriptionContent!)),
+                    ],
+                  ),
+              ],
+            ),
+          const SizedBox(height: 24),
+          if (_weighting != null)
+            Text(
+              '${localizations.processWeighting}: $_weighting',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          const SizedBox(height: 24),
+          Row(
             children: [
-              if (_title != null)
-                Column(
+              if (_proposalStartDate != null && _proposalEndDate != null)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localizations.phasesProposalTitle,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_proposalStartDate!, _timezone!)}',
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_proposalEndDate!, _timezone!)}',
+                      ),
+                    ],
+                  ),
+                ),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      localizations.processTopic,
-                      style: Theme.of(context).textTheme.titleLarge,
+                      localizations.phasesVotingTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    Text(_title!),
-                    const SizedBox(height: 16),
-                    if (_descriptionContent != null)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            localizations.processTopic,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(_title!),
-                          const SizedBox(height: 16),
-                          HtmlWidget(convertToHtml(_descriptionContent!)),
-                        ],
+                    if (_proposalVotingStartDate != null)
+                      Text(
+                        '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_proposalVotingStartDate!, _timezone!)}',
+                      ),
+                    if (_proposalVotingEndDate != null)
+                      Text(
+                        '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_proposalVotingEndDate!, _timezone!)}',
+                      ),
+                    if (_votingOnlyStartDate != null)
+                      Text(
+                        '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_votingOnlyStartDate!, _timezone!)}',
+                      ),
+                    if (_votingOnlyEndDate != null)
+                      Text(
+                        '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_votingOnlyEndDate!, _timezone!)}',
                       ),
                   ],
                 ),
-              const SizedBox(height: 24),
-              if (_weighting != null)
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            '${localizations.setupTimezone}: $_timezone',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 24),
+          if (_proposals.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-                  '${localizations.processWeighting}: $_weighting',
+                  localizations.processProposals,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  if (_proposalStartDate != null && _proposalEndDate != null)
-                    Expanded(
+                const SizedBox(height: 16),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _proposals.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final proposal = _proposals[index];
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            localizations.phasesProposalTitle,
+                            proposal.title,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_proposalStartDate!, _timezone!)}',
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_proposalEndDate!, _timezone!)}',
-                          ),
+                          HtmlWidget(convertToHtml(proposal.description)),
                         ],
                       ),
-                    ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          localizations.phasesVotingTitle,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        if (_proposalVotingStartDate != null)
-                          Text(
-                            '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_proposalVotingStartDate!, _timezone!)}',
-                          ),
-                        if (_proposalVotingEndDate != null)
-                          Text(
-                            '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_proposalVotingEndDate!, _timezone!)}',
-                          ),
-                        if (_votingOnlyStartDate != null)
-                          Text(
-                            '${localizations.phasesStartAt}: ${prettyFormatInTimezone(_votingOnlyStartDate!, _timezone!)}',
-                          ),
-                        if (_votingOnlyEndDate != null)
-                          Text(
-                            '${localizations.phasesEndsAt}: ${prettyFormatInTimezone(_votingOnlyEndDate!, _timezone!)}',
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '${localizations.setupTimezone}: $_timezone',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 24),
-              if (_proposals.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.processProposals,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 16),
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _proposals.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        final proposal = _proposals[index];
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey[300]!),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                proposal.title,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: 8),
-                              HtmlWidget(convertToHtml(proposal.description)),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_mode == 'voting-only') {
-                        context.go('/create/voting-only');
-                      } else {
-                        context.go('/create/proposal-voting');
-                      }
-                    },
-                    child: Text(localizations.buttonBack),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            _startProcess();
-                          },
-                    child: _isLoading
-                        ? const CircularProgressIndicator()
-                        : Text(localizations.buttonStart),
-                  ),
-                ],
+              ],
+            ),
+          const SizedBox(height: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (_mode == 'voting-only') {
+                    context.go('/create/voting-only');
+                  } else {
+                    context.go('/create/proposal-voting');
+                  }
+                },
+                child: Text(localizations.buttonBack),
+              ),
+              ElevatedButton(
+                onPressed: _isLoading
+                    ? null
+                    : () {
+                        _startProcess();
+                      },
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : Text(localizations.buttonStart),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

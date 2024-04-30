@@ -48,7 +48,13 @@ class ProcessDataService {
       'votes': votes,
     };
 
-    List<dynamic> voters = processData['voters'] ?? [];
+    List<dynamic> voters = [];
+    final dynamic votersData = processData['voters'];
+    if (votersData is List<dynamic>) {
+      voters = votersData;
+    } else if (votersData != null) {
+      voters = [votersData];
+    }
     voters.add(newVoter);
 
     final Map<String, dynamic> proposalUpdates = {};

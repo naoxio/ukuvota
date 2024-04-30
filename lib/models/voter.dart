@@ -12,13 +12,28 @@ class Voter {
     required this.votes,
   });
 
-  factory Voter.fromMap(Map<String, dynamic> map) {
+  factory Voter.fromMap(Map<dynamic, dynamic> map) {
+    final dynamic votesData = map['votes'];
+    List<Vote> votes;
+
+    if (votesData != null) {
+      if (votesData is List<dynamic>) {
+        votes = votesData
+            .map((vote) => vote is Map ? Vote.fromMap(vote) : null)
+            .whereType<Vote>()
+            .toList();
+      } else {
+        votes = [Vote.fromMap(votesData)];
+      }
+    } else {
+      votes =
+          []; // or handle the case where votes is null as per your requirements
+    }
+
     return Voter(
       id: map['id'] as String,
       name: map['name'] as String,
-      votes: List<Vote>.from(
-        map['votes'].map((vote) => Vote.fromMap(vote)),
-      ),
+      votes: votes,
     );
   }
 }
@@ -32,7 +47,7 @@ class Vote {
     required this.vote,
   });
 
-  factory Vote.fromMap(Map<String, dynamic> map) {
+  factory Vote.fromMap(Map<dynamic, dynamic> map) {
     return Vote(
       proposalId: map['proposalId'] as String,
       vote: map['vote'] as int,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/models/proposal.dart';
@@ -69,8 +70,7 @@ class ResultsCardState extends State<ResultsCard>
   Widget getAverageEmoji(double total) {
     final average = getAverageScore(total);
     final emojiIndex = average.round() + 3;
-    final emojiName = emojiNames[emojiIndex];
-    return Icon(IconData(emojiName.codeUnitAt(0), fontFamily: 'MaterialIcons'));
+    return SvgPicture.asset('emojis/${emojiNames[emojiIndex]}.svg');
   }
 
   void updateTable() {
@@ -148,6 +148,8 @@ class ResultsCardState extends State<ResultsCard>
     final sortedProposals = proposals.toList()
       ..sort((a, b) => getTotal(b.id).compareTo(getTotal(a.id)));
 
+    Set<Voter> allVoters = widget.process.voters!.toSet();
+    Set<Voter> selectedVotersSet = allVoters.toSet();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Column(
@@ -158,19 +160,20 @@ class ResultsCardState extends State<ResultsCard>
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Wrap(
-            children: selectedVoters.map((voter) {
+            children: allVoters.map((voter) {
               return Padding(
                 padding: const EdgeInsets.all(4),
                 child: FilterChip(
                   label: Text(voter.name),
-                  selected: selectedVoters.contains(voter),
+                  selected: selectedVotersSet.contains(voter),
                   onSelected: (selected) {
                     setState(() {
                       if (selected) {
-                        selectedVoters.add(voter);
+                        selectedVotersSet.add(voter);
                       } else {
-                        selectedVoters.remove(voter);
+                        selectedVotersSet.remove(voter);
                       }
+                      selectedVoters = selectedVotersSet.toList();
                       updateTable();
                     });
                   },
