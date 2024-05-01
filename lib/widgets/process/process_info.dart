@@ -1,3 +1,8 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -88,9 +93,11 @@ class ProcessInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          process.title,
-          style: Theme.of(context).textTheme.headlineMedium,
+        Center(
+          child: Text(
+            process.title,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
         ),
         const SizedBox(height: 16),
         HtmlWidget(convertToHtml(description)),

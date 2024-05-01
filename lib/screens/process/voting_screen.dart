@@ -1,3 +1,8 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +14,6 @@ import 'package:ukuvota/widgets/process/voting_list.dart';
 
 class VotingScreen extends StatefulWidget {
   final Process process;
-  final GlobalKey<VotingListState> votingListKey = GlobalKey<VotingListState>();
 
   VotingScreen({Key? key, required this.process}) : super(key: key);
 
@@ -18,75 +22,21 @@ class VotingScreen extends StatefulWidget {
 }
 
 class VotingScreenState extends State<VotingScreen> {
-  late String _endTime;
-  final _voterNameController = TextEditingController();
-  late Map<String, int> _votes;
+  late DateTime _endTime;
   late Process _process;
 
   @override
   void initState() {
     super.initState();
-    _votes = {};
     _process = widget.process;
+    _endTime = DateTime.fromMillisecondsSinceEpoch(_process.votingDates[1]);
     _saveProcessId();
+    _startTimer();
   }
 
   Future<void> _saveProcessId() async {
     final processId = widget.process.id;
     await SharedProcessService().addUUID(processId);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final votingListState = widget.votingListKey.currentState;
-    if (votingListState != null) {
-      _votes = votingListState.votes;
-    }
-  }
-
-  void _submitVote() {
-    final voterName = _voterNameController.text.trim();
-    if (voterName.isEmpty) {
-      _showSnackBar(AppLocalizations.of(context)!.alertErrorEmptyName);
-      return;
-    }
-
-    ProcessDataService()
-        .submitVote(
-            _process.id,
-            voterName,
-            _votes.entries
-                .map((entry) => {
-                      'proposalId': entry.key,
-                      'vote': entry.value,
-                    })
-                .toList())
-        .then((_) {
-      _showSuccessSnackBar(voterName);
-      _voterNameController.clear();
-      _reloadProcessData();
-    }).catchError((error) {
-      print('Error submitting vote: $error');
-    });
-  }
-
-  void _showSuccessSnackBar(String voterName) {
-    final message =
-        '${AppLocalizations.of(context)!.alertSuccessSubmitVote} $voterName';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 
   void _reloadProcessData() async {
@@ -106,32 +56,17 @@ class VotingScreenState extends State<VotingScreen> {
     return ProcessScaffold(
       process: _process,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             '${localizations.processVoters}: ${_process.voters?.length ?? '0'}',
           ),
           VotingList(
-            key: widget.votingListKey,
             processId: _process.id,
             proposals: _process.proposals,
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _voterNameController,
-                  decoration: InputDecoration(
-                    hintText: localizations.processVoterName,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: _submitVote,
-                child: Text(localizations.processSubmitVote),
-              ),
-            ],
+            onVoteSubmitted: () {
+              _reloadProcessData();
+            },
           ),
         ],
       ),
@@ -140,15 +75,12 @@ class VotingScreenState extends State<VotingScreen> {
 
   @override
   void dispose() {
-    _voterNameController.dispose();
     super.dispose();
-    _startTimer();
   }
 
   void _startTimer() {
-    final endTimeDate = DateTime.parse(_endTime);
     final currentTime = DateTime.now();
-    final timeLeft = endTimeDate.difference(currentTime);
+    final timeLeft = _endTime.difference(currentTime);
 
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

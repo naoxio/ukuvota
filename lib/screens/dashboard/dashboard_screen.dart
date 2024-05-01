@@ -1,3 +1,8 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
@@ -146,10 +151,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: ProcessInfo(
-                            process: process,
-                            showSharePart: false,
-                            skipCompleted: skipCompleted,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ProcessInfo(
+                                process: process,
+                                showSharePart: false,
+                                skipCompleted: skipCompleted,
+                              ),
+                            ],
                           ),
                         ),
                       ),
