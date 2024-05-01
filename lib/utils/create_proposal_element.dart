@@ -54,7 +54,6 @@ Widget createProposalElement(
       }).then((_) {
         toggleEditMode();
       }).catchError((error) {
-        print('Error updating proposal: $error');
         // Handle the error, e.g., display an error message
       });
     } else {
@@ -90,8 +89,6 @@ Widget createProposalElement(
             descriptionController.document =
                 Document.fromJson(jsonDecode(updatedProposal.description));
           } catch (e) {
-            print(jsonData);
-            print('Error parsing proposal data: $e');
             // Handle the error, e.g., display an error message or use default values
           }
         }

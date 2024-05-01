@@ -4,7 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/models/proposal.dart';
@@ -69,16 +68,11 @@ class ProcessDataService {
 
   Future<Map<String, Process>> fetchProcessesByIds(
       List<String> processIds) async {
-    final DatabaseReference processRef =
-        FirebaseDatabase.instance.ref().child('process');
-    final DataSnapshot snapshot = await processRef.get();
-
     final processes = <String, Process>{};
+
     for (final processId in processIds) {
-      if (snapshot.child(processId).exists) {
-        final processData =
-            Map<String, dynamic>.from(snapshot.child(processId).value as Map);
-        final process = Process.fromMap(processData);
+      final process = await fetchProcessData(processId);
+      if (process != null) {
         processes[processId] = process;
       }
     }
@@ -94,7 +88,6 @@ class ProcessDataService {
     if (snapshot.exists) {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
-      print(processData);
 
       final String timezone = processData['timezone'] ?? 'UTC';
       final DateTime currentTime = DateTime.now();
@@ -111,7 +104,6 @@ class ProcessDataService {
       }
       if (proposalEndTime == null || currentTime.isBefore(proposalEndTime)) {
         if (!processData.containsKey('proposals')) {
-          debugPrint('No proposals found');
           return Process.fromMap(processData);
         }
 
@@ -145,7 +137,6 @@ class ProcessDataService {
       }
       return Process.fromMap(processData);
     } else {
-      debugPrint('Process not found');
       return null;
     }
   }

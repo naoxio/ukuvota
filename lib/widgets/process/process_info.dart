@@ -135,7 +135,9 @@ class ProcessInfo extends StatelessWidget {
           ),
         const SizedBox(height: 16),
         if (!skipCompleted)
-          Column(
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8.0,
             children: [
               if (process.proposalDates != null &&
                   process.proposalDates![0] > 0)
@@ -144,7 +146,6 @@ class ProcessInfo extends StatelessWidget {
                   phase: 'proposal',
                   dates: process.proposalDates!,
                 ),
-              const SizedBox(height: 8),
               ProcessTimeLabel(
                 timezone: timezone,
                 phase: 'voting',
@@ -152,12 +153,6 @@ class ProcessInfo extends StatelessWidget {
                 proposalsLength: proposalsLength,
               ),
             ],
-          ),
-        if (skipCompleted && process.votingDates.length == 2)
-          ProcessTimeLabel(
-            timezone: timezone,
-            phase: 'completed',
-            dates: process.votingDates,
           ),
         if (skipCompleted && process.votingDates.length == 2)
           ProcessTimeLabel(

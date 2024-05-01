@@ -31,9 +31,7 @@ String convertToHtml(String description) {
         );
         return converter.convert();
       }
-    } catch (e) {
-      print('Error converting description to HTML: $e');
-    }
+    } catch (e) {}
   }
   return '';
 }

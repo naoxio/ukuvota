@@ -4,7 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedProcessService {
@@ -29,12 +28,10 @@ class SharedProcessService {
   Future<List<String>> fetchUUIDs() async {
     final prefs = await SharedPreferences.getInstance();
     final uuidsString = prefs.getString(_uuidDataKey);
-    if (kDebugMode) {
-      print(jsonDecode(uuidsString!));
-    }
     if (uuidsString != null) {
       return List<String>.from(jsonDecode(uuidsString));
     }
+    print(uuidsString);
     return [];
   }
 
