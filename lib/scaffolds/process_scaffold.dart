@@ -20,8 +20,8 @@ class ProcessScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
             child: ConstrainedBox(

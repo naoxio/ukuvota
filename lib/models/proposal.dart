@@ -1,5 +1,10 @@
-// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
-// If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+/* 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+import 'dart:convert';
 
 class Proposal {
   final String id;
@@ -18,21 +23,23 @@ class Proposal {
 
   factory Proposal.fromJson(Map<String, dynamic> json) {
     return Proposal(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
+      id: json['id'].toString(),
+      title: json['title'].toString(),
+      description: json['description'].toString(),
       editing: json['editing'] ?? false,
-      total: json['total'],
+      total: json['total']?.toDouble(),
     );
   }
 
   factory Proposal.fromMap(Map<dynamic, dynamic> map) {
     return Proposal(
-      id: map['id'] ?? '',
-      title: map['title'] ?? '',
-      description: map['description'] ?? '',
+      id: map['id']?.toString() ?? '',
+      title: map['title']?.toString() ?? '',
+      description: map['description'] is Map
+          ? json.encode(map['description'])
+          : map['description']?.toString() ?? '',
       editing: map['editing'] ?? false,
-      total: map['total']?.toDouble(),
+      total: map['total'] is num ? map['total'].toDouble() : null,
     );
   }
 

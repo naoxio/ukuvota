@@ -48,13 +48,7 @@ class ProcessDataService {
       'votes': votes,
     };
 
-    List<dynamic> voters = [];
-    final dynamic votersData = processData['voters'];
-    if (votersData is List<dynamic>) {
-      voters = votersData;
-    } else if (votersData != null) {
-      voters = [votersData];
-    }
+    List<dynamic> voters = processData['voters'] ?? [];
     voters.add(newVoter);
 
     final Map<String, dynamic> proposalUpdates = {};
@@ -63,8 +57,9 @@ class ProcessDataService {
       final int voteValue = vote['vote'];
 
       final List<dynamic> proposals = processData['proposals'] ?? [];
-      final int proposalIndex = proposals.indexWhere((proposal) =>
-          (proposal as Map<dynamic, dynamic>)['id'] == proposalId);
+      final int proposalIndex = proposals.indexWhere(
+        (proposal) => (proposal as Map<dynamic, dynamic>)['id'] == proposalId,
+      );
 
       if (proposalIndex >= 0) {
         proposalUpdates['proposals/$proposalIndex/votes/$voterId'] = voteValue;
@@ -105,6 +100,8 @@ class ProcessDataService {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
 
+      print(processData);
+
       if (!processData.containsKey('description') &&
           processData.containsKey('descriptionId')) {
         final Reference descriptionRef = FirebaseStorage.instance
@@ -143,63 +140,110 @@ class ProcessDataService {
           debugPrint('No proposals found');
           return Process.fromMap(processData);
         }
-        final Map<String, dynamic> proposalsObj = {};
-        processData['proposals'].asMap().forEach((index, proposalData) {
-          final proposal = Map<String, dynamic>.from(proposalData);
-          final id = proposal['id'] ?? index.toString();
-          proposalsObj[id] = proposal;
-        });
 
-        await Future.wait(
-          proposalsObj.entries.map((MapEntry<String, dynamic> entry) async {
-            final String id = entry.key;
-            final Map<String, dynamic> proposal = entry.value;
-            if (proposal.containsKey('description')) {
-              final Reference proposalDescriptionRef =
-                  FirebaseStorage.instance.ref().child('proposals/$id.json');
-              await proposalDescriptionRef.putString(
-                json.encode({'description': proposal['description']}),
-              );
-              await processRef.child('proposals/$id/description').remove();
-            }
-          }),
-        );
+        final dynamic proposalsData = processData['proposals'];
+        final List<Proposal> updatedProposals = [];
 
-        final List<Proposal> updatedProposals = await Future.wait(
-          proposalsObj.entries.map((MapEntry<String, dynamic> entry) async {
-            final String index = entry.key;
-            final Map<String, dynamic> proposal =
-                Map<String, dynamic>.from(entry.value);
-            final String id = proposal['id'] ?? index;
-
-            if (id.isNotEmpty &&
-                id != '-1' &&
-                proposal.containsKey('description')) {
-              final Reference proposalDescriptionRef =
-                  FirebaseStorage.instance.ref().child('proposals/$id.json');
-              try {
-                final String downloadURL =
-                    await proposalDescriptionRef.getDownloadURL();
-                final http.Response response =
-                    await http.get(Uri.parse(downloadURL));
-                final Map<String, dynamic> descriptionData =
-                    json.decode(response.body);
-                if (descriptionData['description'] is String) {
-                  proposal['description'] = descriptionData['description'];
-                } else {
-                  proposal['description'] =
-                      json.encode(descriptionData['description']);
-                }
-              } catch (error) {
-                debugPrint(
-                    'Failed to fetch description from Firebase Storage: $error');
+        if (proposalsData is Map<String, dynamic>) {
+          await Future.wait(
+            proposalsData.entries.map((MapEntry<String, dynamic> entry) async {
+              final String id = entry.key;
+              final Map<String, dynamic> proposal = entry.value;
+              if (proposal.containsKey('description')) {
+                final Reference proposalDescriptionRef =
+                    FirebaseStorage.instance.ref().child('proposals/$id.json');
+                await proposalDescriptionRef.putString(
+                  json.encode({'description': proposal['description']}),
+                );
+                await processRef.child('proposals/$id/description').remove();
               }
-            }
-            proposal['id'] = id;
+            }),
+          );
 
-            return Proposal.fromMap(proposal);
-          }),
-        );
+          updatedProposals.addAll(
+            await Future.wait(
+              proposalsData.entries
+                  .map((MapEntry<String, dynamic> entry) async {
+                final String id = entry.key;
+                final Map<String, dynamic> proposal =
+                    Map<String, dynamic>.from(entry.value);
+
+                if (id.isNotEmpty &&
+                    id != '-1' &&
+                    proposal.containsKey('description')) {
+                  final Reference proposalDescriptionRef = FirebaseStorage
+                      .instance
+                      .ref()
+                      .child('proposals/$id.json');
+                  try {
+                    final String downloadURL =
+                        await proposalDescriptionRef.getDownloadURL();
+                    final http.Response response =
+                        await http.get(Uri.parse(downloadURL));
+                    final Map<String, dynamic> descriptionData =
+                        json.decode(response.body);
+                    if (descriptionData['description'] is String) {
+                      proposal['description'] = descriptionData['description'];
+                    } else {
+                      proposal['description'] =
+                          json.encode(descriptionData['description']);
+                    }
+                  } catch (error) {
+                    debugPrint(
+                        'Failed to fetch description from Firebase Storage: $error');
+                  }
+                }
+                proposal['id'] = id;
+
+                return Proposal.fromMap(proposal);
+              }),
+            ),
+          );
+        } else if (proposalsData is List<dynamic>) {
+          updatedProposals.addAll(
+            await Future.wait(
+              proposalsData
+                  .asMap()
+                  .entries
+                  .map((MapEntry<int, dynamic> entry) async {
+                final int index = entry.key;
+                final Map<String, dynamic> proposal =
+                    Map<String, dynamic>.from(entry.value);
+                final String id = proposal['id'] ?? index.toString();
+
+                if (id.isNotEmpty &&
+                    id != '-1' &&
+                    proposal.containsKey('description')) {
+                  final Reference proposalDescriptionRef = FirebaseStorage
+                      .instance
+                      .ref()
+                      .child('proposals/$id.json');
+                  try {
+                    final String downloadURL =
+                        await proposalDescriptionRef.getDownloadURL();
+                    final http.Response response =
+                        await http.get(Uri.parse(downloadURL));
+                    final Map<String, dynamic> descriptionData =
+                        json.decode(response.body);
+                    if (descriptionData['description'] is String) {
+                      proposal['description'] = descriptionData['description'];
+                    } else {
+                      proposal['description'] =
+                          json.encode(descriptionData['description']);
+                    }
+                  } catch (error) {
+                    debugPrint(
+                        'Failed to fetch description from Firebase Storage: $error');
+                  }
+                }
+                proposal['id'] = id;
+
+                return Proposal.fromMap(proposal);
+              }),
+            ),
+          );
+        }
+
         processData['proposals'] = updatedProposals;
       }
       return Process.fromMap(processData);

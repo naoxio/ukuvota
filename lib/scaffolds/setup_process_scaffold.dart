@@ -16,8 +16,8 @@ class SetupProcessScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: ConstrainedBox(
