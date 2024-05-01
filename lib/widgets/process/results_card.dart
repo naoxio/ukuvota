@@ -176,6 +176,7 @@ class ResultsCardState extends State<ResultsCard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 10),
           Text(
             '${localizations.processVoters} (${selectedVoters.length}/${allVoters.length}):',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

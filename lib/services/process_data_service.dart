@@ -31,6 +31,9 @@ class ProcessDataService {
 
   Future<void> submitVote(String processId, String voterName,
       List<Map<String, dynamic>> votes) async {
+    print(processId);
+    print(voterName);
+    print(votes);
     final DatabaseReference processRef =
         FirebaseDatabase.instance.ref().child('process/$processId');
     final DataSnapshot processSnapshot = await processRef.get();
@@ -99,9 +102,7 @@ class ProcessDataService {
     if (snapshot.exists) {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
-
       print(processData);
-
       if (!processData.containsKey('description') &&
           processData.containsKey('descriptionId')) {
         final Reference descriptionRef = FirebaseStorage.instance

@@ -6,11 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/process_scaffold.dart';
+import 'package:ukuvota/services/shared_process_service.dart';
 import 'package:ukuvota/widgets/process/results_card.dart';
 
 class ResultsScreen extends StatefulWidget {
   final Process process;
-
   const ResultsScreen({Key? key, required this.process}) : super(key: key);
 
   @override
@@ -19,9 +19,19 @@ class ResultsScreen extends StatefulWidget {
 
 class ResultsScreenState extends State<ResultsScreen> {
   @override
+  void initState() {
+    super.initState();
+    _saveProcessId();
+  }
+
+  Future<void> _saveProcessId() async {
+    final processId = widget.process.id;
+    await SharedProcessService().addUUID(processId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final process = widget.process;
-
     return ProcessScaffold(
       process: process,
       child: ResultsCard(process: process),

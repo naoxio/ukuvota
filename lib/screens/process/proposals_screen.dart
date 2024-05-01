@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/process_scaffold.dart';
+import 'package:ukuvota/services/shared_process_service.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
 
 class ProposalsScreen extends StatefulWidget {
@@ -19,6 +20,17 @@ class ProposalsScreen extends StatefulWidget {
 
 class ProposalsScreenState extends State<ProposalsScreen> {
   late String _endTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _saveProcessId();
+  }
+
+  Future<void> _saveProcessId() async {
+    final processId = widget.process.id;
+    await SharedProcessService().addUUID(processId);
+  }
 
   @override
   Widget build(BuildContext context) {

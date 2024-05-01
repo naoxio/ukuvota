@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/process_scaffold.dart';
+import 'package:ukuvota/services/shared_process_service.dart';
 
 class ProcessScreen extends StatefulWidget {
   final Process process;
@@ -22,10 +23,16 @@ class ProcessScreenState extends State<ProcessScreen> {
   Timer? _proposalTimer;
   Timer? _votingTimer;
 
+  Future<void> _saveProcessId() async {
+    final processId = widget.process.id;
+    await SharedProcessService().addUUID(processId);
+  }
+
   @override
   void initState() {
     super.initState();
     _setupTimers();
+    _saveProcessId();
   }
 
   @override
