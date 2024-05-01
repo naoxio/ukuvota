@@ -89,52 +89,34 @@ class ProcessDataService {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
 
-      final String timezone = processData['timezone'] ?? 'UTC';
-      final DateTime currentTime = DateTime.now();
+      final dynamic proposalsData = processData['proposals'];
+      final List<Proposal> updatedProposals = [];
 
-      final DateTime? proposalEndTime;
-      if (processData['proposalDates'] is List) {
-        proposalEndTime = tz.TZDateTime.from(
-          DateTime.fromMillisecondsSinceEpoch(
-              processData['proposalDates'][1] as int),
-          tz.getLocation(timezone),
-        ).toUtc();
-      } else {
-        proposalEndTime = null;
+      if (proposalsData is Map<String, dynamic>) {
+        updatedProposals.addAll(
+          proposalsData.entries.map((MapEntry<String, dynamic> entry) {
+            final String id = entry.key;
+            final Map<String, dynamic> proposal =
+                Map<String, dynamic>.from(entry.value);
+            proposal['id'] = id;
+            return Proposal.fromMap(proposal);
+          }),
+        );
+      } else if (proposalsData is List<dynamic>) {
+        updatedProposals.addAll(
+          proposalsData.asMap().entries.map((MapEntry<int, dynamic> entry) {
+            final int index = entry.key;
+            final Map<String, dynamic> proposal =
+                Map<String, dynamic>.from(entry.value);
+            final String id = proposal['id'] ?? index.toString();
+            proposal['id'] = id;
+            return Proposal.fromMap(proposal);
+          }),
+        );
       }
-      if (proposalEndTime == null || currentTime.isBefore(proposalEndTime)) {
-        if (!processData.containsKey('proposals')) {
-          return Process.fromMap(processData);
-        }
 
-        final dynamic proposalsData = processData['proposals'];
-        final List<Proposal> updatedProposals = [];
+      processData['proposals'] = updatedProposals;
 
-        if (proposalsData is Map<String, dynamic>) {
-          updatedProposals.addAll(
-            proposalsData.entries.map((MapEntry<String, dynamic> entry) {
-              final String id = entry.key;
-              final Map<String, dynamic> proposal =
-                  Map<String, dynamic>.from(entry.value);
-              proposal['id'] = id;
-              return Proposal.fromMap(proposal);
-            }),
-          );
-        } else if (proposalsData is List<dynamic>) {
-          updatedProposals.addAll(
-            proposalsData.asMap().entries.map((MapEntry<int, dynamic> entry) {
-              final int index = entry.key;
-              final Map<String, dynamic> proposal =
-                  Map<String, dynamic>.from(entry.value);
-              final String id = proposal['id'] ?? index.toString();
-              proposal['id'] = id;
-              return Proposal.fromMap(proposal);
-            }),
-          );
-        }
-
-        processData['proposals'] = updatedProposals;
-      }
       return Process.fromMap(processData);
     } else {
       return null;

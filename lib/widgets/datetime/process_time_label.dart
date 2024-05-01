@@ -70,13 +70,23 @@ class ProcessTimeLabel extends StatelessWidget {
   }
 
   Widget _buildActivePhase(
-      AppLocalizations localizations, List<int> dates, String timezone) {
-    return Row(
-      children: [
-        Countdown(dates: dates, type: 'warning', timezone: timezone),
-        Text(' (${localizations.remainingTime})'),
-      ],
-    );
+    AppLocalizations localizations,
+    List<int> dates,
+    String timezone,
+  ) {
+    if (phase == 'voting' && proposalsLength == 0) {
+      return Text(
+        localizations.skipped,
+        style: const TextStyle(color: Colors.orange),
+      );
+    } else {
+      return Row(
+        children: [
+          Countdown(dates: dates, type: 'warning', timezone: timezone),
+          Text(' (${localizations.remainingTime})'),
+        ],
+      );
+    }
   }
 
   Widget _buildPhaseEnded(AppLocalizations localizations) {

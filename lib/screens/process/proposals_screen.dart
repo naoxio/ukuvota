@@ -39,7 +39,6 @@ class ProposalsScreenState extends State<ProposalsScreen> {
   @override
   Widget build(BuildContext context) {
     final process = widget.process;
-
     return ProcessScaffold(
       process: process,
       child: Column(
@@ -64,15 +63,13 @@ class ProposalsScreenState extends State<ProposalsScreen> {
   void _startTimer() {
     final currentTime = DateTime.now();
     final timeLeft = _endTime.difference(currentTime);
+
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/process/${widget.process.id}/results');
+        context.go('/process/${widget.process.id}/voting');
       });
     } else {
-      Future.delayed(
-        timeLeft.inMilliseconds > 1000 ? const Duration(seconds: 1) : timeLeft,
-        _startTimer,
-      );
+      Future.delayed(timeLeft, _startTimer);
     }
   }
 }

@@ -89,10 +89,14 @@ class ProcessInfo extends StatelessWidget {
     final weightLabel =
         process.weighting != null ? weightingOptions[process.weighting] : null;
     final timezone = process.timezone ?? 'UTC';
-    final description = process.description ?? '';
 
     final proposalsLength = process.proposals?.length ?? 0;
 
+    final descriptionContent = process.description != null
+        ? (process.description is String
+            ? process.description
+            : (process.description as List<dynamic>).join('\n'))
+        : '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,9 +110,14 @@ class ProcessInfo extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
-              HtmlWidget(convertToHtml(description)),
-              const SizedBox(height: 16),
+              if (process.description != null)
+                Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    HtmlWidget(convertToHtml(descriptionContent!)),
+                    const SizedBox(height: 8),
+                  ],
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -135,9 +144,8 @@ class ProcessInfo extends StatelessWidget {
           ),
         const SizedBox(height: 16),
         if (!skipCompleted)
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            runSpacing: 8.0,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (process.proposalDates != null &&
                   process.proposalDates![0] > 0)
@@ -146,6 +154,10 @@ class ProcessInfo extends StatelessWidget {
                   phase: 'proposal',
                   dates: process.proposalDates!,
                 ),
+              if (process.proposalDates != null &&
+                  process.proposalDates![0] > 0)
+                const SizedBox(
+                    height: 16), // Add space between proposal and voting phases
               ProcessTimeLabel(
                 timezone: timezone,
                 phase: 'voting',

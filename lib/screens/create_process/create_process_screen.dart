@@ -4,6 +4,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -197,7 +199,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   Future<void> _saveProcessData(String mode) async {
     final newProcessData = {
       'title': _titleController.text,
-      'content': _controller.document.toDelta().toJson(),
+      'content': jsonEncode(_controller.document.toDelta().toJson()),
       'weighting': _selectedWeighting,
       'mode': mode,
     };

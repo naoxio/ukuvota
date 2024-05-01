@@ -40,7 +40,9 @@ Widget createProposalElement(
   void saveProposal() {
     proposal.title = titleController.text;
     proposal.description =
-        jsonEncode(descriptionController.document.toDelta().toJson());
+        descriptionController.document.toDelta().toJson() != null
+            ? jsonEncode(descriptionController.document.toDelta().toJson())
+            : '';
     if (onUpdate != null) {
       onUpdate(proposal);
     }
@@ -54,7 +56,7 @@ Widget createProposalElement(
       }).then((_) {
         toggleEditMode();
       }).catchError((error) {
-        // Handle the error, e.g., display an error message
+        print('Error updating proposal: $error');
       });
     } else {
       toggleEditMode();

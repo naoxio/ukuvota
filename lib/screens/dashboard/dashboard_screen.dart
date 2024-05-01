@@ -35,6 +35,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               constraints: const BoxConstraints(maxWidth: 800),
               child: Column(
                 children: [
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/create');
+                    },
+                    child: Text(localizations.startNewProcess),
+                  ),
                   const SizedBox(height: 10),
                   FutureBuilder<List<String>>(
                     future: SharedProcessService().fetchUUIDs(),
@@ -56,6 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           for (final process in processes.values) {
                             DateTime? votingEndTime;
                             DateTime? proposalEndTime;
+                            final votingStartTime =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    process.votingDates[0]);
 
                             if (process.votingDates.length == 2) {
                               votingEndTime =
@@ -69,12 +79,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   DateTime.fromMillisecondsSinceEpoch(
                                       process.proposalDates![1]);
                             }
-
-                            if (votingEndTime != null &&
-                                votingEndTime.isAfter(now)) {
-                              currentlyInProgress.add(process);
-                            } else if (proposalEndTime != null &&
+                            final proposalsLength =
+                                process.proposals?.length ?? 0;
+                            if (proposalEndTime != null &&
                                 proposalEndTime.isAfter(now)) {
+                              currentlyInProgress.add(process);
+                            } else if (votingStartTime.isBefore(now) &&
+                                proposalsLength == 0) {
+                              completedProcesses.add(process);
+                            } else if (votingEndTime != null &&
+                                votingEndTime.isAfter(now)) {
                               currentlyInProgress.add(process);
                             } else {
                               completedProcesses.add(process);
@@ -99,13 +113,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                       );
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/create');
-                    },
-                    child: Text(localizations.startNewProcess),
                   ),
                 ],
               ),
@@ -134,9 +141,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 400,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              maxCrossAxisExtent: 300,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
             ),
             itemCount: processes.length,
             itemBuilder: (context, index) {
@@ -151,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Stack(
                     children: [
                       SizedBox(
-                        height: 200,
+                        height: 240,
                         child: Card(
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),

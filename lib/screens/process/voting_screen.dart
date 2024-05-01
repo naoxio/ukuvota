@@ -87,10 +87,7 @@ class VotingScreenState extends State<VotingScreen> {
         context.go('/process/${_process.id}/results');
       });
     } else {
-      Future.delayed(
-        timeLeft.inMilliseconds > 1000 ? const Duration(seconds: 1) : timeLeft,
-        _startTimer,
-      );
+      Future.delayed(timeLeft, _startTimer);
     }
   }
 }

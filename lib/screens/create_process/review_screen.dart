@@ -55,7 +55,8 @@ class ReviewScreenState extends State<ReviewScreen> {
     if (processData != null) {
       setState(() {
         _title = processData['title'];
-        _descriptionContent = processData['descriptionContent'];
+
+        _descriptionContent = processData['content'];
         _timezone = processData['timezone'] ?? tz.local.name;
         _weighting = processData['weighting'];
 
@@ -134,7 +135,6 @@ class ReviewScreenState extends State<ReviewScreen> {
           _votingOnlyEndDate?.millisecondsSinceEpoch
         ];
       }
-
       await _processDataService.createProcess(processId, processData);
       await _sharedSetupService.clearProcessData();
 
@@ -171,21 +171,12 @@ class ReviewScreenState extends State<ReviewScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(_title!),
-                const SizedBox(height: 16),
                 if (_descriptionContent != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localizations.processTopic,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(_title!),
-                      const SizedBox(height: 16),
-                      HtmlWidget(convertToHtml(_descriptionContent!)),
-                    ],
-                  ),
+                  Column(children: [
+                    const SizedBox(height: 8),
+                    HtmlWidget(convertToHtml(_descriptionContent!)),
+                    const SizedBox(height: 8),
+                  ]),
               ],
             ),
           const SizedBox(height: 24),
