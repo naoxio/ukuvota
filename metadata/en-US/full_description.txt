@@ -1,0 +1,3 @@
+Weighted Score Voting is a system that allows voters to express their preferences with precision, giving negative votes more weight than positive ones. It also features effortless sharing, consensus-driven approach, user-friendly interface, and transparent results to ensure widespread participation, collaboration, and trust in the decision-making process.
+
+
