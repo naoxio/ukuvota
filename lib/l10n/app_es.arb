@@ -135,7 +135,12 @@
   "hintMinTwoProposals": "Se requieren al menos dos propuestas para continuar.",
   "hintProposalsNotEmpty": "Las propuestas no pueden estar vacías. Proporciona un título o descripción para cada propuesta.",
   "linkCopied": "Enlace copiado al portapapeles",
-  "phaseCompleted": "Completado"
+  "phaseCompleted": "Completado",
+  "currentlyInProgress": "Actualmente en progreso",
+  "noProcessesInProgress": "No hay procesos actualmente en progreso.",
+  "completedProcesses": "Procesos completados",
+  "completedProcessesEmptyMessage": "Los procesos completados aparecerán aquí.",
+  "startNewProcess": "Iniciar un nuevo proceso"
 
 
 }

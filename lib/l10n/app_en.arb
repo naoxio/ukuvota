@@ -133,7 +133,12 @@
   "hintMinTwoProposals": "A minimum of two proposals are required to continue.",
   "hintProposalsNotEmpty": "Proposals cannot be empty. Please provide a title or description for each proposal.",
   "linkCopied": "Link copied to clipboard",
-  "phaseCompleted": "Completed"
+  "phaseCompleted": "Completed",
+  "currentlyInProgress": "Currently In Progress",
+  "noProcessesInProgress": "No processes currently in progress.",
+  "completedProcesses": "Completed Processes",
+  "completedProcessesEmptyMessage": "Completed processes will appear here.",
+  "startNewProcess": "Start a New Process"
 
 
 }

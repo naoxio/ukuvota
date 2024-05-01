@@ -33,8 +33,6 @@ class ProposalsScreenState extends State<ProposalsScreen> {
 
   Future<void> _saveProcessId() async {
     final processId = widget.process.id;
-    print('i want to save');
-    print(processId);
     await SharedProcessService().addUUID(processId);
   }
 

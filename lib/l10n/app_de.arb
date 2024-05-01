@@ -134,7 +134,12 @@
   "hintMinTwoProposals": "Es sind mindestens zwei Vorschläge erforderlich, um fortzufahren.",
   "hintProposalsNotEmpty": "Vorschläge dürfen nicht leer sein. Bitte gib für jeden Vorschlag einen Titel oder eine Beschreibung an.",
   "linkCopied": "Link in die Zwischenablage kopiert",
-  "phaseCompleted": "Abgeschlossen"
+  "phaseCompleted": "Abgeschlossen",
+  "currentlyInProgress": "Aktuell in Bearbeitung",
+  "noProcessesInProgress": "Derzeit sind keine Prozesse in Bearbeitung.",
+  "completedProcesses": "Abgeschlossene Prozesse",
+  "completedProcessesEmptyMessage": "Abgeschlossene Prozesse werden hier angezeigt.",
+  "startNewProcess": "Neuen Prozess starten"
 
 
 }

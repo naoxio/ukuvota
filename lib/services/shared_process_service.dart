@@ -31,7 +31,6 @@ class SharedProcessService {
     if (uuidsString != null) {
       return List<String>.from(jsonDecode(uuidsString));
     }
-    print(uuidsString);
     return [];
   }
 

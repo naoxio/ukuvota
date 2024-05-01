@@ -10,6 +10,7 @@ import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/services/shared_process_service.dart';
 import 'package:ukuvota/widgets/process/process_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -23,6 +24,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -81,15 +84,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           return Column(
                             children: [
                               _buildSection(
-                                'Currently In Progress',
+                                localizations.currentlyInProgress,
                                 currentlyInProgress,
                                 emptyMessage:
-                                    'No processes currently in progress.',
+                                    localizations.noProcessesInProgress,
                               ),
-                              _buildSection(
-                                  'Completed Processes', completedProcesses,
-                                  emptyMessage:
-                                      'Completed processes will appear here.',
+                              _buildSection(localizations.completedProcesses,
+                                  completedProcesses,
+                                  emptyMessage: localizations
+                                      .completedProcessesEmptyMessage,
                                   skipCompleted: true),
                             ],
                           );
@@ -102,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onPressed: () {
                       context.go('/create');
                     },
-                    child: const Text('Start a New Process'),
+                    child: Text(localizations.startNewProcess),
                   ),
                 ],
               ),

@@ -13,11 +13,8 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final isSmallScreen = MediaQuery.of(context).size.width < 600;
-
     return Scaffold(
       appBar: const CustomAppBar(),
-      // drawer: isSmallScreen ? const CustomDrawer() : null,
       body: body,
     );
   }
