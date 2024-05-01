@@ -1,0 +1,95 @@
+name: Android Build Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+env:
+  FLUTTER_VERSION: '3.16.5'
+  IS_PRERELEASE: ${{ startsWith(github.ref, 'refs/tags/') && 'false' || 'true' }}
+  RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'latest' }}
+
+jobs:
+  cancel:
+    name: Cancel Previous Runs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+        
+  android:
+    needs: cancel
+    name: Build APK
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_KEY_ALIAS: ${{ secrets.FLUTTER_KEY_ALIAS }}
+      FLUTTER_KEY_PASSWORD: ${{ secrets.FLUTTER_KEY_PASSWORD }}
+      FLUTTER_STORE_PASSWORD: ${{ secrets.FLUTTER_STORE_PASSWORD }}
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive 
+        
+    - name: Cache Flutter SDK and dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.pub-cache
+          ~/.flutter
+        key: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
+            
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+
+    - name: Decode Keystore
+      run: echo "${{ secrets.FLUTTER_STORE_FILE }}" | base64 -d > android/app/release-key.jks
+      
+    - name: Install Dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: |
+        flutter build apk --release
+       
+    - name: Rename APK
+      run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota.apk
+
+    - name: Upload APKs as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk-artifacts
+        path: |
+          build/app/outputs/flutter-apk/Ukuvota.apk
+
+  release:
+    name: Release Builds
+    needs: android
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+  
+    - name: Download APK Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: apk-artifacts
+        path: build/app/outputs/flutter-apk/
+    
+    - name: Create Release and Upload Builds
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ env.RELEASE_TAG }}"
+        prerelease: "${{ env.IS_PRERELEASE }}"
+        title: "${{ env.RELEASE_TAG }}"
+        files: |
+          build/app/outputs/flutter-apk/Ukuvota.apk
