@@ -8,6 +8,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:ukuvota/models/proposal.dart';
+import 'package:ukuvota/utils/proposal_utils.dart';
 
 class VotingProposalCard extends StatefulWidget {
   final Proposal proposal;
@@ -60,43 +65,58 @@ class VotingProposalCardState extends State<VotingProposalCard> {
             const SizedBox(height: 8),
             HtmlWidget(convertToHtml(widget.proposal.description)),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
               children: List.generate(
                 7,
-                (index) => IconButton(
-                  icon: ColorFiltered(
-                    colorFilter: widget.selectedVote == index - 3
-                        ? const ColorFilter.mode(
-                            Colors.transparent,
-                            BlendMode.color,
-                          )
-                        : const ColorFilter.matrix(<double>[
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0.2126,
-                            0.7152,
-                            0.0722,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            1,
-                            0,
-                          ]),
-                    child: SvgPicture.asset('emojis/${_emojiNames[index]}.svg'),
-                  ),
-                  onPressed: () => _updateSelectedVote(index - 3),
-                ),
+                (index) {
+                  // Use the fallback Text directly
+                  return IconButton(
+                    icon: ColorFiltered(
+                      colorFilter: widget.selectedVote == index - 3
+                          ? const ColorFilter.mode(
+                              Colors.transparent,
+                              BlendMode.color,
+                            )
+                          : const ColorFilter.matrix(<double>[
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0.2126,
+                              0.7152,
+                              0.0722,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                              1,
+                              0,
+                            ]),
+                      child: SvgPicture.asset(
+                        'emojis/${_emojiNames[index]}.svg',
+                        width: 24,
+                        height: 24,
+                        placeholderBuilder: (BuildContext context) => Text(
+                          _emojiNames[index],
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                    onPressed: () => _updateSelectedVote(index - 3),
+                  );
+                },
               ),
             ),
           ],
