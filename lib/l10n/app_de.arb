@@ -80,6 +80,8 @@
   "buttonDone": "fertig",
   "buttonDelete": "Löschen",
   "buttonUpdate": "Update",
+  "buttonClose": "Schließen",
+
   "loading": "Laden",
   "calendar": "Kalender",
   "slider": "Schieberegler",
@@ -131,6 +133,8 @@
   "continueExisting": "Vorhandenes fortsetzen",
   "hintMinTwoProposals": "Es sind mindestens zwei Vorschläge erforderlich, um fortzufahren.",
   "hintProposalsNotEmpty": "Vorschläge dürfen nicht leer sein. Bitte gib für jeden Vorschlag einen Titel oder eine Beschreibung an.",
-  "linkCopied": "Link in die Zwischenablage kopiert"
+  "linkCopied": "Link in die Zwischenablage kopiert",
+  "phaseCompleted": "Abgeschlossen"
+
 
 }

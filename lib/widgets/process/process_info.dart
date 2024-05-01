@@ -12,15 +12,20 @@ import 'package:qr_flutter/qr_flutter.dart';
 class ProcessInfo extends StatelessWidget {
   final Process process;
   final bool showSharePart;
+  final bool skipCompleted;
 
-  const ProcessInfo(
-      {Key? key, required this.process, this.showSharePart = true})
-      : super(key: key);
-
+  const ProcessInfo({
+    Key? key,
+    required this.process,
+    this.showSharePart = true,
+    this.skipCompleted = false,
+  }) : super(key: key);
   void _showModal(BuildContext context, String title, Widget content) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final localizations = AppLocalizations.of(context)!;
+
         return AlertDialog(
           title: Text(title),
           content: content,
@@ -29,7 +34,7 @@ class ProcessInfo extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Close'),
+              child: Text(localizations.buttonClose),
             ),
           ],
         );
@@ -113,19 +118,28 @@ class ProcessInfo extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        if (process.proposalDates != null && process.proposalDates![0] > 0)
+        if (!skipCompleted &&
+            process.proposalDates != null &&
+            process.proposalDates![0] > 0)
           ProcessTimeLabel(
             timezone: timezone,
             phase: 'proposal',
             dates: process.proposalDates!,
           ),
-        const SizedBox(height: 8),
-        ProcessTimeLabel(
-          timezone: timezone,
-          phase: 'voting',
-          dates: process.votingDates,
-          proposalsLength: proposalsLength,
-        ),
+        if (!skipCompleted) const SizedBox(height: 8),
+        if (!skipCompleted)
+          ProcessTimeLabel(
+            timezone: timezone,
+            phase: 'voting',
+            dates: process.votingDates,
+            proposalsLength: proposalsLength,
+          ),
+        if (skipCompleted && process.votingDates.length == 2)
+          ProcessTimeLabel(
+            timezone: timezone,
+            phase: 'completed',
+            dates: process.votingDates,
+          ),
         const SizedBox(height: 16),
         if (showSharePart)
           Column(

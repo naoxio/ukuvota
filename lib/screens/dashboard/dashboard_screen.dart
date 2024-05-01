@@ -82,11 +82,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     'No processes currently in progress.',
                               ),
                               _buildSection(
-                                'Completed Processes',
-                                completedProcesses,
-                                emptyMessage:
-                                    'Completed processes will appear here.',
-                              ),
+                                  'Completed Processes', completedProcesses,
+                                  emptyMessage:
+                                      'Completed processes will appear here.',
+                                  skipCompleted: true),
                             ],
                           );
                         },
@@ -110,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildSection(String title, List<Process> processes,
-      {String emptyMessage = ''}) {
+      {String emptyMessage = '', bool skipCompleted = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -150,6 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: ProcessInfo(
                             process: process,
                             showSharePart: false,
+                            skipCompleted: skipCompleted,
                           ),
                         ),
                       ),

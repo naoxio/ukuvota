@@ -19,8 +19,11 @@ class SharedProcessService {
     } else {
       uuids = [];
     }
-    uuids.add(uuid);
-    await prefs.setString(_uuidDataKey, jsonEncode(uuids));
+
+    if (!uuids.contains(uuid)) {
+      uuids.add(uuid);
+      await prefs.setString(_uuidDataKey, jsonEncode(uuids));
+    }
   }
 
   Future<List<String>> fetchUUIDs() async {

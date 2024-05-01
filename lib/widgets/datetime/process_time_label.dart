@@ -21,13 +21,25 @@ class ProcessTimeLabel extends StatelessWidget {
     required this.timezone,
     this.proposalsLength = 0,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final startDate = DateTime.fromMillisecondsSinceEpoch(dates[0]);
     final endDate = DateTime.fromMillisecondsSinceEpoch(dates[1]);
     final now = DateTime.now();
+
+    if (phase == 'completed') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${localizations.phaseCompleted}: ${DateFormat('MMMM d, yyyy h:mm a').format(endDate)}',
+            style: const TextStyle(color: Colors.blue),
+          ),
+        ],
+      );
+    }
+
     final label = phase == 'voting'
         ? localizations.phasesVotingTitle
         : localizations.phasesProposalTitle;

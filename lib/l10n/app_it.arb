@@ -80,6 +80,8 @@
   "buttonDone": "fatto",
   "buttonDelete": "Elimina",
   "buttonUpdate": "Aggiornare",
+  "buttonClose": "Chiudi",
+
   "loading": "Caricamento",
   "calendar": "Calendario",
   "slider": "Dispositivo di scorrimento",
@@ -131,6 +133,8 @@
   "continueExisting": "Continua Esistente",
   "hintMinTwoProposals": "Sono necessarie almeno due proposte per continuare.",
   "hintProposalsNotEmpty": "Le proposte non possono essere vuote. Fornisci un titolo o una descrizione per ogni proposta.",
-  "linkCopied": "Link copiato negli appunti"
+  "linkCopied": "Link copiato negli appunti",
+  "phaseCompleted": "Completato"
+
 
 }
