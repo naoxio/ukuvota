@@ -38,8 +38,23 @@
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <style>
+    .indeterminate::before {
+      background-color: rgba(255, 164, 141, 0.7) !important; /* Slightly darker */
+    }
+    .indeterminate {
+      background-color: rgba(255, 181, 160, 0.7) !important; /* Base color */
+    }
+    .indeterminate::after {
+      background-color: rgba(255, 169, 143, 0.7) !important; /* Slightly lighter */
+    }
+  </style>
+  
+  
 </head>
-<body>
+<body style="background-color: #201A1A">
+
+
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
