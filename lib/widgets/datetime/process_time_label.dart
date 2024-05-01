@@ -29,10 +29,6 @@ class ProcessTimeLabel extends StatelessWidget {
     final now = DateTime.now();
     final DateFormat formatter = DateFormat('MMMM d, yyyy h:mm a');
 
-    print(this.phase);
-    print(startDate);
-    print(endDate);
-    print(now);
     if (phase == 'completed') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

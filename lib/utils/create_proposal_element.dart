@@ -1,9 +1,10 @@
-/*
+/* 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -16,8 +17,11 @@ Widget createProposalElement(
   Proposal proposal,
   AppLocalizations localizations,
   bool isSetup, {
+  required bool isEditing,
   VoidCallback? onDelete,
   Function(Proposal)? onUpdate,
+  VoidCallback? onToggleEditing,
+  String? processId,
 }) {
   final titleController = TextEditingController(text: proposal.title);
   final descriptionController = QuillController(
@@ -27,10 +31,9 @@ Widget createProposalElement(
     selection: const TextSelection.collapsed(offset: 0),
   );
 
-  void toggleEditMode(bool editing) {
-    proposal.editing = editing;
-    if (onUpdate != null) {
-      onUpdate(proposal);
+  void toggleEditMode() {
+    if (onToggleEditing != null) {
+      onToggleEditing();
     }
   }
 
@@ -38,20 +41,69 @@ Widget createProposalElement(
     proposal.title = titleController.text;
     proposal.description =
         jsonEncode(descriptionController.document.toDelta().toJson());
-    toggleEditMode(false);
+    if (onUpdate != null) {
+      onUpdate(proposal);
+    }
+    if (!isSetup && processId != null) {
+      final proposalRef = FirebaseDatabase.instance
+          .ref()
+          .child('process/$processId/proposals/${proposal.id}');
+      proposalRef.update({
+        'title': proposal.title,
+        'description': proposal.description,
+      }).then((_) {
+        toggleEditMode();
+      }).catchError((error) {
+        print('Error updating proposal: $error');
+        // Handle the error, e.g., display an error message
+      });
+    } else {
+      toggleEditMode();
+    }
   }
 
   void deleteProposal() {
     if (onDelete != null) {
       onDelete();
     }
+    if (!isSetup && processId != null) {
+      final proposalRef = FirebaseDatabase.instance
+          .ref()
+          .child('process/$processId/proposals/${proposal.id}');
+      proposalRef.remove();
+    }
+  }
+
+  if (!isSetup && processId != null) {
+    final proposalRef = FirebaseDatabase.instance
+        .ref()
+        .child('process/$processId/proposals/${proposal.id}');
+    proposalRef.onValue.listen((event) {
+      final snapshot = event.snapshot;
+      if (snapshot.exists) {
+        final data = snapshot.value;
+        if (data is Map<dynamic, dynamic>) {
+          final jsonData = Map<String, dynamic>.from(data);
+          try {
+            final updatedProposal = Proposal.fromJson(jsonData);
+            titleController.text = updatedProposal.title;
+            descriptionController.document =
+                Document.fromJson(jsonDecode(updatedProposal.description));
+          } catch (e) {
+            print(jsonData);
+            print('Error parsing proposal data: $e');
+            // Handle the error, e.g., display an error message or use default values
+          }
+        }
+      }
+    });
   }
 
   return Card(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!proposal.editing)
+        if (!isEditing)
           ListTile(
             title: Text(proposal.title),
             subtitle: HtmlWidget(convertToHtml(proposal.description)),
@@ -60,7 +112,7 @@ Widget createProposalElement(
               children: [
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () => toggleEditMode(true),
+                  onPressed: toggleEditMode,
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),
@@ -92,7 +144,7 @@ Widget createProposalElement(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () => toggleEditMode(false),
+                      onPressed: toggleEditMode,
                       child: Text(localizations.buttonCancel),
                     ),
                     ElevatedButton(

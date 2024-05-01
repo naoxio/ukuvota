@@ -18,13 +18,16 @@ class ProcessInfo extends StatelessWidget {
   final Process process;
   final bool showSharePart;
   final bool skipCompleted;
+  final bool quickView;
 
   const ProcessInfo({
     Key? key,
     required this.process,
     this.showSharePart = true,
     this.skipCompleted = false,
+    this.quickView = false,
   }) : super(key: key);
+
   void _showModal(BuildContext context, String title, Widget content) {
     showDialog(
       context: context,
@@ -99,31 +102,37 @@ class ProcessInfo extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
-        const SizedBox(height: 16),
-        HtmlWidget(convertToHtml(description)),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(localizations.processWeighting),
-            const SizedBox(width: 8),
-            Text(weightLabel ?? ''),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.info),
-              onPressed: () {
-                _showModal(
-                  context,
-                  localizations.processWeighting,
-                  MarkdownLoader(
-                    localeName: localizations.localeName,
-                    fileName: 'NegativeScoreWeighting',
+        if (!quickView)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              HtmlWidget(convertToHtml(description)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(localizations.processWeighting),
+                  const SizedBox(width: 8),
+                  Text(weightLabel ?? ''),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.info),
+                    onPressed: () {
+                      _showModal(
+                        context,
+                        localizations.processWeighting,
+                        MarkdownLoader(
+                          localeName: localizations.localeName,
+                          fileName: 'NegativeScoreWeighting',
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ],
-        ),
+                ],
+              ),
+            ],
+          ),
         const SizedBox(height: 16),
         if (!skipCompleted)
           Column(

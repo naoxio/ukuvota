@@ -132,7 +132,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.5,
+              childAspectRatio: 1.8,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -156,10 +156,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ProcessInfo(
-                                process: process,
-                                showSharePart: false,
-                                skipCompleted: skipCompleted,
-                              ),
+                                  process: process,
+                                  showSharePart: false,
+                                  skipCompleted: skipCompleted,
+                                  quickView: true),
                             ],
                           ),
                         ),
