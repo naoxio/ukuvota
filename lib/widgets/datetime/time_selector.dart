@@ -103,33 +103,47 @@ class TimeSelectorState extends State<TimeSelector> {
     _duration = _endDate.difference(_startDate).inMinutes;
   }
 
+  List<Widget> _buildDatetimePickers() {
+    return [
+      DatetimePicker(
+        index: 0,
+        date: _startDate,
+        min: widget.startMinDate,
+        id: 'start-date-picker-${widget.phase}',
+        onChanged: _onStartDateChanged,
+        selectedTimeZone: widget.selectedTimeZone,
+      ),
+      DatetimePicker(
+        index: 1,
+        date: _endDate,
+        min: _startDate,
+        id: 'end-date-picker-${widget.phase}',
+        onChanged: _onEndDateChanged,
+        selectedTimeZone: widget.selectedTimeZone,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    const double pickerWidth = 240.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            DatetimePicker(
-              index: 0,
-              date: _startDate,
-              min: widget.startMinDate,
-              id: 'start-date-picker-${widget.phase}',
-              onChanged: _onStartDateChanged,
-              selectedTimeZone: widget.selectedTimeZone,
-            ),
-            DatetimePicker(
-              index: 1,
-              date: _endDate,
-              min: _startDate,
-              id: 'end-date-picker-${widget.phase}',
-              onChanged: _onEndDateChanged,
-              selectedTimeZone: widget.selectedTimeZone,
-            ),
-          ],
-        ),
+        if (screenWidth < pickerWidth * 2)
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            runSpacing: 16,
+            children: _buildDatetimePickers(),
+          )
+        else
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _buildDatetimePickers(),
+          ),
         const SizedBox(height: 16),
         DatetimeSlider(
           durationInMinutes: _duration,

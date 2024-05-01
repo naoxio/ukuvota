@@ -26,7 +26,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
   final SharedSetupService _sharedSetupService = SharedSetupService();
-  String _selectedWeighting = '1';
+  String _selectedWeighting = '3';
 
   @override
   void initState() {

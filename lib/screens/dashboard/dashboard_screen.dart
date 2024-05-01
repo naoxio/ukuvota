@@ -133,9 +133,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.8,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 400,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -151,19 +150,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   },
                   child: Stack(
                     children: [
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ProcessInfo(
-                                  process: process,
-                                  showSharePart: false,
-                                  skipCompleted: skipCompleted,
-                                  quickView: true),
-                            ],
+                      SizedBox(
+                        height: 200,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ProcessInfo(
+                                    process: process,
+                                    showSharePart: false,
+                                    skipCompleted: skipCompleted,
+                                    quickView: true),
+                              ],
+                            ),
                           ),
                         ),
                       ),
