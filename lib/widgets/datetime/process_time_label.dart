@@ -27,7 +27,12 @@ class ProcessTimeLabel extends StatelessWidget {
     final startDate = DateTime.fromMillisecondsSinceEpoch(dates[0]);
     final endDate = DateTime.fromMillisecondsSinceEpoch(dates[1]);
     final now = DateTime.now();
+    final DateFormat formatter = DateFormat('MMMM d, yyyy h:mm a');
 
+    print(this.phase);
+    print(startDate);
+    print(endDate);
+    print(now);
     if (phase == 'completed') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,63 +54,40 @@ class ProcessTimeLabel extends StatelessWidget {
       children: [
         Text(label),
         if (startDate.isAfter(now))
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              Text('${localizations.phasesStart}: '),
-              Text(
-                DateFormat('MMMM d, yyyy h:mm a').format(startDate),
-                style: const TextStyle(color: Colors.green),
-              ),
-              const SizedBox(height: 8),
-              Text('${localizations.phasesLastFor}: '),
-              Countdown(
-                dates: dates,
-                type: 'success',
-                timezone: timezone,
-              ),
-            ],
-          )
+          _buildUpcomingStart(localizations, formatter, startDate)
         else if (endDate.isAfter(now))
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (proposalsLength == 0)
-                Text(
-                  localizations.skipped,
-                  style: const TextStyle(color: Colors.blue),
-                )
-              else
-                Row(
-                  children: [
-                    Countdown(
-                      dates: dates,
-                      type: 'warning',
-                      timezone: timezone,
-                    ),
-                    Text(' (${localizations.remainingTime})'),
-                  ],
-                ),
-            ],
-          )
+          _buildActivePhase(localizations, dates, timezone)
         else
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (proposalsLength == 0)
-                Text(
-                  localizations.skipped,
-                  style: const TextStyle(color: Colors.blue),
-                )
-              else
-                Text(
-                  localizations.buttonDone,
-                  style: const TextStyle(color: Colors.blue),
-                ),
-            ],
-          ),
+          _buildPhaseEnded(localizations),
       ],
+    );
+  }
+
+  Widget _buildUpcomingStart(AppLocalizations localizations,
+      DateFormat formatter, DateTime startDate) {
+    // Phase has not started yet
+    return Row(
+      children: [
+        Text('${localizations.phasesStart}: ${formatter.format(startDate)}'),
+      ],
+    );
+  }
+
+  Widget _buildActivePhase(
+      AppLocalizations localizations, List<int> dates, String timezone) {
+    return Row(
+      children: [
+        Countdown(dates: dates, type: 'warning', timezone: timezone),
+        Text(' (${localizations.remainingTime})'),
+      ],
+    );
+  }
+
+  Widget _buildPhaseEnded(AppLocalizations localizations) {
+    // Phase has ended
+    return Text(
+      localizations.buttonDone,
+      style: const TextStyle(color: Colors.blue),
     );
   }
 }

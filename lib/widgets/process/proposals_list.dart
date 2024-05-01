@@ -36,7 +36,8 @@ class ProposalsListState extends State<ProposalsList> {
   @override
   void initState() {
     super.initState();
-    _proposals = List.from(widget.proposals!);
+    _proposals = widget.proposals ?? [];
+
     if (_proposals.isNotEmpty) {
       for (var proposal in _proposals) {
         proposal.editing = true;
@@ -48,7 +49,7 @@ class ProposalsListState extends State<ProposalsList> {
   void didUpdateWidget(covariant ProposalsList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.proposals != oldWidget.proposals) {
-      _proposals = List<Proposal>.from(widget.proposals!);
+      _proposals = widget.proposals ?? [];
     }
   }
 

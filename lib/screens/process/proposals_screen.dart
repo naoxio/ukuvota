@@ -19,12 +19,16 @@ class ProposalsScreen extends StatefulWidget {
 }
 
 class ProposalsScreenState extends State<ProposalsScreen> {
-  late String _endTime;
+  late DateTime _endTime;
 
   @override
   void initState() {
     super.initState();
+    _endTime =
+        DateTime.fromMillisecondsSinceEpoch(widget.process.proposalDates![1]);
+
     _saveProcessId();
+    _startTimer();
   }
 
   Future<void> _saveProcessId() async {
@@ -46,8 +50,6 @@ class ProposalsScreenState extends State<ProposalsScreen> {
             proposals: process.proposals,
             onProposalsUpdated: (proposal) {},
           ),
-          const SizedBox(height: 16),
-          Text('End Time: $_endTime'),
         ],
       ),
     );
@@ -60,9 +62,8 @@ class ProposalsScreenState extends State<ProposalsScreen> {
   }
 
   void _startTimer() {
-    final endTimeDate = DateTime.parse(_endTime);
     final currentTime = DateTime.now();
-    final timeLeft = endTimeDate.difference(currentTime);
+    final timeLeft = _endTime.difference(currentTime);
     if (timeLeft.isNegative) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/process/${widget.process.id}/results');

@@ -125,21 +125,30 @@ class ProcessInfo extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        if (!skipCompleted &&
-            process.proposalDates != null &&
-            process.proposalDates![0] > 0)
-          ProcessTimeLabel(
-            timezone: timezone,
-            phase: 'proposal',
-            dates: process.proposalDates!,
-          ),
-        if (!skipCompleted) const SizedBox(height: 8),
         if (!skipCompleted)
+          Column(
+            children: [
+              if (process.proposalDates != null &&
+                  process.proposalDates![0] > 0)
+                ProcessTimeLabel(
+                  timezone: timezone,
+                  phase: 'proposal',
+                  dates: process.proposalDates!,
+                ),
+              const SizedBox(height: 8),
+              ProcessTimeLabel(
+                timezone: timezone,
+                phase: 'voting',
+                dates: process.votingDates,
+                proposalsLength: proposalsLength,
+              ),
+            ],
+          ),
+        if (skipCompleted && process.votingDates.length == 2)
           ProcessTimeLabel(
             timezone: timezone,
-            phase: 'voting',
+            phase: 'completed',
             dates: process.votingDates,
-            proposalsLength: proposalsLength,
           ),
         if (skipCompleted && process.votingDates.length == 2)
           ProcessTimeLabel(
