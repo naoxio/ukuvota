@@ -74,6 +74,12 @@ jobs:
 
     - name: Initialize Firebase
       run: firebase init
+
+
+    - name: Authenticate Firebase
+      run: firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
+
+
     - name: Build APK
       run: |
         flutter build apk --release
