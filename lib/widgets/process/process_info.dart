@@ -102,8 +102,14 @@ class ProcessInfo extends StatelessWidget {
       children: [
         Center(
           child: Text(
-            process.title,
-            style: Theme.of(context).textTheme.headlineMedium,
+            quickView
+                ? process.title.length > 30
+                    ? '${process.title.substring(0, 30)}...'
+                    : process.title
+                : process.title,
+            style: quickView
+                ? Theme.of(context).textTheme.titleMedium
+                : Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         if (!quickView)

@@ -29,93 +29,90 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return MainScaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  FutureBuilder<List<String>>(
-                    future: SharedProcessService().fetchUUIDs(),
-                    builder: (context, snapshot) {
-                      final uuids = snapshot.data ?? [];
-                      return FutureBuilder<Map<String, Process>>(
-                        future: ProcessDataService().fetchProcessesByIds(uuids),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: Column(
+              children: [
+                FutureBuilder<List<String>>(
+                  future: SharedProcessService().fetchUUIDs(),
+                  builder: (context, snapshot) {
+                    final uuids = snapshot.data ?? [];
+                    return FutureBuilder<Map<String, Process>>(
+                      future: ProcessDataService().fetchProcessesByIds(uuids),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        final processes = snapshot.data ?? {};
+                        final currentlyInProgress = <Process>[];
+                        final completedProcesses = <Process>[];
+
+                        final now = DateTime.now();
+                        for (final process in processes.values) {
+                          DateTime? votingEndTime;
+                          DateTime? proposalEndTime;
+                          final votingStartTime =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  process.votingDates[0]);
+
+                          if (process.votingDates.length == 2) {
+                            votingEndTime = DateTime.fromMillisecondsSinceEpoch(
+                                process.votingDates[1]);
                           }
 
-                          final processes = snapshot.data ?? {};
-                          final currentlyInProgress = <Process>[];
-                          final completedProcesses = <Process>[];
-
-                          final now = DateTime.now();
-                          for (final process in processes.values) {
-                            DateTime? votingEndTime;
-                            DateTime? proposalEndTime;
-                            final votingStartTime =
+                          if (process.proposalDates != null &&
+                              process.proposalDates!.length == 2) {
+                            proposalEndTime =
                                 DateTime.fromMillisecondsSinceEpoch(
-                                    process.votingDates[0]);
-
-                            if (process.votingDates.length == 2) {
-                              votingEndTime =
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      process.votingDates[1]);
-                            }
-
-                            if (process.proposalDates != null &&
-                                process.proposalDates!.length == 2) {
-                              proposalEndTime =
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      process.proposalDates![1]);
-                            }
-                            final proposalsLength =
-                                process.proposals?.length ?? 0;
-                            if (proposalEndTime != null &&
-                                proposalEndTime.isAfter(now)) {
-                              currentlyInProgress.add(process);
-                            } else if (votingStartTime.isBefore(now) &&
-                                proposalsLength == 0) {
-                              completedProcesses.add(process);
-                            } else if (votingEndTime != null &&
-                                votingEndTime.isAfter(now)) {
-                              currentlyInProgress.add(process);
-                            } else {
-                              completedProcesses.add(process);
-                            }
+                                    process.proposalDates![1]);
                           }
+                          final proposalsLength =
+                              process.proposals?.length ?? 0;
+                          if (proposalEndTime != null &&
+                              proposalEndTime.isAfter(now)) {
+                            currentlyInProgress.add(process);
+                          } else if (votingStartTime.isBefore(now) &&
+                              proposalsLength == 0) {
+                            completedProcesses.add(process);
+                          } else if (votingEndTime != null &&
+                              votingEndTime.isAfter(now)) {
+                            currentlyInProgress.add(process);
+                          } else {
+                            completedProcesses.add(process);
+                          }
+                        }
 
-                          return Column(
-                            children: [
-                              _buildSection(
-                                localizations.currentlyInProgress,
-                                currentlyInProgress,
-                                emptyMessage:
-                                    localizations.noProcessesInProgress,
-                              ),
-                              _buildSection(localizations.completedProcesses,
-                                  completedProcesses,
-                                  emptyMessage: localizations
-                                      .completedProcessesEmptyMessage,
-                                  skipCompleted: true),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/create');
-                    },
-                    child: Text(localizations.startNewProcess),
-                  ),
-                ],
-              ),
+                        return Column(
+                          children: [
+                            _buildSection(
+                              localizations.currentlyInProgress,
+                              currentlyInProgress,
+                              emptyMessage: localizations.noProcessesInProgress,
+                            ),
+                            _buildSection(
+                              localizations.completedProcesses,
+                              completedProcesses,
+                              emptyMessage:
+                                  localizations.completedProcessesEmptyMessage,
+                              skipCompleted: true,
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    context.go('/create');
+                  },
+                  child: Text(localizations.startNewProcess),
+                ),
+              ],
             ),
           ),
         ),
@@ -141,51 +138,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 300,
+              maxCrossAxisExtent: 350,
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
+              childAspectRatio: 0.8,
             ),
             itemCount: processes.length,
             itemBuilder: (context, index) {
               final process = processes[index];
-              return MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () async {
-                    setState(() => _isLoading = true);
-                    context.go('/process/${process.id}');
-                  },
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 240,
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ProcessInfo(
-                                    process: process,
-                                    showSharePart: false,
-                                    skipCompleted: skipCompleted,
-                                    quickView: true),
-                              ],
+              return InkWell(
+                onTap: () async {
+                  setState(() => _isLoading = true);
+                  context.go('/process/${process.id}');
+                },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Stack(
+                      children: [
+                        ProcessInfo(
+                          process: process,
+                          showSharePart: false,
+                          skipCompleted: skipCompleted,
+                          quickView: true,
+                        ),
+                        if (_isLoading)
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.black45,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      if (_isLoading)
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black45,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -204,7 +191,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
-        const SizedBox(height: 20),
       ],
     );
   }

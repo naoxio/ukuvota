@@ -1,4 +1,8 @@
 # Changelog
+## [1.0.3] - 2024-05-03
+- Fix scrolling voting list
+- Improve dashboard card display
+
 ## [1.0.2] - 2024-05-02
 - Split apk files per architecture
 - Improve process time label

@@ -100,43 +100,46 @@ class VotingListState extends State<VotingList> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    return Column(
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.proposals!.length,
-          itemBuilder: (context, index) {
-            final proposal = widget.proposals![index];
-            return VotingProposalCard(
-              proposal: Proposal(
-                id: proposal.id,
-                title: proposal.title,
-                description: proposal.description,
-              ),
-              onVoteChanged: (proposalId, vote) =>
-                  _updateVote(proposalId, vote),
-              selectedVote: _votes[proposal.id] ?? 0,
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: _voterNameController,
-                decoration: InputDecoration(
-                  hintText: localizations.processVoterName,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.proposals!.length,
+            itemBuilder: (context, index) {
+              final proposal = widget.proposals![index];
+              return VotingProposalCard(
+                proposal: Proposal(
+                  id: proposal.id,
+                  title: proposal.title,
+                  description: proposal.description,
+                ),
+                onVoteChanged: (proposalId, vote) =>
+                    _updateVote(proposalId, vote),
+                selectedVote: _votes[proposal.id] ?? 0,
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _voterNameController,
+                  decoration: InputDecoration(
+                    hintText: localizations.processVoterName,
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: _submitVotes,
-              child: Text(AppLocalizations.of(context)!.processSubmitVote),
-            ),
-          ],
-        ),
-      ],
+              ElevatedButton(
+                onPressed: _submitVotes,
+                child: Text(AppLocalizations.of(context)!.processSubmitVote),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
