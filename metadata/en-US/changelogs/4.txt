@@ -1,0 +1,2 @@
+* Fix scrolling voting list
+* Improve dashboard card display
