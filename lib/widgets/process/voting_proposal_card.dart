@@ -8,11 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/utils/proposal_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:ukuvota/models/proposal.dart';
-import 'package:ukuvota/utils/proposal_utils.dart';
 
 class VotingProposalCard extends StatefulWidget {
   final Proposal proposal;
@@ -47,13 +43,21 @@ class VotingProposalCardState extends State<VotingProposalCard> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width.clamp(0, 600);
+
+    const double baseEmojiSize = 48.0;
+
+    final double scalingFactor = (screenWidth / 400).clamp(0.8, 1.5);
+
+    final double emojiSize = baseEmojiSize * scalingFactor;
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               widget.proposal.title,
@@ -103,14 +107,15 @@ class VotingProposalCardState extends State<VotingProposalCard> {
                               0,
                             ]),
                       child: SvgPicture.asset(
-                        'emojis/${_emojiNames[index]}.svg',
-                        width: 24,
-                        height: 24,
+                        'assets/emojis/${_emojiNames[index]}.svg',
+                        width: emojiSize,
+                        height: emojiSize,
                         placeholderBuilder: (BuildContext context) => Text(
                           _emojiNames[index],
-                          style: const TextStyle(
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(
+                              color: widget.selectedVote == index - 3
+                                  ? Colors.blue
+                                  : Colors.grey),
                         ),
                       ),
                     ),

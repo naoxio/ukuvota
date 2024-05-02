@@ -35,13 +35,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               constraints: const BoxConstraints(maxWidth: 800),
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/create');
-                    },
-                    child: Text(localizations.startNewProcess),
-                  ),
                   const SizedBox(height: 10),
                   FutureBuilder<List<String>>(
                     future: SharedProcessService().fetchUUIDs(),
@@ -113,6 +106,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                       );
                     },
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/create');
+                    },
+                    child: Text(localizations.startNewProcess),
                   ),
                 ],
               ),

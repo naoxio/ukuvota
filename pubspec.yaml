@@ -50,19 +50,11 @@ flutter:
   generate: true
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
-    - assets/emojis/angry.svg
-    - assets/emojis/happy.svg
-    - assets/emojis/loving.svg
-    - assets/emojis/neutral.svg
-    - assets/emojis/rage.svg
-    - assets/emojis/sad.svg
-    - assets/emojis/smiling.svg
+    - assets/emojis/
     - assets/content/de/
     - assets/content/en/
     - assets/content/es/
     - assets/content/it/
 
-#   - images/a_dot_ham.jpeg
