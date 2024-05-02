@@ -34,13 +34,13 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: recursive 
-        
-    - name: Setup JDK 22
+
+    - name: Setup JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '22'
-        distribution: 'temurin' 
-        
+        java-version: '17'
+        distribution: 'temurin'
+
     - name: Cache Flutter SDK and dependencies
       uses: actions/cache@v2
       with:
