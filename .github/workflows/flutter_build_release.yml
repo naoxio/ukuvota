@@ -111,7 +111,7 @@ jobs:
         run: echo "${{ secrets.FLUTTER_STORE_FILE }}" | base64 -d > android/app/release-key.jks
 
       - name: Build APKs
-        run: flutter build apk --release --obfuscate --target-platform=android-arm64,android-arm,android-x64 --split-per-abi
+        run: flutter build apk --release --target-platform=android-arm64,android-arm,android-x64 --split-per-abi
 
       - name: Rename APKs and Append Version
         run: |
