@@ -109,21 +109,15 @@ jobs:
 
       - name: Decode Keystore
         run: echo "${{ secrets.FLUTTER_STORE_FILE }}" | base64 -d > android/app/release-key.jks
-        
-      - name: Build APK for arm64-v8a
-        run: |
-          flutter build apk --release --target-platform=android-arm64
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota_arm64-v8a_${{ env.RELEASE_TAG }}.apk
 
-      - name: Build APK for armeabi-v7a
-        run: |
-          flutter build apk --release --target-platform=android-arm
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota_armeabi-v7a_${{ env.RELEASE_TAG }}.apk
+      - name: Build APKs
+        run: flutter build apk --release --target-platform=android-arm64,android-arm,android-x64 --split-per-abi
 
-      - name: Build APK for x86_64
+      - name: Rename APKs and Append Version
         run: |
-          flutter build apk --release --target-platform=android-x64
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota_x86_64_${{ env.RELEASE_TAG }}.apk
+          mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk build/app/outputs/flutter-apk/Ukuvota_arm64-v8a_${{ env.RELEASE_TAG }}.apk
+          mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/app/outputs/flutter-apk/Ukuvota_armeabi-v7a_${{ env.RELEASE_TAG }}.apk
+          mv build/app/outputs/flutter-apk/app-x86_64-release.apk build/app/outputs/flutter-apk/Ukuvota_x86_64_${{ env.RELEASE_TAG }}.apk
 
       - name: Upload APKs as Artifact
         uses: actions/upload-artifact@v2
