@@ -20,7 +20,7 @@ jobs:
     - uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
-
+        
   android:
     needs: cancel
     name: Build APK
@@ -30,54 +30,90 @@ jobs:
       FLUTTER_KEY_PASSWORD: ${{ secrets.FLUTTER_KEY_PASSWORD }}
       FLUTTER_STORE_PASSWORD: ${{ secrets.FLUTTER_STORE_PASSWORD }}
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
       with:
-        submodules: recursive
-    - uses: actions/setup-java@v3
+        submodules: recursive 
+
+    - name: Setup JDK 17
+      uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
-    - uses: actions/cache@v2
+
+    - name: Cache Flutter SDK and dependencies
+      uses: actions/cache@v2
       with:
         path: |
           ~/.pub-cache
           ~/.flutter
         key: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.yaml') }}
-        restore-keys: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
-    - uses: subosito/flutter-action@v2
+        restore-keys: |
+          ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
+            
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
-    - run: npm install -g firebase-tools
-    - run: |
-        echo ${{ secrets.FIREBASE_TOKEN }} | firebase login:ci
-        firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
+
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
+        
+    - name: Authenticate Firebase and Set Project
+      run: |
+        firebase use ${{ secrets.FIREBASE_PROJECT_ID }} --token ${{ secrets.FIREBASE_TOKEN }}
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-    - run: flutter pub get
-    - run: flutter gen-l10n
-    - run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
-    - run: echo "${{ secrets.FLUTTER_STORE_FILE }}" | base64 -d > android/app/release-key.jks
-    - run: flutter build apk --release
-    - run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota.apk
-    - uses: actions/upload-artifact@v2
+
+    - name: Install Dependencies
+      run: flutter pub get
+
+    - name: Generate locales
+      run: flutter gen-l10n
+
+    - name: Add google-services.json
+      run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
+
+    - name: Decode Keystore
+      run: echo "${{ secrets.FLUTTER_STORE_FILE }}" | base64 -d > android/app/release-key.jks
+
+    - name: Initialize Firebase
+      run: firebase init
+
+    - name: Build APK
+      run: |
+        flutter build apk --release
+       
+    - name: Rename APK
+      run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/Ukuvota.apk
+
+    - name: Upload APKs as Artifact
+      uses: actions/upload-artifact@v2
       with:
         name: apk-artifacts
-        path: build/app/outputs/flutter-apk/Ukuvota.apk
+        path: |
+          build/app/outputs/flutter-apk/Ukuvota.apk
 
   release:
     name: Release Builds
     needs: android
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+  
+    - name: Download APK Artifact
+      uses: actions/download-artifact@v2
       with:
         name: apk-artifacts
         path: build/app/outputs/flutter-apk/
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    
+    - name: Create Release and Upload Builds
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "${{ env.RELEASE_TAG }}"
         prerelease: "${{ env.IS_PRERELEASE }}"
         title: "${{ env.RELEASE_TAG }}"
-        files: build/app/outputs/flutter-apk/Ukuvota.apk
+        files: |
+          build/app/outputs/flutter-apk/Ukuvota.apk
