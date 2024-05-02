@@ -73,7 +73,8 @@ jobs:
         --platforms=android \
         --android-package-name="io.naox.ukuvota" \
         --ios-bundle-id="io.naox.ukuvota" \
-        --macos-bundle-id="io.naox.ukuvota" 
+        --macos-bundle-id="io.naox.ukuvota" \
+        --web-app-id="io.naox.ukuvota" 
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
