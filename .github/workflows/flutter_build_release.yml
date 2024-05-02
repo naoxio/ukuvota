@@ -72,12 +72,13 @@ jobs:
     - name: Add google-services.json
       run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
 
-    - name: Initialize Firebase
-      run: firebase init
-
 
     - name: Authenticate Firebase
       run: firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
+
+    - name: Initialize Firebase
+      run: firebase init
+
 
 
     - name: Build APK
