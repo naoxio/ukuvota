@@ -67,7 +67,11 @@ jobs:
       
     - name: Configure FlutterFire for Android
       run: |
-        flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} --out=lib/firebase_options.dart --token=${{ secrets.FIREBASE_TOKEN }} --platforms=android
+        flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} \
+        --out=lib/firebase_options.dart \
+        --token=${{ secrets.FIREBASE_TOKEN }} \
+        --platforms=android \
+        --android-package-name="io.naox.ukuvota"
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
