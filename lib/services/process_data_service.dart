@@ -88,35 +88,6 @@ class ProcessDataService {
     if (snapshot.exists) {
       final Map<String, dynamic> processData =
           Map<String, dynamic>.from(snapshot.value as Map);
-
-      final dynamic proposalsData = processData['proposals'];
-      final List<Proposal> updatedProposals = [];
-
-      if (proposalsData is Map<String, dynamic>) {
-        updatedProposals.addAll(
-          proposalsData.entries.map((MapEntry<String, dynamic> entry) {
-            final String id = entry.key;
-            final Map<String, dynamic> proposal =
-                Map<String, dynamic>.from(entry.value);
-            proposal['id'] = id;
-            return Proposal.fromMap(proposal);
-          }),
-        );
-      } else if (proposalsData is List<dynamic>) {
-        updatedProposals.addAll(
-          proposalsData.asMap().entries.map((MapEntry<int, dynamic> entry) {
-            final int index = entry.key;
-            final Map<String, dynamic> proposal =
-                Map<String, dynamic>.from(entry.value);
-            final String id = proposal['id'] ?? index.toString();
-            proposal['id'] = id;
-            return Proposal.fromMap(proposal);
-          }),
-        );
-      }
-
-      processData['proposals'] = updatedProposals;
-
       return Process.fromMap(processData);
     } else {
       return null;

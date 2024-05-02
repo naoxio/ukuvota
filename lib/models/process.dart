@@ -1,8 +1,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-import 'dart:convert';
 
+import 'dart:convert';
 import 'package:ukuvota/models/voter.dart';
 import 'package:ukuvota/models/proposal.dart';
 
@@ -28,6 +28,7 @@ class Process {
     this.proposals,
     this.voters,
   });
+
   factory Process.fromMap(Map<String, dynamic> map) {
     List<Voter>? voters;
     final dynamic votersData = map['voters'];
@@ -39,6 +40,30 @@ class Process {
             .toList();
       } else {
         voters = [Voter.fromMap(votersData)];
+      }
+    }
+
+    final dynamic proposalsData = map['proposals'];
+    List<Proposal>? proposals;
+
+    if (proposalsData != null) {
+      print('hi');
+      print(proposalsData.runtimeType);
+      if (proposalsData is Map<dynamic, dynamic>) {
+        proposals = proposalsData.entries
+            .map((entry) => Proposal.fromMap({
+                  'id': entry.key.toString(),
+                  ...Map<String, dynamic>.from(entry.value),
+                }))
+            .toList();
+        print(proposals);
+      } else if (proposalsData is List<dynamic>) {
+        proposals = proposalsData
+            .map((proposalData) => Proposal.fromMap(
+                  Map<String, dynamic>.from(proposalData),
+                ))
+            .toList();
+        print(proposals);
       }
     }
 
@@ -54,15 +79,7 @@ class Process {
       votingDates: List<int>.from(map['votingDates']),
       timezone: map['timezone'] as String?,
       weighting: map['weighting'] as String?,
-      proposals: map['proposals'] != null
-          ? (map['proposals'] as List)
-              .map((proposal) => proposal is Proposal
-                  ? proposal
-                  : proposal is Map
-                      ? Proposal.fromMap(proposal)
-                      : throw ArgumentError('Invalid proposal data: $proposal'))
-              .toList()
-          : null,
+      proposals: proposals,
       voters: voters,
     );
   }

@@ -32,14 +32,20 @@ class Proposal {
   }
 
   factory Proposal.fromMap(Map<dynamic, dynamic> map) {
+    final String id = map['id']?.toString() ?? '';
+    final String title = map['title']?.toString() ?? '';
+    final String description = map['description'] is Map
+        ? json.encode(map['description'])
+        : map['description']?.toString() ?? '';
+    final bool editing = map['editing'] ?? false;
+    final double? total = map['total'] is num ? map['total'].toDouble() : null;
+
     return Proposal(
-      id: map['id']?.toString() ?? '',
-      title: map['title']?.toString() ?? '',
-      description: map['description'] is Map
-          ? json.encode(map['description'])
-          : map['description']?.toString() ?? '',
-      editing: map['editing'] ?? false,
-      total: map['total'] is num ? map['total'].toDouble() : null,
+      id: id,
+      title: title,
+      description: description,
+      editing: editing,
+      total: total,
     );
   }
 

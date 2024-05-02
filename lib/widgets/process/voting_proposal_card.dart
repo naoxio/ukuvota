@@ -56,75 +56,77 @@ class VotingProposalCardState extends State<VotingProposalCard> {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              widget.proposal.title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                widget.proposal.title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            HtmlWidget(convertToHtml(widget.proposal.description)),
-            const SizedBox(height: 16),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: List.generate(
-                7,
-                (index) {
-                  // Use the fallback Text directly
-                  return IconButton(
-                    icon: ColorFiltered(
-                      colorFilter: widget.selectedVote == index - 3
-                          ? const ColorFilter.mode(
-                              Colors.transparent,
-                              BlendMode.color,
-                            )
-                          : const ColorFilter.matrix(<double>[
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0.2126,
-                              0.7152,
-                              0.0722,
-                              0,
-                              0,
-                              0,
-                              0,
-                              0,
-                              1,
-                              0,
-                            ]),
-                      child: SvgPicture.asset(
-                        'assets/emojis/${_emojiNames[index]}.svg',
-                        width: emojiSize,
-                        height: emojiSize,
-                        placeholderBuilder: (BuildContext context) => Text(
-                          _emojiNames[index],
-                          style: TextStyle(
-                              color: widget.selectedVote == index - 3
-                                  ? Colors.blue
-                                  : Colors.grey),
+              const SizedBox(height: 8),
+              HtmlWidget(convertToHtml(widget.proposal.description)),
+              const SizedBox(height: 16),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
+                  7,
+                  (index) {
+                    // Use the fallback Text directly
+                    return IconButton(
+                      icon: ColorFiltered(
+                        colorFilter: widget.selectedVote == index - 3
+                            ? const ColorFilter.mode(
+                                Colors.transparent,
+                                BlendMode.color,
+                              )
+                            : const ColorFilter.matrix(<double>[
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0.2126,
+                                0.7152,
+                                0.0722,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                1,
+                                0,
+                              ]),
+                        child: SvgPicture.asset(
+                          'assets/emojis/${_emojiNames[index]}.svg',
+                          width: emojiSize,
+                          height: emojiSize,
+                          placeholderBuilder: (BuildContext context) => Text(
+                            _emojiNames[index],
+                            style: TextStyle(
+                                color: widget.selectedVote == index - 3
+                                    ? Colors.blue
+                                    : Colors.grey),
+                          ),
                         ),
                       ),
-                    ),
-                    onPressed: () => _updateSelectedVote(index - 3),
-                  );
-                },
+                      onPressed: () => _updateSelectedVote(index - 3),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
