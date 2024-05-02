@@ -30,13 +30,13 @@ Quick tool for collaborative score voting to find consensus in a group.
 
 3. **Generate Firebase Options File Using FlutterFire CLI:**
    - Install FlutterFire CLI by running:
-     ### bash
+     ```bash
      dart pub global activate flutterfire_cli
-     ###
+     ```
    - Configure your Firebase project with Flutter by running:
-     ### bash
+     ```bash
      flutterfire configure
-     ###
+     ```
    - This command will generate a `firebase_options.dart` file which contains all the configuration for the Firebase project. Make sure this file is correctly imported in your `main.dart`.
 
 
