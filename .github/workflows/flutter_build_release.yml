@@ -67,7 +67,8 @@ jobs:
       
     - name: Configure FlutterFire for Android
       run: |
-        flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} \
+        flutterfire configure -y \
+        --project=${{ secrets.FIREBASE_PROJECT_ID }} \
         --out=lib/firebase_options.dart \
         --token=${{ secrets.FIREBASE_TOKEN }} \
         --platforms="android" \
