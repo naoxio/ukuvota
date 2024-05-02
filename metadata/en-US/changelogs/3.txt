@@ -1,0 +1,2 @@
+* Split apk files per architecture
+* Improve process time label
