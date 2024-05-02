@@ -82,7 +82,7 @@ class ResultsCardState extends State<ResultsCard>
   Widget getAverageEmoji(double total) {
     final average = getAverageScore(total);
     final emojiIndex = (average + 3).clamp(0, emojiNames.length - 1).toInt();
-    return SvgPicture.asset('emojis/${emojiNames[emojiIndex]}.svg');
+    return SvgPicture.asset('assets/emojis/${emojiNames[emojiIndex]}.svg');
   }
 
   void exportMarkdown() {
