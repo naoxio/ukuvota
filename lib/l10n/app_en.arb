@@ -138,7 +138,7 @@
   "noProcessesInProgress": "No processes currently in progress.",
   "completedProcesses": "Completed Processes",
   "completedProcessesEmptyMessage": "Completed processes will appear here.",
-  "startNewProcess": "Start a New Process"
-
+  "startNewProcess": "Start a New Process",
+  "searchFieldLabel": "Input the ID or URL of an existing process"
 
 }

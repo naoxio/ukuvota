@@ -139,7 +139,8 @@
   "noProcessesInProgress": "Derzeit sind keine Prozesse in Bearbeitung.",
   "completedProcesses": "Abgeschlossene Prozesse",
   "completedProcessesEmptyMessage": "Abgeschlossene Prozesse werden hier angezeigt.",
-  "startNewProcess": "Neuen Prozess starten"
+  "startNewProcess": "Neuen Prozess starten",
+  "searchFieldLabel": "Geben Sie die ID oder URL eines bestehenden Prozesses ein"
 
 
 }

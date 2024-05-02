@@ -31,11 +31,7 @@ class ProcessDataService {
           'proposals': processData['proposals'],
         });
       }
-
-      print('Process created successfully');
-      print(processId);
     } catch (error) {
-      print(error);
       throw Exception('Failed to create the process: $error');
     }
   }

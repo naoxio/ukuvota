@@ -1,0 +1,2 @@
+* Add theme toggler
+* Translation for search bar

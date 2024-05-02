@@ -38,7 +38,7 @@ class CustomDrawer extends StatelessWidget {
                         context: context,
                         builder: (context) => const AlertDialog(
                           title: Text('Select Language'),
-                          content: LanguageSwitcher(hideIcon: true),
+                          content: LanguageSwitcher(),
                         ),
                       );
                     },

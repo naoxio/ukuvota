@@ -5,10 +5,16 @@
  */
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
+  final BuildContext appContext;
+
+  CustomSearchDelegate(this.appContext);
+
   @override
-  String get searchFieldLabel => 'Input the UUID of the process';
+  String get searchFieldLabel =>
+      AppLocalizations.of(appContext)!.searchFieldLabel;
 
   @override
   List<Widget> buildActions(BuildContext context) {

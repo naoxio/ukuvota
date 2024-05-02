@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
+import 'package:ukuvota/app_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,64 +23,52 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  MyAppState createState() => MyAppState();
-
-  static void setLocale(BuildContext context, Locale newLocale) {
-    MyAppState? state = context.findAncestorStateOfType<MyAppState>();
-    state?.setLocale(newLocale);
-  }
-}
-
-class MyAppState extends State<MyApp> {
-  Locale _locale = const Locale('en');
-
-  void setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProcessDataProvider()),
+        ChangeNotifierProvider(create: (_) => MyAppState()),
       ],
-      child: MaterialApp.router(
-        title: 'Ukuvota',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepOrange,
-            brightness: Brightness.light,
-          ),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.deepOrange,
-            brightness: Brightness.dark,
-          ),
-          useMaterial3: true,
-        ),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('de', ''),
-          Locale('en', ''),
-          Locale('es', ''),
-          Locale('it', ''),
-        ],
-        locale: _locale,
-        routerConfig: router,
+      child: Consumer<MyAppState>(
+        builder: (context, appState, _) {
+          return MaterialApp.router(
+            title: 'Ukuvota',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepOrange,
+                brightness: Brightness.light,
+              ),
+              useMaterial3: true,
+            ),
+            darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.deepOrange,
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+            ),
+            themeMode: appState.themeMode,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('de', ''),
+              Locale('en', ''),
+              Locale('es', ''),
+              Locale('it', ''),
+            ],
+            locale: appState.locale,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }
