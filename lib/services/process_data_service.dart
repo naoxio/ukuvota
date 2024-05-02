@@ -13,12 +13,31 @@ class ProcessDataService {
   Future<void> createProcess(
       String processId, Map<String, dynamic> processData) async {
     try {
-      await FirebaseDatabase.instance
-          .ref()
-          .child('process')
-          .child(processId)
-          .set(processData);
+      final processRef = FirebaseDatabase.instance.ref().child('process');
+
+      // Create the process node without the proposals node
+      await processRef.child(processId).update({
+        '_id': processId,
+        'description': processData['description'],
+        'proposalDates': processData['proposalDates'],
+        'title': processData['title'],
+        'votingDates': processData['votingDates'],
+        'voters': processData['voters'],
+        'weighting': processData['weighting'],
+      });
+
+      // Add the proposals node conditionally
+      if (processData['proposalDates'] == null ||
+          processData['proposalDates'].isEmpty) {
+        await processRef.child(processId).update({
+          'proposals': processData['proposals'],
+        });
+      }
+
+      print('Process created successfully');
+      print(processId);
     } catch (error) {
+      print(error);
       throw Exception('Failed to create the process: $error');
     }
   }

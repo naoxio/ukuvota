@@ -90,6 +90,8 @@ class ReviewScreenState extends State<ReviewScreen> {
               : [];
         }
       });
+    } else {
+      context.go('/create');
     }
   }
 

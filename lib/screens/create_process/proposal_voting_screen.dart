@@ -72,6 +72,8 @@ class ProposalVotingScreenState extends State<ProposalVotingScreen> {
         _selectedTimeZone = selectedTimeZone;
         tz.setLocalLocation(tz.getLocation(_selectedTimeZone!));
       });
+    } else {
+      context.go('/create');
     }
   }
 

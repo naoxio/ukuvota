@@ -54,7 +54,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
 
   Future<void> _loadProcessData() async {
     final processData = await _sharedSetupService.getProcessData();
-    if (processData != null) {
+    if (processData != null && processData['title'] != null) {
       _showProcessDataModal(processData);
     }
   }

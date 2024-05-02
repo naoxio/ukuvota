@@ -59,6 +59,8 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
         _selectedTimeZone = selectedTimeZone;
         tz.setLocalLocation(tz.getLocation(_selectedTimeZone!));
       });
+    } else {
+      context.go('/create');
     }
   }
 
