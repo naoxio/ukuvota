@@ -64,12 +64,13 @@ jobs:
 
     - name: Add google-services.json
       run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
-
-    - name: Authenticate Firebase and Set Project
+      
+    - name: Configure FlutterFire for Android
       run: |
-        firebase use ${{ secrets.FIREBASE_PROJECT_ID }} --token ${{ secrets.FIREBASE_TOKEN }}
+        flutterfire configure --project=${{ secrets.FIREBASE_PROJECT_ID }} --out=lib/firebase_options.dart --token=${{ secrets.FIREBASE_TOKEN }} --platforms=android
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
 
     - name: Configure FlutterFire
       run: |

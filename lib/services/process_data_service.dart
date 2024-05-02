@@ -4,9 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'package:firebase_database/firebase_database.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:ukuvota/models/process.dart';
-import 'package:ukuvota/models/proposal.dart';
 import 'package:uuid/uuid.dart';
 
 class ProcessDataService {
