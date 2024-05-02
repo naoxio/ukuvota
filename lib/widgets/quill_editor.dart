@@ -39,6 +39,8 @@ class QuillEditorWidget extends StatelessWidget {
             QuillToolbar.simple(
               configurations: QuillSimpleToolbarConfigurations(
                   controller: controller,
+                  showRedo: false,
+                  showUndo: false,
                   multiRowsDisplay: true,
                   toolbarIconAlignment: WrapAlignment.start,
                   toolbarSectionSpacing: 0,

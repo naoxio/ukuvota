@@ -150,20 +150,20 @@ class ProcessInfo extends StatelessWidget {
               if (process.proposalDates != null &&
                   process.proposalDates![0] > 0)
                 ProcessTimeLabel(
-                  timezone: timezone,
-                  phase: 'proposal',
-                  dates: process.proposalDates!,
-                ),
+                    timezone: timezone,
+                    phase: 'proposal',
+                    dates: process.proposalDates!,
+                    quickView: quickView),
               if (process.proposalDates != null &&
                   process.proposalDates![0] > 0)
                 const SizedBox(
                     height: 16), // Add space between proposal and voting phases
               ProcessTimeLabel(
-                timezone: timezone,
-                phase: 'voting',
-                dates: process.votingDates,
-                proposalsLength: proposalsLength,
-              ),
+                  timezone: timezone,
+                  phase: 'voting',
+                  dates: process.votingDates,
+                  proposalsLength: proposalsLength,
+                  quickView: quickView),
             ],
           ),
         if (skipCompleted && process.votingDates.length == 2)

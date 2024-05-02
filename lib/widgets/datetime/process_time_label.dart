@@ -1,4 +1,4 @@
-/*
+/* 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -13,6 +13,7 @@ class ProcessTimeLabel extends StatelessWidget {
   final List<int> dates;
   final String timezone;
   final int proposalsLength;
+  final bool quickView;
 
   const ProcessTimeLabel({
     Key? key,
@@ -20,7 +21,9 @@ class ProcessTimeLabel extends StatelessWidget {
     required this.dates,
     required this.timezone,
     this.proposalsLength = 0,
+    this.quickView = false,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -64,7 +67,8 @@ class ProcessTimeLabel extends StatelessWidget {
     // Phase has not started yet
     return Row(
       children: [
-        Text('${localizations.phasesStart}: ${formatter.format(startDate)}'),
+        Text(formatter.format(startDate),
+            style: const TextStyle(color: Colors.green)),
       ],
     );
   }
@@ -83,7 +87,7 @@ class ProcessTimeLabel extends StatelessWidget {
       return Row(
         children: [
           Countdown(dates: dates, type: 'warning', timezone: timezone),
-          Text(' (${localizations.remainingTime})'),
+          if (!quickView) Text(' (${localizations.remainingTime})'),
         ],
       );
     }
