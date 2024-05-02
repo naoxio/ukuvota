@@ -55,6 +55,10 @@ jobs:
       
     - name: Install Dependencies
       run: flutter pub get
+
+
+    - name: Generate locales
+      run: flutter gen-l10n
       
     - name: Build APK
       run: |

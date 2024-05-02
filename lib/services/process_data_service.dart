@@ -46,17 +46,33 @@ class ProcessDataService {
     voters.add(newVoter);
 
     final Map<String, dynamic> proposalUpdates = {};
-    for (final vote in votes) {
-      final String proposalId = vote['proposalId'];
-      final int voteValue = vote['vote'];
 
-      final List<dynamic> proposals = processData['proposals'] ?? [];
-      final int proposalIndex = proposals.indexWhere(
-        (proposal) => (proposal as Map<dynamic, dynamic>)['id'] == proposalId,
-      );
+    if (processData['proposals'] is Map<Object?, Object?>) {
+      final Map<Object?, Object?> proposals = processData['proposals'];
 
-      if (proposalIndex >= 0) {
-        proposalUpdates['proposals/$proposalIndex/votes/$voterId'] = voteValue;
+      for (final vote in votes) {
+        final String proposalId = vote['proposalId'];
+
+        if (proposals.containsKey(proposalId)) {
+          final int voteValue = vote['vote'];
+          proposalUpdates['proposals/$proposalId/votes/$voterId'] = voteValue;
+        }
+      }
+    } else if (processData['proposals'] is List<dynamic>) {
+      final List<dynamic> proposals = processData['proposals'];
+
+      for (final vote in votes) {
+        final String proposalId = vote['proposalId'];
+        final int voteValue = vote['vote'];
+
+        final int proposalIndex = proposals.indexWhere(
+          (proposal) => (proposal as Map<dynamic, dynamic>)['id'] == proposalId,
+        );
+
+        if (proposalIndex >= 0) {
+          proposalUpdates['proposals/$proposalIndex/votes/$voterId'] =
+              voteValue;
+        }
       }
     }
 

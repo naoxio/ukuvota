@@ -47,8 +47,6 @@ class Process {
     List<Proposal>? proposals;
 
     if (proposalsData != null) {
-      print('hi');
-      print(proposalsData.runtimeType);
       if (proposalsData is Map<dynamic, dynamic>) {
         proposals = proposalsData.entries
             .map((entry) => Proposal.fromMap({
@@ -56,14 +54,12 @@ class Process {
                   ...Map<String, dynamic>.from(entry.value),
                 }))
             .toList();
-        print(proposals);
       } else if (proposalsData is List<dynamic>) {
         proposals = proposalsData
             .map((proposalData) => Proposal.fromMap(
                   Map<String, dynamic>.from(proposalData),
                 ))
             .toList();
-        print(proposals);
       }
     }
 
