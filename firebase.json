@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "impactful-yeti-387506",
+          "appId": "1:259081600268:android:7e70962c23993c65205d29",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "impactful-yeti-387506",
+          "configurations": {
+            "android": "1:259081600268:android:7e70962c23993c65205d29",
+            "ios": "1:259081600268:ios:2ca13250d7dc7ead205d29",
+            "macos": "1:259081600268:ios:2ca13250d7dc7ead205d29",
+            "web": "1:259081600268:web:cd2e0d4d312f20c7205d29",
+            "windows": "1:259081600268:web:d048f868cc891d9b205d29"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
