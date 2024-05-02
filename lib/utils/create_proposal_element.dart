@@ -40,9 +40,7 @@ Widget createProposalElement(
   void saveProposal() {
     proposal.title = titleController.text;
     proposal.description =
-        descriptionController.document.toDelta().toJson() != null
-            ? jsonEncode(descriptionController.document.toDelta().toJson())
-            : '';
+        jsonEncode(descriptionController.document.toDelta().toJson());
     if (onUpdate != null) {
       onUpdate(proposal);
     }
