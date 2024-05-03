@@ -1,0 +1,4 @@
+* Improve mobile language selector
+* Clean language files
+* Store user preferences
+* Improve results display
