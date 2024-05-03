@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ukuvota/widgets/language_switcher.dart';
 import 'package:ukuvota/widgets/search_delegate.dart';
@@ -18,7 +19,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final appState = Provider.of<MyAppState>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -33,12 +36,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: InkWell(
         onTap: () => context.go('/'),
-        child: const Text('Ukuvota'),
+        child: screenWidth < 500
+            ? const Icon(Icons.dashboard)
+            : Text(localizations.buttonDashboard),
       ),
       actions: [
         Row(
           children: [
-            LanguageSwitcher(),
+            const LanguageSwitcher(),
             IconButton(
               icon: Icon(
                 appState.themeMode == ThemeMode.light

@@ -90,5 +90,6 @@
   "completedProcesses": "Processi completati",
   "completedProcessesEmptyMessage": "I processi completati verranno visualizzati qui.",
   "startNewProcess": "Avvia un nuovo processo",
-  "searchFieldLabel": "Inserisci l'ID o l'URL di un processo esistente"
+  "searchFieldLabel": "Inserisci l'ID o l'URL di un processo esistente",
+  "languageDialogTitle": "Seleziona la lingua"
 }

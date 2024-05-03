@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
-import 'package:ukuvota/services/shared_setup_service.dart';
+import 'package:ukuvota/services/setup_process_preferences.dart';
 import 'package:ukuvota/widgets/datetime/timezone_selector.dart';
 import 'package:ukuvota/widgets/datetime/time_selector.dart';
 import 'package:ukuvota/widgets/process/proposals_list.dart';
@@ -24,7 +24,8 @@ class VotingOnlyScreen extends StatefulWidget {
 }
 
 class VotingOnlyScreenState extends State<VotingOnlyScreen> {
-  final SharedSetupService _sharedSetupService = SharedSetupService();
+  final SetupProcessPreferences _setupProcessPreferences =
+      SetupProcessPreferences();
 
   DateTime? _votingOnlyStartDate;
   DateTime? _votingOnlyEndDate;
@@ -39,7 +40,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _sharedSetupService.getProcessData();
+    final processData = await _setupProcessPreferences.getProcessData();
 
     if (processData != null) {
       String selectedTimeZone =
@@ -77,7 +78,7 @@ class VotingOnlyScreenState extends State<VotingOnlyScreen> {
       'proposals': _proposals,
       'timezone': _selectedTimeZone,
     };
-    _sharedSetupService.saveProcessData(processData);
+    _setupProcessPreferences.saveProcessData(processData);
   }
 
   void _updateProposals(List<Proposal> proposals) {

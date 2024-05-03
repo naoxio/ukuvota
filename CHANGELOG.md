@@ -1,4 +1,9 @@
 # Changelog
+## [1.0.4] - 2024-05-03
+- Improve mobile language selector
+- Clean language files
+- Store user preferences
+
 ## [1.0.3] - 2024-05-03
 - Fix scrolling voting list
 - Improve dashboard card display

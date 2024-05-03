@@ -6,7 +6,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedProcessService {
+class DashboardPreferences {
   static const String _uuidDataKey = 'process_uuids';
 
   Future<void> addUUID(String uuid) async {

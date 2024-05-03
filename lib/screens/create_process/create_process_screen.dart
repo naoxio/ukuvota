@@ -11,7 +11,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
-import 'package:ukuvota/services/shared_setup_service.dart';
+import 'package:ukuvota/services/setup_process_preferences.dart';
 import 'package:ukuvota/utils/weighting_options.dart';
 import 'package:ukuvota/widgets/quill_editor.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +27,8 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   late QuillController _controller;
   late TextEditingController _titleController;
   bool _isTitleEmpty = true;
-  final SharedSetupService _sharedSetupService = SharedSetupService();
+  final SetupProcessPreferences _setupProcessPreferences =
+      SetupProcessPreferences();
   String _selectedWeighting = '3';
 
   @override
@@ -53,7 +54,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _sharedSetupService.getProcessData();
+    final processData = await _setupProcessPreferences.getProcessData();
     if (processData != null && processData['title'] != null) {
       _showProcessDataModal(processData);
     }
@@ -71,7 +72,7 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                _sharedSetupService.clearProcessData();
+                _setupProcessPreferences.clearProcessData();
                 Navigator.of(context).pop();
               },
               child: Text(localizations.startNew),
@@ -204,6 +205,6 @@ class CreateProcessScreenState extends State<CreateProcessScreen> {
       'mode': mode,
     };
 
-    _sharedSetupService.saveProcessData(newProcessData);
+    _setupProcessPreferences.saveProcessData(newProcessData);
   }
 }

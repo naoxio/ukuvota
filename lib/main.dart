@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/router.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ukuvota/services/user_preferences.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:ukuvota/providers/process_data_provider.dart';
@@ -20,18 +21,35 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   tz.initializeTimeZones();
-  runApp(const MyApp());
+
+  await UserPreferences.initialize();
+
+  final locale = UserPreferences.getLocale();
+  final themeMode = UserPreferences.getThemeMode();
+
+  runApp(MyApp(initialLocale: locale, initialThemeMode: themeMode));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Locale initialLocale;
+  final ThemeMode initialThemeMode;
+
+  const MyApp({
+    super.key,
+    required this.initialLocale,
+    required this.initialThemeMode,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProcessDataProvider()),
-        ChangeNotifierProvider(create: (_) => MyAppState()),
+        ChangeNotifierProvider(
+          create: (_) => MyAppState()
+            ..setLocale(initialLocale)
+            ..setThemeMode(initialThemeMode),
+        ),
       ],
       child: Consumer<MyAppState>(
         builder: (context, appState, _) {

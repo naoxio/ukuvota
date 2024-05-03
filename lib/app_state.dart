@@ -4,6 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 import 'package:flutter/material.dart';
+import 'package:ukuvota/services/user_preferences.dart';
 
 class MyAppState extends ChangeNotifier {
   Locale _locale = const Locale('en');
@@ -14,11 +15,13 @@ class MyAppState extends ChangeNotifier {
 
   void setLocale(Locale locale) {
     _locale = locale;
+    UserPreferences.setLocale(locale);
     notifyListeners();
   }
 
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
+    UserPreferences.setThemeMode(themeMode);
     notifyListeners();
   }
 }

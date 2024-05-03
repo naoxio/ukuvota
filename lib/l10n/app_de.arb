@@ -90,7 +90,6 @@
   "completedProcesses": "Abgeschlossene Prozesse",
   "completedProcessesEmptyMessage": "Abgeschlossene Prozesse werden hier angezeigt.",
   "startNewProcess": "Neuen Prozess starten",
-  "searchFieldLabel": "Geben Sie die ID oder URL eines bestehenden Prozesses ein"
-
-
+  "searchFieldLabel": "Geben Sie die ID oder URL eines bestehenden Prozesses ein",
+  "languageDialogTitle": "Sprache auswählen"
 }

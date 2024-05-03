@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/proposal.dart';
 import 'package:ukuvota/scaffolds/setup_process_scaffold.dart';
-import 'package:ukuvota/services/shared_process_service.dart';
-import 'package:ukuvota/services/shared_setup_service.dart';
+import 'package:ukuvota/services/dashboard_preferences.dart';
+import 'package:ukuvota/services/setup_process_preferences.dart';
 import 'package:ukuvota/services/process_data_service.dart';
 import 'package:ukuvota/utils/date_utils.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +26,8 @@ class ReviewScreen extends StatefulWidget {
 }
 
 class ReviewScreenState extends State<ReviewScreen> {
-  final SharedSetupService _sharedSetupService = SharedSetupService();
+  final SetupProcessPreferences _setupProcessPreferences =
+      SetupProcessPreferences();
   final ProcessDataService _processDataService = ProcessDataService();
   bool _isLoading = false;
 
@@ -51,7 +52,7 @@ class ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _loadProcessData() async {
-    final processData = await _sharedSetupService.getProcessData();
+    final processData = await _setupProcessPreferences.getProcessData();
     if (processData != null) {
       setState(() {
         _title = processData['title'];
@@ -138,9 +139,9 @@ class ReviewScreenState extends State<ReviewScreen> {
         ];
       }
       await _processDataService.createProcess(processId, processData);
-      await _sharedSetupService.clearProcessData();
+      await _setupProcessPreferences.clearProcessData();
 
-      await SharedProcessService().addUUID(processId);
+      await DashboardPreferences().addUUID(processId);
 
       context.go('/process/$processId');
     } catch (error) {

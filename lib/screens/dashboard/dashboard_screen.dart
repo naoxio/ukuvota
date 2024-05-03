@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/main_scaffold.dart';
 import 'package:ukuvota/services/process_data_service.dart';
-import 'package:ukuvota/services/shared_process_service.dart';
+import 'package:ukuvota/services/dashboard_preferences.dart';
 import 'package:ukuvota/widgets/process/process_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -35,7 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               children: [
                 FutureBuilder<List<String>>(
-                  future: SharedProcessService().fetchUUIDs(),
+                  future: DashboardPreferences().fetchUUIDs(),
                   builder: (context, snapshot) {
                     final uuids = snapshot.data ?? [];
                     return FutureBuilder<Map<String, Process>>(

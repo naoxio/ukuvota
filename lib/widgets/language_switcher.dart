@@ -11,31 +11,79 @@ import 'package:ukuvota/app_state.dart';
 class LanguageSwitcher extends StatelessWidget {
   const LanguageSwitcher({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
+  void _showLanguageDialog(BuildContext context) {
     final appState = Provider.of<MyAppState>(context, listen: false);
     final localizations = AppLocalizations.of(context)!;
 
-    return DropdownButton<String>(
-      underline: Container(),
-      value: localizations.localeName,
-      onChanged: (String? newValue) {
-        if (newValue != null) {
-          appState.setLocale(Locale(newValue));
-        }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(localizations.languageDialogTitle),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: AppLocalizations.supportedLocales.map((locale) {
+                final languageCode = locale.languageCode;
+                final languageName = {
+                      'en': 'English',
+                      'es': 'Español',
+                      'de': 'Deutsch',
+                      'fr': 'Français',
+                      'it': 'Italiano',
+                    }[languageCode] ??
+                    languageCode;
+
+                return ListTile(
+                  title: Text(languageName),
+                  onTap: () {
+                    appState.setLocale(locale);
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
       },
-      items: AppLocalizations.supportedLocales.map((locale) {
-        final languageCode = locale.languageCode;
-        final languageName = {
-              'en': 'English',
-              'es': 'Español',
-              'de': 'Deutsch',
-              'fr': 'Français',
-              'it': 'Italiano',
-            }[languageCode] ??
-            languageCode;
-        return DropdownMenuItem(value: languageCode, child: Text(languageName));
-      }).toList(),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final localizations = AppLocalizations.of(context)!;
+
+    if (screenWidth < 500) {
+      return IconButton(
+        icon: const Icon(Icons.language),
+        onPressed: () => _showLanguageDialog(context),
+      );
+    } else {
+      final appState = Provider.of<MyAppState>(context, listen: false);
+
+      return DropdownButton<String>(
+        underline: Container(),
+        value: localizations.localeName,
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            appState.setLocale(Locale(newValue));
+          }
+        },
+        items: AppLocalizations.supportedLocales.map((locale) {
+          final languageCode = locale.languageCode;
+          final languageName = {
+                'en': 'English',
+                'es': 'Español',
+                'de': 'Deutsch',
+                'fr': 'Français',
+                'it': 'Italiano',
+              }[languageCode] ??
+              languageCode;
+
+          return DropdownMenuItem(
+              value: languageCode, child: Text(languageName));
+        }).toList(),
+      );
+    }
   }
 }

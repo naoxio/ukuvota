@@ -90,6 +90,6 @@
   "completedProcesses": "Completed Processes",
   "completedProcessesEmptyMessage": "Completed processes will appear here.",
   "startNewProcess": "Start a New Process",
-  "searchFieldLabel": "Input the ID or URL of an existing process"
-
+  "searchFieldLabel": "Input the ID or URL of an existing process",
+  "languageDialogTitle": "Select Language"
 }

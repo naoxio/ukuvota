@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ukuvota/models/process.dart';
 import 'package:ukuvota/scaffolds/process_scaffold.dart';
 import 'package:ukuvota/services/process_data_service.dart';
-import 'package:ukuvota/services/shared_process_service.dart';
+import 'package:ukuvota/services/dashboard_preferences.dart';
 import 'package:ukuvota/widgets/process/voting_list.dart';
 
 class VotingScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class VotingScreenState extends State<VotingScreen> {
 
   Future<void> _saveProcessId() async {
     final processId = widget.process.id;
-    await SharedProcessService().addUUID(processId);
+    await DashboardPreferences().addUUID(processId);
   }
 
   void _reloadProcessData() async {
