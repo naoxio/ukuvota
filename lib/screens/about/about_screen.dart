@@ -42,7 +42,7 @@ class AboutScreen extends StatelessWidget {
                   onPressed: () {
                     context.go('/create');
                   },
-                  child: Text(localizations.webAppCardButton),
+                  child: Text(localizations.startNewProcess),
                 ),
                 const SizedBox(height: 40),
               ],

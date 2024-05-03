@@ -155,14 +155,14 @@ class ProposalsListState extends State<ProposalsList> {
             },
           )
         else
-          Text(localizations.noProposalsFound),
+          Text(localizations.proposalsNoneFound),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: _addProposal,
-              child: Text(localizations.addProposal),
+              child: Text(localizations.proposalsAdd),
             ),
             const SizedBox(width: 16),
             PopupMenuButton<Proposal>(
@@ -202,7 +202,7 @@ class ProposalsListState extends State<ProposalsList> {
 
                 widget.onProposalsUpdated(_proposals);
               },
-              child: Text(localizations.addProposalTemplate),
+              child: Text(localizations.processAddProposalTemplate),
             ),
           ],
         ),
