@@ -3,6 +3,7 @@
 - Improve mobile language selector
 - Clean language files
 - Store user preferences
+- Improve results display
 
 ## [1.0.3] - 2024-05-03
 - Fix scrolling voting list

@@ -138,6 +138,7 @@ class VotingListState extends State<VotingList> {
               ),
             ],
           ),
+          const SizedBox(height: 32),
         ],
       ),
     );

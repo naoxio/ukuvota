@@ -203,69 +203,49 @@ class ResultsCardState extends State<ResultsCard>
             }).toList(),
           ),
           const SizedBox(height: 16),
-          DataTable(
-            columns: [
-              DataColumn(label: Text(localizations.processProposal)),
-              DataColumn(label: Text(localizations.processAverageScore)),
-              DataColumn(label: Text(localizations.processTotalScore)),
-            ],
-            rows: sortedProposals.map((proposal) {
-              final total = getTotal(proposal.id);
-              return DataRow(
-                cells: [
-                  DataCell(
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          truncateString(proposal.title, 50),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: [
+                DataColumn(label: Text(localizations.processProposal)),
+                DataColumn(label: Text(localizations.processAverageScore)),
+                DataColumn(label: Text(localizations.processTotalScore)),
+              ],
+              rows: sortedProposals.map((proposal) {
+                final total = getTotal(proposal.id);
+                return DataRow(
+                  cells: [
+                    DataCell(
+                      SizedBox(
+                        height: 150,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                truncateString(proposal.title, 50),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              HtmlWidget(convertToHtml(proposal.description)),
+                            ],
+                          ),
                         ),
-                        HtmlWidget(convertToHtml(proposal.description)),
-                      ],
+                      ),
                     ),
-                  ),
-                  DataCell(
-                    Tooltip(
-                      message: getAverageScore(total).toString(),
-                      child: getAverageEmoji(total),
+                    DataCell(
+                      Tooltip(
+                        message: getAverageScore(total).toString(),
+                        child: getAverageEmoji(total),
+                      ),
                     ),
-                  ),
-                  DataCell(Text(total.toStringAsFixed(2))),
-                ],
-              );
-            }).toList(),
+                    DataCell(Text(total.toStringAsFixed(2))),
+                  ],
+                );
+              }).toList(),
+            ),
           ),
           const SizedBox(height: 16),
-          if (!kIsWeb)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      localizations.processExportData,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.file_download),
-                          onPressed: exportMarkdown,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.image),
-                          onPressed: exportImage,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
         ],
       ),
     );
