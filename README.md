@@ -1,7 +1,7 @@
-! Will slowly migrate to Dioxus, for a fast, secure and cross platform apllication
+! Will slowly migrate to Dioxus [Ukuvota](https://github.com/naoxio/ukuvota)
 ---
 
-# Ukuvote
+# Ukuvota
 Quick tool for collaborative score voting to find consensus in a group.
 
 ## Development Environment
