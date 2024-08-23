@@ -1,5 +1,3 @@
-! Will slowly migrate to Dioxus [Ukuvota](https://github.com/naoxio/ukuvota)
----
 
 # Ukuvota
 Quick tool for collaborative score voting to find consensus in a group.
