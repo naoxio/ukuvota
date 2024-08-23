@@ -1,4 +1,7 @@
-# Ukuvota
+! Will slowly migrate to Dioxus, for a fast, secure and cross platform apllication
+---
+
+# Ukuvote
 Quick tool for collaborative score voting to find consensus in a group.
 
 ## Development Environment
