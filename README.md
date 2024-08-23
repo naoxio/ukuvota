@@ -1,3 +1,5 @@
+! No longer maintained, use the astro version until we have a Dioxus replacment [ukuvote](https://ukuvote.xyz)
+
 # Ukuvota
 Quick tool for collaborative score voting to find consensus in a group.
 
