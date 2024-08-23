@@ -1,4 +1,4 @@
-! Will slowly migrate to Dioxus [Ukuvota](https://github.com/naoxio/ukuvota)
+! Will slowly revive the astro version, enhanced with Tauri [Ukuvota](https://github.com/naoxio/ukuvota)
 ---
 
 # Ukuvota
