@@ -1,16 +1,13 @@
-import { component$, Slot, useStyles$, useStore } from '@builder.io/qwik';
-import { useLocation, Form } from '@builder.io/qwik-city';
-import BaseLayout from '@layouts/BaseLayout';
-import type { ProcessCookie } from '@utils/parseProcessCookie';
-import { parseProcessCookie } from '@utils/parseProcessCookie';
-import { Translator } from '@utils/i18n';
+import { component$, Slot, useStyles$, useStore, $ } from '@builder.io/qwik';
+import { useLocation, useNavigate } from '@builder.io/qwik-city';
+import { useTranslator } from '@utils/i18n';
 
 export interface CreateProcessLayoutProps {
   step: number;
 }
 
 export default component$((props: CreateProcessLayoutProps) => {
-  const translator = new Translator('en'); // Replace with your locale logic
+  const translator = useTranslator();
 
   useStyles$(`
     .brown-ring {
@@ -34,6 +31,7 @@ export default component$((props: CreateProcessLayoutProps) => {
   `);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const processCookie = useStore<ProcessCookie>(parseProcessCookie(location.url.searchParams.get('process') || ''));
 
   const steps = [
@@ -42,26 +40,30 @@ export default component$((props: CreateProcessLayoutProps) => {
     { stepNumber: 3, disabled: (!processCookie.title || !processCookie.phase || !processCookie.endVotingDate) }
   ];
 
+  const updateStep = $((stepNumber: number) => {
+    // Here you would update your process cookie or state
+    // For now, we'll just navigate to the new step
+    navigate(`/create-process/step${stepNumber}`);
+  });
+
   return (
-    <BaseLayout title={translator.t('setup.process')} description={translator.t('description')}>
+    <>
       <h1 class="text-center">{translator.t('setup.process')}</h1>
       <div class="flex justify-center space-x-2 m-2">
         {steps.map(({ stepNumber, disabled }) => (
-          <Form key={stepNumber} action="/api/update-step" method="POST">
-            <input type="hidden" name="step" value={stepNumber} />
-            <button 
-              type="submit" 
-              class={`w-4 h-4 rounded-full ${
-                props.step === stepNumber ? 'ring-bg ring brown-ring ring-2' : 
-                props.step > stepNumber ? 'ring-bg' : 
-                'bg-gray-300'
-              } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} 
-              disabled={disabled}
-            ></button>
-          </Form>
+          <button 
+            key={stepNumber}
+            onClick$={() => updateStep(stepNumber)}
+            class={`w-4 h-4 rounded-full ${
+              props.step === stepNumber ? 'ring-bg ring brown-ring ring-2' : 
+              props.step > stepNumber ? 'ring-bg' : 
+              'bg-gray-300'
+            } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} 
+            disabled={disabled}
+          ></button>
         ))}
       </div>
       <Slot />
-    </BaseLayout>
+    </>
   );
 });

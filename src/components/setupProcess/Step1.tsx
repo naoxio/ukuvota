@@ -1,9 +1,9 @@
 import { component$, useSignal, useStore, $, useVisibleTask$ } from "@builder.io/qwik";
-import { Translator } from '@utils/i18n';
-import weightingOptions from '@utils/weightingOptions';
-import Modal from '@components/ui/Modal';
-import ContentDoc from '@components/ui/ContentDoc';
-import { createQuill, updateQuill } from '@utils/quillUtils';
+import { Translator } from '../../utils/i18n';
+import weightingOptions from '../../utils/weightingOptions';
+import Modal from '../ui/Modal';
+import ContentDoc from '../ui/ContentDoc';
+import { createQuill, updateQuill } from '../../utils/quillUtils';
 
 export interface Step1Props {
   title: string;

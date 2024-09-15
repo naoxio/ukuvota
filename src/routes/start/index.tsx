@@ -1,12 +1,11 @@
 import { component$, useSignal, useStore, $ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import { Translator } from '@utils/i18n';
-import { parseProcessCookie } from '@utils/parseProcessCookie';
-import type { ProcessCookie } from '@utils/parseProcessCookie';
-import Step1 from '@components/setupProcess/Step1';
-import Step2 from '@components/setupProcess/Step2';
-import Step3 from '@components/setupProcess/Step3';
-import CreateProcessLayout from '@layouts/CreateProcessLayout';
+import { Translator } from '../../utils/i18n';
+
+import Step1 from '../../components/setupProcess/Step1';
+import Step2 from '../../components/setupProcess/Step2';
+import Step3 from '../../components/setupProcess/Step3';
+
 import { Icon } from 'qwik-icon'; // You might need to find a Qwik equivalent for icons
 
 export default component$(() => {
@@ -31,30 +30,9 @@ export default component$(() => {
   const currentStep = useSignal(1);
   const showExistingProcessModal = useSignal(false);
 
-  const initializeComponent = $(() => {
-    // In Qwik, you'll need to handle cookie parsing differently
-    // This is a placeholder for where you'd parse the cookie and set the state
-    const parsedCookie = parseProcessCookie(""); // Replace with actual cookie value
-    Object.assign(processCookie, parsedCookie);
-
-    currentStep.value = Number(processCookie.step);
-
-    if (currentStep.value === 1 && !processCookie.phase && !processCookie.weighting && !processCookie.title && !processCookie.descriptionId) {
-      processCookie.create = 'false';
-    }
-
-    showExistingProcessModal.value = processCookie.create === 'true';
-  });
-
-  const startNewProcess = $(async () => {
-    // Replace with your API call logic
-    await fetch('/api/start-new-process', { method: 'POST' });
-    showExistingProcessModal.value = false;
-    // Reset processCookie state here
-  });
 
   return (
-    <CreateProcessLayout step={currentStep.value}>
+    <div step={currentStep.value}>
       <div id="jsContent">
         {showExistingProcessModal.value && (
           <div class="modal">
@@ -102,6 +80,6 @@ export default component$(() => {
           />
         ) : null}
       </div>
-    </CreateProcessLayout>
+    </div>
   );
 });

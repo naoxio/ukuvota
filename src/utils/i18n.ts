@@ -3,43 +3,46 @@ import enTranslations from '../locales/en.json';
 import deTranslations from '../locales/de.json';
 import itTranslations from '../locales/it.json';
 
-export const TranslatorContext = createContextId<{ locale: string; translator: Translator | null }>('TranslatorContext');
+// Context to store locale and translations
+export const TranslatorContext = createContextId<{ locale: string; translations: any }>('TranslatorContext');
 
-const translationsMap: { [key: string]: any } = { 
+// Map of translations for each locale
+export const translationsMap: { [key: string]: any } = { 
   en: enTranslations,
   de: deTranslations,
   it: itTranslations
 };
 
-export class Translator {
-  private translations: any;
+// Simplified function for translation lookup
+const getTranslation = (translations: any, key: string): string => {
+  const keys = key.split('.');
+  let value: any = translations;
 
-  constructor(private locale: string) {
-    this.setTranslations(locale);
-  }
-
-  private setTranslations(locale: string): void {
-    this.translations = translationsMap[locale] || translationsMap.en;
-  }
-
-  public t(key: string): string {
-    const keys = key.split('.');
-    let value: any = this.translations;
-
-    for (const keyPart of keys) {
-      value = value[keyPart];
-      if (value === undefined) {
-        return key;  // Fallback to the key if translation is missing
-      }
+  for (const keyPart of keys) {
+    value = value[keyPart];
+    if (value === undefined) {
+      return key;  // Fallback to the key if translation is missing
     }
-
-    return value as string;
   }
-}
 
+  return value as string;
+};
+
+// Hook to use translator with locale and translations from context
 export const useTranslator = () => {
   const context = useContext(TranslatorContext);
+
   return {
-    t: $((key: string) => context.translator?.t(key) || key)
+    t: $((key: string) => getTranslation(context.translations, key))
+  };
+};
+
+// Example of setting the context somewhere in your app (e.g., at the root component)
+export const setTranslatorContext = (locale: string) => {
+  const translations = translationsMap[locale] || translationsMap.en;
+  
+  return {
+    locale,
+    translations
   };
 };

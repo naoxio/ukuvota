@@ -1,40 +1,114 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --orange-brown: #C45E1E;
   --jungle-green: #1E8C4E;
+  --white: #ffffff;
+  --black: #000000;
+  --gray-light: #f0f0f0;
+  --gray-dark: #333333;
+
+  /* Default (light) theme variables */
+  --background-color: var(--white);
+  --text-color: var(--black);
+  --header-background: var(--gray-light);
+  --button-text-color: var(--black);
+  --feature-heading-color: var(--orange-brown);
+  --navbar-background: var(--gray-light);
 }
 
-@layer components {
-  .cta-button {
-    @apply inline-block bg-green-600 text-white py-4 px-8 rounded-lg text-xl mt-8 transition-colors duration-300 hover:bg-green-700;
-  }
-
-  .features {
-    @apply flex justify-around mt-16;
-  }
-
-  .feature {
-    @apply flex-1 p-4;
-  }
-
-  .feature h2 {
-    @apply text-orange-600 dark:text-orange-400;
-  }
+[data-theme="dark"] {
+  --background-color: var(--gray-dark);
+  --text-color: var(--white);
+  --header-background: var(--gray-dark);
+  --button-text-color: var(--white);
+  --feature-heading-color: #f4a261; /* Lighter shade of orange-brown for dark mode */
+  --navbar-background: var(--gray-dark);
 }
 
-@layer base {
-  body {
-    @apply font-sans m-0 p-0 transition-colors duration-300;
-  }
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
 
-  h1 {
-    @apply text-green-600 text-4xl mb-4;
-  }
+h1 {
+  color: var(--jungle-green);
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
 
-  main {
-    @apply max-w-4xl mx-auto p-8 text-center;
-  }
+main {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--jungle-green);
+  color: var(--white);
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #176f3e;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 4rem;
+}
+
+.feature {
+  flex: 1;
+  padding: 1rem;
+}
+
+.feature h2 {
+  color: var(--feature-heading-color);
+}
+
+
+/* Header styles */
+header {
+  background-color: var(--navbar-background);
+  padding: 1rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-link {
+  background: none;
+  color: var(--jungle-green);
+  text-decoration: none;
+}
+
+.btn-ghost {
+  background: none;
+  color: var(--button-text-color);
+}
+
+.select {
+  padding: 0.25rem;
+  margin: 0 0.5rem;
 }
