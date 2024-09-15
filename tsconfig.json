@@ -1,24 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "allowJs": true,
+    "target": "ES2017",
+    "module": "ES2022",
+    "lib": ["es2022", "DOM", "WebWorker", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@builder.io/qwik",
     "strict": true,
-    "jsx": "preserve",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "incremental": true,
     "isolatedModules": true,
-    "baseUrl": "./src",
+    "outDir": "tmp",
+    "noEmit": true,
     "paths": {
-      "@content/*": ["content/*"],
-      "@assets/*": ["assets/*"],
-      "@utils/*": ["utils/*"],
-      "@layouts/*": ["layouts/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@components/*": ["components/*"]
+      "~/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist"]
+  "files": ["./.eslintrc.cjs"],
+  "include": ["src", "./*.d.ts", "./*.config.ts"]
 }

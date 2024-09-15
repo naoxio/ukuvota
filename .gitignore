@@ -1,35 +1,45 @@
-# build output
-dist/
-build/
+# Build
+/dist
+/lib
+/lib-types
+/server
 
-# database
-db/
+# Development
+node_modules
+*.local
 
-# dependencies
-node_modules/
+# Cache
+.cache
+.mf
+.rollup.cache
+tsconfig.tsbuildinfo
 
-# logs
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
+# Editor
+.vscode/*
+!.vscode/launch.json
+!.vscode/*.code-snippets
 
-# environment variables
-.env
-.env.production
-.env.development.local
-
-# macOS-specific files
+.idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# test related
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/cypress/e2e/2-advanced-examples
+# Yarn
+.yarn/*
+!.yarn/releases
 
-# deploy related
-.vercel
-.netlify
-.env*.local
+
+# devenv
+.devenv
