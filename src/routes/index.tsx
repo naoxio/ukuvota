@@ -1,24 +1,14 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 
 export default component$(() => {
-  const isDarkTheme = useSignal(false);
-
   return (
-    <div class={isDarkTheme.value ? "dark" : "light"}>
-      <header>
-        <nav>
-          <Link href="/dashboard">Dashboard</Link>
-          <button onClick$={() => isDarkTheme.value = !isDarkTheme.value}>
-            {isDarkTheme.value ? "Light Mode" : "Dark Mode"}
-          </button>
-        </nav>
-      </header>
+    <>
       <main>
         <h1>Welcome to Ukuvota</h1>
         <p>Empower your decision-making process with our innovative voting platform</p>
-        <Link href="/start" class="cta-button">Get Started</Link>
+        <Link href="/start" class="btn btn-primary cta-button">Get Started</Link>
         <section class="features">
           <div class="feature">
             <h2>Collaborative</h2>
@@ -34,7 +24,7 @@ export default component$(() => {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 });
 

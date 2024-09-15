@@ -1,103 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --orange-brown: #C45E1E;
   --jungle-green: #1E8C4E;
-  --light-bg: #F5F5F5;
-  --dark-bg: #1A1A1A;
-  --light-text: #333333;
-  --dark-text: #F5F5F5;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.3s, color 0.3s;
+@layer components {
+  .cta-button {
+    @apply inline-block bg-green-600 text-white py-4 px-8 rounded-lg text-xl mt-8 transition-colors duration-300 hover:bg-green-700;
+  }
+
+  .features {
+    @apply flex justify-around mt-16;
+  }
+
+  .feature {
+    @apply flex-1 p-4;
+  }
+
+  .feature h2 {
+    @apply text-orange-600 dark:text-orange-400;
+  }
 }
 
-.light {
-  background-color: var(--light-bg);
-  color: var(--light-text);
-}
+@layer base {
+  body {
+    @apply font-sans m-0 p-0 transition-colors duration-300;
+  }
 
-.dark {
-  background-color: var(--dark-bg);
-  color: var(--dark-text);
-}
+  h1 {
+    @apply text-green-600 text-4xl mb-4;
+  }
 
-header {
-  background-color: var(--orange-brown);
-  padding: 1rem;
+  main {
+    @apply max-w-4xl mx-auto p-8 text-center;
+  }
 }
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-nav a, nav button {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-nav a:hover, nav button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-nav button {
-  background: none;
-  border: 1px solid white;
-  cursor: pointer;
-}
-
-main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-h1 {
-  color: var(--jungle-green);
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.cta-button {
-  display: inline-block;
-  background-color: var(--jungle-green);
-  color: white;
-  padding: 1rem 2rem;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  margin-top: 2rem;
-  transition: background-color 0.3s;
-}
-
-.cta-button:hover {
-  background-color: #166B3A;
-}
-
-.features {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 4rem;
-}
-
-.feature {
-  flex: 1;
-  padding: 1rem;
-}
-
-.feature h2 {
-  color: var(--orange-brown);
-}
-
-.dark .feature h2 {
-  color: #FF8C42;
-}
-
