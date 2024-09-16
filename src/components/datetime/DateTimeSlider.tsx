@@ -1,5 +1,5 @@
 import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { durationToSlider } from '~/utils/logslider';
 
 interface DateTimeSliderProps {
@@ -8,7 +8,7 @@ interface DateTimeSliderProps {
 }
 
 export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   
   const state = useStore({
     sliderValue: durationToSlider(props.duration),
@@ -17,7 +17,7 @@ export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
 
   const updateDurationText = $(
     (value: number) => {
-       state.durationText = `${value} ${translator.t('setup.unit')}`; // Assuming 'setup.unit' is a key for unit text
+       state.durationText = `${value} ${t('setup.unit')}`; // Assuming 'setup.unit' is a key for unit text
      }
   );
 
@@ -35,7 +35,7 @@ export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
 
   return (
     <div id={props.id}>
-      <span>{translator.t('setup.duration')}:&nbsp;</span>
+      <span>{t('setup.duration')}:&nbsp;</span>
       <span class="duration-display" style={{ color: 'green' }}>{state.durationText}</span>
       <br />
       <input

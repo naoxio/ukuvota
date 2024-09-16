@@ -1,5 +1,5 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { format } from 'date-fns-tz';
 import { Countdown } from '~/components/datetime/Countdown'; 
 
@@ -11,7 +11,7 @@ interface ProcessTimeLabelProps {
 }
 
 export const ProcessTimeLabel = component$((props: ProcessTimeLabelProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
 
   const state = useStore({
     startDateFormatted: '',
@@ -27,33 +27,33 @@ export const ProcessTimeLabel = component$((props: ProcessTimeLabelProps) => {
 
   return (
     <process-time-label data-start={props.dates[0]} data-timezone={props.timezone}>
-      <span>{translator.t(`phases.${props.phase}.title`)}:&nbsp;</span>
+      <span>{t(`phases.${props.phase}.title`)}:&nbsp;</span>
       {props.dates[0] > state.currentDate ? (
         <>
           <br />
-          <span>{translator.t('phases.start')}:&nbsp;</span>
+          <span>{t('phases.start')}:&nbsp;</span>
           <span id="start-date" class="link-success">{state.startDateFormatted}</span>
           <br />
-          <span>{translator.t('phases.lastFor')}:&nbsp;</span>
+          <span>{t('phases.lastFor')}:&nbsp;</span>
           <Countdown type="success" dates={props.dates} timezone={props.timezone} />
         </>
       ) : props.dates[1] > state.currentDate ? (
         <>
           {props.proposals_length === 0 ? (
-            <span class="text-info">{translator.t('skipped')}</span>
+            <span class="text-info">{t('skipped')}</span>
           ) : (
             <>
               <Countdown dates={props.dates} type="warning" timezone={props.timezone} />
-              <span>&nbsp;({translator.t('remainingTime')})</span>
+              <span>&nbsp;({t('remainingTime')})</span>
             </>
           )}
         </>
       ) : (
         <>
           {props.proposals_length === 0 ? (
-            <span class="text-info">{translator.t('skipped')}</span>
+            <span class="text-info">{t('skipped')}</span>
           ) : (
-            <span class="text-info">{translator.t('done')}</span>
+            <span class="text-info">{t('done')}</span>
           )}
         </>
       )}

@@ -1,5 +1,5 @@
 ---
-import { Translator } from '~/utils/i18n.js';
+import { Translator } from '~/i18n/translator.js';
 import { parseProcessCookie } from '~/utils/parseProcessCookie'
 import type { ProcessCookie } from '~/utils/parseProcessCookie'
 import Step1 from '@components/setupProcess/Step1.astro';
@@ -11,7 +11,7 @@ import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
 import { Icon } from 'astro-icon'
 import localforage from 'localforage';
 
-const translator = new Translator(Astro.currentLocale || 'en'); 
+const { t } =new Translator(Astro.currentLocale || 'en'); 
 
 
 
@@ -48,7 +48,7 @@ if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
     #jsContent { display: none; }
   </style>
   <div class="alert">
-    <p>{translator.t('enableJavaScript')}</p>
+    <p>{t('enableJavaScript')}</p>
   </div>
 </noscript>
 
@@ -61,18 +61,18 @@ if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
           <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
             <Icon width="22" name="close"/>
           </label>
-          <h3>{translator.t('setup.continueEditing')}</h3>
-          <p>{translator.t('setup.existingProcessPrompt')}</p>
+          <h3>{t('setup.continueEditing')}</h3>
+          <p>{t('setup.existingProcessPrompt')}</p>
           <div class="process-details">
-            { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
-            { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
+            { title && <p><strong>{t('process.topic')}:</strong> {title}</p> }
+            { weighting && <p><strong>{t('process.weighting')}:</strong> {weighting}</p> }
           </div>
 
           <div class="flex justify-center">
             <form action="/api/start-new-process" method="post">
-              <button type="submit" class="btn m-2">{translator.t('setup.startNew')}</button>
+              <button type="submit" class="btn m-2">{t('setup.startNew')}</button>
             </form>
-            <label for="existingProcessModal" class="btn m-2">{translator.t('buttons.continue')}</label>
+            <label for="existingProcessModal" class="btn m-2">{t('buttons.continue')}</label>
           </div>
         </label>
       </label>

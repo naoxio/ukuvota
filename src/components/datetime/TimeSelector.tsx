@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { DateTimePicker } from '~/components/datetime/DateTimePicker';
 import { DateTimeSlider } from '~/components/datetime/DateTimeSlider';
 
@@ -12,9 +12,9 @@ interface TimeSelectorProps {
 }
 
 export const TimeSelector = component$((props: TimeSelectorProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   
-  const title = translator.t(`phases.${props.phase}.title`);
+  const title = t(`phases.${props.phase}.title`);
 
   // Calculate the duration in minutes
   const duration = (new Date(props.endDate).getTime() - new Date(props.startDate).getTime()) / 1000 / 60;

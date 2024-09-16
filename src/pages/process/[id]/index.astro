@@ -2,9 +2,9 @@
 import ProcessLayout from '@layouts/ProcessLayout.astro';
 import fetchProcessData from '~/utils/fetchProcessData';
 import getProcessUrl from '~/utils/getProcessUrl';
-import { Translator } from '~/utils/i18n.js';
+import { Translator } from '~/i18n/translator.js';
 
-const translator = new Translator(Astro.currentLocale || 'en');
+const { t } =new Translator(Astro.currentLocale || 'en');
 
 
 const { url } = Astro;
@@ -23,7 +23,7 @@ try {
     <process-details data-process={JSON.stringify(process)}>
       {+new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] && (
         <div>
-          <h2>{translator.t('process.proposals')}</h2>
+          <h2>{t('process.proposals')}</h2>
           <div class="proposals-container"></div>
         </div>
       )}

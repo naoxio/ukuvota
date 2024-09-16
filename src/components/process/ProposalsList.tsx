@@ -1,6 +1,6 @@
 import { component$, useStore, $, useVisibleTask$, useTask$ } from '@builder.io/qwik';
 import { v4 as uuidv4 } from 'uuid';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { Store } from '@tauri-apps/plugin-store';
 import { exampleProposals } from '~/utils/exampleProposals';
 
@@ -24,7 +24,7 @@ function useProposals(processId?: string) {
     proposals: [],
     dropdownOptions: [],
   });
-  const translator = useTranslator();
+  const { t } =useTranslator();
 
 
   useVisibleTask$(async () => {
@@ -61,7 +61,7 @@ function useProposals(processId?: string) {
 }
 
 export default component$((props: ProposalsProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const proposalsStore = useProposals(props.processId);
 
   const addProposal = $((title: string = '', description: string = '') => {
@@ -89,15 +89,15 @@ export default component$((props: ProposalsProps) => {
         ))}
       </div>
       {proposalsStore.proposals.length === 0 && (
-        <p id="no-proposals-text">{translator.t('noProposalsFound')}</p>
+        <p id="no-proposals-text">{t('noProposalsFound')}</p>
       )}
 
       <div class="flex items-center flex-wrap justify-center w-full">
         <button class="btn p-2" onClick$={() => addProposal()}>
-          {translator.t('addProposal')}
+          {t('addProposal')}
         </button>
         <div class="dropdown">
-          <div tabIndex={0} role="button" class="btn m-1">{translator.t('addProposalTemplate')}</div>
+          <div tabIndex={0} role="button" class="btn m-1">{t('addProposalTemplate')}</div>
           <div tabIndex={0} class="dropdown-content menu p-2 shadow rounded-box bg-base-100 z-[1]">
             {proposalsStore.dropdownOptions.map((option, index) => (
               <a key={index} class="card-body link" onClick$={() => addProposal(option.title, option.description)}>

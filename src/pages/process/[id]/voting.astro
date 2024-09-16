@@ -3,13 +3,13 @@
 import Alert from "@components/ui/Alert.astro";
 import AlertList from "components/ui/AlertList.astro";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
-import { Translator } from '~/utils/i18n.js';
+import { Translator } from '~/i18n/translator.js';
 import fetchProcessData from '~/utils/fetchProcessData';
 
 import { Icon } from "astro-icon";
 import getProcessUrl from "~/utils/getProcessUrl";
 
-const translator = new Translator(Astro.currentLocale || 'en');
+const { t } =new Translator(Astro.currentLocale || 'en');
 
 const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
 
@@ -46,7 +46,7 @@ try {
 <ProcessLayout process={process}>
     <voting-list data-process={JSON.stringify(process)}>
         <span class='flex justify-end'>
-            <span>{ translator.t('process.voters') }:&nbsp;</span>
+            <span>{ t('process.voters') }:&nbsp;</span>
             <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
         </span>
         <div class="proposal-list">
@@ -67,26 +67,26 @@ try {
             </div>
         </div>
         <br/>   
-        <p>{ translator.t('process.voterName') }</p>
+        <p>{ t('process.voterName') }</p>
         <div class="text-center flex items-center">
             <input id="sender-name" type="text" class="input w-full m-2"/>
             <button id="submit-vote" class="btn btn-primary p-2" >
-                {translator.t('process.submitVote')}
+                {t('process.submitVote')}
             </button>
         </div>
         <AlertList>
             <Alert icon="sync" info>
-                { translator.t('alert.info.submittingVote') }
+                { t('alert.info.submittingVote') }
             </Alert>
             <Alert icon="checkmark-outline" success>
-                { translator.t('alert.success.submitVote') }
+                { t('alert.success.submitVote') }
                 <span class="name"></span>
             </Alert>
             <Alert icon="close" error>
-                { translator.t('alert.error.submitVote') }
+                { t('alert.error.submitVote') }
             </Alert>
             <Alert icon="close" error>
-                { translator.t('alert.error.emptyName') }
+                { t('alert.error.emptyName') }
             </Alert>
         </AlertList>
         

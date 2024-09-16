@@ -1,5 +1,5 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 
 import Step1 from '~/components/setupProcess/Step1';
@@ -9,7 +9,7 @@ import Step3 from '~/components/setupProcess/Step3';
 import { LuX } from "@qwikest/icons/lucide";
 
 export default component$(() => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const processData = useProcessData();
 
   const currentStep = useSignal(1);
@@ -43,16 +43,16 @@ export default component$(() => {
               <button class="btn btn-sm btn-circle absolute right-2 top-2" onClick$={() => showExistingProcessModal.value = false}>
                 <LuX width={22} height={22} />
               </button>
-              <h3>{translator.t('setup.continueEditing')}</h3>
-              <p>{translator.t('setup.existingProcessPrompt')}</p>
+              <h3>{t('setup.continueEditing')}</h3>
+              <p>{t('setup.existingProcessPrompt')}</p>
               <div class="process-details">
-                {processData.title && <p><strong>{translator.t('process.topic')}:</strong> {processData.title}</p>}
-                {processData.weighting && <p><strong>{translator.t('process.weighting')}:</strong> {processData.weighting}</p>}
+                {processData.title && <p><strong>{t('process.topic')}:</strong> {processData.title}</p>}
+                {processData.weighting && <p><strong>{t('process.weighting')}:</strong> {processData.weighting}</p>}
               </div>
 
               <div class="flex justify-center">
-                <button onClick$={startNewProcess} class="btn m-2">{translator.t('setup.startNew')}</button>
-                <button onClick$={() => showExistingProcessModal.value = false} class="btn m-2">{translator.t('buttons.continue')}</button>
+                <button onClick$={startNewProcess} class="btn m-2">{t('setup.startNew')}</button>
+                <button onClick$={() => showExistingProcessModal.value = false} class="btn m-2">{t('buttons.continue')}</button>
               </div>
             </div>
           </div>

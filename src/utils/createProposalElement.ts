@@ -17,7 +17,7 @@ const createProposalElement = (
   }
   const isEmpty = isProposalEmpty({id: uniqueId, title, description: descriptionContent} as IProposal);
 
-  // Use translator.t to fetch localized strings
+  // Use t to fetch localized strings
   const descriptionArea = `
     <div id="description-${uniqueId}" class="ql-container ql-snow">
       <div class="ql-editor" data-gramm="false">${descriptionContent}</div>
@@ -27,9 +27,9 @@ const createProposalElement = (
 
   const editMode = `
     <div class="flex flex-col w-full edit-mode" style="${isSetup ? 'display:block;' : 'display:none;'}">
-      <b>${translator.t('process.title')}</b>
+      <b>${t('process.title')}</b>
       <input id="title-${uniqueId}" type="text" class="input input-bordered input-sm my-2 w-full" value="${title}" />
-      <label>${translator.t('process.description')}</label>
+      <label>${t('process.description')}</label>
       ${descriptionArea}
     </div>
   `;
@@ -38,21 +38,21 @@ const createProposalElement = (
     <div class="flex flex-col w-full view-mode" style="${isSetup ? 'display:none;' : 'display:block;'}">
       <h2 class="title">${title}</h2>
       <div class="desc">${descriptionContent}</div>
-      <p class="text-center text-gray-500 empty-proposal" style="${isEmpty ? 'display:block;' : 'display:none;'}">${translator.t('emptyProposal')}</p>
+      <p class="text-center text-gray-500 empty-proposal" style="${isEmpty ? 'display:block;' : 'display:none;'}">${t('emptyProposal')}</p>
     </div>
   `;
 
   const buttons = `
     <div class="flex justify-around w-full pt-2">
-      <button class="edit-button btn btn-primary btn-sm" style="${isSetup ? 'display:none;' : 'display:block;'}">${translator.t('buttons.edit')}</button>
-      <button class="save-button btn btn-primary btn-sm" style="display:none;">${translator.t('buttons.save')}</button>
+      <button class="edit-button btn btn-primary btn-sm" style="${isSetup ? 'display:none;' : 'display:block;'}">${t('buttons.edit')}</button>
+      <button class="save-button btn btn-primary btn-sm" style="display:none;">${t('buttons.save')}</button>
     </div>
   `;
 
   const proposalElement = `
     <div class="proposal card outline outline-1 shadow-xl py-4 px-4 my-8 w-full" id="${uniqueId}">
       <div class="flex justify-end">
-        <button class="delete-button btn btn-ghost text-error btn-xs" style="${isSetup ? 'display:block;' : 'display:none;'}" >${translator.t('buttons.delete')}</button>
+        <button class="delete-button btn btn-ghost text-error btn-xs" style="${isSetup ? 'display:block;' : 'display:none;'}" >${t('buttons.delete')}</button>
       </div>
       <div class="flex items-center flex-col" id="${uniqueId}">
         ${editMode}

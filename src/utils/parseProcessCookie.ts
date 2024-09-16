@@ -1,4 +1,4 @@
-import IProposal from "@types/IProposal";
+import type {IProposal} from "~/types";
 
 export type ProcessCookie = {
   timezone?: string;

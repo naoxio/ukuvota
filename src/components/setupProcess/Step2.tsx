@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import ProposalsList from "~/components/process/ProposalsList";
@@ -10,7 +10,7 @@ import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
 
 
 export default component$(() => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const navigate = useNavigate();
   const processData = useProcessData();
   const { proposalsStore, addProposal, removeProposal } = useProposals(processData._id);
@@ -52,7 +52,7 @@ export default component$(() => {
 
   const handleContinueButtonClick = $(async () => {
     if (processData.phase === 'voting' && proposalsStore.proposals.length === 0) {
-      errorMessage.value = await translator.t('error.noProposals');
+      errorMessage.value = await t('error.noProposals');
       return;
     }
 
@@ -64,7 +64,7 @@ export default component$(() => {
     <div id="step-2">
       {processData.phase === "full" ? (
         <div>
-          <h2 class="flex mt-4">{translator.t('setup.timeLeftHeading')}</h2>
+          <h2 class="flex mt-4">{t('setup.timeLeftHeading')}</h2>
           <TimezoneSelector onChange$={handleTimezoneChange} value={processData.timezone || 'UTC'} />
           <br />
           <div>
@@ -86,7 +86,7 @@ export default component$(() => {
         </div>
       ) : processData.phase === "voting" ? (
         <div>
-          <h2 class="flex mt-4">{translator.t('setup.timeLeftVotingHeading')}</h2>
+          <h2 class="flex mt-4">{t('setup.timeLeftVotingHeading')}</h2>
           <TimezoneSelector onChange$={handleTimezoneChange} value={processData.timezone || 'UTC'} />
           <br />
           <div>
@@ -99,7 +99,7 @@ export default component$(() => {
               onTimeChange$={handleTimeChange}
             />
             <br />
-            <h2>{translator.t('setup.proposals')}</h2>    
+            <h2>{t('setup.proposals')}</h2>    
             <ProposalsList 
               proposals={proposalsStore.proposals} 
               isSetup={true}
@@ -113,8 +113,8 @@ export default component$(() => {
         </div>
       ) : null}
       <div class="justify-around mt-5 flex">
-        <button id="backButton" class="btn" onClick$={handleBackButtonClick}>{translator.t('buttons.back')}</button>
-        <button id="continueButton" class="btn btn-primary" onClick$={handleContinueButtonClick}>{translator.t('buttons.continue')}</button>
+        <button id="backButton" class="btn" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="continueButton" class="btn btn-primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
       </div>
     </div>
   );

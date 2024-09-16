@@ -1,12 +1,10 @@
 import { component$ } from '@builder.io/qwik';
-import { useLocation, Link } from '@builder.io/qwik-city';
-import { Translator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { LuMail } from '@qwikest/icons/lucide';
 import { SiTelegram, SiX } from '@qwikest/icons/simple-icons';
 
 export default component$(() => {
-  const location = useLocation();
-  const translator = new Translator(location.locale || 'en');
+  const { t } = useTranslator();
 
   return (
     <footer class="flex flex-col justify-center items-center gap-4">
@@ -20,7 +18,7 @@ export default component$(() => {
         <span>&nbsp;-&nbsp;</span>
         <span>
           <Link class="link link-primary" href="/privacy-policy">
-            {translator.t('policy')}
+            {t('policy')}
           </Link>
         </span>
       </div>

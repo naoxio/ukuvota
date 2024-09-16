@@ -1,5 +1,5 @@
-import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { component$, useVisibleTask$, useStore, $ } from '@builder.io/qwik';
+import { useTranslator } from '~/i18n/translator';
 import { formatDuration } from '~/utils/dateUtils';
 
 interface CountdownProps {
@@ -9,39 +9,41 @@ interface CountdownProps {
 }
 
 export const Countdown = component$((props: CountdownProps) => {
-  const translator = useTranslator();
+  const { t } = useTranslator();
   
   const state = useStore({
     targetDate: new Date(props.dates[1]).getTime(),
     currentDate: Date.now(),
     duration: '',
-    doneText: translator.t('done'),
     statusClass: '',
   });
 
-  const updateCountdown = () => {
-    state.currentDate = Date.now();
-    const diff = state.targetDate - state.currentDate;
+  // Create a memoized function for translation
+  const translateDone = $(() => t('done'));
 
-    if (diff > 0) {
-      state.duration = formatDuration(diff / 1000);
+  useVisibleTask$(({ cleanup }) => {
+    const updateCountdown = async () => {
+      state.currentDate = Date.now();
+      const diff = state.targetDate - state.currentDate;
 
-      if (props.type === 'warning' && diff > 300000) {
-        state.statusClass = 'link-warning';
-      } else if (props.type === 'warning' && diff <= 300000) {
-        state.statusClass = 'text-error';
-      } else if (props.type === 'success') {
-        state.statusClass = 'link-success';
+      if (diff > 0) {
+        state.duration = formatDuration(diff / 1000);
+
+        if (props.type === 'warning' && diff > 300000) {
+          state.statusClass = 'link-warning';
+        } else if (props.type === 'warning' && diff <= 300000) {
+          state.statusClass = 'text-error';
+        } else if (props.type === 'success') {
+          state.statusClass = 'link-success';
+        }
+      } else {
+        state.duration = await translateDone();
+        state.statusClass = 'text-info';
       }
-    } else {
-      state.duration = state.doneText;
-      state.statusClass = 'text-info';
-    }
-  };
+    };
 
-  useVisibleTask$(() => {
     const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
+    cleanup(() => clearInterval(interval));
   });
 
   return (

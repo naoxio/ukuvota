@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/ui/Modal';
 import QRCode from '~/components/ui/QRCode';
@@ -13,7 +13,7 @@ interface ProcessInfoProps {
 }
 
 export default component$((props: ProcessInfoProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const { process, url } = props;
 
   const weightLabel = process.weighting ? weightingOptions[process.weighting] : null;
@@ -25,10 +25,10 @@ export default component$((props: ProcessInfoProps) => {
       <h1>{process.title}</h1>
       <div class="topic-description">{process.description}</div>
       <div class="flex justify-end items-center">
-        {translator.t('process.weighting')}&nbsp;
+        {t('process.weighting')}&nbsp;
         {weightLabel}&nbsp;
         <Modal id="weightingInfo">
-          <h3>{translator.t('process.weighting')}</h3>
+          <h3>{t('process.weighting')}</h3>
           <ContentDoc fileName="NegativeScoreWeighting"/>
         </Modal>
       </div>
@@ -43,7 +43,7 @@ export default component$((props: ProcessInfoProps) => {
         <br/>
       </div>
       <div class="w-full pr-2">
-        <p>{translator.t('process.shareableUrl')}</p>
+        <p>{t('process.shareableUrl')}</p>
         <div class="flex items-center">
           <input 
             id="shareableUrl" 
@@ -54,7 +54,7 @@ export default component$((props: ProcessInfoProps) => {
           />
           &nbsp; &nbsp;
           <Modal id="shareableQrCode" icon="info">
-            <h3>{translator.t('process.qrcode')}</h3>
+            <h3>{t('process.qrcode')}</h3>
             <div class="flex justify-center">
               <QRCode text={url} />
             </div>

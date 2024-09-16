@@ -1,10 +1,10 @@
 ---
-import { Translator } from '~/utils/i18n.js';
+import { Translator } from '~/i18n/translator.js';
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ContentDoc from "@components/ui/ContentDoc.astro";
 
-const translator = new Translator(Astro.currentLocale || 'en');
+const { t } =new Translator(Astro.currentLocale || 'en');
 
 
 ---
@@ -13,11 +13,11 @@ const translator = new Translator(Astro.currentLocale || 'en');
   <div class="container mx-auto p-4">
     <ContentDoc file_name="Guide"/>
     <label class="cursor-pointer label" for="noGuide">
-      <span class="label-text">{translator.t('guide.checkboxLabel')}</span>
+      <span class="label-text">{t('guide.checkboxLabel')}</span>
       <input type="checkbox" name="noGuide" class="checkbox checkbox-primary" checked/>
     </label>
     <div class="flex justify-center">
-      <button type="submit" class="btn text-btn m-2">{translator.t('guide.createProcessButton')}</button>
+      <button type="submit" class="btn text-btn m-2">{t('guide.createProcessButton')}</button>
     </div>
   </div>
 </BaseLayout>

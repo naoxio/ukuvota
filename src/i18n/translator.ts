@@ -1,7 +1,7 @@
 import { $, useContext, createContextId } from '@builder.io/qwik';
-import enTranslations from '../locales/en.json';
-import deTranslations from '../locales/de.json';
-import itTranslations from '../locales/it.json';
+import enTranslations from './locales/en.json';
+import deTranslations from './locales/de.json';
+import itTranslations from './locales/it.json';
 
 // Context to store locale and translations
 export const TranslatorContext = createContextId<{ locale: string; translations: any }>('TranslatorContext');

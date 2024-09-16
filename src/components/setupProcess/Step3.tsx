@@ -1,115 +1,89 @@
-import { component$, useStore, useTask$, $ } from '@builder.io/qwik';
+import { component$, useTask$, $ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { prettyFormatInTimezone } from '~/utils/dateUtils';
-import getQuillHTML from '~/utils/getQuillHTML';
-import type { IProposal } from '~/types';
+import { useProcessData } from '~/hooks/useProcessData';
+import { useProposals } from '~/hooks/useProposals';
+import { Store } from '@tauri-apps/plugin-store';
 
-export interface Step3Props {
-  title: string;
-  description: string;
-  proposals: Array<IProposal>;
-  proposalStartDate: number;
-  proposalEndDate: number;
-  votingStartDate: number;
-  votingEndDate: number;
-  timezone: string;
-  weighting: string;
-}
-
-export default component$((props: Step3Props) => {
-  const translator = useTranslator();
+export default component$(() => {
+  const { t } = useTranslator();
   const navigate = useNavigate();
-
-  const store = useStore({
-    descriptionContent: '',
-    proposalsData: [] as Array<{ id: string; title: string; description: string }>,
-  });
+  const processData = useProcessData();
+  const { proposalsStore } = useProposals(processData._id);
 
   useTask$(async () => {
-    if (props.description) {
-      const descriptionContent = await localforage.getItem(props.descriptionId) as string || '';
-      if (descriptionContent) {
-        store.descriptionContent = JSON.parse(descriptionContent);
+    // Any initialization logic if needed
+    const store = new Store('.processData.dat');
+    await store.load();
+    
+    // Load description if it's not already in processData
+    if (!processData.description) {
+      const description = await store.get('description') as string;
+      if (description) {
+        processData.description = description;
       }
     }
-
-    store.proposalsData = await Promise.all(props.proposals.map(async (proposal) => {
-      const titleContent = await localforage.getItem(`title-${proposal.id}`) as string || '';
-      const descriptionContent = await localforage.getItem(`description-${proposal.id}`) as string || '';
-      return {
-        id: proposal.id,
-        title: titleContent,
-        description: descriptionContent,
-      };
-    }));
   });
 
   const handleBack = $(() => {
-    navigate('/api/update-step?step=2');
+    navigate('/create-process/step2');
   });
 
-  const handleStart = $(() => {
-    const formData = new FormData();
-    formData.append('descriptionContent', JSON.stringify(store.descriptionContent));
-    formData.append('proposalsData', JSON.stringify(store.proposalsData));
+  const handleStart = $(async () => {
+    const store = new Store('.processData.dat');
+    await store.load();
 
-    fetch('/api/start-process', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Handle successful process start
-          navigate('/process-started'); // Adjust this to your actual route
-        } else {
-          console.error('Failed to start process');
-        }
-      })
-      .catch((error) => {
-        console.error('Error starting process:', error);
-      });
+    // Save the final process data
+    for (const [key, value] of Object.entries(processData)) {
+      await store.set(key, value);
+    }
+
+    // Save proposals
+    await store.set('proposals', proposalsStore.proposals);
+
+    await store.save();
+
+    // Navigate to the process started page
+    navigate('/process-started');
   });
 
   return (
     <div class="process-details">
       <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
-        {props.title && (
+        {processData.title && (
           <div class="mb-4">
-            <h2 class="text-xl font-semibold mb-2">{translator.t('process.topic')}</h2>
-            <p>{props.title}</p>
-            <div
-              id="descriptionContent"
-              dangerouslySetInnerHTML={getQuillHTML(store.descriptionContent as Delta)}
-            />
+            <h2 class="text-xl font-semibold mb-2">{t('process.topic')}</h2>
+            <p>{processData.title}</p>
+            <div id="descriptionContent">{processData.description}</div>
           </div>
         )}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {props.proposalStartDate && props.proposalEndDate && (
+          {processData.proposalDates[0] && processData.proposalDates[1] && (
             <div class="p-4">
-              <h2 class="text-lg font-semibold mb-2">{translator.t(`phases.proposal.title`)}</h2>
-              <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {prettyFormatInTimezone(props.proposalStartDate, props.timezone)}</p>
-              <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {prettyFormatInTimezone(props.proposalEndDate, props.timezone)}</p>
+              <h2 class="text-lg font-semibold mb-2">{t(`phases.proposal.title`)}</h2>
+              <p><h3 class="font-semibold">{t('phases.startAt')}:</h3> {prettyFormatInTimezone(processData.proposalDates[0], processData.timezone || 'UTC')}</p>
+              <p><h3 class="font-semibold">{t('phases.endsAt')}:</h3> {prettyFormatInTimezone(processData.proposalDates[1], processData.timezone || 'UTC')}</p>
             </div>
           )}
           <div class="p-4">
-            <h2 class="text-lg font-semibold mb-2">{translator.t(`phases.voting.title`)}</h2>
-            {props.votingStartDate && <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {prettyFormatInTimezone(props.votingStartDate, props.timezone)}</p>}
-            {props.votingEndDate && <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {prettyFormatInTimezone(props.votingEndDate, props.timezone)}</p>}
+            <h2 class="text-lg font-semibold mb-2">{t(`phases.voting.title`)}</h2>
+            {processData.votingDates[0] && <p><h3 class="font-semibold">{t('phases.startAt')}:</h3> {prettyFormatInTimezone(processData.votingDates[0], processData.timezone || 'UTC')}</p>}
+            {processData.votingDates[1] && <p><h3 class="font-semibold">{t('phases.endsAt')}:</h3> {prettyFormatInTimezone(processData.votingDates[1], processData.timezone || 'UTC')}</p>}
           </div>
           <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-2">{translator.t('setup.timezone')}:</h3>
-            <p>{props.timezone}</p>
+            <h3 class="text-lg font-semibold mb-2">{t('setup.timezone')}:</h3>
+            <p>{processData.timezone || 'UTC'}</p>
           </div>
         </div>
-        {store.proposalsData.length > 0 && (
+        {proposalsStore.proposals.length > 0 && (
           <div class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">{translator.t('process.proposals')}</h2>
+            <h2 class="text-xl font-semibold mb-4">{t('process.proposals')}</h2>
             <ul class="space-y-4">
-              {store.proposalsData.map((proposal) => (
+              {proposalsStore.proposals.map((proposal) => (
                 <li key={proposal.id} class="border border-gray-200 rounded-lg p-4" id={`proposal-${proposal.id}`}>
                   <b class="text-lg">{proposal.title}</b>
-                  <p class="mt-2" dangerouslySetInnerHTML={getQuillHTML(JSON.parse(proposal.description) as Delta)} />
+                  <p class="mt-2">{proposal.description}</p>
                 </li>
               ))}
             </ul>
@@ -117,8 +91,8 @@ export default component$((props: Step3Props) => {
         )}
       </div>
       <div class="flex justify-around mt-5">
-        <button onClick$={handleBack} class="btn m-2">{translator.t('buttons.back')}</button>
-        <button onClick$={handleStart} class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
+        <button onClick$={handleBack} class="btn m-2">{t('buttons.back')}</button>
+        <button onClick$={handleStart} class="btn btn-primary m-2">{t('buttons.start')}</button>
       </div>
     </div>
   );

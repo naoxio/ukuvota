@@ -3,10 +3,10 @@ import type IProcess from "@types/IProcess";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
 import getProcessUrl from "~/utils/getProcessUrl";
-import { Translator } from '~/utils/i18n.js';
+import { Translator } from '~/i18n/translator.js';
 import fetchProcessData from '~/utils/fetchProcessData';   
 
-const translator = new Translator(Astro.currentLocale || 'en');
+const { t } =new Translator(Astro.currentLocale || 'en');
 
 const { url } = Astro;
 const processId: any = Astro.params.id;
@@ -39,7 +39,7 @@ if (process && !("voters" in process)) {
 
         { !process.voters || process.voters.length == 0 && (
         <div class="text-center text-warning">
-            <p>{ translator.t('process.noVotesSubmitted') }</p>
+            <p>{ t('process.noVotesSubmitted') }</p>
         </div>
         )}
         {process.proposals && Object.keys(process.proposals).length > 0 ? (
@@ -52,10 +52,10 @@ if (process && !("voters" in process)) {
 
                 <div class="tab-custom-content hide">
                     <span class="flex justify-between items-center">
-                        <h2>{ translator.t('process.results') }</h2>
+                        <h2>{ t('process.results') }</h2>
                     </span>
                     <h3>
-                        <span class="voter-label">{ translator.t('process.voters') }</span>
+                        <span class="voter-label">{ t('process.voters') }</span>
                         <span class="num-voters">({ process.voters?.length })</span>:
                     </h3>
                     <div class="flex justify-around flex-wrap">
@@ -73,9 +73,9 @@ if (process && !("voters" in process)) {
                         <table class="table w-full">
                             <thead>
                                 <tr class="table-row-one">
-                                    <th class="whitespace-normal break-words">{ translator.t('process.proposal') }</th>
-                                    <th class="whitespace-normal break-words">{ translator.t('process.averageScore') }</th>
-                                    <th class="whitespace-normal break-words">{ translator.t('process.totalScore') }</th>
+                                    <th class="whitespace-normal break-words">{ t('process.proposal') }</th>
+                                    <th class="whitespace-normal break-words">{ t('process.averageScore') }</th>
+                                    <th class="whitespace-normal break-words">{ t('process.totalScore') }</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,7 +84,7 @@ if (process && !("voters" in process)) {
                     </div>
                     <br/>
                     <div class="card">
-                        <h3>{ translator.t('process.exportData') }</h3>
+                        <h3>{ t('process.exportData') }</h3>
                         <div class="flex justify-around exports">
                             <button class="export-markdown btn btn-ghost"><Icon width="28" name="document-download"/></button>
                             <button class="export-image btn btn-ghost"><Icon width="28" name="camera" /></button>
@@ -110,7 +110,7 @@ if (process && !("voters" in process)) {
             </div>
         ) : (
             <div class="text-center">
-                <h2>{ translator.t('process.noProposalsSubmitted') }</h2>
+                <h2>{ t('process.noProposalsSubmitted') }</h2>
             </div>
         )}
     </results-card>

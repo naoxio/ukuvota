@@ -3,12 +3,12 @@ const exampleProposals = (translator: any) => {
   
   return [
     {
-      title: translator.t('proposal.zero.title'),
-      description: translator.t('proposal.zero.description'),
+      title: t('proposal.zero.title'),
+      description: t('proposal.zero.description'),
     },
     {
-      title: translator.t('proposal.one.title'),
-      description: translator.t('proposal.one.description'),
+      title: t('proposal.one.title'),
+      description: t('proposal.one.description'),
     },
   ];
 }

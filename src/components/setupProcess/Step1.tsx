@@ -1,5 +1,5 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '../ui/Modal';
@@ -7,7 +7,7 @@ import ContentDoc from '../ui/ContentDoc';
 import { Store } from '@tauri-apps/plugin-store';
 
 export default component$(() => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
 
@@ -37,7 +37,7 @@ export default component$(() => {
       <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
 
       <div id="scrollTopicQuestion" />
-      <p>{translator.t('process.topic')}</p>
+      <p>{t('process.topic')}</p>
       <input 
         id="topicQuestion" 
         name="topicQuestion" 
@@ -46,11 +46,11 @@ export default component$(() => {
         value={processData.title} 
         onInput$={(event) => processData.title = (event.target as HTMLInputElement).value}
         required 
-        title={translator.t('alert.error.topicQuestion')}
+        title={t('alert.error.topicQuestion')}
       />
       <br/>
       <br/>
-      <p>{translator.t('process.description')}</p>
+      <p>{t('process.description')}</p>
 
       <textarea
         id="description"
@@ -63,7 +63,7 @@ export default component$(() => {
       <br/>
 
       <div class="flex justify-between items-center">
-        <span>{translator.t('process.weighting')}</span>
+        <span>{t('process.weighting')}</span>
         <span class="flex justify-center items-center">
           <select 
             id="select" 
@@ -80,7 +80,7 @@ export default component$(() => {
           </select>
           
           <Modal id="weightingInfo">
-            <h3>{translator.t('process.weighting')}</h3>
+            <h3>{t('process.weighting')}</h3>
             <ContentDoc file_name="NegativeScoreWeighting"/>
           </Modal>
         </span>
@@ -88,10 +88,10 @@ export default component$(() => {
       <br/>
       <div class="flex justify-around flex-wrap">
         <button onClick$={(e) => handleSubmit(e, 'full')} class="btn btn-primary m-2">
-          {translator.t('process.phases.full')}
+          {t('process.phases.full')}
         </button>
         <button onClick$={(e) => handleSubmit(e, 'voting')} class="btn btn-primary m-2">
-          {translator.t('process.phases.voting')}
+          {t('process.phases.voting')}
         </button>
       </div>
     </form>

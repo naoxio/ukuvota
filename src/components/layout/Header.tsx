@@ -1,12 +1,12 @@
 import { component$, useSignal, useStore, $, useVisibleTask$ } from "@builder.io/qwik";
 import { useLocation, useNavigate } from "@builder.io/qwik-city";
-import { useTranslator } from "~/utils/i18n";
+import { useTranslator } from "~/i18n/translator";
 import { LuSun, LuMoon } from "@qwikest/icons/lucide";
 
 export default component$(() => {
   const loc = useLocation();
   const navigate = useNavigate();
-  const translator = useTranslator();
+  const { t } =useTranslator();
 
   const supportedLanguages = ["en", "de", "it"];
   const currentLanguage = 'en';
@@ -59,7 +59,7 @@ export default component$(() => {
       <div class="navbar">
         <div>      
           <a class={`btn btn-link ${loc.url.pathname.includes('/') ? 'selected' : ''}`} href="/">
-            {translator.t('buttons.home')}
+            {t('buttons.home')}
           </a>
         </div>
         <div>

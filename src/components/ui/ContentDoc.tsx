@@ -1,5 +1,6 @@
 import { component$, Resource, useResource$ } from '@builder.io/qwik';
-import { useLocation } from '@builder.io/qwik-city';
+import { loadContent } from '~/utils/contentLoader';
+import { useLocale } from '~/i18n/useLocale';
 
 interface Props {
   fileName: string;
@@ -7,20 +8,28 @@ interface Props {
 
 export default component$((props: Props) => {
   const { fileName } = props;
-  const location = useLocation();
+  const locale = useLocale();
 
   const contentResource = useResource$<string>(async ({ track }) => {
     track(() => fileName);
-    track(() => location.locale);
+    track(() => locale);
 
-    const content = await import(`~/content/${location.locale}/${fileName}.md`);
-    return content.default;
+    try {
+      return await loadContent(locale, fileName);
+    } catch (error) {
+      console.error('Error loading content:', error);
+      return 'Content not found';
+    }
   });
 
   return (
     <Resource
       value={contentResource}
-      onResolved={(content) => <div dangerouslySetInnerHTML={content} />}
+      onPending={() => <div>Loading...</div>}
+      onRejected={(error) => <div>Error: {error.message}</div>}
+      onResolved={(content) => (
+        <div dangerouslySetInnerHTML={content} />
+      )}
     />
   );
 });

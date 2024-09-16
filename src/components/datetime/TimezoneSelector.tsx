@@ -1,16 +1,16 @@
 import { component$ } from '@builder.io/qwik';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 
 // Sample list of timezones; replace with your preferred list or dynamic values
 const timezones = Intl.supportedValuesOf('timeZone');
 
 export const TimezoneSelector = component$(() => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
 
   return (
     <div style={styles.container}>
       <label style={styles.label}>
-        {translator.t('setup.timezone')}
+        {t('setup.timezone')}
       </label>
       <select id="timezone-select" style={styles.select}>
         {timezones.map((timezone: string) => (

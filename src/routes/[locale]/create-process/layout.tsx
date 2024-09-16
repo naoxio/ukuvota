@@ -1,6 +1,6 @@
 import { component$, Slot, useStyles$, $ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
-import { useTranslator } from '~/utils/i18n';
+import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 
 export interface CreateProcessLayoutProps {
@@ -8,7 +8,7 @@ export interface CreateProcessLayoutProps {
 }
 
 export default component$((props: CreateProcessLayoutProps) => {
-  const translator = useTranslator();
+  const { t } =useTranslator();
   const processData = useProcessData();
 
   useStyles$(`
@@ -29,7 +29,7 @@ export default component$((props: CreateProcessLayoutProps) => {
 
   return (
     <>
-      <h1 class="text-center">{translator.t('setup.process')}</h1>
+      <h1 class="text-center">{t('setup.process')}</h1>
       <div class="flex justify-center space-x-2 m-2">
         {steps.map(({ stepNumber, disabled }) => (
           <button 
