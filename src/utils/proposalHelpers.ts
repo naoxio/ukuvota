@@ -1,7 +1,7 @@
 import localforage from 'localforage';
-import { createQuill, updateQuill } from '@utils/quillUtils';
-import IProposal from '@interfaces/IProposal';
-import { isProposalEmpty } from '@utils/proposalUtils';
+import { createQuill, updateQuill } from '~/utils/quillUtils';
+import IProposal from '@types/IProposal';
+import { isProposalEmpty } from '~/utils/proposalUtils';
 
 
 const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {

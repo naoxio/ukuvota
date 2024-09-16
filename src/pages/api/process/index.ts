@@ -1,4 +1,4 @@
-/*import { putProcessIntoDatabase, getProcessFromDatabase } from '../../lib/database.js'
+/*import { putProcessIntoDatabase, getProcessFromDatabase } from '~/lib/database.js'
 import crypto from 'crypto';
 
 const updateDates = (dates) => {

@@ -8,7 +8,7 @@ export default component$(() => {
       <main>
         <h1>Welcome to Ukuvota</h1>
         <p>Empower your decision-making process with our innovative voting platform</p>
-        <Link href="/start" class="cta-button">Get Started</Link>
+        <Link href="/create-process" class="cta-button">Get Started</Link>
         <section class="features">
           <div class="feature">
             <h2>Collaborative</h2>

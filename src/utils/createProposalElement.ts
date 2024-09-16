@@ -1,6 +1,6 @@
 import type Delta from 'quill-delta';
 import { isProposalEmpty } from './proposalUtils';
-import IProposal from '@interfaces/IProposal';
+import IProposal from '@types/IProposal';
 
 const createProposalElement = (
   uniqueId: string,

@@ -1,14 +1,13 @@
 import { component$, useStore, useTask$, $ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
-import { useTranslator } from '../../utils/i18n';
-import { prettyFormatInTimezone } from '../../utils/dateUtils';
-import getQuillHTML from '../../utils/getQuillHTML';
-import type IProposal from '../../interfaces/IProposal';
-import type { Delta } from 'quill-delta';
+import { useTranslator } from '~/utils/i18n';
+import { prettyFormatInTimezone } from '~/utils/dateUtils';
+import getQuillHTML from '~/utils/getQuillHTML';
+import type { IProposal } from '~/types';
 
 export interface Step3Props {
   title: string;
-  descriptionId: string;
+  description: string;
   proposals: Array<IProposal>;
   proposalStartDate: number;
   proposalEndDate: number;
@@ -28,7 +27,7 @@ export default component$((props: Step3Props) => {
   });
 
   useTask$(async () => {
-    if (props.descriptionId) {
+    if (props.description) {
       const descriptionContent = await localforage.getItem(props.descriptionId) as string || '';
       if (descriptionContent) {
         store.descriptionContent = JSON.parse(descriptionContent);

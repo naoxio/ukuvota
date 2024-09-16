@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { parseProcessRawCookie } from '@utils/parseProcessCookie';
+import { parseProcessRawCookie } from '~/utils/parseProcessCookie';
 
 export const POST: APIRoute = async ({ request }) => {
   let processCookieObject = parseProcessRawCookie(request.headers.get('cookie'));

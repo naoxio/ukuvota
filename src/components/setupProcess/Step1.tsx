@@ -1,63 +1,34 @@
-import { component$, useSignal, useStore, $, useVisibleTask$ } from "@builder.io/qwik";
-import { Translator } from '../../utils/i18n';
-import weightingOptions from '../../utils/weightingOptions';
+import { component$, useSignal, $ } from "@builder.io/qwik";
+import { useTranslator } from '~/utils/i18n';
+import { useProcessData } from '~/hooks/useProcessData';
+import weightingOptions from '~/utils/weightingOptions';
 import Modal from '../ui/Modal';
 import ContentDoc from '../ui/ContentDoc';
-import { createQuill, updateQuill } from '../../utils/quillUtils';
+import { Store } from '@tauri-apps/plugin-store';
 
-export interface Step1Props {
-  title: string;
-  descriptionId?: string;
-  weighting?: string;
-}
-
-export default component$((props: Step1Props) => {
-  const translator = new Translator('en'); // Replace with your locale logic
+export default component$(() => {
+  const translator = useTranslator();
+  const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
 
-  const store = useStore({
-    title: props.title,
-    descriptionId: props.descriptionId || `description_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
-    weighting: props.weighting,
-    quillOps: '',
-  });
+  const descriptionSignal = useSignal(processData.description || '');
 
-  const quillEditor = useSignal<any>(null);
+  const handleDescriptionChange = $(async (event: Event) => {
+    const newDescription = (event.target as HTMLTextAreaElement).value;
+    descriptionSignal.value = newDescription;
+    processData.description = newDescription;
 
-  useVisibleTask$(() => {
-    const quillContainer = document.getElementById('description') as HTMLElement;
-    if (quillContainer) {
-      quillContainer.style.display = 'block';
-      quillContainer.innerText = '';
-      quillEditor.value = createQuill('#description');
-
-      // Retrieve the description data from localforage using the descriptionId
-      if (typeof window !== 'undefined' && window.localforage) {
-        window.localforage.getItem(store.descriptionId).then((descriptionData: string | null) => {
-          if (descriptionData) {
-            const quillOps = JSON.parse(descriptionData);
-            updateQuill(quillEditor.value, quillOps);
-            store.quillOps = descriptionData;
-          }
-        });
-      }
-
-      if (quillEditor.value) {
-        quillEditor.value.on('text-change', $(() => {
-          const quillOps = quillEditor.value.getContents();
-          if (typeof window !== 'undefined' && window.localforage) {
-            window.localforage.setItem(store.descriptionId, JSON.stringify(quillOps));
-          }
-          store.quillOps = JSON.stringify(quillOps);
-        }));
-      }
-    }
+    const store = new Store('.processData.dat');
+    await store.load();
+    await store.set('description', newDescription);
+    await store.save();
   });
 
   const handleSubmit = $((event: Event, phase: string) => {
     event.preventDefault();
+    processData.phase = phase;
     // Handle form submission logic here
-    // You might want to use Qwik City's API routes or server$ function
+    // You might want to use Tauri's event system or IPC for communicating with the backend
   });
 
   return (
@@ -72,8 +43,8 @@ export default component$((props: Step1Props) => {
         name="topicQuestion" 
         class="input input-bordered w-full" 
         type="text" 
-        value={store.title} 
-        onInput$={(event) => store.title = (event.target as HTMLInputElement).value}
+        value={processData.title} 
+        onInput$={(event) => processData.title = (event.target as HTMLInputElement).value}
         required 
         title={translator.t('alert.error.topicQuestion')}
       />
@@ -81,9 +52,14 @@ export default component$((props: Step1Props) => {
       <br/>
       <p>{translator.t('process.description')}</p>
 
-      <input id="descriptionId" name="descriptionId" type="hidden" value={store.descriptionId} />
-      <div id="description" class="hidden" data-description-id={store.descriptionId}>{translator.t('loadQuill')}</div>
-      <input id="quillops" name="description" class="hidden" value={store.quillOps} />
+      <textarea
+        id="description"
+        name="description"
+        class="textarea textarea-bordered w-full"
+        rows={5}
+        value={descriptionSignal.value}
+        onInput$={handleDescriptionChange}
+      ></textarea>
       <br/>
 
       <div class="flex justify-between items-center">
@@ -93,8 +69,8 @@ export default component$((props: Step1Props) => {
             id="select" 
             name="weighting" 
             class="select mx-2 select-bordered mt-2" 
-            value={store.weighting}
-            onChange$={(event) => store.weighting = (event.target as HTMLSelectElement).value}
+            value={processData.weighting}
+            onChange$={(event) => processData.weighting = (event.target as HTMLSelectElement).value}
           >
             {Object.entries(weightingOptions).map(([value, label]) => (
               <option key={value} value={value}>

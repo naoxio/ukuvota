@@ -1,11 +1,10 @@
-import type IProposal from "./IProposal";
-import type IVoter from "./IVoter";
-import type Delta from 'quill-delta';
+import type { IProposal } from './IProposal';
+import type { IVoter } from './IVoter';
 
-export default interface IProcess {
+export interface IProcess {
   _id: string;
   title: string;
-  description?: string | Delta;
+  description?: string;
   descriptionId?: string;
   proposalDates: number[];
   votingDates: number[];
@@ -14,4 +13,6 @@ export default interface IProcess {
   proposals: IProposal[];
   voters?: IVoter[];
   timezone?: string;
+  phase?: string;
+
 }

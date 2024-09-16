@@ -1,4 +1,4 @@
-import type IProposal from '@interfaces/IProposal';
+import type IProposal from '@types/IProposal';
 
 const isProposalEmpty = (proposal: IProposal): boolean => {
   if (proposal.id === undefined) return true;

@@ -1,14 +1,16 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { QwikIcon } from 'path-to-qwik-icon-component'; // You'll need to implement or find a Qwik-compatible icon component
+import { LuInfo, LuX } from '@qwikest/icons/lucide';
 
 interface Props {
   id: string;
-  icon?: string;
+  icon?: 'info' | 'custom'; 
   btn?: string;
 }
 
 export default component$((props: Props) => {
-  const { id, icon = "information", btn } = props;
+  const { id, icon = 'info', btn } = props;
+
+  const IconComponent = icon === 'info' ? LuInfo : LuInfo; // Default to info icon if custom is not provided
 
   return (
     <>
@@ -18,15 +20,15 @@ export default component$((props: Props) => {
         </button>
       ) : (
         <label for={id} class="btn btn-ghost btn-sm btn-circle">
-          <QwikIcon width={22} name={icon} />
+          <IconComponent width={22} height={22} />
         </label>
       )}
 
       <input type="checkbox" id={id} class="modal-toggle" />
-      <label for={id} class="modal">
-        <label class="modal-box">
+      <label for={id} class="modal cursor-pointer">
+        <label class="modal-box relative" for="">
           <label for={id} class="btn btn-sm btn-circle absolute right-2 top-2">
-            <QwikIcon width={22} name="close" />
+            <LuX width={22} height={22} />
           </label>
           <Slot />
         </label>

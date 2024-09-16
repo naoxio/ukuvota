@@ -1,6 +1,6 @@
 import { component$, useSignal, useStore, $, useVisibleTask$ } from "@builder.io/qwik";
 import { useLocation, useNavigate } from "@builder.io/qwik-city";
-import { useTranslator } from "../../utils/i18n";
+import { useTranslator } from "~/utils/i18n";
 import { LuSun, LuMoon } from "@qwikest/icons/lucide";
 
 export default component$(() => {
@@ -9,7 +9,7 @@ export default component$(() => {
   const translator = useTranslator();
 
   const supportedLanguages = ["en", "de", "it"];
-  const currentLanguage = loc.locale || 'en';
+  const currentLanguage = 'en';
   const primaryLocale = 'en';
 
   const store = useStore({

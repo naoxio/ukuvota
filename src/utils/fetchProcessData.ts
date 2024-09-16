@@ -1,8 +1,8 @@
 import { ref, get, remove } from 'firebase/database';
-import { firebaseDB } from '@utils/firebaseConfig';
+import { firebaseDB } from '~/utils/firebaseConfig';
 import { getDownloadURL, ref as storageRef, getStorage, uploadString } from 'firebase/storage';
 import { zonedTimeToUtc } from 'date-fns-tz';
-import IProposal from '@interfaces/IProposal';
+import IProposal from '@types/IProposal';
 
 export default async function fetchProcessData(processId: string): Promise<any> {
   let process;

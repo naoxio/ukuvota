@@ -42,7 +42,7 @@ const adjustDates = (
   return { pStart, pEnd, vStart, vEnd };
 };
 
-import { formatDateInTimezone } from '@utils/dateUtils';
+import { formatDateInTimezone } from '~/utils/dateUtils';
 import { utcToZonedTime } from 'date-fns-tz';
 
 const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement, timezone: string) => {

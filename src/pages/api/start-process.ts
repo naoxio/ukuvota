@@ -1,13 +1,13 @@
 import type { APIRoute } from 'astro';
-import { parseProcessRawCookie } from '@utils/parseProcessCookie';
+import { parseProcessRawCookie } from '~/utils/parseProcessCookie';
 import { ref, set } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadString } from 'firebase/storage';
-import { firebaseDB } from '@utils/firebaseConfig';
-import { prettyFormatInTimezone } from '@utils/dateUtils';
+import { firebaseDB } from '~/utils/firebaseConfig';
+import { prettyFormatInTimezone } from '~/utils/dateUtils';
 
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
-import IProcess from '@interfaces/IProcess';
+import IProcess from '@types/IProcess';
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();

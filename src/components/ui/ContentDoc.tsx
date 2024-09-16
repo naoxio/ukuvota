@@ -13,7 +13,7 @@ export default component$((props: Props) => {
     track(() => fileName);
     track(() => location.locale);
 
-    const content = await import(`../../content/${location.locale}/${fileName}.md`);
+    const content = await import(`~/content/${location.locale}/${fileName}.md`);
     return content.default;
   });
 

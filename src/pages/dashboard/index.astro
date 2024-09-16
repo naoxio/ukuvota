@@ -1,7 +1,7 @@
 ---
 /* @ts-ignore */
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 import BaseLayout from "@layouts/BaseLayout.astro";
 
 const translator = new Translator(Astro.currentLocale || 'en'); 

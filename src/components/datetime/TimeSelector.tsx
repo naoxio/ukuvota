@@ -1,0 +1,49 @@
+import { component$ } from '@builder.io/qwik';
+import { useTranslator } from '~/utils/i18n';
+import { DateTimePicker } from '~/components/datetime/DateTimePicker';
+import { DateTimeSlider } from '~/components/datetime/DateTimeSlider';
+
+interface TimeSelectorProps {
+  phase: string;
+  startMinDate: Date;
+  startDate: Date;
+  endDate: Date;
+  hideTitle?: boolean;
+}
+
+export const TimeSelector = component$((props: TimeSelectorProps) => {
+  const translator = useTranslator();
+  
+  const title = translator.t(`phases.${props.phase}.title`);
+
+  // Calculate the duration in minutes
+  const duration = (new Date(props.endDate).getTime() - new Date(props.startDate).getTime()) / 1000 / 60;
+
+  return (
+    <div class="time-selector" data-phase={props.phase}>
+      {!props.hideTitle && (
+        <h3 class="title">{title}</h3>
+      )}
+      <br />
+      <DateTimePicker
+        index={0}
+        date={props.startDate}
+        min={props.startMinDate}
+        id={`start-date-picker-${props.phase}`}
+      />
+      <br />
+      <DateTimePicker
+        index={1}
+        date={props.endDate}
+        min={props.startDate}
+        id={`end-date-picker-${props.phase}`}
+      />
+      <br />
+      <DateTimeSlider
+        duration={duration}
+        id={`datetime-slider-${props.phase}`}
+      />
+      <br />
+    </div>
+  );
+});

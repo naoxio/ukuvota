@@ -34,6 +34,7 @@
     "@tauri-apps/cli": "^1.6.1",
     "@types/eslint": "8.56.10",
     "@types/node": "20.14.11",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "7.16.1",
     "@typescript-eslint/parser": "7.16.1",
     "autoprefixer": "^10.4.20",
@@ -46,5 +47,8 @@
     "undici": "*",
     "vite": "5.3.5",
     "vite-tsconfig-paths": "^4.2.1"
+  },
+  "dependencies": {
+    "@tauri-apps/plugin-store": "2.0.0-rc.1"
   }
 }

@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { useLocation, Link } from '@builder.io/qwik-city';
-import { Translator } from '../../utils/i18n';
+import { Translator } from '~/utils/i18n';
 import { LuMail } from '@qwikest/icons/lucide';
 import { SiTelegram, SiX } from '@qwikest/icons/simple-icons';
 

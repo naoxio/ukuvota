@@ -3,11 +3,11 @@
 import Alert from "@components/ui/Alert.astro";
 import AlertList from "components/ui/AlertList.astro";
 import ProcessLayout from "@layouts/ProcessLayout.astro";
-import { Translator } from '@utils/i18n.js';
-import fetchProcessData from '@utils/fetchProcessData';
+import { Translator } from '~/utils/i18n.js';
+import fetchProcessData from '~/utils/fetchProcessData';
 
 import { Icon } from "astro-icon";
-import getProcessUrl from "@utils/getProcessUrl";
+import getProcessUrl from "~/utils/getProcessUrl";
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
@@ -94,10 +94,10 @@ try {
 </ProcessLayout>
 
 <script>
-    import type IProposal from '@interfaces/IProposal'
-    import addAlert from '@utils/addAlert'
-    import getQuillHTML from '@utils/getQuillHTML';
-    import { isProposalEmpty } from '@utils/proposalUtils';
+    import type IProposal from '@types/IProposal'
+    import addAlert from '~/utils/addAlert'
+    import getQuillHTML from '~/utils/getQuillHTML';
+    import { isProposalEmpty } from '~/utils/proposalUtils';
 
     class VotingList extends HTMLElement {
         voteCounter = this.querySelector('span.no-voters') as HTMLElement;
