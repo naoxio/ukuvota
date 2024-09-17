@@ -1,15 +1,24 @@
 // src/utils/contentLoader.ts
 
-const contentModules = import.meta.glob('~/content/**/*.md');
+import { useLocale } from '~/i18n/useLocale';
+import { $ } from '@builder.io/qwik';
 
-export async function loadContent(locale: string, fileName: string): Promise<string> {
-  const path = `/content/${locale}/${fileName}.md`;
-  const module = contentModules[path];
-  
-  if (module) {
-    const content = await module();
-    return (content as any).default;
-  }
-  
-  throw new Error(`Content not found: ${path}`);
-}
+const contentModules = import.meta.glob('/content/**/*.md');
+
+export const useContentLoader = () => {
+  const locale = useLocale();
+
+  const loadContent = $(async (fileName: string): Promise<string> => {
+    const path = `/content/${locale}/${fileName}.md`;
+    const module = contentModules[path];
+    
+    if (module) {
+      const content = await module();
+      return (content as any).default;
+    }
+    
+    throw new Error(`Content not found: ${path}`);
+  });
+
+  return { loadContent };
+};

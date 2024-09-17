@@ -1,6 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 
+import { useLocale } from '~/i18n/useLocale';
+
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
@@ -8,19 +10,22 @@ export const RouterHead = component$(() => {
   const supportedLanguages = ["en", "de", "it"];
   const display_title = `Ukuvota ${head.title ? `- ${head.title}` : ''}`;
 
+  // Use the useLocale function to get the current locale
+  const currentLocale = useLocale();
+
   return (
     <>
       <title>{display_title}</title>
       <meta name="description" content={head.meta.find(m => m.name === "description")?.content} />
       <meta name="keywords" content="evotico, ukuvota, voting, democracy, consensus, collaborative" />
       <meta name="author" content="NaoX" />
-      <meta name="locale" content={loc.locale} />
+      <meta name="locale" content={currentLocale} />
 
       {supportedLanguages.map((lang) => (
         <link
           key={lang}
           rel="alternate"
-          hrefLang={lang}
+          hreflang={lang}
           href={`/${lang}${loc.url.pathname}`}
         />
       ))}

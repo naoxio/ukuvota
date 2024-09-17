@@ -1,52 +1,55 @@
-import { component$, useStylesScoped$ } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
+import { useTranslator } from "~/i18n/translator";
 
 export default component$(() => {
-  useStylesScoped$(`
-		.card {
-			width: 300px;
-			border-radius: .5rem;
-			border: 1px black solid;
-			background-color: white;
-			color: black;
-      margin: auto;
-      text-align:center;
-      padding: 2rem;
-      margin-top: 4rem;
-		}
+  const { t } = useTranslator();
 
-    .links {
-      display: flex;
-      justify-content: space-evenly;
-			padding: 1.25rem 0;
-    }
-
-    .link {
-      font-weight: 500;
-      color: rgb(63 131 248/1);
-    }
-	`);
-  const name = "Qwik";
   return (
-    <div class="card">
-      <div style="padding-bottom: 1.25rem;">
-        <div style="font-weight: 700; font-size: 1.5rem;">{$localize`Hello from ${name}!`}</div>
-      </div>
-      <div style="padding-bottom: 1.25rem;">
-        <div style="font-weight: 700; font-size: 1.0rem;">
-          {$localize`Use the following links to change the translation.`}
-          <div class="links">
-            <a class="link" href="/en/">
-              English
-            </a>
-            <a class="link" href="/it/">
-              Italiano
-            </a>
+    <>
+      <main>
+        <section class="hero">
+          <h1>{t('ukuvota')}</h1>
+          <p>{t('tagline')}</p>
+          <div class="cta-buttons">
+            <a href="/app" class="cta-button">{t('launchWebApp')}</a>
+            <a href="/download/android" class="cta-button">{t('getAndroidAPK')}</a>
           </div>
-          <div style="font-size: 1.0rem;">
-            {$localize`Translation is performed as part of the build step so translated strings are inlined into the application, there is no need to load or look them up at runtime. However, these advantages mean that the user cannot change the language without refreshing the page.`}
+        </section>
+
+        <section class="features">
+          <div class="feature">
+            <h2>{t('weightedScoreVoting')}</h2>
+            <p>{t('weightedScoreVotingDesc')}</p>
           </div>
+          <div class="feature">
+            <h2>{t('effortlessSharing')}</h2>
+            <p>{t('effortlessSharingDesc')}</p>
+          </div>
+          <div class="feature">
+            <h2>{t('consensusDrivenApproach')}</h2>
+            <p>{t('consensusDrivenApproachDesc')}</p>
+          </div>
+          <div class="feature">
+            <h2>{t('userFriendlyInterface')}</h2>
+            <p>{t('userFriendlyInterfaceDesc')}</p>
+          </div>
+          <div class="feature">
+            <h2>{t('transparentResults')}</h2>
+            <p>{t('transparentResultsDesc')}</p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>&copy; 2024 NaoX</p>
+        <div class="social-links">
+          <a href="mailto:contact@ukuvota.com" aria-label="Email">📧</a>
+          <a href="https://instagram.com/ukuvota" aria-label="Instagram">📷</a>
+          <a href="https://x.com/ukuvota" aria-label="X">𝕏</a>
+          <a href="https://github.com/ukuvota" aria-label="GitHub">🐙</a>
+          <a href="https://t.me/ukuvota" aria-label="Telegram">📞</a>
         </div>
-      </div>
-    </div>
+      </footer>
+    </>
   );
 });

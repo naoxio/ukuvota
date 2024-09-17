@@ -1,7 +1,6 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useNavigate } from '@builder.io/qwik-city';
-import BaseLayout from '~/components/BaseLayout';
 
 export default component$(() => {
   const { t } = useTranslator();
@@ -22,7 +21,7 @@ export default component$(() => {
   });
 
   return (
-    <BaseLayout title={t('buttons.dashboard')} description={t('description')}>
+    <div>
       {store.allProcesses.length > 0 ? (
         <div>
           {store.allProcesses.map((uuid: string) => (
@@ -93,6 +92,6 @@ export default component$(() => {
           <input type="file" class="hidden" id="fileInput" accept=".csv" />
         </div>
       )}
-    </BaseLayout>
+    </div>
   );
 });

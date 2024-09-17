@@ -13,7 +13,7 @@
   "type": "module",
   "scripts": {
     "build": "qwik build",
-    "build.client": "vite build && npm run i18n-translate",
+    "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/static/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
@@ -22,17 +22,12 @@
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "fmt": "prettier --write .",
     "fmt.check": "prettier --check .",
-    "i18n-extract": "node_modules/.bin/localize-extract -s \"dist/build/*.js\" -f json -o src/locales/message.en.json",
-    "i18n-translate": "node_modules/.bin/localize-translate -s \"*.js\" -t src/locales/message.*.json -o dist/build/{{LOCALE}} -r ./dist/build",
     "lint": "eslint \"src/**/*.ts*\"",
-    "prei18n-extract": "vite build",
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@angular/compiler": "^16.2.2",
-    "@angular/compiler-cli": "^16.2.2",
     "@builder.io/qwik": "^1.8.0",
     "@builder.io/qwik-city": "^1.8.0",
     "@qwikest/icons": "^0.0.13",
@@ -54,7 +49,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@angular/localize": "^16.2.2",
     "@tauri-apps/plugin-store": "2.0.0-rc.1"
   }
 }

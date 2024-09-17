@@ -58,6 +58,7 @@ main {
   transition: background-color 0.3s;
 }
 
+
 .cta-button:hover {
   background-color: #176f3e;
 }
@@ -112,3 +113,123 @@ header {
   padding: 0.25rem;
   margin: 0 0.5rem;
 }
+
+
+
+
+.hero {
+  padding: 4rem 0;
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 4rem 0;
+}
+
+.feature {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+}
+
+.feature h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  background-color: var(--navbar-background);
+  color: var(--text-color);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--jungle-green);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--navbar-background);
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-link {
+  background: none;
+  color: var(--jungle-green);
+  text-decoration: none;
+}
+
+.btn-ghost {
+  background: none;
+  color: var(--button-text-color);
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.select {
+  padding: 0.25rem;
+  margin: 0 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--button-text-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+

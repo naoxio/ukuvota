@@ -1,18 +1,11 @@
-import { component$, useContextProvider } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/RouterHead";
 import Header from "./components/layout/Header";
-import { TranslatorContext, setTranslatorContext } from "~/i18n/translator";
-import { useLocale } from "~/i18n/useLocale";
 
 import "./global.css";
 
 export default component$(() => {
-  const locale = useLocale();
-  const translatorContext = setTranslatorContext(locale);
-
-  useContextProvider(TranslatorContext, translatorContext);
-
   return (
     <QwikCityProvider>
       <head>
