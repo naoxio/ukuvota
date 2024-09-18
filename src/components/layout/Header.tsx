@@ -1,20 +1,16 @@
-import { component$, useSignal, useStore, $, useTask$ } from "@builder.io/qwik";
+import { component$, useSignal, $, useTask$ } from "@builder.io/qwik";
 import { useLocation, useNavigate, Link } from "@builder.io/qwik-city";
 import { useTranslator } from "~/i18n/translator";
 import { LuSun, LuMoon } from "@qwikest/icons/lucide";
+import { Store } from '@tauri-apps/plugin-store';
 
 export default component$(() => {
-
   const loc = useLocation();
   const navigate = useNavigate();
   const { t, setLocale, locale } = useTranslator();
 
   const supportedLanguages = ["en", "de", "it"];
-  const primaryLocale = 'en';
-
-  const store = useStore({
-    theme: 'light',
-  });
+  const theme = useSignal('dark');
 
   const languageNames: Record<string, string> = {
     'en': 'English',
@@ -22,50 +18,44 @@ export default component$(() => {
     'it': 'Italiano',
   };
 
-  const removeLanguageFromPath = $((path: string) => {
-    const pathSegments = path.split('/').filter(Boolean);
-    if (supportedLanguages.includes(pathSegments[0])) {
-      pathSegments.shift(); 
-    }
-    return '/' + pathSegments.join('/'); 
-  });
-
-  const pathnameWithoutLanguage = useSignal(removeLanguageFromPath(loc.url.pathname));
-
   const updateLanguage = $((newLang: string) => {
     setLocale(newLang);
-    const newPath = `${newLang !== primaryLocale ? '/' + newLang : ''}${pathnameWithoutLanguage.value}`;
+    const newPath = `/${newLang}${loc.url.pathname.replace(/^\/[a-z]{2}/, '') || '/'}`;
     navigate(newPath);
   });
 
-  const toggleTheme = $(() => {
-    store.theme = store.theme === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', store.theme);
-    localStorage.setItem('theme', store.theme);
+  const toggleTheme = $(async () => {
+    const store = new Store('.settings.dat');
+    const newTheme = theme.value === 'light' ? 'dark' : 'light';
+    theme.value = newTheme;
+    await store.set('theme', newTheme);
+    await store.save();
+    document.documentElement.setAttribute('data-theme', newTheme);
   });
 
-  useTask$(({ track }) => {
-    track(() => store.theme);
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        store.theme = savedTheme;
-      } else {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        store.theme = prefersDark ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', store.theme);
+  useTask$(async () => {
+    const store = new Store('.settings.dat');
+    await store.load();
+    const savedTheme = await store.get<string>('theme');
+    if (savedTheme) {
+      theme.value = savedTheme;
+    } else {
+      theme.value = 'dark';
+      await store.set('theme', 'dark');
+      await store.save();
     }
+    document.documentElement.setAttribute('data-theme', theme.value);
   });
+
   return (
-    <header>
+    <header class="header">
       <nav class="navbar">
-        <div>      
-          <Link class={`btn btn-link ${loc.url.pathname === '/' ? 'selected' : ''}`} href="/">
+        <div class="nav-group">      
+          <Link class={`btn btn-link ${loc.url.pathname === '/' || loc.url.pathname === `/${locale.value}` ? 'selected' : ''}`} href={`/${locale.value}`}>
             {t('buttons.home')}
           </Link>
         </div>
-        <div>
+        <div class="nav-group">
           <select 
             class="select" 
             onChange$={(event) => updateLanguage((event.target as HTMLSelectElement).value)}
@@ -79,7 +69,7 @@ export default component$(() => {
           </select>      
 
           <button onClick$={toggleTheme} class="btn btn-ghost">
-            {store.theme === 'dark' ? (
+            {theme.value === 'dark' ? (
               <LuSun width="22" height="22" />
             ) : ( 
               <LuMoon width="22" height="22" />

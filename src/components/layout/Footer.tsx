@@ -1,7 +1,8 @@
 import { component$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { LuMail } from '@qwikest/icons/lucide';
-import { SiTelegram, SiX } from '@qwikest/icons/simple-icons';
+import { SiTelegram, SiX } from '@qwikest/icons/simpleicons';
+import { Link } from '@builder.io/qwik-city';
 
 export default component$(() => {
   const { t } = useTranslator();

@@ -1,18 +1,29 @@
 import { component$ } from "@builder.io/qwik";
 import { useTranslator } from "~/i18n/translator";
+import Footer from "~/components/layout/Footer";
 
 export default component$(() => {
   const { t } = useTranslator();
 
   return (
-    <>
-      <main>
+    <div class="app-container">
+      <header class="header">
+        <nav class="navbar">
+          <a href="/" class="logo">{t('ukuvota')}</a>
+          <div class="nav-links">
+            <a href="/app" class="nav-link">{t('launchWebApp')}</a>
+            <a href="/download/android" class="nav-link">{t('getAndroidAPK')}</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="main-content">
         <section class="hero">
           <h1>{t('ukuvota')}</h1>
-          <p>{t('tagline')}</p>
+          <p class="tagline">{t('tagline')}</p>
           <div class="cta-buttons">
             <a href="/app" class="cta-button">{t('launchWebApp')}</a>
-            <a href="/download/android" class="cta-button">{t('getAndroidAPK')}</a>
+            <a href="/download/android" class="cta-button secondary">{t('getAndroidAPK')}</a>
           </div>
         </section>
 
@@ -40,16 +51,7 @@ export default component$(() => {
         </section>
       </main>
 
-      <footer class="footer">
-        <p>&copy; 2024 NaoX</p>
-        <div class="social-links">
-          <a href="mailto:contact@ukuvota.com" aria-label="Email">📧</a>
-          <a href="https://instagram.com/ukuvota" aria-label="Instagram">📷</a>
-          <a href="https://x.com/ukuvota" aria-label="X">𝕏</a>
-          <a href="https://github.com/ukuvota" aria-label="GitHub">🐙</a>
-          <a href="https://t.me/ukuvota" aria-label="Telegram">📞</a>
-        </div>
-      </footer>
-    </>
+      <Footer/>
+    </div>
   );
 });

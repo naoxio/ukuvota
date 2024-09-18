@@ -1,158 +1,24 @@
 {
-  "proposalsContainer": "Proposals Container",
-  "noProposalsFound": "No proposals found.",
-  "addProposal": "Add Proposal",
-  "emptyProposal": "Empty proposal",
-  "addProposalTemplate": "Add Proposal Template",
-  "enableJavaScript": "JavaScript is required for the full functionality of this page. Please enable JavaScript in your browser settings.",
-  "home": {
-    "description": "Voting Made Simple, Secure, and Empowering",
-    "subheader": "Voting Made Simple, Secure, and Empowering",
-    "webAppCardTitle": "Web App",
-    "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
-    "webAppCardButton": "Create New Process",
-    "telegramBotCardTitle": "Telegram Bot",
-    "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
-    "telegramBotCardButton": "Go to Bot" 
-  },
-  "dashboard": {
-    "noProcesses": "Currently, there are no processes to display.",
-    "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
-    "options": "What would you like to do?",
-    "createNewProcess": "Create New Process",
-    "add": "Add",
-    "addByUUID": "Add Process by UUID",
-    "enterUUID": "Enter UUID or link",
-    "importProcesses": "Import Processes",
-    "import": "Import",
-    "export": "Export Processes"
-  },
-  "guide": {
-    "checkboxLabel": "Do not show this guide next time",
-    "createProcessButton": "Create Process"
-  },
-  "setup": {
-    "continueEditing": "Continue Editing",
-    "existingProcessPrompt": "You have an existing process. Would you like to continue?",
-    "startNew": "Start over",
-    "process": "Setup Process",
-    "selectTimeForVoting": "Select the time for voting",
-    "proposals": "Add proposals",
-    "setDate": "Set Date",
-    "duration": "Duration",
-    "setDuration": "Set Duration",
-    "timeLeftHeading": "Select the time for proposals and voting",
-    "timeLeftVotingHeading": "Select the time for voting",
-    "errorMinProposals": "You need at least 2 proposals to proceed.",
-    "timezone": "Timezone"
-  },
-  "loadQuill": "Loading QuillEditor...",
-  "policy": "Privacy Policy",
-  "donate": "Donate",
-  "phases": {
-    "start": "Starts",
-    "startAt": "Start at",
-    "endsAt": "Ends at",
-    "lastFor": "Lasts for",
-    "proposal": {
-      "title": "Proposal Phase"
-    },
-    "voting": {
-      "title": "Voting Phase"
-    }
-  },
-  "alert": {
-    "success": {
-      "createProcess": "Process starting...",
-      "creatingProcess": "Process is being created...",
-      "submitVote": "Vote submitted for: ",
-      "repeatProcess": "Repeat process with selection...",
-      "websocketConnected": "Successfully connected to WebSocket"
-    },
-    "connecting": {
-      "connectingToWebsocket": "Connecting to WebSocket..."
-    },
-    "info": {
-      "submittingVote": "Submitting vote..."
-    },
-    "error": {
-      "topicQuestion": "Please add a Topic Question",
-      "emptyName": "Please add a name",
-      "proposalsMissing": "Missing proposals, you need at least 2 proposals",
-      "missingProposals": "Missing proposals, you need to select at least 2 proposals",
-      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content",
-      "errorConnectingToWebsocket": "Error connecting to WebSocket"
-    } 
-  },
-  "remainingTime": "remaining time",
-  "skipped": "skipped",
-  "tagline": "Finding the best solution",
+  "ukuvota": "Ukuvota",
+  "tagline": "Voting Made Simple, Secure, and Empowering",
+  "launchWebApp": "Launch Web App",
+  "getAndroidAPK": "Get Android APK",
+  "weightedScoreVoting": "Weighted Score Voting",
+  "weightedScoreVotingDesc": "Our unique voting system allows for nuanced decision-making.",
+  "effortlessSharing": "Effortless Sharing",
+  "effortlessSharingDesc": "Share your voting processes with a simple link or QR code.",
+  "consensusDrivenApproach": "Consensus-Driven Approach",
+  "consensusDrivenApproachDesc": "Find solutions that work for everyone, not just the majority.",
+  "userFriendlyInterface": "User-Friendly Interface",
+  "userFriendlyInterfaceDesc": "Intuitive design makes voting accessible to all.",
+  "transparentResults": "Transparent Results",
+  "transparentResultsDesc": "See real-time results and understand how decisions are made.",
   "buttons": {
-    "dashboard": "Dashboard",
-    "about": "About",
-    "go": "GO",
-    "home": "Home",
-    "toggle_dark": "Toggle dark mode",
-    "toggle_langs": "Change languages",
-    "start": "Start process",
-    "continue": "Continue",
-    "back": "Back",
-    "edit": "Edit",
-    "save": "Save",
-    "select": "select",
-    "confirm": "confirm",
-    "cancel": "cancel",
-    "done": "done",
-    "delete": "Delete",
-    "update": "Update"
+    "home": "Home"
   },
-  "loading": "Loading",
-  "calendar": "Calendar",
-  "slider": "Slider",
-  "not-found": "Not found",
-  "process": {
-    "noVotesSubmitted": "No votes submitted",
-    "noProposalsSubmitted": "No proposals were submitted.",
-    "topic": "Topic Question",
-    "title": "Title",
-    "description": "Description",
-    "weighting": "Negative Score Weighting",
-    "proposal": "Proposal",
-    "proposals": "Proposals",
-    "addProposal": "Add proposal",
-    "averageScore": "Average Score",
-    "totalScore": "Total Score",
-    "results": "Results",
-    "maxProposals": "Maximum amount of proposals",
-    "amountProposals": "Amount of proposals",
-    "limitProposals": "Limit amount of proposals",
-    "starting": "Process starting...",
-    "submitVote": "Submit Vote",
-    "shareableUrl": "Shareable link",
-    "qrcode": "Qr-Code",
-    "voterName": "Your name or persistent alias",
-    "voters": "Voters",
-    "voter": "Voter",
-    "exportData": "Export Data",
-    "advancedOptions": "Show Advanced Options",
-    "phases": {
-      "select": "Select phases",
-      "full": "Proposal + Voting Phase",
-      "voting": "Voting Phase only"
-    },
-    "addProposalTemplate": "Add proposal by template"
-  },
-  "proposal": {
-    "zero": {
-      "title": "Status quo",
-      "description": "Keep things the way they are."
-    },
-    "one": {
-      "title": "Repeat process",
-      "description": "Repeat the process and look for other options."
-    }
-  },
-  "repeatProcess":"Repeat process",
-  "description": "Ukuvota is a powerful decision making tool that helps people make informed choices in a collaborative and organized manner.",
-  "wip": "Work in progress"
+  "languageNames": {
+    "en": "English",
+    "de": "Deutsch",
+    "it": "Italiano"
+  }
 }
