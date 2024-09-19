@@ -18,7 +18,7 @@ export default component$(() => {
     descriptionSignal.value = newDescription;
     processData.description = newDescription;
 
-    const store = new Store('.processData.dat');
+    const store = new Store('.processData.bin');
     await store.load();
     await store.set('description', newDescription);
     await store.save();

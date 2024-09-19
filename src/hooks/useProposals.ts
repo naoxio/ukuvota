@@ -12,7 +12,7 @@ export function useProposals(processId: string) {
   });
 
   useTask$(async () => {
-    const store = new Store(`.proposals_${processId}.dat`);
+    const store = new Store(`.proposals_${processId}.bin`);
     await store.load();
 
     const existingProposals = await store.get('proposals') as IProposal[] | null;
@@ -24,7 +24,7 @@ export function useProposals(processId: string) {
   useTask$(async ({ track }) => {
     track(() => proposalsStore.proposals);
     
-    const store = new Store(`.proposals_${processId}.dat`);
+    const store = new Store(`.proposals_${processId}.bin`);
     await store.set('proposals', proposalsStore.proposals);
     await store.save();
   });

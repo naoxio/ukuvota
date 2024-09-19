@@ -14,7 +14,7 @@ export default component$(() => {
 
   useTask$(async () => {
     // Any initialization logic if needed
-    const store = new Store('.processData.dat');
+    const store = new Store('.processData.bin');
     await store.load();
     
     // Load description if it's not already in processData
@@ -31,7 +31,7 @@ export default component$(() => {
   });
 
   const handleStart = $(async () => {
-    const store = new Store('.processData.dat');
+    const store = new Store('.processData.bin');
     await store.load();
 
     // Save the final process data

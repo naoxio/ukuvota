@@ -17,7 +17,7 @@ export function useProcessData() {
   });
 
   useVisibleTask$(async () => {
-    const store = new Store('.processData.dat');
+    const store = new Store('.processData.bin');
     await store.load();
 
     const keys: (keyof IProcess)[] = ['_id', 'title', 'description', 'proposalDates', 
@@ -35,7 +35,7 @@ export function useProcessData() {
   useVisibleTask$(async ({ track }) => {
     track(() => processData);
     
-    const store = new Store('.processData.dat');
+    const store = new Store('.processData.bin');
     await store.load();
 
     for (const [key, value] of Object.entries(processData)) {

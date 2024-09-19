@@ -1,56 +1,37 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "ukuvota",
+  "version": "0.1.0",
   "identifier": "io.naox.ukuvota",
   "build": {
-    "beforeBuildCommand": "pnpm build",
-    "beforeDevCommand": "pnpm dev",
+    "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
-    "frontendDist": "../dist"
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build"
   },
   "app": {
-    "security": {
-      "csp": null
-    },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
         "title": "Ukuvota",
         "width": 800,
-        "label": "main"
+        "height": 600,
+        "resizable": true,
+        "fullscreen": false
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   },
   "bundle": {
     "active": true,
-    "category": "DeveloperTool",
-    "copyright": "",
-    "externalBin": [],
+    "targets": "all",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ],
-    "longDescription": "",
-    "macOS": {
-      "entitlements": null,
-      "exceptionDomain": "",
-      "frameworks": [],
-      "providerShortName": null,
-      "signingIdentity": null
-    },
-    "resources": [],
-    "shortDescription": "",
-    "targets": "all",
-    "windows": {
-      "certificateThumbprint": null,
-      "digestAlgorithm": "sha256",
-      "timestampUrl": ""
-    }
-  },
-  "productName": "ukuvota",
-  "version": "0.1.0"
+    ]
+  }
 }

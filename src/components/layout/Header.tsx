@@ -25,7 +25,7 @@ export default component$(() => {
   });
 
   const toggleTheme = $(async () => {
-    const store = new Store('.settings.dat');
+    const store = new Store('.settings.bin');
     const newTheme = theme.value === 'light' ? 'dark' : 'light';
     theme.value = newTheme;
     await store.set('theme', newTheme);
@@ -34,7 +34,7 @@ export default component$(() => {
   });
 
   useTask$(async () => {
-    const store = new Store('.settings.dat');
+    const store = new Store('.settings.bin');
     await store.load();
     const savedTheme = await store.get<string>('theme');
     if (savedTheme) {

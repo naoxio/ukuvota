@@ -28,7 +28,7 @@ function useProposals(processId?: string) {
 
 
   useVisibleTask$(async () => {
-    const localStore = new Store('.proposals.dat');
+    const localStore = new Store('.proposals.bin');
     await localStore.load();
 
     // Load existing proposals
@@ -52,7 +52,7 @@ function useProposals(processId?: string) {
   // Save proposals whenever they change
   useTask$(async ({ track }) => {
     track(() => store.proposals);
-    const localStore = new Store('.proposals.dat');
+    const localStore = new Store('.proposals.bin');
     await localStore.set('proposals', store.proposals);
     await localStore.save();
   });
