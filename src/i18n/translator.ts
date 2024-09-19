@@ -1,4 +1,4 @@
-import { $, useContext, useSignal, useStore, useVisibleTask$} from '@builder.io/qwik';
+import { $, useContext, useSignal, useVisibleTask$} from '@builder.io/qwik';
 import enTranslations from './locales/en.json';
 import deTranslations from './locales/de.json';
 import itTranslations from './locales/it.json';
@@ -32,19 +32,11 @@ const getTranslation = (translations: any, key: string): string => {
 
 export const useTranslator = () => {
   const localeContext = useContext(LocaleContext);
-  const state = useStore({
-    translationsSignal: useSignal(translationsMap[localeContext.locale] || translationsMap.en),
-    get locale() {
-      return localeContext.locale;
-    },
-    set locale(value: string) {
-      localeContext.locale = value;
-    }
-  });
-  // eslint-disable-next-line
+  const translationsSignal = useSignal(translationsMap[localeContext.locale] || translationsMap.en);
+
   useVisibleTask$(({ track }) => {
-    const locale = track(() => state.locale);
-    state.translationsSignal.value = translationsMap[locale] || translationsMap.en;
+    const locale = track(() => localeContext.locale);
+    translationsSignal.value = translationsMap[locale] || translationsMap.en;
     if (typeof window !== 'undefined') {
       localStorage.setItem('locale', locale);
     }
@@ -52,18 +44,16 @@ export const useTranslator = () => {
 
   const setLocale = $((newLocale: string) => {
     if (translationsMap[newLocale]) {
-      state.locale = newLocale;
+      localeContext.locale = newLocale;
     } else {
       console.warn(`Locale ${newLocale} not supported, falling back to English`);
-      state.locale = 'en';
+      localeContext.locale = 'en';
     }
   });
 
   return {
-    t: $((key: string): string => getTranslation(state.translationsSignal.value, key)),
+    t: $((key: string): string => getTranslation(translationsSignal.value, key)),
     setLocale,
-    get locale() {
-      return state.locale;
-    }
+    locale: localeContext.locale
   };
 };

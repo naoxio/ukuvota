@@ -8,6 +8,7 @@ import TimeSelector from "~/components/datetime/TimeSelector";
 import TimezoneSelector from "~/components/datetime/TimezoneSelector";
 import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
 
+import './setup-process.css';
 
 export default component$(() => {
   const { t } =useTranslator();

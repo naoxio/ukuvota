@@ -2,7 +2,7 @@ import { component$, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
 import { useLocation, useNavigate, Link } from "@builder.io/qwik-city";
 import { useTranslator } from "~/i18n/translator";
 import { LuSun, LuMoon } from "@qwikest/icons/lucide";
-import { Store } from '@tauri-apps/plugin-store';
+import StoreManager from '~/utils/storeManager';
 
 import './header.css';
 
@@ -23,30 +23,25 @@ export default component$(() => {
     const newPath = `/${newLang}${loc.url.pathname.replace(/^\/[a-z]{2}/, '') || '/'}`;
     navigate(newPath);
   });
-
   const toggleTheme = $(async () => {
     const newTheme = theme.value === 'light' ? 'dark' : 'light';
     theme.value = newTheme;
-    const store = new Store('settings.bin');
+    const store = new StoreManager('settings.bin');
     await store.set('theme', newTheme);
-    await store.save();
     document.documentElement.setAttribute('data-theme', newTheme);
   });
-
   // eslint-disable-next-line
   useVisibleTask$(async () => {
-    const store = new Store('settings.bin');
+    const store = new StoreManager('settings.bin');
     const savedTheme = await store.get('theme') as string | null;
     if (savedTheme) {
       theme.value = savedTheme;
     } else {
       theme.value = 'dark';
       await store.set('theme', 'dark');
-      await store.save();
     }
     document.documentElement.setAttribute('data-theme', theme.value);
   });
-  
 
   return (
     <header class="header">

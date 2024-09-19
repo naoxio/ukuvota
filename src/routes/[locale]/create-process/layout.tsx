@@ -1,17 +1,16 @@
-import { component$, Slot, $ } from '@builder.io/qwik';
-import { useNavigate } from '@builder.io/qwik-city';
+import { component$, Slot, $, PropFunction } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import './index.css';
 
 export interface CreateProcessLayoutProps {
   step: number;
+  setStep: PropFunction<(step: number) => void>;
 }
 
 export default component$((props: CreateProcessLayoutProps) => {
   const { t } = useTranslator();
   const processData = useProcessData();
-  const navigate = useNavigate();
 
   const steps = [
     { stepNumber: 1, disabled: false },
@@ -20,7 +19,9 @@ export default component$((props: CreateProcessLayoutProps) => {
   ];
 
   const updateStep = $((stepNumber: number) => {
-    navigate(`/create-process/step${stepNumber}`);
+    if (!steps[stepNumber - 1].disabled) {
+      props.setStep(stepNumber);
+    }
   });
 
   return (

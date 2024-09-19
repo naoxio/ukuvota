@@ -1,7 +1,7 @@
 import { component$, useStore, $, useTask$, useTask$ } from '@builder.io/qwik';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslator } from '~/i18n/translator';
-import { Store } from '@tauri-apps/plugin-store';
+import StoreManager from '~/utils/storeManager';
 import { exampleProposals } from '~/utils/exampleProposals';
 
 interface IProposal {
@@ -28,8 +28,7 @@ function useProposals(processId?: string) {
 
 
   useTask$(async () => {
-    const localStore = new Store('.proposals.bin');
-    await localStore.load();
+    const localStore = new StoreManager('.proposals.bin');
 
     // Load existing proposals
     const existingProposals = await localStore.get('proposals') as IProposal[] | null;
@@ -52,7 +51,7 @@ function useProposals(processId?: string) {
   // Save proposals whenever they change
   useTask$(async ({ track }) => {
     track(() => store.proposals);
-    const localStore = new Store('.proposals.bin');
+    const localStore = new StoreManager('.proposals.bin');
     await localStore.set('proposals', store.proposals);
     await localStore.save();
   });

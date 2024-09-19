@@ -1,6 +1,6 @@
 // src/hooks/useProcessData.ts
-import { useStore, useVisibleTask$, useTask$ } from '@builder.io/qwik';
-import { Store } from '@tauri-apps/plugin-store';
+import { useStore, useVisibleTask$ } from '@builder.io/qwik';
+import StoreManager from '../utils/storeManager';
 import type { IProcess } from '../types';
 
 export function useProcessData() {
@@ -18,15 +18,16 @@ export function useProcessData() {
     timezone: undefined,
     phase: undefined,
   });
+
   // eslint-disable-next-line
   useVisibleTask$(async () => {
-    const store = new Store('.processData.bin');
-    await store.load();
+    const store = new StoreManager('.processData.bin');
     const keys: (keyof IProcess)[] = [
       '_id', 'title', 'description', 'descriptionId', 'proposalDates',
       'votingDates', 'strategy', 'weighting',
       'proposals', 'voters', 'timezone', 'phase'
     ];
+
     for (const key of keys) {
       const value = await store.get(key);
       if (value !== null) {
@@ -34,19 +35,18 @@ export function useProcessData() {
       }
     }
   });
+
   // eslint-disable-next-line
   useVisibleTask$(async ({ track }) => {
     // Track all properties of processData
     track(() => ({ ...processData }));
-
-    const store = new Store('.processData.bin');
-    await store.load();
-
+    
+    const store = new StoreManager('.processData.bin');
+    
     // Save all properties to the store
     for (const [key, value] of Object.entries(processData)) {
       await store.set(key, value);
     }
-    await store.save();
   });
 
   return processData;

@@ -1,8 +1,7 @@
-import type { APIRoute } from "astro";
 import { exampleProposals } from '~/utils/exampleProposals.js';
 
 import { parseProcessRawCookie } from '~/utils/parseProcessCookie';
-import IProposal from "@types/IProposal";
+import { IProposal } from "~/types";
 import { utcToZonedTime } from 'date-fns-tz';
 
 export const POST: APIRoute = async ({ request }) => {

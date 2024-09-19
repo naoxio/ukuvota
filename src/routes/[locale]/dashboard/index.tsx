@@ -1,7 +1,7 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useNavigate } from '@builder.io/qwik-city';
-import { Store } from '@tauri-apps/plugin-store';
+import StoreManager from '~/utils/storeManager';
 
 export default component$(() => {
   const { t } = useTranslator();
@@ -10,20 +10,18 @@ export default component$(() => {
     allProcesses: [] as string[],
     modalOpen: false
   });
-
+  // eslint-disable-next-line
   useVisibleTask$(async () => {
-    const tauriStore = new Store('.processes.bin');
-    await tauriStore.load();
-    const processes = await tauriStore.get('allProcesses') as string[] | null;
+    const data = new StoreManager('.processes.bin');
+    const processes = await data.get('allProcesses') as string[] | null;
     if (processes) {
       store.allProcesses = processes;
     }
   });
-
+  // eslint-disable-next-line
   useVisibleTask$(async ({ track }) => {
     track(() => store.allProcesses);
-    const tauriStore = new Store('.processes.bin');
-    await tauriStore.load();
+    const tauriStore = new StoreManager('.processes.bin');
     await tauriStore.set('allProcesses', store.allProcesses);
     await tauriStore.save();
   });

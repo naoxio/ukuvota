@@ -4,7 +4,9 @@ import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/modal/modal';
 import ContentDoc from '../content-doc/content-doc';
-import { Store } from '@tauri-apps/plugin-store';
+import StoreManager from '~/utils/storeManager';
+
+import './setup-process.css';
 
 export default component$(() => {
   const { t } = useTranslator();
@@ -14,7 +16,7 @@ export default component$(() => {
   
   // eslint-disable-next-line
   useVisibleTask$(async () => {
-    const store = new Store('processData.bin');
+    const store = new StoreManager('processData.bin');
     const savedDescription = await store.get('description') as string | null;
     if (savedDescription) {
       descriptionSignal.value = savedDescription;
@@ -26,7 +28,7 @@ export default component$(() => {
     const newDescription = (event.target as HTMLTextAreaElement).value;
     descriptionSignal.value = newDescription;
     processData.description = newDescription;
-    const store = new Store('processData.bin');
+    const store = new StoreManager('processData.bin');
     await store.set('description', newDescription);
     await store.save();
   });
@@ -34,7 +36,7 @@ export default component$(() => {
   const handleSubmit = $(async (event: Event, phase: string) => {
     event.preventDefault();
     processData.phase = phase;
-    const store = new Store('processData.bin');
+    const store = new StoreManager('processData.bin');
     await store.set('title', processData.title);
     await store.set('description', processData.description);
     await store.set('weighting', processData.weighting);
