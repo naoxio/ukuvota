@@ -1,4 +1,4 @@
-import { component$, useStore, $, useVisibleTask$, useTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useTask$, useTask$ } from '@builder.io/qwik';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslator } from '~/i18n/translator';
 import { Store } from '@tauri-apps/plugin-store';
@@ -27,7 +27,7 @@ function useProposals(processId?: string) {
   const { t } =useTranslator();
 
 
-  useVisibleTask$(async () => {
+  useTask$(async () => {
     const localStore = new Store('.proposals.bin');
     await localStore.load();
 

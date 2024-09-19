@@ -1,6 +1,6 @@
 import { component$, Resource, useResource$ } from '@builder.io/qwik';
 import { loadContent } from '~/utils/contentLoader';
-import { useLocale } from '~/i18n/useLocale';
+import { useLocale } from '~/hooks/useLocale';
 
 interface Props {
   fileName: string;

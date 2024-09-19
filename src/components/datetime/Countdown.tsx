@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$, useStore, $ } from '@builder.io/qwik';
+import { component$, useTask$, useStore, $ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { formatDuration } from '~/utils/dateUtils';
 
@@ -21,7 +21,7 @@ export const Countdown = component$((props: CountdownProps) => {
   // Create a memoized function for translation
   const translateDone = $(() => t('done'));
 
-  useVisibleTask$(({ cleanup }) => {
+  useTask$(({ cleanup }) => {
     const updateCountdown = async () => {
       state.currentDate = Date.now();
       const diff = state.targetDate - state.currentDate;

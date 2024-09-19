@@ -1,4 +1,4 @@
-import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { format } from 'date-fns-tz';
 import { Countdown } from '~/components/datetime/Countdown'; 
@@ -18,7 +18,7 @@ export const ProcessTimeLabel = component$((props: ProcessTimeLabelProps) => {
     currentDate: Date.now(),
   });
 
-  useVisibleTask$(() => {
+  useTask$(() => {
     const timezone = props.timezone || 'UTC';
     const startMillis = props.dates[0];
     const start = new Date(startMillis);

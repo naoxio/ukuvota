@@ -1,28 +1,41 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$, useContextProvider, useStore } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from "@builder.io/qwik-city";
-import { RouterHead } from "./components/RouterHead";
-import Header from "./components/layout/Header";
-
+import { RouterHead } from "./components/router-head/router-head";
+import { isDev } from "@builder.io/qwik/build";
+import Header from "./components/header/header";
+import { LocaleContext } from "./i18n/localeContext";
 import "./global.css";
 
 export default component$(() => {
+  const localeStore = useStore({
+    locale: 'en',
+    setLocale: null as unknown as (newLocale: string) => void
+  });
+
+  // Define setLocale function after localeStore is initialized
+  localeStore.setLocale = $((newLocale: string) => {
+    localeStore.locale = newLocale;
+  });
+
+  useContextProvider(LocaleContext, localeStore);
+
+
   return (
     <QwikCityProvider>
       <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <meta charset="utf-8" />
+        {!isDev && (
+          <link
+            rel="manifest"
+            href={`${import.meta.env.BASE_URL}manifest.json`}
+          />
+        )}
         <RouterHead />
       </head>
       <body>
         <Header />
-        <main>
-          <RouterOutlet />
-        </main>
-        <ServiceWorkerRegister />
+        <RouterOutlet />
+        {!isDev && <ServiceWorkerRegister />}
       </body>
     </QwikCityProvider>
   );

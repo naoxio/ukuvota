@@ -4,6 +4,10 @@ import { LuMail } from '@qwikest/icons/lucide';
 import { SiTelegram, SiX } from '@qwikest/icons/simpleicons';
 import { Link } from '@builder.io/qwik-city';
 
+
+import './footer.css';
+
+
 export default component$(() => {
   const { t } = useTranslator();
 

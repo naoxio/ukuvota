@@ -1,21 +1,12 @@
 import { component$ } from "@builder.io/qwik";
 import { useTranslator } from "~/i18n/translator";
-import Footer from "~/components/layout/Footer";
+import Footer from "~/components/footer/footer";
 
 export default component$(() => {
   const { t } = useTranslator();
 
   return (
     <div class="app-container">
-      <header class="header">
-        <nav class="navbar">
-          <a href="/" class="logo">{t('ukuvota')}</a>
-          <div class="nav-links">
-            <a href="/app" class="nav-link">{t('launchWebApp')}</a>
-            <a href="/download/android" class="nav-link">{t('getAndroidAPK')}</a>
-          </div>
-        </nav>
-      </header>
 
       <main class="main-content">
         <section class="hero">

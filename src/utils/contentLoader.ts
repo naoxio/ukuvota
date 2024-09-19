@@ -1,6 +1,6 @@
 // src/utils/contentLoader.ts
 
-import { useLocale } from '~/i18n/useLocale';
+import { useLocale } from '~/hooks/useLocale';
 import { $ } from '@builder.io/qwik';
 
 const contentModules = import.meta.glob('/content/**/*.md');

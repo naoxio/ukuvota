@@ -1,5 +1,5 @@
 // src/hooks/useProcessData.ts
-import { useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { useStore, useTask$ } from '@builder.io/qwik';
 import { Store } from '@tauri-apps/plugin-store';
 import type { IProcess } from '../types';
 
@@ -16,7 +16,7 @@ export function useProcessData() {
     timezone: undefined,
   });
 
-  useVisibleTask$(async () => {
+  useTask$(async () => {
     const store = new Store('.processData.bin');
     await store.load();
 
@@ -32,7 +32,7 @@ export function useProcessData() {
     }
   });
 
-  useVisibleTask$(async ({ track }) => {
+  useTask$(async ({ track }) => {
     track(() => processData);
     
     const store = new Store('.processData.bin');

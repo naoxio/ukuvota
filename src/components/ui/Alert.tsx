@@ -1,4 +1,4 @@
-import { component$, Slot, useSignal, useVisibleTask$, $ } from '@builder.io/qwik';
+import { component$, Slot, useSignal, useTask$, $ } from '@builder.io/qwik';
 import { LuInformation, LuAlertCircle, LuAlertTriangle, LuCheckCircle } from '@qwikest/icons/lucide';
 
 interface Props {
@@ -18,7 +18,7 @@ export default component$((props: Props) => {
     error ? 'alert-error' : success ? 'alert-success' : warning ? 'alert-warning' : info ? 'alert-info' : ''
   }`;
 
-  useVisibleTask$(() => {
+  useTask$(() => {
     visible.value = true;
   });
 
