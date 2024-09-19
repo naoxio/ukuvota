@@ -1,3 +1,4 @@
+// src/types/IProcess.ts
 import type { IProposal } from './IProposal';
 import type { IVoter } from './IVoter';
 
@@ -6,13 +7,13 @@ export interface IProcess {
   title: string;
   description?: string;
   descriptionId?: string;
-  proposalDates: number[];
-  votingDates: number[];
+  proposalDates: [number, number]; // [start, end]
+  votingDates: [number, number]; // [start, end]
   strategy: string;
   weighting: string;
   proposals: IProposal[];
   voters?: IVoter[];
   timezone?: string;
-  phase?: string;
-
+  phase?: 'full' | 'voting';
+  step?: string;
 }

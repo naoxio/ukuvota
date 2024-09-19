@@ -1,8 +1,12 @@
-import { component$, useSignal, $ } from "@builder.io/qwik";
+import { component$, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import Step1 from '~/components/setup-process/step1';
-import { LuX } from "@qwikest/icons/lucide";
+import Step2 from '~/components/setup-process/step2';
+import Step3 from '~/components/setup-process/step3';
+import Modal from '~/components/modal/modal';
+import type { IProcess } from '~/types/IProcess';
+import StoreManager from '~/utils/storeManager';
 
 export default component$(() => {
   const { t } = useTranslator();
@@ -10,33 +14,64 @@ export default component$(() => {
   const currentStep = useSignal(1);
   const showExistingProcessModal = useSignal(false);
 
-  const startNewProcess = $(() => {
-    Object.assign(processData, {
-      create: 'false',
-      phase: '',
-      weighting: '',
+  const startNewProcess = $(async () => {
+    const newProcessData: IProcess = {
+      _id: '',
       title: '',
+      description: '',
       descriptionId: '',
-      startProposalDate: 0,
-      endProposalDate: 0,
-      startVotingDate: 0,
-      endVotingDate: 0,
-      step: '1',
+      proposalDates: [0, 0],
+      votingDates: [0, 0],
+      strategy: '',
+      weighting: '',
       proposals: [],
+      voters: [],
       timezone: undefined,
-    });
-    localStorage.removeItem('processData');
+      phase: undefined,
+      step: '1',
+    };
+
+    Object.assign(processData, newProcessData);
+    
+    const store = new StoreManager('.processData.bin');
+    for (const [key, value] of Object.entries(newProcessData)) {
+      await store.set(key, value);
+    }
+    await store.save();
+
     showExistingProcessModal.value = false;
+  });
+
+  const setStep = $((step: number) => {
+    currentStep.value = step;
+  });
+
+  // Load existing process data
+  useVisibleTask$(async () => {
+    const store = new StoreManager('.processData.bin');
+    const keys: (keyof IProcess)[] = [
+      '_id', 'title', 'description', 'descriptionId', 'proposalDates',
+      'votingDates', 'strategy', 'weighting', 'proposals', 'voters', 
+      'timezone', 'phase', 'step'
+    ];
+    for (const key of keys) {
+      const value = await store.get(key);
+      if (value !== null) {
+        (processData as any)[key] = value;
+      }
+    }
+
+    // Check if there's existing process data
+    if (processData.title || processData.description) {
+      showExistingProcessModal.value = true;
+    }
   });
 
   return (
     <div class="main-content">
-      {showExistingProcessModal.value && (
-        <div class="modal">
+      <Modal id="existing-process-modal" icon="custom">
+        {showExistingProcessModal.value && (
           <div class="modal-box">
-            <button class="btn-ghost" onClick$={() => showExistingProcessModal.value = false}>
-              <LuX width={22} height={22} />
-            </button>
             <h3 class="tagline">{t('setup.continueEditing')}</h3>
             <p>{t('setup.existingProcessPrompt')}</p>
             <div class="process-details">
@@ -48,14 +83,14 @@ export default component$(() => {
               <button onClick$={() => showExistingProcessModal.value = false} class="cta-button secondary">{t('buttons.continue')}</button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
       {currentStep.value === 1 ? (
-        <Step1 />
+        <Step1 setStep={setStep} />
       ) : currentStep.value === 2 ? (
-        <div />
+        <Step2 setStep={setStep} />
       ) : currentStep.value === 3 ? (
-        <div />
+        <Step3 setStep={setStep} />
       ) : null}
     </div>
   );

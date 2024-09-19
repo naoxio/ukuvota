@@ -1,18 +1,21 @@
 import { component$, useSignal, $ } from '@builder.io/qwik';
-import { useNavigate } from '@builder.io/qwik-city';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import ProposalsList from "~/components/process/ProposalsList";
-import TimeSelector from "~/components/datetime/TimeSelector";
-import TimezoneSelector from "~/components/datetime/TimezoneSelector";
+import { TimeSelector } from "~/components/datetime/TimeSelector";
+import { TimezoneSelector } from "~/components/datetime/TimezoneSelector";
 import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
+import StoreManager from '~/utils/storeManager';
 
 import './setup-process.css';
 
-export default component$(() => {
-  const { t } =useTranslator();
-  const navigate = useNavigate();
+export interface Step2Props {
+  setStep: (step: number) => void;
+}
+
+export default component$((props: Step2Props) => {
+  const { t } = useTranslator();
   const processData = useProcessData();
   const { proposalsStore, addProposal, removeProposal } = useProposals(processData._id);
 
@@ -22,7 +25,7 @@ export default component$(() => {
     const [pStart, pEnd] = processData.proposalDates;
     const [vStart, vEnd] = processData.votingDates;
     const { pStart: newPStart, pEnd: newPEnd, vStart: newVStart, vEnd: newVEnd } = adjustDates(
-      processData.phase ?  processData.phase  : '',
+      processData.phase || '',
       pStart,
       pEnd,
       vStart,
@@ -32,23 +35,30 @@ export default component$(() => {
     processData.votingDates = [newVStart.getTime(), newVEnd.getTime()];
   });
 
-  const handleTimezoneChange = $((newTimezone: string) => {
+  const handleTimezoneChange = $(async (newTimezone: string) => {
     processData.timezone = newTimezone;
+    const store = new StoreManager('.processData.bin');
+    await store.set('timezone', newTimezone);
+    await store.save();
   });
 
-  const handleTimeChange = $((phase: 'proposal' | 'voting', startDate: number, endDate: number) => {
+  const handleTimeChange = $(async (phase: 'proposal' | 'voting', startDate: number, endDate: number) => {
+    const store = new StoreManager('.processData.bin');
     if (phase === 'proposal') {
       processData.proposalDates = [startDate, endDate];
       if (processData.phase === 'full') {
         adjustVotingPhaseDates(new Date(endDate), new Date(processData.votingDates[1]), processData, processData.timezone || 'UTC');
       }
+      await store.set('proposalDates', processData.proposalDates);
     } else if (phase === 'voting') {
       processData.votingDates = [startDate, endDate];
+      await store.set('votingDates', processData.votingDates);
     }
+    await store.save();
   });
 
   const handleBackButtonClick = $(() => {
-    navigate('/create-process/step1');
+    props.setStep(1);
   });
 
   const handleContinueButtonClick = $(async () => {
@@ -58,7 +68,10 @@ export default component$(() => {
     }
 
     processData.proposals = proposalsStore.proposals;
-    navigate('/create-process/step3');
+    const store = new StoreManager('.processData.bin');
+    await store.set('proposals', processData.proposals);
+    await store.save();
+    props.setStep(3);
   });
 
   return (

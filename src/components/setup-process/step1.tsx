@@ -5,15 +5,18 @@ import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/modal/modal';
 import ContentDoc from '~/components/content-doc/content-doc';
 import StoreManager from '~/utils/storeManager';
-
 import './setup-process.css';
 
-export default component$(() => {
+export interface Step1Props {
+  setStep: (step: number) => void;
+}
+
+export default component$((props: Step1Props) => {
   const { t } = useTranslator();
   const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
   const descriptionSignal = useSignal(processData.description || '');
-  
+
   // eslint-disable-next-line
   useVisibleTask$(async () => {
     const store = new StoreManager('processData.bin');
@@ -33,7 +36,8 @@ export default component$(() => {
     await store.save();
   });
 
-  const handleSubmit = $(async (event: Event, phase: string) => {
+
+  const handleSubmit = $(async (event: Event, phase: 'full' | 'voting') => {
     event.preventDefault();
     processData.phase = phase;
     const store = new StoreManager('processData.bin');
@@ -41,10 +45,28 @@ export default component$(() => {
     await store.set('description', processData.description);
     await store.set('weighting', processData.weighting);
     await store.set('phase', processData.phase);
-    await store.set('timezoneOffset', timezoneOffset);
-    await store.save();
-  });
+    await store.set('timezone', timezoneOffset.toString());
 
+    // Update the step and dates
+    processData.step = '2';
+    const currentDate = new Date().getTime();
+    if (phase === 'full') {
+      processData.proposalDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
+      processData.votingDates = [processData.proposalDates[1], processData.proposalDates[1] + 7 * 24 * 60 * 60 * 1000];
+    } else if (phase === 'voting') {
+      processData.votingDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
+    }
+
+    // Save the updated process data
+    await store.set('step', processData.step);
+    await store.set('proposalDates', processData.proposalDates);
+    await store.set('votingDates', processData.votingDates);
+    await store.save();
+
+    // Move to the next step
+    props.setStep(2);
+  });
+  
   return (
     <form id="step-1" class="process-form" preventdefault:submit>
       <input type="hidden" name="step" value="1" />
