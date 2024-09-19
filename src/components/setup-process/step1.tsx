@@ -3,7 +3,7 @@ import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/modal/modal';
-import ContentDoc from '../content-doc/content-doc';
+import ContentDoc from '~/components/content-doc/content-doc';
 import StoreManager from '~/utils/storeManager';
 
 import './setup-process.css';

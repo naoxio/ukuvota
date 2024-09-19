@@ -1,24 +1,60 @@
 {
   "ukuvota": "Ukuvota",
   "tagline": "Voting Made Simple, Secure, and Empowering",
-  "launchWebApp": "Launch Web App",
-  "getAndroidAPK": "Get Android APK",
-  "weightedScoreVoting": "Weighted Score Voting",
-  "weightedScoreVotingDesc": "Our unique voting system allows for nuanced decision-making.",
-  "effortlessSharing": "Effortless Sharing",
-  "effortlessSharingDesc": "Share your voting processes with a simple link or QR code.",
-  "consensusDrivenApproach": "Consensus-Driven Approach",
-  "consensusDrivenApproachDesc": "Find solutions that work for everyone, not just the majority.",
-  "userFriendlyInterface": "User-Friendly Interface",
-  "userFriendlyInterfaceDesc": "Intuitive design makes voting accessible to all.",
-  "transparentResults": "Transparent Results",
-  "transparentResultsDesc": "See real-time results and understand how decisions are made.",
+  "launch": {
+    "webApp": "Launch Web App",
+    "androidAPK": "Get Android APK"
+  },
+  "features": {
+    "weightedScoreVoting": {
+      "title": "Weighted Score Voting",
+      "description": "Our unique voting system allows for nuanced decision-making."
+    },
+    "effortlessSharing": {
+      "title": "Effortless Sharing",
+      "description": "Share your voting processes with a simple link or QR code."
+    },
+    "consensusDrivenApproach": {
+      "title": "Consensus-Driven Approach",
+      "description": "Find solutions that work for everyone, not just the majority."
+    },
+    "userFriendlyInterface": {
+      "title": "User-Friendly Interface",
+      "description": "Intuitive design makes voting accessible to all."
+    },
+    "transparentResults": {
+      "title": "Transparent Results",
+      "description": "See real-time results and understand how decisions are made."
+    }
+  },
   "buttons": {
-    "home": "Home"
+    "home": "Home",
+    "continue": "Continue",
+    "createNewProcess": "Create New Process"
   },
   "languageNames": {
     "en": "English",
     "de": "Deutsch",
     "it": "Italiano"
+  },
+  "setup": {
+    "process": "Setup Process",
+    "continueEditing": "Continue Editing",
+    "existingProcessPrompt": "You have an existing process. Do you want to continue editing or start a new one?",
+    "startNew": "Start New Process"
+  },
+  "process": {
+    "topic": "Topic",
+    "description": "Description",
+    "weighting": "Weighting",
+    "phases": {
+      "full": "Full Process",
+      "voting": "Voting Only"
+    }
+  },
+  "modal": {
+    "weightingInfo": {
+      "title": "Weighting Information"
+    }
   }
 }
