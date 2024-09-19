@@ -1,9 +1,12 @@
 import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 import { useTranslator } from "~/i18n/translator";
 import Footer from "~/components/footer/footer";
 
+import './index.css';
+
 export default component$(() => {
-  const { t } = useTranslator();
+  const { t, locale } = useTranslator();
 
   return (
     <div class="app-container">
@@ -12,10 +15,12 @@ export default component$(() => {
         <section class="hero">
           <h1>{t('ukuvota')}</h1>
           <p class="tagline">{t('tagline')}</p>
+
           <div class="cta-buttons">
-            <a href="/app" class="cta-button">{t('launchWebApp')}</a>
-            <a href="/download/android" class="cta-button secondary">{t('getAndroidAPK')}</a>
+            <Link href={`/${locale}/create-process`} class="cta-button">{t('createNewProcess')}</Link>
+            <Link href={`/${locale}/download/android`} class="cta-button secondary">{t('getAndroidAPK')}</Link>
           </div>
+          
         </section>
 
         <section class="features">

@@ -2,8 +2,8 @@ import { component$, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
-import Modal from '../ui/Modal';
-import ContentDoc from '../ui/ContentDoc';
+import Modal from '~/components/modal/modal';
+import ContentDoc from '../content-doc/content-doc';
 import { Store } from '@tauri-apps/plugin-store';
 
 export default component$(() => {
@@ -11,7 +11,8 @@ export default component$(() => {
   const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
   const descriptionSignal = useSignal(processData.description || '');
-
+  
+  // eslint-disable-next-line
   useVisibleTask$(async () => {
     const store = new Store('processData.bin');
     const savedDescription = await store.get('description') as string | null;
@@ -33,7 +34,6 @@ export default component$(() => {
   const handleSubmit = $(async (event: Event, phase: string) => {
     event.preventDefault();
     processData.phase = phase;
-    
     const store = new Store('processData.bin');
     await store.set('title', processData.title);
     await store.set('description', processData.description);
@@ -44,40 +44,36 @@ export default component$(() => {
   });
 
   return (
-    <form id="step-1" preventdefault:submit>
+    <form id="step-1" class="process-form" preventdefault:submit>
       <input type="hidden" name="step" value="1" />
       <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
       <div id="scrollTopicQuestion" />
-      <p>{t('process.topic')}</p>
+      <label class="form-label">{t('process.topic')}</label>
       <input
         id="topicQuestion"
         name="topicQuestion"
-        class="input input-bordered w-full"
+        class="form-input"
         type="text"
         value={processData.title}
         onInput$={(event) => processData.title = (event.target as HTMLInputElement).value}
         required
-        title={t('alert.error.topicQuestion')}
       />
-      <br/>
-      <br/>
-      <p>{t('process.description')}</p>
+      <label class="form-label">{t('process.description')}</label>
       <textarea
         id="description"
         name="description"
-        class="textarea textarea-bordered w-full"
+        class="form-textarea"
         rows={5}
         value={descriptionSignal.value}
         onInput$={handleDescriptionChange}
       ></textarea>
-      <br/>
-      <div class="flex justify-between items-center">
-        <span>{t('process.weighting')}</span>
-        <span class="flex justify-center items-center">
+      <div class="form-row">
+        <span class="form-label">{t('process.weighting')}</span>
+        <div class="form-input-group">
           <select
             id="select"
             name="weighting"
-            class="select mx-2 select-bordered mt-2"
+            class="select"
             value={processData.weighting}
             onChange$={(event) => processData.weighting = (event.target as HTMLSelectElement).value}
           >
@@ -88,17 +84,16 @@ export default component$(() => {
             ))}
           </select>
           <Modal id="weightingInfo">
-            <h3>{t('process.weighting')}</h3>
+            <h3 class="modal-title">{t('process.weighting')}</h3>
             <ContentDoc fileName="NegativeScoreWeighting"/>
           </Modal>
-        </span>
+        </div>
       </div>
-      <br/>
-      <div class="flex justify-around flex-wrap">
-        <button onClick$={(e) => handleSubmit(e, 'full')} class="btn btn-primary m-2">
+      <div class="cta-buttons">
+        <button onClick$={(e) => handleSubmit(e, 'full')} class="cta-button">
           {t('process.phases.full')}
         </button>
-        <button onClick$={(e) => handleSubmit(e, 'voting')} class="btn btn-primary m-2">
+        <button onClick$={(e) => handleSubmit(e, 'voting')} class="cta-button secondary">
           {t('process.phases.voting')}
         </button>
       </div>

@@ -1,4 +1,3 @@
-// in localeContext.ts
 import { createContextId } from "@builder.io/qwik";
 
 export interface LocaleContextValue {
@@ -7,4 +6,3 @@ export interface LocaleContextValue {
 }
 
 export const LocaleContext = createContextId<LocaleContextValue>('locale-context');
-

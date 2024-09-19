@@ -1,22 +1,21 @@
 // src/utils/contentLoader.ts
-
 import { useLocale } from '~/hooks/useLocale';
 import { $ } from '@builder.io/qwik';
 
-const contentModules = import.meta.glob('/content/**/*.md');
+// Update this line to point to the public folder
+const contentModules = import.meta.glob('/public/content/**/*.md');
 
 export const useContentLoader = () => {
   const locale = useLocale();
 
   const loadContent = $(async (fileName: string): Promise<string> => {
-    const path = `/content/${locale}/${fileName}.md`;
+    // Update the path to include 'public'
+    const path = `/public/content/${locale}/${fileName}.md`;
     const module = contentModules[path];
-    
     if (module) {
       const content = await module();
       return (content as any).default;
     }
-    
     throw new Error(`Content not found: ${path}`);
   });
 

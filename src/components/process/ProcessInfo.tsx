@@ -1,9 +1,9 @@
 import { component$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import weightingOptions from '~/utils/weightingOptions';
-import Modal from '~/components/ui/Modal';
+import Modal from '~/components/modal/Modal';
 import QRCode from '~/components/ui/QRCode';
-import ContentDoc from '~/components/ui/ContentDoc';
+import ContentDoc from '~/components/content-doc/content-doc';
 import { ProcessTimeLabel } from '~/components/datetime/ProcessTimeLabel';
 import type { IProcess } from '~/types';
 

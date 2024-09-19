@@ -1,4 +1,4 @@
-import { $, component$, useContextProvider, useStore } from "@builder.io/qwik";
+import { component$, useContextProvider, useStore, $ } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 import { isDev } from "@builder.io/qwik/build";
@@ -8,17 +8,10 @@ import "./global.css";
 
 export default component$(() => {
   const localeStore = useStore({
-    locale: 'en',
-    setLocale: null as unknown as (newLocale: string) => void
-  });
-
-  // Define setLocale function after localeStore is initialized
-  localeStore.setLocale = $((newLocale: string) => {
-    localeStore.locale = newLocale;
+    locale: 'en'
   });
 
   useContextProvider(LocaleContext, localeStore);
-
 
   return (
     <QwikCityProvider>

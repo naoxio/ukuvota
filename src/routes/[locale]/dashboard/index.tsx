@@ -1,23 +1,31 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useNavigate } from '@builder.io/qwik-city';
+import { Store } from '@tauri-apps/plugin-store';
 
 export default component$(() => {
   const { t } = useTranslator();
   const nav = useNavigate();
-
   const store = useStore({
-    allProcesses: [],
+    allProcesses: [] as string[],
     modalOpen: false
   });
 
-  useVisibleTask$(() => {
-    const processesCookie = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('processes='));
-    if (processesCookie) {
-      store.allProcesses = JSON.parse(processesCookie.split('=')[1]);
+  useVisibleTask$(async () => {
+    const tauriStore = new Store('.processes.bin');
+    await tauriStore.load();
+    const processes = await tauriStore.get('allProcesses') as string[] | null;
+    if (processes) {
+      store.allProcesses = processes;
     }
+  });
+
+  useVisibleTask$(async ({ track }) => {
+    track(() => store.allProcesses);
+    const tauriStore = new Store('.processes.bin');
+    await tauriStore.load();
+    await tauriStore.set('allProcesses', store.allProcesses);
+    await tauriStore.save();
   });
 
   return (
@@ -42,7 +50,7 @@ export default component$(() => {
           <p>{t('dashboard.noProcesses')}</p>
           <p>{t('dashboard.beginProcess')}</p>
           <div class="absolute right-5 bottom-20">
-            <button 
+            <button
               class="btn btn-primary btn-circle fixed right-5 bottom-20"
               onClick$={() => store.modalOpen = true}
             >
@@ -50,34 +58,29 @@ export default component$(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5"></path>
               </svg>
             </button>
-
             {store.modalOpen && (
               <div class="modal modal-open">
                 <div class="modal-box">
-                  <button 
+                  <button
                     class="btn btn-sm btn-circle absolute right-2 top-2"
                     onClick$={() => store.modalOpen = false}
                   >
                     ✕
                   </button>
-                
                   <p class="font-bold text-lg">{t('dashboard.options')}</p>
                   <br/>
-                  
-                  <button 
+                  <button
                     class="btn btn-primary mb-4"
                     onClick$={() => nav('/create')}
                   >
                     {t('dashboard.createNewProcess')}
                   </button>
-
                   <form class="mt-4" action="/api/add-by-uuid" method="post">
                     <input placeholder={t('enterUUID')} type="text" name="uuid" class="input input-bordered" required />
                     <button type="submit" class="btn btn-primary m-2">
                       {t('dashboard.add')}
                     </button>
                   </form>
-                  
                   <form class="flex items-center mt-4" action="/api/import-csv" method="post" enctype="multipart/form-data">
                     <input type="file" class="file-input" name="file" accept=".csv" required />
                     <br/>

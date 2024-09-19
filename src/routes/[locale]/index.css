@@ -1,0 +1,60 @@
+
+.hero {
+    text-align: center;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--text-light);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    animation: fadeIn 1s ease-out;
+}
+
+  
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+  
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+  
+.feature {
+    flex-basis: calc(33.333% - 2rem);
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    animation: slideUp 0.5s ease-out;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+}
+  
+.feature h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+  
+.feature p {
+    margin-bottom: 0;
+}
+
+
+
+@media (max-width: 768px) {
+    .feature {
+      flex-basis: 100%;
+    }
+}

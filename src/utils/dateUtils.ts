@@ -1,4 +1,5 @@
-import { format, utcToZonedTime } from 'date-fns-tz';
+import { DateTime, Duration } from 'luxon';
+
 const formatDuration = (durationInSeconds: number): string => {
   const times = {
     year: 31536000,
@@ -8,7 +9,6 @@ const formatDuration = (durationInSeconds: number): string => {
     minute: 60,
     second: 1
   };
-
   let result = '';
   let remainingSeconds = durationInSeconds;
 
@@ -38,32 +38,24 @@ const formatDuration = (durationInSeconds: number): string => {
   } else {
     result = `${Math.floor(remainingSeconds)}s`;
   }
-
   return result;
 };
 
-
-const prettyFormatInTimezone = (utcMillis: number, timezone: string, formatStr = 'MMMM do, yyyy, h:mm aa') => {
-  const date = new Date(utcMillis);
-  const zonedDate = utcToZonedTime(date, timezone);
-  return format(zonedDate, formatStr);
+const prettyFormatInTimezone = (utcMillis: number, timezone: string, formatStr = 'MMMM dd, yyyy, h:mm a') => {
+  return DateTime.fromMillis(utcMillis).setZone(timezone).toFormat(formatStr);
 }
 
 const formatDateInTimezone = (date: number, timezone?: string): string => {
-  const zonedDate = utcToZonedTime(date, timezone || 'UTC');
-  return format(zonedDate, "yyyy-MM-dd'T'HH:mm", { timeZone: timezone });
-};
-const formatDate = (date: number): string => {
-  return format(date, "yyyy-MM-dd'T'HH:mm",);
+  return DateTime.fromMillis(date).setZone(timezone || 'UTC').toFormat("yyyy-MM-dd'T'HH:mm");
 };
 
+const formatDate = (date: number): string => {
+  return DateTime.fromMillis(date).toUTC().toFormat("yyyy-MM-dd'T'HH:mm");
+};
 
 function getTimezoneOffset(timezone: string): number {
-  const currentDate = new Date().toLocaleString('en-US', { timeZone: timezone });
-  const timezoneDate = new Date(currentDate);
-  const timezoneOffset = timezoneDate.getTimezoneOffset();
-  return timezoneOffset;
+  const now = DateTime.now().setZone(timezone);
+  return now.offset;
 }
 
 export { formatDuration, formatDateInTimezone, prettyFormatInTimezone, formatDate, getTimezoneOffset };
-

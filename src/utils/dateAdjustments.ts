@@ -1,10 +1,11 @@
-// dateAdjustments.ts
+import { DateTime } from 'luxon';
+import { formatDateInTimezone } from '~/utils/dateUtils';
 
 type DateAdjustmentResult = {
-  pStart: Date;
-  pEnd: Date;
-  vStart: Date;
-  vEnd: Date;
+  pStart: DateTime;
+  pEnd: DateTime;
+  vStart: DateTime;
+  vEnd: DateTime;
 };
 
 const adjustDates = (
@@ -14,56 +15,49 @@ const adjustDates = (
   votingStartDate: number,
   votingEndDate: number
 ): DateAdjustmentResult => {
-  const now = new Date();
-
-  const parseDate = (dateStr: number, defaultDate: Date): Date => {
-    return dateStr ? new Date(dateStr) : defaultDate;
+  const now = DateTime.now();
+  const parseDate = (dateNum: number, defaultDate: DateTime): DateTime => {
+    return dateNum ? DateTime.fromMillis(dateNum) : defaultDate;
   };
-
-  const shiftDate = (startDate: Date, endDate: Date, shiftAmount: number): [Date, Date] => {
-    return [new Date(startDate.getTime() + shiftAmount), new Date(endDate.getTime() + shiftAmount)];
+  const shiftDate = (startDate: DateTime, endDate: DateTime, shiftAmount: number): [DateTime, DateTime] => {
+    return [startDate.plus({ milliseconds: shiftAmount }), endDate.plus({ milliseconds: shiftAmount })];
   };
 
   let pStart = parseDate(proposalStartDate, now);
-  let pEnd = parseDate(proposalEndDate, new Date(pStart.getTime() + 60 * 60000));
+  let pEnd = parseDate(proposalEndDate, pStart.plus({ hours: 1 }));
   let vStart = parseDate(votingStartDate, (phase === 'full' ? pEnd : now));
-  let vEnd = parseDate(votingEndDate, new Date(vStart.getTime() + 60 * 60000));
+  let vEnd = parseDate(votingEndDate, vStart.plus({ hours: 1 }));
 
   if (pStart < now && proposalStartDate) {
-    const shiftAmount = now.getTime() - pStart.getTime();
+    const shiftAmount = now.diff(pStart).as('milliseconds');
     [pStart, pEnd] = shiftDate(pStart, pEnd, shiftAmount);
   }
 
   if (vStart < now && votingStartDate) {
-    const shiftAmount = now.getTime() - vStart.getTime();
+    const shiftAmount = now.diff(vStart).as('milliseconds');
     [vStart, vEnd] = shiftDate(vStart, vEnd, shiftAmount);
   }
 
   return { pStart, pEnd, vStart, vEnd };
 };
 
-import { formatDateInTimezone } from '~/utils/dateUtils';
-import { utcToZonedTime } from 'date-fns-tz';
-
-const adjustVotingPhaseDates = (originalProposalEndDate: Date, proposalEndDate: Date, step2Element: HTMLElement, timezone: string) => {
+const adjustVotingPhaseDates = (originalProposalEndDate: DateTime, proposalEndDate: DateTime, step2Element: HTMLElement, timezone: string) => {
   const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
   if (!votingTimeSelector) return;
-
   const querySelector = (selector: any) => votingTimeSelector.querySelector(selector);
   const votingStartPicker = querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
   const votingEndPicker = querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-
   if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
 
-  const originalVotingStartDate = utcToZonedTime(new Date(votingStartPicker.value), timezone);
-  const originalVotingEndDate = utcToZonedTime(new Date(votingEndPicker.value), timezone);
-  const originalVotingDuration = originalVotingEndDate.getTime() - originalVotingStartDate.getTime();
+  const originalVotingStartDate = DateTime.fromISO(votingStartPicker.value, { zone: timezone });
+  const originalVotingEndDate = DateTime.fromISO(votingEndPicker.value, { zone: timezone });
+  const originalVotingDuration = originalVotingEndDate.diff(originalVotingStartDate).as('milliseconds');
 
-  const newVotingStartDate = utcToZonedTime(proposalEndDate, timezone);
-  const newVotingEndDate = utcToZonedTime(new Date(newVotingStartDate.getTime() + originalVotingDuration), timezone);
+  const newVotingStartDate = proposalEndDate.setZone(timezone);
+  const newVotingEndDate = newVotingStartDate.plus({ milliseconds: originalVotingDuration });
 
-  votingStartPicker.value = formatDateInTimezone(newVotingStartDate.getTime(), timezone);
-  votingEndPicker.value = formatDateInTimezone(newVotingEndDate.getTime(), timezone);
+  votingStartPicker.value = formatDateInTimezone(newVotingStartDate.toMillis(), timezone);
+  votingEndPicker.value = formatDateInTimezone(newVotingEndDate.toMillis(), timezone);
 };
 
 export { adjustDates, adjustVotingPhaseDates }

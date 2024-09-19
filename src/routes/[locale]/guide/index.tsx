@@ -1,6 +1,6 @@
 import { component$, useSignal } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
-import ContentDoc from '~/components/ui/ContentDoc';
+import ContentDoc from '~/components/content-doc/content-doc';
 
 export default component$(() => {
   const { t } = useTranslator();

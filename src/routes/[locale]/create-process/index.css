@@ -1,0 +1,47 @@
+
+/* Process Setup Styles */
+.process-details {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border-radius: 4px;
+  }
+  
+  .process-details p {
+    margin: 0.5rem 0;
+  }
+  
+  /* Step Indicator Styles */
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+  
+  .step-indicator button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    margin: 0 0.5rem;
+    padding: 0;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+  }
+  
+  .step-indicator button.active {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  
+  .step-indicator button.completed {
+    background-color: var(--primary-light);
+  }
+  
+  .step-indicator button:disabled {
+    background-color: var(--text-color);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  
