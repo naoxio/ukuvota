@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukuvota - Voting Made Simple, Secure, and Empowering</title>
+    <style>
+        :root {
+            --primary-color: #FFA500;
+            --background-color: #1A0F00;
+            --text-color: #FFFFFF;
+            --secondary-color: #FF8C00;
+        }
+        a {
+            color: var(--secondary-color);
+        }
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 54px;
+            height: 54px;
+            margin-right: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .hero {
+            background-image: url('/assets/background.webp');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-top: 0;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .features {
+            margin-bottom: 2rem;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+
+        .button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        footer {
+            background-color: var(--background-color);
+            color: var(--secondary-color);
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--background-color);
+            margin: 0 0.5rem;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/assets/ukuvota.png" alt="Ukuvota Logo">
+            <h1>Ukuvota</h1>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h2>Ukuvota</h2>
+            <p>Voting Made Simple, Secure, and Empowering</p>
+        </div>
+    </div>
+
+    <main>
+        <section class="features">
+            <h2>About</h2>
+            <p><strong>Weighted Score Voting:</strong> Empowering voters to express their preferences with precision, allowing negative votes to carry more weight than positive ones.</p>
+            <p><strong>Effortless Sharing:</strong> Seamlessly share voting links with anyone, enabling widespread participation and engagement.</p>
+            <p><strong>Consensus-Driven Approach:</strong> Collect diverse proposals from participants, fostering a collaborative decision-making process.</p>
+            <p><strong>User-Friendly Interface:</strong> Intuitive and easy-to-navigate platform, ensuring easy accessibility on all devices.</p>
+            <p><strong>Transparent Results:</strong> After the voting phase ends, all votes are transparently displayed, promoting trust in the process.</p>
+        </section>
+
+        <div class="cta-buttons">
+            <a href="https://web.ukuvota.xyz/" class="button">Launch Web-app</a>
+            <a href="https://github.com/naoxio/ukuvota-flutter/releases/latest" class="button">Get Android APK</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 <a href="https://naox.io/">NaoX</a></p>
+        <div class="social-links">
+            <a href="mailto:ukuvota@naox.io">Email</a>
+            <a href="https://instagram.com/ukuvota_">Instagram</a>
+            <a href="https://x.com/ukuvota">X</a>
+            <a href="https://github.com/naoxio/ukuvota">GitHub</a>
+            <a href="https://t.me/ukuvota">Telegram</a>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+</body>
+</html>
