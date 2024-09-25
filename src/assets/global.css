@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --base-100: #f0f0f0;
+    --base-100-dark: #292929;
+    --link-color: #512a2a;
+    --link-hover-color: #693939;
+    --link-color-dark: #c78f65;
+    --link-hover-color-dark: #d4a987; 
+    --input-bg-color-light: #e1e1e1;
+    --input-bg-color-dark: #1e1e1e;
+    --input-focus-shadow: inset 1px 1px 0 rgba(0,0,0,.1), inset -1px -1px 0 rgba(0,0,0,.05);
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    scroll-behavior: smooth;
+    font-size: 18px;
+    margin: auto;
+}
+
+/* navigation */
+header {
+    background-color: var(--base-100);
+}
+
+.dark header {
+    background-color: var(--base-100-dark);
+}
+
+footer {
+    padding-bottom: 1rem;
+}
+
+/* general */
+main {
+    max-width: 900px;
+    width: 100%;
+    padding: 2rem;
+    margin: auto;
+}
+
+a, .link {
+    color: var(--link-color);
+}
+.dark a, .dark .link {
+    color: var(--link-color-dark);
+}
+
+a:hover, .link:hover {
+    color: var(--link-hover-color);
+}
+
+.dark a:hover, .dark .link:hover {
+    color: var(--link-hover-color-dark);
+}
+
+.link, .link:hover, .btn, .btn:hover  {
+    text-decoration: none;
+}
+
+p, li {
+    margin-block: 1em;
+    transition: background-color 0.1s ease-in-out;
+}
+
+h1, h2, h3 {
+    margin: 0;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.17em; }
+
+ul {
+    list-style: initial;
+    margin: initial;
+    padding: 0 0 0 40px;
+}
+
+li {
+    display: list-item;
+}
+
+/* quill */
+
+
+.dark .input, .dark .dp__input, .dark .ql-editor, .dark .textarea {
+    background-color: var(--input-bg-color-dark);
+    color: #fff;
+}
+
+
+
+.input, .dp__input, .ql-editor, .textarea {
+    border: none;
+    border-radius: 8px;
+    background-color: var(--input-bg-color-light);
+}
+
+.input:focus, .dp__input:focus, .ql-editor:focus, .textarea:focus {
+    border: none;
+    outline: none;
+    background-color: #fff;
+    color: #000;
+    box-shadow: var(--input-focus-shadow);
+    transition: box-shadow 250ms ease;
+}
+
+.ql-toolbar {
+    border-radius: 8px 8px 0 0;
+}
+
+.dp__cell_disabled {
+    color: var(--dp-disabled-color);
+}
+
+.dp__arrow_top {
+    display: none;
+}
+
+hr {
+    border-top: 2px solid gray;
+}
+
+.dark .ql-container {
+    background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+}
+
+.ql-container {
+    background-color: #f6f0f6;
+}
+
+.ql-container, .ql-editor {
+    border-radius: 0 0 8px 8px;
+}
+.ql-snow, .ql-editor {
+    border: none !important;
+}
+
+
+.dark button:not(:hover) .ql-fill {
+    fill: #d0d0d0;
+}
+
+.dark button:not(:hover) .ql-stroke {
+    stroke: #d0d0d0;
+}
+
+
+/* datetime */
+
+input[type="datetime-local"] {
+    border: none;
+    border-radius: 8px;
+    background-color: var(--input-bg-color-light);
+    color: #000;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+input[type="datetime-local"]:focus {
+    background-color: #fff;
+    color: #000;
+    outline: none;
+    box-shadow: var(--input-focus-shadow);
+}
+
+.dark input[type="datetime-local"] {
+    background-color: var(--input-bg-color-dark);
+    color: #fff;
+}
+
+.dark input[type="datetime-local"]:focus {
+    background-color: #424345;
+    color: #fff;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+}
+
+.text-linkbg:hover,
+.bg-linkwhite:hover {
+    background-color: var(--link-hover-color);
+}
+
+.bg-linkwhite {
+    background-color: white;
+}
+
+.disabled-select {
+    background-color: #E5E7EB; /* Gray from Tailwind's palette */
+    pointer-events: none;
+    cursor: not-allowed;
+}

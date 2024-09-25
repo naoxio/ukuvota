@@ -1,0 +1,18 @@
+---
+interface Props {
+    text: string
+}
+
+const { text } = Astro.props;
+import QRCode from 'qrcode'
+
+
+const generateQR = async (text: string) => {
+  return await QRCode.toDataURL(text)
+}
+
+const qr = await generateQR(text)
+
+---
+
+<img src={ qr } />

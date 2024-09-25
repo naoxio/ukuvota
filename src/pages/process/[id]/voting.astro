@@ -1,0 +1,220 @@
+---
+
+import Alert from "@components/ui/Alert.astro";
+import AlertList from "components/ui/AlertList.astro";
+import ProcessLayout from "@layouts/ProcessLayout.astro";
+import { Translator } from '@utils/i18n.js';
+import fetchProcessData from '@utils/fetchProcessData';
+
+import { Icon } from "astro-icon";
+import getProcessUrl from "@utils/getProcessUrl";
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+
+const { url } = Astro;
+const processId: any = Astro.params.id;
+const process = await fetchProcessData(processId);
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
+
+if (pathname !== url.pathname)
+    return Astro.redirect(pathname);
+
+const emojiNames = ["rage", "angry", "sad", "neutral", "smiling", "happy", "loving"];
+---
+<style>
+    .gray {
+        filter: grayscale(100%);
+    }
+    .icon {
+        width: 48px;
+    }
+    @media screen and (max-width: 600px) {
+        .icon {
+            width: 32px;
+        }
+        .emoji-btn {
+            flex-shrink: unset;
+        }
+    }
+</style>
+<ProcessLayout process={process}>
+    <voting-list data-process={JSON.stringify(process)}>
+        <span class='flex justify-end'>
+            <span>{ translator.t('process.voters') }:&nbsp;</span>
+            <span class='no-voters'>{ process.voters ? process.voters.length : '0' }</span>
+        </span>
+        <div class="proposal-list">
+            <div class="proposal card outline outline-1 shadow-xl py-2 px-4 my-4">
+                <h3></h3>
+                <p></p>
+                <br/>
+                <div class="flex justify-between">
+                    {emojiNames.map((name) => (
+                        <button class="btn btn-ghost btn-circle emoji-btn">
+                        <Icon
+                            class={'icon ' + (name === 'neutral' ? '' : 'gray')}
+                            name={name}
+                        />
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+        <br/>   
+        <p>{ translator.t('process.voterName') }</p>
+        <div class="text-center flex items-center">
+            <input id="sender-name" type="text" class="input w-full m-2"/>
+            <button id="submit-vote" class="btn btn-primary p-2" >
+                {translator.t('process.submitVote')}
+            </button>
+        </div>
+        <AlertList>
+            <Alert icon="sync" info>
+                { translator.t('alert.info.submittingVote') }
+            </Alert>
+            <Alert icon="checkmark-outline" success>
+                { translator.t('alert.success.submitVote') }
+                <span class="name"></span>
+            </Alert>
+            <Alert icon="close" error>
+                { translator.t('alert.error.submitVote') }
+            </Alert>
+            <Alert icon="close" error>
+                { translator.t('alert.error.emptyName') }
+            </Alert>
+        </AlertList>
+        
+    </voting-list>
+</ProcessLayout>
+
+<script>
+    import type IProposal from '@interfaces/IProposal'
+    import addAlert from '@utils/addAlert'
+    import getQuillHTML from '@utils/getQuillHTML';
+    import { isProposalEmpty } from '@utils/proposalUtils';
+
+    class VotingList extends HTMLElement {
+        voteCounter = this.querySelector('span.no-voters') as HTMLElement;
+        alertList = this.querySelector('div.alert-list') as HTMLElement;
+        alerts = this.querySelectorAll('alert-element') as NodeListOf<HTMLElement>;
+
+        proposal_list = this.querySelector('div.proposal-list') as HTMLElement;
+        proposal_html = (this.proposal_list.querySelector('div.proposal') as HTMLElement).cloneNode(true);
+
+        process = JSON.parse(this.getAttribute('data-process') || '{}');
+
+        addButtonListeners(buttons: NodeListOf<HTMLButtonElement>, proposal_node: HTMLDivElement) {
+            buttons.forEach((button: HTMLButtonElement) => {
+                button.addEventListener('click', () => {
+                const svgs = proposal_node.querySelectorAll('svg');
+                svgs.forEach((svg: SVGElement) => {
+                    svg.classList.add('gray');
+                });
+
+                const svg = button.querySelector('svg');
+                svg?.classList.remove('gray');
+                });
+            });
+        }
+        submitVote = async () => {
+            const votesMap = new Map();
+            const proposals = this.proposal_list.querySelectorAll('div.proposal') as NodeListOf<HTMLElement>;
+            Array.from(proposals).forEach((proposal_node) => {
+                const svgs = proposal_node.querySelectorAll('svg');
+                for (const [i, svg] of svgs.entries()) {
+                    if (!svg.classList.contains('gray')) {
+                        votesMap.set(proposal_node.id, i - 3);
+                        svg.classList.add('gray');
+                    }
+                    if (i - 3 == 0)
+                        svg.classList.remove('gray');
+                };
+            });
+
+            const votes = Array.from(votesMap, ([proposalId, vote]) => ({ proposalId, vote }));
+            const senderName: HTMLInputElement = this.querySelector('input#sender-name') as HTMLInputElement;
+            const vote = {
+                name: senderName.value,
+                votes
+            };
+            
+            if (senderName.value !== "") {
+                if (this.alerts.length > 0) {
+                    const span = this.alerts[1].querySelector('span.name') as HTMLElement;
+                    span.innerHTML = senderName.value;
+                    addAlert(this.alertList, this.alerts[0]);
+                }
+                senderName.value = '';
+
+                try {
+                    const response = await fetch(`/api/process/${this.process._id}/vote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(vote),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            addAlert(this.alertList, this.alerts[1]);
+                        } else {
+                            addAlert(this.alertList, this.alerts[2]);
+                        }
+                    } else {
+                        addAlert(this.alertList, this.alerts[2]);
+
+                    }
+                } catch (error) {
+                    addAlert(this.alertList, this.alerts[2]);
+                    console.error('Error submitting vote:', error);
+                }
+            } else {
+                if (this.alerts.length > 1) {
+                    addAlert(this.alertList, this.alerts[3]);
+                }
+            }
+        };
+        addProposal(proposal: IProposal) {
+            if (isProposalEmpty(proposal)) return
+            const proposal_node = this.proposal_html.cloneNode(true) as HTMLDivElement;
+            proposal_node.id = proposal.id
+            const h3 = proposal_node.querySelector('h3') as HTMLElement
+            h3.innerHTML = proposal.title
+            const p =proposal_node.querySelector('p') as HTMLElement;
+            p.innerHTML = getQuillHTML(proposal.description || '')
+            const buttons = proposal_node.querySelectorAll('button')
+            this.addButtonListeners(buttons, proposal_node);
+            this.proposal_list.appendChild(proposal_node)
+        }
+        constructor() {
+            super()
+            this.proposal_html = (this.proposal_list.querySelector('div.proposal') as HTMLElement).cloneNode(true);
+            this.proposal_list.innerHTML = "";
+            this.process = JSON.parse(this.getAttribute('data-process') as string);
+            const proposalsArray = Object.values(this.process.proposals) as IProposal[];
+
+            proposalsArray.forEach((proposal: IProposal) => {
+                if(!isProposalEmpty(proposal)) {
+                    this.addProposal(proposal);
+                }
+            });
+
+            const submit = this.querySelector('button#submit-vote') as HTMLButtonElement;
+            submit.addEventListener('click', this.submitVote);
+            const checkTime = () => {
+                const time = this.process.votingDates[1] - +new Date()
+                if (time < 0)
+                    window.location.href = `${window.location.origin}/process/${this.process._id}/results`
+                else
+                    setTimeout(checkTime, time)
+            }
+            checkTime()
+        }
+    }
+    customElements.define('voting-list', VotingList)
+
+
+</script>

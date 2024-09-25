@@ -1,0 +1,167 @@
+---
+import { createProposalElement } from '@utils/createProposalElement';
+import { exampleProposals } from '@utils/exampleProposals';
+import { Translator } from '@utils/i18n.js';
+import IProposal from '@interfaces/IProposal';
+
+const locale = Astro.currentLocale || 'en';
+const dropdownOptions = await exampleProposals(locale);
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+interface Props {
+    processId?: string;
+    proposals: Array<IProposal>;
+    isSetup?: boolean;
+}
+
+const { processId, proposals, isSetup } = Astro.props;
+---
+
+<div>
+  <div id="proposals-container" data-is-setup={(isSetup || false).toString()} data-process={processId}>
+    {(proposals.length > 0) && (
+      proposals.map((proposal: any) => (
+      <Fragment set:html={createProposalElement(proposal.id, proposal.title, proposal.description || '', translator, isSetup)} />
+
+    )))}
+  </div>
+  {proposals.length === 0 && (
+    <p id="no-proposals-text">{translator.t('noProposalsFound')}</p>
+  )}
+
+  <div class="flex items-center flex-wrap justify-center w-full">
+    <button id="add-button" class="btn p-2">{translator.t('addProposal')}</button>
+    <div class="dropdown">
+      <div tabindex={0} role="button" class="btn m-1">{translator.t('addProposalTemplate')}</div>
+      <div tabindex={0} class="dropdown-content menu p-2 shadow rounded-box bg-base-100 z-[1]">
+        {dropdownOptions.map((option, index) => (
+          <a class="card-body link">
+            <h3 class="card-title">{option.title}</h3>
+            <p class="description">{option.description.ops[0].insert}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  
+/* @ts-ignore */
+import { v4 as uuidv4 } from 'uuid';
+import { createProposalElement } from '@utils/createProposalElement';
+import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
+import localforage from 'localforage';
+
+import { Translator } from '@utils/i18n.js';
+const locale = document.querySelector('meta[name="locale"]')?.getAttribute('content');
+const translator = new Translator(locale || 'en');
+
+const addButton: HTMLElement | null = document.getElementById('add-button');
+const proposalsContainer: HTMLElement = document.getElementById('proposals-container') as HTMLElement;
+const noProposalsText = document.getElementById('no-proposals-text');
+  
+if (proposalsContainer) {
+  const isSetup: boolean = proposalsContainer.dataset.isSetup === 'true';
+  const processId = proposalsContainer.dataset.process || '';
+
+  const proposalElements = proposalsContainer.children;
+  const notifyNewProposal = (uniqueId: string, title: string, description: string) => {
+    fetch(`/api/process/${processId}/proposals`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: uniqueId,
+        title: title,
+        description: description
+      })
+    }).catch(console.error);
+  }
+
+
+  if (processId) {
+    const eventSource = new EventSource(`/api/process/${processId}/proposals`);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const latestProposals = JSON.parse(event.data);
+        if (!latestProposals || typeof latestProposals !== 'object') {
+          console.error('Received non-object data:', latestProposals);
+          return;
+        }
+
+        const existingProposals = new Map(
+          Array.from(proposalsContainer.children).map(element => [element.id, element])
+        );
+
+        const receivedIds = new Set(Object.keys(latestProposals));
+
+        // Only add new proposals
+        Object.entries(latestProposals).forEach(([id, proposal]: [string, any]) => {
+          if (!existingProposals.has(id)) {
+            const proposalElement = createProposalElement(id, proposal.title, proposal.description, translator, isSetup);
+            insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText);
+          }
+        });
+
+        // Remove proposals that were not in the latest update
+        existingProposals.forEach((element, id) => {
+          if (!receivedIds.has(id)) {
+            proposalsContainer.removeChild(element);
+          }
+        });
+
+        if (noProposalsText) {
+          noProposalsText.style.display = Object.keys(latestProposals).length === 0 ? 'block' : 'none';
+        }
+      } catch (error) {
+        console.error('Error processing incoming data:', error);
+      }
+    };
+
+  }
+  else {
+    for (let i = 0; i < proposalElements.length; i++) {
+      const proposalElement = proposalElements[i];
+      setupButtonListeners(proposalElement, proposalsContainer, processId, noProposalsText);
+      if (isSetup) {
+        initializeQuill(proposalElement, proposalElement.id, processId, isSetup);
+      }
+    }
+  }
+
+  if (addButton) {
+    addButton.addEventListener('click', () => {
+      const uniqueId: string = uuidv4();
+      const proposalElement = createProposalElement(uniqueId, '', '', translator, isSetup);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, true);
+      if (processId) {
+        notifyNewProposal(uniqueId, '', '');
+      }
+    });
+    
+  }
+
+  const dropdownOptionsElements = document.querySelectorAll('.dropdown-content a');
+
+  dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
+    dropdownOptionElement.addEventListener('click', () => {
+      const selectedTemplateTitle = dropdownOptionElement.querySelector('.card-title')?.textContent || '';
+      const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
+
+      const uniqueId = uuidv4();
+
+      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, translator, isSetup);
+      insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, false);
+      if (processId) {
+        notifyNewProposal(uniqueId, selectedTemplateTitle, selectedTemplateDescription);
+      }
+      if (isSetup) {
+        const deltaOps = [{ insert: selectedTemplateDescription + '\n' }];
+        localforage.setItem(`description-${uniqueId}`, JSON.stringify({ ops: deltaOps })); 
+      }
+    });
+  });
+
+}
+</script>

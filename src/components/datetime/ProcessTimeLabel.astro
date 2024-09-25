@@ -1,0 +1,68 @@
+---
+import { Translator } from '@utils/i18n.js';
+import Countdown from './Countdown.astro';
+import { utcToZonedTime } from 'date-fns-tz';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+
+interface Props {
+  phase: string;
+  dates: number[];
+  timezone: string;
+  proposals_length?: number;
+}
+
+const { phase, dates, timezone, proposals_length } = Astro.props;
+---
+
+<process-time-label data-start={dates[0]} data-timezone={timezone}>
+  <span>{translator.t(`phases.${phase}.title`)}:&nbsp;</span>
+  {utcToZonedTime(dates[0], timezone) > new Date() ? (
+    <>
+      <br />
+      <span>{translator.t(`phases.start`)}:&nbsp;</span>
+      <span id="start-date" class="link-success"></span>
+      <br />
+      <span>{translator.t(`phases.lastFor`)}:&nbsp;</span>
+      <Countdown type="success" dates={dates} timezone={timezone} />
+    </>
+  ) : utcToZonedTime(dates[1], timezone) > new Date() ? (
+    <>
+      {(proposals_length !== undefined && proposals_length === 0) ? (
+        <span class="text-info">{translator.t('skipped')}</span>
+      ) : (
+        <Countdown dates={dates} type="warning" timezone={timezone} />
+        <span>&nbsp;({translator.t('remainingTime')})</span>
+      )}
+    </>
+  ) : (
+    <>
+      {(proposals_length !== undefined && proposals_length === 0) ? (
+        <span class="text-info">{translator.t('skipped')}</span>
+      ) : (
+        <span class="text-info">{translator.t('done')}</span>
+      )}
+    </>
+  )}
+  <br />
+</process-time-label>
+
+<script>
+import { format, utcToZonedTime } from 'date-fns-tz';
+
+class ProcessTimeLabel extends HTMLElement {
+  constructor() {
+    super();
+    const startDate = this.querySelector('span#start-date');
+    const timezone = this.dataset.timezone || 'UTC';
+
+    if (startDate) {
+      const start = utcToZonedTime(Number(this.dataset.start), timezone);
+      startDate.innerHTML = format(start, 'MMMM d, yyyy h:mm a', { timeZone: timezone });
+    }
+  }
+}
+
+customElements.define('process-time-label', ProcessTimeLabel);
+</script>

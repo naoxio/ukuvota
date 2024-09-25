@@ -1,0 +1,51 @@
+---
+import DatetimePicker from '@components/datetime/DatetimePicker.astro';
+import DatetimeSlider from '@components/datetime/DatetimeSlider.astro';
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+
+interface Props {
+  phase: string;
+  startMinDate: Date;
+  startDate: Date;
+  endDate: Date;
+  hideTitle?: Boolean;
+}
+
+const { phase, startDate, endDate, startMinDate, hideTitle } = Astro.props;
+const title = translator.t(`phases.${phase}.title`);
+
+const duration = (new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60;
+---
+
+<div class="time-selector" data-phase={phase}>
+  {!hideTitle && (
+    <h3 class="title">{title}</h3>
+  )}
+  
+  <>
+    <br />
+    <DatetimePicker
+      index={0}
+      date={startDate}
+      min={startMinDate}
+      id={`start-date-picker-${phase}`}
+    />
+    <br />
+    <DatetimePicker
+      index={1}
+      date={endDate}
+      min={startDate}
+      id={`end-date-picker-${phase}`}
+    />
+    <br />
+    <DatetimeSlider
+      duration={duration}
+      id={`datetime-slider-${phase}`}
+    />
+    <br />
+  </>
+
+</div>

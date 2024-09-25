@@ -1,0 +1,86 @@
+---
+import ProcessLayout from '@layouts/ProcessLayout.astro';
+import fetchProcessData from '@utils/fetchProcessData';
+import getProcessUrl from '@utils/getProcessUrl';
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+
+const { url } = Astro;
+const processId = Astro.params.id as string;
+const process = await fetchProcessData(processId);
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
+if (pathname !== url.pathname) return Astro.redirect(pathname);
+
+---
+
+<ProcessLayout process={process}>
+  {process && (
+    <process-details data-process={JSON.stringify(process)}>
+      {+new Date() >= process.proposalDates[1] && +new Date() < process.votingDates[0] && (
+        <div>
+          <h2>{translator.t('process.proposals')}</h2>
+          <div class="proposals-container"></div>
+        </div>
+      )}
+    </process-details>
+  )}
+</ProcessLayout>
+
+<script>
+import getQuillHTML from '@utils/getQuillHTML';
+
+class ProcessDetails extends HTMLElement {
+  process: any;
+
+  constructor() {
+    super();
+    this.process = JSON.parse(this.getAttribute("data-process") || "{}");
+  }
+
+  connectedCallback() {
+    this.setupRedirects();
+    this.renderProposalList();
+  }
+
+  setupRedirects() {
+    const proposalStart = this.process.proposalDates[0];
+    const votingStart = this.process.votingDates[0];
+
+    const redirectToPage = (startTime: number, pageName: string) => {
+      if (+new Date() < startTime) {
+        const time = startTime - +new Date();
+        setTimeout(() => {
+          window.location.href = `/process/${this.process._id}/${pageName}`;
+        }, time);
+      }
+    };
+
+    redirectToPage(proposalStart, 'proposals');
+    redirectToPage(votingStart, 'voting');
+  }
+
+  renderProposalList() {
+    const proposalsContainer = this.querySelector(".proposals-container") as HTMLElement;
+    if (!proposalsContainer) return;
+
+    const proposals = this.process.proposals || [];
+    let proposalsHTML = '';
+
+    proposals.forEach((proposal: any) => {
+      proposalsHTML += `
+        <div>
+          <h3>${proposal.title}</h3>
+          <p>${getQuillHTML(proposal.description)}</p>
+        </div>
+        <br/>
+      `;
+    });
+
+    proposalsContainer.innerHTML = proposalsHTML;
+  }
+}
+
+customElements.define("process-details", ProcessDetails);
+</script>

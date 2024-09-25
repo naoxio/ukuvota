@@ -1,0 +1,159 @@
+{
+  "proposalsContainer": "Vorschläge Container",
+  "noProposalsFound": "Keine Vorschläge gefunden.",
+  "addProposal": "Vorschlag hinzufügen",
+  "emptyProposal": "Leerer Vorschlag",
+  "addProposalTemplate": "Vorlagen-Vorschlag hinzufügen",
+  "enableJavaScript": "JavaScript wird für die volle Funktionalität dieser Seite benötigt. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.",
+  "home": {
+    "description": "Einfaches, sicheres und ermächtigendes Wählen",
+    "subheader": "Einfaches, sicheres und ermächtigendes Wählen",
+    "webAppCardTitle": "Web-App",
+    "webAppCardDescription": "Nahtlose webbasierte Wahlerfahrung, zugänglich und benutzerfreundlich.",
+    "webAppCardButton": "Neuen Prozess Erstellen",
+    "telegramBotCardTitle": "Telegram-Bot",
+    "telegramBotCardDescription": "Bequemes Wählen über Telegram, integriert in die tägliche Kommunikation.",
+    "telegramBotCardButton": "Zum Bot gehen"
+  },
+  "dashboard": {
+    "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
+    "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
+    "options": "Was möchten Sie tun?",
+    "createNewProcess": "Neuen Prozess erstellen",
+    "add": "Hinzufügen",
+    "addByUUID": "Prozess per UUID hinzufügen",
+    "enterUUID": "Geben Sie UUID oder Link ein",
+    "importProcesses": "Prozesse importieren",
+    "import": "Importieren",
+    "export": "Prozesse exportieren"
+  },
+  "guide": {
+    "checkboxLabel": "Diesen Leitfaden das nächste Mal nicht anzeigen",
+    "createProcessButton": "Prozess erstellen"
+  },
+  "setup": {
+    "continueEditing": "Bearbeitung Fortsetzen",
+    "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",
+    "startNew": "Neu starten",
+    "process": "Process Erstellen",
+    "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
+    "proposals": "Vorschläge hinzufügen",
+    "setDate": "Datum festlegen",
+    "duration": "Dauer",
+    "setDuration": "Dauer festlegen",
+    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
+    "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
+    "timezone": "Zeitzone"
+
+  },
+  "loadQuill": "Lade QuillEditor...",
+  "policy": "Datenschutzerklärung",
+  "donate": "Spenden",
+  "phases": {
+    "start": "Startet",
+    "startAt": "Startet am",
+    "endsAt": "Endet am",
+    "lastFor": "Dauer",
+    "proposal": {
+      "title": "Vorschlagsphase"
+    },
+    "voting": {
+      "title": "Abstimmungsphase"
+    }
+  },
+  "alert": {
+    "success": {
+      "createProcess": "Prozess startet...",
+      "creatingProcess": "Prozess wird erstellt...",
+      "submitVote": "Wahl eingereicht für: ",
+      "repeatProcess": "Wiederhole den Prozess mit der Auswahl...",
+      "websocketConnected": "Erfolgreich mit WebSocket verbunden"
+    },
+    "connecting": {
+      "connectingToWebsocket": "Verbindung zu WebSocket wird hergestellt..."
+    },
+    "info": {
+      "submittingVote": "Wahl wird eingereicht..."
+    },
+    "error": {
+      "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
+      "emptyName": "Bitte fügen Sie einen Namen hinzu",
+      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
+      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
+      "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
+      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket"
+    } 
+  },
+  "remainingTime": "verbleibende Zeit",
+  "skipped": "übersprungen",
+  "tagline": "Die beste Lösung finden",
+  "buttons": {
+    "dashboard": "Dashboard",
+    "about": "Über",
+    "go": "Los",
+    "home": "Startseite",
+    "toggle_dark": "Dunkelmodus umschalten",
+    "toggle_langs": "Sprachen ändern",
+    "start": "Starten Sie den Prozess",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
+    "select": "auswählen",
+    "confirm": "Bestätigen",
+    "cancel": "abbrechen",
+    "done": "fertig",
+    "delete": "Löschen",
+    "update": "Update"
+  },
+  "loading": "Laden",
+  "calendar": "Kalender",
+  "slider": "Schieberegler",
+  "not-found": "Nicht gefunden",
+  "process": {
+    "noVotesSubmitted": "Keine Stimmen abgegeben",
+    "noProposalsSubmitted": "Es wurden keine Vorschläge eingereicht.",
+    "topic": "Thema Frage",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "weighting": "Negative Punktegewichtung",
+    "proposal": "Vorschlag",
+    "proposals": "Vorschläge",
+    "addProposal": "Vorschlag hinzufügen",
+    "averageScore": "Durchschnittliche Punktzahl",
+    "totalScore": "Gesamtpunktzahl",
+    "results": "Ergebnisse",
+    "maxProposals": "Maximale Anzahl von Vorschlägen",
+    "amountProposals": "Anzahl von Vorschlägen",
+    "limitProposals": "Anzahl von Vorschlägen begrenzen",
+    "starting": "Prozess beginnt...",
+    "submitVote": "Wahl abschicken",
+    "shareableUrl": "Teilbarer Link",
+    "qrcode": "Qr-Code",
+    "voterName": "Ihr Name oder dauerhafter Alias",
+    "voters": "Wählende",
+    "voter": "Wählende",
+    "exportData": "Daten exportieren",
+    "advancedOptions": "Erweiterte Optionen anzeigen",
+    "phases": {
+      "select": "Phasen auswählen",
+      "full": "Vorschlags- und Abstimmungsphase",
+      "voting": "Nur die Abstimmungsphase"
+    },
+    "addProposalTemplate": "Vorschlag per Vorlage hinzufügen"
+  },
+  "proposal": {
+    "zero": {
+      "title": "Aktueller Stand",
+      "description": "Die Dinge so belassen, wie sie sind."
+    },
+    "one": {
+      "title": "Prozess wiederholen",
+      "description": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen."
+    }
+  },
+  "repeatProcess":"Prozess wiederholen",
+  "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung.",
+  "wip": "in Bearbeitung"
+}

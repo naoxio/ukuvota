@@ -1,0 +1,29 @@
+---
+import logo from "@assets/logo.png";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ContentDoc from "@components/ui/ContentDoc.astro";
+import Footer from "@components/layout/Footer.astro";
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en'); 
+
+
+---
+<BaseLayout title={translator.t('buttons.about')} description={translator.t('home.description')}>
+  <div class="flex items-center flex-col">
+    <img width="220" class="m-10" id="logo" alt="Ukuvota logo" src={logo.src} />
+    <h1>Ukuvota</h1>
+    <h2>{translator.t('home.subheader')}</h2>
+  </div>
+  <ContentDoc file_name="Introduction"/>
+  <br/>
+  <div class="card-actions justify-center">
+    <form action="/api/create-process" method="post">
+      <button type="submit" class="btn btn-primary">{translator.t('home.webAppCardButton')}</button>
+    </form>
+  </div>
+
+  <br/><br/>
+  <Footer/>
+  
+</BaseLayout>

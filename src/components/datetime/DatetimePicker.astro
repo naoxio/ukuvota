@@ -1,0 +1,57 @@
+---
+import { Translator } from '@utils/i18n.js';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+
+interface Props {
+  id: string;
+  index: number;
+  date: Date;
+  min: Date;
+}
+
+const {  id, index, date, min } = Astro.props;
+
+---
+<div id={id} class="flex justify-between items-center flex-wrap">
+  <h4>{index == 0 ? translator.t(`phases.startAt`) : translator.t(`phases.endsAt`)}</h4>
+  <date-time-input id="start-date" date={date.getTime()} min={min.getTime()}></date-time-input>
+</div>
+<script>
+  import localforage from 'localforage';
+  import { formatDateInTimezone } from '@utils/dateUtils';
+
+  class DateTimeInput extends HTMLElement {
+    date = this.getAttribute('date') || '';
+    min = this.getAttribute('min') || '';
+    constructor() {
+      super();
+    }
+    connectedCallback() {
+      this.render();
+      this.setup();
+    }
+
+    async setup() {
+      const timezone = await localforage.getItem('timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.updateTimeInput(timezone as string);
+    }
+
+    updateTimeInput(timezone: string) {
+      const input = this.querySelector('input[type="datetime-local"]') as HTMLInputElement;
+      input.value = formatDateInTimezone(Number(this.date), timezone);
+      input.min = formatDateInTimezone(Number(this.min), timezone);
+    }
+    
+  
+    render() {
+      this.innerHTML = `
+        <input type="datetime-local" name="${this.id}">
+      `;
+    }
+  }
+  
+  customElements.define('date-time-input', DateTimeInput);
+  </script>
+  

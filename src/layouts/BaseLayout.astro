@@ -1,0 +1,82 @@
+---
+/* @ts-ignore*/
+import SpeedInsights from "@vercel/speed-insights/astro"
+import Header from '@components/layout/Header.astro';
+
+import '@assets/quill.snow.css';
+import '@assets/global.css';
+
+// @ts-ignore
+import { getPathByLocale } from 'astro:i18n';
+
+//const supportedLanguages = Astro.preferredLocaleList as string[];
+const supportedLanguages = ["en", "de", "it"];
+const { title, description } = Astro.props;
+
+const { url } = Astro;
+
+const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
+
+const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
+
+if (url.hash.includes('#/app/')) {
+  const newHash = url.hash.replace('#/app/', '');
+  const cleanHash = newHash.split('/')[0];
+  
+  Astro.redirect(`${url.href}/process/${cleanHash}`);
+}
+---
+<!DOCTYPE html>
+<html lang={Astro.currentLocale} data-theme={theme} class={theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="evotico, ukuvota, voting, democracy, consensus, collaborative" />
+    <meta name="author" content="NaoX" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="locale" content={Astro.currentLocale}>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <title>{display_title}</title>
+    <meta name="generator" content={Astro.generator} />
+    {
+      supportedLanguages.map((lang) => (
+        <link
+          rel="alternate"
+          hreflang={lang}
+          href={getPathByLocale(lang)}
+        />
+      ))
+    }
+    <!-- SEO -->
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+
+      <!-- Open Graph -->
+    <meta property="og:title" content={display_title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${url.origin}social_logo.png`} />
+    <meta property="og:url" content={url.origin} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={display_title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${url.origin}social_logo.png`} />
+  </head>
+  <body>
+    <Header/>
+    <main>
+      <slot />
+    </main>
+    <br/>
+    <SpeedInsights/>
+  </body>
+</html>

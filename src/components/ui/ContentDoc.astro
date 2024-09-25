@@ -1,0 +1,11 @@
+---
+interface Props {
+    file_name: string
+}
+const { file_name } = Astro.props;
+
+
+const content = await import(`../../content/${Astro.currentLocale}/${file_name}.md`);
+---
+
+<Fragment set:html={content.compiledContent()} />

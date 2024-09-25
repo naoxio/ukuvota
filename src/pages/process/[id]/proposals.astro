@@ -1,0 +1,41 @@
+---
+import ProcessLayout from "@layouts/ProcessLayout.astro";
+import getProcessUrl from "@utils/getProcessUrl";
+import fetchProcessData from '@utils/fetchProcessData';
+import ProposalsList from "@components/process/ProposalsList.astro";
+
+
+const { url } = Astro;
+const processId: any = Astro.params.id;
+const process = await fetchProcessData(processId);
+const pathname = `${Astro.currentLocale === "en" ? "" : `/${Astro.currentLocale}`}${getProcessUrl(process)}`;
+if (pathname !== url.pathname) {
+    return Astro.redirect(pathname);
+}
+const proposals = process.proposals ? process.proposals : [];
+const endTime = new Date(process.proposalDates[1]).toISOString();
+---
+
+<ProcessLayout process={process}>
+  <div id="process-data" data-process-id={process._id} data-end-time={endTime}></div>
+  <ProposalsList processId={process._id} proposals={proposals}/>
+</ProcessLayout>
+
+<script>
+  const processData = document.getElementById('process-data') as HTMLElement;
+  const processId = processData.dataset.processId;
+  const endTime = new Date(processData.dataset.endTime as string).getTime();
+
+  const checkTime = () => {
+    const currentTime = new Date().getTime();
+    const timeLeft = endTime - currentTime;
+
+    if (timeLeft < 0) {
+        window.location.href = `${window.location.origin}/process/${processId}/results`;
+    } else {
+        setTimeout(checkTime, timeLeft > 1000 ? 1000 : timeLeft); // Check every second or after remaining time
+    }
+  };
+
+  checkTime();
+</script>
