@@ -40,6 +40,7 @@
 		"workbox-cli": "^7.0.0"
 	},
 	"devDependencies": {
+		"@tauri-apps/cli": "2.0.0-rc.16",
 		"@types/quill": "^2.0.14",
 		"daisyui": "^4.4.19",
 		"unplugin-icons": "^0.17.0"
