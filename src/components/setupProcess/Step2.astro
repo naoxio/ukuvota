@@ -8,7 +8,6 @@ import IProposal from '@interfaces/IProposal';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
-
 type Props = {
   phase: string;
   proposals: Array<IProposal>;
@@ -27,38 +26,69 @@ if (proposals && proposals.length > 0) {
 }
 ---
 
-<step-2 data-phase={phase} >
-  <div id="step-2">
-    {phase === "full" ? (
-      <div>
-        <h2 class="flex mt-4">{translator.t('setup.timeLeftHeading')}</h2>
-        <TimezoneSelector />
-        <br />
-        <div class="js-content-block hidden">
+<step-2 data-phase={phase} class="step-container">
+  <div id="step-2" class="step-content">
+    <div class="phase-container">
+      <h2 class="section-heading">{phase === "full" ? translator.t('setup.timeLeftHeading') : translator.t('setup.timeLeftVotingHeading')}</h2>
+      <TimezoneSelector />
+      <br />
+      {phase === "full" ? (
+        <div>
           <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} />  
           <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} />
         </div>
-      </div>
-    ) : phase === "voting" ? (
-      <div>
-        <h2 class="flex mt-4">{translator.t('setup.timeLeftVotingHeading')}</h2>
-        <TimezoneSelector />
-        <br />
-        <div class="js-content-block hidden">
+      ) : (
+        <div>
           <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} />
           <br />
-          <h2>{translator.t('setup.proposals')}</h2>    
+          <h2 class="section-heading">{translator.t('setup.proposals')}</h2>    
           <ProposalsList proposals={proposals} isSetup/>
-          <div id="errorMessage" class="text-red-500 mt-4 hidden">{translator.t('setup.errorMinProposals')}</div>
+          <div id="errorMessage" class="error-message hidden">{translator.t('setup.errorMinProposals')}</div>
         </div>
-      </div>
-    ) : null}
-    <div class="justify-around mt-5 js-content-flex hidden">
-      <button id="backButton" class="btn" type="submit">{translator.t('buttons.back')}</button>
-      <button id="continueButton" class="btn btn-primary disabled" type="submit">{translator.t('buttons.continue')}</button>
+      )}
+    </div>
+    <div class="button-container">
+      <button id="backButton" class="button secondary" type="submit">{translator.t('buttons.back')}</button>
+      <button id="continueButton" class="button primary disabled" type="submit">{translator.t('buttons.continue')}</button>
     </div>
   </div>
 </step-2>
+
+<style>
+  .step-container {
+    margin-bottom: 2rem;
+  }
+
+  .step-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .phase-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .error-message {
+    color: #ff0000;
+    margin-top: 1rem;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+</style>
 
 <script>
   import { sliderToDuration, durationToSlider } from '@utils/logslider';
@@ -82,7 +112,6 @@ if (proposals && proposals.length > 0) {
     initialize() {
       this.initializeTimeSelectors();
       this.setupEventListeners();
-      this.displayJavaScriptContent();
       this.initializeTimezoneSelector();
       this.updateContinueButton();
     }
@@ -90,12 +119,10 @@ if (proposals && proposals.length > 0) {
     initializeTimezoneSelector() {
       const timezoneSelect = this.querySelector('#timezone-select') as HTMLSelectElement;
       if (timezoneSelect) {
-        timezoneSelect.value = this.timezone ;
-        console.log(this.timezone, storedTimeZone, Intl.DateTimeFormat().resolvedOptions().timeZone)
+        timezoneSelect.value = this.timezone;
         timezoneSelect.addEventListener('change', async () => {
           this.timezone = timezoneSelect.value;
           await localforage.setItem('userTimezone', this.timezone);
-
           this.updateTimeSelectors();
         });
       }
@@ -138,6 +165,12 @@ if (proposals && proposals.length > 0) {
       if (continueButton) {
         continueButton.addEventListener('click', (event) => this.handleContinueButtonClick(event));
       }
+
+      // Add event listener for proposal changes
+      const proposalsList = this.querySelector('proposals-list');
+      if (proposalsList) {
+        proposalsList.addEventListener('proposalsUpdated', () => this.updateContinueButton());
+      }
     }
 
     handleBackButtonClick(event: Event) {
@@ -147,6 +180,10 @@ if (proposals && proposals.length > 0) {
     }
 
     handleContinueButtonClick(event: Event) {
+      if ((event.target as HTMLButtonElement).classList.contains('disabled')) {
+        return;
+      }
+
       const formData = new FormData();
       formData.append('step', '2');
 
@@ -184,13 +221,11 @@ if (proposals && proposals.length > 0) {
         const descriptionDiv = proposalElement.querySelector('div[id^="description-"]') as HTMLElement;
         
         if (id && titleInput) {
-          // Store the proposal with just ID and title
           proposals.push({
             id,
             title: titleInput.value
           });
 
-          // Store description in LocalForage, key by description ID
           if (descriptionDiv) {
             const descriptionId = `description_${id}`;
             localforage.setItem(descriptionId, descriptionDiv.innerText);
@@ -224,18 +259,22 @@ if (proposals && proposals.length > 0) {
     updateContinueButton() {
       const continueButton = this.querySelector('#continueButton') as HTMLButtonElement;
       const proposals = this.querySelectorAll('.proposal .flex');
+      const allTimeSelectorsValid = this.checkTimeSelectors();
 
-      if (proposals.length >= 2) {
+      if ((this.phase === 'voting' && proposals.length >= 2) || (this.phase === 'full' && allTimeSelectorsValid)) {
         continueButton.classList.remove('disabled');
       } else {
         continueButton.classList.add('disabled');
       }
     }
 
-    displayJavaScriptContent() {
-      const jsContentBlocks = this.querySelectorAll('.js-content-block, .js-content-flex') as NodeListOf<HTMLElement>;
-      jsContentBlocks.forEach((content) => {
-        content.style.display = content.classList.contains('js-content-flex') ? 'flex' : 'block';
+    checkTimeSelectors() {
+      const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
+      return Array.from(timeSelectors).every(selector => {
+        const phaseMode = selector.getAttribute('data-phase');
+        const startPicker = selector.querySelector(`#start-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
+        const endPicker = selector.querySelector(`#end-date-picker-${phaseMode} input[type="datetime-local"]`) as HTMLInputElement;
+        return startPicker && endPicker && startPicker.value && endPicker.value;
       });
     }
 
@@ -270,6 +309,7 @@ if (proposals && proposals.length > 0) {
           }
           endPicker.value = formatDateInTimezone(newEndDate.getTime(), this.timezone);
           endPicker.min = formatDateInTimezone(utcToZonedTime(new Date(newStartDate.getTime() + 60000), this.timezone).getTime(), this.timezone);
+          this.updateContinueButton();
         });
 
         endPicker.addEventListener('change', (event: any) => {
@@ -280,6 +320,7 @@ if (proposals && proposals.length > 0) {
           originalDuration = originalEndDate.getTime() - originalStartDate.getTime();
           originalStartDate = utcToZonedTime(new Date(startPicker.value), this.timezone);
           this.updateDurationSlider(durationSlider, startPicker, endPicker, durationDisplay);
+          this.updateContinueButton();
         });
       }
     }

@@ -1,84 +1,110 @@
 ---
-
-
 // @ts-ignore
 import { getAbsoluteLocaleUrl, getAbsoluteLocaleUrlList } from 'astro:i18n';
 import { Translator } from '@utils/i18n.js';
-
-const translator = new Translator(Astro.currentLocale || 'en'); 
-
-
+const translator = new Translator(Astro.currentLocale || 'en');
 import { Icon } from 'astro-icon';
-
 //const supportedLanguages = Astro.preferredLocaleList || ['en'];
 const supportedLanguages = ["en", "de", "it"];
-
 const currentLanguage = Astro.currentLocale || 'en';
 const primaryLocale = 'en';
-
 const { pathname } = Astro.url;
-
-const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
-
 const removeLanguageFromPath = (path: string) => {
-  const pathSegments = path.split('/').filter(Boolean);
-  if (supportedLanguages.includes(pathSegments[0])) {
-    pathSegments.shift(); 
-  }
-  return '/' + pathSegments.join('/'); 
+const pathSegments = path.split('/').filter(Boolean);
+if (supportedLanguages.includes(pathSegments[0])) {
+ pathSegments.shift();
+}
+return '/' + pathSegments.join('/');
 };
-
 const pathnameWithoutLanguage = removeLanguageFromPath(pathname);
-
 const languageNames: any = {
-  'en': 'English',
-  'de': 'Deutsch',
-  'it': 'Italiano',
+'en': 'English',
+'de': 'Deutsch',
+'it': 'Italiano',
 };
-
 ---
-
-<header>
-  <div class="navbar bg-base-100">
-    <div class="flex-1 items-center">      
-      <a class={'btn btn-link ' + (pathname.includes('/') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/')}>
+<header class="header">
+  <div class="navbar">
+    <div class="nav-links">
+      <a class={'nav-link ' + (pathname.includes('/') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/')}>
         {translator.t('buttons.home')}
       </a>
-      <!--a class={'btn btn-link ' + (pathname.includes('/dashboard') ? 'selected' : '')} href={getAbsoluteLocaleUrl(currentLanguage, '/dashboard')}>
-        {translator.t('buttons.dashboard')}
-      </a-->
     </div>
-    <div class="flex-none items-center">
-      <form action="/api/update-language" method="POST">
-        <div class="mx-2 flex items-center">
-          <button class="hideonjs" type="submit">&#128472;</button>
-          <select class="select select-xs mx-2" onchange="location = this.value" name="lang">
+    <div class="nav-actions">
+      <form action="/api/update-language" method="POST" class="language-form">
+        <div class="language-selector">
+          <button class="hideonjs refresh-btn" type="submit">&#128472;</button>
+          <select class="language-select" onchange="location = this.value" name="lang">
             {supportedLanguages.map((lang: string) => (
-              <option 
-                selected={lang === currentLanguage} 
+              <option
+                selected={lang === currentLanguage}
                 value={`${lang !== primaryLocale ? '/' + lang : ''}${pathnameWithoutLanguage}`}>
                 {languageNames[lang]}
               </option>
             ))}
-          </select>      
+          </select>
         </div>
-      </form>  
-
-      <form action="/api/theme" method="POST">
-        <input type="hidden" name="theme" value={theme === 'light' ? 'dark' : 'light'} />
-        <button type="submit" class="btn btn-ghost btn-sm">
-          { theme === 'dark' ? (
-            <Icon class="icon-sun" width="22" name="sun" />
-            ) : ( <Icon class="icon-moon" width="22" name="moon" /> 
-          )}
-        </button>
       </form>
     </div>
   </div>
 </header>
 <script>
-  const hideme = document.getElementsByClassName('hideonjs') as HTMLCollectionOf<HTMLElement>
-  Array.from(hideme).forEach((element: HTMLElement) => {
-    element.style.display = 'none';
-  });
+const hideme = document.getElementsByClassName('hideonjs') as HTMLCollectionOf<HTMLElement>
+ Array.from(hideme).forEach((element: HTMLElement) => {
+ element.style.display = 'none';
+});
 </script>
+
+<style>
+
+.header {
+  background-color: rgba(255, 165, 0, 0.1);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.nav-link {
+  color: var(--text-color-light);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.selected {
+  background-color: var(--primary-color);
+  color: var(--background-color-dark);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.language-form, {
+  margin-left: 1rem;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+}
+
+.language-select {
+  padding: 0.25rem;
+  border-radius: 4px;
+  border: 1px solid var(--primary-color);
+  background-color: var(--input-background-light);
+  color: var(--text-color-light);
+}
+</style>

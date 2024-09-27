@@ -5,7 +5,6 @@ import { formatDateInTimezone } from '@utils/dateUtils';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 
-
 type Props = {
     title: string;
     descriptionId: string;
@@ -20,65 +19,63 @@ type Props = {
 const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals, timezone, weighting } = Astro.props;
 ---
 <div class="process-details">
-    <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
-        {title ? (
-            <div class="mb-4">
-                <h2 class="text-xl font-semibold mb-2">{translator.t('process.topic')}</h2>
+    <div class="details-container">
+        {title && (
+            <div class="topic-section">
+                <h2>{translator.t('process.topic')}</h2>
                 <p>{title}</p>
-                <div id="descriptionContent" data-description-id={descriptionId}/>
-
+                <div id="descriptionContent" data-description-id={descriptionId}></div>
             </div>
-        ) : null}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {proposalStartDate && proposalEndDate ? (
-                <div class="p-4">
-                        <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.proposal.title`) }</h2>
-                        <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(proposalStartDate, timezone)}</p>
-                        <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(proposalEndDate, timezone)}</p>
+        )}
+        <div class="phases-grid">
+            {proposalStartDate && proposalEndDate && (
+                <div class="phase-section">
+                    <h2>{ translator.t(`phases.proposal.title`) }</h2>
+                    <p><span class="phase-label">{translator.t('phases.startAt')}:</span> {formatDateInTimezone(proposalStartDate, timezone)}</p>
+                    <p><span class="phase-label">{translator.t('phases.endsAt')}:</span> {formatDateInTimezone(proposalEndDate, timezone)}</p>
                 </div>
-            ) : null }
-            <div class="p-4">
-                <h2 class="text-lg font-semibold mb-2">{ translator.t(`phases.voting.title`) }</h2>
-                {votingStartDate ? <p><h3 class="font-semibold">{translator.t('phases.startAt')}:</h3> {formatDateInTimezone(votingStartDate, timezone)}</p> : null}
-                {votingEndDate ? <p><h3 class="font-semibold">{translator.t('phases.endsAt')}:</h3> {formatDateInTimezone(votingEndDate, timezone)}</p> : null}
+            )}
+            <div class="phase-section">
+                <h2>{ translator.t(`phases.voting.title`) }</h2>
+                {votingStartDate && <p><span class="phase-label">{translator.t('phases.startAt')}:</span> {formatDateInTimezone(votingStartDate, timezone)}</p>}
+                {votingEndDate && <p><span class="phase-label">{translator.t('phases.endsAt')}:</span> {formatDateInTimezone(votingEndDate, timezone)}</p>}
             </div>
-            <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-2">{translator.t('setup.timezone')}:</h3>
-            <p>{timezone}</p>
+            <div class="timezone-section">
+                <h3>{translator.t('setup.timezone')}:</h3>
+                <p>{timezone}</p>
             </div>
         </div>
-        {proposals.length > 0 ? (
-            <div class="mt-8">
-                <h2 class="text-xl font-semibold mb-4">{translator.t('process.proposals')}</h2>
-                <ul class="space-y-4">
+        {proposals.length > 0 && (
+            <div class="proposals-section">
+                <h2>{translator.t('process.proposals')}</h2>
+                <ul class="proposals-list">
                     { proposals.map((proposal: IProposal) => (
-                    <li class="border border-gray-200 rounded-lg p-4" id={`proposal-${proposal.id}`}>
-                        <b class="text-lg">{proposal.title || 'Untitled Proposal'}</b>
-                        <p class="mt-2" id={`description-${proposal.id}`}></p>
+                    <li class="proposal-item" id={`proposal-${proposal.id}`}>
+                        <h3>{proposal.title || 'Untitled Proposal'}</h3>
+                        <p id={`description-${proposal.id}`}></p>
                     </li>
                     ))}
                 </ul>
             </div>
-        ) : null}
+        )}
     </div>
 </div>
-<div class="flex justify-around mt-5">
+<div class="form-actions">
     <form action="/api/update-step" method="post">
         <input type="hidden" name="step" value="2"/>
-
-        <button type="submit" class="btn m-2">{translator.t('buttons.back')}</button>
+        <button type="submit" class="button secondary">{translator.t('buttons.back')}</button>
     </form>
     <form action="/api/start-process" method="post">
         <input type="hidden" name="descriptionContent" id="descriptionContentInput" />
         <input type="hidden" name="proposalsData" id="proposalsDataInput" />
-        <button type="submit" class="btn btn-primary m-2">{translator.t('buttons.start')}</button>
+        <button type="submit" class="button primary">{translator.t('buttons.start')}</button>
     </form>
 </div>
+
 <script>
     import getQuillHTML from '@utils/getQuillHTML';
     import localforage from 'localforage';
     import type Delta from 'quill-delta';
-
 
     const descriptionContentDiv = document.getElementById('descriptionContent') as HTMLElement;
     const descriptionContentInput = document.getElementById('descriptionContentInput') as HTMLInputElement;
@@ -93,28 +90,86 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
     }
 
     const proposals = document.querySelectorAll('[id^="proposal-"]');
-        const proposalsData = await Promise.all(Array.from(proposals).map(async (proposal) => {
-            const proposalId = proposal.id.replace('proposal-', '');
-            const titleElement = proposal.querySelector('b.text-lg');
-            const descriptionContent = await localforage.getItem(`description-${proposalId}`) as string || '';
-            if(descriptionContent) {
-                const descriptionDelta = JSON.parse(descriptionContent) as Delta;
-                    
-                const descriptionElement = document.getElementById(`description-${proposalId}`);
-                if (descriptionElement) {
-                    descriptionElement.innerHTML = getQuillHTML(descriptionDelta);
-                }
+    const proposalsData = await Promise.all(Array.from(proposals).map(async (proposal) => {
+        const proposalId = proposal.id.replace('proposal-', '');
+        const titleElement = proposal.querySelector('h3');
+        const descriptionContent = await localforage.getItem(`description-${proposalId}`) as string || '';
+        if(descriptionContent) {
+            const descriptionDelta = JSON.parse(descriptionContent) as Delta;
+                
+            const descriptionElement = document.getElementById(`description-${proposalId}`);
+            if (descriptionElement) {
+                descriptionElement.innerHTML = getQuillHTML(descriptionDelta);
             }
-            return {
-                id: proposalId,
-                title: titleElement ? titleElement.textContent : '',
-                description: descriptionContent
-            };
-        }));
-
-        const proposalsDataInput = document.getElementById('proposalsDataInput') as HTMLInputElement;
-        if (proposalsDataInput) {
-            proposalsDataInput.value = JSON.stringify(proposalsData);
         }
+        return {
+            id: proposalId,
+            title: titleElement ? titleElement.textContent : '',
+            description: descriptionContent
+        };
+    }));
 
+    const proposalsDataInput = document.getElementById('proposalsDataInput') as HTMLInputElement;
+    if (proposalsDataInput) {
+        proposalsDataInput.value = JSON.stringify(proposalsData);
+    }
 </script>
+<style>
+    .process-details {
+  margin-bottom: 2rem;
+}
+
+.details-container {
+  border: 1px solid var(--input-border-light);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.topic-section {
+  margin-bottom: 1rem;
+}
+
+.phases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.phase-section, .timezone-section {
+  padding: 1rem;
+}
+
+.phase-label {
+  font-weight: bold;
+}
+
+.proposals-section {
+  margin-top: 2rem;
+}
+
+.proposals-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.proposal-item {
+  border: 1px solid var(--input-border-light);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .phases-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

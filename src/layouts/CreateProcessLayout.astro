@@ -3,45 +3,37 @@ import BaseLayout from '@layouts/BaseLayout.astro'
 import type { ProcessCookie } from '@utils/parseProcessCookie'
 import { parseProcessCookie } from '@utils/parseProcessCookie'
 import { Translator } from '@utils/i18n.js';
-
 const translator = new Translator(Astro.currentLocale || 'en');
-
-
 interface Props {
-    step: number,
+ step: number,
 }
-
 const { step } = Astro.props;
-
-
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
-
 const {
-  phase = "",
-  title = "",
-  endVotingDate = "",
+ phase = "",
+ title = "",
+ endVotingDate = "",
 } = processCookie as ProcessCookie
-
 const steps = [
   { stepNumber: 1, disabled: false },
   { stepNumber: 2, disabled: (!title || !phase) },
   { stepNumber: 3, disabled: (!title || !phase || !endVotingDate) }
 ];
-
 ---
-
 <BaseLayout title={translator.t('setup.process')} description={translator.t('description')}>
-  <h1 class="text-center">{ translator.t('setup.process') }</h1>
-  <div class="flex justify-center space-x-2 m-2">
+  <h1 class="page-title">{ translator.t('setup.process') }</h1>
+  <div class="step-indicator">
     {steps.map(({ stepNumber, disabled }) => (
-      <form action="/api/update-step" method="POST">
+      <form action="/api/update-step" method="POST" class="step-form">
         <input type="hidden" name="step" value={stepNumber}/>
-        <button type="submit" class={`w-4 h-4 rounded-full ${
-          step === stepNumber ? 'ring-bg ring brown-ring ring-2' : 
-          step > stepNumber ? 'ring-bg' : 
-          'bg-gray-300'
-        } ${disabled ? 'bg-gray-500 pointer-events-none' : ''}`} disabled={disabled}></button>
+        <button 
+          type="submit" 
+          class={`step-button ${step === stepNumber ? 'current' : ''} ${step > stepNumber ? 'completed' : ''} ${disabled ? 'disabled' : ''}`} 
+          disabled={disabled}
+        >
+          <span class="step-number">{stepNumber}</span>
+        </button>
       </form>
     ))}
   </div>
@@ -49,22 +41,75 @@ const steps = [
 </BaseLayout>
 
 <style>
-  .brown-ring {
-    --tw-ring-color: var(--link-hover-color);
+  .page-title {
+    text-align: center;
+    margin-bottom: 2rem;
   }
-  .dark .brown-ring {
-    --tw-ring-color: var(--link-hover-color-dark);
+
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
   }
-  .ring-bg {
-    background-color: var(--link-color);
+
+  .step-form {
+    margin: 0 0.5rem;
   }
-  .dark .ring-bg {
-    background-color: var(--link-color-dark);
+
+  .step-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    color: var(--primary-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
   }
-  .ring-bg:hover {
-    background-color: var(--link-hover-color);
+
+  .step-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+    transform: translateY(-50%);
   }
-  .dark .ring-bg:hover {
-    background-color: var(--link-hover-color-dark);
+
+  .step-form:last-child .step-button::after {
+    display: none;
+  }
+
+  .step-button.current {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .step-button.completed {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .step-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .step-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .process-form {
+    max-width: 600px;
+    margin: 0 auto;
   }
 </style>

@@ -1,22 +1,64 @@
 ---
 import { Translator } from '@utils/i18n.js';
 import { durationToSlider } from '@utils/logslider';
-
 const translator = new Translator(Astro.currentLocale || 'en');
-
-
 interface Props {
-  id: string;
-  duration: number;
+ id: string;
+ duration: number;
 }
-
 const { id, duration } = Astro.props;
 const initialSliderValue = durationToSlider(duration);
 ---
-
-<div id={id}>
-  <span>{translator.t('setup.duration')}:&nbsp;</span>
-  <span class="duration-display" class="text-success"></span>
-  <br />
-  <input type="range" min="1" max="165" class="range" name={id} value={initialSliderValue} />
+<div id={id} class="duration-slider">
+  <div class="duration-label">
+    <span>{translator.t('setup.duration')}:&nbsp;</span>
+    <span class="duration-display"></span>
+  </div>
+  <input type="range" min="1" max="165" class="form-range" name={id} value={initialSliderValue} />
 </div>
+
+<style>
+  .duration-slider {
+    margin-bottom: 1rem;
+  }
+
+  .duration-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .duration-display {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+
+  .form-range {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: var(--input-border-light);
+    outline: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  .form-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+</style>

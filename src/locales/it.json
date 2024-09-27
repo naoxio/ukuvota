@@ -13,7 +13,17 @@
     "webAppCardButton": "Creare Nuovo Processo",
     "telegramBotCardTitle": "Bot Telegram",
     "telegramBotCardDescription": "Voto conveniente tramite Telegram, integrando il voto nella comunicazione quotidiana.",
-    "telegramBotCardButton": "Vai al Bot"
+    "telegramBotCardButton": "Vai al Bot",
+    "weightedScoreTitle": "Voto a punteggio ponderato",
+    "weightedScoreDescription": "Consente agli elettori di esprimere le loro preferenze con precisione, permettendo ai voti negativi di avere più peso di quelli positivi.",
+    "effortlessSharingTitle": "Condivisione senza sforzo",
+    "effortlessSharingDescription": "Condividi facilmente i link di voto con chiunque, consentendo un'ampia partecipazione e coinvolgimento.",
+    "consensusDrivenTitle": "Approccio basato sul consenso",
+    "consensusDrivenDescription": "Raccoglie diverse proposte dai partecipanti, favorendo un processo decisionale collaborativo.",
+    "userFriendlyTitle": "Interfaccia user-friendly",
+    "userFriendlyDescription": "Piattaforma intuitiva e facile da navigare, che garantisce facile accessibilità su tutti i dispositivi.",
+    "transparentResultsTitle": "Risultati trasparenti",
+    "transparentResultsDescription": "Dopo la fine della fase di votazione, tutti i voti vengono visualizzati in modo trasparente, promuovendo la fiducia nel processo."
   },
   "dashboard": {
     "noProcesses": "Attualmente, non ci sono processi da visualizzare.",

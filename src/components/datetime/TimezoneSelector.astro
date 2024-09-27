@@ -1,17 +1,39 @@
 ---
-
 import { Translator } from '@utils/i18n.js';
-
 const translator = new Translator(Astro.currentLocale || 'en');
-
 ---
+<div class="timezone-selector">
+  <label for="timezone-select">{translator.t('setup.timezone')}</label>
+  <select id="timezone-select" class="form-select">
+    {Intl.supportedValuesOf('timeZone').map((timezone: string) => (
+      <option value={timezone}>{timezone}</option>
+    ))}
+  </select>
+</div>
 
-<div class="flex items-center">
-    <label for="timezone-select">{translator.t('setup.timezone')}</label>
-    <select id="timezone-select" class="select select-bordered ml-2">
-      {Intl.supportedValuesOf('timeZone').map((timezone: string) => (
-        <option value={timezone}>{timezone}</option>
-      ))}
-    </select>
-</div>
-</div>
+<style>
+  .timezone-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .timezone-selector label {
+    margin-right: 0.5rem;
+  }
+
+  .form-select {
+    padding: 0.5rem;
+    border: 1px solid var(--input-border-light);
+    border-radius: 0.25rem;
+    background-color: var(--input-background-light);
+    color: var(--text-color-light);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+</style>

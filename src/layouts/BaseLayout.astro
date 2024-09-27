@@ -1,6 +1,5 @@
 ---
 /* @ts-ignore*/
-import SpeedInsights from "@vercel/speed-insights/astro"
 import Header from '@components/layout/Header.astro';
 
 import '@assets/quill.snow.css';
@@ -17,7 +16,6 @@ const { url } = Astro;
 
 const display_title = `Ukuvota ${title ? `- ${title}` : ''}`
 
-const theme = (Astro.cookies.get('theme')?.value || 'light') as string;
 
 if (url.hash.includes('#/app/')) {
   const newHash = url.hash.replace('#/app/', '');
@@ -27,7 +25,7 @@ if (url.hash.includes('#/app/')) {
 }
 ---
 <!DOCTYPE html>
-<html lang={Astro.currentLocale} data-theme={theme} class={theme}>
+<html lang={Astro.currentLocale} >
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
@@ -77,6 +75,5 @@ if (url.hash.includes('#/app/')) {
       <slot />
     </main>
     <br/>
-    <SpeedInsights/>
   </body>
 </html>

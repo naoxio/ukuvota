@@ -1,29 +1,131 @@
 ---
 interface Props {
-    id: string
-    icon?: string
-    btn?: string
+ id: string;
+ icon?: string;
+ btn?: string;
 }
 const { id, icon = "information", btn } = Astro.props;
-
 import { Icon } from 'astro-icon'
-
+import { Translator } from '@utils/i18n.js';
+const translator = new Translator(Astro.currentLocale || 'en');
 ---
-{ btn ? 
-  <button class='btn btn-sm'>
-    <label for={id}>{ btn }</label>
-  </button> :
-  <label for={id} class="btn btn-ghost btn-sm btn-circle">
-      <Icon width="22" name={icon}/>
+
+{btn ? (
+  <button class='modal-trigger-button'>
+    <label for={id}>{translator.t(btn)}</label>
+  </button>
+) : (
+  <label for={id} class="modal-trigger-icon">
+    <Icon width="22" name={icon}/>
   </label>
-}
+)}
 
 <input type="checkbox" id={id} class="modal-toggle" />
-<label for={id} class="modal">
-  <label class="modal-box">
-    <label for={id} class="btn btn-sm btn-circle absolute right-2 top-2">
+<label for={id} class="modal-overlay">
+  <div class="modal-content">
+    <label for={id} class="modal-close">
       <Icon width="22" name="close"/>
     </label>
-    <slot/>
-  </label>
+    <div class="modal-body">
+      <slot/>
+    </div>
+  </div>
 </label>
+
+<style>
+  .modal-trigger-button {
+    background-color: var(--primary-color);
+    color: var(--background-color-light);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+
+  .modal-trigger-button:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .modal-trigger-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--background-color-light);
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .modal-trigger-icon:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color-light);
+  }
+
+  .modal-toggle {
+    display: none;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+  }
+
+  .modal-toggle:checked + .modal-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-content {
+    background-color: var(--background-color-light);
+    color: var(--text-color-light);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color-light);
+    color: var(--text-color-light);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .modal-close:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color-light);
+  }
+
+  .modal-body {
+    margin-top: 1rem;
+  }
+</style>

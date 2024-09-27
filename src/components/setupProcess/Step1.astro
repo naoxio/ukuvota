@@ -3,103 +3,96 @@ import { Translator } from '@utils/i18n.js';
 import weightingOptions from '@utils/weightingOptions';
 import Modal from '@components/ui/Modal.astro';
 import ContentDoc from '@components/ui/ContentDoc.astro';
-
 const translator = new Translator(Astro.currentLocale || 'en');
-
-
 const timezoneOffset = new Date().getTimezoneOffset();
-
 type Props = {
-  title: string;
-  descriptionId?: string;
-  weighting?: string;
+ title: string;
+ descriptionId?: string;
+ weighting?: string;
 }
-
-const { title, descriptionId, weighting } = Astro.props;
+const { title, descriptionId, weighting = '1' } = Astro.props;
 ---
 
-<form id="step-1" action='/api/process-store' method="POST">
+<form id="step-1" class="process-form" action='/api/process-store' method="POST">
   <input type="hidden" name="step" value="1" />
   <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
+  <div id="scrollTopicQuestion"></div>
+  
+  <div class="form-group">
+    <label for="topicQuestion">{ translator.t('process.topic') }</label>
+    <input
+      id="topicQuestion"
+      name="topicQuestion"
+      class="form-input"
+      type="text"
+      value={title}
+      required
+      title={translator.t('alert.error.topicQuestion')}
+    />
+  </div>
 
-  <div id="scrollTopicQuestion" />
-  <p>{ translator.t('process.topic') }</p>
-  <input 
-    id="topicQuestion" 
-    name="topicQuestion" 
-    class="input input-bordered w-full" 
-    type="text" 
-    value={title} 
-    required 
-    title={translator.t('alert.error.topicQuestion')}
-  />
-  <br/>
-  <br/>
-  <p>{ translator.t('process.description') }</p>
+  <div class="form-group">
+    <label for="description">{ translator.t('process.description') }</label>
+    <input id="descriptionId" name="descriptionId" type="hidden" />
+    <div id="description" class="quill-editor" data-description-id={descriptionId}>{translator.t('loadQuill')}</div>
+    <input id="quillops" name="description" type="hidden" value='' />
+  </div>
 
-  <input id="descriptionId" name="descriptionId" type="hidden" />
-  <div id="description" class="hidden" data-description-id={descriptionId}>{translator.t('loadQuill')}</div>
-  <input id="quillops" name="description" class="hidden" value='' />
-  <br/>
-  <!--details class="text-center">
-    <summary class="cursor-pointer text-indianared mt-6 ">{ translator.t('process.advancedOptions') }</summary-->
-  <div class="flex justify-between items-center">
-    <span>{ translator.t('process.weighting') }</span>
-    <span class="flex justify-center items-center">
-      <select id="select" name="weighting" class="select mx-2 select-bordered mt-2" value={weighting}>
+  <div class="form-group weighting-group">
+    <label for="select">{ translator.t('process.weighting') }</label>
+    <div class="weighting-select">
+      <select id="select" name="weighting" class="form-select" value={weighting}>
         {weightingOptions.map(weight => (
-          <option value={weight.value}>
-            { Number(weight.value) > 0 ? <span>{ weight.label }</span> : <span>&infin;</span> }
+          <option value={weight.value} selected={weight.value === weighting}>
+            { Number(weight.value) > 0 ? weight.label : '∞' }
           </option>
         ))}
       </select>
-      
       <Modal id="weightingInfo">
         <h3>{ translator.t('process.weighting') }</h3>
         <ContentDoc file_name="NegativeScoreWeighting"/>
       </Modal>
-    </span>
+    </div>
   </div>
-  <br/>
-  <div class="flex justify-around flex-wrap">
-    <button type="submit" name="phase" value="full" class="btn btn-primary m-2">
+
+  <div class="form-actions">
+    <button type="submit" name="phase" value="full" class="button primary">
       { translator.t('process.phases.full') }
     </button>
-    <button type="submit" name="phase" value="voting" class="btn btn-primary m-2">
+    <button type="submit" name="phase" value="voting" class="button primary">
       { translator.t('process.phases.voting') }
     </button>
   </div>
 </form>
+
 <script>
-  import localforage from 'localforage';
-  import { createQuill, updateQuill } from '@utils/quillUtils';
+import localforage from 'localforage';
+import { createQuill, updateQuill } from '@utils/quillUtils';
 
-  const formElement = document.getElementById('step-1');
-  if (formElement) {
-    const quillContainer = document.getElementById('description') as HTMLElement;
-    const descriptionId = quillContainer.dataset.descriptionId || `description_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-    quillContainer.style.display = 'block';
-    if (quillContainer) quillContainer.innerText = '';
+const formElement = document.getElementById('step-1');
+if (formElement) {
+  const quillContainer = document.getElementById('description') as HTMLElement;
+  const descriptionId = quillContainer.dataset.descriptionId || `description_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  quillContainer.style.display = 'block';
+  if (quillContainer) quillContainer.innerText = '';
+  const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
+  const descriptionIdInput = document.getElementById('descriptionId') as HTMLInputElement;
+  const quillEditor = createQuill('#description');
+  if (descriptionIdInput) descriptionIdInput.value = descriptionId;
 
-    const quillOpsInput = document.getElementById('quillops') as HTMLInputElement;
-    const descriptionIdInput = document.getElementById('descriptionId') as HTMLInputElement;
-    const quillEditor = createQuill('#description');
-    if (descriptionIdInput) descriptionIdInput.value = descriptionId;
-
-    // Retrieve the description data from localforage using the descriptionId
-    localforage.getItem(descriptionId).then((descriptionData) => {
-      if (descriptionData) {
-        const quillOps = JSON.parse(descriptionData as string);
-        updateQuill(quillEditor, quillOps);
-        quillOpsInput.value = descriptionData as string;
-      }
-    });
-
-    if (quillEditor) {
-      quillEditor.on('text-change', () => {
-        const quillOps = quillEditor.getContents();
-        localforage.setItem(descriptionId, JSON.stringify(quillOps));
-      });
+  localforage.getItem(descriptionId).then((descriptionData) => {
+    if (descriptionData) {
+      const quillOps = JSON.parse(descriptionData as string);
+      updateQuill(quillEditor, quillOps);
+      quillOpsInput.value = descriptionData as string;
     }
+  });
+
+  if (quillEditor) {
+    quillEditor.on('text-change', () => {
+      const quillOps = quillEditor.getContents();
+      localforage.setItem(descriptionId, JSON.stringify(quillOps));
+    });
   }
+}
 </script>

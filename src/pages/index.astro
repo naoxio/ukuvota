@@ -1,7 +1,6 @@
 ---
 import logo from "@assets/logo.png";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import ContentDoc from "@components/ui/ContentDoc.astro";
 import Footer from "@components/layout/Footer.astro";
 import { Translator } from '@utils/i18n.js';
 
@@ -9,21 +8,121 @@ const translator = new Translator(Astro.currentLocale || 'en');
 
 
 ---
-<BaseLayout title={translator.t('buttons.about')} description={translator.t('home.description')}>
-  <div class="flex items-center flex-col">
-    <img width="220" class="m-10" id="logo" alt="Ukuvota logo" src={logo.src} />
-    <h1>Ukuvota</h1>
-    <h2>{translator.t('home.subheader')}</h2>
-  </div>
-  <ContentDoc file_name="Introduction"/>
-  <br/>
-  <div class="card-actions justify-center">
-    <form action="/api/create-process" method="post">
-      <button type="submit" class="btn btn-primary">{translator.t('home.webAppCardButton')}</button>
-    </form>
-  </div>
 
-  <br/><br/>
-  <Footer/>
-  
+<BaseLayout title={translator.t('buttons.about')} description={translator.t('home.description')}>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <img src={logo.src} alt="Ukuvota Logo" class="logo">
+        <h1>Ukuvota</h1>
+        <h2>{translator.t('home.subheader')}</h2>
+      </div>
+    </section>
+    <section class="features-grid">
+      <div class="feature-card">
+        <h3>{translator.t('home.weightedScoreTitle')}</h3>
+        <p>{translator.t('home.weightedScoreDescription')}</p>
+      </div>
+      <div class="feature-card">
+        <h3>{translator.t('home.effortlessSharingTitle')}</h3>
+        <p>{translator.t('home.effortlessSharingDescription')}</p>
+      </div>
+      <div class="feature-card">
+        <h3>{translator.t('home.consensusDrivenTitle')}</h3>
+        <p>{translator.t('home.consensusDrivenDescription')}</p>
+      </div>
+      <div class="feature-card">
+        <h3>{translator.t('home.userFriendlyTitle')}</h3>
+        <p>{translator.t('home.userFriendlyDescription')}</p>
+      </div>
+      <div class="feature-card">
+        <h3>{translator.t('home.transparentResultsTitle')}</h3>
+        <p>{translator.t('home.transparentResultsDescription')}</p>
+      </div>
+    </section>
+    <br/><br/>
+    <section class="cta">
+
+      <form action="/api/create-process" method="post">
+        <button type="submit" class="button primary">{translator.t('home.webAppCardButton')}</button>
+      </form>
+      <a href="#" class="button secondary disabled" title="Coming soon">Get Android APK</a>
+    </section>
+  </main>
+  <Footer />
 </BaseLayout>
+
+<style>
+
+.hero {
+  background-image: url('/background.webp');
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero-content {
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  margin: auto;
+  width: 120px;
+  height: auto;
+}
+
+.features {
+  margin: 3rem 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background-color: rgba(255, 165, 0, 0.1);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h3 {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

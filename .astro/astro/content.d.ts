@@ -148,13 +148,6 @@ declare module 'astro:content' {
   collection: "de";
   data: any
 } & { render(): Render[".md"] };
-"Introduction.md": {
-	id: "Introduction.md";
-  slug: "introduction";
-  body: string;
-  collection: "de";
-  data: any
-} & { render(): Render[".md"] };
 "NegativeScoreWeighting.md": {
 	id: "NegativeScoreWeighting.md";
   slug: "negativescoreweighting";
@@ -178,13 +171,6 @@ declare module 'astro:content' {
   collection: "en";
   data: any
 } & { render(): Render[".md"] };
-"Introduction.md": {
-	id: "Introduction.md";
-  slug: "introduction";
-  body: string;
-  collection: "en";
-  data: any
-} & { render(): Render[".md"] };
 "NegativeScoreWeighting.md": {
 	id: "NegativeScoreWeighting.md";
   slug: "negativescoreweighting";
@@ -204,13 +190,6 @@ declare module 'astro:content' {
 "Guide.md": {
 	id: "Guide.md";
   slug: "guide";
-  body: string;
-  collection: "it";
-  data: any
-} & { render(): Render[".md"] };
-"Introduction.md": {
-	id: "Introduction.md";
-  slug: "introduction";
   body: string;
   collection: "it";
   data: any

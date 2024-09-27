@@ -383,9 +383,8 @@ class ResultsCard extends HTMLElement {
         }
         if (exportImageButton) {
             exportImageButton.addEventListener('click', () => {
-                const theme = localStorage.getItem("theme");
 
-                toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: theme === 'dark' ? "black" : "white" }).then((dataUrl) => {
+                toPng(this.querySelector('div.screenshot-results') as HTMLElement, { backgroundColor: "white" }).then((dataUrl) => {
                     download(dataUrl, this.process.title + '.png');
                 });
             });
