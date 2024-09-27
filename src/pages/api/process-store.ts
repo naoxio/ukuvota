@@ -89,54 +89,37 @@ export const POST: APIRoute = async ({ request }) => {
         return new Response(null, { status: 303, headers: { 'Location': referer } });
       }
     } else if (phase === 'voting') {
-      const proposals = JSON.parse(formData.get('proposals') as string|| '') as IProposal[] || processCookieObject.proposals || [];
-      if (proposals.length < 2) {
-        const headers = new Headers({
-          'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
-          'Location': request.headers.get('referer') as string,
-        });
-        return new Response('At least 2 proposals are required for the voting phase.', { status: 400, headers: headers });
+      let proposals: IProposal[] = [];
+      const proposalsData = formData.get('proposals');
+      if (proposalsData) {
+        try {
+          proposals = JSON.parse(proposalsData as string) as IProposal[];
+        } catch (error) {
+          console.error("Error parsing proposals:", error);
+          // If parsing fails, use the existing proposals or an empty array
+          proposals = processCookieObject.proposals || [];
+        }
+      } else {
+        // If no proposals in form data, use existing proposals or empty array
+        proposals = processCookieObject.proposals || [];
       }
 
       if (endVotingDate <= startVotingDate) {
         endVotingDate = startVotingDate + 60000;
       }
 
-      const locale = 'en';
-      const proposalTemplates = await exampleProposals(locale);
       try {
         processCookieObject.startVotingDate = startVotingDate;
         processCookieObject.endVotingDate = endVotingDate;
-
         processCookieObject.step = nextStep.toString();
-        processCookieObject.proposals = [];
-
-        const proposalsData = formData.get('proposals');
-        if (proposalsData) {
-          const proposals = JSON.parse(proposalsData as string);
-          proposals.forEach((proposal: IProposal) => {
-            if (!proposal.id) {
-              return;
-            }
-
-            processCookieObject.proposals = processCookieObject.proposals || [];
-            
-            const existingProposalIndex = processCookieObject.proposals.findIndex(p => p.id === proposal.id);
-
-            if (existingProposalIndex !== -1) {
-              processCookieObject.proposals[existingProposalIndex] = proposal;
-            } else {
-              processCookieObject.proposals.push(proposal);
-            }
-          });
-        }
-        
+        processCookieObject.proposals = proposals;
+    
         const headers = new Headers({
           'Set-Cookie': `process=${encodeURIComponent(JSON.stringify(processCookieObject))}; Path=/; HttpOnly; SameSite=Strict`,
           'Content-Type': 'application/json',
           'Location': referer
         });
-
+    
         return new Response(null, { status: 303, headers: headers });
       } catch (error) {
         console.error("Error:", error);

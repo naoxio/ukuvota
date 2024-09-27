@@ -6,41 +6,33 @@ import Step1 from '@components/setupProcess/Step1.astro';
 import Step2 from '@components/setupProcess/Step2.astro';
 import Step3 from '@components/setupProcess/Step3.astro';
 import CreateProcessLayout from '@layouts/CreateProcessLayout.astro';
-
-
+import Modal from '@components/ui/Modal.astro';
 import { Icon } from 'astro-icon'
 import localforage from 'localforage';
 
-const translator = new Translator(Astro.currentLocale || 'en'); 
-
-
-
+const translator = new Translator(Astro.currentLocale || 'en');
 const rawCookieValue = Astro.cookies.get('process')?.value;
 const processCookie: ProcessCookie = parseProcessCookie(rawCookieValue);
 const {
-  create = 'false',
-  phase = '',
-  weighting = '',
-  title = '',
-  descriptionId = '',
-  startProposalDate = 0,
-  endProposalDate = 0,
-  startVotingDate = 0,
-  endVotingDate = 0,
-  step = '1',
-  proposals = [],
-  timezone,
+ create = 'false',
+ phase = '',
+ weighting = '',
+ title = '',
+ descriptionId = '',
+ startProposalDate = 0,
+ endProposalDate = 0,
+ startVotingDate = 0,
+ endVotingDate = 0,
+ step = '1',
+ proposals = [],
+ timezone,
 } = processCookie as ProcessCookie;
 
-
 const currentStep = Number(step);
-
 let modifiedCreate = JSON.parse(create);
-
 if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
-    modifiedCreate = false;
+ modifiedCreate = false;
 }
-
 ---
 
 <noscript>
@@ -54,29 +46,22 @@ if (currentStep === 1 && !phase && !weighting && !title && !descriptionId) {
 
 <CreateProcessLayout step={currentStep}>
   <div id="jsContent">
-    {modifiedCreate ? (
-      <input type="checkbox" id="existingProcessModal" class="modal-toggle" checked/>
-      <label for="existingProcessModal" class="modal">
-        <label class="modal-box">
-          <label for="existingProcessModal" class="btn btn-sm btn-circle absolute right-2 top-2">
-            <Icon width="22" name="close"/>
-          </label>
-          <h3>{translator.t('setup.continueEditing')}</h3>
-          <p>{translator.t('setup.existingProcessPrompt')}</p>
-          <div class="process-details">
-            { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
-            { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
-          </div>
-
-          <div class="flex justify-center">
-            <form action="/api/start-new-process" method="post">
-              <button type="submit" class="btn m-2">{translator.t('startNew')}</button>
-            </form>
-            <label for="existingProcessModal" class="btn m-2">{translator.t('buttons.continue')}</label>
-          </div>
-        </label>
-      </label>
-    ) : null}
+    {modifiedCreate && (
+    <Modal id="existingProcessModal" initiallyOpen={modifiedCreate}>
+      <h3 class="modal-title">{translator.t('setup.continueEditing')}</h3>
+      <p>{translator.t('setup.existingProcessPrompt')}</p>
+      <div class="process-details">
+        { title && <p><strong>{translator.t('process.topic')}:</strong> {title}</p> }
+        { weighting && <p><strong>{translator.t('process.weighting')}:</strong> {weighting}</p> }
+      </div>
+      <div class="form-actions">
+        <form action="/api/start-new-process" method="post">
+          <button type="submit" class="button secondary">{translator.t('startNew')}</button>
+        </form>
+        <label for="existingProcessModal" class="button primary">{translator.t('buttons.continue')}</label>
+      </div>
+    </Modal>
+    )}
 
     { currentStep === 1 ? (
       <Step1 title={title} descriptionId={descriptionId} weighting={weighting} />

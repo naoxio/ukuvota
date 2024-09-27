@@ -18,36 +18,38 @@ interface Props {
 const { processId, proposals, isSetup } = Astro.props;
 ---
 
-<div>
+<div class="proposals-list">
   <div id="proposals-container" data-is-setup={(isSetup || false).toString()} data-process={processId}>
     {(proposals.length > 0) && (
       proposals.map((proposal: any) => (
       <Fragment set:html={createProposalElement(proposal.id, proposal.title, proposal.description || '', translator, isSetup)} />
-
     )))}
   </div>
   {proposals.length === 0 && (
     <p id="no-proposals-text">{translator.t('noProposalsFound')}</p>
   )}
 
-  <div class="flex items-center flex-wrap justify-center w-full">
-    <button id="add-button" class="btn p-2">{translator.t('addProposal')}</button>
+  <div class="proposal-actions">
+    <button id="add-button" class="button">{translator.t('addProposal')}</button>
     <div class="dropdown">
-      <div tabindex={0} role="button" class="btn m-1">{translator.t('addProposalTemplate')}</div>
-      <div tabindex={0} class="dropdown-content menu p-2 shadow rounded-box bg-base-100 z-[1]">
+      <button class="button dropdown-toggle">{translator.t('addProposalTemplate')}</button>
+      <div class="dropdown-content">
         {dropdownOptions.map((option, index) => (
-          <a class="card-body link">
-            <h3 class="card-title">{option.title}</h3>
-            <p class="description">{option.description.ops[0].insert}</p>
+          <a class="dropdown-item">
+            <h3 class="dropdown-item-title">{option.title}</h3>
+            <p class="dropdown-item-description">{option.description.ops[0].insert}</p>
           </a>
         ))}
       </div>
     </div>
   </div>
 </div>
+
+<style>
+</style>
+
 <script>
-  
-/* @ts-ignore */
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 import { createProposalElement } from '@utils/createProposalElement';
 import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
@@ -78,6 +80,68 @@ if (proposalsContainer) {
     }).catch(console.error);
   }
 
+  let draggedItem: HTMLElement | null = null;
+
+  proposalsContainer.addEventListener('dragstart', (e: DragEvent) => {
+    const target = e.target as Element;
+    draggedItem = target.closest('.proposal') as HTMLElement;
+    if (draggedItem && e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', draggedItem.innerHTML);
+      draggedItem.style.opacity = '0.5';
+    }
+  });
+
+  proposalsContainer.addEventListener('dragover', (e: DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'move';
+    }
+  });
+
+  proposalsContainer.addEventListener('dragenter', (e: DragEvent) => {
+    e.preventDefault();
+    const target = (e.target as Element).closest('.proposal') as HTMLElement;
+    if (target) {
+      target.style.borderTop = '2px solid var(--primary-color)';
+    }
+  });
+
+  proposalsContainer.addEventListener('dragleave', (e: DragEvent) => {
+    const target = (e.target as Element).closest('.proposal') as HTMLElement;
+    if (target) {
+      target.style.borderTop = '';
+    }
+  });
+
+  proposalsContainer.addEventListener('drop', (e: DragEvent) => {
+    e.preventDefault();
+    const target = (e.target as Element).closest('.proposal') as HTMLElement;
+    if (target && draggedItem && target !== draggedItem) {
+      const allProposals = Array.from(proposalsContainer.children);
+      const draggedIndex = allProposals.indexOf(draggedItem);
+      const targetIndex = allProposals.indexOf(target);
+      if (draggedIndex < targetIndex) {
+        proposalsContainer.insertBefore(draggedItem, target.nextSibling);
+      } else {
+        proposalsContainer.insertBefore(draggedItem, target);
+      }
+      // Update indexes
+      allProposals.forEach((proposal, index) => {
+        (proposal as HTMLElement).dataset.index = index.toString();
+      });
+    }
+    if (target) {
+      target.style.borderTop = '';
+    }
+  });
+
+  proposalsContainer.addEventListener('dragend', () => {
+    if (draggedItem) {
+      (draggedItem as HTMLElement).style.opacity = '1';
+      draggedItem = null;
+    }
+  });
 
   if (processId) {
     const eventSource = new EventSource(`/api/process/${processId}/proposals`);
@@ -131,9 +195,11 @@ if (proposalsContainer) {
   }
 
   if (addButton) {
+
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
-      const proposalElement = createProposalElement(uniqueId, '', '', translator, isSetup);
+      const newIndex = proposalsContainer.children.length;
+      const proposalElement = createProposalElement(uniqueId, '', '', translator, isSetup, newIndex);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, true);
       if (processId) {
         notifyNewProposal(uniqueId, '', '');
@@ -146,12 +212,12 @@ if (proposalsContainer) {
 
   dropdownOptionsElements.forEach((dropdownOptionElement: Element) => {
     dropdownOptionElement.addEventListener('click', () => {
-      const selectedTemplateTitle = dropdownOptionElement.querySelector('.card-title')?.textContent || '';
-      const selectedTemplateDescription = dropdownOptionElement.querySelector('.description')?.textContent || '';
+      const selectedTemplateTitle = dropdownOptionElement.querySelector('.dropdown-item-title')?.textContent || '';
+      const selectedTemplateDescription = dropdownOptionElement.querySelector('.dropdown-item-description')?.textContent || '';
 
       const uniqueId = uuidv4();
-
-      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, translator, isSetup);
+      const newIndex = proposalsContainer.children.length;
+      const proposalElement = createProposalElement(uniqueId, selectedTemplateTitle, selectedTemplateDescription, translator, isSetup, newIndex);    
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, false);
       if (processId) {
         notifyNewProposal(uniqueId, selectedTemplateTitle, selectedTemplateDescription);

@@ -75,6 +75,7 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
 <script>
     import getQuillHTML from '@utils/getQuillHTML';
     import localforage from 'localforage';
+    /* @ts-ignore */
     import type Delta from 'quill-delta';
 
     const descriptionContentDiv = document.getElementById('descriptionContent') as HTMLElement;
@@ -115,7 +116,7 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
     }
 </script>
 <style>
-    .process-details {
+.process-details {
   margin-bottom: 2rem;
 }
 
@@ -172,4 +173,6 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
     grid-template-columns: 1fr;
   }
 }
+
+
 </style>

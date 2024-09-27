@@ -3,24 +3,27 @@ interface Props {
  id: string;
  icon?: string;
  btn?: string;
+ initiallyOpen?: boolean;
 }
-const { id, icon = "information", btn } = Astro.props;
+const { id, icon = "information", btn, initiallyOpen = false } = Astro.props;
 import { Icon } from 'astro-icon'
 import { Translator } from '@utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
 ---
 
-{btn ? (
-  <button class='modal-trigger-button'>
-    <label for={id}>{translator.t(btn)}</label>
-  </button>
-) : (
-  <label for={id} class="modal-trigger-icon">
-    <Icon width="22" name={icon}/>
-  </label>
+{!initiallyOpen && (
+  btn ? (
+    <button class='modal-trigger-button'>
+      <label for={id}>{translator.t(btn)}</label>
+    </button>
+  ) : (
+    <label for={id} class="modal-trigger-icon">
+      <Icon width="22" name={icon}/>
+    </label>
+  )
 )}
 
-<input type="checkbox" id={id} class="modal-toggle" />
+<input type="checkbox" id={id} class="modal-toggle" checked={initiallyOpen} />
 <label for={id} class="modal-overlay">
   <div class="modal-content">
     <label for={id} class="modal-close">
@@ -43,11 +46,9 @@ const translator = new Translator(Astro.currentLocale || 'en');
     transition: background-color 0.3s ease;
     font-size: 1rem;
   }
-
   .modal-trigger-button:hover {
     background-color: var(--secondary-color);
   }
-
   .modal-trigger-icon {
     display: inline-flex;
     align-items: center;
@@ -60,16 +61,13 @@ const translator = new Translator(Astro.currentLocale || 'en');
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-
   .modal-trigger-icon:hover {
     background-color: var(--primary-color);
     color: var(--background-color-light);
   }
-
   .modal-toggle {
     display: none;
   }
-
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -85,12 +83,10 @@ const translator = new Translator(Astro.currentLocale || 'en');
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 1000;
   }
-
   .modal-toggle:checked + .modal-overlay {
     opacity: 1;
     visibility: visible;
   }
-
   .modal-content {
     background-color: var(--background-color-light);
     color: var(--text-color-light);
@@ -103,7 +99,6 @@ const translator = new Translator(Astro.currentLocale || 'en');
     overflow-y: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-
   .modal-close {
     position: absolute;
     top: 1rem;
@@ -119,12 +114,10 @@ const translator = new Translator(Astro.currentLocale || 'en');
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-
   .modal-close:hover {
     background-color: var(--primary-color);
     color: var(--background-color-light);
   }
-
   .modal-body {
     margin-top: 1rem;
   }

@@ -47,10 +47,15 @@ if (proposals && proposals.length > 0) {
         </div>
       )}
     </div>
+
+    <div id="errorMessage" class="error-message hidden">
+      <p id="errorMinProposals" class="hidden">{translator.t('setup.errorMinProposals')}</p>
+      <p id="errorSelectTime" class="hidden">{translator.t('setup.errorSelectTime')}</p>
+    </div>
     <div class="button-container">
       <button id="backButton" class="button secondary" type="submit">{translator.t('buttons.back')}</button>
       <button id="continueButton" class="button primary disabled" type="submit">{translator.t('buttons.continue')}</button>
-    </div>
+    </div> 
   </div>
 </step-2>
 
@@ -166,7 +171,15 @@ if (proposals && proposals.length > 0) {
         continueButton.addEventListener('click', (event) => this.handleContinueButtonClick(event));
       }
 
-      // Add event listener for proposal changes
+      const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
+      timeSelectors.forEach(selector => {
+        const inputs = selector.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.addEventListener('change', () => this.updateContinueButton());
+        });
+      });
+
+      // Add listener for proposal changes
       const proposalsList = this.querySelector('proposals-list');
       if (proposalsList) {
         proposalsList.addEventListener('proposalsUpdated', () => this.updateContinueButton());
@@ -178,7 +191,6 @@ if (proposals && proposals.length > 0) {
       formData.append('step', '1');
       this.submitFormData('/api/update-step', formData);
     }
-
     handleContinueButtonClick(event: Event) {
       if ((event.target as HTMLButtonElement).classList.contains('disabled')) {
         return;
@@ -192,10 +204,10 @@ if (proposals && proposals.length > 0) {
         this.appendInputValueToFormData(formData, 'end-date-picker-proposal');
         this.appendInputValueToFormData(formData, 'start-date-picker-voting');
         this.appendInputValueToFormData(formData, 'end-date-picker-voting');
+        this.appendProposalsToFormData(formData);
       } else if (this.phase === 'voting') {
         this.appendInputValueToFormData(formData, 'start-date-picker-voting');
         this.appendInputValueToFormData(formData, 'end-date-picker-voting');
-        this.appendProposalsToFormData(formData);
       }
 
       formData.append('timezone', this.timezone);
@@ -255,19 +267,41 @@ if (proposals && proposals.length > 0) {
           console.error('Error sending request', error);
         });
     }
-
     updateContinueButton() {
       const continueButton = this.querySelector('#continueButton') as HTMLButtonElement;
       const proposals = this.querySelectorAll('.proposal .flex');
       const allTimeSelectorsValid = this.checkTimeSelectors();
+      const errorElement = this.querySelector('#errorMessage') as HTMLElement;
+      const errorMinProposals = this.querySelector('#errorMinProposals') as HTMLElement;
+      const errorSelectTime = this.querySelector('#errorSelectTime') as HTMLElement;
 
-      if ((this.phase === 'voting' && proposals.length >= 2) || (this.phase === 'full' && allTimeSelectorsValid)) {
-        continueButton.classList.remove('disabled');
-      } else {
-        continueButton.classList.add('disabled');
+      if (this.phase === 'voting') {
+        if (allTimeSelectorsValid) {
+          continueButton.classList.remove('disabled');
+          errorElement.classList.add('hidden');
+        } else {
+          continueButton.classList.add('disabled');
+          errorElement.classList.remove('hidden');
+          errorSelectTime.classList.remove('hidden');
+          errorMinProposals.classList.add('hidden');
+        }
+      } else if (this.phase === 'full') {
+        if (allTimeSelectorsValid && proposals.length >= 2) {
+          continueButton.classList.remove('disabled');
+          errorElement.classList.add('hidden');
+        } else {
+          continueButton.classList.add('disabled');
+          errorElement.classList.remove('hidden');
+          if (!allTimeSelectorsValid) {
+            errorSelectTime.classList.remove('hidden');
+            errorMinProposals.classList.add('hidden');
+          } else {
+            errorSelectTime.classList.add('hidden');
+            errorMinProposals.classList.remove('hidden');
+          }
+        }
       }
     }
-
     checkTimeSelectors() {
       const timeSelectors = this.querySelectorAll('.time-selector') as NodeListOf<Element>;
       return Array.from(timeSelectors).every(selector => {
