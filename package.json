@@ -28,7 +28,7 @@
 		"dompurify": "^3.0.1",
 		"downloadjs": "^1.4.7",
 		"file-saver": "^2.0.5",
-		"firebase": "^10.9.0",
+		"firebase": "^10.13.2",
 		"html-to-image": "^1.11.11",
 		"localforage": "^1.10.0",
 		"qrcode": "^1.5.1",
