@@ -2,40 +2,49 @@ import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { useTranslator } from "~/i18n/translator";
 import Footer from "~/components/footer/footer";
+import ImgLogo from '~/assets/logo.png?jsx';
 import './index.css';
 
 export default component$(() => {
   const { t, locale } = useTranslator();
-
-  const features = [
-    'weightedScoreVoting',
-    'effortlessSharing',
-    'consensusDrivenApproach',
-    'userFriendlyInterface',
-    'transparentResults'
-  ];
-
   return (
     <div class="app-container">
-      <main class="main-content">
+      <main>
         <section class="hero">
-          <h1>{t('ukuvota')}</h1>
-          <p class="tagline">{t('tagline')}</p>
-          <div class="cta-buttons">
-            <Link href={`/${locale}/create-process`} class="cta-button">{t('buttons.createNewProcess')}</Link>
-            <Link href={`/${locale}/download/android`} class="cta-button secondary">{t('launch.androidAPK')}</Link>
+          <div class="hero-content">
+            <ImgLogo class="logo" alt="Ukuvota Logo" />
+            <h1>Ukuvota</h1>
+            <h2>{t('home.subheader')}</h2>
           </div>
         </section>
-        <section class="features">
-          {features.map((feature) => (
-            <div class="feature" key={feature}>
-              <h2>{t(`features.${feature}.title`)}</h2>
-              <p>{t(`features.${feature}.description`)}</p>
-            </div>
-          ))}
+        <section class="features-grid">
+          <div class="feature-card">
+            <h3>{t('home.weightedScoreTitle')}</h3>
+            <p>{t('home.weightedScoreDescription')}</p>
+          </div>
+          <div class="feature-card">
+            <h3>{t('home.effortlessSharingTitle')}</h3>
+            <p>{t('home.effortlessSharingDescription')}</p>
+          </div>
+          <div class="feature-card">
+            <h3>{t('home.consensusDrivenTitle')}</h3>
+            <p>{t('home.consensusDrivenDescription')}</p>
+          </div>
+          <div class="feature-card">
+            <h3>{t('home.userFriendlyTitle')}</h3>
+            <p>{t('home.userFriendlyDescription')}</p>
+          </div>
+          <div class="feature-card">
+            <h3>{t('home.transparentResultsTitle')}</h3>
+            <p>{t('home.transparentResultsDescription')}</p>
+          </div>
+        </section>
+        <section class="cta">
+          <Link href={`/${locale}/create-process`} class="button primary">{t('home.webAppCardButton')}</Link>
+          <a href="#" class="button secondary disabled" title="Coming soon">Get Android APK</a>
         </section>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 });

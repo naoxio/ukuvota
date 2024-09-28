@@ -1,4 +1,4 @@
-import { component$, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import { useLocale } from '~/hooks/useLocale';
 
@@ -11,5 +11,5 @@ export default component$(() => {
     nav(`/${locale}/`);
   });
 
-  return <div>Loading...</div>;
+  return <div class="loading">Loading...</div>;
 });
