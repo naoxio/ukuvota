@@ -56,7 +56,8 @@
     "timezone": "Timezone",
     "errorMinProposals": "You need at least 2 proposals to proceed.",
     "errorNotEnoughValidProposals": "You need at least 2 non-empty proposals to proceed.",
-    "errorSelectTime": "Please select valid times for all phases."
+    "errorSelectTime": "Please select valid times for all phases.",
+    "errorNoTitle": "Please enter a title before proceeding."
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",

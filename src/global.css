@@ -118,28 +118,6 @@ h2 {
   background-color: rgba(255, 152, 0, 0.1);
 }
 
-.select {
-  font-family: 'Roboto', sans-serif;
-  font-size: 0.9rem;
-  padding: 0.5rem 2rem 0.5rem 0.5rem;
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  background-color: var(--input-background);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 5px center;
-  background-size: 16px;
-}
-
-.select:hover, .select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
-}
-
 @media (max-width: 768px) {
   
   .cta {
@@ -163,4 +141,116 @@ h2 {
 
 .loading {
   text-align: center;
+}
+
+
+/* General input styles */
+input,
+select,
+textarea {
+  background-color: var(--input-background);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  transition: all var(--transition-speed);
+}
+
+/* Select specific styles */
+select {
+  appearance: none;
+  padding-right: 2rem;
+  background-repeat: no-theme-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+}
+
+/* Focus styles */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--input-background);
+  color: var(--text-color);
+  border-color: var(--input-border);
+}
+
+/* Dropdown options for select */
+select option {
+  background-color: var(--input-background);
+  color: var(--text-color);
+}
+
+/* Webkit scrollbar styles */
+select::-webkit-scrollbar {
+  width: 10px;
+}
+
+select::-webkit-scrollbar-track {
+  background: var(--input-background);
+}
+
+select::-webkit-scrollbar-thumb {
+  background-color: var(--input-border);
+  border-radius: 20px;
+  border: 3px solid var(--input-background);
+}
+
+.error-message {
+  text-align: center;
+  color: var(--error-color); /* A softer red that fits with the orange theme */
+  background-color: rgba(255, 99, 71, 0.1); /* Very light red background */
+  border: 1px solid rgba(255, 99, 71, 0.3); /* Light red border */
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.error-message.hidden {
+  opacity: 0;
+}
+
+.error-message p {
+  margin: 0;
+}
+
+.step-container {
+  margin-bottom: 2rem;
+}
+
+.step-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.phase-container {
+  margin-bottom: 1.5rem;
+}
+
+.section-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
 }

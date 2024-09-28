@@ -96,7 +96,8 @@
       "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
       "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
       "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
-      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket"
+      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket",
+          "errorNoTitle": "Bitte geben Sie einen Titel ein, bevor Sie fortfahren."
     } 
   },
   "remainingTime": "verbleibende Zeit",

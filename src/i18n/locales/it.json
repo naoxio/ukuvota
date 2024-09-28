@@ -56,7 +56,8 @@
     "timezone": "Fuso orario",
     "errorMinProposals": "Hai bisogno di almeno 2 proposte per procedere.",
     "errorNotEnoughValidProposals": "Hai bisogno di almeno 2 proposte non vuote per procedere.",
-    "errorSelectTime": "Seleziona orari validi per tutte le fasi."
+    "errorSelectTime": "Seleziona orari validi per tutte le fasi.",
+    "errorNoTitle": "Inserisci un titolo prima di procedere."
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",

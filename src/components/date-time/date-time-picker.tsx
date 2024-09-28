@@ -1,4 +1,5 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, $ } from '@builder.io/qwik';
+import type { PropFunction } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { formatDate } from '~/utils/dateUtils';
 
@@ -7,19 +8,22 @@ interface DateTimePickerProps {
   index: number;
   date: Date;
   min: Date;
+  onChange$?: PropFunction<(newDate: Date) => void>;
 }
 
 export const DateTimePicker = component$((props: DateTimePickerProps) => {
-  const { t } =useTranslator();
-
+  const { t } = useTranslator();
   const state = useStore({
     formattedDate: formatDate(props.date.getTime()),
     minDate: formatDate(props.min.getTime())
   });
 
-  const handleInputChange = (e: any) => {
-    state.formattedDate = e.target.value;
-  };
+  const handleInputChange = $((e: Event) => {
+    const target = e.target as HTMLInputElement;
+    state.formattedDate = target.value;
+    const newDate = new Date(target.value);
+    props.onChange$?.(newDate);
+  });
 
   return (
     <div id={props.id} class="flex justify-between items-center flex-wrap">

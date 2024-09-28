@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { formatDateInTimezone } from '~/utils/dateUtils';
+import type { IProcess } from '~/types';
 
 type DateAdjustmentResult = {
   pStart: DateTime;
@@ -41,23 +41,22 @@ const adjustDates = (
   return { pStart, pEnd, vStart, vEnd };
 };
 
-const adjustVotingPhaseDates = (originalProposalEndDate: DateTime, proposalEndDate: DateTime, step2Element: HTMLElement, timezone: string) => {
-  const votingTimeSelector = step2Element.querySelector('[data-phase="voting"]');
-  if (!votingTimeSelector) return;
-  const querySelector = (selector: any) => votingTimeSelector.querySelector(selector);
-  const votingStartPicker = querySelector('#start-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-  const votingEndPicker = querySelector('#end-date-picker-voting input[type="datetime-local"]') as HTMLInputElement;
-  if (!votingStartPicker || !votingEndPicker) return; // Ensure elements exist
+const adjustVotingPhaseDates = (
+  originalProposalEndDate: DateTime,
+  proposalEndDate: DateTime,
+  processData: IProcess,
+  timezone: string
+) => {
+  if (processData.phase !== 'full') return;
 
-  const originalVotingStartDate = DateTime.fromISO(votingStartPicker.value, { zone: timezone });
-  const originalVotingEndDate = DateTime.fromISO(votingEndPicker.value, { zone: timezone });
+  const originalVotingStartDate = DateTime.fromMillis(processData.votingDates[0], { zone: timezone });
+  const originalVotingEndDate = DateTime.fromMillis(processData.votingDates[1], { zone: timezone });
   const originalVotingDuration = originalVotingEndDate.diff(originalVotingStartDate).as('milliseconds');
 
   const newVotingStartDate = proposalEndDate.setZone(timezone);
   const newVotingEndDate = newVotingStartDate.plus({ milliseconds: originalVotingDuration });
 
-  votingStartPicker.value = formatDateInTimezone(newVotingStartDate.toMillis(), timezone);
-  votingEndPicker.value = formatDateInTimezone(newVotingEndDate.toMillis(), timezone);
+  processData.votingDates = [newVotingStartDate.toMillis(), newVotingEndDate.toMillis()];
 };
 
 export { adjustDates, adjustVotingPhaseDates }

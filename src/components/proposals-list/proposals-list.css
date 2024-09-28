@@ -1,0 +1,91 @@
+.proposals-list {
+    background-color: var(--surface-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .proposal {
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .proposal h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+  }
+  
+  .delete-button {
+    background-color: var(--error-color);
+    color: var(--surface-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .delete-button:hover {
+    background-color: color-mix(in srgb, var(--error-color) 80%, black);
+  }
+  
+  .proposal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .add-button, .dropdown-button {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .add-button:hover, .dropdown-button:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 80%, black);
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--surface-color);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-item {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+  }
+  
+  .dropdown-item:hover {
+    background-color: color-mix(in srgb, var(--background-color) 90%, var(--primary-color));
+  }
+  
+  #no-proposals-text {
+    color: var(--text-color);
+    text-align: center;
+    font-style: italic;
+  }
