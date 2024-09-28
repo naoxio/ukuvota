@@ -5,23 +5,150 @@
     margin: 10px 0;
   }
   
-  .label {
-    font-size: 16px;
-    font-weight: 500;
-    margin-right: 8px;
-    color: #333;
+
+  .date-time-picker {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
   }
   
-  .select {
-    font-size: 16px;
-    padding: 8px 12px;
+  .date-time-label, .label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .date-time-input {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
     border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    padding: 0.75rem;
+    font-size: 1rem;
+    transition: all var(--transition-speed);
+    width: 100%;
+  }
+  
+  .date-time-input:focus {
     outline: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+  }
+  
+  .date-time-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+  }
+  
+  [data-theme="dark"] .date-time-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+  }
+  
+  @media (min-width: 768px) {
+    .date-time-picker {
+      flex-direction: row;
+      align-items: center;
+    }
+  
+    .date-time-label {
+      width: 30%;
+      margin-bottom: 0;
+      margin-right: 1rem;
+    }
+  
+    .date-time-input {
+      width: 70%;
+    }
   }
 
+  .duration-slider {
+    margin-bottom: 1rem;
+  }
   
+  .duration-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .duration-display {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .form-range {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: var(--input-border-light);
+    outline: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  
+  .form-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+
+.timezone-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.timezone-label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.timezone-select {
+  background-color: var(--input-background);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  transition: all var(--transition-speed);
+  width: 100%;
+}
+
+.timezone-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .timezone-container {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .timezone-label {
+    width: 30%;
+    margin-bottom: 0;
+    margin-right: 20px;
+  }
+
+  .timezone-select {
+    width: 70%;
+  }
+}

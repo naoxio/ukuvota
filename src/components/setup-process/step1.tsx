@@ -106,69 +106,67 @@ export default component$(() => {
   });
   
   return (
-    <div id="step-1" class="process-form step-container">
-      <div class="step-content">
-        <input type="hidden" name="step" value="1" />
-        <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
-        <div id="scrollTopicQuestion" />
-        <label class="form-label">{t('process.topic')}</label>
-        <input
-          id="topicQuestion"
-          name="topicQuestion"
-          class="form-input"
-          type="text"
-          value={titleSignal.value}
-          onInput$={handleTitleChange}
-          required
-        />
-        <label class="form-label">{t('process.description')}</label>
-        <textarea
-          id="description"
-          name="description"
-          class="form-textarea"
-          rows={5}
-          value={descriptionSignal.value}
-          onInput$={handleDescriptionChange}
-        ></textarea>
-        <div class="form-row">
-          <span class="form-label">{t('process.weighting')}</span>
-          <div class="form-input-group">
-            <select
-              id="select"
-              name="weighting"
-              class="select"
-              value={weightingSignal.value}
-              onChange$={handleWeightingChange}
-            >
-              {Object.entries(weightingOptions).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {Number(value) > 0 ? label : '\u221E' /* Unicode for infinity symbol */}
-                </option>
-              ))}
-            </select>
-            <Modal id="weightingInfo" icon="info">
-              <h3 class="modal-title">{t('process.weighting')}</h3>
-              <div>{t('negativeScoreWeighting')}</div>
-            </Modal>
-          </div>
-        </div>
-        <div id="errorMessage" class={`error-message ${errorMessageSignal.value ? '' : 'hidden'}`}>
-          <p>{errorMessageSignal.value}</p>
-        </div>
-        <div class="button-container">
-          <button 
-            onClick$={(e) => handleSubmit(e, 'full')} 
-            class="cta-button"
+    <div id="step-1" class="step-container">
+      <input type="hidden" name="step" value="1" />
+      <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
+      <div id="scrollTopicQuestion" />
+      <label class="form-label">{t('process.topic')}</label>
+      <input
+        id="topicQuestion"
+        name="topicQuestion"
+        class="form-input"
+        type="text"
+        value={titleSignal.value}
+        onInput$={handleTitleChange}
+        required
+      />
+      <label class="form-label">{t('process.description')}</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-textarea"
+        rows={5}
+        value={descriptionSignal.value}
+        onInput$={handleDescriptionChange}
+      ></textarea>
+      <div class="form-row">
+        <span class="form-label">{t('process.weighting')}</span>
+        <div class="form-input-group">
+          <select
+            id="select"
+            name="weighting"
+            class="select"
+            value={weightingSignal.value}
+            onChange$={handleWeightingChange}
           >
-            {t('process.phases.full')}
-          </button>
-          <button 
-            onClick$={(e) => handleSubmit(e, 'voting')} 
-            class="cta-button secondary"
-          >
-            {t('process.phases.voting')}
-          </button>
+            {Object.entries(weightingOptions).map(([value, label]) => (
+              <option key={value} value={value}>
+                {Number(value) > 0 ? label : '\u221E' /* Unicode for infinity symbol */}
+              </option>
+            ))}
+          </select>
+          <Modal id="weightingInfo" icon="info">
+            <h3 class="modal-title">{t('process.weighting')}</h3>
+            <div>{t('negativeScoreWeighting')}</div>
+          </Modal>
         </div>
+      </div>
+      <div id="errorMessage" class={`error-message ${errorMessageSignal.value ? '' : 'hidden'}`}>
+        <p>{errorMessageSignal.value}</p>
+      </div>
+      <div class="button-container">
+        <button 
+          onClick$={(e) => handleSubmit(e, 'full')} 
+          class="cta-button"
+        >
+          {t('process.phases.full')}
+        </button>
+        <button 
+          onClick$={(e) => handleSubmit(e, 'voting')} 
+          class="cta-button secondary"
+        >
+          {t('process.phases.voting')}
+        </button>
       </div>
     </div>
   );

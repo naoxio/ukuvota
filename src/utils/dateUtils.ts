@@ -58,4 +58,9 @@ function getTimezoneOffset(timezone: string): number {
   return now.offset;
 }
 
-export { formatDuration, formatDateInTimezone, prettyFormatInTimezone, formatDate, getTimezoneOffset };
+
+const parseDateTime = (dateString: string, timezone?: string): DateTime => {
+  return DateTime.fromISO(dateString, { zone: timezone || 'UTC' });
+};
+
+export { formatDuration, formatDateInTimezone, prettyFormatInTimezone, formatDate, getTimezoneOffset, parseDateTime };

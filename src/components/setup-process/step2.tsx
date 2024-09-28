@@ -1,5 +1,4 @@
-import type { QRL } from '@builder.io/qwik';
-import { component$, useSignal, $, useContext } from '@builder.io/qwik';
+import { component$, useSignal, $, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
@@ -9,11 +8,9 @@ import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
 import StoreManager from '~/utils/storeManager';
 import { StepContext } from "~/contexts/stepContext";
 import { TimezoneSelector } from "~/components/date-time/timezone-selector";
-
 import './setup-process.css';
 import type { IProposal } from '~/types';
 import { DateTime } from 'luxon';
-
 
 export default component$(() => {
   const stepStore = useContext(StepContext);
@@ -23,7 +20,7 @@ export default component$(() => {
   
   const errorMessage = useSignal<string | null>(null);
 
-  $(() => {
+  useVisibleTask$(() => {
     const [pStart, pEnd] = processData.proposalDates;
     const [vStart, vEnd] = processData.votingDates;
     const { pStart: newPStart, pEnd: newPEnd, vStart: newVStart, vEnd: newVEnd } = adjustDates(
@@ -41,15 +38,15 @@ export default component$(() => {
     processData.timezone = newTimezone;
     const store = new StoreManager('processData.bin');
     await store.set('timezone', newTimezone);
-    await store.save();
   });
-  const handleTimeChange: QRL<(phase: string, startDate: Date, endDate: Date) => Promise<void>> = $(async (phase, startDate, endDate) => {
+
+  const handleTimeChange = $(async (phase: string, startDate: number, endDate: number) => {
     const store = new StoreManager('processData.bin');
     if (phase === 'proposal') {
-      processData.proposalDates = [startDate.getTime(), endDate.getTime()];
+      processData.proposalDates = [startDate, endDate];
       if (processData.phase === 'full') {
         adjustVotingPhaseDates(
-          DateTime.fromJSDate(endDate),
+          DateTime.fromMillis(endDate),
           DateTime.fromMillis(processData.votingDates[1]),
           processData,
           processData.timezone || 'UTC'
@@ -57,11 +54,9 @@ export default component$(() => {
       }
       await store.set('proposalDates', processData.proposalDates);
     } else {
-      // This is the voting phase
-      processData.votingDates = [startDate.getTime(), endDate.getTime()];
+      processData.votingDates = [startDate, endDate];
       await store.set('votingDates', processData.votingDates);
     }
-    await store.save();
   });
 
   const handleBackButtonClick = $(() => {
@@ -81,7 +76,6 @@ export default component$(() => {
       processData.proposals = proposals;
       const processStore = new StoreManager('processData.bin');
       await processStore.set('proposals', processData.proposals);
-      await processStore.save();
     }
 
     stepStore.step = 3;
@@ -97,16 +91,18 @@ export default component$(() => {
           <div class="time-selectors">
             <TimeSelector
               phase="proposal"
-              startDate={new Date(processData.proposalDates[0])}
-              endDate={new Date(processData.proposalDates[1])}
-              startMinDate={new Date()}
+              startDate={processData.proposalDates[0]}
+              endDate={processData.proposalDates[1]}
+              startMinDate={DateTime.now().toMillis()}
+              timezone={processData.timezone || 'UTC'}
               onTimeChange$={handleTimeChange}
             />  
             <TimeSelector
               phase="voting"
-              startDate={new Date(processData.votingDates[0])}
-              endDate={new Date(processData.votingDates[1])}
-              startMinDate={new Date(processData.proposalDates[1])}
+              startDate={processData.votingDates[0]}
+              endDate={processData.votingDates[1]}
+              startMinDate={processData.proposalDates[1]}
+              timezone={processData.timezone || 'UTC'}
               onTimeChange$={handleTimeChange}
             />
           </div>
@@ -117,13 +113,13 @@ export default component$(() => {
           <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
           <div class="spacer"></div>
           <div class="time-selectors">
-
-          <TimeSelector
+            <TimeSelector
               hideTitle
               phase="voting"
-              startDate={new Date(processData.votingDates[0])}
-              endDate={new Date(processData.votingDates[1])}
-              startMinDate={new Date()}
+              startDate={processData.votingDates[0]}
+              endDate={processData.votingDates[1]}
+              startMinDate={DateTime.now().toMillis()}
+              timezone={processData.timezone || 'UTC'}
               onTimeChange$={handleTimeChange}
             />
           </div>
@@ -141,8 +137,8 @@ export default component$(() => {
         </div>
       ) : null}
       <div class="button-group">
-        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="continueButton" class="cta-btn primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
+        <button id="backButton" class="cta-button secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="continueButton" class="cta-button primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
       </div>
     </div>
   );

@@ -8,8 +8,8 @@ import './index.css';
 export default component$(() => {
   const { t, locale } = useTranslator();
   return (
-    <div class="app-container">
-      <main>
+    <div>
+      <main class="app-container">
         <section class="hero">
           <div class="hero-content">
             <ImgLogo class="logo" alt="Ukuvota Logo" />

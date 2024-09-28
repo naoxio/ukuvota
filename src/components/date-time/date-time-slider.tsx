@@ -1,50 +1,47 @@
-import type { PropFunction } from '@builder.io/qwik';
-import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useTask$, $ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { durationToSlider, sliderToDuration } from '~/utils/logslider';
+import { formatDuration } from '~/utils/dateUtils';
+import './date-time.css';
 
 interface DateTimeSliderProps {
   id: string;
   duration: number;
-  onChange$?: PropFunction<(newDuration: number) => void>;
+  onDurationChange$?: (newDuration: number) => void;
 }
 
 export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
   const { t } = useTranslator();
-  const state = useStore({
-    sliderValue: durationToSlider(props.duration),
-    durationText: '',
+  const initialSliderValue = durationToSlider(props.duration / 60); // Convert seconds to minutes
+  const sliderValue = useSignal(initialSliderValue);
+  const durationDisplay = useSignal('');
+
+  const updateDurationDisplay = $((value: number) => {
+    const durationInSeconds = sliderToDuration(value) * 60; // Convert minutes to seconds
+    durationDisplay.value = formatDuration(durationInSeconds);
+    // eslint-disable-next-line qwik/valid-lexical-scope
+    props.onDurationChange$?.(durationInSeconds);
   });
 
-  const updateDurationText = $((value: number) => {
-    state.durationText = `${value} ${t('setup.unit')}`;
-  });
-
-  useTask$(() => {
-    updateDurationText(state.sliderValue);
-  });
-
-  const handleSliderChange = $((event: Event) => {
-    const target = event.target as HTMLInputElement;
-    state.sliderValue = Number(target.value);
-    const newDuration = sliderToDuration(state.sliderValue);
-    updateDurationText(newDuration);
-    props.onChange$?.(newDuration);
+  useTask$(({ track }) => {
+    const value = track(() => sliderValue.value);
+    updateDurationDisplay(value);
   });
 
   return (
-    <div id={props.id}>
-      <span>{t('setup.duration')}:&nbsp;</span>
-      <span class="duration-display" style={{ color: 'green' }}>{state.durationText}</span>
-      <br />
+    <div id={props.id} class="duration-slider">
+      <div class="duration-label">
+        <span>{t('setup.duration')}:&nbsp;</span>
+        <span class="duration-display">{durationDisplay.value}</span>
+      </div>
       <input
         type="range"
         min="1"
         max="165"
-        class="range"
+        class="form-range"
         name={props.id}
-        value={state.sliderValue}
-        onInput$={handleSliderChange}
+        value={sliderValue.value}
+        onInput$={(event) => sliderValue.value = Number((event.target as HTMLInputElement).value)}
       />
     </div>
   );

@@ -1,24 +1,41 @@
-import type { PropFunction } from '@builder.io/qwik';
+import { component$, useSignal, $ } from '@builder.io/qwik';
+import type { PropFunction, QRL } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { DateTimePicker } from '~/components/date-time/date-time-picker';
 import { DateTimeSlider } from '~/components/date-time/date-time-slider';
-import { component$, QRL } from '@builder.io/qwik';
 
 interface TimeSelectorProps {
   phase: string;
-  startMinDate: Date;
-  startDate: Date;
-  endDate: Date;
+  startMinDate: number;
+  startDate: number; 
+  endDate: number; 
+  timezone: string;
   hideTitle?: boolean;
-  onTimeChange$?: PropFunction<(phase: string, startDate: Date, endDate: Date) => void> | QRL<(phase: string, startDate: Date, endDate: Date) => Promise<void>>;
+  onTimeChange$?: PropFunction<(phase: string, startDate: number, endDate: number) => void> | QRL<(phase: string, startDate: number, endDate: number) => Promise<void>>;
 }
 
 export const TimeSelector = component$((props: TimeSelectorProps) => {
   const { t } = useTranslator();
   const title = t(`phases.${props.phase}.title`);
   
-  // Calculate the duration in minutes
-  const duration = (props.endDate.getTime() - props.startDate.getTime()) / (1000 * 60);
+  const startDateSignal = useSignal(props.startDate);
+  const endDateSignal = useSignal(props.endDate);
+
+  const handleStartDateChange = $((newDateMillis: number) => {
+    startDateSignal.value = newDateMillis;
+    props.onTimeChange$?.(props.phase, newDateMillis, endDateSignal.value);
+  });
+
+  const handleEndDateChange = $((newDateMillis: number) => {
+    endDateSignal.value = newDateMillis;
+    props.onTimeChange$?.(props.phase, startDateSignal.value, newDateMillis);
+  });
+
+  const handleSliderChange = $((newDuration: number) => {
+    const newEndDateMillis = startDateSignal.value + newDuration * 60 * 1000;
+    endDateSignal.value = newEndDateMillis;
+    props.onTimeChange$?.(props.phase, startDateSignal.value, newEndDateMillis);
+  });
 
   return (
     <div class="time-selector" data-phase={props.phase}>
@@ -28,27 +45,26 @@ export const TimeSelector = component$((props: TimeSelectorProps) => {
       <br />
       <DateTimePicker
         index={0}
-        date={props.startDate}
+        date={startDateSignal.value}
         min={props.startMinDate}
+        timezone={props.timezone}
         id={`start-date-picker-${props.phase}`}
-        onChange$={(newDate) => props.onTimeChange$?.(props.phase, newDate, props.endDate)}
+        onChange$={handleStartDateChange}
       />
       <br />
       <DateTimePicker
         index={1}
-        date={props.endDate}
-        min={props.startDate}
+        date={endDateSignal.value}
+        min={startDateSignal.value}
+        timezone={props.timezone}
         id={`end-date-picker-${props.phase}`}
-        onChange$={(newDate) => props.onTimeChange$?.(props.phase, props.startDate, newDate)}
+        onChange$={handleEndDateChange}
       />
       <br />
       <DateTimeSlider
-        duration={duration}
+        duration={(endDateSignal.value - startDateSignal.value) / (1000 * 60)}
         id={`datetime-slider-${props.phase}`}
-        onChange$={(newDuration) => {
-          const newEndDate = new Date(props.startDate.getTime() + newDuration * 60 * 1000);
-          props.onTimeChange$?.(props.phase, props.startDate, newEndDate);
-        }}
+        onChange$={handleSliderChange}
       />
       <br />
     </div>

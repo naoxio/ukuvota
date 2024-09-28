@@ -13,10 +13,9 @@ export default component$(() => {
   const { t } = useTranslator();
   const processData = useProcessData();
   const stepStore = useContext(StepContext);
-
   const showExistingProcessModal = useSignal(false);
 
-  const startNewProcess = $(async () => {
+  const resetProcessData = $(async () => {
     const newProcessData: IProcess = {
       _id: '',
       title: '',
@@ -34,37 +33,54 @@ export default component$(() => {
     };
 
     Object.assign(processData, newProcessData);
-    
     const store = new StoreManager('.processData.bin');
+    await store.clear(); // Clear all existing data
     for (const [key, value] of Object.entries(newProcessData)) {
       await store.set(key, value);
     }
-    await store.save();
-
-    showExistingProcessModal.value = false;
   });
 
+  const startNewProcess = $(async () => {
+    await resetProcessData();
+    showExistingProcessModal.value = false;
+  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     const store = new StoreManager('.processData.bin');
     const keys: (keyof IProcess)[] = [
       '_id', 'title', 'description', 'descriptionId', 'proposalDates',
-      'votingDates', 'strategy', 'weighting', 'proposals', 'voters', 
+      'votingDates', 'strategy', 'weighting', 'proposals', 'voters',
       'timezone', 'phase', 'step'
     ];
+
+    let hasValidData = false;
+
     for (const key of keys) {
-      const value = await store.get(key);
-      if (value !== null) {
-        (processData as any)[key] = value;
+      try {
+        const value = await store.get(key);
+        if (value !== null) {
+          (processData as any)[key] = value;
+          if (key === 'title' || key === 'description') {
+            hasValidData = true;
+          }
+        }
+      } catch (error) {
+        console.error(`Error retrieving data for key ${key}:`, error);
+        // If there's an error retrieving, set to default value
+        (processData as any)[key] = (processData as any)[key] || undefined;
       }
     }
 
-    // Check if there's existing process data
-    if (processData.title || processData.description) {
+    // Check if there's existing valid process data
+    if (hasValidData) {
       showExistingProcessModal.value = true;
+    } else {
+      // If no valid data, reset the process data
+      await resetProcessData();
     }
   });
+
 
   return (
     <div>

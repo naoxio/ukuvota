@@ -14,13 +14,13 @@ export const TimezoneSelector = component$<TimezoneSelectorProps>(({ onTimezoneC
   const { t } = useTranslator();
 
   return (
-    <div class="container">
-      <label class="label">
+    <div class="timezone-container">
+      <label class="timezone-label">
         {t('setup.timezone')}
       </label>
-      <select 
-        id="timezone-select" 
-        class="select" 
+      <select
+        id="timezone-select"
+        class="timezone-select"
         value={timezone}
         onChange$={(event) => onTimezoneChange$((event.target as HTMLSelectElement).value)}
       >
