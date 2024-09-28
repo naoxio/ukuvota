@@ -9,10 +9,9 @@ interface Props {
 }
 
 export default component$((props: Props) => {
-  const { id, icon = 'info', btn } = props;
+  const { id, icon, btn } = props;
   const isOpen = useSignal(false);
-  const IconComponent = icon === 'info' ? LuInfo : LuInfo; // Default to info icon if custom is not provided
-
+  
   const openModal = $(() => {
     isOpen.value = true;
   });
@@ -33,11 +32,12 @@ export default component$((props: Props) => {
         <button class="btn btn-sm" onClick$={openModal}>
           {btn}
         </button>
-      ) : (
+      ) : icon ? (
         <button class="btn btn-ghost btn-sm btn-circle" onClick$={openModal}>
-          <IconComponent width={22} height={22} />
+          <LuInfo width={22} height={22} />
         </button>
-      )}
+      ) : null}
+      
       {isOpen.value && (
         <div class="modal-overlay" onClick$={handleOutsideClick}>
           <div class="modal-content" onClick$={(e) => e.stopPropagation()}>

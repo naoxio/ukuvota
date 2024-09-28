@@ -9,6 +9,7 @@
   --surface-color: #ffffff;
   --error-color: #b00020;
   --transition-speed: 0.3s;
+  
 }
 
 [data-theme="dark"] {

@@ -1,12 +1,16 @@
-import { component$, useTask$, $ } from '@builder.io/qwik';
+import { component$, useTask$, $, useContext } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import { useTranslator } from '~/i18n/translator';
 import { prettyFormatInTimezone } from '~/utils/dateUtils';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import { Store } from '@tauri-apps/plugin-store';
+import { StepContext } from '~/contexts/stepContext';
+
 
 export default component$(() => {
+  const stepStore = useContext(StepContext);
+
   const { t } = useTranslator();
   const navigate = useNavigate();
   const processData = useProcessData();
@@ -27,7 +31,7 @@ export default component$(() => {
   });
 
   const handleBack = $(() => {
-    navigate('/create-process/step2');
+    stepStore.step = 2;
   });
 
   const handleStart = $(async () => {

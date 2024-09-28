@@ -1,4 +1,4 @@
-import { component$, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, $, useVisibleTask$, useContext } from "@builder.io/qwik";
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import Step1 from '~/components/setup-process/step1';
@@ -7,11 +7,13 @@ import Step3 from '~/components/setup-process/step3';
 import Modal from '~/components/modal/modal';
 import type { IProcess } from '~/types/IProcess';
 import StoreManager from '~/utils/storeManager';
+import { StepContext } from "~/contexts/stepContext";
 
 export default component$(() => {
   const { t } = useTranslator();
   const processData = useProcessData();
-  const currentStep = useSignal(1);
+  const stepStore = useContext(StepContext);
+
   const showExistingProcessModal = useSignal(false);
 
   const startNewProcess = $(async () => {
@@ -42,11 +44,8 @@ export default component$(() => {
     showExistingProcessModal.value = false;
   });
 
-  const setStep = $((step: number) => {
-    currentStep.value = step;
-  });
 
-  // Load existing process data
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     const store = new StoreManager('.processData.bin');
     const keys: (keyof IProcess)[] = [
@@ -68,8 +67,8 @@ export default component$(() => {
   });
 
   return (
-    <div class="main-content">
-      <Modal id="existing-process-modal" icon="custom">
+    <div>
+      <Modal id="existing-process-modal" >
         {showExistingProcessModal.value && (
           <div class="modal-box">
             <h3 class="tagline">{t('setup.continueEditing')}</h3>
@@ -85,12 +84,12 @@ export default component$(() => {
           </div>
         )}
       </Modal>
-      {currentStep.value === 1 ? (
-        <Step1 setStep={setStep} />
-      ) : currentStep.value === 2 ? (
-        <Step2 setStep={setStep} />
-      ) : currentStep.value === 3 ? (
-        <Step3 setStep={setStep} />
+      {stepStore.step === 1 ? (
+        <Step1 />
+      ) : stepStore.step === 2 ? (
+        <Step2 />
+      ) : stepStore.step === 3 ? (
+        <Step3/>
       ) : null}
     </div>
   );

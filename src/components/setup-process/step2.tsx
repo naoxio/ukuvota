@@ -1,4 +1,4 @@
-import { component$, useSignal, $ } from '@builder.io/qwik';
+import { component$, useSignal, $, useContext } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
@@ -7,14 +7,13 @@ import { TimeSelector } from "~/components/date-time/time-selector";
 import { TimezoneSelector } from "~/components/date-time/timezone-selector";
 import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
 import StoreManager from '~/utils/storeManager';
+import { StepContext } from "~/contexts/stepContext";
 
 import './setup-process.css';
 
-export interface Step2Props {
-  setStep: (step: number) => void;
-}
 
-export default component$((props: Step2Props) => {
+export default component$(() => {
+  const stepStore = useContext(StepContext);
   const { t } = useTranslator();
   const processData = useProcessData();
   const { proposalsStore, addProposal, removeProposal } = useProposals(processData._id);
@@ -58,7 +57,7 @@ export default component$((props: Step2Props) => {
   });
 
   const handleBackButtonClick = $(() => {
-    props.setStep(1);
+    stepStore.step = 1;
   });
 
   const handleContinueButtonClick = $(async () => {
@@ -71,7 +70,7 @@ export default component$((props: Step2Props) => {
     const store = new StoreManager('.processData.bin');
     await store.set('proposals', processData.proposals);
     await store.save();
-    props.setStep(3);
+    stepStore.step = 3;
   });
 
   return (

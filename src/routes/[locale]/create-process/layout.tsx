@@ -1,16 +1,20 @@
-import { component$, Slot, $, PropFunction } from '@builder.io/qwik';
+import { component$, Slot, useStore, useContextProvider, $ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
+import type { StepStore } from '~/contexts/stepContext';
+import { StepContext } from '~/contexts/stepContext';
 import './index.css';
 
-export interface CreateProcessLayoutProps {
-  step: number;
-  setStep: PropFunction<(step: number) => void>;
-}
-
-export default component$((props: CreateProcessLayoutProps) => {
+export default component$(() => {
   const { t } = useTranslator();
   const processData = useProcessData();
+  const stepStore = useStore<StepStore>({ step: 1 });
+
+  useContextProvider(StepContext, stepStore);
+
+  const setStep = $((newStep: number) => {
+    stepStore.step = newStep;
+  });
 
   const steps = [
     { stepNumber: 1, disabled: false },
@@ -18,27 +22,33 @@ export default component$((props: CreateProcessLayoutProps) => {
     { stepNumber: 3, disabled: (!processData.title || !processData.phase || !processData.votingDates[1]) }
   ];
 
-  const updateStep = $((stepNumber: number) => {
-    if (!steps[stepNumber - 1].disabled) {
-      props.setStep(stepNumber);
-    }
-  });
-
   return (
     <div class="main-content">
-      <h1 class="tagline">{t('setup.process')}</h1>
+      <h1 class="page-title">{ t('setup.process') }</h1>
       <div class="step-indicator">
-        {steps.map(({ stepNumber, disabled }) => (
-          <button
-            key={stepNumber}
-            onClick$={() => updateStep(stepNumber)}
-            class={`${
-              props.step === stepNumber ? 'active' :
-              props.step > stepNumber ? 'completed' : ''
-            } ${disabled ? 'disabled' : ''}`}
-            disabled={disabled}
-          ></button>
-        ))}
+        {steps.map(({ stepNumber, disabled }) => {
+          const isClickable = stepNumber <= stepStore.step || !disabled;
+          return (
+            <button
+              key={stepNumber}
+              onClick$={() => {
+                if (isClickable) {
+                  setStep(stepNumber);
+                }
+              }}
+              class={`step-button ${
+                stepStore.step === stepNumber ? 'active' :
+                stepStore.step > stepNumber ? 'completed' :
+                isClickable ? 'clickable' : 'disabled'
+              }`}
+              style={{
+                cursor: isClickable ? 'pointer' : 'not-allowed'
+              }}
+            >
+              {stepNumber}
+            </button>
+          );
+        })}
       </div>
       <Slot />
     </div>

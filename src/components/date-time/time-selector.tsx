@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
-import { DateTimePicker } from '~/components/datetime/DateTimePicker';
-import { DateTimeSlider } from '~/components/datetime/DateTimeSlider';
+import { DateTimePicker } from '~/components/date-time/date-time-picker';
+import { DateTimeSlider } from '~/components/date-time/date-time-slider';
 
 interface TimeSelectorProps {
   phase: string;

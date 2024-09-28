@@ -1,17 +1,15 @@
-import { component$, useSignal, $, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, $, useVisibleTask$, useContext } from "@builder.io/qwik";
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/modal/modal';
-import ContentDoc from '~/components/content-doc/content-doc';
 import StoreManager from '~/utils/storeManager';
 import './setup-process.css';
+import { StepContext } from "~/contexts/stepContext";
 
-export interface Step1Props {
-  setStep: (step: number) => void;
-}
+export default component$(() => {
+  const stepStore = useContext(StepContext);
 
-export default component$((props: Step1Props) => {
   const { t } = useTranslator();
   const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
@@ -64,7 +62,8 @@ export default component$((props: Step1Props) => {
     await store.save();
 
     // Move to the next step
-    props.setStep(2);
+    stepStore.step = 2;
+
   });
   
   return (
@@ -107,13 +106,14 @@ export default component$((props: Step1Props) => {
               </option>
             ))}
           </select>
-          <Modal id="weightingInfo">
+          <Modal id="weightingInfo" icon="info">
             <h3 class="modal-title">{t('process.weighting')}</h3>
-            <ContentDoc fileName="NegativeScoreWeighting"/>
+            <div>{t('negativeScoreWeighting')}</div>
           </Modal>
         </div>
       </div>
       <div class="cta-buttons">
+        
         <button onClick$={(e) => handleSubmit(e, 'full')} class="cta-button">
           {t('process.phases.full')}
         </button>
