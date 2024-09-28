@@ -7,7 +7,7 @@ interface Props {
 }
 const { id, icon = "information", btn, initiallyOpen = false } = Astro.props;
 import { Icon } from 'astro-icon'
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
 ---
 

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { ref, onValue, update, remove, off } from 'firebase/database';
-import { firebaseDB } from '@utils/firebaseConfig';
+import { firebaseDB } from '~/utils/firebaseConfig';
 
 export const GET: APIRoute = ({ params, request }) => {
   const { processId } = params;

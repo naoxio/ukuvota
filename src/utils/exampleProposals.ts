@@ -1,4 +1,4 @@
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 
 const exampleProposals = async (locale: string) => {
   const translator = new Translator(locale);

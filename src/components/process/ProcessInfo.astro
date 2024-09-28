@@ -1,12 +1,12 @@
 ---
-import { Translator } from '@utils/i18n.js';
-import weightingOptions from '@utils/weightingOptions';
-import Modal from '@components/ui/Modal.astro';
-import QRCode from '@components/ui/QRCode.astro';
-import ContentDoc from '@components/ui/ContentDoc.astro';
-import ProcessTimeLabel from '@components/datetime/ProcessTimeLabel.astro';
-import getQuillHTML from '@utils/getQuillHTML';
-import IProcess from '@interfaces/IProcess';
+import { Translator } from '~/utils/i18n.js';
+import weightingOptions from '~/utils/weightingOptions';
+import Modal from '~/components/ui/Modal.astro';
+import QRCode from '~/components/ui/QRCode.astro';
+import ContentDoc from '~/components/ui/ContentDoc.astro';
+import ProcessTimeLabel from '~/components/datetime/ProcessTimeLabel.astro';
+import getQuillHTML from '~/utils/getQuillHTML';
+import IProcess from '~/interfaces/IProcess';
 const translator = new Translator(Astro.currentLocale || 'en');
 const { url } = Astro;
 interface Props {

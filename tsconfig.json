@@ -11,12 +11,7 @@
     "isolatedModules": true,
     "baseUrl": "./src",
     "paths": {
-      "@content/*": ["content/*"],
-      "@assets/*": ["assets/*"],
-      "@utils/*": ["utils/*"],
-      "@layouts/*": ["layouts/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@components/*": ["components/*"]
+      "~/*": ["./*"]
     }
   },
   "include": ["src/**/*"],

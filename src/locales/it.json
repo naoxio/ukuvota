@@ -53,8 +53,10 @@
     "setDuration": "Imposta durata",
     "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
     "timeLeftVotingHeading": "Seleziona l'orario per la votazione",
-    "errorMinProposals": "È necessario almeno 2 proposte per procedere.",
-    "timezone": "Fuso orario"
+    "timezone": "Fuso orario",
+    "errorMinProposals": "Hai bisogno di almeno 2 proposte per procedere.",
+    "errorNotEnoughValidProposals": "Hai bisogno di almeno 2 proposte non vuote per procedere.",
+    "errorSelectTime": "Seleziona orari validi per tutte le fasi."
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",

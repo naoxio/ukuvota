@@ -1,5 +1,5 @@
 ---
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
@@ -18,7 +18,7 @@ const { dates, type, timezone } = Astro.props;
 </countdown-view>
 
 <script>
-import { formatDuration } from '@utils/dateUtils';
+import { formatDuration } from '~/utils/dateUtils';
 import { utcToZonedTime } from 'date-fns-tz';
 
 class Countdown extends HTMLElement {

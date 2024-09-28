@@ -53,8 +53,10 @@
     "setDuration": "Set Duration",
     "timeLeftHeading": "Select the time for proposals and voting",
     "timeLeftVotingHeading": "Select the time for voting",
+    "timezone": "Timezone",
     "errorMinProposals": "You need at least 2 proposals to proceed.",
-    "timezone": "Timezone"
+    "errorNotEnoughValidProposals": "You need at least 2 non-empty proposals to proceed.",
+    "errorSelectTime": "Please select valid times for all phases."
   },
   "loadQuill": "Loading QuillEditor...",
   "policy": "Privacy Policy",

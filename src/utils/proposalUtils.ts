@@ -1,13 +1,20 @@
-import type IProposal from '@interfaces/IProposal';
+import type IProposal from '~/interfaces/IProposal';
 
 const isProposalEmpty = (proposal: IProposal): boolean => {
-  const isEmptyStringDescription = typeof proposal.description === 'string' && proposal.description === '';
-  let isEmptyOpsDescription = false;
-  if (typeof proposal.description === 'object' && proposal.description.ops) {
-    isEmptyOpsDescription = proposal.description.ops.length === 1 && proposal.description.ops[0].insert === '';
+  const isEmptyTitle = proposal.title.trim() === '';
+  
+  let isEmptyDescription = false;
+  if (typeof proposal.description === 'string') {
+    isEmptyDescription = proposal.description.trim() === '';
+  } else if (typeof proposal.description === 'object' && proposal.description.ops) {
+    isEmptyDescription = proposal.description.ops.every((op: { insert: string; }) => 
+      typeof op.insert === 'string' && op.insert.trim() === ''
+    );
   }
-  return proposal.title === '' && (isEmptyStringDescription || isEmptyOpsDescription);
+
+  return isEmptyTitle && isEmptyDescription;
 };
+
 
 const truncateDescription = (description: any, maxLength: number) => {
   if (typeof description === 'object' && description.ops) {

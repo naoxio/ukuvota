@@ -54,8 +54,11 @@
     "setDuration": "Dauer festlegen",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
     "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
+    "timezone": "Zeitzone",
+
     "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
-    "timezone": "Zeitzone"
+    "errorNotEnoughValidProposals": "Sie benötigen mindestens 2 nicht-leere Vorschläge, um fortzufahren.",
+    "errorSelectTime": "Bitte wählen Sie gültige Zeiten für alle Phasen aus."
 
   },
   "loadQuill": "Lade QuillEditor...",

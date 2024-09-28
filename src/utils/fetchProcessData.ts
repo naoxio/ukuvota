@@ -1,5 +1,5 @@
 import { ref, get, remove } from 'firebase/database';
-import { firebaseDB } from '@utils/firebaseConfig';
+import { firebaseDB } from '~/utils/firebaseConfig';
 import { getDownloadURL, ref as storageRef, getStorage, uploadString } from 'firebase/storage';
 
 export default async function fetchProcessData(processId: string): Promise<any> {

@@ -1,0 +1,118 @@
+---
+import { Translator } from '~/utils/i18n.js';
+import ProposalsList from "~/components/process/ProposalsList.astro";
+import TimeSelector from "~/components/datetime/TimeSelector.astro";
+import TimezoneSelector from "~/components/datetime/TimezoneSelector.astro";
+import { adjustDates } from '~/utils/dateAdjustments';
+import IProposal from '~/interfaces/IProposal';
+
+const translator = new Translator(Astro.currentLocale || 'en');
+
+type Props = {
+  phase: string;
+  proposals: Array<IProposal>;
+  proposalStartDate: number;
+  proposalEndDate: number;
+  votingStartDate: number;
+  votingEndDate: number;
+}
+
+const { phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate, proposals } = Astro.props;
+
+const { pStart, pEnd, vStart, vEnd } = adjustDates(phase, proposalStartDate, proposalEndDate, votingStartDate, votingEndDate);
+
+if (proposals && proposals.length > 0) {
+  proposals.forEach(proposal => proposal.editing = true);
+}
+---
+
+<step-2 data-phase={phase} class="step-container">
+  <div id="step-2" class="step-content">
+    <div class="phase-container">
+      <h2 class="section-heading">{phase === "full" ? translator.t('setup.timeLeftHeading') : translator.t('setup.timeLeftVotingHeading')}</h2>
+      <TimezoneSelector />
+      <br />
+      {phase === "full" ? (
+        <div>
+          <TimeSelector phase="proposal" startDate={pStart} endDate={pEnd} startMinDate={new Date()} />  
+          <TimeSelector phase="voting" startDate={vStart} endDate={vEnd} startMinDate={pEnd} />
+        </div>
+      ) : (
+        <div>
+          <TimeSelector hideTitle phase="voting" startDate={vStart} endDate={vEnd} startMinDate={new Date()} />
+          <br />
+          <h2 class="section-heading">{translator.t('setup.proposals')}</h2>    
+          <ProposalsList proposals={proposals} isSetup/>
+        </div>
+      )}
+    </div>
+    <div id="errorMessage" class="error-message hidden">
+      <p id="errorMinProposals" class="hidden">{translator.t('setup.errorMinProposals')}</p>
+      <p id="errorNotEnoughValidProposals" class="hidden">{translator.t('setup.errorNotEnoughValidProposals')}</p>
+      <p id="errorSelectTime" class="hidden">{translator.t('setup.errorSelectTime')}</p>
+    </div>
+    <div class="button-container">
+      <button id="backButton" class="button secondary" type="submit">{translator.t('buttons.back')}</button>
+      <button id="continueButton" class="button primary disabled" type="submit">{translator.t('buttons.continue')}</button>
+    </div> 
+  </div>
+</step-2>
+
+<style>
+  .error-message {
+    text-align: center;
+    color: #FF6347; /* A softer red that fits with the orange theme */
+    background-color: rgba(255, 99, 71, 0.1); /* Very light red background */
+    border: 1px solid rgba(255, 99, 71, 0.3); /* Light red border */
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .error-message:not(.hidden) {
+    opacity: 1;
+  }
+
+  .error-message p {
+    margin: 0;
+  }
+
+  .step-container {
+    margin-bottom: 2rem;
+  }
+
+  .step-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .phase-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .error-message {
+    color: #ff0000;
+    margin-top: 1rem;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+</style>
+
+<script src="./step2.ts"></script>

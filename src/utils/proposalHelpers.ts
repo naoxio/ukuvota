@@ -1,43 +1,43 @@
 import localforage from 'localforage';
-import { createQuill, updateQuill } from '@utils/quillUtils';
-import IProposal from '@interfaces/IProposal';
-import { isProposalEmpty } from '@utils/proposalUtils';
-
+import { createQuill, updateQuill } from '~/utils/quillUtils';
+import IProposal from '~/interfaces/IProposal';
+import { isProposalEmpty } from '~/utils/proposalUtils';
 
 const toggleDisplay = (element: HTMLElement, isEditing: boolean) => {
   const viewElement = element.querySelector('.view-mode') as HTMLElement;
   const editElement = element.querySelector('.edit-mode') as HTMLElement;
-  const editButton = element.querySelector('.edit-button') as HTMLButtonElement;
-  const saveButton = element.querySelector('.save-button') as HTMLButtonElement;
-  const deleteButton = element.querySelector('.delete-button') as HTMLButtonElement;
-  const emptyProposalElement = viewElement.querySelector('.empty-proposal') as HTMLElement;
+  const editButton = element.querySelector('.edit-button') as HTMLButtonElement | null;
+  const saveButton = element.querySelector('.save-button') as HTMLButtonElement | null;
+  const deleteButton = element.querySelector('.delete-button') as HTMLButtonElement | null;
+  const emptyProposalElement = viewElement?.querySelector('.empty-proposal') as HTMLElement | null;
 
   if (isEditing) {
-    viewElement.style.display = 'none';
-    editElement.style.display = 'block';
-    editButton.style.display = 'none';
-    saveButton.style.display = 'block';
-    deleteButton.style.display = 'block';
+    if (viewElement) viewElement.style.display = 'none';
+    if (editElement) editElement.style.display = 'block';
+    if (editButton) editButton.style.display = 'none';
+    if (saveButton) saveButton.style.display = 'block';
+    if (deleteButton) deleteButton.style.display = 'block';
     element.setAttribute('data-editing', 'true');
   } else {
-    const title = (viewElement.querySelector('.title') as HTMLElement).textContent || '';
-    const descriptionContent = (viewElement.querySelector('.desc') as HTMLElement).innerHTML;
+    const title = viewElement?.querySelector('.title')?.textContent || '';
+    const descriptionContent = viewElement?.querySelector('.desc')?.innerHTML || '';
 
-    viewElement.style.display = 'block';
-    editElement.style.display = 'none';
-    editButton.style.display = 'block';
-    saveButton.style.display = 'none';
-    deleteButton.style.display = 'none';
+    if (viewElement) viewElement.style.display = 'block';
+    if (editElement) editElement.style.display = 'none';
+    if (editButton) editButton.style.display = 'block';
+    if (saveButton) saveButton.style.display = 'none';
+    if (deleteButton) deleteButton.style.display = 'none';
 
     element.setAttribute('data-editing', 'false');
-
 
     const isEmpty = isProposalEmpty({
       title: title,
       description: descriptionContent,
     } as IProposal);
 
-    emptyProposalElement.style.display = isEmpty ? 'block' : 'none';
+    if (emptyProposalElement) {
+      emptyProposalElement.style.display = isEmpty ? 'block' : 'none';
+    }
   }
 };
 

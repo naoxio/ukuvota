@@ -1,7 +1,7 @@
 ---
 // @ts-ignore
 import { getAbsoluteLocaleUrl, getAbsoluteLocaleUrlList } from 'astro:i18n';
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 const translator = new Translator(Astro.currentLocale || 'en');
 import { Icon } from 'astro-icon';
 //const supportedLanguages = Astro.preferredLocaleList || ['en'];

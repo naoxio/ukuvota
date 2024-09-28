@@ -1,5 +1,5 @@
 ---
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
@@ -20,7 +20,7 @@ const {  id, index, date, min } = Astro.props;
 </div>
 <script>
   import localforage from 'localforage';
-  import { formatDateInTimezone } from '@utils/dateUtils';
+  import { formatDateInTimezone } from '~/utils/dateUtils';
 
   class DateTimeInput extends HTMLElement {
     date = this.getAttribute('date') || '';

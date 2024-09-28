@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { ref, update, remove, onValue,off } from 'firebase/database';
-import { firebaseDB } from '@utils/firebaseConfig';
+import { firebaseDB } from '~/utils/firebaseConfig';
 
 
 export const GET: APIRoute = async ({ params, request }) => {

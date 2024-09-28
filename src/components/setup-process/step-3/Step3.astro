@@ -1,7 +1,7 @@
 ---
-import IProposal from '@interfaces/IProposal';
-import { Translator } from '@utils/i18n.js';
-import { formatDateInTimezone } from '@utils/dateUtils';
+import IProposal from '~/interfaces/IProposal';
+import { Translator } from '~/utils/i18n.js';
+import { formatDateInTimezone } from '~/utils/dateUtils';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 
@@ -73,7 +73,7 @@ const { title, descriptionId, proposalStartDate, proposalEndDate, votingStartDat
 </div>
 
 <script>
-    import getQuillHTML from '@utils/getQuillHTML';
+    import getQuillHTML from '~/utils/getQuillHTML';
     import localforage from 'localforage';
     /* @ts-ignore */
     import type Delta from 'quill-delta';

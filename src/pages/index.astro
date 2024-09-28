@@ -1,8 +1,8 @@
 ---
-import logo from "@assets/logo.png";
-import BaseLayout from "@layouts/BaseLayout.astro";
-import Footer from "@components/layout/Footer.astro";
-import { Translator } from '@utils/i18n.js';
+import logo from "~/assets/logo.png";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Footer from "~/components/layout/Footer.astro";
+import { Translator } from '~/utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en'); 
 

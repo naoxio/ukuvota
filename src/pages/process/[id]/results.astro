@@ -1,10 +1,10 @@
 ---
-import type IProcess from "@interfaces/IProcess";
-import ProcessLayout from "@layouts/ProcessLayout.astro";
+import type IProcess from "~/interfaces/IProcess";
+import ProcessLayout from "~/layouts/ProcessLayout.astro";
 import { Icon } from "astro-icon";
-import getProcessUrl from "@utils/getProcessUrl";
-import { Translator } from '@utils/i18n.js';
-import fetchProcessData from '@utils/fetchProcessData';   
+import getProcessUrl from "~/utils/getProcessUrl";
+import { Translator } from '~/utils/i18n.js';
+import fetchProcessData from '~/utils/fetchProcessData';   
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
@@ -120,11 +120,11 @@ if (process && !("voters" in process)) {
 <script>
 /* @ts-ignore */
 import download from 'downloadjs';
-import type IProcess from '@interfaces/IProcess';
+import type IProcess from '~/interfaces/IProcess';
 import { toPng } from 'html-to-image';
-import addAlert from '@utils/addAlert';
-import getQuillHTML from '@utils/getQuillHTML';
-import { isProposalEmpty, truncateTitle } from '@utils/proposalUtils';
+import addAlert from '~/utils/addAlert';
+import getQuillHTML from '~/utils/getQuillHTML';
+import { isProposalEmpty, truncateTitle } from '~/utils/proposalUtils';
 
 
 const save = (filename: string, data: any, type: string): void => {

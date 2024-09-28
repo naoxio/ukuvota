@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { ref, update, get } from 'firebase/database';
-import { firebaseDB } from '@utils/firebaseConfig';
+import { firebaseDB } from '~/utils/firebaseConfig';
 /* @ts-ignore */
 import { v4 as uuidv4 } from 'uuid';
-import IProposal from '@interfaces/IProposal';
+import IProposal from '~/interfaces/IProposal';
 
 export const POST: APIRoute = async ({ request }) => {
   const referer = request.headers.get('Referer');

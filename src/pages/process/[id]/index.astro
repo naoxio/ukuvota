@@ -1,8 +1,8 @@
 ---
-import ProcessLayout from '@layouts/ProcessLayout.astro';
-import fetchProcessData from '@utils/fetchProcessData';
-import getProcessUrl from '@utils/getProcessUrl';
-import { Translator } from '@utils/i18n.js';
+import ProcessLayout from '~/layouts/ProcessLayout.astro';
+import fetchProcessData from '~/utils/fetchProcessData';
+import getProcessUrl from '~/utils/getProcessUrl';
+import { Translator } from '~/utils/i18n.js';
 
 const translator = new Translator(Astro.currentLocale || 'en');
 
@@ -29,7 +29,7 @@ if (pathname !== url.pathname) return Astro.redirect(pathname);
 </ProcessLayout>
 
 <script>
-import getQuillHTML from '@utils/getQuillHTML';
+import getQuillHTML from '~/utils/getQuillHTML';
 
 class ProcessDetails extends HTMLElement {
   process: any;

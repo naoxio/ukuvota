@@ -1,8 +1,8 @@
 ---
-import { createProposalElement } from '@utils/createProposalElement';
-import { exampleProposals } from '@utils/exampleProposals';
-import { Translator } from '@utils/i18n.js';
-import IProposal from '@interfaces/IProposal';
+import { createProposalElement } from '~/utils/createProposalElement';
+import { exampleProposals } from '~/utils/exampleProposals';
+import { Translator } from '~/utils/i18n.js';
+import IProposal from '~/interfaces/IProposal';
 
 const locale = Astro.currentLocale || 'en';
 const dropdownOptions = await exampleProposals(locale);
@@ -45,17 +45,14 @@ const { processId, proposals, isSetup } = Astro.props;
   </div>
 </div>
 
-<style>
-</style>
-
 <script>
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
-import { createProposalElement } from '@utils/createProposalElement';
-import { initializeQuill, insertNewProposal, setupButtonListeners } from '@utils/proposalHelpers';
+import { createProposalElement } from '~/utils/createProposalElement';
+import { initializeQuill, insertNewProposal, setupButtonListeners } from '~/utils/proposalHelpers';
 import localforage from 'localforage';
 
-import { Translator } from '@utils/i18n.js';
+import { Translator } from '~/utils/i18n.js';
 const locale = document.querySelector('meta[name="locale"]')?.getAttribute('content');
 const translator = new Translator(locale || 'en');
 
@@ -199,6 +196,7 @@ if (proposalsContainer) {
     addButton.addEventListener('click', () => {
       const uniqueId: string = uuidv4();
       const newIndex = proposalsContainer.children.length;
+      console.log('hi')
       const proposalElement = createProposalElement(uniqueId, '', '', translator, isSetup, newIndex);
       insertNewProposal(proposalElement, proposalsContainer, processId, isSetup, noProposalsText, true);
       if (processId) {
