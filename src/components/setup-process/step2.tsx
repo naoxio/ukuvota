@@ -2,9 +2,9 @@ import { component$, useSignal, $ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
-import ProposalsList from "~/components/process/ProposalsList";
-import { TimeSelector } from "~/components/datetime/TimeSelector";
-import { TimezoneSelector } from "~/components/datetime/TimezoneSelector";
+import ProposalsList from "~/components/process/proposals-list";
+import { TimeSelector } from "~/components/date-time/time-selector";
+import { TimezoneSelector } from "~/components/date-time/timezone-selector";
 import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
 import StoreManager from '~/utils/storeManager';
 
