@@ -44,4 +44,126 @@
     display: flex;
     align-items: center;
 }
-  
+.form-input-group * {
+  margin: 0 0.2rem;
+}
+
+
+/* Add these styles to setup-process.css */
+
+.process-details {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.process-summary {
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.summary-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.topic-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.topic-description {
+  color: var(--text-color-light);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.summary-item {
+  background-color: var(--surface-color-alt);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.item-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.label {
+  font-weight: 500;
+}
+
+.proposals-section {
+  margin-top: 2rem;
+}
+
+.proposals-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.proposal-item {
+  background-color: var(--surface-color-alt);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.proposal-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.proposal-description {
+  color: var(--text-color-light);
+}
+
+.success-message {
+  background-color: var(--success-color);
+  color: var(--surface-color);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .process-details {
+    padding: 1rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group button {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}

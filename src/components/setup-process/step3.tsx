@@ -1,20 +1,23 @@
-import { component$, useTask$, $, useContext } from '@builder.io/qwik';
-import { useNavigate } from '@builder.io/qwik-city';
+import { component$, useTask$, $, useContext, useSignal } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { prettyFormatInTimezone } from '~/utils/dateUtils';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import { Store } from '@tauri-apps/plugin-store';
 import { StepContext } from '~/contexts/stepContext';
+import StoreManager from '~/utils/storeManager';
+
+import './setup-process.css';
 
 
 export default component$(() => {
   const stepStore = useContext(StepContext);
 
   const { t } = useTranslator();
-  const navigate = useNavigate();
   const processData = useProcessData();
   const { proposalsStore } = useProposals(processData._id);
+
+  const errorMessage = useSignal<string | null>(null);
 
   useTask$(async () => {
     // Any initialization logic if needed
@@ -30,13 +33,13 @@ export default component$(() => {
     }
   });
 
-  const handleBack = $(() => {
+
+  const handleBackButtonClick = $(() => {
     stepStore.step = 2;
   });
 
-  const handleStart = $(async () => {
-    const store = new Store('.processData.bin');
-    await store.load();
+  const handleStartButtonClick = $(async () => {
+    const store = new StoreManager('.processData.bin');
 
     // Save the final process data
     for (const [key, value] of Object.entries(processData)) {
@@ -48,55 +51,58 @@ export default component$(() => {
 
     await store.save();
 
-    // Navigate to the process started page
-    navigate('/process-started');
+    errorMessage.value = 'Process started successfully!';
   });
 
+
   return (
-    <div class="process-details">
-      <div class="border border-gray-200 rounded-lg shadow-md p-6 mb-8">
+    <div id="step-3" class="process-details">
+      <div class="process-summary">
         {processData.title && (
-          <div class="mb-4">
-            <h2 class="text-xl font-semibold mb-2">{t('process.topic')}</h2>
-            <p>{processData.title}</p>
-            <div id="descriptionContent">{processData.description}</div>
+          <div class="summary-section">
+            <h2 class="section-title">{t('process.topic')}</h2>
+            <p class="topic-title">{processData.title}</p>
+            <div id="descriptionContent" class="topic-description">{processData.description}</div>
           </div>
         )}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="summary-grid">
           {processData.proposalDates[0] && processData.proposalDates[1] && (
-            <div class="p-4">
-              <h2 class="text-lg font-semibold mb-2">{t(`phases.proposal.title`)}</h2>
-              <p><h3 class="font-semibold">{t('phases.startAt')}:</h3> {prettyFormatInTimezone(processData.proposalDates[0], processData.timezone || 'UTC')}</p>
-              <p><h3 class="font-semibold">{t('phases.endsAt')}:</h3> {prettyFormatInTimezone(processData.proposalDates[1], processData.timezone || 'UTC')}</p>
+            <div class="summary-item">
+              <h2 class="item-title">{t(`phases.proposal.title`)}</h2>
+              <p><span class="label">{t('phases.startAt')}:</span> {prettyFormatInTimezone(processData.proposalDates[0], processData.timezone || 'UTC')}</p>
+              <p><span class="label">{t('phases.endsAt')}:</span> {prettyFormatInTimezone(processData.proposalDates[1], processData.timezone || 'UTC')}</p>
             </div>
           )}
-          <div class="p-4">
-            <h2 class="text-lg font-semibold mb-2">{t(`phases.voting.title`)}</h2>
-            {processData.votingDates[0] && <p><h3 class="font-semibold">{t('phases.startAt')}:</h3> {prettyFormatInTimezone(processData.votingDates[0], processData.timezone || 'UTC')}</p>}
-            {processData.votingDates[1] && <p><h3 class="font-semibold">{t('phases.endsAt')}:</h3> {prettyFormatInTimezone(processData.votingDates[1], processData.timezone || 'UTC')}</p>}
+          <div class="summary-item">
+            <h2 class="item-title">{t(`phases.voting.title`)}</h2>
+            {processData.votingDates[0] && <p><span class="label">{t('phases.startAt')}:</span> {prettyFormatInTimezone(processData.votingDates[0], processData.timezone || 'UTC')}</p>}
+            {processData.votingDates[1] && <p><span class="label">{t('phases.endsAt')}:</span> {prettyFormatInTimezone(processData.votingDates[1], processData.timezone || 'UTC')}</p>}
           </div>
-          <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-2">{t('setup.timezone')}:</h3>
+          <div class="summary-item">
+            <h3 class="item-title">{t('setup.timezone')}:</h3>
             <p>{processData.timezone || 'UTC'}</p>
           </div>
         </div>
         {proposalsStore.proposals.length > 0 && (
-          <div class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">{t('process.proposals')}</h2>
-            <ul class="space-y-4">
+          <div class="proposals-section">
+            <h2 class="section-title">{t('process.proposals')}</h2>
+            <ul class="proposals-list">
               {proposalsStore.proposals.map((proposal) => (
-                <li key={proposal.id} class="border border-gray-200 rounded-lg p-4" id={`proposal-${proposal.id}`}>
-                  <b class="text-lg">{proposal.title}</b>
-                  <p class="mt-2">{proposal.description}</p>
+                <li key={proposal.id} class="proposal-item" id={`proposal-${proposal.id}`}>
+                  <h3 class="proposal-title">{proposal.title}</h3>
+                  <p class="proposal-description">{proposal.description}</p>
                 </li>
               ))}
             </ul>
           </div>
         )}
       </div>
-      <div class="flex justify-around mt-5">
-        <button onClick$={handleBack} class="btn m-2">{t('buttons.back')}</button>
-        <button onClick$={handleStart} class="btn btn-primary m-2">{t('buttons.start')}</button>
+      {errorMessage.value && (
+        <div id="errorMessage" class="success-message">{errorMessage.value}</div>
+      )}
+      <div class="button-group">
+        <button id="backButton" class="btn" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="startButton" class="btn btn-primary" onClick$={handleStartButtonClick}>{t('buttons.start')}</button>
       </div>
     </div>
   );

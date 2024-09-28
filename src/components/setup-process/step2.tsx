@@ -10,14 +10,15 @@ import StoreManager from '~/utils/storeManager';
 import { StepContext } from "~/contexts/stepContext";
 
 import './setup-process.css';
+import type { IProposal } from '~/types';
 
 
 export default component$(() => {
   const stepStore = useContext(StepContext);
   const { t } = useTranslator();
   const processData = useProcessData();
-  const { proposalsStore, addProposal, removeProposal } = useProposals(processData._id);
-
+  const { addProposal, removeProposal } = useProposals(processData._id);
+  
   const errorMessage = useSignal<string | null>(null);
 
   $(() => {
@@ -30,26 +31,32 @@ export default component$(() => {
       vStart,
       vEnd
     );
-    processData.proposalDates = [newPStart.getTime(), newPEnd.getTime()];
-    processData.votingDates = [newVStart.getTime(), newVEnd.getTime()];
+    processData.proposalDates = [newPStart.toMillis(), newPEnd.toMillis()];
+    processData.votingDates = [newVStart.toMillis(), newVEnd.toMillis()];
   });
 
   const handleTimezoneChange = $(async (newTimezone: string) => {
     processData.timezone = newTimezone;
-    const store = new StoreManager('.processData.bin');
+    const store = new StoreManager('processData.bin');
     await store.set('timezone', newTimezone);
     await store.save();
   });
 
   const handleTimeChange = $(async (phase: 'proposal' | 'voting', startDate: number, endDate: number) => {
-    const store = new StoreManager('.processData.bin');
+    const store = new StoreManager('processData.bin');
     if (phase === 'proposal') {
       processData.proposalDates = [startDate, endDate];
       if (processData.phase === 'full') {
-        adjustVotingPhaseDates(new Date(endDate), new Date(processData.votingDates[1]), processData, processData.timezone || 'UTC');
+        adjustVotingPhaseDates(
+          DateTime.fromMillis(endDate),
+          DateTime.fromMillis(processData.votingDates[1]),
+          processData,
+          processData.timezone || 'UTC'
+        );
       }
       await store.set('proposalDates', processData.proposalDates);
-    } else if (phase === 'voting') {
+    } else {
+      // This is the voting phase
       processData.votingDates = [startDate, endDate];
       await store.set('votingDates', processData.votingDates);
     }
@@ -61,26 +68,32 @@ export default component$(() => {
   });
 
   const handleContinueButtonClick = $(async () => {
-    if (processData.phase === 'voting' && proposalsStore.proposals.length === 0) {
+    const store = new StoreManager(`proposals_${processData._id}.bin`);
+    const proposals = await store.get('proposals') as IProposal[] | null;
+
+    if (processData.phase === 'voting' && (!proposals || proposals.length === 0)) {
       errorMessage.value = await t('error.noProposals');
       return;
     }
 
-    processData.proposals = proposalsStore.proposals;
-    const store = new StoreManager('.processData.bin');
-    await store.set('proposals', processData.proposals);
-    await store.save();
+    if (proposals) {
+      processData.proposals = proposals;
+      const processStore = new StoreManager('processData.bin');
+      await processStore.set('proposals', processData.proposals);
+      await processStore.save();
+    }
+
     stepStore.step = 3;
   });
-
+  
   return (
-    <div id="step-2">
+    <div id="step-2" class="step-container">
       {processData.phase === "full" ? (
-        <div>
-          <h2 class="flex mt-4">{t('setup.timeLeftHeading')}</h2>
-          <TimezoneSelector onChange$={handleTimezoneChange} value={processData.timezone || 'UTC'} />
-          <br />
-          <div>
+        <div class="phase-container">
+          <h2 class="section-heading">{t('setup.timeLeftHeading')}</h2>
+          <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
+          <div class="spacer"></div>
+          <div class="time-selectors">
             <TimeSelector
               phase="proposal"
               startDate={processData.proposalDates[0]}
@@ -98,11 +111,11 @@ export default component$(() => {
           </div>
         </div>
       ) : processData.phase === "voting" ? (
-        <div>
-          <h2 class="flex mt-4">{t('setup.timeLeftVotingHeading')}</h2>
-          <TimezoneSelector onChange$={handleTimezoneChange} value={processData.timezone || 'UTC'} />
-          <br />
-          <div>
+        <div class="phase-container">
+          <h2 class="section-heading">{t('setup.timeLeftVotingHeading')}</h2>
+          <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
+          <div class="spacer"></div>
+          <div class="time-selectors">
             <TimeSelector
               hideTitle
               phase="voting"
@@ -111,23 +124,23 @@ export default component$(() => {
               startMinDate={Date.now()}
               onTimeChange$={handleTimeChange}
             />
-            <br />
-            <h2>{t('setup.proposals')}</h2>    
-            <ProposalsList 
-              proposals={proposalsStore.proposals} 
-              isSetup={true}
-              onAdd$={addProposal}
-              onRemove$={removeProposal}
-            />
-            {errorMessage.value && (
-              <div id="errorMessage" class="text-red-500 mt-4">{errorMessage.value}</div>
-            )}
           </div>
+          <div class="spacer"></div>
+          <h2 class="section-heading">{t('setup.proposals')}</h2>  
+          <ProposalsList 
+            processId={processData._id}
+            isSetup={true}
+            onAdd$={addProposal}
+            onRemove$={removeProposal}
+          />
+          {errorMessage.value && (
+            <div id="errorMessage" class="error-message">{errorMessage.value}</div>
+          )}
         </div>
       ) : null}
-      <div class="justify-around mt-5 flex">
-        <button id="backButton" class="btn" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="continueButton" class="btn btn-primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
+      <div class="button-group">
+        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="continueButton" class="cta-btn primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
       </div>
     </div>
   );

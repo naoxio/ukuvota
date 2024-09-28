@@ -67,7 +67,7 @@ export default component$(() => {
   });
   
   return (
-    <form id="step-1" class="process-form" preventdefault:submit>
+    <div id="step-1" class="process-form">
       <input type="hidden" name="step" value="1" />
       <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
       <div id="scrollTopicQuestion" />
@@ -112,7 +112,7 @@ export default component$(() => {
           </Modal>
         </div>
       </div>
-      <div class="cta-buttons">
+      <div class="button-group">
         
         <button onClick$={(e) => handleSubmit(e, 'full')} class="cta-button">
           {t('process.phases.full')}
@@ -121,6 +121,6 @@ export default component$(() => {
           {t('process.phases.voting')}
         </button>
       </div>
-    </form>
+    </div>
   );
 });

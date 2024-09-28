@@ -1,10 +1,9 @@
 import { component$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import weightingOptions from '~/utils/weightingOptions';
-import Modal from '~/components/modal/Modal';
+import Modal from '~/components/modal/modal';
 import QRCode from '~/components/ui/QRCode';
-import ContentDoc from '~/components/content-doc/content-doc';
-import { ProcessTimeLabel } from '~/components/datetime/ProcessTimeLabel';
+import { ProcessTimeLabel } from '~/components/date-time/process-time-label';
 import type { IProcess } from '~/types';
 
 interface ProcessInfoProps {
@@ -29,7 +28,7 @@ export default component$((props: ProcessInfoProps) => {
         {weightLabel}&nbsp;
         <Modal id="weightingInfo">
           <h3>{t('process.weighting')}</h3>
-          <ContentDoc fileName="NegativeScoreWeighting"/>
+          <div>{t('negativeScoreWeighting')}<div/>
         </Modal>
       </div>
       <div>
