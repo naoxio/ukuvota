@@ -17,6 +17,7 @@ class StoreManager {
       this.store = localStorage;
     }
   }
+
   async get(key: string): Promise<any> {
     try {
       let value: string | null;
@@ -25,33 +26,39 @@ class StoreManager {
       } else {
         value = (this.store as Storage).getItem(key);
       }
-      console.log(`Raw value for key "${key}":`, value); // Debugging
+  
       if (value === null || value === 'undefined') {
         return null;
       }
-      // Always try to parse as JSON, return original value if parsing fails
-      try {
-        return JSON.parse(value);
-      } catch (parseError) {
-        console.warn(`Failed to parse JSON for key "${key}":`, parseError);
-        return value; // Return the raw string if it's not valid JSON
+  
+      // Check if the value starts with '{' or '[' to determine if it's likely JSON
+      if (value.startsWith('{') || value.startsWith('[')) {
+        try {
+          return JSON.parse(value);
+        } catch (parseError) {
+          console.warn(`Failed to parse JSON for key "${key}":`, parseError);
+        }
       }
+  
+      // If not JSON or parsing failed, return the original value
+      return value;
     } catch (error) {
       console.warn(`Failed to get value for key "${key}":`, error);
       return null;
     }
   }
-
+  
   async set(key: string, value: any): Promise<void> {
-    let stringValue;
+    let stringValue: string;
+    
     if (value === undefined) {
       stringValue = 'undefined';
-    } else if (typeof value === 'string') {
-      stringValue = value;
-    } else {
+    } else if (typeof value === 'object') {
       stringValue = JSON.stringify(value);
+    } else {
+      stringValue = String(value);
     }
-    console.log(`Setting value for key "${key}":`, stringValue); // Debugging
+  
     if (this.isTauri) {
       try {
         await (this.store as TauriStore).set(key, stringValue);

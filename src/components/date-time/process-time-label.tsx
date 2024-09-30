@@ -26,14 +26,14 @@ export const ProcessTimeLabel = component$((props: ProcessTimeLabelProps) => {
 
   return (
     <process-time-label data-start={props.dates[0]} data-timezone={props.timezone}>
-      <span>{t(`modes.${props.mode}.title`)}:&nbsp;</span>
+      <span>{t(`phases.${props.mode}.title`)}:&nbsp;</span>
       {props.dates[0] > state.currentDate ? (
         <>
           <br />
-          <span>{t('modes.start')}:&nbsp;</span>
+          <span>{t('phases.start')}:&nbsp;</span>
           <span id="start-date" class="link-success">{state.startDateFormatted}</span>
           <br />
-          <span>{t('modes.lastFor')}:&nbsp;</span>
+          <span>{t('phases.lastFor')}:&nbsp;</span>
           <Countdown type="success" dates={props.dates} timezone={props.timezone} />
         </>
       ) : props.dates[1] > state.currentDate ? (

@@ -5,35 +5,22 @@ import { useProposals } from '~/hooks/useProposals';
 import ProposalsList from "~/components/proposals-list/proposals-list";
 import { TimeSelector } from "~/components/date-time/time-selector";
 import { adjustDates, adjustVotingPhaseDates } from '~/utils/dateAdjustments';
-import StoreManager from '~/utils/storeManager';
 import { StepContext } from "~/contexts/stepContext";
 import { TimezoneSelector } from "~/components/date-time/timezone-selector";
 import './setup-process.css';
-import type { IProposal } from '~/types';
 import { DateTime } from 'luxon';
+
 export default component$(() => {
   const stepStore = useContext(StepContext);
   const { t } = useTranslator();
-  const processData = useProcessData();
+  const { processData, saveProcessData, loadProcessData } = useProcessData();
   const { addProposal, removeProposal } = useProposals(processData._id);
   
   const errorMessage = useSignal<string | null>(null);
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    const store = new StoreManager('processData.bin');
-    const savedTitle = await store.get('title') as string | null;
-    if (savedTitle) {
-      processData.title = savedTitle;
-    }
-    const savedDescription = await store.get('description') as string | null;
-    if (savedDescription) {
-      processData.description = savedDescription;
-    }
-    const savedWeighting = await store.get('weighting') as string | null;
-    if (savedWeighting) {
-      processData.weighting = savedWeighting;
-    }
-    
+    await loadProcessData();
     const [pStart, pEnd] = processData.proposalDates;
     const [vStart, vEnd] = processData.votingDates;
     const { pStart: newPStart, pEnd: newPEnd, vStart: newVStart, vEnd: newVEnd } = adjustDates(
@@ -43,19 +30,21 @@ export default component$(() => {
       vStart,
       vEnd
     );
-    processData.proposalDates = [newPStart.toMillis(), newPEnd.toMillis()];
-    processData.votingDates = [newVStart.toMillis(), newVEnd.toMillis()];
+    
+    Object.assign(processData, {
+      proposalDates: [newPStart.toMillis(), newPEnd.toMillis()],
+      votingDates: [newVStart.toMillis(), newVEnd.toMillis()]
+    });
+
+    await saveProcessData();
   });
 
   const handleTimezoneChange = $(async (newTimezone: string) => {
     processData.timezone = newTimezone;
-    const store = new StoreManager('processData.bin');
-    await store.set('timezone', newTimezone);
-    await store.save();
+    await saveProcessData();
   });
 
   const handleTimeChange = $(async (phase: string, startDate: number, endDate: number) => {
-    const store = new StoreManager('processData.bin');
     if (phase === 'proposal') {
       processData.proposalDates = [startDate, endDate];
       if (processData.mode === 'full') {
@@ -66,39 +55,26 @@ export default component$(() => {
           processData.timezone || 'UTC'
         );
       }
-      await store.set('proposalDates', processData.proposalDates);
     } else {
       processData.votingDates = [startDate, endDate];
-      await store.set('votingDates', processData.votingDates);
     }
-    await store.save();
+    await saveProcessData();
   });
 
   const handleBackButtonClick = $(async () => {
-    const store = new StoreManager('processData.bin');
-    await store.set('title', processData.title);
-    await store.set('description', processData.description);
-    await store.set('weighting', processData.weighting);
-    await store.save();
+    processData.step = 1;
+    await saveProcessData();
     stepStore.step = 1;
   });
 
   const handleContinueButtonClick = $(async () => {
-    const store = new StoreManager(`proposals_${processData._id}.bin`);
-    const proposals = await store.get('proposals') as IProposal[] | null;
-
-    if (processData.mode === 'voting' && (!proposals || proposals.length === 0)) {
+    if (processData.mode === 'voting' && processData.proposals.length === 0) {
       errorMessage.value = await t('error.noProposals');
       return;
     }
 
-    if (proposals) {
-      processData.proposals = proposals;
-      const processStore = new StoreManager('processData.bin');
-      await processStore.set('proposals', processData.proposals);
-      await processStore.save();
-    }
-
+    processData.step = 3;
+    await saveProcessData();
     stepStore.step = 3;
   });
   

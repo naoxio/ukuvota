@@ -15,4 +15,5 @@ export interface IProcess {
   voters?: IVoter[];
   timezone?: string;
   mode?: 'full' | 'voting';
+  step?: number;
 }

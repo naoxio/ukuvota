@@ -3,75 +3,52 @@ import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
 import weightingOptions from '~/utils/weightingOptions';
 import Modal from '~/components/modal/modal';
-import StoreManager from '~/utils/storeManager';
 import './setup-process.css';
 import { StepContext } from "~/contexts/stepContext";
+
 export default component$(() => {
   const stepStore = useContext(StepContext);
   const { t } = useTranslator();
-  const processData = useProcessData();
+  const { processData, saveProcessData, loadProcessData } = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
   const descriptionSignal = useSignal(processData.description || '');
   const titleSignal = useSignal(processData.title || '');
   const weightingSignal = useSignal(processData.weighting || 'x1');
   const errorMessageSignal = useSignal('');
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    const store = new StoreManager('processData.bin');
-    const savedDescription = await store.get('description') as string | null;
-    if (savedDescription) {
-      descriptionSignal.value = savedDescription;
-      processData.description = savedDescription;
-    }
-    const savedTitle = await store.get('title') as string | null;
-    if (savedTitle) {
-      titleSignal.value = savedTitle;
-      processData.title = savedTitle;
-    }
-    const savedWeighting = await store.get('weighting') as string | null;
-    if (savedWeighting) {
-      weightingSignal.value = savedWeighting;
-      processData.weighting = savedWeighting;
-    } else {
-      weightingSignal.value = 'x1';
+    await loadProcessData();
+    descriptionSignal.value = processData.description || '';
+    titleSignal.value = processData.title || '';
+    weightingSignal.value = processData.weighting || 'x1';
+
+    if (!processData.weighting) {
       processData.weighting = 'x1';
-      await store.set('weighting', 'x1');
-      await store.save();
+      await saveProcessData();
     }
   });
 
-  const handleDescriptionChange = $(async (event: Event) => {
+  const handleDescriptionChange = $((event: Event) => {
     const newDescription = (event.target as HTMLTextAreaElement).value;
     descriptionSignal.value = newDescription;
     processData.description = newDescription;
-    const store = new StoreManager('processData.bin');
-    await store.set('description', newDescription);
-    await store.save();
   });
 
-  const handleTitleChange = $(async (event: Event) => {
+  const handleTitleChange = $((event: Event) => {
     const newTitle = (event.target as HTMLInputElement).value;
     titleSignal.value = newTitle;
     processData.title = newTitle;
-    const store = new StoreManager('processData.bin');
-    await store.set('title', newTitle);
-    await store.save();
   });
 
-  const handleWeightingChange = $(async (event: Event) => {
+  const handleWeightingChange = $((event: Event) => {
     const newWeighting = (event.target as HTMLSelectElement).value;
     if (newWeighting && Object.prototype.hasOwnProperty.call(weightingOptions, newWeighting)) {
       weightingSignal.value = newWeighting;
       processData.weighting = newWeighting;
-      const store = new StoreManager('processData.bin');
-      await store.set('weighting', newWeighting);
-      await store.save();
     } else {
       weightingSignal.value = 'x1';
       processData.weighting = 'x1';
-      const store = new StoreManager('processData.bin');
-      await store.set('weighting', 'x1');
-      await store.save();
     }
   });
   
@@ -83,30 +60,22 @@ export default component$(() => {
     }
     errorMessageSignal.value = '';
     
-    processData.mode = mode;
-    processData.title = titleSignal.value;
-    processData.description = descriptionSignal.value;
-    processData.weighting = weightingSignal.value || 'x1';
-
-    const store = new StoreManager('processData.bin');
-    await store.set('title', processData.title);
-    await store.set('description', processData.description);
-    await store.set('weighting', processData.weighting);
-    await store.set('mode', processData.mode);
-    await store.set('timezone', timezoneOffset.toString());
-
     const currentDate = new Date().getTime();
-    if (mode === 'full') {
-      processData.proposalDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
-      processData.votingDates = [processData.proposalDates[1], processData.proposalDates[1] + 7 * 24 * 60 * 60 * 1000];
-    } else {
-      processData.votingDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
-    }
+    
+    Object.assign(processData, {
+      mode,
+      title: titleSignal.value,
+      description: descriptionSignal.value,
+      weighting: weightingSignal.value || 'x1',
+      timezone: timezoneOffset.toString(),
+      proposalDates: mode === 'full' ? [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000] : undefined,
+      votingDates: mode === 'full' 
+        ? [currentDate + 7 * 24 * 60 * 60 * 1000, currentDate + 14 * 24 * 60 * 60 * 1000]
+        : [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000],
+      step: 2
+    });
 
-    await store.set('proposalDates', processData.proposalDates);
-    await store.set('votingDates', processData.votingDates);
-    await store.save();
-
+    await saveProcessData();
     stepStore.step = 2;
   });
   

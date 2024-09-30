@@ -4,7 +4,6 @@ import { prettyFormatInTimezone } from '~/utils/dateUtils';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import { StepContext } from '~/contexts/stepContext';
-import StoreManager from '~/utils/storeManager';
 
 import './setup-process.css';
 
@@ -12,39 +11,27 @@ export default component$(() => {
   const stepStore = useContext(StepContext);
 
   const { t } = useTranslator();
-  const processData = useProcessData();
+  const { processData, saveProcessData, loadProcessData } = useProcessData();
   const { proposalsStore } = useProposals(processData._id);
 
   const errorMessage = useSignal<string | null>(null);
 
   useTask$(async () => {
-    const store = new StoreManager('processData.bin');
-    
-    // Load description if it's not already in processData
-    if (!processData.description) {
-      const description = await store.get('description') as string;
-      if (description) {
-        processData.description = description;
-      }
-    }
+    await loadProcessData();
   });
 
-  const handleBackButtonClick = $(() => {
+  const handleBackButtonClick = $(async () => {
+    processData.step = 2;
+    await saveProcessData();
     stepStore.step = 2;
   });
 
   const handleStartButtonClick = $(async () => {
-    const store = new StoreManager('processData.bin');
+    // Update proposals in processData
+    processData.proposals = proposalsStore.proposals;
 
     // Save the final process data
-    for (const [key, value] of Object.entries(processData)) {
-      await store.set(key, value);
-    }
-
-    // Save proposals
-    await store.set('proposals', proposalsStore.proposals);
-
-    await store.save();
+    await saveProcessData();
 
     errorMessage.value = 'Process started successfully!';
   });

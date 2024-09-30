@@ -1,0 +1,24 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-color);
+  }
+  
+  .loading-logo {
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite, pulse 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.5; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
+  

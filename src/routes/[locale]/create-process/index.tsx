@@ -1,4 +1,3 @@
-// src/routes/index.tsx
 import { component$, useSignal, $, useVisibleTask$, useContext } from "@builder.io/qwik";
 import { useTranslator } from '~/i18n/translator';
 import { useProcessData } from '~/hooks/useProcessData';
@@ -7,60 +6,75 @@ import Step2 from '~/components/setup-process/step2';
 import Step3 from '~/components/setup-process/step3';
 import Modal from '~/components/modal/modal';
 import { StepContext } from "~/contexts/stepContext";
+import LoadingAnimation from '~/components/loading-animation/loading-animation';
 
 export default component$(() => {
-  const { t } = useTranslator();
-  const processData = useProcessData();
+  const { t, locale } = useTranslator();
+  const { processData, clearProcessData, loadProcessData } = useProcessData();
   const stepStore = useContext(StepContext);
   const showExistingProcessModal = useSignal(false);
+  const isLoading = useSignal(true);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    const hasValidData = processData.title !== '' || processData.description !== '';
-
-    if (stepStore.step === 2 && !processData.mode) {
-      stepStore.step = 1;
-    }
-
-    if (hasValidData) {
-      showExistingProcessModal.value = true;
-    }
+  useVisibleTask$(async ({ track }) => {
+    await loadProcessData();
+    track(() => processData);
+    const hasExistingData = processData.title || processData.description;
+    showExistingProcessModal.value = hasExistingData ? true : false;
+    isLoading.value = false;
   });
 
-  const startNewProcess = $(() => {
-    processData.title = '';
-    processData.description = '';
-    processData.weighting = 'x1';
-    processData.mode = undefined;
+  const startNewProcess = $(async () => {
+    await clearProcessData();
     stepStore.step = 1;
     showExistingProcessModal.value = false;
+    window.location.href = `/${locale}/create-process`;
+  });
+
+  const continueProcess = $(async () => {
+    showExistingProcessModal.value = false;
+    stepStore.step = processData.step || 1;
   });
 
   return (
     <div>
-      <Modal id="existing-process-modal">
-        {showExistingProcessModal.value && (
+      {isLoading.value ? (
+        <LoadingAnimation />
+      ) : (
+        <>
+          <Modal id="existing-process-modal" isOpen={showExistingProcessModal.value}>
           <div class="modal-box">
             <h3 class="tagline">{t('setup.continueEditing')}</h3>
             <p>{t('setup.existingProcessPrompt')}</p>
-            <div class="process-details">
-              {processData.title && <p><strong>{t('process.topic')}:</strong> {processData.title}</p>}
-              {processData.weighting && <p><strong>{t('process.weighting')}:</strong> {processData.weighting}</p>}
+            <div class="process-details-content">
+              {processData.title && (
+                <div class="process-detail-item">
+                  <span class="detail-label">{t('process.topic')}</span>
+                  <span class="detail-value">{processData.title}</span>
+                </div>
+              )}
+              {processData.weighting && (
+                <div class="process-detail-item">
+                  <span class="detail-label">{t('process.weighting')}</span>
+                  <span class="detail-value">{processData.weighting}</span>
+                </div>
+              )}
             </div>
             <div class="cta-btns">
               <button onClick$={startNewProcess} class="cta-btn">{t('setup.startNew')}</button>
-              <button onClick$={() => showExistingProcessModal.value = false} class="cta-btn secondary">{t('buttons.continue')}</button>
+              <button onClick$={continueProcess} class="cta-btn secondary">{t('buttons.continue')}</button>
             </div>
           </div>
-        )}
-      </Modal>
-      {stepStore.step === 1 ? (
-        <Step1 />
-      ) : stepStore.step === 2 ? (
-        <Step2 />
-      ) : stepStore.step === 3 ? (
-        <Step3/>
-      ) : null}
+        </Modal>
+          {stepStore.step === 1 ? (
+            <Step1 />
+          ) : stepStore.step === 2 ? (
+            <Step2 />
+          ) : stepStore.step === 3 ? (
+            <Step3/>
+          ) : null}
+        </>
+      )}
     </div>
   );
 });

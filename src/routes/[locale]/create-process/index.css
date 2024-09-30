@@ -1,13 +1,53 @@
 /* Process Setup Styles */
 .process-details {
-  margin: 1rem 0;
-  padding: 1rem;
   background-color: var(--background-color);
-  border-radius: 4px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
 }
-.process-details p {
-  margin: 0.5rem 0;
+
+.process-details-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
 }
+
+.process-details-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.process-detail-item {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--input-background);
+  padding: 0.75rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.process-detail-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.detail-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+
 .page-title {
   text-align: center;
   margin-bottom: 2rem;

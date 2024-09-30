@@ -51,12 +51,6 @@
 
 /* Add these styles to setup-process.css */
 
-.process-details {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
 .process-summary {
   background-color: var(--surface-color);
   border-radius: 8px;
@@ -150,9 +144,6 @@
 }
 
 @media (max-width: 768px) {
-  .process-details {
-    padding: 1rem;
-  }
 
   .summary-grid {
     grid-template-columns: 1fr;

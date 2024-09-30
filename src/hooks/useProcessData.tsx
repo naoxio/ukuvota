@@ -1,5 +1,5 @@
 // src/hooks/useProcessData.ts
-import { useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { useStore, useVisibleTask$, $ } from '@builder.io/qwik';
 import { DateTime } from 'luxon';
 import StoreManager from '../utils/storeManager';
 import type { IProcess } from '../types/IProcess';
@@ -13,32 +13,34 @@ export function useProcessData() {
     proposalDates: [0, 0],
     votingDates: [0, 0],
     strategy: '',
-    weighting: 'x1', // Default to 'x1'
+    weighting: 'x1',
     proposals: [],
     voters: [],
-    timezone: DateTime.local().zoneName || 'UTC', // Set default timezone
+    timezone: DateTime.local().zoneName || 'UTC',
     mode: undefined,
+    step: 1
   });
 
-  useVisibleTask$(async ({ track }) => {
+  const loadProcessData = $(async () => {
     const store = new StoreManager('.processData.bin');
     const keys: (keyof IProcess)[] = [
       '_id', 'title', 'description', 'descriptionId', 'proposalDates',
       'votingDates', 'strategy', 'weighting', 'proposals', 'voters',
-      'timezone', 'mode'
+      'timezone', 'mode', 'step'
     ];
 
-    // Load initial data
     for (const key of keys) {
       try {
         const value = await store.get(key);
         if (value !== null) {
           if (key === 'mode') {
-            (processData as any)[key] = value === 'undefined' ? undefined : value;
+            processData[key] = value === 'undefined' ? undefined : value;
+          } else if (key === 'step') {
+            processData[key] = Number(value) || 1;
           } else if (['proposalDates', 'votingDates'].includes(key)) {
-            (processData as any)[key] = value ? value : [0, 0];
+            processData[key] = value ? value : [0, 0];
           } else {
-            (processData as any)[key] = value;
+            processData[key] = value;
           }
         }
       } catch (error) {
@@ -55,13 +57,17 @@ export function useProcessData() {
       processData.timezone = DateTime.local().zoneName || 'UTC';
       await store.set('timezone', processData.timezone);
     }
+    await store.save();
+  });
 
-    // Track changes and save
-    track(() => ({ ...processData }));
+  const saveProcessData = $(async () => {
+    const store = new StoreManager('.processData.bin');
     for (const [key, value] of Object.entries(processData)) {
       try {
         if (key === 'mode') {
           await store.set(key, value === undefined ? 'undefined' : value);
+        } else if (key === 'step') {
+          await store.set(key, Number(value)); // Ensure step is stored as a number
         } else {
           await store.set(key, value);
         }
@@ -69,9 +75,38 @@ export function useProcessData() {
         console.error(`Error saving ${key}:`, error);
       }
     }
-    
     await store.save();
   });
 
-  return processData;
+  const clearProcessData = $(async () => {
+    const store = new StoreManager('.processData.bin');
+    await store.clear();
+    await store.save();
+
+    // Reset all fields to their default values
+    Object.assign(processData, {
+      _id: '',
+      title: '',
+      description: '',
+      descriptionId: '',
+      proposalDates: [0, 0],
+      votingDates: [0, 0],
+      strategy: '',
+      weighting: 'x1',
+      proposals: [],
+      voters: [],
+      timezone: DateTime.local().zoneName || 'UTC',
+      mode: undefined,
+      step: 1
+    });
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async ({ track }) => {
+    await loadProcessData();
+    track(() => ({ ...processData }));
+    await saveProcessData();
+  });
+
+  return { processData, clearProcessData, loadProcessData, saveProcessData };
 }

@@ -7,12 +7,13 @@ import './index.css';
 
 export default component$(() => {
   const { t } = useTranslator();
-  const processData = useProcessData();
+  const { processData, saveProcessData } = useProcessData();
   const stepStore = useStore<StepStore>({ step: 1 });
-
   useContextProvider(StepContext, stepStore);
 
-  const setStep = $((newStep: number) => {
+  const setStep = $(async (newStep: number) => {
+    processData.step = newStep;
+    await saveProcessData();
     stepStore.step = newStep;
   });
 
