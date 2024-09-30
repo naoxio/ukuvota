@@ -34,7 +34,9 @@ export const useTranslator = () => {
   const localeContext = useContext(LocaleContext);
   const translationsSignal = useSignal(translationsMap[localeContext.locale] || translationsMap.en);
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
+    // eslint-disable-next-line qwik/valid-lexical-scope
     const locale = track(() => localeContext.locale);
     translationsSignal.value = translationsMap[locale] || translationsMap.en;
     if (typeof window !== 'undefined') {
@@ -44,9 +46,11 @@ export const useTranslator = () => {
 
   const setLocale = $((newLocale: string) => {
     if (translationsMap[newLocale]) {
+      // eslint-disable-next-line qwik/valid-lexical-scope
       localeContext.locale = newLocale;
     } else {
       console.warn(`Locale ${newLocale} not supported, falling back to English`);
+      // eslint-disable-next-line qwik/valid-lexical-scope
       localeContext.locale = 'en';
     }
   });

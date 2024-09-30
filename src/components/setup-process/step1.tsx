@@ -10,10 +10,9 @@ export default component$(() => {
   const stepStore = useContext(StepContext);
   const { t } = useTranslator();
   const { processData, saveProcessData, loadProcessData } = useProcessData();
-  const timezoneOffset = new Date().getTimezoneOffset();
   const descriptionSignal = useSignal(processData.description || '');
   const titleSignal = useSignal(processData.title || '');
-  const weightingSignal = useSignal(processData.weighting || 'x1');
+  const weightingSignal = useSignal(processData.weighting || '1');
   const errorMessageSignal = useSignal('');
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -21,12 +20,8 @@ export default component$(() => {
     await loadProcessData();
     descriptionSignal.value = processData.description || '';
     titleSignal.value = processData.title || '';
-    weightingSignal.value = processData.weighting || 'x1';
-
-    if (!processData.weighting) {
-      processData.weighting = 'x1';
-      await saveProcessData();
-    }
+    weightingSignal.value = processData.weighting || '1';
+    console.log(`wegihting siganl ${weightingSignal.value}`)
   });
 
   const handleDescriptionChange = $((event: Event) => {
@@ -47,8 +42,8 @@ export default component$(() => {
       weightingSignal.value = newWeighting;
       processData.weighting = newWeighting;
     } else {
-      weightingSignal.value = 'x1';
-      processData.weighting = 'x1';
+      weightingSignal.value = '1';
+      processData.weighting = '1';
     }
   });
   
@@ -66,8 +61,7 @@ export default component$(() => {
       mode,
       title: titleSignal.value,
       description: descriptionSignal.value,
-      weighting: weightingSignal.value || 'x1',
-      timezone: timezoneOffset.toString(),
+      weighting: weightingSignal.value || '1',
       proposalDates: mode === 'full' ? [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000] : undefined,
       votingDates: mode === 'full' 
         ? [currentDate + 7 * 24 * 60 * 60 * 1000, currentDate + 14 * 24 * 60 * 60 * 1000]
@@ -81,8 +75,6 @@ export default component$(() => {
   
   return (
     <div id="step-1" class="step-container">
-      <input type="hidden" name="step" value="1" />
-      <input type="hidden" name="timezoneOffset" id="timezoneOffset" value={timezoneOffset} />
       <div id="scrollTopicQuestion" />
       <label class="form-label">{t('process.topic')}</label>
       <input

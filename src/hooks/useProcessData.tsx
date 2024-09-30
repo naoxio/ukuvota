@@ -13,7 +13,7 @@ export function useProcessData() {
     proposalDates: [0, 0],
     votingDates: [0, 0],
     strategy: '',
-    weighting: 'x1',
+    weighting: '1',
     proposals: [],
     voters: [],
     timezone: DateTime.local().zoneName || 'UTC',
@@ -50,13 +50,16 @@ export function useProcessData() {
 
     // Ensure default values
     if (!processData.weighting) {
-      processData.weighting = 'x1';
-      await store.set('weighting', 'x1');
+      processData.weighting = '1';
+      await store.set('weighting', '1');
     }
     if (!processData.timezone) {
       processData.timezone = DateTime.local().zoneName || 'UTC';
       await store.set('timezone', processData.timezone);
     }
+
+    console.log(processData)
+
     await store.save();
   });
 
@@ -67,7 +70,7 @@ export function useProcessData() {
         if (key === 'mode') {
           await store.set(key, value === undefined ? 'undefined' : value);
         } else if (key === 'step') {
-          await store.set(key, Number(value)); // Ensure step is stored as a number
+          await store.set(key, Number(value));
         } else {
           await store.set(key, value);
         }
@@ -92,7 +95,7 @@ export function useProcessData() {
       proposalDates: [0, 0],
       votingDates: [0, 0],
       strategy: '',
-      weighting: 'x1',
+      weighting: '1',
       proposals: [],
       voters: [],
       timezone: DateTime.local().zoneName || 'UTC',

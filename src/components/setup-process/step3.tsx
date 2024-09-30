@@ -81,9 +81,9 @@ export default component$(() => {
       {errorMessage.value && (
         <div id="errorMessage" class="success-message">{errorMessage.value}</div>
       )}
-      <div class="btn-group">
-        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="startButton" class="cta-btn primary" onClick$={handleStartButtonClick}>{t('buttons.start')}</button>
+      <div class="btn-container">
+        <button id="backButton" class="cta-btn" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="startButton" class="cta-btn secondary" onClick$={handleStartButtonClick}>{t('buttons.start')}</button>
       </div>
     </div>
   );

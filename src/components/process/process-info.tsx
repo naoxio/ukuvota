@@ -32,13 +32,11 @@ export default component$((props: ProcessInfoProps) => {
         </Modal>
       </div>
       <div>
-        {process.proposalDates && process.proposalDates[0] > 0 && (
+        {process.proposalDates[0] > 0 && (
           <ProcessTimeLabel timezone={timezone} mode="proposal" dates={process.proposalDates}/>
         )}
         <br/>
-        {process.votingDates && (
-          <ProcessTimeLabel timezone={timezone} mode="voting" dates={process.votingDates} proposals_length={proposalsLength}/>
-        )}
+        <ProcessTimeLabel timezone={timezone} mode="voting" dates={process.votingDates} proposals_length={proposalsLength}/>
         <br/>
       </div>
       <div class="w-full pr-2">

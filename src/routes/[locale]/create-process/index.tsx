@@ -7,6 +7,7 @@ import Step3 from '~/components/setup-process/step3';
 import Modal from '~/components/modal/modal';
 import { StepContext } from "~/contexts/stepContext";
 import LoadingAnimation from '~/components/loading-animation/loading-animation';
+import weightingOptions from '~/utils/weightingOptions';
 
 export default component$(() => {
   const { t, locale } = useTranslator();
@@ -36,6 +37,13 @@ export default component$(() => {
     stepStore.step = processData.step || 1;
   });
 
+  const getWeightingLabel = (value: string) => {
+    if (value in weightingOptions) {
+      return Number(value) > 0 ? weightingOptions[value] : '\u221E'; // Unicode for infinity symbol
+    }
+    return value;
+  };
+
   return (
     <div>
       {isLoading.value ? (
@@ -43,29 +51,29 @@ export default component$(() => {
       ) : (
         <>
           <Modal id="existing-process-modal" isOpen={showExistingProcessModal.value}>
-          <div class="modal-box">
-            <h3 class="tagline">{t('setup.continueEditing')}</h3>
-            <p>{t('setup.existingProcessPrompt')}</p>
-            <div class="process-details-content">
-              {processData.title && (
-                <div class="process-detail-item">
-                  <span class="detail-label">{t('process.topic')}</span>
-                  <span class="detail-value">{processData.title}</span>
-                </div>
-              )}
-              {processData.weighting && (
-                <div class="process-detail-item">
-                  <span class="detail-label">{t('process.weighting')}</span>
-                  <span class="detail-value">{processData.weighting}</span>
-                </div>
-              )}
+            <div class="modal-box">
+              <h3 class="tagline">{t('setup.continueEditing')}</h3>
+              <p>{t('setup.existingProcessPrompt')}</p>
+              <div class="process-details-content">
+                {processData.title && (
+                  <div class="process-detail-item">
+                    <span class="detail-label">{t('process.topic')}</span>
+                    <span class="detail-value">{processData.title}</span>
+                  </div>
+                )}
+                {processData.weighting && (
+                  <div class="process-detail-item">
+                    <span class="detail-label">{t('process.weighting')}</span>
+                    <span class="detail-value">{getWeightingLabel(processData.weighting)}</span>
+                  </div>
+                )}
+              </div>
+              <div class="btn-container">
+                <button onClick$={startNewProcess} class="cta-btn">{t('setup.startNew')}</button>
+                <button onClick$={continueProcess} class="cta-btn secondary">{t('buttons.continue')}</button>
+              </div>
             </div>
-            <div class="cta-btns">
-              <button onClick$={startNewProcess} class="cta-btn">{t('setup.startNew')}</button>
-              <button onClick$={continueProcess} class="cta-btn secondary">{t('buttons.continue')}</button>
-            </div>
-          </div>
-        </Modal>
+          </Modal>
           {stepStore.step === 1 ? (
             <Step1 />
           ) : stepStore.step === 2 ? (

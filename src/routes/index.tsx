@@ -1,6 +1,7 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import { useLocale } from '~/hooks/useLocale';
+import LoadingAnimation from '~/components/loading-animation/loading-animation';
 
 export default component$(() => {
   const nav = useNavigate();
@@ -11,5 +12,5 @@ export default component$(() => {
     nav(`/${locale}/`);
   });
 
-  return <div class="loading">Loading...</div>;
+  return <LoadingAnimation/>;
 });

@@ -35,7 +35,6 @@ export default component$(() => {
       proposalDates: [newPStart.toMillis(), newPEnd.toMillis()],
       votingDates: [newVStart.toMillis(), newVEnd.toMillis()]
     });
-
     await saveProcessData();
   });
 
@@ -133,9 +132,9 @@ export default component$(() => {
           )}
         </div>
       ) : null}
-      <div class="btn-group">
-        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="continueButton" class="cta-btn primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
+      <div class="btn-container">
+        <button id="backButton" class="cta-btn" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="continueButton" class="cta-btn secondary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
       </div>
     </div>
   );
