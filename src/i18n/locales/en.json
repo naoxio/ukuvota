@@ -148,7 +148,7 @@
     "voter": "Voter",
     "exportData": "Export Data",
     "advancedOptions": "Show Advanced Options",
-    "phases": {
+    "modes": {
       "select": "Select phases",
       "full": "Proposal + Voting Phase",
       "voting": "Voting Phase only"

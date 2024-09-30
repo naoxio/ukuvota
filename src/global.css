@@ -58,7 +58,7 @@ h2 {
   margin-top: 2rem;
 }
 
-.button, .cta-button {
+.btn, .cta-btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   border-radius: 25px;
@@ -70,22 +70,22 @@ h2 {
   cursor: pointer;
 }
 
-.button:hover, .cta-button:hover {
+.btn:hover, .cta-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.button.primary, .cta-button:first-child {
+.btn.primary, .cta-btn:first-child {
   background-color: var(--primary-color);
   color: var(--background-color);
 }
 
-.button.secondary, .cta-button.secondary {
+.btn.secondary, .cta-btn.secondary {
   background-color: var(--secondary-color);
   color: var(--background-color);
 }
 
-.button.disabled {
+.btn.disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -235,7 +235,7 @@ select::-webkit-scrollbar-thumb {
   margin: 0 auto;
 }
 
-.phase-container {
+.mode-container {
   margin-bottom: 1.5rem;
 }
 
@@ -249,7 +249,7 @@ select::-webkit-scrollbar-thumb {
   display: none;
 }
 
-.button-container {
+.btn-container {
   display: flex;
   justify-content: space-between;
   margin-top: 1.5rem;

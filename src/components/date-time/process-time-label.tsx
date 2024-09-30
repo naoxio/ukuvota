@@ -1,40 +1,39 @@
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
-import { format } from 'date-fns-tz';
-import { Countdown } from '~/components/datetime/Countdown'; 
+import { DateTime } from 'luxon';
+import { Countdown } from '~/components/date-time/countdown';
 
 interface ProcessTimeLabelProps {
-  phase: string;
+  mode: string;
   dates: number[];
   timezone: string;
   proposals_length?: number;
 }
 
 export const ProcessTimeLabel = component$((props: ProcessTimeLabelProps) => {
-  const { t } =useTranslator();
-
+  const { t } = useTranslator();
   const state = useStore({
     startDateFormatted: '',
-    currentDate: Date.now(),
+    currentDate: DateTime.now().toMillis(),
   });
 
   useTask$(() => {
     const timezone = props.timezone || 'UTC';
     const startMillis = props.dates[0];
-    const start = new Date(startMillis);
-    state.startDateFormatted = format(start, 'MMMM d, yyyy h:mm a', { timeZone: timezone });
+    const start = DateTime.fromMillis(startMillis).setZone(timezone);
+    state.startDateFormatted = start.toFormat('MMMM d, yyyy h:mm a');
   });
 
   return (
     <process-time-label data-start={props.dates[0]} data-timezone={props.timezone}>
-      <span>{t(`phases.${props.phase}.title`)}:&nbsp;</span>
+      <span>{t(`modes.${props.mode}.title`)}:&nbsp;</span>
       {props.dates[0] > state.currentDate ? (
         <>
           <br />
-          <span>{t('phases.start')}:&nbsp;</span>
+          <span>{t('modes.start')}:&nbsp;</span>
           <span id="start-date" class="link-success">{state.startDateFormatted}</span>
           <br />
-          <span>{t('phases.lastFor')}:&nbsp;</span>
+          <span>{t('modes.lastFor')}:&nbsp;</span>
           <Countdown type="success" dates={props.dates} timezone={props.timezone} />
         </>
       ) : props.dates[1] > state.currentDate ? (

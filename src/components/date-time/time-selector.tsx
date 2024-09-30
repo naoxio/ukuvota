@@ -1,5 +1,6 @@
+// TimeSelector.tsx
 import { component$, useSignal, $ } from '@builder.io/qwik';
-import type { PropFunction, QRL } from '@builder.io/qwik';
+import type { PropFunction } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { DateTimePicker } from '~/components/date-time/date-time-picker';
 import { DateTimeSlider } from '~/components/date-time/date-time-slider';
@@ -7,17 +8,16 @@ import { DateTimeSlider } from '~/components/date-time/date-time-slider';
 interface TimeSelectorProps {
   phase: string;
   startMinDate: number;
-  startDate: number; 
-  endDate: number; 
+  startDate: number;
+  endDate: number;
   timezone: string;
   hideTitle?: boolean;
-  onTimeChange$?: PropFunction<(phase: string, startDate: number, endDate: number) => void> | QRL<(phase: string, startDate: number, endDate: number) => Promise<void>>;
+  onTimeChange$?: PropFunction<(phase: string, startDate: number, endDate: number) => void>;
 }
 
 export const TimeSelector = component$((props: TimeSelectorProps) => {
   const { t } = useTranslator();
   const title = t(`phases.${props.phase}.title`);
-  
   const startDateSignal = useSignal(props.startDate);
   const endDateSignal = useSignal(props.endDate);
 
@@ -31,12 +31,13 @@ export const TimeSelector = component$((props: TimeSelectorProps) => {
     props.onTimeChange$?.(props.phase, startDateSignal.value, newDateMillis);
   });
 
+
   const handleSliderChange = $((newDuration: number) => {
-    const newEndDateMillis = startDateSignal.value + newDuration * 60 * 1000;
+    const newEndDateMillis = startDateSignal.value + newDuration;
     endDateSignal.value = newEndDateMillis;
     props.onTimeChange$?.(props.phase, startDateSignal.value, newEndDateMillis);
   });
-
+  
   return (
     <div class="time-selector" data-phase={props.phase}>
       {!props.hideTitle && (
@@ -62,9 +63,9 @@ export const TimeSelector = component$((props: TimeSelectorProps) => {
       />
       <br />
       <DateTimeSlider
-        duration={(endDateSignal.value - startDateSignal.value) / (1000 * 60)}
+        duration={(endDateSignal.value - startDateSignal.value) / 1000}
         id={`datetime-slider-${props.phase}`}
-        onChange$={handleSliderChange}
+        onDurationChange$={handleSliderChange}    
       />
       <br />
     </div>

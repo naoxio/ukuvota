@@ -17,7 +17,7 @@ export default component$((props: ProcessInfoProps) => {
 
   const weightLabel = process.weighting ? weightingOptions[process.weighting] : null;
   const timezone = process.timezone ? process.timezone : 'UTC';
-  const proposalsLength = process.proposals ? Object.values(process.proposals).length : 0;
+  const proposalsLength = Object.values(process.proposals).length;
 
   return (
     <div class="flex flex-col pb-3">
@@ -28,16 +28,16 @@ export default component$((props: ProcessInfoProps) => {
         {weightLabel}&nbsp;
         <Modal id="weightingInfo">
           <h3>{t('process.weighting')}</h3>
-          <div>{t('negativeScoreWeighting')}<div/>
+          <div>{t('negativeScoreWeighting')}</div>+
         </Modal>
       </div>
       <div>
         {process.proposalDates && process.proposalDates[0] > 0 && (
-          <ProcessTimeLabel timezone={timezone} phase="proposal" dates={process.proposalDates}/>
+          <ProcessTimeLabel timezone={timezone} mode="proposal" dates={process.proposalDates}/>
         )}
         <br/>
         {process.votingDates && (
-          <ProcessTimeLabel timezone={timezone} phase="voting" dates={process.votingDates} proposals_length={proposalsLength}/>
+          <ProcessTimeLabel timezone={timezone} mode="voting" dates={process.votingDates} proposals_length={proposalsLength}/>
         )}
         <br/>
       </div>

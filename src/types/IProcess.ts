@@ -14,6 +14,5 @@ export interface IProcess {
   proposals: IProposal[];
   voters?: IVoter[];
   timezone?: string;
-  phase?: 'full' | 'voting';
-  step?: string;
+  mode?: 'full' | 'voting';
 }

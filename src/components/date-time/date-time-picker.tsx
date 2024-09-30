@@ -41,8 +41,8 @@ export const DateTimePicker = component$((props: DateTimePickerProps) => {
     <div id={props.id} class="date-time-picker">
       <label class="date-time-label">
         {props.index === 0
-          ? t('phases.startAt')
-          : t('phases.endsAt')}
+          ? t('modes.startAt')
+          : t('modes.endsAt')}
       </label>
       <input
         type="datetime-local"

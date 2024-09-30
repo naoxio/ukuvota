@@ -6,10 +6,8 @@ import Modal from '~/components/modal/modal';
 import StoreManager from '~/utils/storeManager';
 import './setup-process.css';
 import { StepContext } from "~/contexts/stepContext";
-
 export default component$(() => {
   const stepStore = useContext(StepContext);
-
   const { t } = useTranslator();
   const processData = useProcessData();
   const timezoneOffset = new Date().getTimezoneOffset();
@@ -18,7 +16,6 @@ export default component$(() => {
   const weightingSignal = useSignal(processData.weighting || 'x1');
   const errorMessageSignal = useSignal('');
 
-  // eslint-disable-next-line
   useVisibleTask$(async () => {
     const store = new StoreManager('processData.bin');
     const savedDescription = await store.get('description') as string | null;
@@ -35,6 +32,11 @@ export default component$(() => {
     if (savedWeighting) {
       weightingSignal.value = savedWeighting;
       processData.weighting = savedWeighting;
+    } else {
+      weightingSignal.value = 'x1';
+      processData.weighting = 'x1';
+      await store.set('weighting', 'x1');
+      await store.save();
     }
   });
 
@@ -58,14 +60,22 @@ export default component$(() => {
 
   const handleWeightingChange = $(async (event: Event) => {
     const newWeighting = (event.target as HTMLSelectElement).value;
-    weightingSignal.value = newWeighting;
-    processData.weighting = newWeighting;
-    const store = new StoreManager('processData.bin');
-    await store.set('weighting', newWeighting);
-    await store.save();
+    if (newWeighting && Object.prototype.hasOwnProperty.call(weightingOptions, newWeighting)) {
+      weightingSignal.value = newWeighting;
+      processData.weighting = newWeighting;
+      const store = new StoreManager('processData.bin');
+      await store.set('weighting', newWeighting);
+      await store.save();
+    } else {
+      weightingSignal.value = 'x1';
+      processData.weighting = 'x1';
+      const store = new StoreManager('processData.bin');
+      await store.set('weighting', 'x1');
+      await store.save();
+    }
   });
-
-  const handleSubmit = $(async (event: Event, phase: 'full' | 'voting') => {
+  
+  const handleSubmit = $(async (event: Event, mode: 'full' | 'voting') => {
     event.preventDefault();
     if (!titleSignal.value.trim()) {
       errorMessageSignal.value = await t('setup.errorNoTitle');
@@ -73,7 +83,7 @@ export default component$(() => {
     }
     errorMessageSignal.value = '';
     
-    processData.phase = phase;
+    processData.mode = mode;
     processData.title = titleSignal.value;
     processData.description = descriptionSignal.value;
     processData.weighting = weightingSignal.value || 'x1';
@@ -82,26 +92,21 @@ export default component$(() => {
     await store.set('title', processData.title);
     await store.set('description', processData.description);
     await store.set('weighting', processData.weighting);
-    await store.set('phase', processData.phase);
+    await store.set('mode', processData.mode);
     await store.set('timezone', timezoneOffset.toString());
 
-    // Update the step and dates
-    processData.step = '2';
     const currentDate = new Date().getTime();
-    if (phase === 'full') {
+    if (mode === 'full') {
       processData.proposalDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
       processData.votingDates = [processData.proposalDates[1], processData.proposalDates[1] + 7 * 24 * 60 * 60 * 1000];
     } else {
       processData.votingDates = [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
     }
 
-    // Save the updated process data
-    await store.set('step', processData.step);
     await store.set('proposalDates', processData.proposalDates);
     await store.set('votingDates', processData.votingDates);
     await store.save();
 
-    // Move to the next step
     stepStore.step = 2;
   });
   
@@ -154,18 +159,18 @@ export default component$(() => {
       <div id="errorMessage" class={`error-message ${errorMessageSignal.value ? '' : 'hidden'}`}>
         <p>{errorMessageSignal.value}</p>
       </div>
-      <div class="button-container">
+      <div class="btn-container">
         <button 
           onClick$={(e) => handleSubmit(e, 'full')} 
-          class="cta-button"
+          class="cta-btn"
         >
-          {t('process.phases.full')}
+          {t('process.modes.full')}
         </button>
         <button 
           onClick$={(e) => handleSubmit(e, 'voting')} 
-          class="cta-button secondary"
+          class="cta-btn secondary"
         >
-          {t('process.phases.voting')}
+          {t('process.modes.voting')}
         </button>
       </div>
     </div>

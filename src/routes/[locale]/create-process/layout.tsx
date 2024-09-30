@@ -18,8 +18,8 @@ export default component$(() => {
 
   const steps = [
     { stepNumber: 1, disabled: false },
-    { stepNumber: 2, disabled: (!processData.title || !processData.phase) },
-    { stepNumber: 3, disabled: (!processData.title || !processData.phase || !processData.votingDates[1]) }
+    { stepNumber: 2, disabled: (!processData.title || !processData.mode) },
+    { stepNumber: 3, disabled: (!processData.title || !processData.mode || !processData.votingDates[1]) }
   ];
 
   return (

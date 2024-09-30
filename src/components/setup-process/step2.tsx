@@ -11,7 +11,6 @@ import { TimezoneSelector } from "~/components/date-time/timezone-selector";
 import './setup-process.css';
 import type { IProposal } from '~/types';
 import { DateTime } from 'luxon';
-
 export default component$(() => {
   const stepStore = useContext(StepContext);
   const { t } = useTranslator();
@@ -20,11 +19,25 @@ export default component$(() => {
   
   const errorMessage = useSignal<string | null>(null);
 
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
+    const store = new StoreManager('processData.bin');
+    const savedTitle = await store.get('title') as string | null;
+    if (savedTitle) {
+      processData.title = savedTitle;
+    }
+    const savedDescription = await store.get('description') as string | null;
+    if (savedDescription) {
+      processData.description = savedDescription;
+    }
+    const savedWeighting = await store.get('weighting') as string | null;
+    if (savedWeighting) {
+      processData.weighting = savedWeighting;
+    }
+    
     const [pStart, pEnd] = processData.proposalDates;
     const [vStart, vEnd] = processData.votingDates;
     const { pStart: newPStart, pEnd: newPEnd, vStart: newVStart, vEnd: newVEnd } = adjustDates(
-      processData.phase || '',
+      processData.mode || '',
       pStart,
       pEnd,
       vStart,
@@ -38,13 +51,14 @@ export default component$(() => {
     processData.timezone = newTimezone;
     const store = new StoreManager('processData.bin');
     await store.set('timezone', newTimezone);
+    await store.save();
   });
 
   const handleTimeChange = $(async (phase: string, startDate: number, endDate: number) => {
     const store = new StoreManager('processData.bin');
     if (phase === 'proposal') {
       processData.proposalDates = [startDate, endDate];
-      if (processData.phase === 'full') {
+      if (processData.mode === 'full') {
         adjustVotingPhaseDates(
           DateTime.fromMillis(endDate),
           DateTime.fromMillis(processData.votingDates[1]),
@@ -57,9 +71,15 @@ export default component$(() => {
       processData.votingDates = [startDate, endDate];
       await store.set('votingDates', processData.votingDates);
     }
+    await store.save();
   });
 
-  const handleBackButtonClick = $(() => {
+  const handleBackButtonClick = $(async () => {
+    const store = new StoreManager('processData.bin');
+    await store.set('title', processData.title);
+    await store.set('description', processData.description);
+    await store.set('weighting', processData.weighting);
+    await store.save();
     stepStore.step = 1;
   });
 
@@ -67,7 +87,7 @@ export default component$(() => {
     const store = new StoreManager(`proposals_${processData._id}.bin`);
     const proposals = await store.get('proposals') as IProposal[] | null;
 
-    if (processData.phase === 'voting' && (!proposals || proposals.length === 0)) {
+    if (processData.mode === 'voting' && (!proposals || proposals.length === 0)) {
       errorMessage.value = await t('error.noProposals');
       return;
     }
@@ -76,6 +96,7 @@ export default component$(() => {
       processData.proposals = proposals;
       const processStore = new StoreManager('processData.bin');
       await processStore.set('proposals', processData.proposals);
+      await processStore.save();
     }
 
     stepStore.step = 3;
@@ -83,7 +104,7 @@ export default component$(() => {
   
   return (
     <div id="step-2" class="step-container">
-      {processData.phase === "full" ? (
+      {processData.mode === "full" ? (
         <div class="phase-container">
           <h2 class="section-heading">{t('setup.timeLeftHeading')}</h2>
           <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
@@ -107,7 +128,7 @@ export default component$(() => {
             />
           </div>
         </div>
-      ) : processData.phase === "voting" ? (
+      ) : processData.mode === "voting" ? (
         <div class="phase-container">
           <h2 class="section-heading">{t('setup.timeLeftVotingHeading')}</h2>
           <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
@@ -136,9 +157,9 @@ export default component$(() => {
           )}
         </div>
       ) : null}
-      <div class="button-group">
-        <button id="backButton" class="cta-button secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="continueButton" class="cta-button primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
+      <div class="btn-group">
+        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="continueButton" class="cta-btn primary" onClick$={handleContinueButtonClick}>{t('buttons.continue')}</button>
       </div>
     </div>
   );

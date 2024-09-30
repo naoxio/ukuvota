@@ -3,12 +3,10 @@ import { useTranslator } from '~/i18n/translator';
 import { prettyFormatInTimezone } from '~/utils/dateUtils';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
-import { Store } from '@tauri-apps/plugin-store';
 import { StepContext } from '~/contexts/stepContext';
 import StoreManager from '~/utils/storeManager';
 
 import './setup-process.css';
-
 
 export default component$(() => {
   const stepStore = useContext(StepContext);
@@ -20,9 +18,7 @@ export default component$(() => {
   const errorMessage = useSignal<string | null>(null);
 
   useTask$(async () => {
-    // Any initialization logic if needed
-    const store = new Store('.processData.bin');
-    await store.load();
+    const store = new StoreManager('processData.bin');
     
     // Load description if it's not already in processData
     if (!processData.description) {
@@ -33,13 +29,12 @@ export default component$(() => {
     }
   });
 
-
   const handleBackButtonClick = $(() => {
     stepStore.step = 2;
   });
 
   const handleStartButtonClick = $(async () => {
-    const store = new StoreManager('.processData.bin');
+    const store = new StoreManager('processData.bin');
 
     // Save the final process data
     for (const [key, value] of Object.entries(processData)) {
@@ -53,7 +48,6 @@ export default component$(() => {
 
     errorMessage.value = 'Process started successfully!';
   });
-
 
   return (
     <div id="step-3" class="process-details">
@@ -100,9 +94,9 @@ export default component$(() => {
       {errorMessage.value && (
         <div id="errorMessage" class="success-message">{errorMessage.value}</div>
       )}
-      <div class="button-group">
-        <button id="backButton" class="cta-button secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
-        <button id="startButton" class="cta-button primary" onClick$={handleStartButtonClick}>{t('buttons.start')}</button>
+      <div class="btn-group">
+        <button id="backButton" class="cta-btn secondary" onClick$={handleBackButtonClick}>{t('buttons.back')}</button>
+        <button id="startButton" class="cta-btn primary" onClick$={handleStartButtonClick}>{t('buttons.start')}</button>
       </div>
     </div>
   );

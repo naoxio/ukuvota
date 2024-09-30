@@ -40,8 +40,8 @@ export default component$(() => {
           </div>
         </section>
         <section class="cta">
-          <Link href={`/${locale}/create-process`} class="button primary">{t('home.webAppCardButton')}</Link>
-          <a href="#" class="button secondary disabled" title="Coming soon">Get Android APK</a>
+          <Link href={`/${locale}/create-process`} class="btn primary">{t('home.webAppCardButton')}</Link>
+          <a href="#" class="btn secondary disabled" title="Coming soon">Get Android APK</a>
         </section>
       </main>
       <Footer />

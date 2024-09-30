@@ -1,6 +1,6 @@
 // src/hooks/useProposals.ts
 import { useStore, useTask$, $ } from '@builder.io/qwik';
-import { Store } from '@tauri-apps/plugin-store';
+import StoreManager from '~/utils/storeManager';
 import { v4 as uuidv4 } from 'uuid';
 import type { IProposal } from '~/types/IProposal';
 
@@ -12,9 +12,7 @@ export function useProposals(processId: string) {
   });
 
   useTask$(async () => {
-    const store = new Store(`.proposals_${processId}.bin`);
-    await store.load();
-
+    const store = new StoreManager(`proposals_${processId}.bin`);
     const existingProposals = await store.get('proposals') as IProposal[] | null;
     if (existingProposals) {
       proposalsStore.proposals = existingProposals;
@@ -23,8 +21,7 @@ export function useProposals(processId: string) {
 
   useTask$(async ({ track }) => {
     track(() => proposalsStore.proposals);
-    
-    const store = new Store(`.proposals_${processId}.bin`);
+    const store = new StoreManager(`proposals_${processId}.bin`);
     await store.set('proposals', proposalsStore.proposals);
     await store.save();
   });
@@ -44,7 +41,7 @@ export function useProposals(processId: string) {
   });
 
   const updateProposal = $((id: string, title: string, description: string) => {
-    proposalsStore.proposals = proposalsStore.proposals.map(p => 
+    proposalsStore.proposals = proposalsStore.proposals.map(p =>
       p.id === id ? { ...p, title, description } : p
     );
   });

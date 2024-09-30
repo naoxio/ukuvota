@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
         weighting: formData.get('weighting'),
         title: formData.get('topicQuestion'),
         descriptionId: formData.get('descriptionId'),
-        phase: formData.get('phase')
+        mode: formData.get('mode')
       });
 
       const headers = new Headers({
@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(null, { status: 303, headers: { 'Location': '/create' } });
     }
   } else if (step === 2) {
-    const phase = processCookieObject.phase;
+    const mode = processCookieObject.mode;
 
     const currentDate = timezone ? utcToZonedTime(new Date(), timezone) : new Date();
 
@@ -50,10 +50,10 @@ export const POST: APIRoute = async ({ request }) => {
       ? Number(formData.get('end-date-picker-voting'))
       : processCookieObject.endVotingDate || (startVotingDate + 3600000);
 
-    if (phase === 'full') {
+    if (mode === 'full') {
       if (processCookieObject.proposals) processCookieObject.proposals = []
 
-      let startProposalDate = formData.get('start-date-picker-proposal')
+      const startProposalDate = formData.get('start-date-picker-proposal')
         ? Number(formData.get('start-date-picker-proposal'))
         : processCookieObject.startProposalDate || currentDate.getTime();
 
@@ -88,7 +88,7 @@ export const POST: APIRoute = async ({ request }) => {
         console.error("Error:", error);
         return new Response(null, { status: 303, headers: { 'Location': referer } });
       }
-    } else if (phase === 'voting') {
+    } else {
       const proposals = JSON.parse(formData.get('proposals') as string|| '') as IProposal[] || processCookieObject.proposals || [];
       if (proposals.length < 2) {
         const headers = new Headers({
@@ -127,8 +127,6 @@ export const POST: APIRoute = async ({ request }) => {
         console.error("Error:", error);
         return new Response(null, { status: 303, headers: { 'Location': referer } });
       }
-    } else {
-      return new Response(null, { status: 303, headers: { 'Location': referer } });
     }
   }
   console.error("Invalid Step");
