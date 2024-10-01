@@ -1,4 +1,4 @@
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 
 const formatDuration = (durationInSeconds: number): string => {
   const times = {

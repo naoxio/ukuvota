@@ -20,7 +20,10 @@ const adjustDates = (
     return dateNum ? DateTime.fromMillis(dateNum) : defaultDate;
   };
   const shiftDate = (startDate: DateTime, endDate: DateTime, shiftAmount: number): [DateTime, DateTime] => {
-    return [startDate.plus({ milliseconds: shiftAmount }), endDate.plus({ milliseconds: shiftAmount })];
+    const duration = endDate.diff(startDate);
+    const newStartDate = startDate.plus({ milliseconds: shiftAmount });
+    const newEndDate = newStartDate.plus(duration);
+    return [newStartDate, newEndDate];
   };
 
   let pStart = parseDate(proposalStartDate, now);
@@ -28,26 +31,28 @@ const adjustDates = (
   let vStart = parseDate(votingStartDate, (phase === 'full' ? pEnd : now));
   let vEnd = parseDate(votingEndDate, vStart.plus({ hours: 1 }));
 
-  if (pStart < now && proposalStartDate) {
+  if (pStart < now) {
     const shiftAmount = now.diff(pStart).as('milliseconds');
     [pStart, pEnd] = shiftDate(pStart, pEnd, shiftAmount);
+    if (phase === 'full') {
+      [vStart, vEnd] = shiftDate(vStart, vEnd, shiftAmount);
+    }
   }
 
-  if (vStart < now && votingStartDate) {
+  if (phase === 'voting' && vStart < now) {
     const shiftAmount = now.diff(vStart).as('milliseconds');
     [vStart, vEnd] = shiftDate(vStart, vEnd, shiftAmount);
   }
 
   return { pStart, pEnd, vStart, vEnd };
 };
-
 const adjustVotingPhaseDates = (
   originalProposalEndDate: DateTime,
   proposalEndDate: DateTime,
   processData: IProcess,
   timezone: string
 ) => {
-  if (processData.phase !== 'full') return;
+  if (processData.mode !== 'full') return;
 
   const originalVotingStartDate = DateTime.fromMillis(processData.votingDates[0], { zone: timezone });
   const originalVotingEndDate = DateTime.fromMillis(processData.votingDates[1], { zone: timezone });

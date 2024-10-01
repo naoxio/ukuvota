@@ -53,11 +53,16 @@
     "setDuration": "Imposta durata",
     "timeLeftHeading": "Seleziona il tempo per le proposte e la votazione",
     "timeLeftVotingHeading": "Seleziona l'orario per la votazione",
-    "timezone": "Fuso orario",
     "errorMinProposals": "Hai bisogno di almeno 2 proposte per procedere.",
     "errorNotEnoughValidProposals": "Hai bisogno di almeno 2 proposte non vuote per procedere.",
     "errorSelectTime": "Seleziona orari validi per tutte le fasi.",
-    "errorNoTitle": "Inserisci un titolo prima di procedere."
+    "errorNoTitle": "Inserisci un titolo prima di procedere.",
+
+    "startsImmediately": "Inizia immediatamente dopo aver premuto Avvia",
+    "startsIn": "Inizia tra {duration}",
+    "startsAfterProposal": "Inizia dopo la fase di proposta",
+    "processStarted": "Processo avviato con successo!",
+    "timezone": "Fuso orario"
   },
   "loadQuill": "Caricamento di QuillEditor...",
   "policy": "Informativa sulla privacy",

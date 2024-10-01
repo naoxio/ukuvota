@@ -1,23 +1,43 @@
-import { component$, useTask$, $, useContext, useSignal } from '@builder.io/qwik';
+import { component$, useTask$, $, useContext, useSignal, useStore } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
-import { prettyFormatInTimezone } from '~/utils/dateUtils';
+import { prettyFormatInTimezone, formatDuration } from '~/utils/dateUtils';
 import { useProcessData } from '~/hooks/useProcessData';
 import { useProposals } from '~/hooks/useProposals';
 import { StepContext } from '~/contexts/stepContext';
-
+import { DateTime } from 'luxon';
 import './setup-process.css';
 
 export default component$(() => {
   const stepStore = useContext(StepContext);
-
   const { t } = useTranslator();
   const { processData, saveProcessData, loadProcessData } = useProcessData();
   const { proposalsStore } = useProposals(processData._id);
-
   const errorMessage = useSignal<string | null>(null);
+  const startsIn = useStore({ proposal: '', voting: '' });
+
+  useTask$(async ({ track }) => {
+    track(() => processData.proposalDates[0]);
+    track(() => processData.votingDates[0]);
+
+    const now = DateTime.now();
+    const proposalStart = DateTime.fromMillis(processData.proposalDates[0]);
+    const votingStart = DateTime.fromMillis(processData.votingDates[0]);
+
+    const proposalDiff = proposalStart.diff(now).as('seconds');
+    const votingDiff = votingStart.diff(now).as('seconds');
+
+    startsIn.proposal = proposalDiff <= 60 
+      ? await t('setup.startsImmediately')
+      : await t('setup.startsIn', { duration: formatDuration(proposalDiff) });
+    
+    startsIn.voting = votingDiff <= 60 
+      ? await t('setup.startsAfterProposal')
+      : await t('setup.startsIn', { duration: formatDuration(votingDiff) });
+  });
 
   useTask$(async () => {
     await loadProcessData();
+    await saveProcessData();
   });
 
   const handleBackButtonClick = $(async () => {
@@ -27,13 +47,9 @@ export default component$(() => {
   });
 
   const handleStartButtonClick = $(async () => {
-    // Update proposals in processData
     processData.proposals = proposalsStore.proposals;
-
-    // Save the final process data
     await saveProcessData();
-
-    errorMessage.value = 'Process started successfully!';
+    errorMessage.value = await t('setup.processStarted');
   });
 
   return (
@@ -49,14 +65,21 @@ export default component$(() => {
         <div class="summary-grid">
           {processData.proposalDates[0] && processData.proposalDates[1] && (
             <div class="summary-item">
-              <h2 class="item-title">{t(`phases.proposal.title`)}</h2>
+              <h2 class="item-title">{t('phases.proposal.title')}</h2>
               <p><span class="label">{t('phases.startAt')}:</span> {prettyFormatInTimezone(processData.proposalDates[0], processData.timezone || 'UTC')}</p>
+              <p class="starts-in">{startsIn.proposal}</p>
               <p><span class="label">{t('phases.endsAt')}:</span> {prettyFormatInTimezone(processData.proposalDates[1], processData.timezone || 'UTC')}</p>
             </div>
           )}
+          
           <div class="summary-item">
-            <h2 class="item-title">{t(`phases.voting.title`)}</h2>
-            {processData.votingDates[0] && <p><span class="label">{t('phases.startAt')}:</span> {prettyFormatInTimezone(processData.votingDates[0], processData.timezone || 'UTC')}</p>}
+            <h2 class="item-title">{t('phases.voting.title')}</h2>
+            {processData.votingDates[0] && (
+              <>
+                <p><span class="label">{t('phases.startAt')}:</span> {prettyFormatInTimezone(processData.votingDates[0], processData.timezone || 'UTC')}</p>
+                <p class="starts-in">{startsIn.voting}</p>
+              </>
+            )}
             {processData.votingDates[1] && <p><span class="label">{t('phases.endsAt')}:</span> {prettyFormatInTimezone(processData.votingDates[1], processData.timezone || 'UTC')}</p>}
           </div>
           <div class="summary-item">

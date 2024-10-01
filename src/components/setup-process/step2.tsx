@@ -18,28 +18,44 @@ export default component$(() => {
   
   const errorMessage = useSignal<string | null>(null);
 
+  const adjustProcessDates = $(() => {
+    const { pStart, pEnd, vStart, vEnd } = adjustDates(
+      processData.mode || '',
+      processData.proposalDates[0],
+      processData.proposalDates[1],
+      processData.votingDates[0],
+      processData.votingDates[1]
+    );
+    
+    processData.proposalDates = [pStart.toMillis(), pEnd.toMillis()];
+    processData.votingDates = [vStart.toMillis(), vEnd.toMillis()];
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     await loadProcessData();
-    const [pStart, pEnd] = processData.proposalDates;
-    const [vStart, vEnd] = processData.votingDates;
-    const { pStart: newPStart, pEnd: newPEnd, vStart: newVStart, vEnd: newVEnd } = adjustDates(
-      processData.mode || '',
-      pStart,
-      pEnd,
-      vStart,
-      vEnd
-    );
-    
-    Object.assign(processData, {
-      proposalDates: [newPStart.toMillis(), newPEnd.toMillis()],
-      votingDates: [newVStart.toMillis(), newVEnd.toMillis()]
-    });
+    adjustProcessDates();
     await saveProcessData();
   });
 
   const handleTimezoneChange = $(async (newTimezone: string) => {
     processData.timezone = newTimezone;
+    adjustProcessDates();
+    await saveProcessData();
+  });
+
+  const handleReset = $(async () => {
+    const now = DateTime.now();
+    const tenMinutesLater = now.plus({ minutes: 10 });
+    
+    if (processData.mode === 'full') {
+      processData.proposalDates = [now.toMillis(), tenMinutesLater.toMillis()];
+      processData.votingDates = [tenMinutesLater.toMillis(), tenMinutesLater.plus({ minutes: 10 }).toMillis()];
+    } else if (processData.mode === 'voting') {
+      processData.votingDates = [now.toMillis(), tenMinutesLater.toMillis()];
+    }
+    
+    adjustProcessDates();
     await saveProcessData();
   });
 
@@ -48,8 +64,8 @@ export default component$(() => {
       processData.proposalDates = [startDate, endDate];
       if (processData.mode === 'full') {
         adjustVotingPhaseDates(
+          DateTime.fromMillis(processData.proposalDates[1]),
           DateTime.fromMillis(endDate),
-          DateTime.fromMillis(processData.votingDates[1]),
           processData,
           processData.timezone || 'UTC'
         );
@@ -57,6 +73,7 @@ export default component$(() => {
     } else {
       processData.votingDates = [startDate, endDate];
     }
+    adjustProcessDates();
     await saveProcessData();
   });
 
@@ -79,9 +96,17 @@ export default component$(() => {
   
   return (
     <div id="step-2" class="step-container">
+      <div class="reset-button-container">
+        <button id="resetButton" class="btn-ghost" onClick$={handleReset}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2v6h6"></path>
+            <path d="M3 13a9 9 0 1 0 3-7.7L3 8"></path>
+          </svg>
+        </button>
+      </div>
       {processData.mode === "full" ? (
         <div class="phase-container">
-          <h2 class="section-heading">{t('setup.timeLeftHeading')}</h2>
+          <h2 class="section-heading">{t('setup.t imeLeftHeading')}</h2>
           <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
           <div class="spacer"></div>
           <div class="time-selectors">

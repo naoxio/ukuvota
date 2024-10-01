@@ -100,22 +100,28 @@ h2 {
   color: var(--primary-color);
   background-color: rgba(255, 152, 0, 0.1);
 }
-
 .btn-ghost {
   color: var(--text-color);
   background: none;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
+  border: none;
+  transition: background-color var(--transition-speed), color var(--transition-speed), transform 0.1s ease;
 }
 
 .btn-ghost:hover, .btn-ghost:focus {
   color: var(--primary-color);
   background-color: rgba(255, 152, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-ghost:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
@@ -155,6 +161,10 @@ textarea {
   padding: 0.5rem;
   font-size: 0.9rem;
   transition: all var(--transition-speed);
+}
+
+textarea {
+  resize: vertical;
 }
 
 /* Select specific styles */

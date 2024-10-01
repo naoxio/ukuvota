@@ -15,19 +15,20 @@ interface DateTimeSliderProps {
 
 export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
   const { t } = useTranslator();
-  const initialSliderValue = durationToSlider(props.duration / 60); // Convert seconds to minutes
-  const sliderValue = useSignal(initialSliderValue);
+  const sliderValue = useSignal(durationToSlider(props.duration / 60));
   const durationDisplay = useSignal('');
 
-  const updateDurationDisplay = $((value: number) => {
-    const durationInSeconds = sliderToDuration(value) * 60; // Convert minutes to seconds
-    durationDisplay.value = formatDuration(durationInSeconds);
-    props.onDurationChange$?.(durationInSeconds);
+  useTask$(({ track }) => {
+    const duration = track(() => props.duration);
+    sliderValue.value = durationToSlider(duration / 60);
+    durationDisplay.value = formatDuration(duration);
   });
 
-  useTask$(({ track }) => {
-    const value = track(() => sliderValue.value);
-    updateDurationDisplay(value);
+  const handleSliderChange = $((event: Event) => {
+    const value = Number((event.target as HTMLInputElement).value);
+    const newDuration = sliderToDuration(value) * 60;
+    durationDisplay.value = formatDuration(newDuration);
+    props.onDurationChange$?.(newDuration);
   });
 
   return (
@@ -43,7 +44,7 @@ export const DateTimeSlider = component$((props: DateTimeSliderProps) => {
         class="form-range"
         name={props.id}
         value={sliderValue.value}
-        onInput$={(event) => sliderValue.value = Number((event.target as HTMLInputElement).value)}
+        onInput$={handleSliderChange}
       />
     </div>
   );

@@ -1,5 +1,4 @@
-// TimeSelector.tsx
-import { component$, useSignal, $ } from '@builder.io/qwik';
+import { component$, useSignal, $, useTask$ } from '@builder.io/qwik';
 import type { PropFunction } from '@builder.io/qwik';
 import { useTranslator } from '~/i18n/translator';
 import { DateTimePicker } from '~/components/date-time/date-time-picker';
@@ -20,29 +19,38 @@ export const TimeSelector = component$((props: TimeSelectorProps) => {
   const title = t(`phases.${props.phase}.title`);
   const startDateSignal = useSignal(props.startDate);
   const endDateSignal = useSignal(props.endDate);
+  const durationSignal = useSignal((props.endDate - props.startDate) / 1000);
+
+  useTask$(({ track }) => {
+    track(() => props.startDate);
+    track(() => props.endDate);
+    startDateSignal.value = props.startDate;
+    endDateSignal.value = props.endDate;
+    durationSignal.value = (props.endDate - props.startDate) / 1000;
+  });
 
   const handleStartDateChange = $((newDateMillis: number) => {
     startDateSignal.value = newDateMillis;
+    durationSignal.value = (endDateSignal.value - newDateMillis) / 1000;
     props.onTimeChange$?.(props.phase, newDateMillis, endDateSignal.value);
   });
 
   const handleEndDateChange = $((newDateMillis: number) => {
     endDateSignal.value = newDateMillis;
+    durationSignal.value = (newDateMillis - startDateSignal.value) / 1000;
     props.onTimeChange$?.(props.phase, startDateSignal.value, newDateMillis);
   });
 
-
   const handleSliderChange = $((newDuration: number) => {
-    const newEndDateMillis = startDateSignal.value + newDuration;
+    const newEndDateMillis = startDateSignal.value + newDuration * 1000;
     endDateSignal.value = newEndDateMillis;
+    durationSignal.value = newDuration;
     props.onTimeChange$?.(props.phase, startDateSignal.value, newEndDateMillis);
   });
-  
+
   return (
     <div class="time-selector" data-phase={props.phase}>
-      {!props.hideTitle && (
-        <h3 class="title">{title}</h3>
-      )}
+      {!props.hideTitle && <h3 class="title">{title}</h3>}
       <br />
       <DateTimePicker
         index={0}
@@ -63,9 +71,9 @@ export const TimeSelector = component$((props: TimeSelectorProps) => {
       />
       <br />
       <DateTimeSlider
-        duration={(endDateSignal.value - startDateSignal.value) / 1000}
+        duration={durationSignal.value}
         id={`datetime-slider-${props.phase}`}
-        onDurationChange$={handleSliderChange}    
+        onDurationChange$={handleSliderChange}
       />
       <br />
     </div>

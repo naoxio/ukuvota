@@ -54,11 +54,15 @@
     "setDuration": "Dauer festlegen",
     "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
     "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
-    "timezone": "Zeitzone",
-
     "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
     "errorNotEnoughValidProposals": "Sie benötigen mindestens 2 nicht-leere Vorschläge, um fortzufahren.",
-    "errorSelectTime": "Bitte wählen Sie gültige Zeiten für alle Phasen aus."
+    "errorSelectTime": "Bitte wählen Sie gültige Zeiten für alle Phasen aus.",
+
+    "startsImmediately": "Startet sofort nach dem Drücken von Start",
+    "startsIn": "Startet in {duration}",
+    "startsAfterProposal": "Startet nach der Vorschlagsphase",
+    "processStarted": "Prozess erfolgreich gestartet!",
+    "timezone": "Zeitzone"
 
   },
   "loadQuill": "Lade QuillEditor...",
@@ -97,7 +101,7 @@
       "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
       "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
       "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket",
-          "errorNoTitle": "Bitte geben Sie einen Titel ein, bevor Sie fortfahren."
+      "errorNoTitle": "Bitte geben Sie einen Titel ein, bevor Sie fortfahren."
     } 
   },
   "remainingTime": "verbleibende Zeit",
