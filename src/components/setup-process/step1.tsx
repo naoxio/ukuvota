@@ -46,7 +46,6 @@ export default component$(() => {
       processData.weighting = '1';
     }
   });
-  
   const handleSubmit = $(async (event: Event, mode: 'full' | 'voting') => {
     event.preventDefault();
     if (!titleSignal.value.trim()) {
@@ -57,18 +56,25 @@ export default component$(() => {
     
     const currentDate = new Date().getTime();
     
+    // Preserve existing dates if they are set
+    const proposalDates = processData.proposalDates[0] && processData.proposalDates[1] 
+      ? processData.proposalDates 
+      : [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000];
+    
+    const votingDates = processData.votingDates[0] && processData.votingDates[1]
+      ? processData.votingDates
+      : [currentDate + 7 * 24 * 60 * 60 * 1000, currentDate + 14 * 24 * 60 * 60 * 1000];
+  
     Object.assign(processData, {
       mode,
       title: titleSignal.value,
       description: descriptionSignal.value,
       weighting: weightingSignal.value || '1',
-      proposalDates: mode === 'full' ? [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000] : undefined,
-      votingDates: mode === 'full' 
-        ? [currentDate + 7 * 24 * 60 * 60 * 1000, currentDate + 14 * 24 * 60 * 60 * 1000]
-        : [currentDate, currentDate + 7 * 24 * 60 * 60 * 1000],
+      proposalDates: mode === 'full' ? proposalDates : undefined,
+      votingDates: mode === 'full' ? votingDates : proposalDates,
       step: 2
     });
-
+  
     await saveProcessData();
     stepStore.step = 2;
   });

@@ -1,0 +1,179 @@
+{
+    "alert": {
+      "connecting": {
+        "connectingToWebsocket": "Conectando a WebSocket..."
+      },
+      "error": {
+        "emptyName": "Por favor, añada un nombre",
+        "errorConnectingToWebsocket": "Error al conectar con WebSocket",
+        "missingProposals": "Faltan propuestas, necesita seleccionar al menos 2 propuestas",
+        "payloadSizeTooLarge": "El tamaño de la carga es demasiado grande, por favor reduzca el tamaño de su contenido",
+        "proposalsMissing": "Faltan propuestas, necesita al menos 2 propuestas",
+        "topicQuestion": "Por favor, añada una Pregunta de Tema"
+      },
+      "info": {
+        "submittingVote": "Enviando voto..."
+      },
+      "success": {
+        "createProcess": "Iniciando proceso...",
+        "creatingProcess": "El proceso se está creando...",
+        "repeatProcess": "Repetir proceso con selección...",
+        "submitVote": "Voto enviado para: ",
+        "websocketConnected": "Conectado exitosamente a WebSocket"
+      }
+    },
+    "buttons": {
+      "about": "Acerca de",
+      "back": "Atrás",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "continue": "Continuar",
+      "dashboard": "Panel",
+      "delete": "Eliminar",
+      "done": "Hecho",
+      "edit": "Editar",
+      "go": "IR",
+      "home": "Inicio",
+      "save": "Guardar",
+      "select": "Seleccionar",
+      "start": "Iniciar proceso",
+      "toggleDark": "Alternar modo oscuro",
+      "toggleLangs": "Cambiar idiomas",
+      "update": "Actualizar"
+    },
+    "calendar": "Calendario",
+    "dashboard": {
+      "add": "Añadir",
+      "addByUUID": "Añadir Proceso por UUID",
+      "beginProcess": "Comience creando un nuevo proceso o añadiendo uno existente para empezar.",
+      "createNewProcess": "Crear Nuevo Proceso",
+      "enterUUID": "Introduzca UUID o enlace",
+      "export": "Exportar Procesos",
+      "import": "Importar",
+      "importProcesses": "Importar Procesos",
+      "noProcesses": "Actualmente, no hay procesos para mostrar.",
+      "options": "¿Qué le gustaría hacer?"
+    },
+    "description": "Ukuvota es una potente herramienta de toma de decisiones que ayuda a las personas a tomar decisiones informadas de manera colaborativa y organizada.",
+    "donate": "Donar",
+    "enableJavaScript": "Se requiere JavaScript para la funcionalidad completa de esta página. Por favor, habilite JavaScript en la configuración de su navegador.",
+    "guide": {
+      "checkboxLabel": "No mostrar esta guía la próxima vez",
+      "createProcessButton": "Crear Proceso"
+    },
+    "home": {
+      "consensusDrivenDescription": "Recopile diversas propuestas de los participantes, fomentando un proceso de toma de decisiones colaborativo.",
+      "consensusDrivenTitle": "Enfoque Basado en el Consenso",
+      "description": "Votación Simple, Segura y Empoderadora",
+      "effortlessSharingDescription": "Comparta fácilmente enlaces de votación con cualquier persona, permitiendo una participación y compromiso generalizado.",
+      "effortlessSharingTitle": "Compartir Sin Esfuerzo",
+      "subheader": "Votación Simple, Segura y Empoderadora",
+      "telegramBotCardButton": "Ir al Bot",
+      "telegramBotCardDescription": "Votación conveniente a través de Telegram, integrando la votación en la comunicación diaria.",
+      "telegramBotCardTitle": "Bot de Telegram",
+      "transparentResultsDescription": "Después de que finaliza la fase de votación, todos los votos se muestran de manera transparente, promoviendo la confianza en el proceso.",
+      "transparentResultsTitle": "Resultados Transparentes",
+      "userFriendlyDescription": "Plataforma intuitiva y fácil de navegar, asegurando fácil accesibilidad en todos los dispositivos.",
+      "userFriendlyTitle": "Interfaz Amigable",
+      "webAppCardButton": "Crear Nuevo Proceso",
+      "webAppCardDescription": "Experiencia de votación web sin problemas, accesible y fácil de usar.",
+      "webAppCardTitle": "Aplicación Web",
+      "weightedScoreDescription": "Empoderando a los votantes para expresar sus preferencias con precisión, permitiendo que los votos negativos tengan más peso que los positivos.",
+      "weightedScoreTitle": "Votación de Puntuación Ponderada"
+    },
+    "loadQuill": "Cargando QuillEditor...",
+    "loading": {
+      "message": "Cargando..."
+    },
+    "negativeScoreWeighting": "Opcionalmente, puede aumentar el impacto de las puntuaciones negativas utilizando la ponderación de puntuación negativa. Este es un multiplicador simple: x1 no tiene impacto en las puntuaciones negativas, x2 duplica su impacto, x3 las triplica. Ejemplo: un voto de -3 donde hay una ponderación de puntuación negativa de x3 se cuenta como -9. Al aumentar el impacto de las puntuaciones negativas, el grupo se mueve hacia propuestas que son más aceptables (menos 'negativas') que propuestas que son más preferidas (más 'positivas' netas). ¡El multiplicador de ponderación 'correcto' para su grupo probablemente se encuentre mejor a través de la experimentación!",
+    "notFound": "No encontrado",
+    "phases": {
+      "endsAt": "Termina a las",
+      "lastFor": "Dura",
+      "proposal": {
+        "title": "Fase de Propuesta"
+      },
+      "start": "Comienza",
+      "startAt": "Comienza a las",
+      "voting": {
+        "title": "Fase de Votación"
+      }
+    },
+    "policy": "Política de Privacidad",
+    "process": {
+      "addProposal": "Añadir propuesta",
+      "addProposalTemplate": "Añadir propuesta por plantilla",
+      "advancedOptions": "Mostrar Opciones Avanzadas",
+      "amountProposals": "Cantidad de propuestas",
+      "averageScore": "Puntuación Promedio",
+      "description": "Descripción",
+      "exportData": "Exportar Datos",
+      "limitProposals": "Límite de cantidad de propuestas",
+      "maxProposals": "Cantidad máxima de propuestas",
+      "modes": {
+        "full": "Fase de Propuesta + Votación",
+        "select": "Seleccionar fases",
+        "voting": "Solo Fase de Votación"
+      },
+      "noProposalsSubmitted": "No se presentaron propuestas.",
+      "noVotesSubmitted": "No se han enviado votos",
+      "proposal": "Propuesta",
+      "proposals": "Propuestas",
+      "qrcode": "Código QR",
+      "results": "Resultados",
+      "shareableUrl": "Enlace compartible",
+      "starting": "Iniciando proceso...",
+      "submitVote": "Enviar Voto",
+      "title": "Título",
+      "topic": "Pregunta del Tema",
+      "totalScore": "Puntuación Total",
+      "voter": "Votante",
+      "voterName": "Su nombre o alias persistente",
+      "voters": "Votantes",
+      "weighting": "Ponderación de Puntuación Negativa"
+    },
+    "proposal": {
+      "one": {
+        "description": "Repetir el proceso y buscar otras opciones.",
+        "title": "Repetir proceso"
+      },
+      "zero": {
+        "description": "Mantener las cosas como están.",
+        "title": "Status quo"
+      }
+    },
+    "proposalsContainer": "Contenedor de Propuestas",
+    "addProposal": "Añadir Propuesta",
+    "addProposalTemplate": "Añadir Plantilla de Propuesta",
+    "emptyProposal": "Propuesta vacía",
+    "noProposalsFound": "No se encontraron propuestas.",
+    "remainingTime": "tiempo restante",
+    "repeatProcess": "Repetir proceso",
+    "setup": {
+      "continueEditing": "Continuar Editando",
+      "duration": "Duración",
+      "errorMinProposals": "Necesita al menos 2 propuestas para continuar.",
+      "errorNoTitle": "Por favor, introduzca un título antes de continuar.",
+      "errorNotEnoughValidProposals": "Necesita al menos 2 propuestas no vacías para continuar.",
+      "errorSelectTime": "Por favor, seleccione tiempos válidos para todas las fases.",
+      "existingProcessPrompt": "Tiene un proceso existente. ¿Le gustaría continuar?",
+      "process": "Configurar Proceso",
+      "processStarted": "¡Proceso iniciado con éxito!",
+      "proposals": "Añadir propuestas",
+      "selectTimeForVoting": "Seleccione el tiempo para la votación",
+      "setDate": "Establecer Fecha",
+      "setDuration": "Establecer Duración",
+      "startNew": "Comenzar de nuevo",
+      "startsAfterProposal": "Comienza después de la fase de propuesta",
+      "startsImmediately": "Comienza inmediatamente después de presionar Iniciar",
+      "startsIn": "Comienza en {duration}",
+      "timeLeftHeading": "Seleccione el tiempo para propuestas y votación",
+      "timeLeftVotingHeading": "Seleccione el tiempo para la votación",
+      "timezone": "Zona horaria"
+    },
+    "skipped": "omitido",
+    "slider": "Deslizador",
+    "tagline": "Encontrando la mejor solución",
+    "wip": "Trabajo en progreso"
+  }
+  

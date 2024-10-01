@@ -106,7 +106,7 @@ export default component$(() => {
       </div>
       {processData.mode === "full" ? (
         <div class="phase-container">
-          <h2 class="section-heading">{t('setup.t imeLeftHeading')}</h2>
+          <h2 class="section-heading">{t('setup.timeLeftHeading')}</h2>
           <TimezoneSelector onTimezoneChange$={handleTimezoneChange} timezone={processData.timezone || 'UTC'} />
           <div class="spacer"></div>
           <div class="time-selectors">

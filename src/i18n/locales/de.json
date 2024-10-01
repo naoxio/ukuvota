@@ -1,179 +1,178 @@
 {
-  "proposalsContainer": "Vorschläge Container",
-  "noProposalsFound": "Keine Vorschläge gefunden.",
-  "addProposal": "Vorschlag hinzufügen",
-  "emptyProposal": "Leerer Vorschlag",
-  "addProposalTemplate": "Vorlagen-Vorschlag hinzufügen",
-  "enableJavaScript": "JavaScript wird für die volle Funktionalität dieser Seite benötigt. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.",
-  "home": {
-    "description": "Einfaches, sicheres und ermächtigendes Wählen",
-    "subheader": "Einfaches, sicheres und ermächtigendes Wählen",
-    "webAppCardTitle": "Web-App",
-    "webAppCardDescription": "Nahtlose webbasierte Wahlerfahrung, zugänglich und benutzerfreundlich.",
-    "webAppCardButton": "Neuen Prozess Erstellen",
-    "telegramBotCardTitle": "Telegram-Bot",
-    "telegramBotCardDescription": "Bequemes Wählen über Telegram, integriert in die tägliche Kommunikation.",
-    "telegramBotCardButton": "Zum Bot gehen",
-  
-    "weightedScoreTitle": "Gewichtete Punktabstimmung",
-    "weightedScoreDescription": "Ermöglicht Wählern, ihre Präferenzen präzise auszudrücken, wobei negative Stimmen mehr Gewicht haben als positive.",
-    "effortlessSharingTitle": "Mühelose Weitergabe",
-    "effortlessSharingDescription": "Teilen Sie Abstimmungslinks nahtlos mit jedem und ermöglichen Sie so eine breite Beteiligung und Engagement.",
-    "consensusDrivenTitle": "Konsensorientierter Ansatz",
-    "consensusDrivenDescription": "Sammelt vielfältige Vorschläge von Teilnehmern und fördert einen kollaborativen Entscheidungsprozess.",
-    "userFriendlyTitle": "Benutzerfreundliche Oberfläche",
-    "userFriendlyDescription": "Intuitive und einfach zu navigierende Plattform, die eine einfache Zugänglichkeit auf allen Geräten gewährleistet.",
-    "transparentResultsTitle": "Transparente Ergebnisse",
-    "transparentResultsDescription": "Nach Ende der Abstimmungsphase werden alle Stimmen transparent angezeigt und fördern so das Vertrauen in den Prozess."
+  "alert": {
+    "connecting": {
+      "connectingToWebsocket": "Verbindung zum WebSocket wird hergestellt..."
+    },
+    "error": {
+      "emptyName": "Bitte fügen Sie einen Namen hinzu",
+      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket",
+      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen",
+      "payloadSizeTooLarge": "Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
+      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge",
+      "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu"
+    },
+    "info": {
+      "submittingVote": "Stimme wird abgegeben..."
+    },
+    "success": {
+      "createProcess": "Prozess wird gestartet...",
+      "creatingProcess": "Prozess wird erstellt...",
+      "repeatProcess": "Prozess mit Auswahl wiederholen...",
+      "submitVote": "Stimme abgegeben für: ",
+      "websocketConnected": "Erfolgreich mit WebSocket verbunden"
+    }
   },
+  "buttons": {
+    "about": "Über",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "continue": "Fortfahren",
+    "dashboard": "Dashboard",
+    "delete": "Löschen",
+    "done": "Fertig",
+    "edit": "Bearbeiten",
+    "go": "LOS",
+    "home": "Startseite",
+    "save": "Speichern",
+    "select": "Auswählen",
+    "start": "Prozess starten",
+    "toggleDark": "Dunkelmodus umschalten",
+    "toggleLangs": "Sprachen ändern",
+    "update": "Aktualisieren"
+  },
+  "calendar": "Kalender",
   "dashboard": {
-    "noProcesses": "Derzeit gibt es keine anzuzeigenden Prozesse.",
-    "beginProcess": "Starten Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen.",
-    "options": "Was möchten Sie tun?",
-    "createNewProcess": "Neuen Prozess erstellen",
     "add": "Hinzufügen",
-    "addByUUID": "Prozess per UUID hinzufügen",
-    "enterUUID": "Geben Sie UUID oder Link ein",
-    "importProcesses": "Prozesse importieren",
+    "addByUUID": "Prozess nach UUID hinzufügen",
+    "beginProcess": "Beginnen Sie, indem Sie einen neuen Prozess erstellen oder einen bestehenden hinzufügen, um loszulegen.",
+    "createNewProcess": "Neuen Prozess erstellen",
+    "enterUUID": "UUID oder Link eingeben",
+    "export": "Prozesse exportieren",
     "import": "Importieren",
-    "export": "Prozesse exportieren"
+    "importProcesses": "Prozesse importieren",
+    "noProcesses": "Derzeit gibt es keine Prozesse zum Anzeigen.",
+    "options": "Was möchten Sie tun?"
   },
+  "description": "Ukuvota ist ein leistungsstarkes Entscheidungsfindungstool, das Menschen hilft, fundierte Entscheidungen auf kollaborative und organisierte Weise zu treffen.",
+  "donate": "Spenden",
+  "enableJavaScript": "JavaScript ist für die volle Funktionalität dieser Seite erforderlich. Bitte aktivieren Sie JavaScript in Ihren Browsereinstellungen.",
   "guide": {
-    "checkboxLabel": "Diesen Leitfaden das nächste Mal nicht anzeigen",
+    "checkboxLabel": "Diese Anleitung beim nächsten Mal nicht mehr anzeigen",
     "createProcessButton": "Prozess erstellen"
   },
-  "setup": {
-    "continueEditing": "Bearbeitung Fortsetzen",
-    "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",
-    "startNew": "Neu starten",
-    "process": "Process Erstellen",
-    "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
-    "proposals": "Vorschläge hinzufügen",
-    "setDate": "Datum festlegen",
-    "duration": "Dauer",
-    "setDuration": "Dauer festlegen",
-    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
-    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
-    "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
-    "errorNotEnoughValidProposals": "Sie benötigen mindestens 2 nicht-leere Vorschläge, um fortzufahren.",
-    "errorSelectTime": "Bitte wählen Sie gültige Zeiten für alle Phasen aus.",
-
-    "startsImmediately": "Startet sofort nach dem Drücken von Start",
-    "startsIn": "Startet in {duration}",
-    "startsAfterProposal": "Startet nach der Vorschlagsphase",
-    "processStarted": "Prozess erfolgreich gestartet!",
-    "timezone": "Zeitzone"
-
+  "home": {
+    "consensusDrivenDescription": "Sammeln Sie vielfältige Vorschläge von Teilnehmern und fördern Sie einen kollaborativen Entscheidungsfindungsprozess.",
+    "consensusDrivenTitle": "Konsensorientierter Ansatz",
+    "description": "Abstimmung einfach, sicher und ermächtigend gemacht",
+    "effortlessSharingDescription": "Teilen Sie Abstimmungslinks nahtlos mit jedem und ermöglichen Sie eine breite Teilnahme und Engagement.",
+    "effortlessSharingTitle": "Müheloses Teilen",
+    "subheader": "Abstimmung einfach, sicher und ermächtigend gemacht",
+    "telegramBotCardButton": "Zum Bot gehen",
+    "telegramBotCardDescription": "Bequeme Abstimmung über Telegram, Integration der Abstimmung in die tägliche Kommunikation.",
+    "telegramBotCardTitle": "Telegram-Bot",
+    "transparentResultsDescription": "Nach Ende der Abstimmungsphase werden alle Stimmen transparent angezeigt und fördern das Vertrauen in den Prozess.",
+    "transparentResultsTitle": "Transparente Ergebnisse",
+    "userFriendlyDescription": "Intuitive und einfach zu navigierende Plattform, die eine einfache Zugänglichkeit auf allen Geräten gewährleistet.",
+    "userFriendlyTitle": "Benutzerfreundliche Oberfläche",
+    "webAppCardButton": "Neuen Prozess erstellen",
+    "webAppCardDescription": "Nahtlose webbasierte Abstimmungserfahrung, zugänglich und benutzerfreundlich.",
+    "webAppCardTitle": "Web-App",
+    "weightedScoreDescription": "Ermöglicht den Wählern, ihre Präferenzen präzise auszudrücken, wobei negative Stimmen mehr Gewicht haben können als positive.",
+    "weightedScoreTitle": "Gewichtete Punktabstimmung"
   },
-  "loadQuill": "Lade QuillEditor...",
-  "policy": "Datenschutzerklärung",
-  "donate": "Spenden",
+  "loadQuill": "QuillEditor wird geladen...",
+  "loading": {
+    "message": "Wird geladen..."
+  },
+  "negativeScoreWeighting": "Sie können optional den Einfluss negativer Punktzahlen durch die negative Punktgewichtung erhöhen. Dies ist ein einfacher Multiplikator: x1 hat keinen Einfluss auf negative Punktzahlen, x2 verdoppelt ihren Einfluss, x3 verdreifacht ihn. Beispiel: Eine Stimme von -3 mit einer negativen Punktgewichtung von x3 zählt als -9. Durch die Erhöhung des Einflusses negativer Punktzahlen bewegt sich die Gruppe zu Vorschlägen, die akzeptabler sind (weniger 'negativ') als Vorschläge, die bevorzugt werden (mehr netto 'positiv'). Der 'richtige' Gewichtungsmultiplikator für Ihre Gruppe wird wahrscheinlich am besten durch Experimentieren gefunden!",
+  "notFound": "Nicht gefunden",
   "phases": {
-    "start": "Startet",
-    "startAt": "Startet am",
-    "endsAt": "Endet am",
-    "lastFor": "Dauer",
+    "endsAt": "Endet um",
+    "lastFor": "Dauert",
     "proposal": {
       "title": "Vorschlagsphase"
     },
+    "start": "Beginnt",
+    "startAt": "Beginnt um",
     "voting": {
       "title": "Abstimmungsphase"
     }
   },
-  "alert": {
-    "success": {
-      "createProcess": "Prozess startet...",
-      "creatingProcess": "Prozess wird erstellt...",
-      "submitVote": "Wahl eingereicht für: ",
-      "repeatProcess": "Wiederhole den Prozess mit der Auswahl...",
-      "websocketConnected": "Erfolgreich mit WebSocket verbunden"
-    },
-    "connecting": {
-      "connectingToWebsocket": "Verbindung zu WebSocket wird hergestellt..."
-    },
-    "info": {
-      "submittingVote": "Wahl wird eingereicht..."
-    },
-    "error": {
-      "topicQuestion": "Bitte fügen Sie eine Themenfrage hinzu",
-      "emptyName": "Bitte fügen Sie einen Namen hinzu",
-      "proposalsMissing": "Fehlende Vorschläge, Sie benötigen mindestens 2 Vorschläge.",
-      "missingProposals": "Fehlende Vorschläge, Sie müssen mindestens 2 Vorschläge auswählen.",
-      "payloadSizeTooLarge": "Die Nutzlastgröße ist zu groß, bitte reduzieren Sie die Größe Ihres Inhalts",
-      "errorConnectingToWebsocket": "Fehler beim Verbinden mit WebSocket",
-      "errorNoTitle": "Bitte geben Sie einen Titel ein, bevor Sie fortfahren."
-    } 
-  },
-  "remainingTime": "verbleibende Zeit",
-  "skipped": "übersprungen",
-  "tagline": "Die beste Lösung finden",
-  "buttons": {
-    "dashboard": "Dashboard",
-    "about": "Über",
-    "go": "Los",
-    "home": "Startseite",
-    "toggle_dark": "Dunkelmodus umschalten",
-    "toggle_langs": "Sprachen ändern",
-    "start": "Starten Sie den Prozess",
-    "continue": "Weiter",
-    "back": "Zurück",
-    "edit": "Bearbeiten",
-    "save": "Speichern",
-    "select": "auswählen",
-    "confirm": "Bestätigen",
-    "cancel": "abbrechen",
-    "done": "fertig",
-    "delete": "Löschen",
-    "update": "Update"
-  },
-  "loading": "Laden",
-  "calendar": "Kalender",
-  "slider": "Schieberegler",
-  "not-found": "Nicht gefunden",
+  "policy": "Datenschutzrichtlinie",
   "process": {
-    "noVotesSubmitted": "Keine Stimmen abgegeben",
-    "noProposalsSubmitted": "Es wurden keine Vorschläge eingereicht.",
-    "topic": "Thema Frage",
-    "title": "Titel",
+    "addProposal": "Vorschlag hinzufügen",
+    "addProposalTemplate": "Vorschlagsvorlage hinzufügen",
+    "advancedOptions": "Erweiterte Optionen anzeigen",
+    "amountProposals": "Anzahl der Vorschläge",
+    "averageScore": "Durchschnittliche Punktzahl",
     "description": "Beschreibung",
-    "weighting": "Negative Punktegewichtung",
+    "exportData": "Daten exportieren",
+    "limitProposals": "Begrenzung der Anzahl der Vorschläge",
+    "maxProposals": "Maximale Anzahl der Vorschläge",
+    "modes": {
+      "full": "Vorschlags- + Abstimmungsphase",
+      "select": "Phasen auswählen",
+      "voting": "Nur Abstimmungsphase"
+    },
+    "noProposalsSubmitted": "Es wurden keine Vorschläge eingereicht.",
+    "noVotesSubmitted": "Keine Stimmen abgegeben",
     "proposal": "Vorschlag",
     "proposals": "Vorschläge",
-    "addProposal": "Vorschlag hinzufügen",
-    "averageScore": "Durchschnittliche Punktzahl",
-    "totalScore": "Gesamtpunktzahl",
+    "qrcode": "QR-Code",
     "results": "Ergebnisse",
-    "maxProposals": "Maximale Anzahl von Vorschlägen",
-    "amountProposals": "Anzahl von Vorschlägen",
-    "limitProposals": "Anzahl von Vorschlägen begrenzen",
-    "starting": "Prozess beginnt...",
-    "submitVote": "Wahl abschicken",
     "shareableUrl": "Teilbarer Link",
-    "qrcode": "Qr-Code",
-    "voterName": "Ihr Name oder dauerhafter Alias",
-    "voters": "Wählende",
-    "voter": "Wählende",
-    "exportData": "Daten exportieren",
-    "advancedOptions": "Erweiterte Optionen anzeigen",
-    "modes": {
-      "select": "Phasen auswählen",
-      "full": "Vorschlags- und Abstimmungsphase",
-      "voting": "Nur die Abstimmungsphase"
-    },
-    "addProposalTemplate": "Vorschlag per Vorlage hinzufügen"
+    "starting": "Prozess wird gestartet...",
+    "submitVote": "Stimme abgeben",
+    "title": "Titel",
+    "topic": "Themenfrage",
+    "totalScore": "Gesamtpunktzahl",
+    "voter": "Wähler",
+    "voterName": "Ihr Name oder dauerhaftes Alias",
+    "voters": "Wähler",
+    "weighting": "Negative Punktgewichtung"
   },
   "proposal": {
-    "zero": {
-      "title": "Aktueller Stand",
-      "description": "Die Dinge so belassen, wie sie sind."
-    },
     "one": {
-      "title": "Prozess wiederholen",
-      "description": "Wiederholen Sie den Vorgang und suchen Sie nach anderen Optionen."
+      "description": "Den Prozess wiederholen und nach anderen Optionen suchen.",
+      "title": "Prozess wiederholen"
+    },
+    "zero": {
+      "description": "Die Dinge so lassen, wie sie sind.",
+      "title": "Status quo"
     }
   },
-  "repeatProcess":"Prozess wiederholen",
-  "description": "Entscheidungen treffen mit Transparenz und Effizienz. Ein einfaches und effektives Tool für Meinungsbildung und Entscheidungsfindung.",
-  "wip": "in Bearbeitung",
-  "negativeScoreWeighting": "Sie können den Einfluss negativer Bewertungen optional erhöhen, indem Sie die negative Bewertungsgewichtung verwenden. Dies ist ein einfacher Multiplikator: x1 hat keinen Einfluss auf negative Bewertungen, x2 verdoppelt ihren Einfluss, x3 verdreifacht ihn. Beispiel: Eine Abstimmung von -3 bei einer negativen Bewertungsgewichtung von x3 wird als -9 gezählt. Durch das Erhöhen des Einflusses von negativen Bewertungen bewegt sich die Gruppe hin zu Vorschlägen, die akzeptabler (weniger \"negativ\") sind als Vorschläge, die bevorzugt (mehr netto \"positiv\") sind. Die \"richtige\" Gewichtungsmultiplikator für Ihre Gruppe wird wahrscheinlich durch Experimente am besten gefunden werden!"
+  "proposalsContainer": "Vorschlagsbehälter",
+  "addProposal": "Vorschlag hinzufügen",
+  "addProposalTemplate": "Vorschlagsvorlage hinzufügen",
+  "emptyProposal": "Leerer Vorschlag",
+  "noProposalsFound": "Keine Vorschläge gefunden.",
+  "remainingTime": "verbleibende Zeit",
+  "repeatProcess": "Prozess wiederholen",
+  "setup": {
+    "continueEditing": "Weiter bearbeiten",
+    "duration": "Dauer",
+    "errorMinProposals": "Sie benötigen mindestens 2 Vorschläge, um fortzufahren.",
+    "errorNoTitle": "Bitte geben Sie einen Titel ein, bevor Sie fortfahren.",
+    "errorNotEnoughValidProposals": "Sie benötigen mindestens 2 nicht leere Vorschläge, um fortzufahren.",
+    "errorSelectTime": "Bitte wählen Sie gültige Zeiten für alle Phasen aus.",
+    "existingProcessPrompt": "Sie haben einen bestehenden Prozess. Möchten Sie fortfahren?",
+    "process": "Prozess einrichten",
+    "processStarted": "Prozess erfolgreich gestartet!",
+    "proposals": "Vorschläge hinzufügen",
+    "selectTimeForVoting": "Wählen Sie die Zeit für die Abstimmung",
+    "setDate": "Datum festlegen",
+    "setDuration": "Dauer festlegen",
+    "startNew": "Neu beginnen",
+    "startsAfterProposal": "Beginnt nach der Vorschlagsphase",
+    "startsImmediately": "Beginnt sofort nach dem Drücken von Start",
+    "startsIn": "Beginnt in {duration}",
+    "timeLeftHeading": "Wählen Sie die Zeit für Vorschläge und Abstimmung",
+    "timeLeftVotingHeading": "Wählen Sie die Zeit für die Abstimmung",
+    "timezone": "Zeitzone"
+  },
+  "skipped": "übersprungen",
+  "slider": "Schieberegler",
+  "tagline": "Die beste Lösung finden",
+  "wip": "In Arbeit"
 }

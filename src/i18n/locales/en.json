@@ -1,177 +1,178 @@
 {
-  "proposalsContainer": "Proposals Container",
-  "noProposalsFound": "No proposals found.",
-  "addProposal": "Add Proposal",
-  "emptyProposal": "Empty proposal",
-  "addProposalTemplate": "Add Proposal Template",
-  "enableJavaScript": "JavaScript is required for the full functionality of this page. Please enable JavaScript in your browser settings.",
-  "home": {
-    "description": "Voting Made Simple, Secure, and Empowering",
-    "subheader": "Voting Made Simple, Secure, and Empowering",
-    "webAppCardTitle": "Web App",
-    "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
-    "webAppCardButton": "Create New Process",
-    "telegramBotCardTitle": "Telegram Bot",
-    "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
-    "telegramBotCardButton": "Go to Bot",
-    "weightedScoreTitle": "Weighted Score Voting",
-    "weightedScoreDescription": "Empowering voters to express their preferences with precision, allowing negative votes to carry more weight than positive ones.",
-    "effortlessSharingTitle": "Effortless Sharing",
-    "effortlessSharingDescription": "Seamlessly share voting links with anyone, enabling widespread participation and engagement.",
-    "consensusDrivenTitle": "Consensus-Driven Approach",
-    "consensusDrivenDescription": "Collect diverse proposals from participants, fostering a collaborative decision-making process.",
-    "userFriendlyTitle": "User-Friendly Interface",
-    "userFriendlyDescription": "Intuitive and easy-to-navigate platform, ensuring easy accessibility on all devices.",
-    "transparentResultsTitle": "Transparent Results",
-    "transparentResultsDescription": "After the voting phase ends, all votes are transparently displayed, promoting trust in the process."
+  "alert": {
+    "connecting": {
+      "connectingToWebsocket": "Connecting to WebSocket..."
+    },
+    "error": {
+      "emptyName": "Please add a name",
+      "errorConnectingToWebsocket": "Error connecting to WebSocket",
+      "missingProposals": "Missing proposals, you need to select at least 2 proposals",
+      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content",
+      "proposalsMissing": "Missing proposals, you need at least 2 proposals",
+      "topicQuestion": "Please add a Topic Question"
+    },
+    "info": {
+      "submittingVote": "Submitting vote..."
+    },
+    "success": {
+      "createProcess": "Process starting...",
+      "creatingProcess": "Process is being created...",
+      "repeatProcess": "Repeat process with selection...",
+      "submitVote": "Vote submitted for: ",
+      "websocketConnected": "Successfully connected to WebSocket"
+    }
   },
+  "buttons": {
+    "about": "About",
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "continue": "Continue",
+    "dashboard": "Dashboard",
+    "delete": "Delete",
+    "done": "Done",
+    "edit": "Edit",
+    "go": "GO",
+    "home": "Home",
+    "save": "Save",
+    "select": "Select",
+    "start": "Start process",
+    "toggleDark": "Toggle dark mode",
+    "toggleLangs": "Change languages",
+    "update": "Update"
+  },
+  "calendar": "Calendar",
   "dashboard": {
-    "noProcesses": "Currently, there are no processes to display.",
-    "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
-    "options": "What would you like to do?",
-    "createNewProcess": "Create New Process",
     "add": "Add",
     "addByUUID": "Add Process by UUID",
+    "beginProcess": "Begin by creating a new process or adding an existing one to get started.",
+    "createNewProcess": "Create New Process",
     "enterUUID": "Enter UUID or link",
-    "importProcesses": "Import Processes",
+    "export": "Export Processes",
     "import": "Import",
-    "export": "Export Processes"
+    "importProcesses": "Import Processes",
+    "noProcesses": "Currently, there are no processes to display.",
+    "options": "What would you like to do?"
   },
+  "description": "Ukuvota is a powerful decision making tool that helps people make informed choices in a collaborative and organized manner.",
+  "donate": "Donate",
+  "enableJavaScript": "JavaScript is required for the full functionality of this page. Please enable JavaScript in your browser settings.",
   "guide": {
     "checkboxLabel": "Do not show this guide next time",
     "createProcessButton": "Create Process"
   },
-  "setup": {
-    "continueEditing": "Continue Editing",
-    "existingProcessPrompt": "You have an existing process. Would you like to continue?",
-    "startNew": "Start over",
-    "process": "Setup Process",
-    "selectTimeForVoting": "Select the time for voting",
-    "proposals": "Add proposals",
-    "setDate": "Set Date",
-    "duration": "Duration",
-    "setDuration": "Set Duration",
-    "timeLeftHeading": "Select the time for proposals and voting",
-    "timeLeftVotingHeading": "Select the time for voting",
-    "errorMinProposals": "You need at least 2 proposals to proceed.",
-    "errorNotEnoughValidProposals": "You need at least 2 non-empty proposals to proceed.",
-    "errorSelectTime": "Please select valid times for all phases.",
-    "errorNoTitle": "Please enter a title before proceeding.",
-
-    "startsImmediately": "Starts immediately after pressing Start",
-    "startsIn": "Starts in {duration}",
-    "startsAfterProposal": "Starts after proposal phase",
-    "processStarted": "Process started successfully!",
-    "timezone": "Timezone"
+  "home": {
+    "consensusDrivenDescription": "Collect diverse proposals from participants, fostering a collaborative decision-making process.",
+    "consensusDrivenTitle": "Consensus-Driven Approach",
+    "description": "Voting Made Simple, Secure, and Empowering",
+    "effortlessSharingDescription": "Seamlessly share voting links with anyone, enabling widespread participation and engagement.",
+    "effortlessSharingTitle": "Effortless Sharing",
+    "subheader": "Voting Made Simple, Secure, and Empowering",
+    "telegramBotCardButton": "Go to Bot",
+    "telegramBotCardDescription": "Convenient voting through Telegram, integrating voting into daily communication.",
+    "telegramBotCardTitle": "Telegram Bot",
+    "transparentResultsDescription": "After the voting phase ends, all votes are transparently displayed, promoting trust in the process.",
+    "transparentResultsTitle": "Transparent Results",
+    "userFriendlyDescription": "Intuitive and easy-to-navigate platform, ensuring easy accessibility on all devices.",
+    "userFriendlyTitle": "User-Friendly Interface",
+    "webAppCardButton": "Create New Process",
+    "webAppCardDescription": "Seamless web-based voting experience, accessible and user-friendly.",
+    "webAppCardTitle": "Web App",
+    "weightedScoreDescription": "Empowering voters to express their preferences with precision, allowing negative votes to carry more weight than positive ones.",
+    "weightedScoreTitle": "Weighted Score Voting"
   },
   "loadQuill": "Loading QuillEditor...",
-  "policy": "Privacy Policy",
-  "donate": "Donate",
+  "loading": {
+    "message": "Loading..."
+  },
+  "negativeScoreWeighting": "You may optionally increase the impact of negative scores using the negative score weighting. This is a simple multiplier: x1 has no impact on negative scores, x2 doubles their impact, x3 triples them. Example: a vote of -3 where there is a negative score weighting of x3 is counted as -9. By increasing the impact of negative scores, the group moves towards proposals which are more acceptable (less 'negative') than proposals which are more preferred (more net 'positive.'). The 'right' weighting multiplier for your group will probably best be found through experimentation!",
+  "notFound": "Not found",
   "phases": {
-    "start": "Starts",
-    "startAt": "Start at",
     "endsAt": "Ends at",
     "lastFor": "Lasts for",
     "proposal": {
       "title": "Proposal Phase"
     },
+    "start": "Starts",
+    "startAt": "Start at",
     "voting": {
       "title": "Voting Phase"
     }
   },
-  "alert": {
-    "success": {
-      "createProcess": "Process starting...",
-      "creatingProcess": "Process is being created...",
-      "submitVote": "Vote submitted for: ",
-      "repeatProcess": "Repeat process with selection...",
-      "websocketConnected": "Successfully connected to WebSocket"
-    },
-    "connecting": {
-      "connectingToWebsocket": "Connecting to WebSocket..."
-    },
-    "info": {
-      "submittingVote": "Submitting vote..."
-    },
-    "error": {
-      "topicQuestion": "Please add a Topic Question",
-      "emptyName": "Please add a name",
-      "proposalsMissing": "Missing proposals, you need at least 2 proposals",
-      "missingProposals": "Missing proposals, you need to select at least 2 proposals",
-      "payloadSizeTooLarge": "Payload size is too large, please reduce the size of your content",
-      "errorConnectingToWebsocket": "Error connecting to WebSocket"
-    } 
-  },
-  "remainingTime": "remaining time",
-  "skipped": "skipped",
-  "tagline": "Finding the best solution",
-  "buttons": {
-    "dashboard": "Dashboard",
-    "about": "About",
-    "go": "GO",
-    "home": "Home",
-    "toggle_dark": "Toggle dark mode",
-    "toggle_langs": "Change languages",
-    "start": "Start process",
-    "continue": "Continue",
-    "back": "Back",
-    "edit": "Edit",
-    "save": "Save",
-    "select": "select",
-    "confirm": "confirm",
-    "cancel": "cancel",
-    "done": "done",
-    "delete": "Delete",
-    "update": "Update"
-  },
-  "loading": "Loading",
-  "calendar": "Calendar",
-  "slider": "Slider",
-  "not-found": "Not found",
+  "policy": "Privacy Policy",
   "process": {
-    "noVotesSubmitted": "No votes submitted",
-    "noProposalsSubmitted": "No proposals were submitted.",
-    "topic": "Topic Question",
-    "title": "Title",
-    "description": "Description",
-    "weighting": "Negative Score Weighting",
-    "proposal": "Proposal",
-    "proposals": "Proposals",
     "addProposal": "Add proposal",
-    "averageScore": "Average Score",
-    "totalScore": "Total Score",
-    "results": "Results",
-    "maxProposals": "Maximum amount of proposals",
-    "amountProposals": "Amount of proposals",
-    "limitProposals": "Limit amount of proposals",
-    "starting": "Process starting...",
-    "submitVote": "Submit Vote",
-    "shareableUrl": "Shareable link",
-    "qrcode": "Qr-Code",
-    "voterName": "Your name or persistent alias",
-    "voters": "Voters",
-    "voter": "Voter",
-    "exportData": "Export Data",
+    "addProposalTemplate": "Add proposal by template",
     "advancedOptions": "Show Advanced Options",
+    "amountProposals": "Amount of proposals",
+    "averageScore": "Average Score",
+    "description": "Description",
+    "exportData": "Export Data",
+    "limitProposals": "Limit amount of proposals",
+    "maxProposals": "Maximum amount of proposals",
     "modes": {
-      "select": "Select phases",
       "full": "Proposal + Voting Phase",
+      "select": "Select phases",
       "voting": "Voting Phase only"
     },
-    "addProposalTemplate": "Add proposal by template"
+    "noProposalsSubmitted": "No proposals were submitted.",
+    "noVotesSubmitted": "No votes submitted",
+    "proposal": "Proposal",
+    "proposals": "Proposals",
+    "qrcode": "Qr-Code",
+    "results": "Results",
+    "shareableUrl": "Shareable link",
+    "starting": "Process starting...",
+    "submitVote": "Submit Vote",
+    "title": "Title",
+    "topic": "Topic Question",
+    "totalScore": "Total Score",
+    "voter": "Voter",
+    "voterName": "Your name or persistent alias",
+    "voters": "Voters",
+    "weighting": "Negative Score Weighting"
   },
   "proposal": {
-    "zero": {
-      "title": "Status quo",
-      "description": "Keep things the way they are."
-    },
     "one": {
-      "title": "Repeat process",
-      "description": "Repeat the process and look for other options."
+      "description": "Repeat the process and look for other options.",
+      "title": "Repeat process"
+    },
+    "zero": {
+      "description": "Keep things the way they are.",
+      "title": "Status quo"
     }
   },
-  "repeatProcess":"Repeat process",
-  "description": "Ukuvota is a powerful decision making tool that helps people make informed choices in a collaborative and organized manner.",
-  "wip": "Work in progress",
-  "negativeScoreWeighting": "You may optionally increase the impact of negative scores using the negative score weighting. This is a simple multiplier: x1 has no impact on negative scores, x2 doubles their impact, x3 triples them. Example: a vote of -3 where there is a negative score weighting of x3 is counted as -9. By increasing the impact of negative scores, the group moves towards proposals which are more acceptable (less 'negative') than proposals which are more preferred (more net 'positive.'). The 'right' weighting multiplier for your group will probably best be found through experimentation!"
+  "proposalsContainer": "Proposals Container",
+  "addProposal": "Add Proposal",
+  "addProposalTemplate": "Add Proposal Template",
+  "emptyProposal": "Empty proposal",
+  "noProposalsFound": "No proposals found.",
+  "remainingTime": "remaining time",
+  "repeatProcess": "Repeat process",
+  "setup": {
+    "continueEditing": "Continue Editing",
+    "duration": "Duration",
+    "errorMinProposals": "You need at least 2 proposals to proceed.",
+    "errorNoTitle": "Please enter a title before proceeding.",
+    "errorNotEnoughValidProposals": "You need at least 2 non-empty proposals to proceed.",
+    "errorSelectTime": "Please select valid times for all phases.",
+    "existingProcessPrompt": "You have an existing process. Would you like to continue?",
+    "process": "Setup Process",
+    "processStarted": "Process started successfully!",
+    "proposals": "Add proposals",
+    "selectTimeForVoting": "Select the time for voting",
+    "setDate": "Set Date",
+    "setDuration": "Set Duration",
+    "startNew": "Start over",
+    "startsAfterProposal": "Starts after proposal phase",
+    "startsImmediately": "Starts immediately after pressing Start",
+    "startsIn": "Starts in {duration}",
+    "timeLeftHeading": "Select the time for proposals and voting",
+    "timeLeftVotingHeading": "Select the time for voting",
+    "timezone": "Timezone"
+  },
+  "skipped": "skipped",
+  "slider": "Slider",
+  "tagline": "Finding the best solution",
+  "wip": "Work in progress"
 }
